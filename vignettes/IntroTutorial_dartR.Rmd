@@ -1,0 +1,162 @@
+---
+title: "darter intro"
+author: "Bernd Gruber, Oliver Berry, Peter Unmack & Arthur Georges"
+date: "6 February 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction to darter 
+
+
+
+\includegraphics{figures/darter.png}
+
+##Install and load the package
+
+```{r}
+library(dart)
+```
+
+
+
+## Load your data
+
+Data can be loaded via a variety of pathways. All pathways should lead to a so-called genlight object which stores all the genetic data and if based on a dart data set also the dart meta data, which is describing the quality of the SNPs or SilicoDart loci.
+
+
+```{r, eval=FALSE}
+
+#read.dart
+#dart2genlight
+
+```
+
+
+
+For documentation purposes we will use the examplary data that comes with the package. Simply type: testset.gl
+
+
+
+```{r testdata}
+testset.gl
+```
+
+##Structure of a dart-genlight object
+
+For a detailed description of general genlight object see the introductory tutorial of the adgenet package. A dart-genlight object contains all of the slots of a genlight object and the additional metadata provided by dart.
+The metadata is "hidden" under the other slot as a dataframe called metrics (SNP quality data), latlong (if coordinates for samples were provided) and covariates (sample meta data, if provided).
+
+
+We can access this data to for example filter our loci in regards to quality or filter our genetic data set for a certaion subset (e.g. a population specified in the covariate file)
+
+
+
+##Visualising
+
+```{r}
+plot(testset.gl)
+```
+
+## Summarising your data set
+
+
+gl.base.summary
+gl.report.ld
+gl.report.callrate	Report summary of Call Rate for loci or individuals
+gl.report.dups	Report duplicated loci in a genlight {adegenet} object
+gl.report.heterozygosity	Reports hetrozygosity
+gl.report.hwe
+
+
+##Filter your data using dart quality meassurement (filter over loci)
+
+We now will use the dart meta data to filter our data. Depending on the data set provided from dart you may have different meta data. If your dart data loaded correctly we can check the attached meta data by accessing the "metrics" data.frame within the other slot. 
+
+```{r}
+names(testset.gl@other$metrics)
+```
+
+Description of dart metadata
+
+
+RepAvg is a meassurement of repeatability and a value twoards one indicates a high reproducabilty.
+To filter we simply can create an index based on RepAvg and use that in combination with the R indexing function "[]" to filter our data.
+
+```{r}
+indexrepavg <- testset.gl@other$metrics$RepAvg>0.99
+table(indexrepavg)
+
+filtered.testset.gl <- testset.gl[ , indexrepavg]
+
+filtered.testset.gl
+```
+
+Fourteen loci were below our quality threshold and therefore our new dart-genlight object
+
+gl.filter.callrate	Filter loci or specimens in a genlight {adegenet} object based on call rate
+gl.filter.cloneid	Filter for CloneID to select only unique SNPs
+gl.filter.dups	Filter duplicated loci in a genlight {adegenet} object
+gl.filter.monomorphs	Remove monomorphic loci, including those with all NAs
+gl.filter.repavg  Remove monomorphic loci, including those with all NAs
+
+
+
+
+## Filter data using covariates of (filter over samples)
+
+## Filter loci by HWE per pop pair
+
+## Filter loci by linkage disequilibrium per pop pair
+
+
+## Filter loci by Outflank (detection of outliers using Lotterhus & Whitlock)
+
+## Other filter
+
+gl.subsample.loci
+
+
+# Analysis
+
+
+## PCoA using a filtered dart genlight object
+
+gl.fixed.diff	Generate a matrix of fixed differences from a genelight or genind object {adegenet}
+
+gl.gene.freq	Calculate a statistic for each locus by group An internal function essentially to convey readability to rather contorted R code. It takes as input a genelight {adegenet} object with an index variable (say, population) and calculates the selected statistic for each locus, broken down by the groups defined by the index variable.
+
+gl.pcoa	PCoA ordination (glPca)
+gl.pcoa.plot	Bivariate plot of the results of a PCoA ordination
+gl.pcoa.plot.3d	3D interactive plot of the results of a PCoA ordination
+gl.pcoa.scree
+
+## Pairwise Fst, D using other packages
+
+
+# Conversion
+
+gl2gi
+gi2gl
+gl2phylip	Create a Phylip input distance matrix from a genlight (SNP) or genind (SilicoDarT) {adegenet} object
+gl2related
+
+
+# Output
+
+gl.write.csv
+
+
+## Create a fasta file from dart genlight
+
+gl2fasta	Export genlight SNP data {adegenet} in fastA format
+gl2fasta.nohets	Concatenates DArT fragments after removing heterozygous loci by random allele assignment
+gl2nhyb
+
+
+## Create a faststructure file from genlight
+
+gl2faststructure
