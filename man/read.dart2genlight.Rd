@@ -35,8 +35,8 @@ This function is a wrapper function that allows you to convert you dart file int
 }
 \examples{
 {
-dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dart")
-covfilename <- system.file("extdata","testset_metadata.csv", package="dart")
+dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
+covfilename <- system.file("extdata","testset_metadata.csv", package="dartR")
 gl <- read.dart2genlight(dartfile, covfilename = covfilename, probar=TRUE)
 }
 }

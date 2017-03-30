@@ -30,9 +30,10 @@
 #' @import ggplot2 directlabels tidyr
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
+#' \dontrun{
 #' p <- gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="smart",hadjust=1.5, vadjust=1)
 #' p <- gl.pcoa.plot(pcoa, gl, ellipse=FALSE, p=0.99, labels="ind")
-#
+#' }
 # Amended: 27-Oct-16
 
 gl.pcoa.plot <- function(glPca, data, scale=FALSE, ellipse=FALSE, p=0.95, labels="pop", hadjust=1.5, 

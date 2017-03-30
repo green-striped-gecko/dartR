@@ -13,8 +13,8 @@
 #' @return a dart genlight object that contains individuals [if data were provided] and loci meta data [from a DArT report]. The dart genlight object can then be fed into a number of initial screening, export and export functions provided by the package. For some of the function it is necessary to have the metadata that was provided from DArT. Please check the vignette for more information. Additional information can also be found in the help documents for  \code{\link{read.dart}} and \code{\link{dart2genlight}}. 
 #' @export
 #' @examples{
-#' dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dart")
-#' covfilename <- system.file("extdata","testset_metadata.csv", package="dart")
+#' dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
+#' covfilename <- system.file("extdata","testset_metadata.csv", package="dartR")
 #' gl <- read.dart2genlight(dartfile, covfilename = covfilename, probar=TRUE)
 #' }
 

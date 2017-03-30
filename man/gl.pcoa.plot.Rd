@@ -49,8 +49,10 @@ ggplotly() friendly. Running ggplotyly() with no parameters will replot the data
 over them. Refer to the plotly package for further information. Do not forget to load the library via library(plotly).
 }
 \examples{
+\dontrun{
 p <- gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="smart",hadjust=1.5, vadjust=1)
 p <- gl.pcoa.plot(pcoa, gl, ellipse=FALSE, p=0.99, labels="ind")
+}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

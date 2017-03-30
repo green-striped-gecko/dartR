@@ -9,7 +9,7 @@
 #' @return a list of length 5. #dart format (one or two rows) #individuals, #snps, #non genetic metrics, #genetic data (still two line format, rows=snps, columns=individuals)
 #' @export
 #' @examples{
-#' dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dart")
+#' dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
 #' dart <-read.dart(dartfile)
 #' }
 

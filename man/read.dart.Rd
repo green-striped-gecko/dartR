@@ -30,7 +30,7 @@ Import DarT data to R
 }
 \examples{
 {
-dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dart")
+dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
 dart <-read.dart(dartfile)
 }
 }
