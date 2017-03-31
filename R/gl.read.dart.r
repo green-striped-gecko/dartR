@@ -15,7 +15,7 @@
 #' @examples{
 #' dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
 #' covfilename <- system.file("extdata","testset_metadata.csv", package="dartR")
-#' gl <- read.dart2genlight(dartfile, covfilename = covfilename, probar=TRUE)
+#' gl <- gl.read.dart(dartfile, covfilename = covfilename, probar=TRUE)
 #' }
 
 gl.read.dart <- function(filename, covfilename=NULL, nas = "-", topskip=NULL, stdmetrics =c("CloneID", "SNP","SnpPosition","RepAvg","CallRate", "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets","OneRatioSnp"), addmetrics=NULL, lastmetric ="RepAvg", probar=TRUE)
