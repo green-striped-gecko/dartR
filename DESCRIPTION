@@ -51,4 +51,4 @@ RoxygenNote: 5.0.1
 Remotes: 
     whitlock/OutFLANK
     bioc::release/qvalue
-    bioc::release/SNPRelated
+    bioc::release/SNPRelated 
