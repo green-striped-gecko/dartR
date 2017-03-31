@@ -2,54 +2,41 @@
 % Please edit documentation in R/gl.read.dart.r
 \name{gl.read.dart}
 \alias{gl.read.dart}
-\title{Import SNP data from DArT and convert to  genlight \{agegenet\} format (gl)}
+\title{Import DarT data into R and conver it to a genlight object}
 \usage{
-gl.read.dart(datafile, topskip, nmetavar, nas = "-", ind.metafile = NULL)
+gl.read.dart(filename, covfilename = NULL, nas = "-", topskip = NULL,
+  stdmetrics = c("CloneID", "SNP", "SnpPosition", "RepAvg", "CallRate",
+  "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets",
+  "OneRatioSnp"), addmetrics = NULL, lastmetric = "RepAvg", probar = TRUE)
 }
 \arguments{
-\item{datafile}{-- name of csv file containing the DartSeq data in 2-row format (csv) [required]}
+\item{filename}{path to file (csv file only currently)}
 
-\item{topskip}{-- number of rows to skip before the header row (containing the specimen identities [required]}
+\item{covfilename}{the name of the file that has entails additional information on individuals. For the require format check}
 
-\item{nmetavar}{-- number of columns containing the locus metadata (e.g. AlleleID, RepAvg) [required]}
+\item{nas}{a character specifying NAs (default is "-")}
 
-\item{nas}{-- missing data character [default "-"]}
+\item{topskip}{a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.}
 
-\item{ind.metafile}{-- name of csv file containing metadata assigned to each entity (individual) [default NULL]}
+\item{stdmetrics}{a vector of column headings that are extracted. AlleleID and its format is compulsory, the rest are needed for filtering.}
+
+\item{addmetrics}{add additional headers/columns by name}
+
+\item{lastmetric}{specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.}
+
+\item{probar}{show progress bar}
 }
 \value{
-An object of class ("genlight") containing the SNP data, and locus and individual metadata
+a dart genlight object that contains individuals [if data were provided] and loci meta data [from a DArT report]. The dart genlight object can then be fed into a number of initial screening, export and export functions provided by the package. For some of the function it is necessary to have the metadata that was provided from DArT. Please check the vignette for more information. Additional information can also be found in the help documents for  \code{\link{read.dart}} and \code{\link{dart2genlight}}.
 }
 \description{
-DaRT provide the data as a matrix of entities (individual turtles) across the top and
-attributes (SNP loci) down the side in a format that is unique to DArT. This program
-reads the data in to adegenet format (genlight) for consistency with
-other programming activity. The script or the data may require modification as DArT modify their
-data formats from time to time.
-}
-\details{
-gl.read.dart() opens the data file (csv comma delimited) and skips the first n=topskip lines. The script assumes
-that the next line contains the entity labels (specimen ids) followed immediately by the SNP data for the first locus.
-It reads the SNP data into a matrix of 1s and 0s,
-and inputs the locus metadata and specimen metadata. The locus metadata comprises a series of columns of values for
-each locus including the essential columns of AlleleID, SNP, SnpPostion and the desirable variables REpAvg and AvgPIC.
-Refer to documentation provide by DArT for an explanation of these columns.
-
-The specimen metadata provides the opportunity
-to reassign specimens to populations, and to add other data relevant to the specimen. The key variables are id (specimen identity
-which must be the same and in the same order as the DArTSeq file, each unique), pop (population assignment), lat (latitude, optional)
-and lon (longitude, optional). id, pop, lat, lon are the column headers in the csv file. Other optional columns can be added.
-
-The SNP matrix, locus names (constructed from the AlleleID, SNP and SnpPosition to be unique), locus metadata, specimen names,
-specimen metadata are combined into a genlight object. Refer to the genlight documentation (Package adegenet) for further details.
+This function is a wrapper function that allows you to convert you dart file into a genlight object in one step. In previous versions you had to use read.dart and then dart2genlight. In case you have individual metadata for each individual/sample you can specify as before in the dart2genlight command the file that combines the data.
 }
 \examples{
-\dontrun{
-gl <- gl.read.dart(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
-nmetavar=16, nas="-", ind.metafile="metadata.csv" )
+{
+dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
+covfilename <- system.file("extdata","testset_metadata.csv", package="dartR")
+gl <- read.dart2genlight(dartfile, covfilename = covfilename, probar=TRUE)
 }
-}
-\author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
 
