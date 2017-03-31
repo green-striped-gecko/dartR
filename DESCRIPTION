@@ -26,7 +26,6 @@ Imports:
     directlabels,
     quadprog,
     rgl,
-    related,
     misc3d,
     pca3d,
     utils,
