@@ -12,9 +12,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' result2 <- gl.filter.callrate(testset.gl, method="ind", threshold=0.95)
-#' }
+#' result2 <- gl.filter.callrate(testset.gl, method="ind", threshold=0.9)
+
 
 
  gl.filter.callrate <- function(gl, method="loc", threshold=0.95) {
@@ -56,6 +55,8 @@
       cat("Initial no. of individuals =", n0, "\n")
       # Calculate the individual call rate
       ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)
+      # Check that there are some individuals left
+      if (sum(ind.call.rate >= threshold) == 0) stop(paste("Maximum individual call rate =",max(ind.call.rate),". Nominated threshold of",threshold,"too stringent.\n No individuals remain.\n"))
       # Extract those individuals with a call rate greater or equal to the threshold
       x2 <- x[ind.call.rate >= threshold,]
       # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus filtering
@@ -87,3 +88,5 @@
 
     return(x2)
 }
+
+ 

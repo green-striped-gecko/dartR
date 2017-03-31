@@ -23,9 +23,7 @@ lower than a specified value. The script will also filter out loci (or specimens
 is lower than the specified value. In this case, the data are missing owing to low coverage.
 }
 \examples{
-\dontrun{
-result2 <- gl.filter.callrate(testset.gl, method="ind", threshold=0.95)
-}
+result2 <- gl.filter.callrate(testset.gl, method="ind", threshold=0.9)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

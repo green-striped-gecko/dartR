@@ -21,7 +21,7 @@ of several percentiles. The script gl.filter.callrate() will filter out the loci
 }
 \examples{
 \dontrun{
-result <- gl.report.callrate(gl)
+result <- gl.report.callrate(testset.gl)
 }
 }
 \author{

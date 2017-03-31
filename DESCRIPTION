@@ -1,8 +1,8 @@
 Package: dartR
 Type: Package
 Title: Importing and Analysing DArT type snp and silicodart data
-Version: 0.56
-Date: 2017-30-03
+Version: 0.57
+Date: 2017-31-03
 Authors@R: c(
             person("Bernd", "Gruber", email="bernd.gruber@canberra.edu.au", role=c("aut","cre")), 
             person("Arthur", "Georges", email="georges@aerg.edu.au", role="aut"))
@@ -45,7 +45,7 @@ Imports:
     stringr,
     ape,
     vegan,
-    SNPRelate
+    SNPRelate,
 License: GPL-2
 LazyData: true
 RoxygenNote: 5.0.1

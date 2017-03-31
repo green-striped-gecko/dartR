@@ -34,7 +34,7 @@ x <- gl
   rownames(m) <- pop(x)
     
 # Convert the SNP data to long format
-  m.long <- melt(m, na.rm=FALSE)
+  m.long <- data.table::melt(m, na.rm=FALSE)
   colnames(m.long) <- c("popn", "locus", "snp")
     
 # Calculate sums and counts broken down by population and locus

@@ -11,7 +11,7 @@
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' \dontrun{
-#' result <- gl.report.callrate(gl)
+#' result <- gl.report.callrate(testset.gl)
 #' }
 
 gl.report.callrate <- function(gl, method="loc") {

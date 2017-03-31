@@ -117,6 +117,7 @@ id.col = match( "id", names(ind.cov))
 
 
 if (is.na(id.col)) {cat ("There is no id column\n") ;stop()} else {
+  ind.cov[,id.col]<- trimws(ind.cov[,id.col], which="both")  #trim spaces
 
 if (length(ind.cov[,id.col])!= length(unique(ind.cov[,id.col]))) {cat("Individual names are not unique. You need to change them!\n"); stop()}  
   

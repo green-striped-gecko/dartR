@@ -44,7 +44,7 @@ read.dart <- function(filename, nas = "-", topskip=NULL, stdmetrics =c("CloneID"
   } else lmet  <- lastmetric
   
   ind.names <- colnames(snpraw)[(lmet+1):ncol(snpraw) ]
-  
+  ind.names <- trimws(ind.names, which = "both") #trim for spaces
   if (length(ind.names)!= length(unique(ind.names))) stop("Individual names are not unique. You need to change them!\n")
   
   datas <- snpraw[, (lmet+1):ncol(snpraw)]
