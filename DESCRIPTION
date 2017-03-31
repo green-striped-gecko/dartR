@@ -48,4 +48,6 @@ Imports:
 License: GPL-2
 LazyData: true
 RoxygenNote: 5.0.1
-Remotes: github::whitlock/OutFLANK, bioc::release/qvalue, bioc::release/SNPRelated 
+Remotes: github::whitlock/OutFLANK, 
+Remotes: bioc::qvalue
+Remotes: bioc::SNPRelated 
