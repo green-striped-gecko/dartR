@@ -5,7 +5,7 @@
 \title{Import DarT data into R and conver it to a genlight object}
 \usage{
 gl.read.dart(filename, covfilename = NULL, nas = "-", topskip = NULL,
-  stdmetrics = c("CloneID", "SNP", "SnpPosition", "RepAvg", "CallRate",
+  stdmetrics = c("AlleleID", "SNP", "SnpPosition", "RepAvg", "CallRate",
   "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets",
   "OneRatioSnp"), addmetrics = NULL, lastmetric = "RepAvg", probar = TRUE)
 }

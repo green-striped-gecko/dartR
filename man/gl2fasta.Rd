@@ -37,7 +37,7 @@ to the individual. The resultant SNP bases are concatenated across loci to gener
 a single composite haplotype to be used in subsequent MP phylogenetic analyses.
 
 The script writes out the composite haplotypes for each individual as a fastA file. Requires
-trimmed sequences to be among the locus metrics.
+'TrimmedSequence' and 'SNP' (position and type of transition/transversion of a locus) to be among the locus metrics (\code{@other$loc.metrics}) headers.
 }
 \examples{
 \dontrun{

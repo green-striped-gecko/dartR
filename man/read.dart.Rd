@@ -4,7 +4,7 @@
 \alias{read.dart}
 \title{Import DarT data to R}
 \usage{
-read.dart(filename, nas = "-", topskip = NULL, stdmetrics = c("CloneID",
+read.dart(filename, nas = "-", topskip = NULL, stdmetrics = c("AlleleID",
   "SNP", "SnpPosition", "RepAvg", "CallRate", "AvgCountRef", "AvgCountSnp",
   "FreqHomRef", "FreqHomSnp", "FreqHets", "OneRatioSnp"), addmetrics = NULL,
   lastmetric = "RepAvg")

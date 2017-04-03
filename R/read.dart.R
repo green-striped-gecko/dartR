@@ -15,7 +15,7 @@
 
 
 
-read.dart <- function(filename, nas = "-", topskip=NULL, stdmetrics =c("CloneID", "SNP","SnpPosition","RepAvg","CallRate", "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets","OneRatioSnp"), addmetrics=NULL, lastmetric ="RepAvg")
+read.dart <- function(filename, nas = "-", topskip=NULL, stdmetrics =c("AlleleID", "SNP","SnpPosition","RepAvg","CallRate", "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets","OneRatioSnp"), addmetrics=NULL, lastmetric ="RepAvg")
 {
   
   if (is.null(topskip))
@@ -92,8 +92,8 @@ read.dart <- function(filename, nas = "-", topskip=NULL, stdmetrics =c("CloneID"
   
   #check that there are two lines per locus...
   #covmetrics = separate(covmetrics, AlleleID, into  = c("allid","alrest"),sep = "\\|", extra="merge")
-  covmetrics$clone <- (sub("\\|.*","",covmetrics$CloneID, perl=T))
-  spp <- ( sub(".+-+(\\d{1,3}):.+","\\1",covmetrics$CloneID))
+  covmetrics$clone <- (sub("\\|.*","",covmetrics$AlleleID, perl=T))
+  spp <- ( sub(".+-+(\\d{1,3}):.+","\\1",covmetrics$AlleleID))
   
   
   #### find uid within allelid 

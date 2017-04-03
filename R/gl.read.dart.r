@@ -18,7 +18,7 @@
 #' gl <- gl.read.dart(dartfile, covfilename = covfilename, probar=TRUE)
 #' }
 
-gl.read.dart <- function(filename, covfilename=NULL, nas = "-", topskip=NULL, stdmetrics =c("CloneID", "SNP","SnpPosition","RepAvg","CallRate", "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets","OneRatioSnp"), addmetrics=NULL, lastmetric ="RepAvg", probar=TRUE)
+gl.read.dart <- function(filename, covfilename=NULL, nas = "-", topskip=NULL, stdmetrics =c("AlleleID", "SNP","SnpPosition","RepAvg","CallRate", "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets","OneRatioSnp"), addmetrics=NULL, lastmetric ="RepAvg", probar=TRUE)
 {
   dout <-read.dart(filename = filename, nas=nas, topskip=topskip, stdmetrics = stdmetrics, addmetrics = addmetrics, lastmetric = lastmetric)
   glout <- dart2genlight(dout, covfilename = covfilename,probar = probar)

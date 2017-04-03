@@ -19,7 +19,7 @@
 #' a single composite haplotype to be used in subsequent MP phylogenetic analyses.
 #'
 #' The script writes out the composite haplotypes for each individual as a fastA file. Requires
-#' trimmed sequences to be among the locus metrics.
+#' 'TrimmedSequence' and 'SNP' (position and type of transition/transversion of a locus) to be among the locus metrics (\code{@other$loc.metrics}) headers.
 #' 
 #' @param gl -- name of the DArT genlight object [required]
 #' @param method -- 1 | 2 | 3 | 4. Type method=0 for a list of options  [method=1]
@@ -79,7 +79,7 @@ if (method==1 || method==3) {
   
 # Create a lookup table for the ambiguity codes
 #     A  T  G  C
-#  A  A  W  R  M
+#  A  A  W  R  M)
 #  T  W  T  K  Y
 #  G  R  K  G  S
 #  C  M  Y  S  C  
@@ -93,6 +93,18 @@ if (method==1 || method==3) {
   allele1 =gsub("(\\d{1,3}):(.)>(.)", "\\2", snp, perl=T)
   allele2 = gsub("(\\d{1,3}):(.)>(.)", "\\3", snp, perl=T)
 
+  
+  lenTrim <- nchar(as.character(gl@other$loc.metrics$TrimmedSequence))
+  
+  index <- lenTrim>allelepos
+  if (sum(index)!=nLoc(gl)) 
+  {
+    cat(paste("Not all snp position are within the length of the trimmed sequences. Those loci will be deleted (",sum(!index),")."  ) )
+  }
+  
+  
+  
+  
   sequences <- NA
 
 # Prepare the output fastA file
@@ -103,6 +115,7 @@ if (method==1 || method==3) {
   for (i in 1:nInd(gl)) {
     seq <- NA
     for (j in 1:nLoc(gl)) {
+      if (index[j]) {
       if (is.na(snpmatrix[i,j])) {
         code <- "N"
       } else {
@@ -114,13 +127,14 @@ if (method==1 || method==3) {
       snppos <- allelepos[j]
       if(method==1){
         if (code !="N") {
-          seq[j] <- paste0( substr(gl@other$loc.metrics$TrimmedSequence[j],1,snppos),code,substr(gl@other$loc.metrics$TrimmedSequence[j],snppos+2, 500))
+          seq[j] <- paste0( substr(as.character(gl@other$loc.metrics$TrimmedSequence[j]),1,snppos),code,substr(gl@other$loc.metrics$TrimmedSequence[j],snppos+2, 500))
         } else {
           seq[j] <- paste(rep("N", nchar(as.character(gl@other$loc.metrics$TrimmedSequence[j]))), collapse = "")
         }
       } else if(method==3){
           seq[j] <- code
       }
+      }#run only if index is true
     }
 #    seqall = paste(seq, collapse="")
 #    write.fasta(seqall, gl@other$ind.metrics$phylo.label[i], file.out=outfile, open="a")
