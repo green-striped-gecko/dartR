@@ -102,9 +102,6 @@ if (method==1 || method==3) {
     cat(paste("Not all snp position are within the length of the trimmed sequences. Those loci will be deleted (",sum(!index),")."  ) )
   }
   
-  
-  
-  
   sequences <- NA
 
 # Prepare the output fastA file
@@ -174,14 +171,21 @@ if (method==2 || method==4) {
   }
   
 # Check that the sequences are all the same length
+#  
+#  mx <- max(str_length(gl@other$loc.metrics$AlleleSequence))
+#  mn <- min(str_length(gl@other$loc.metrics$AlleleSequence))
+#  if (mn == mx) {
+#    cat(paste("\nAllelic sequences (incl. adaptors) are all the same length:", mx),"\n")
+#  } else {
+#    cat("Allele sequences not all the same length, padding with NNNNs\n")
+#    gl@other$loc.metrics$AlleleSequence <- str_pad(gl@other$loc.metrics$AlleleSequence, mx, side = c("right"), pad = "N")
+#  }
   
-  mx <- max(str_length(gl@other$loc.metrics$AlleleSequence))
-  mn <- min(str_length(gl@other$loc.metrics$AlleleSequence))
-  if (mn == mx) {
-    cat(paste("\nAllelic sequences (incl. adaptors) are all the same length:", mx),"\n")
-  } else {
-    cat("Allele sequences not all the same length, padding with NNNNs\n")
-    gl@other$loc.metrics$AlleleSequence <- str_pad(gl@other$loc.metrics$AlleleSequence, mx, side = c("right"), pad = "N")
+  lenTrim <- nchar(as.character(gl@other$loc.metrics$TrimmedSequence))
+  index <- lenTrim > gl@other$loc.metrics$SnpPosition
+  if (sum(index)!=nLoc(gl)) 
+  {
+    cat(paste("Not all SNP positions are within the length of the trimmed sequences. Those loci will be deleted (",sum(!index),")."  ) )
   }
   
 # Prepare the output fastA file
@@ -193,8 +197,9 @@ if (method==2 || method==4) {
   seq <- rep(" ", c)
   for (i in 1:r) {
     for (j in 1:c) {
+      if (index[j]) {
       # Reassign some variables
-        fragment <- as.character(gl@other$loc.metrics$AlleleSequence[j])
+        # trimmed <- as.character(gl@other$loc.metrics$AlleleSequence[j])
         trimmed <- as.character(gl@other$loc.metrics$TrimmedSequence[j])
         snp <- as.character(gl@other$loc.metrics$SNP[j])
         snpos <- gl@other$loc.metrics$SnpPosition[j]
@@ -207,15 +212,14 @@ if (method==2 || method==4) {
             seq[j] <- trimmed
           }
         } else if(method==4){
-            seq[j] <- str_sub(fragment, start=(snpos), end=(snpos))
+            seq[j] <- str_sub(trimmed, start=(snpos), end=(snpos))
         }
-
       # If the score is homozygous for the alternate allele
         if (matrix[i,j] == 2 && !is.na(matrix[i,j])) {
-          # Split the fragment into a beginning sequence, the SNP and an end sequences
-            start <- str_sub(fragment, end=snpos-1)
-            snpbase <- str_sub(fragment, start=(snpos), end=(snpos))
-            end <- str_sub(fragment, start=snpos+1)
+          # Split the trimmed into a beginning sequence, the SNP and an end sequences
+            start <- str_sub(trimmed, end=snpos-1)
+            snpbase <- str_sub(trimmed, start=(snpos), end=(snpos))
+            end <- str_sub(trimmed, start=snpos+1)
         # Extract the SNP transition bases (e.g. A and T)
           state.change <- str_split_fixed(snp,":",2)
           state1 <- str_sub(state.change[2], start=1, end=1)
@@ -245,12 +249,13 @@ if (method==2 || method==4) {
             seq[j] <- str_pad(seq[j], nchar(trimmed), side = c("right"), pad = "N")
           }
         }
+      }  
     }
 
     # Join all the trimmed sequence together into one long "composite" haplotype
     result <- paste(seq,sep="",collapse="")
     # Write the results to file in fastA format
-    cat(paste0(">", indNames(gl)[i],"|",pop(gl)[i], "\n"))
+    cat(paste0(">", indNames(gl)[i],"_",pop(gl)[i], "\n"))
     cat(result, " \n")
   
   } # Select the next individual and repeat
