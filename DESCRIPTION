@@ -1,7 +1,7 @@
 Package: dartR
 Type: Package
 Title: Importing and Analysing DArT type snp and silicodart data
-Version: 0.57
+Version: 0.58
 Date: 2017-31-03
 Authors@R: c(
             person("Bernd", "Gruber", email="bernd.gruber@canberra.edu.au", role=c("aut","cre")), 
