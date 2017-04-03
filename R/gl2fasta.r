@@ -35,9 +35,9 @@
 #' @import stringr
 #' @author Bernd Gruber and Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
+#' gl <- gl.filter.repavg(testset.gl,t=1)
+#' gl <- gl.filter.callrate(testset.gl,t=.98)
 #' gl2fasta(gl, method=1, outfile="test.fasta")
-#' }
 
 gl2fasta <- function(gl, method=1, outfile="output.fasta") {
   
