@@ -139,7 +139,7 @@ if (method==1 || method==3) {
     # Join all the trimmed sequence together into one long "composite" haplotype
       result <- paste(seq,sep="",collapse="")
     # Write the results to file in fastA format
-      cat(paste0(">", indNames(gl)[i],"|",pop(gl)[i], "\n"))
+      cat(paste0(">", indNames(gl)[i],"_",pop(gl)[i], "\n"))
       cat(result, " \n")
 
 #    cat(paste("Individual:", i,"Took: ", round(proc.time()[3]-ptm),"seconds\n") )
@@ -170,17 +170,6 @@ if (method==2 || method==4) {
     setTxtProgressBar(pb, i/r)
   }
   
-# Check that the sequences are all the same length
-#  
-#  mx <- max(str_length(gl@other$loc.metrics$AlleleSequence))
-#  mn <- min(str_length(gl@other$loc.metrics$AlleleSequence))
-#  if (mn == mx) {
-#    cat(paste("\nAllelic sequences (incl. adaptors) are all the same length:", mx),"\n")
-#  } else {
-#    cat("Allele sequences not all the same length, padding with NNNNs\n")
-#    gl@other$loc.metrics$AlleleSequence <- str_pad(gl@other$loc.metrics$AlleleSequence, mx, side = c("right"), pad = "N")
-#  }
-  
   lenTrim <- nchar(as.character(gl@other$loc.metrics$TrimmedSequence))
   index <- lenTrim > gl@other$loc.metrics$SnpPosition
   if (sum(index)!=nLoc(gl)) 
@@ -199,7 +188,6 @@ if (method==2 || method==4) {
     for (j in 1:c) {
       if (index[j]) {
       # Reassign some variables
-        # trimmed <- as.character(gl@other$loc.metrics$AlleleSequence[j])
         trimmed <- as.character(gl@other$loc.metrics$TrimmedSequence[j])
         snp <- as.character(gl@other$loc.metrics$SNP[j])
         snpos <- gl@other$loc.metrics$SnpPosition[j]
