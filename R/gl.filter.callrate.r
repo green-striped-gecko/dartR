@@ -12,9 +12,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' result2 <- gl.filter.callrate(testset.gl, method="ind", threshold=0.9)
-
-
+#' result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8)
 
  gl.filter.callrate <- function(gl, method="loc", threshold=0.95) {
  x <- gl

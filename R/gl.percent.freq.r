@@ -11,10 +11,8 @@
 #' @importFrom plyr ddply
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
 #' m <-  gl.percent.freq(testset.gl)
 #' m
-#' }
 
 gl.percent.freq<- function(gl) {
 x <- gl
@@ -34,14 +32,14 @@ x <- gl
   rownames(m) <- pop(x)
     
 # Convert the SNP data to long format
-  m.long <- data.table::melt(m, na.rm=FALSE)
+  m.long <- melt(m, na.rm=FALSE)
   colnames(m.long) <- c("popn", "locus", "snp")
     
 # Calculate sums and counts broken down by population and locus
   cat("  Tallying allele frequencies, this may take some time\n")
   m.summed<-ddply(
             m.long,
-            c("popn","locus"),
+            .(popn,locus),
             summarize,
             sums=sum(as.numeric(as.character(m.long$snp)),na.rm=TRUE),
             count=sum(!is.na(m.long$snp)),

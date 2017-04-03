@@ -10,9 +10,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' result <- gl.report.callrate(testset.gl)
-#' }
+#' gl.report.callrate(testset.gl)
+
 
 gl.report.callrate <- function(gl, method="loc") {
 x <- gl
@@ -34,7 +33,7 @@ x <- gl
       if (percentile == 1) {
         cat(paste0("  Loci with no missing values = ",a," [",round((a*100/nLoc(x)),digits=1),"%]\n"))
       } else {
-        cat(paste0("  Loci with less than ",(1-percentile)*100,"% missing values = ",a," [",round((a*100/nLoc(x)),digits=1),"%]\n"))
+        cat(paste0("    < ",(1-percentile)*100,"% missing values = ",a," [",round((a*100/nLoc(x)),digits=1),"%]\n"))
       }
       return(a)
     }

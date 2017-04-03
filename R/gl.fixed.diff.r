@@ -20,12 +20,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' gl.fixed.diff(testset.gl, t=0.05)
-#' }
+#' mat <- gl.fixed.diff(testset.gl, t=0.05)
 #' @seealso \code{\link{is.fixed}}
-#
-# Ammended 9-Mar-17
 
 gl.fixed.diff <- function(gl, t=0) {
 x <- gl

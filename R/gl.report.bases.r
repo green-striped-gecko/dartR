@@ -15,9 +15,8 @@
 #' @import adegenet stringr
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' list <- gl.report.bases(gl)
-#' }
+#' lst <- gl.report.bases(testset.gl)
+#' lst
 
 gl.report.bases <- function(gl) {
 x <- gl

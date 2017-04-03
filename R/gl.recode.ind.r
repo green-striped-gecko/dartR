@@ -19,8 +19,7 @@
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' \dontrun{
-#'    gl <- gl.recode.ind(gl, ind.recode="ind_recode_table_0.csv")
-#'    glind <- gl.recode.ind(glind, ind.recode="ind_recode_table_0.csv")
+#'    gl <- gl.recode.ind(testset.gl, ind.recode="testset_pop_recode.csv")
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' 

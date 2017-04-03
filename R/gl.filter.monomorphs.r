@@ -11,9 +11,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' gl <- gl.filter.monomorphs(gl)
-#' }
+#' gl <- gl.filter.monomorphs(testset.gl)
 
 gl.filter.monomorphs <- function (gl) {
 x <- gl

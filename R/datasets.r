@@ -7,7 +7,6 @@
 #' @keywords datasets
 "testset.gl"
 
-
 #' Testfile in DArT format (as provided by DArT)
 #' 
 #' this test data set is provided to show a typical DArT file format. Can be used to create a genlight object using the read.dart function.
@@ -18,11 +17,9 @@
 #' @keywords datasets
 NULL
 
-
-
 #' Recode file to be used with the function.
 #' 
-#' this test data set is provided to show a typical DArT file format. Can be used to create a genlight object using the read.dart function.
+#' This test data set is provided to show a typical recode file format.
 #' @name testset_pop_recode
 #' @format csv
 #' @docType data

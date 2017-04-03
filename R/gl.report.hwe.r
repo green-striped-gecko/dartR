@@ -17,7 +17,7 @@
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @export
 #' @examples
-#' result <- gl.report.hwe(testset.gl,0.05, pop=c("EmmacMaclGeor", "EmmacCoopCully"))
+#' gl.report.hwe(testset.gl,0.05, pop=c("EmmacMaclGeor", "EmmacCoopCully"))
 #
 # Amended 23-Oct-16
 

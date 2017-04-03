@@ -9,7 +9,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' result <- gl.report.dups(testset.gl)
+#' gl.report.dups(testset.gl)
 
 
 gl.report.dups <- function(gl) {
@@ -27,7 +27,11 @@ x <- gl
   b <- unlist(a)[ c(TRUE,FALSE,FALSE) ]
 # Identify duplicates from the genlight object
   cat("Total number of SNP loci:",nLoc(x),"\n")
-  cat("   Number of duplicates:",table(duplicated(b))[2],"\n")
+  if (is.na(table(duplicated(b))[2])) {
+    cat("   Number of duplicates: 0 \n")
+  } else {
+    cat("   Number of duplicates:",table(duplicated(b))[2],"\n")
+  }  
   cat("   Number of loci after duplicates removed:",table(duplicated(b))[1],"\n")
 
     return(1)

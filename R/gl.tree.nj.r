@@ -16,7 +16,8 @@
 #' @importFrom ape plot.phylo
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
-
+#' @example 
+#' gl.tree.nj(testset.gl,type="fan")
 
 gl.tree.nj <- function(gl, type="phylogram",outgroup=NULL,labelsize=0.7) {
 x <- gl

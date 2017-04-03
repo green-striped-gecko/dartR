@@ -13,7 +13,7 @@
 #' @importFrom grDevices rainbow
 #' @importFrom graphics par
 #' @examples
-#' result <- gl.report.heterozygosity(testset.gl)
+#' gl.report.heterozygosity(testset.gl)
 #
 # Amended 9-Mar-17
 
@@ -38,7 +38,6 @@ x <- gl
   # Plot the results
   par(mai=c(2.5,1,0.5,0.2))
   barplot(dd$hs, names.arg=paste(dd$names, dd$freq, sep=" | "), las=2, cex.names=1, space=0, border=F, col=rainbow(nrow(dd)), main="Observed Heterozygosity")
-  
 
   # Return the result
   return(dd) 
