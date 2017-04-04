@@ -53,7 +53,7 @@ gl.dist <- function(gl, method="euclidean", binary=FALSE, diag=TRUE, upper=FALSE
     }
     # Calculate distance using dist {stat}
     if (method %in% veganmethod) {
-      d <- vegdist(f, method=m, binary=b, diag=d, upper=u)
+      d <- vegdist(f, method=m, binary=b, diag=d, upper=u, na.rm=TRUE)
       cat(paste("  Calculating distances: ",method,"\n"))
       cat("    Refer to vegdist {vegan} documentation for algorithm\n\n")
     }

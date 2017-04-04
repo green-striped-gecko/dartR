@@ -15,9 +15,8 @@
 #' @export
 #' @author Arthur Georges and Aaron Adamnack (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' gl.collapse(fd, gl, outfile=="new_pop_recode.csv",t=0.026)
-#' }
+#' fd <- gl.fixed.diff(testset.gl, t=0.05)
+#' gl <- gl.collapse(fd, testset.gl, recode.table="testset_recode.csv",t=0.026)
 
 gl.collapse <- function(fd, gl, recode.table="tmp.csv", t=0, iter=1) {
 
