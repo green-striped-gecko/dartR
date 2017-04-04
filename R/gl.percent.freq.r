@@ -32,18 +32,18 @@ x <- gl
   rownames(m) <- pop(x)
     
 # Convert the SNP data to long format
-  m.long <- melt(m, na.rm=FALSE)
+  m.long <- reshape2::melt(m, na.rm=FALSE)
   colnames(m.long) <- c("popn", "locus", "snp")
     
 # Calculate sums and counts broken down by population and locus
   cat("  Tallying allele frequencies, this may take some time\n")
-  m.summed<-ddply(
+  m.summed<-plyr::ddply(
             m.long,
             .(popn,locus),
             summarize,
-            sums=sum(as.numeric(as.character(m.long$snp)),na.rm=TRUE),
-            count=sum(!is.na(m.long$snp)),
-            missing=sum(is.na(m.long$snp))
+            sums=sum(as.numeric(as.character(snp)),na.rm=TRUE),
+            count=sum(!is.na(snp)),
+            missing=sum(is.na(snp))
             )
   names(m.summed)<-c("popn","locus","sum","nobs","nmissing")
   
