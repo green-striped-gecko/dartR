@@ -1,23 +1,23 @@
-#' Remove monomorphic loci, including those with all NAs
+#' Report monomorphic loci, including those with all NAs
 #'
-#' This script deletes monomorphic loci from a genlight \{adegenet\} object
+#' This script reports the number of monomorphic loci from a genlight \{adegenet\} object
 #'
-#' A DArT dataset will not have monomorphic loci, but they can arise when populations are deleted by assignment or by using
-#' the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
+#' A DArT dataset will not have monomorphic loci, but they can arise when populations or individuals are deleted.
+#' Retaining monomorphic loci unnecessarily increases the size of the dataset.
 #'
 #' @param gl -- name of the input genlight object [required]
-#' @return A genlight object with monomorphic loci removed
+#' @return A report on loci, polymorphic, monomorphic, all NAs
 #' @import adegenet plyr utils
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' gl <- gl.filter.monomorphs(testset.gl)
+#' gl <- gl.report.monomorphs(testset.gl)
 
-gl.filter.monomorphs <- function (gl) {
+gl.report.monomorphs <- function (gl) {
 x <- gl
 
   cat("Identifying monomorphic loci\n")
-  # Create vectors to hold test results
+# Create vectors to hold test results
   # homozygote reference
   a <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {a[i] <- FALSE}
@@ -30,14 +30,11 @@ x <- gl
   # NA
   d <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {d[i] <- FALSE}
-  # NA
-  index <- vector(mode="logical", length=nLoc(x))
-  for (i in 1:nLoc(x)) {index[i] <- NA}
   
 # Set up the progress counter
   pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
   getTxtProgressBar(pb)
-  # Identify polymorphic, monomorphic and 'all na' loci
+# Identify polymorphic, monomorphic and 'all na' loci
   # Set a,b,c,d <- TRUE if monomorphic, or if all NAs
   xmat <-as.matrix(x)
   for (i in (1:nLoc(x))) {
@@ -49,17 +46,11 @@ x <- gl
   }
   polym <- nLoc(x) - sum(a) - sum(b) - sum(d) - sum(c)
   cat("\nBreakdown of", nLoc(x), "loci\n")
-  cat("  Polymorphic loci:", polym, "retained\n  Monomorphic loci:", sum(a)+sum(b)+sum(c), "deleted\n  Loci with no scores (all NA):" , sum(d) ,"deleted\n")
-
-# Write the polymorphic loci to a new genlight object
-#  cat("Deleting monomorphic loci and loci with no scores\n")
-  for (i in (1:nLoc(x))) {
-    index[i] <- !(a[i] == TRUE || b[i] == TRUE || c[i] == TRUE || d[i] == TRUE)
-  }
-  x <- x[,(index)]
-  x@other$loc.metrics <- x@other$loc.metrics[(index),]
+  cat("  Polymorphic loci:", polym, "\n  Monomorphic loci:", sum(a)+sum(b)+sum(c), "\n  Loci with no scores (all NA):" , sum(d) ,"\n")
 
 return <- x
 
 }
+
+
 
