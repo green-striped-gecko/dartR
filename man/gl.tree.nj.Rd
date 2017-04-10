@@ -22,6 +22,9 @@ A tree file of type phylo
 This function is a wrapper for the nj\{ape\} function applied to Euclidian
 distances calculated from the genlight object.
 }
+\examples{
+gl.tree.nj(testset.gl,type="fan")
+}
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
