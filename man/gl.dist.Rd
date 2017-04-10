@@ -33,11 +33,8 @@ The distance measure can be one of "manhattan", "euclidean", "canberra", "bray",
 dist stats or vegdist vegan for definitions.
 }
 \examples{
-\dontrun{
 gl.dist(testset.gl, method="gower", diag=TRUE)
-}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

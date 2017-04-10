@@ -26,14 +26,11 @@ Note: return code of -1.0 signals an error condition; return code of NA signals 
 all alleles are NA for a locus
 }
 \examples{
-\dontrun{
 hets <- 20
 hom_1 <- 5
 hom_2 <- 30
 p_value <- prob.hwe(hets, hom_1, hom_2)
 }
-}
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

@@ -17,12 +17,9 @@ This is a support script, to take SNP data or SilocoDArT presence/absence data g
 and generate a table of allele frequencies for each population and locus
 }
 \examples{
-\dontrun{
 m <-  gl.percent.freq(testset.gl)
 m
-}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

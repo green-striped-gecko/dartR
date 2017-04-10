@@ -35,10 +35,9 @@ with all values missing and deletes them (using gl.filter.monomorphs.r)
    glind <- gl.recode.pop(glind, pop.recode="pop_recode_table_0.csv")
 }
 }
-\author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
-}
 \seealso{
 \code{\link{gl.filter.monomorphs}}
 }
-
+\author{
+Arthur Georges (glbugs@aerg.canberra.edu.au)
+}

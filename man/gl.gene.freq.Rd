@@ -30,11 +30,8 @@ Calculate a statistic for each locus by group
  by the index variable.
 }
 \examples{
-\dontrun{
-result <- gl.gene.freq(gl, method=pop(gl), stat="mean")
-}
+result <- gl.gene.freq(testset.gl, method=pop(gl), stat="mean")
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

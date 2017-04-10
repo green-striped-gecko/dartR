@@ -30,14 +30,11 @@ Tollerance in the definition of a fixed difference is provided by the t paramete
 that SNP allele frequencies of 95,5 and 5,95 percent will be regarded as fixed.
 }
 \examples{
-\dontrun{
-gl.fixed.diff(testset.gl, t=0.05)
-}
-}
-\author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+mat <- gl.fixed.diff(testset.gl, t=0.05)
 }
 \seealso{
 \code{\link{is.fixed}}
 }
-
+\author{
+Arthur Georges (glbugs@aerg.canberra.edu.au)
+}

@@ -49,12 +49,12 @@ ggplotly() friendly. Running ggplotyly() with no parameters will replot the data
 over them. Refer to the plotly package for further information. Do not forget to load the library via library(plotly).
 }
 \examples{
-\dontrun{
-p <- gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="smart",hadjust=1.5, vadjust=1)
-p <- gl.pcoa.plot(pcoa, gl, ellipse=FALSE, p=0.99, labels="ind")
-}
+gl <- testset.gl
+levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
+pcoa<-gl.pcoa(gl,nfactors=5)
+gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1)
+gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1, xaxis=1, yaxis=3)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

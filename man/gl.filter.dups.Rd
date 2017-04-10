@@ -20,4 +20,3 @@ This script filters out duplicate loci after ordering the genlight object on bas
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

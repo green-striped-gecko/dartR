@@ -18,9 +18,8 @@ These multiple SNP loci within a fragment are likely to be linked, and so you ma
 This script reports duplicate loci.
 }
 \examples{
-result <- gl.report.dups(testset.gl)
+gl.report.dups(testset.gl)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

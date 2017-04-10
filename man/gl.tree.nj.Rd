@@ -25,4 +25,3 @@ distances calculated from the genlight object.
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

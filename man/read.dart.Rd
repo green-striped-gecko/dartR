@@ -34,4 +34,3 @@ dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
 dart <-read.dart(dartfile)
 }
 }
-

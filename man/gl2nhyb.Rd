@@ -52,4 +52,3 @@ m <- gl2nhyb(gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), t=0, m="random")
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

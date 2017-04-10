@@ -28,11 +28,9 @@ the axes are ordered on the proportion of variation explained, so the first axis
 the second explains the next greatest amount, and so on.
 }
 \examples{
-\dontrun{
-m <- gl.pcoa.scree(gl, top=TRUE)
-}
+pcoa <- gl.pcoa(testset.gl)
+gl.pcoa.scree(pcoa)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-
