@@ -24,7 +24,6 @@
 #' @param str1 -- string containing the first sequence [required]
 #' @param str2 -- string containing the second sequence [required]
 #' @return Hamming distance between the two strings
-#' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' str1 <- "AcTGGCTAGC"
@@ -45,8 +44,8 @@ utils.hamming <- function(str1, str2) {
   for ( uniq in uniqs[-1] ) {
       H <- H + t(x == uniq) %*% (y == uniq)
   }
-  # Calculate the hamming distance as a percentage
-  result <- as.numeric(length(x) - H)*100/strmin
+  # Calculate the hamming distance as a proportion
+  result <- as.numeric(length(x) - H)/strmin
   
   return(result)
 }

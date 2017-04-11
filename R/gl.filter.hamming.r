@@ -21,11 +21,12 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' gl <- gl.filter.hamming(testset.gl, t=0.35)
+#' gl <- gl.filter.hamming(testset.gl, t=0.25)
 
 gl.filter.hamming <- function(gl=gl, t=0.2) {
   
   x <- gl
+  n0 <- nLoc(x)
   
   if(class(x) == "genlight") {
     cat("Analysing a genlight object\n")
@@ -39,7 +40,8 @@ gl.filter.hamming <- function(gl=gl, t=0.2) {
   
   x@other$loc.metrics$TrimmedSequence <- as.character(x@other$loc.metrics$TrimmedSequence)
   
-  cat("Calculating pairwise Hamming Distances\n")
+  cat("Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n")
+  cat("Calculating pairwise Hamming distances between trimmed reference sequence tags\n")
   count=0
   flag <- rep(FALSE,(nLoc(x)-1))
   pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
@@ -49,7 +51,7 @@ gl.filter.hamming <- function(gl=gl, t=0.2) {
       count <- count + 1
       s1 <- x@other$loc.metrics$TrimmedSequence[i]
       s2 <- x@other$loc.metrics$TrimmedSequence[j]
-      if(utils.hamming(s1,s2) <= (t*100)) {
+      if(utils.hamming(s1,s2) <= t) {
         flag[i] <- TRUE
         # cat("Deleting locus\n")
       }
@@ -60,6 +62,15 @@ gl.filter.hamming <- function(gl=gl, t=0.2) {
   x <- x[,(index)]
   # That pesky genlight bug
   x@other$loc.metrics <- x@other$loc.metrics[(index),]
+  
+  # REPORT A SUMMARY
+  cat("\n\nSummary of filtered dataset\n")
+  cat(paste("  Initial No. of loci:",n0,"\n"))
+  cat(paste("  Hamming d >",t,"\n"))
+  cat(paste("  Loci deleted",(n0-nLoc(x)),"\n"))
+  cat(paste("  Final No. of loci:",nLoc(x),"\n"))
+  cat(paste("  No. of individuals:", nInd(x),"\n"))
+  cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
 
   return <- x
 }

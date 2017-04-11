@@ -184,6 +184,8 @@ if (method==2 || method==4) {
 
 # For each individual, and for each locus, generate the relevant haplotype 
   seq <- rep(" ", c)
+  pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+  getTxtProgressBar(pb)
   for (i in 1:r) {
     for (j in 1:c) {
       if (index[j]) {
@@ -239,6 +241,7 @@ if (method==2 || method==4) {
         }
       }  
     }
+    setTxtProgressBar(pb, i/r)
 
     # Join all the trimmed sequence together into one long "composite" haplotype
     result <- paste(seq,sep="",collapse="")
