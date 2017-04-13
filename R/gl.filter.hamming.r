@@ -1,5 +1,13 @@
 #' Filters loci in a genlight object based on pairwise Hamming distance between sequence tags
 #'
+#' Hamming distance is calculated as the number of base differences between two 
+#' sequences which can be expressed as a count or a proportion. Typically, it is
+#' calculated between two sequences of equal length. In the context of DArT
+#' trimmed sequences, which differ in length but which are anchored to the left
+#' by the restriction enzyme recognition sequence, it is sensible to compare the
+#' two trimmed sequences starting from immediately after the common recognition
+#' sequence and terminating at the last base of the shorter sequence. 
+#'
 #' Hamming distance can be computed 
 #' by exploiting the fact that the dot product of two binary vectors x and (1 – y) 
 #' counts the corresponding elements that are different between x and y.
@@ -17,13 +25,14 @@
 #'
 #' @param gl -- genlight object [required]
 #' @param t -- a threshold Hamming distance for filtering loci [default 0.2]
+#' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
 #' @return a genlight object filtered on Hamming distance.
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' gl <- gl.filter.hamming(testset.gl, t=0.25)
 
-gl.filter.hamming <- function(gl=gl, t=0.2) {
+gl.filter.hamming <- function(gl=gl, t=0.2, rs=4) {
   
   x <- gl
   n0 <- nLoc(x)
@@ -43,22 +52,24 @@ gl.filter.hamming <- function(gl=gl, t=0.2) {
   cat("Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n")
   cat("Calculating pairwise Hamming distances between trimmed reference sequence tags\n")
   count=0
-  flag <- rep(FALSE,(nLoc(x)-1))
+  #flag <- rep(FALSE,(nLoc(x)-1))
+  nL <- nLoc(x)
+  index <- rep(TRUE,(nL-1))
   pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
   getTxtProgressBar(pb)
-  for (i in 1:(nLoc(x)-1)){
-    for (j in ((i+1):nLoc(x))){
+  for (i in 1:(nL-1)){
+    s1 <- x@other$loc.metrics$TrimmedSequence[i]
+    for (j in ((i+1):nL)){
       count <- count + 1
-      s1 <- x@other$loc.metrics$TrimmedSequence[i]
       s2 <- x@other$loc.metrics$TrimmedSequence[j]
-      if(utils.hamming(s1,s2) <= t) {
-        flag[i] <- TRUE
-        # cat("Deleting locus\n")
+      if(utils.hamming(s1,s2,r=rs) <= t) {
+        index[i] <- FALSE
+        break
       }
     }
-    setTxtProgressBar(pb, i/(nLoc(x)-1))
+    setTxtProgressBar(pb, i/(nL-1))
   }
-  index <- !flag
+  #index <- flag
   x <- x[,(index)]
   # That pesky genlight bug
   x@other$loc.metrics <- x@other$loc.metrics[(index),]

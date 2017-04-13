@@ -32,7 +32,7 @@ Only one of two loci are retained if their Hamming distance is less that a speci
 percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 }
 \examples{
-gl <- gl.filter.hamming(testset.gl, t=0.35)
+gl <- gl.filter.hamming(testset.gl, t=0.25)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

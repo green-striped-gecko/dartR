@@ -13,6 +13,7 @@
 #' tables (also stored to disk) [default "collapse"]
 #' @param threshold -- the threshold distance value for amalgamating populations [default 0]
 #' @return The new genlight object with recoded populations.
+#' @import reshape2
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples

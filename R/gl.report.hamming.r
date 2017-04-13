@@ -1,5 +1,13 @@
 #' Calculates the pairwise Hamming distance between DArT trimmed DNA sequences
 #'
+#' Hamming distance is calculated as the number of base differences between two 
+#' sequences which can be expressed as a count or a proportion. Typically, it is
+#' calculated between two sequences of equal length. In the context of DArT
+#' trimmed sequences, which differ in length but which are anchored to the left
+#' by the restriction enzyme recognition sequence, it is sensible to compare the
+#' two trimmed sequences starting from immediately after the common recognition
+#' sequence and terminating at the last base of the shorter sequence. 
+#' 
 #' Hamming distance can be computed 
 #' by exploiting the fact that the dot product of two binary vectors x and (1 – y) 
 #' counts the corresponding elements that are different between x and y.
@@ -13,13 +21,14 @@
 #' as implimented in utils.hamming.r
 #'
 #' @param gl -- genlight object [required]
+#' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
 #' @return Histogram of Hamming distance for the gl object
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' gl.report.hamming(testset.gl)
 
-gl.report.hamming <- function(gl) {
+gl.report.hamming <- function(gl, rs=4) {
   
   x <- gl
   
@@ -41,15 +50,23 @@ gl.report.hamming <- function(gl) {
     cat("Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n")
     cat("Calculating pairwise Hamming distances between trimmed reference sequence tags\n")
   count=0
-  d <- rep(NA,(nLoc(x)-1))
+  nL <- nLoc(x)
+  
+  # Calculate the number of iterations in loops below to set dimensions of d
+  # niter = sum i=1 to nL-1 of (nL - i)
+  # niter = sum i=1 to nL-1 of (nL) - sum i=1 to nL-1 of (i)
+  # niter = nL(nL-1) - (nL-1)nL/2 [triangle number]
+  # niter = nL(nL-1)/2 which seem intuitive
+  d <- rep(NA,(((nL-1)*nL)/2))
+  
   pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
   getTxtProgressBar(pb)
-  for (i in 1:(nLoc(x)-1)){
-    for (j in ((i+1):nLoc(x))){
+  for (i in 1:(nL-1)){
+    for (j in ((i+1):nL)){
       count <- count + 1
-      d[count] <- utils.hamming(s[i],s[j])
+      d[count] <- utils.hamming(s[i],s[j],r=rs)
     }
-    setTxtProgressBar(pb, i/nLoc(x))
+    setTxtProgressBar(pb, i/(nL-1))
   }
   }
    mn <- round(mean(d),2)
