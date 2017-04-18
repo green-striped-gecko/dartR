@@ -26,3 +26,4 @@ pcoa <- gl.pcoa(testset.gl, nfactors=3)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+

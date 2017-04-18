@@ -24,3 +24,4 @@ index.highhet <- fox.gl.keep@other$loc.metrics[,"FreqHets"] <0.75
 index.comb <- filter.dart(index.repro, index.callrate, index.coverage)
 }
 }
+

@@ -9,3 +9,4 @@ utils.hwe(x, prob = 0.05)
 \description{
 Utility script not meant for end users
 }
+

@@ -58,3 +58,4 @@ gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+

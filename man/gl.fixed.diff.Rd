@@ -32,9 +32,10 @@ that SNP allele frequencies of 95,5 and 5,95 percent will be regarded as fixed.
 \examples{
 mat <- gl.fixed.diff(testset.gl, t=0.05)
 }
-\seealso{
-\code{\link{is.fixed}}
-}
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+\seealso{
+\code{\link{is.fixed}}
+}
+

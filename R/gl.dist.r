@@ -15,7 +15,6 @@
 #' @param p -- The power of the Minkowski distance
 #' @return A matrix of distances between populations (class dist)
 #' @import adegenet
-#' @import permute
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
 #' @export

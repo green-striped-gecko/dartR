@@ -47,3 +47,4 @@ gl2fasta(gl, method=1, outfile="test.fasta")
 \author{
 Bernd Gruber and Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+

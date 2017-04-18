@@ -38,3 +38,4 @@ list <- gl.filter.hwe(testset.gl,0.05, bon=TRUE)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+

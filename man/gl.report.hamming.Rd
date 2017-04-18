@@ -4,22 +4,32 @@
 \alias{gl.report.hamming}
 \title{Calculates the pairwise Hamming distance between DArT trimmed DNA sequences}
 \usage{
-gl.report.hamming(gl)
+gl.report.hamming(gl, rs = 4)
 }
 \arguments{
 \item{gl}{-- genlight object [required]}
+
+\item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 4]}
 }
 \value{
 Histogram of Hamming distance for the gl object
 }
 \description{
+Hamming distance is calculated as the number of base differences between two 
+sequences which can be expressed as a count or a proportion. Typically, it is
+calculated between two sequences of equal length. In the context of DArT
+trimmed sequences, which differ in length but which are anchored to the left
+by the restriction enzyme recognition sequence, it is sensible to compare the
+two trimmed sequences starting from immediately after the common recognition
+sequence and terminating at the last base of the shorter sequence.
+}
+\details{
 Hamming distance can be computed 
 by exploiting the fact that the dot product of two binary vectors x and (1 – y) 
 counts the corresponding elements that are different between x and y.
 This approach can also be used for vectors that contain more than two possible 
 values at each position (e.g. A, C, T or G).
-}
-\details{
+
 If a pair of DNA sequences are of differing length, the longer is truncated.
 
 The algorithm is that of Johann de Jong 
@@ -32,3 +42,4 @@ gl.report.hamming(testset.gl)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+

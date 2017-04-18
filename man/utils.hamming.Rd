@@ -4,24 +4,34 @@
 \alias{utils.hamming}
 \title{Calculates the Hamming distance between two DArT trimmed DNA sequences}
 \usage{
-utils.hamming(str1, str2)
+utils.hamming(str1, str2, r = 4)
 }
 \arguments{
 \item{str1}{-- string containing the first sequence [required]}
 
 \item{str2}{-- string containing the second sequence [required]}
+
+\item{r}{-- number of bases in the restriction enzyme recognition sequence [default = 4]}
 }
 \value{
 Hamming distance between the two strings
 }
 \description{
-The Hamming distance between the rows of a matrix can be computed fast, 
-by exploiting the fact that the dot product of two binary vectors x and (1 – y) 
-counts the corresponding elements that are different between x and y.
-Matrix multiplication can also be used for matrices with more than two possible 
-values, and different types of elements.
+Hamming distance is calculated as the number of base differences between two 
+sequences which can be expressed as a count or a proportion. Typically, it is
+calculated between two sequences of equal length. In the context of DArT
+trimmed sequences, which differ in length but which are anchored to the left
+by the restriction enzyme recognition sequence, it is sensible to compare the
+two trimmed sequences starting from immediately after the common recognition
+sequence and terminating at the last base of the shorter sequence.
 }
 \details{
+The Hamming distance between the rows of a matrix can be computed quickly 
+by exploiting the fact that the dot product of two binary vectors x and (1 – y) 
+counts the corresponding elements that are different between x and y.
+This matrix multiplication can also be used for matrices with more than two possible 
+values, and different types of elements, such as DNA sequences.
+
 The function calculates the Hamming distance between all columns of a 
 matrix X, or two matrices X and Y. Again matrix multiplication is used, this
 time for counting, between two columns x and y, the number of cases in which 
@@ -32,16 +42,18 @@ corresponding elements that are the same, i.e. the inverse of the Hamming
 distance. Therefore, the last step is to subtract this end result H from the 
 maximum possible distance, which is the number of rows of matrix X.
 
-If the two DNA sequences are of differing length, the longer is truncated.
+If the two DNA sequences are of differing length, the longer is truncated. The 
+initial common restriction enzyme recognition sequence is ignored.
 
 The algorithm is that of Johann de Jong 
 (https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/)
 }
 \examples{
-str1 <- "AcTGGCTAGC"
-str2 <- "AaTGGCTAG"
+str1 <- "aatgGCTAG"
+str2 <- "aatgGCTcG"
 utils.hamming(str1,str2)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+

@@ -31,3 +31,4 @@ gl.write.csv(gl, outfile="SNP_1row.csv")
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+
