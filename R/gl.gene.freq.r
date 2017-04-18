@@ -12,9 +12,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' result <- gl.gene.freq(gl, method=pop(gl), stat="mean")
-#' }
+#' result <- gl.gene.freq(testset.gl, method=pop(gl), stat="mean")
 
 gl.gene.freq <- function(gl, method=pop(gl), stat="mean") {
   

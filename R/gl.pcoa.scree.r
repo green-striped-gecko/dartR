@@ -17,9 +17,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' m <- gl.pcoa.scree(gl, top=TRUE)
-#' }
+#' pcoa <- gl.pcoa(testset.gl)
+#' gl.pcoa.scree(pcoa)
 
 gl.pcoa.scree <- function(x, top=TRUE) {
 

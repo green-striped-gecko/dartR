@@ -8,9 +8,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' gl.report.repavg(gl)
-#' }
+#' gl.report.repavg(testset.gl)
+
 
 gl.report.repavg <- function(gl) {
 x <- gl
@@ -32,7 +31,7 @@ x <- gl
     if (percentile == 1) {
       cat(paste0("  Loci with perfect reproducibility = ",a," [",round((a*100/nLoc(x)),digits=1),"%]\n"))
     } else {
-      cat(paste0("  Loci with reproducibility greater than ",percentile," = ",a," [",round((a*100/nLoc(x)),digits=1),"%]\n"))
+      cat(paste0("  > ",percentile," = ",a," [",round((a*100/nLoc(x)),digits=1),"%]\n"))
     }
     return(a)
   }

@@ -35,9 +35,9 @@
 #' @import stringr
 #' @author Bernd Gruber and Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
+#' gl <- gl.filter.repavg(testset.gl,t=1)
+#' gl <- gl.filter.callrate(testset.gl,t=.98)
 #' gl2fasta(gl, method=1, outfile="test.fasta")
-#' }
 
 gl2fasta <- function(gl, method=1, outfile="output.fasta") {
   
@@ -184,6 +184,8 @@ if (method==2 || method==4) {
 
 # For each individual, and for each locus, generate the relevant haplotype 
   seq <- rep(" ", c)
+  pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+  getTxtProgressBar(pb)
   for (i in 1:r) {
     for (j in 1:c) {
       if (index[j]) {
@@ -239,6 +241,7 @@ if (method==2 || method==4) {
         }
       }  
     }
+    setTxtProgressBar(pb, i/r)
 
     # Join all the trimmed sequence together into one long "composite" haplotype
     result <- paste(seq,sep="",collapse="")

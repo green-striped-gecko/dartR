@@ -15,13 +15,13 @@
 #' @param p -- The power of the Minkowski distance
 #' @return A matrix of distances between populations (class dist)
 #' @import adegenet
+#' @import permute
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
+#' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
 #' gl.dist(testset.gl, method="gower", diag=TRUE)
-#' }
 
 gl.dist <- function(gl, method="euclidean", binary=FALSE, diag=TRUE, upper=FALSE, p=NULL) {
   x <- gl
@@ -53,7 +53,7 @@ gl.dist <- function(gl, method="euclidean", binary=FALSE, diag=TRUE, upper=FALSE
     }
     # Calculate distance using dist {stat}
     if (method %in% veganmethod) {
-      d <- vegdist(f, method=m, binary=b, diag=d, upper=u)
+      d <- vegdist(f, method=m, binary=b, diag=d, upper=u, na.rm=TRUE)
       cat(paste("  Calculating distances: ",method,"\n"))
       cat("    Refer to vegdist {vegan} documentation for algorithm\n\n")
     }

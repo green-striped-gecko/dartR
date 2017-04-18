@@ -27,8 +27,6 @@
 #' @examples
 #' pcoa <- gl.pcoa(testset.gl, nfactor=5)
 #' gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
-#
-# Ammended 22-Oct-16
 
 gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,
                             shape="sphere", radius=2, legend="topright") {

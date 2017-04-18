@@ -20,11 +20,8 @@ at one or both of the the restriction enzyme recognition sites. This script repo
 of several percentiles. The script gl.filter.callrate() will filter out the loci with call rates below a specified threshold.
 }
 \examples{
-\dontrun{
-result <- gl.report.callrate(testset.gl)
-}
+gl.report.callrate(testset.gl)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

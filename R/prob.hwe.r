@@ -13,13 +13,10 @@
 #' @return Exact probability of agreement with HWE
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
 #' hets <- 20
 #' hom_1 <- 5
 #' hom_2 <- 30
 #' p_value <- prob.hwe(hets, hom_1, hom_2)
-#' }
-# Amended 23-Oct-16
 
 prob.hwe <- function(obs_hets, obs_hom1, obs_hom2) {
   
@@ -29,7 +26,7 @@ prob.hwe <- function(obs_hets, obs_hom1, obs_hom2) {
   
   # Added by Arthur Georges Aug 8 2015 to avoid crash on prob.hwe(0,0,0)
   if (obs_hets==0 && obs_hom1==0 && obs_hom2 == 0) {
-    return(-1.0)
+    return(-2.0)
   }
   
   # total number of genotypes

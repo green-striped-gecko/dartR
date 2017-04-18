@@ -4,19 +4,19 @@
 \alias{gl.report.hwe}
 \title{Reports departure from Hardy-Weinberg Equilibrium}
 \usage{
-gl.report.hwe(gl, p = 0.05, pop = "all")
+gl.report.hwe(gl, p = 0.05, subset = "each")
 }
 \arguments{
 \item{gl}{-- a genlight object containing the SNP genotypes [Required]}
 
 \item{p}{-- level of significance (per locus) [Default 0.05]}
 
-\item{pop}{-- populations to combine in the analysis [Default "all"]}
+\item{pop}{-- list populations to combine in the analysis | each | all [Default "all"]}
 }
 \value{
 a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
 and alternate SNP homozygotes; probability of departure from H-W equilibrium,
-and per locus significance.
+and per locus significance with and without Bonferroni Correction.
 }
 \description{
 Calculates the probabilities of agreement with H-W equilibrium based on observed
@@ -27,11 +27,17 @@ Wigginton, JE, Cutler, DJ, and Abecasis, GR.
 \details{
 #Input is a genlight {adegenet} object containing SNP genotypes (0 homozygous for reference SNP, 
 #1 heterozygous, 2 homozygous for alternate SNP).
+
+Tests are applied to all populations pooled (subset="all"), to each population treated separately
+(subset="each") or to selected populations (subset=c("pop1","pop2")). Tests for Hwe are
+only valid if there is no population substructure, and the tests have sufficient power
+only when there is sufficient sample size (n>20).
 }
 \examples{
-result <- gl.report.hwe(testset.gl,0.05, pop=c("EmmacMaclGeor", "EmmacCoopCully"))
+list <- gl.report.hwe(testset.gl,0.05, subset=c("EmmacMaclGeor", "EmmacCoopCully"))
+list <- gl.report.hwe(testset.gl,0.05, subset="all")
+list <- gl.report.hwe(testset.gl,0.05, subset="each")
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

@@ -48,4 +48,3 @@ gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

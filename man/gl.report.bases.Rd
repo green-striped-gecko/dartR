@@ -24,11 +24,9 @@ and transversions assume that there is no directionality, that is C>T is the sam
 the reference state is arbitrary.
 }
 \examples{
-\dontrun{
-list <- gl.report.bases(gl)
-}
+lst <- gl.report.bases(testset.gl)
+lst
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

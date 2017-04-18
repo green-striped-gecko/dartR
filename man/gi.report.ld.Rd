@@ -29,4 +29,3 @@ this function is implemented in a parallel fashion to speed up the process. Ther
 \author{
 Bernd Gruber (glbugs@aerg.canberra.edu.au)
 }
-

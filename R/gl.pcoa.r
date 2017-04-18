@@ -13,8 +13,6 @@
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' pcoa <- gl.pcoa(testset.gl, nfactors=3)
-#
-# Amended 25-Oct-16
 
 gl.pcoa <- function(gl, nfactors=5) {
 x <- gl

@@ -24,4 +24,3 @@ Filter function to facilitate analysing of dart data
 HWEperpop(gi=geni, pvalue = 0.05, plot = TRUE)
 }
 }
-

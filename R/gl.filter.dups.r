@@ -8,8 +8,8 @@
 #' @return The reduced genlight or genind object, plus a summary
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
-
-
+#' @examples
+#' gl <- gl.filter.dups(testset.gl)
 
 gl.filter.dups <- function(gl) {
 

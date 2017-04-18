@@ -12,4 +12,3 @@ Metadata file. Can be integrated via the dart2genlight function.
 Arthur Georges \email{(glbugs@aerg.canberra.edu.au}
 }
 \keyword{datasets}
-

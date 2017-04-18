@@ -21,9 +21,8 @@ and plots as a barchart ordered on heterozygosity.
 #1 heterozygous, 2 homozygous for alternate SNP).
 }
 \examples{
-result <- gl.report.heterozygosity(testset.gl)
+gl.report.heterozygosity(testset.gl)
 }
 \author{
 Bernd Gruber (glbugs@aerg.canberra.edu.au)
 }
-

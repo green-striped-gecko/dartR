@@ -30,11 +30,11 @@
 #' @import ggplot2 directlabels tidyr
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' p <- gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="smart",hadjust=1.5, vadjust=1)
-#' p <- gl.pcoa.plot(pcoa, gl, ellipse=FALSE, p=0.99, labels="ind")
-#' }
-# Amended: 27-Oct-16
+#' gl <- testset.gl
+#' levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
+#' pcoa<-gl.pcoa(gl,nfactors=5)
+#' gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1)
+#' gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1, xaxis=1, yaxis=3)
 
 gl.pcoa.plot <- function(glPca, data, scale=FALSE, ellipse=FALSE, p=0.95, labels="pop", hadjust=1.5, 
                          vadjust=1, xaxis=1, yaxis=2) {

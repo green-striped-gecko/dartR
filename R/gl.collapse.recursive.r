@@ -13,14 +13,11 @@
 #' tables (also stored to disk) [default "collapse"]
 #' @param threshold -- the threshold distance value for amalgamating populations [default 0]
 #' @return The new genlight object with recoded populations.
+#' @import reshape2
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' fd <- gl.collapse.recursive(gl, prefix="testset",threshold=0.026)
-#' }
-#
-# Ammended 9-Mar-17
+#' fd <- gl.collapse.recursive(testset.gl, prefix="testset",threshold=0.026)
 
 gl.collapse.recursive <- function(gl, prefix="collapse", threshold=0) {
 

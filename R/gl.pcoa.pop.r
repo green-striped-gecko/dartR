@@ -16,12 +16,11 @@
 #' @export
 #' @importFrom ape pcoa
 #' @examples
-#' \dontrun{
-#' pcoa <- gl.pop.pcoa(gl)
-#' pcoa <- gl.pop.pcoa(gl, c="cailiez", m="Minkowski", p=2)
-#' }
+#' pcoa <- gl.pcoa.pop(testset.gl)
+#' pcoa <- gl.pcoa.pop(testset.gl, c="cailliez", m="minkowski")
 
-gl.pop.pcoa <- function(gl, c="none", method="euclidean") {
+
+gl.pcoa.pop <- function(gl, c="none", method="euclidean") {
 
   cat("PCoA on allele frequencies -- populations", 
       "as entities, SNP loci as attributes\n")
@@ -32,7 +31,7 @@ gl.pop.pcoa <- function(gl, c="none", method="euclidean") {
 
     t <- pcoa(D, correction=c, rn=attributes(D)$Labels)
 
-    e <- round(t$values[,2]*100,1)
+    e <- round(t$values[,2]*100/sum(t$values[,2]),1)
     cat(paste("Ordination yielded",length(e),"dimensions being the number of populations minus 1\n"))
     cat(paste("  PCoA Axis 1 explains",e[1],"% of the total variance\n"))
     cat(paste("  PCoA Axes 1 and 2 combined explain",e[1]+e[2],"% of the total variance\n"))

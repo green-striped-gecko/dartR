@@ -9,10 +9,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' gl.report.repavg(gl)
-#' result <- gl.filter.repavg(gl, t=0.95)
-#' }
+#' gl.report.repavg(testset.gl)
+#' result <- gl.filter.repavg(testset.gl, t=0.95)
 
 gl.filter.repavg <- function(gl, t=1) {
 x <- gl

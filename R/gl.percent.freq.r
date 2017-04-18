@@ -7,14 +7,12 @@
 #' @return A matrix with allele frequencies (genelight) or presence/absence frequencies (genind) broken down by population and locus
 #' @export
 #' @import adegenet
-#' @importFrom data.table melt
+#' @importFrom reshape2 melt
 #' @importFrom plyr ddply
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
 #' m <-  gl.percent.freq(testset.gl)
 #' m
-#' }
 
 gl.percent.freq<- function(gl) {
 x <- gl
@@ -34,18 +32,18 @@ x <- gl
   rownames(m) <- pop(x)
     
 # Convert the SNP data to long format
-  m.long <- data.table::melt(m, na.rm=FALSE)
+  m.long <- melt(m, na.rm=FALSE)
   colnames(m.long) <- c("popn", "locus", "snp")
     
 # Calculate sums and counts broken down by population and locus
   cat("  Tallying allele frequencies, this may take some time\n")
   m.summed<-ddply(
             m.long,
-            c("popn","locus"),
+            .(popn,locus),
             summarize,
-            sums=sum(as.numeric(as.character(m.long$snp)),na.rm=TRUE),
-            count=sum(!is.na(m.long$snp)),
-            missing=sum(is.na(m.long$snp))
+            sums=sum(as.numeric(as.character(snp)),na.rm=TRUE),
+            count=sum(!is.na(snp)),
+            missing=sum(is.na(snp))
             )
   names(m.summed)<-c("popn","locus","sum","nobs","nmissing")
   
