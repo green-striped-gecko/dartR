@@ -17,18 +17,20 @@
 #' If a pair of DNA sequences are of differing length, the longer is truncated.
 #'
 #' The algorithm is that of Johann de Jong 
-#' (https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/)
+#' \url(https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/)
 #' as implimented in utils.hamming.r
 #'
 #' @param gl -- genlight object [required]
 #' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
 #' @return Histogram of Hamming distance for the gl object
+#' @importFrom stat sd mean
+#' @importFrom graphics hist
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' gl.report.hamming(testset.gl)
 
-gl.report.hamming <- function(gl, rs=4) {
+gl.report.hamming <- function(gl, rs=5) {
   
   x <- gl
   

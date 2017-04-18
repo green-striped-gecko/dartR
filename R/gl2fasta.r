@@ -1,7 +1,13 @@
 #' Concatenates DArT trimmed sequences and outputs a fastA file.
 #'
-#' Heterozygous loci are resolved by either assigning ambiguity codes or by random allele assignment. 
+#' Concatenated sequence tags are useful for phylogenetic methods where information
+#' on base frequencies and transition and transversion ratios are required (for
+#' example, Maximum Liklihood methods). Where relevant, heterozygous loci are resolved 
+#' before concatenation by either assigning ambiguity codes or by random allele 
+#' assignment. 
 #'
+#' Four methods are employed
+#' 
 #' Method 1 -- heterozygous positions are replaced by
 #' the standard ambiguity codes. The resultant sequence fragments are concatenated across loci to generate
 #' a single combined sequence to be used in subsequent ML phylogenetic analyses.
@@ -17,6 +23,8 @@
 #' Method=4 -- the heterozyous state is resolved by randomly assigning one or the other SNP variant
 #' to the individual. The resultant SNP bases are concatenated across loci to generate
 #' a single composite haplotype to be used in subsequent MP phylogenetic analyses.
+#' 
+#' Trimmed sequences for which the SNP has been trimmed out, rarely, by adaptor mis-identity are deleted.
 #'
 #' The script writes out the composite haplotypes for each individual as a fastA file. Requires
 #' 'TrimmedSequence' and 'SNP' (position and type of transition/transversion of a locus) to be among the locus metrics (\code{@other$loc.metrics}) headers.
