@@ -1,5 +1,9 @@
-# dartR
+
+![][id]
+
 #### Importing and Analysing DArT type snp and silicodart data
+
+
 
 
 Currently the installation of the package might not run smoothly, as it requires additional bioconductor and github packages that need to be installed. 
@@ -49,4 +53,4 @@ Have fun working with dartR! Any issues you encounter please use the issues tab 
 
 Cheers, Bernd & Arthur
 
-
+[id]: vignettes/figures/dartRlogo.png ""
