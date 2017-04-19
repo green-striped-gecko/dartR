@@ -17,6 +17,11 @@
 gl.percent.freq<- function(gl) {
 x <- gl
 
+# Workaround to deal with an idiosyncratic CRAN issue
+  popn <- NULL
+  locus <- NULL
+  snp <- NULL
+  
 # Determine data type
   if(class(x)=="genlight"){
     cat("Using SNP data from a genlight object\n")

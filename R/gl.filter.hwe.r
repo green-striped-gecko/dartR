@@ -14,7 +14,7 @@
 #' 
 #' @param gl -- a genlight object containing the SNP genotypes [Required]
 #' @param p -- level of significance (per locus) [Default 0.05]
-#' @param pop -- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]
+#' @param basis -- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]
 #' @param bon -- apply bonferroni correction to significance levels for filtering [default TRUE]  
 #' @return a genlight object with the loci departing significantly from HWE removed
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)

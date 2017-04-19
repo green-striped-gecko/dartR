@@ -1,4 +1,16 @@
-#' Utility script not meant for end users
+#' Calculates departure from Hardy-Weinberg Equilibrium. Utility script not meant 
+#' for end users.
+#' 
+#' Calculates the probabilities of agreement with H-W equilibrium based on observed
+#' frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
+#' Uses the exact calculations contained in function prob.hwe() as developed by
+#' Wigginton, JE, Cutler, DJ, and Abecasis, GR.
+#' 
+#' @param x -- a genlight object containting the SNP profiles for a population [Required]
+#' @param prob -- level of significance [Default 0.05]
+#' @return Locus, Hom_1, Het, Hom_2, N, Prob, Sig, BonSig)
+#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' 
 utils.hwe <- function (x, prob=0.05) {
   m <- as.matrix(x)  
   # Intialize arrays
