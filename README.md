@@ -2,8 +2,8 @@
 Importing and Analysing DArT type snp and silicodart data
 
 
-Currently the installation of the package might not run smoothly as it requires additional bioconductor and github package. 
-A that always seems to work is copy paste the script below into your R-console. If you are lucky it simply installs all packages:
+Currently the installation of the package might not run smoothly, as it requires additional bioconductor and github packages that need to be installed. 
+To install the packages and all dependencies copy paste the script below into your R-console. (If you are lucky it simply installs all packages without any errro message and you are done):
 
 
 ```install.packages("devtools")```
@@ -24,7 +24,7 @@ A that always seems to work is copy paste the script below into your R-console. 
 
 
 
-Unfortunately sometime to us unkown reason R is not able to install all dependent packages and breaks with an error message. 
+Unfortunately sometimes to us unkown reasons R is not able to install all dependent packages and breaks with an error message. 
 Then you need to install packages "by hand". For example you may find:
 
 ```ERROR: dependency 'seqinr' is not available for package 'dartR'```
@@ -33,7 +33,7 @@ Then you need to install packages "by hand". For example you may find:
 
 ```Error: Command failed (1)```
 
-Then you need to install the package seqinr via: 
+Then you need to install the package ```seqinr``` via: 
 
 ```install.packages("seqinr")```
 
@@ -49,7 +49,7 @@ This "game"  of ```install.packages()``` and ```install_github()``` [the last tw
 
 **without any error** (warnings if you are using an older version of R are okay) and you are done. 
 
-Have fun working with dartR (any issues you encounter please use the issues tab on github or contact us via email under glbugs@aerg.canberra.edu.au
+Have fun working with dartR! Any issues you encounter please use the issues tab on github or contact us via email under glbugs@aerg.canberra.edu.au
 
 Cheers, Bernd & Arthur
 
