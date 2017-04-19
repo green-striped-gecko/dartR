@@ -10,6 +10,7 @@
 #' @param s1 -- percentage SNP allele frequency for the first population [required]
 #' @param s2 -- percentage SNP allele frequency for the second population [required]
 #' @param t -- threshold value for tollerance in when a difference is regarded as fixed [default 0]
+#' @export
 #' @return TRUE (fixed difference) or FALSE (alleles shared) or NA (one or both s1 or s2 missing)
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples

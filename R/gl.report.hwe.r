@@ -15,7 +15,7 @@
 #' 
 #' @param gl -- a genlight object containing the SNP genotypes [Required]
 #' @param p -- level of significance (per locus) [Default 0.05]
-#' @param pop -- list populations to combine in the analysis | each | all [Default "all"] 
+#' @param subset -- list populations to combine in the analysis | each | all [Default "all"] 
 #' @return a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
 #' and alternate SNP homozygotes; probability of departure from H-W equilibrium,
 #' and per locus significance with and without Bonferroni Correction.
