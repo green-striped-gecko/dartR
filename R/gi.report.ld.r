@@ -12,7 +12,7 @@
 #' @param chunkname the name of the chunks for saving, default is NULL 
 #' @return returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed.
 #' @export
-#' @importFrom data.table rbindlist
+#' @importFrom data.table rbindlist setnames
 #' @import parallel 
 #' @import foreach
 #' @importFrom doParallel registerDoParallel
