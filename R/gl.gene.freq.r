@@ -17,10 +17,10 @@
 gl.gene.freq <- function(gl, method=pop(gl), stats="mean") {
   
   # For each column of gl, apply the function tapply with index variable pop(gl)and function mean(x)/2
-  if (stat=="mean"){
+  if (stats=="mean"){
     t=apply(as.matrix(gl),2, tapply, pop(gl), function(x){mean(x, na.rm=TRUE)/2}) 
   } else {
-    cat("Only stat=\"mean\" is implemented\n"); stop()
+    cat("Only stats=\"mean\" is implemented\n"); stop()
   }
   return(t)
 } 

@@ -27,7 +27,7 @@ sequence and terminating at the last base of the shorter sequence.
 }
 \details{
 Hamming distance can be computed 
-by exploiting the fact that the dot product of two binary vectors x and (1 – y) 
+by exploiting the fact that the dot product of two binary vectors x and (1-y)
 counts the corresponding elements that are different between x and y.
 This approach can also be used for vectors that contain more than two possible 
 values at each position (e.g. A, C, T or G).
@@ -35,7 +35,7 @@ values at each position (e.g. A, C, T or G).
 If a pair of DNA sequences are of differing length, the longer is truncated.
 
 The algorithm is that of Johann de Jong 
-\code{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
+\url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 as implimented in utils.hamming.r
 
 Only one of two loci are retained if their Hamming distance is less that a specified
