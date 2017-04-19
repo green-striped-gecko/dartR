@@ -46,7 +46,7 @@ If the two DNA sequences are of differing length, the longer is truncated. The
 initial common restriction enzyme recognition sequence is ignored.
 
 The algorithm is that of Johann de Jong 
-(https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/)
+\code{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 }
 \examples{
 str1 <- "aatgGCTAG"

@@ -9,14 +9,14 @@
  and calculates the selected statistic for each locus, broken down by the groups defined
  by the index variable.}
 \usage{
-gl.gene.freq(gl, method = pop(gl), stat = "mean")
+gl.gene.freq(gl, method = pop(gl), stats = "mean")
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing the SNP data [required]}
 
 \item{method}{-- breakdown variable [default pop(x)]}
 
-\item{stat}{-- statistic to calculate: mean [only mean(x)/2 currently implemented]}
+\item{stats}{-- statistic to calculate: mean [only mean(x)/2 currently implemented]}
 }
 \value{
 A matrix, populations (rows) by loci (columns), showing the statistic [mean/2]

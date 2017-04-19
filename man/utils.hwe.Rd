@@ -2,11 +2,26 @@
 % Please edit documentation in R/utils.hwe.r
 \name{utils.hwe}
 \alias{utils.hwe}
-\title{Utility script not meant for end users}
+\title{Calculates departure from Hardy-Weinberg Equilibrium. Utility script not meant 
+for end users.}
 \usage{
 utils.hwe(x, prob = 0.05)
 }
+\arguments{
+\item{x}{-- a genlight object containting the SNP profiles for a population [Required]}
+
+\item{prob}{-- level of significance [Default 0.05]}
+}
+\value{
+Locus, Hom_1, Het, Hom_2, N, Prob, Sig, BonSig)
+}
 \description{
-Utility script not meant for end users
+Calculates the probabilities of agreement with H-W equilibrium based on observed
+frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
+Uses the exact calculations contained in function prob.hwe() as developed by
+Wigginton, JE, Cutler, DJ, and Abecasis, GR.
+}
+\author{
+Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
 

@@ -4,7 +4,7 @@
 \alias{gl.report.hamming}
 \title{Calculates the pairwise Hamming distance between DArT trimmed DNA sequences}
 \usage{
-gl.report.hamming(gl, rs = 4)
+gl.report.hamming(gl, rs = 5)
 }
 \arguments{
 \item{gl}{-- genlight object [required]}
@@ -33,7 +33,7 @@ values at each position (e.g. A, C, T or G).
 If a pair of DNA sequences are of differing length, the longer is truncated.
 
 The algorithm is that of Johann de Jong 
-(https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/)
+\link{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 as implimented in utils.hamming.r
 }
 \examples{

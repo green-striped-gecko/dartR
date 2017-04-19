@@ -28,7 +28,7 @@
 #' initial common restriction enzyme recognition sequence is ignored.
 #'
 #' The algorithm is that of Johann de Jong 
-#' \url(https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/)
+#' \code{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 #'
 #' @param str1 -- string containing the first sequence [required]
 #' @param str2 -- string containing the second sequence [required]

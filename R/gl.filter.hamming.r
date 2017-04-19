@@ -17,7 +17,7 @@
 #' If a pair of DNA sequences are of differing length, the longer is truncated.
 #'
 #' The algorithm is that of Johann de Jong 
-#' \url(https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/)
+#' \code{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 #' as implimented in utils.hamming.r
 #' 
 #' Only one of two loci are retained if their Hamming distance is less that a specified

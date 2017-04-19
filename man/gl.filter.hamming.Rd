@@ -4,7 +4,7 @@
 \alias{gl.filter.hamming}
 \title{Filters loci in a genlight object based on pairwise Hamming distance between sequence tags}
 \usage{
-gl.filter.hamming(gl = gl, t = 0.2, rs = 4)
+gl.filter.hamming(gl = gl, t = 0.2, rs = 5)
 }
 \arguments{
 \item{gl}{-- genlight object [required]}
@@ -35,7 +35,7 @@ values at each position (e.g. A, C, T or G).
 If a pair of DNA sequences are of differing length, the longer is truncated.
 
 The algorithm is that of Johann de Jong 
-(https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/)
+\code{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 as implimented in utils.hamming.r
 
 Only one of two loci are retained if their Hamming distance is less that a specified

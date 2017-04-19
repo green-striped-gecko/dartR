@@ -7,14 +7,14 @@
 #'
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @param method -- breakdown variable [default pop(x)]
-#' @param stat -- statistic to calculate: mean [only mean(x)/2 currently implemented]
+#' @param stats -- statistic to calculate: mean [only mean(x)/2 currently implemented]
 #' @return A matrix, populations (rows) by loci (columns), showing the statistic [mean/2]
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' result <- gl.gene.freq(testset.gl, method=pop(gl), stat="mean")
 
-gl.gene.freq <- function(gl, method=pop(gl), stat="mean") {
+gl.gene.freq <- function(gl, method=pop(gl), stats="mean") {
   
   # For each column of gl, apply the function tapply with index variable pop(gl)and function mean(x)/2
   if (stat=="mean"){
