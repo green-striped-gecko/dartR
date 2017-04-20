@@ -7,11 +7,11 @@
 
 
 Currently the installation of the package might not run smoothly, as it requires additional bioconductor and github packages that need to be installed. 
-To install the packages and all dependencies copy paste the script below into your R-console. (If you are lucky it simply installs all packages without any errro message and you are done):
+To install the packages and all dependencies copy paste the script below into your R-console. (If you are lucky it simply installs all packages without any error message and you are done):
 
 
 ```{r}
-install.packages("devtools")```
+install.packages("devtools")
 library(devtools)
 source("http://bioconductor.org/biocLite.R")
 biocLite("qvalue", suppressUpdates=T)
@@ -20,7 +20,6 @@ install_github("whitlock/OutFLANK")
 install_github("green-striped-gecko/dartR")
 library(dartR)
 ```
-
 
 
 Unfortunately sometimes to us unkown reasons R is not able to install all dependent packages and breaks with an error message. 
@@ -40,7 +39,7 @@ And run the last line of code again:
 
 ```install_github("green-striped-gecko/dartR")```
 
-This "game"  of ```install.packages()``` and ```install_github()``` [the last two steps] might need to be repeated for additional packages as for whatever reason R does no longer install all packages (if anyone could tell me a way to fix this it would be highly appreciated). Finally you should be able to run:
+This "game"  of ```install.packages()``` and ```install_github()``` [the last two steps] might need to be repeated for additional packages as for whatever reason R does no longer install all packages (if anyone could tell me a way to fix this, it would be highly appreciated). Finally you should be able to run:
 
 ```{r}
 install_github("green-striped-gecko/dartR")
