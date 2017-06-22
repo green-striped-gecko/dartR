@@ -17,22 +17,25 @@
 #' }
 #' @references Whitlock, M.C. and Lotterhos K.J. (2015) Reliable detection of loci responsible for local adaptation: inference of a neutral model through trimming the distribution of Fst. The American Naturalist 186: 24 - 36.
 
+
+#Needs to be included but outflank is not officially on CRAN
 gi.outflank <- function(gi, plot=TRUE)
 {
   #library(OutFLANK)
   #library(qvalue)
   # outflank requires (of course) a different format 
   # missing value is 9!!! tempted to rewrite their model to be able to use genlight directly....
-  snpmat <- as.matrix(gi)#(matrix(NA, nrow=nind, ncol=nsnp)
-  snpmat <- replace(snpmat, is.na(snpmat), 9) 
-  mdfm <- OutFLANK::MakeDiploidFSTMat(SNPmat = snpmat, list(colnames(snpmat)), list(as.character(gi@pop)))
+#  snpmat <- as.matrix(gi)#(matrix(NA, nrow=nind, ncol=nsnp)
+#  snpmat <- replace(snpmat, is.na(snpmat), 9) 
+#  mdfm <- OutFLANK::MakeDiploidFSTMat(SNPmat = snpmat, list(colnames(snpmat)), list(as.character(gi@pop)))
   #run outflank
-  outf <- OutFLANK::OutFLANK(mdfm, LeftTrimFraction = 0.05, RightTrimFraction = 0.05, Hmin = 0.1, NumberOfSamples = length(levels(gi@pop)), qthreshold = 0.05)
-  if (plot) OutFLANK::OutFLANKResultsPlotter(outf)
+#  outf <- OutFLANK::OutFLANK(mdfm, LeftTrimFraction = 0.05, RightTrimFraction = 0.05, Hmin = 0.1, NumberOfSamples = length(levels(gi@pop)), qthreshold = 0.05)
+#  if (plot) OutFLANK::OutFLANKResultsPlotter(outf)
   #the filter if we believe in Whitlock and why wouldn't we?
-  index.outflank <- !(outf$results$OutlierFlag) ## 6650 inliers and 188 outliers 
-  return(list(index=index.outflank, outflank=outf))
+#  index.outflank <- !(outf$results$OutlierFlag) ## 6650 inliers and 188 outliers 
+#  return(list(index=index.outflank, outflank=outf))
   #sum(!index.outflank) #number of outliers 
+return(1)
 }
 
 
