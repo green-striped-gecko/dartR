@@ -11,9 +11,9 @@ output:
     toc: yes
     toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{dartR Introduction}
-  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{dartR_Introduction}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
