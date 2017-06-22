@@ -4,12 +4,14 @@
 \alias{gl.fixed.diff}
 \title{Generate a matrix of fixed differences from a genelight or genind object \{adegenet\}}
 \usage{
-gl.fixed.diff(gl, t = 0)
+gl.fixed.diff(gl, t = 0, probar = FALSE)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
 \item{t}{-- threshold value for tollerance in when a difference is regarded as fixed}
+
+\item{probar}{-- switch to output progress bar [default is false]}
 }
 \value{
 Matrix of fixed differences

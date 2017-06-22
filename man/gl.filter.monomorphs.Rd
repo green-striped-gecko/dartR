@@ -4,10 +4,12 @@
 \alias{gl.filter.monomorphs}
 \title{Remove monomorphic loci, including those with all NAs}
 \usage{
-gl.filter.monomorphs(gl)
+gl.filter.monomorphs(gl, probar = FALSE)
 }
 \arguments{
 \item{gl}{-- name of the input genlight object [required]}
+
+\item{probar}{-- switch to output progress bar [default is false]}
 }
 \value{
 A genlight object with monomorphic loci removed

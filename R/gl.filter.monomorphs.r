@@ -6,6 +6,7 @@
 #' the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
 #'
 #' @param gl -- name of the input genlight object [required]
+#' @param probar -- switch to output progress bar [default is false]
 #' @return A genlight object with monomorphic loci removed
 #' @import adegenet plyr utils
 #' @export
@@ -13,7 +14,7 @@
 #' @examples
 #' gl <- gl.filter.monomorphs(testset.gl)
 
-gl.filter.monomorphs <- function (gl) {
+gl.filter.monomorphs <- function (gl, probar=FALSE) {
 x <- gl
 
   cat("Identifying monomorphic loci\n")
@@ -35,8 +36,10 @@ x <- gl
   for (i in 1:nLoc(x)) {index[i] <- NA}
   
 # Set up the progress counter
-  pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-  getTxtProgressBar(pb)
+  if (probar) {
+    pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+    getTxtProgressBar(pb)
+  }
   # Identify polymorphic, monomorphic and 'all na' loci
   # Set a,b,c,d <- TRUE if monomorphic, or if all NAs
   xmat <-as.matrix(x)
@@ -53,7 +56,7 @@ x <- gl
       d[i] <- FALSE
     }
     ##cat(xmat[,i],a[i],b[i],c[i],d[i],"\n")
-    setTxtProgressBar(pb, i/nLoc(x))
+  if (probar)  setTxtProgressBar(pb, i/nLoc(x))
   }
   s1 <- sum(a,na.rm=TRUE) + sum(b,na.rm=TRUE) + sum(c,na.rm=TRUE)
   s2 <- s1 + sum(d,na.rm=TRUE)

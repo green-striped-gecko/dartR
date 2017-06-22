@@ -15,6 +15,7 @@
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param t -- threshold value for tollerance in when a difference is regarded as fixed
+#' @param probar -- switch to output progress bar [default is false]
 #' @return Matrix of fixed differences
 #' @import adegenet utils
 #' @export
@@ -23,7 +24,7 @@
 #' mat <- gl.fixed.diff(testset.gl, t=0.05)
 #' @seealso \code{\link{is.fixed}}
 
-gl.fixed.diff <- function(gl, t=0) {
+gl.fixed.diff <- function(gl, t=0, probar=FALSE) {
 x <- gl
 
   # Calculate percent allele frequencies
@@ -40,8 +41,10 @@ x <- gl
     loc.count <- array(-1, c(npops, npops))
 
     # Set up the progress counter
-    pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-    getTxtProgressBar(pb)
+    if (probar) {
+      pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+      getTxtProgressBar(pb)
+    }
 
     # Cycle through the data to sum the fixed differences into a square matrix
     flag <- 0
@@ -73,7 +76,7 @@ x <- gl
           }
         }
       }
-      setTxtProgressBar(pb, i/nloci)
+     if(probar) setTxtProgressBar(pb, i/nloci)
     }
 
   # Cycle through the populations to determine sample sizes

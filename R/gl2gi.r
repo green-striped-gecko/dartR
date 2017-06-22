@@ -32,7 +32,7 @@ if (probar)   setTxtProgressBar(pb, i/nrow(x))
   }
   
 cat("\nMatrix converted.. Prepare genind object...\n")
-close(pb)
+if (probar) close(pb)
 gen<-df2genind(x[,], sep="/", ncode=1, ind.names=gl@ind.names, pop = gl@pop, ploidy=2)#, probar=probar)
 gen@other <- gl@other
 

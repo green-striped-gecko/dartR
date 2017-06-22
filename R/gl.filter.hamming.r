@@ -26,13 +26,14 @@
 #' @param gl -- genlight object [required]
 #' @param t -- a threshold Hamming distance for filtering loci [default 0.2]
 #' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
+#' @param probar -- switch to output progress bar [default is false]
 #' @return a genlight object filtered on Hamming distance.
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' gl <- gl.filter.hamming(testset.gl, t=0.25)
 
-gl.filter.hamming <- function(gl=gl, t=0.2, rs=5) {
+gl.filter.hamming <- function(gl=gl, t=0.2, rs=5, probar=TRUE) {
   
   x <- gl
   n0 <- nLoc(x)
@@ -55,8 +56,10 @@ gl.filter.hamming <- function(gl=gl, t=0.2, rs=5) {
   #flag <- rep(FALSE,(nLoc(x)-1))
   nL <- nLoc(x)
   index <- rep(TRUE,(nL-1))
-  pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-  getTxtProgressBar(pb)
+  if (probar) {
+    pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+    getTxtProgressBar(pb)
+  }
   for (i in 1:(nL-1)){
     s1 <- x@other$loc.metrics$TrimmedSequence[i]
     for (j in ((i+1):nL)){
@@ -67,7 +70,7 @@ gl.filter.hamming <- function(gl=gl, t=0.2, rs=5) {
         break
       }
     }
-    setTxtProgressBar(pb, i/(nL-1))
+  if (probar)  setTxtProgressBar(pb, i/(nL-1))
   }
   #index <- flag
   x <- x[,(index)]

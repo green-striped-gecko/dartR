@@ -4,7 +4,7 @@
 \alias{gl.filter.hamming}
 \title{Filters loci in a genlight object based on pairwise Hamming distance between sequence tags}
 \usage{
-gl.filter.hamming(gl = gl, t = 0.2, rs = 5)
+gl.filter.hamming(gl = gl, t = 0.2, rs = 5, probar = TRUE)
 }
 \arguments{
 \item{gl}{-- genlight object [required]}
@@ -12,6 +12,8 @@ gl.filter.hamming(gl = gl, t = 0.2, rs = 5)
 \item{t}{-- a threshold Hamming distance for filtering loci [default 0.2]}
 
 \item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 4]}
+
+\item{probar}{-- switch to output progress bar [default is false]}
 }
 \value{
 a genlight object filtered on Hamming distance.
