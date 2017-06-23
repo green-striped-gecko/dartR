@@ -25,4 +25,3 @@ result <- gl.filter.repavg(testset.gl, t=0.95)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

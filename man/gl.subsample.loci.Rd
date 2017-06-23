@@ -29,4 +29,3 @@ result <- gl.subsample.loci(gl, n=200, method="avgPIC")
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

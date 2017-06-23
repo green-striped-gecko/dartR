@@ -21,4 +21,3 @@ Be aware due to ambiguity which one is the reference allele a combination of gi2
 \author{
 Bernd Gruber (glbugs@aerg.canberra.edu.au)
 }
-

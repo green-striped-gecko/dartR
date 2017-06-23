@@ -43,10 +43,9 @@ is.fixed(s1=100, s2=0, t=0)
 is.fixed(96, 4, t=0.05)
 
 }
-\author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
-}
 \seealso{
 \code{\link{gl.fixed.diff}}
 }
-
+\author{
+Arthur Georges (glbugs@aerg.canberra.edu.au)
+}
