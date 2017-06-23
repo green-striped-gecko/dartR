@@ -15,8 +15,9 @@
 #' @export
 #' @author Arthur Georges and Aaron Adamnack (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' fd <- gl.fixed.diff(testset.gl, t=0.05)
-#' gl <- gl.collapse(fd, testset.gl, recode.table="testset_recode.csv",t=0.026)
+#' #only used the first 20 individuals due to runtime reasons 
+#' fd <- gl.fixed.diff(testset.gl[1:20,], t=0.05)
+#' gl <- gl.collapse(fd, testset.gl[1:20,], recode.table="testset_recode.csv",t=0.026)
 
 gl.collapse <- function(fd, gl, recode.table="tmp.csv", t=0, iter=1) {
 

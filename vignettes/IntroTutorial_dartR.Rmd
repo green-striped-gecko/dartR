@@ -409,15 +409,21 @@ barplot(table(pop(gl)), las=2)
 You can reassign individuals to new populations using a recode table. The quickest way to construct a recode table for an active genlight object is using
 
 ```{r, eval=T}
-gl.make.recode.pop(gl, outfile = "new_pop_assignments.csv")
+gl.make.recode.pop(gl, outfile = paste0(tempdir(),"new_pop_assignments.csv"))
 ```
+
+```{block, type="hint"}
+Please note we are using the ```tempdir()``` to read/write files to a location in all examples. Feel free to change that to your needs by just providing a path to the folder of your liking.
+```
+
+
 
 This will generate a csv file with two columns, the first containing the existing population assignments, and the second also containing those assignments ready for editing. This editing is best done in Excel.
 
 The population reassignments are then applied using:
 
 ```{r}
-glnew <- gl.recode.pop(gl, pop.recode="new_pop_assignments.csv")
+glnew <- gl.recode.pop(gl, pop.recode=paste0(tempdir(),"new_pop_assignments.csv"))
 ```
 
 You can check that the new assignments have been applied with:
@@ -433,7 +439,7 @@ Try this using commands in the R editor to create the comma-delimited recode fil
 Another way of population reassignment, and probably the easiest, is to use:
 
 ```{r, eval=FALSE}
-glnew2 <- gl.edit.recode.pop(gl, pop.recode = "new_pop_assingments.csv")
+glnew2 <- gl.edit.recode.pop(gl, pop.recode = paste0(tempdir(),"new_pop_assingments.csv"))
 ```
 
 This command will bring up a window with a table showing the existing population assignments, with a second column available for editing. When the window is closed, the assignments will be applied. If you have optionally nominated a pop.recode file, a recode table will be written to file for future use.
@@ -466,14 +472,14 @@ indNames(gl)[1:10]
 The quickest way to rename individuals is to construct a recode table for an active genlight object is using 
 
 ```{r}
-gl.make.recode.ind(gl, outfile="new_ind_assignments.csv")
+gl.make.recode.ind(gl, outfile=paste0(tempdir(),"new_ind_assignments.csv"))
 ```
 
 This will generate a csv file with two columns, the first containing the existing individual names, and the second also containing those names ready for editing. This editing is best done in Excel.
 
 The population reassignments are then applied using
 ```{r}
-glnew3 <- gl.recode.ind(gl, ind.recode="new_ind_assignments.csv")
+glnew3 <- gl.recode.ind(gl, ind.recode=paste0(tempdir(),"new_ind_assignments.csv"))
 
 ```
 
@@ -482,7 +488,7 @@ You can check that the new assignments have been applied with ```indNames(gl)```
 Another way of individual reassignment is to use
 
 ```{r, eval=F}
-gl <- gl.edit.recode.ind(gl, ind.recode="new_ind_assignments.csv")
+gl <- gl.edit.recode.ind(gl, ind.recode=paste0(tempdir(),"new_ind_assignments.csv"))
 ```
 
 
@@ -595,17 +601,17 @@ Several packages have already implemented the calculations of F statistics. Ther
 For Fst and Neis Gst we recommend the use of functions of the StAMPP package as they allow for the use of parallel computing, which is much faster. It also works on genlight objects directly and therefore no conversion is necessary. For a more detailed explanation on options to achieve also confidence intervals via bootstrap refer to the StAMPP help pages)
 stamppFst calculates pairwise Fst values between populations. (due to performance reasons we use only the first 30 individuals, which result in 8 populations :
 
-```{r, warning=FALSE}
+```{r, eval=FALSE}
 library(StAMPP) #you may need to install the package
-pwfst <-stamppFst(gl[1:20], nboots=1, percent=95, nclusters=1)
+pwfst <-stamppFst(gl[1:20,], nboots=1, percent=95, nclusters=1)
 round(pwfst,3)
 ```
 
 
 For Neis Gst use 
 
-```{r}
-pwGst <-stamppNeisD(gl[1:20]) #no parallel version :-()
+```{r, eval=FALSE}
+pwGst <-stamppNeisD(gl[1:20,]) #no parallel version :-()
 round(pwGst,3)
 ```
 
@@ -750,7 +756,7 @@ gl.collapse.recursive(gl, t=0)
 will ultimately yield a grouping of aggregate populations that are diagnosable from each other by one or more fixed allelic differences. Here is the output, abridged:
 Let's refresh the data again, to bring back in the outgroups, then run the analysis.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 gl <- testset.gl
 gl.collapse.recursive(gl, t=0)
 
@@ -817,7 +823,7 @@ The reason for including the full trimmed sequences, most of the bases of which 
 The base frequencies and transition and transversion ratios can in any case be obtained using
 
 ```{r}
-gl.report.bases(gl)
+gl.report.bases(testset.gl)
 ```
 
 Monomorphic sites are parsimony uninformative, so a more compact output fastA file, for parsimony analyses, can be generated with
@@ -846,7 +852,7 @@ gl2fasta(gl, method=3, outfile="ambcodes.fasta")
 
 These data can be used in some Maximum Likelihood software by providing base frequencies and transition and transversion ratios separately. They can be calculated with
 ```{r}
-gl.report.bases(gl)
+gl.report.bases(testset.gl)
 ```
 
 # Genlight Conversion
@@ -861,11 +867,8 @@ gi <- gl2gi(gl, probar=FALSE)
 
 Conversion in the opposite direction can be achieved with 
 
-```{r}
+```{r, eval=FALSE}
 gl2 <- gi2gl(gi)
-gl
-gl2
-
 ```
 
 
@@ -888,8 +891,8 @@ NewHybrids (Anderson and Thompson, 2002) employs a statistical method for identi
 
 To generate an input file for NewHybrids, use the function
 
-```{r}
-glnew <- gl2nhyb(gl)
+```{r, eval=TRUE}
+glnew <- gl2nhyb(gl, outfile = paste0(tempdir(),"nhyb.txt"))
 ```
 
 with appropriate options set, for example:
@@ -955,8 +958,8 @@ STRUCTURE is one of the most widely used population analysis tools that allows r
 
 To generate an input file for fastSTRUCTURE, use the function (this format can also be used for input to STRUCTURE, though the meta data options are not supported yet):
 
-```{r}
-gl2faststructure(gl, outfile="myfile.fs", probar = FALSE)
+```{r, eval=T}
+gl2faststructure(gl, outfile=paste0(tempdir(),"myfile.fs"), probar = FALSE)
 ```
 
 

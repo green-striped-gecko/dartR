@@ -99,16 +99,16 @@ table(pop(gl))
 barplot(table(pop(gl)), las=2)
 
 ## ---- eval=T-------------------------------------------------------------
-gl.make.recode.pop(gl, outfile = "new_pop_assignments.csv")
+gl.make.recode.pop(gl, outfile = paste0(tempdir(),"new_pop_assignments.csv"))
 
 ## ------------------------------------------------------------------------
-glnew <- gl.recode.pop(gl, pop.recode="new_pop_assignments.csv")
+glnew <- gl.recode.pop(gl, pop.recode=paste0(tempdir(),"new_pop_assignments.csv"))
 
 ## ------------------------------------------------------------------------
 levels(pop(gl))
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  glnew2 <- gl.edit.recode.pop(gl, pop.recode = "new_pop_assingments.csv")
+#  glnew2 <- gl.edit.recode.pop(gl, pop.recode = paste0(tempdir(),"new_pop_assingments.csv"))
 
 ## ------------------------------------------------------------------------
 #only first 10 entries are shown
@@ -117,14 +117,14 @@ indNames(gl)[1:10]
 
 
 ## ------------------------------------------------------------------------
-gl.make.recode.ind(gl, outfile="new_ind_assignments.csv")
+gl.make.recode.ind(gl, outfile=paste0(tempdir(),"new_ind_assignments.csv"))
 
 ## ------------------------------------------------------------------------
-glnew3 <- gl.recode.ind(gl, ind.recode="new_ind_assignments.csv")
+glnew3 <- gl.recode.ind(gl, ind.recode=paste0(tempdir(),"new_ind_assignments.csv"))
 
 
 ## ---- eval=F-------------------------------------------------------------
-#  gl <- gl.edit.recode.ind(gl, ind.recode="new_ind_assignments.csv")
+#  gl <- gl.edit.recode.ind(gl, ind.recode=paste0(tempdir(),"new_ind_assignments.csv"))
 
 ## ------------------------------------------------------------------------
 gl_new <- gl[gl$pop!="EmmacBrisWive", ]
@@ -163,14 +163,14 @@ dim(glsub2@other$loc.metrics)
 d <- gl.dist(gl[1:5,1:10])
 d
 
-## ---- warning=FALSE------------------------------------------------------
-library(StAMPP) #you may need to install the package
-pwfst <-stamppFst(gl[1:20], nboots=1, percent=95, nclusters=1)
-round(pwfst,3)
+## ---- eval=FALSE---------------------------------------------------------
+#  library(StAMPP) #you may need to install the package
+#  pwfst <-stamppFst(gl[1:20,], nboots=1, percent=95, nclusters=1)
+#  round(pwfst,3)
 
-## ------------------------------------------------------------------------
-pwGst <-stamppNeisD(gl[1:20]) #no parallel version :-()
-round(pwGst,3)
+## ---- eval=FALSE---------------------------------------------------------
+#  pwGst <-stamppNeisD(gl[1:20,]) #no parallel version :-()
+#  round(pwGst,3)
 
 ## ---- warning=FALSE------------------------------------------------------
 library(mmod) #you may need to install the package first
@@ -223,10 +223,10 @@ gl.tree.nj(glnew, type="fan")
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl.collapse.recursive(gl, t=0)
 
-## ---- echo=FALSE---------------------------------------------------------
-gl <- testset.gl
-gl.collapse.recursive(gl, t=0)
-
+## ---- echo=FALSE, eval=FALSE---------------------------------------------
+#  gl <- testset.gl
+#  gl.collapse.recursive(gl, t=0)
+#  
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl <- testset.gl
@@ -236,7 +236,7 @@ gl.collapse.recursive(gl, t=0)
 #  gl2fasta(gl, method=2, outfile="nohets.fasta")
 
 ## ------------------------------------------------------------------------
-gl.report.bases(gl)
+gl.report.bases(testset.gl)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl2fasta(gl, method=4, outfile="nohets.fasta")
@@ -252,20 +252,17 @@ gl.report.bases(gl)
 #  
 
 ## ------------------------------------------------------------------------
-gl.report.bases(gl)
+gl.report.bases(testset.gl)
 
 ## ------------------------------------------------------------------------
 gi <- gl2gi(gl, probar=FALSE)
 
 
-## ------------------------------------------------------------------------
-gl2 <- gi2gl(gi)
-gl
-gl2
+## ---- eval=FALSE---------------------------------------------------------
+#  gl2 <- gi2gl(gi)
 
-
-## ------------------------------------------------------------------------
-glnew <- gl2nhyb(gl)
+## ---- eval=TRUE----------------------------------------------------------
+glnew <- gl2nhyb(gl, outfile = paste0(tempdir(),"nhyb.txt"))
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl.new <- gl2nhyb(gl, outfile = "nhyb.txt", p0 = NULL,p1 = NULL, t = 0,   m = "random")
@@ -284,6 +281,6 @@ glnew <- gl2nhyb(gl)
 ## ---- eval=FALSE---------------------------------------------------------
 #  gds <- snpgdsOpen("gl2gds.gds")
 
-## ------------------------------------------------------------------------
-gl2faststructure(gl, outfile="myfile.fs", probar = FALSE)
+## ---- eval=T-------------------------------------------------------------
+gl2faststructure(gl, outfile=paste0(tempdir(),"myfile.fs"), probar = FALSE)
 

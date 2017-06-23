@@ -21,7 +21,9 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' mat <- gl.fixed.diff(testset.gl, t=0.05)
+#' #only used the first 20 individuals due to runtime reasons 
+#' mat <- gl.fixed.diff(testset.gl[1:20,], t=0.05)
+#' mat
 #' @seealso \code{\link{is.fixed}}
 
 gl.fixed.diff <- function(gl, t=0, probar=FALSE) {

@@ -17,7 +17,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' fd <- gl.collapse.recursive(testset.gl, prefix="testset",threshold=0.026)
+#' #only used the first 20 individuals due to runtime reasons
+#' fd <- gl.collapse.recursive(testset.gl[1:20,], prefix="testset",threshold=0.026)
 
 gl.collapse.recursive <- function(gl, prefix="collapse", threshold=0) {
 

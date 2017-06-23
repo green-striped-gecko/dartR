@@ -27,7 +27,8 @@ yield a final table with no distances less than or equal to the specified thresh
 stored to disk as csv files for use with other analyses. In particular, the recode tables can be editted to replace Group1, Group2 etc with meaninful names.
 }
 \examples{
-fd <- gl.collapse.recursive(testset.gl, prefix="testset",threshold=0.026)
+#only used the first 20 individuals due to runtime reasons
+fd <- gl.collapse.recursive(testset.gl[1:20,], prefix="testset",threshold=0.026)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
