@@ -1,20 +1,24 @@
-#' Remove monomorphic loci, including those with all NAs
+#' Report number of private alleles possessed by an individual of unknown provenance
 #'
-#' This script deletes monomorphic loci from a genlight \{adegenet\} object
+#' This script calculates the number of private alleles possessed by individuals of unknown
+#' provinence when compared to a series of populations.
 #'
-#' A DArT dataset will not have monomorphic loci, but they can arise when populations are deleted by assignment or by using
-#' the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
+#' The genlight object should identify individuals to a number of known populations with individuals of unknown
+#' provinence assigned to population "unknown".
 #'
 #' @param gl -- name of the input genlight object [required]
-#' @return A genlight object with monomorphic loci removed
-#' @import adegenet plyr utils
+#' @return A table with unknown individuals as rows; populations as columns; number of loci with private alleles in the body
+#' @import 
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' gl <- gl.filter.monomorphs(testset.gl)
+#' gl <- gl.report.pa(testset.gl)
 
-gl.filter.monomorphs <- function (gl) {
+gl.report.pa <- function (gl) {
 x <- gl
+
+x <- testset.gl
+pop(x[indNames(x)=="UC_00161",])<-"unknown"
 
   cat("Identifying monomorphic loci\n")
   # Create vectors to hold test results
