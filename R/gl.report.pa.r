@@ -97,6 +97,7 @@ x <- gl
 #        cat("Threshold for population retention:",t,"private alleles in the focal individual\n")
         index <- ((pop(x) %in% levels(pop(knowns))[count<=t]) | (as.character(pop(x)) == "unknown"))
         gl <- x[index,]
+        gl <- gl.filter.monomorphs(gl)
         cat("Saved data for the focal individual and populations for which that individual has",t,"or less loci with private alleles\n")
   }  
   return(gl)
