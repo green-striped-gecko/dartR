@@ -27,8 +27,8 @@
 #' Trimmed sequences for which the SNP has been trimmed out, rarely, by adaptor mis-identity are deleted.
 #'
 #' The script writes out the composite haplotypes for each individual as a fastA file. Requires
-#' 'TrimmedSequence' and 'SNP' (position and type of transition/transversion of a locus) to be among the locus metrics (\code{@other$loc.metrics}) headers.
-#' 
+#' 'TrimmedSequence' to be among the locus metrics (\code{@other$loc.metrics}) and information of the type of alleles (slot loc.all e.g. "G/A") and the position of the SNP in slot position of the ```genlight``` object (see testset.gl@position and testset.gl@loc.all for how to format these slots.)
+#'  
 #' @param gl -- name of the DArT genlight object [required]
 #' @param method -- 1 | 2 | 3 | 4. Type method=0 for a list of options  [method=1]
 #' @param outfile -- name of the output file (fasta format) [output.fasta]
@@ -49,15 +49,19 @@
 
 gl2fasta <- function(gl, method=1, outfile="output.fasta") {
   
-  if(class(gl) == "genlight") {
-    cat("Analysing a genlight object\n")
-  } else {
-    cat("Fatal Error: Specify a genlight object\n")
-    stop()
+  if(class(gl) != "genlight") {
+    stop("Fatal Error: Specify a genlight object\n")
   }
-  if(length(gl@other$loc.metrics$TrimmedSequence) == 0) {
-    cat("Fatal Error: Data must include Trimmed Sequences\n"); stop()
+  if(length(gl@other$loc.metrics$TrimmedSequence) != nLoc(gl)) {
+    stop("Fatal Error: Data must include Trimmed Sequences for each loci\n")
   }
+  if(length(gl@position) != nLoc(gl)) {
+     stop("Fatal Error: Data must include position information for each loci\n")
+  }
+  if(length(gl@loc.all) != nLoc(gl)) {
+    stop("Fatal Error: Data must include Trimmed Sequences\n")
+  }
+  
   if(method==1){
     cat("Assigning ambiguity codes to heterozygote SNPs, concatenating trimmed sequence\n")
   }else if (method==2) {
@@ -81,7 +85,7 @@ gl2fasta <- function(gl, method=1, outfile="output.fasta") {
 if (method==1 || method==3) {
 
   allnames <- locNames(gl)
-  snp = as.character(gl@other$loc.metrics$SNP)
+  snp = as.character(gl@loc.all)
   trimmed <- as.character(gl@other$loc.metrics$TrimmedSequence)
   snpmatrix <- as.matrix(gl)
   
@@ -97,9 +101,9 @@ if (method==1 || method==3) {
   rownames(conversion) <- colnames(conversion)
 
 # Extract alleles 1 and 2
-  allelepos = as.numeric(gsub("(\\d{1,3}):(.)>(.)", "\\1", snp, perl=T))
-  allele1 =gsub("(\\d{1,3}):(.)>(.)", "\\2", snp, perl=T)
-  allele2 = gsub("(\\d{1,3}):(.)>(.)", "\\3", snp, perl=T)
+  allelepos = gl@position
+  allele1 =gsub("(.)/(.)", "\\1", snp, perl=T)
+  allele2 = gsub("(.)/(.)", "\\2", snp, perl=T)
 
   
   lenTrim <- nchar(as.character(gl@other$loc.metrics$TrimmedSequence))
@@ -141,16 +145,15 @@ if (method==1 || method==3) {
       }
       }#run only if index is true
     }
-#    seqall = paste(seq, collapse="")
-#    write.fasta(seqall, gl@other$ind.metrics$phylo.label[i], file.out=outfile, open="a")
-
+    # seqall = paste(seq, collapse="")
+    # write.fasta(seqall, gl@other$ind.metrics$phylo.label[i], file.out=outfile, open="a")
     # Join all the trimmed sequence together into one long "composite" haplotype
       result <- paste(seq,sep="",collapse="")
     # Write the results to file in fastA format
       cat(paste0(">", indNames(gl)[i],"_",pop(gl)[i], "\n"))
       cat(result, " \n")
 
-#    cat(paste("Individual:", i,"Took: ", round(proc.time()[3]-ptm),"seconds\n") )
+    # cat(paste("Individual:", i,"Took: ", round(proc.time()[3]-ptm),"seconds\n") )
   }
 
 # Close the output fastA file
@@ -163,9 +166,9 @@ if (method==2 || method==4) {
 
 # Randomly allocate heterozygotes (1) to homozygote state (0 or 2)
   matrix <- as.matrix(gl)
-  cat("Randomly allocating heterozygotes (1) to homozygote state (0 or 2)\n")
-  pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-  getTxtProgressBar(pb)
+  #cat("Randomly allocating heterozygotes (1) to homozygote state (0 or 2)\n")
+  #pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+  #getTxtProgressBar(pb)
   r <- nrow(matrix)
   c <- ncol(matrix)
   for (i in 1:r) {
@@ -175,11 +178,11 @@ if (method==2 || method==4) {
         matrix[i,j] <- (sample(1:2, 1)-1)*2
       }
     }
-    setTxtProgressBar(pb, i/r)
+  #  setTxtProgressBar(pb, i/r)
   }
   
   lenTrim <- nchar(as.character(gl@other$loc.metrics$TrimmedSequence))
-  index <- lenTrim > gl@other$loc.metrics$SnpPosition
+  index <- lenTrim > gl@position
   if (sum(index)!=nLoc(gl)) 
   {
     cat(paste("Not all SNP positions are within the length of the trimmed sequences. Those loci will be deleted (",sum(!index),")."  ) )
@@ -192,15 +195,15 @@ if (method==2 || method==4) {
 
 # For each individual, and for each locus, generate the relevant haplotype 
   seq <- rep(" ", c)
-  pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-  getTxtProgressBar(pb)
+  #pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+  #getTxtProgressBar(pb)
   for (i in 1:r) {
     for (j in 1:c) {
       if (index[j]) {
       # Reassign some variables
         trimmed <- as.character(gl@other$loc.metrics$TrimmedSequence[j])
-        snp <- as.character(gl@other$loc.metrics$SNP[j])
-        snpos <- gl@other$loc.metrics$SnpPosition[j]
+        snp <- gl@loc.all[j]
+        snpos <- gl@position[j]
       # Shift the index for snppos to start from 1 not zero
         snpos <- snpos +1
       
@@ -219,9 +222,8 @@ if (method==2 || method==4) {
             snpbase <- str_sub(trimmed, start=(snpos), end=(snpos))
             end <- str_sub(trimmed, start=snpos+1)
         # Extract the SNP transition bases (e.g. A and T)
-          state.change <- str_split_fixed(snp,":",2)
-          state1 <- str_sub(state.change[2], start=1, end=1)
-          state2 <- str_sub(state.change[2], start=3, end=3)
+          state1 =gsub("(.)/(.)", "\\1", snp, perl=T)
+          state2 = gsub("(.)/(.)", "\\2", snp, perl=T)
         # Change the SNP state to the alternate
           if (snpbase == state1) {
             snpbase <- state2
@@ -249,7 +251,7 @@ if (method==2 || method==4) {
         }
       }  
     }
-    setTxtProgressBar(pb, i/r)
+    #setTxtProgressBar(pb, i/r)
 
     # Join all the trimmed sequence together into one long "composite" haplotype
     result <- paste(seq,sep="",collapse="")
