@@ -45,7 +45,7 @@ a single composite haplotype to be used in subsequent MP phylogenetic analyses.
 Trimmed sequences for which the SNP has been trimmed out, rarely, by adaptor mis-identity are deleted.
 
 The script writes out the composite haplotypes for each individual as a fastA file. Requires
-'TrimmedSequence' and 'SNP' (position and type of transition/transversion of a locus) to be among the locus metrics (\code{@other$loc.metrics}) headers.
+'TrimmedSequence' to be among the locus metrics (\code{@other$loc.metrics}) and information of the type of alleles (slot loc.all e.g. "G/A") and the position of the SNP in slot position of the ```genlight``` object (see testset.gl@position and testset.gl@loc.all for how to format these slots.)
 }
 \examples{
 gl <- gl.filter.repavg(testset.gl,t=1)
