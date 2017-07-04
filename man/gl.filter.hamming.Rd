@@ -49,3 +49,4 @@ gl <- gl.filter.hamming(testset.gl, t=0.25)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+

@@ -33,3 +33,4 @@ fd <- gl.collapse.recursive(testset.gl[1:20,], prefix="testset",threshold=0.026)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+

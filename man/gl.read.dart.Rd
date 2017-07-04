@@ -39,3 +39,4 @@ covfilename <- system.file("extdata","testset_metadata.csv", package="dartR")
 gl <- gl.read.dart(dartfile, covfilename = covfilename, probar=TRUE)
 }
 }
+

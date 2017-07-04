@@ -35,3 +35,4 @@ result <- gl.gene.freq(testset.gl, method=pop(gl), stat="mean")
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+

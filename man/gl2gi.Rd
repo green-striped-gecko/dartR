@@ -23,3 +23,4 @@ this function uses a faster version of df2genind (from the adgegenet package)
 \author{
 Bernd Gruber (glbugs@aerg.canberra.edu.au)
 }
+

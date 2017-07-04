@@ -39,3 +39,4 @@ result <- gl.make.recode.ind(gl, outfile="Emmac_recode_ind.csv")
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
+
