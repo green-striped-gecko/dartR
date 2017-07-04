@@ -409,7 +409,7 @@ barplot(table(pop(gl)), las=2)
 You can reassign individuals to new populations using a recode table. The quickest way to construct a recode table for an active genlight object is using
 
 ```{r, eval=T}
-gl.make.recode.pop(gl, outfile = paste0(tempdir(),"new_pop_assignments.csv"))
+gl.make.recode.pop(gl, outfile = file.path(tempdir(),"new_pop_assignments.csv"))
 ```
 
 ```{block, type="hint"}
@@ -423,7 +423,7 @@ This will generate a csv file with two columns, the first containing the existin
 The population reassignments are then applied using:
 
 ```{r}
-glnew <- gl.recode.pop(gl, pop.recode=paste0(tempdir(),"new_pop_assignments.csv"))
+glnew <- gl.recode.pop(gl, pop.recode=file.path(tempdir(),"new_pop_assignments.csv"))
 ```
 
 You can check that the new assignments have been applied with:
@@ -439,7 +439,7 @@ Try this using commands in the R editor to create the comma-delimited recode fil
 Another way of population reassignment, and probably the easiest, is to use:
 
 ```{r, eval=FALSE}
-glnew2 <- gl.edit.recode.pop(gl, pop.recode = paste0(tempdir(),"new_pop_assingments.csv"))
+glnew2 <- gl.edit.recode.pop(gl, pop.recode = file.path(tempdir(),"new_pop_assingments.csv"))
 ```
 
 This command will bring up a window with a table showing the existing population assignments, with a second column available for editing. When the window is closed, the assignments will be applied. If you have optionally nominated a pop.recode file, a recode table will be written to file for future use.
@@ -472,14 +472,14 @@ indNames(gl)[1:10]
 The quickest way to rename individuals is to construct a recode table for an active genlight object is using 
 
 ```{r}
-gl.make.recode.ind(gl, outfile=paste0(tempdir(),"new_ind_assignments.csv"))
+gl.make.recode.ind(gl, outfile=file.path(tempdir(),"new_ind_assignments.csv"))
 ```
 
 This will generate a csv file with two columns, the first containing the existing individual names, and the second also containing those names ready for editing. This editing is best done in Excel.
 
 The population reassignments are then applied using
 ```{r}
-glnew3 <- gl.recode.ind(gl, ind.recode=paste0(tempdir(),"new_ind_assignments.csv"))
+glnew3 <- gl.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))
 
 ```
 
@@ -488,7 +488,7 @@ You can check that the new assignments have been applied with ```indNames(gl)```
 Another way of individual reassignment is to use
 
 ```{r, eval=F}
-gl <- gl.edit.recode.ind(gl, ind.recode=paste0(tempdir(),"new_ind_assignments.csv"))
+gl <- gl.edit.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))
 ```
 
 
@@ -892,7 +892,7 @@ NewHybrids (Anderson and Thompson, 2002) employs a statistical method for identi
 To generate an input file for NewHybrids, use the function
 
 ```{r, eval=TRUE}
-glnew <- gl2nhyb(gl, outfile = paste0(tempdir(),"nhyb.txt"))
+glnew <- gl2nhyb(gl, outfile = file.path(tempdir(),"nhyb.txt"))
 ```
 
 with appropriate options set, for example:
@@ -959,7 +959,7 @@ STRUCTURE is one of the most widely used population analysis tools that allows r
 To generate an input file for fastSTRUCTURE, use the function (this format can also be used for input to STRUCTURE, though the meta data options are not supported yet):
 
 ```{r, eval=T}
-gl2faststructure(gl, outfile=paste0(tempdir(),"myfile.fs"), probar = FALSE)
+gl2faststructure(gl, outfile=file.path(tempdir(),"myfile.fs"), probar = FALSE)
 ```
 
 

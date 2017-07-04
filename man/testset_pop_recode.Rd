@@ -12,4 +12,3 @@ This test data set is provided to show a typical recode file format.
 Arthur Georges \email{(glbugs@aerg.canberra.edu.au}
 }
 \keyword{datasets}
-

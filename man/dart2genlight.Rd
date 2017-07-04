@@ -27,4 +27,3 @@ the covariate file needs to have very specific headings. First an heading called
 dgl <- dart2genlight(dart, "covariates.csv")
 }
 }
-

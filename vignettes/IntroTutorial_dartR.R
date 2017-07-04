@@ -99,16 +99,16 @@ table(pop(gl))
 barplot(table(pop(gl)), las=2)
 
 ## ---- eval=T-------------------------------------------------------------
-gl.make.recode.pop(gl, outfile = paste0(tempdir(),"new_pop_assignments.csv"))
+gl.make.recode.pop(gl, outfile = file.path(tempdir(),"new_pop_assignments.csv"))
 
 ## ------------------------------------------------------------------------
-glnew <- gl.recode.pop(gl, pop.recode=paste0(tempdir(),"new_pop_assignments.csv"))
+glnew <- gl.recode.pop(gl, pop.recode=file.path(tempdir(),"new_pop_assignments.csv"))
 
 ## ------------------------------------------------------------------------
 levels(pop(gl))
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  glnew2 <- gl.edit.recode.pop(gl, pop.recode = paste0(tempdir(),"new_pop_assingments.csv"))
+#  glnew2 <- gl.edit.recode.pop(gl, pop.recode = file.path(tempdir(),"new_pop_assingments.csv"))
 
 ## ------------------------------------------------------------------------
 #only first 10 entries are shown
@@ -117,14 +117,14 @@ indNames(gl)[1:10]
 
 
 ## ------------------------------------------------------------------------
-gl.make.recode.ind(gl, outfile=paste0(tempdir(),"new_ind_assignments.csv"))
+gl.make.recode.ind(gl, outfile=file.path(tempdir(),"new_ind_assignments.csv"))
 
 ## ------------------------------------------------------------------------
-glnew3 <- gl.recode.ind(gl, ind.recode=paste0(tempdir(),"new_ind_assignments.csv"))
+glnew3 <- gl.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))
 
 
 ## ---- eval=F-------------------------------------------------------------
-#  gl <- gl.edit.recode.ind(gl, ind.recode=paste0(tempdir(),"new_ind_assignments.csv"))
+#  gl <- gl.edit.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))
 
 ## ------------------------------------------------------------------------
 gl_new <- gl[gl$pop!="EmmacBrisWive", ]
@@ -262,7 +262,7 @@ gi <- gl2gi(gl, probar=FALSE)
 #  gl2 <- gi2gl(gi)
 
 ## ---- eval=TRUE----------------------------------------------------------
-glnew <- gl2nhyb(gl, outfile = paste0(tempdir(),"nhyb.txt"))
+glnew <- gl2nhyb(gl, outfile = file.path(tempdir(),"nhyb.txt"))
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl.new <- gl2nhyb(gl, outfile = "nhyb.txt", p0 = NULL,p1 = NULL, t = 0,   m = "random")
@@ -282,5 +282,5 @@ glnew <- gl2nhyb(gl, outfile = paste0(tempdir(),"nhyb.txt"))
 #  gds <- snpgdsOpen("gl2gds.gds")
 
 ## ---- eval=T-------------------------------------------------------------
-gl2faststructure(gl, outfile=paste0(tempdir(),"myfile.fs"), probar = FALSE)
+gl2faststructure(gl, outfile=file.path(tempdir(),"myfile.fs"), probar = FALSE)
 

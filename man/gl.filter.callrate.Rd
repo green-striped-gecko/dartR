@@ -28,4 +28,3 @@ result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

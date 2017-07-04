@@ -38,4 +38,3 @@ gl.dist(testset.gl, method="gower", diag=TRUE)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

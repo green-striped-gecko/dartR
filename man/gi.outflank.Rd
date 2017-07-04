@@ -34,4 +34,3 @@ gi.outflank(gi, plot = TRUE)
 \references{
 Whitlock, M.C. and Lotterhos K.J. (2015) Reliable detection of loci responsible for local adaptation: inference of a neutral model through trimming the distribution of Fst. The American Naturalist 186: 24 - 36.
 }
-

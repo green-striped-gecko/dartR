@@ -19,4 +19,3 @@ Filter for CloneID to select only unique SNPs
 {
 }
 }
-
