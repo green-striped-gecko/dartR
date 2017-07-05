@@ -4,9 +4,9 @@
 #' provenance when compared to a series of target populations.
 #'
 #' @param gl -- name of the input genlight object [required]
-#' @param id -- identity label of the focal individual whose provenance is unknown
-#' @param nmin -- minimum sample size for a target population to be included in the analysis
-#' @param t -- populations to retain in the output genlight object; those for which the focal individual has less than or equal to t loci with private alleles
+#' @param id -- identity label of the focal individual whose provenance is unknown [required]
+#' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
+#' @param t -- populations to retain in the output genlight object; those for which the focal individual has less than or equal to t loci with private alleles [default 0]
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and 
 #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @import 
