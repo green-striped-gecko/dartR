@@ -93,7 +93,7 @@ x <- gl
     pcoa <- gl.pcoa(x2, nfactors=dim)
 
 # Plot the PCoA
-    print(gl.pcoa.plot(pcoa,x2, xaxis=1, yaxis=2, ellipse=TRUE, p=alpha))
+    suppressMessages(print(gl.pcoa.plot(pcoa,x2, xaxis=1, yaxis=2, ellipse=TRUE, p=alpha)))
   
 # Add population names to the scores   
   c <- cbind(pcoa$scores,as.character(pop(x2)))
