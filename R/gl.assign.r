@@ -65,7 +65,8 @@ x <- gl
     cat("There are no further populations to compare for assignment.",levels(pop(x2))[1],"is the best assignment\n")
     stop("Terminating execution")
   }
-
+  
+  cat("\n\nCOMPUTING ASSIGNMENT BASED ON CONFIDENCE ENVELOPES\n\n")
 # Ordinate a reduced space of K = nPop(x2) dimensions
   pcoa <- gl.pcoa(x2, nfactors=nPop(x2),v=FALSE)
 #  gl.pcoa.plot(pcoa,x2, xaxis=3, yaxis=4, ellipse=TRUE)
@@ -147,10 +148,8 @@ x <- gl
   df <- df[rev(order(df$Index)),]
   print(df)
   best <- as.character(df$Population[df$Assign=="yes"][1])
-  cat("Index is a weighted log-likelihood\n")
-  cat("CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
-  cat("Best assignment is the population with the largest value of the Index, in this case",best,"\n")
+  cat("  Index is a weighted log-likelihood\n")
+  cat("  CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
+  cat("  Best assignment is the population with the largest value of the Index, in this case",best,"\n")
   return(df)
 }
-
-
