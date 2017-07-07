@@ -26,6 +26,12 @@
 gl.fixed.diff <- function(gl, t=0) {
 x <- gl
 
+  # Checking for and removing monomorphic loci
+    x2 <- gl.filter.monomorphs(x,v=FALSE)
+    if (nLoc(x2) < nLoc(x)) {
+      cat("Warning: Monomorphic loci present and will be used in percentage fixed difference calculations\n")
+    }
+
   # Calculate percent allele frequencies
     gl.mat.sum <- gl.percent.freq(x)
 
@@ -112,7 +118,7 @@ x <- gl
     colnames(loc.count)<-levels(gl.mat.sum$popn)
     loc.count <- loc.count[order(rownames(loc.count)), order(colnames(loc.count))]
     
-    # Put the sample sizes in the upper matrix, percent fixed differences in the lower matrix
+    # Put the SNP locus counts in the upper matrix, percent fixed differences in the lower matrix
 
     if (npops == 1) {
       cat("All populations amalgamated into one\n")
@@ -120,7 +126,7 @@ x <- gl
     } else {
       for (i in 1:npops-1) {
         for (j in (i+1):npops) {
-          fixed[i,j] <- ind.count[i,j]
+          fixed[i,j] <- round(loc.count[i,j],0)
         }
       }
     }
