@@ -36,12 +36,12 @@
 #' @param id -- identity label of the focal individual whose provenance is unknown [required]
 #' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
 #' @param dim -- number of dimensions to retain in the dimension reduction [default k, number of populations]
-#' @param p -- probability level for bounding ellipses in the PCoA plot [default 0.99]
+#' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.99]
 #' @param t -- populations to retain for consideration; those for which the focal individual has less than or equal to t loci with private alleles [default 0]
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and 
 #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
-#' @import msm
 #' @export
+#' @importFrom stats dnorm qnorm
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' x <- testset.gl

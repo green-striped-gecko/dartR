@@ -255,6 +255,12 @@ gl.report.bases(testset.gl)
 gl.report.bases(testset.gl)
 
 ## ------------------------------------------------------------------------
+x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, t=0)
+
+## ---- fig.height=4-------------------------------------------------------
+x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.95, t=1)
+
+## ------------------------------------------------------------------------
 gi <- gl2gi(gl, probar=FALSE)
 
 

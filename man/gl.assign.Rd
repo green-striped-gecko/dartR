@@ -15,9 +15,9 @@ gl.assign(gl, id, nmin = 10, dim = NULL, alpha = 0.99, t = 0)
 
 \item{dim}{-- number of dimensions to retain in the dimension reduction [default k, number of populations]}
 
-\item{t}{-- populations to retain for consideration; those for which the focal individual has less than or equal to t loci with private alleles [default 0]}
+\item{alpha}{-- probability level for bounding ellipses in the PCoA plot [default 0.99]}
 
-\item{p}{-- probability level for bounding ellipses in the PCoA plot [default 0.99]}
+\item{t}{-- populations to retain for consideration; those for which the focal individual has less than or equal to t loci with private alleles [default 0]}
 }
 \value{
 A genlight object containing the focal individual (assigned to population "unknown") and 
