@@ -38,7 +38,7 @@ x <- gl
   # GENERATE A MATRIX OF PAIRWISE FIXED DIFFERENCES
     
   # Report samples sizes for each population
-    cat("Sample sizes")
+    cat("Populations, aggregations and sample sizes")
     print(table(pop(gl)))
     cat("NOTE: fixed differences can arise through sampling error if sample sizes are small (N < 5)\n")
 

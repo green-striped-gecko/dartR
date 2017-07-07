@@ -102,7 +102,9 @@ gl.collapse <- function(fd, gl, recode.table="tmp.csv", t=0, iter=1) {
 
   n <- unique(result.table[,2])
   n <- n[order(-nchar(n))]
+  m <- n[grep("-",n, invert=TRUE)]
   n <- n[grep("-",n)]
+
   if (length(n) > 0) {
     cat("\n\nPOPULATION GROUPINGS\n")
     for (i in 1:length(n)) {
