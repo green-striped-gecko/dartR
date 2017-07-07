@@ -115,7 +115,7 @@ gl.collapse <- function(fd, gl, recode.table="tmp.csv", t=0, iter=1) {
     # Recode the data file (genlight object)
     gl <- gl.recode.pop(gl, pop.recode=recode.table)
   } else {
-    cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed, no further improvement at d =", round(t, digits=2),"\n"))
+    cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed, no further improvement at d =", t,"\n"))
   }
 
   return(gl)

@@ -14,8 +14,8 @@
 #' that SNP allele frequencies of 95,5 and 5,95 percent will be regarded as fixed.
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
-#' @param t -- threshold value for tollerance in when a difference is regarded as fixed
-#' @return Matrix of fixed differences
+#' @param t -- threshold value for tollerance in when a difference is regarded as fixed [default 0]
+#' @return Matrix of percent fixed differences (lower matrix), number of loci (upper matrix)
 #' @import adegenet utils
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
@@ -30,6 +30,11 @@ x <- gl
     gl.mat.sum <- gl.percent.freq(x)
 
   # GENERATE A MATRIX OF PAIRWISE FIXED DIFFERENCES
+    
+  # Report samples sizes for each population
+    cat("Sample sizes")
+    print(table(pop(gl)))
+    cat("NOTE: fixed differences can arise through sampling error if sample sizes are small (N < 5)\n")
 
    cat("Calculating pairwise fixed differences\n")
    
@@ -84,18 +89,20 @@ x <- gl
     for (i in 1:(length(t)-1)) {
       for (j in i:length(t)) {
         ind.count[i,j] <- t[i] + t[j]
-        if (i < 5 | j < 5) { 
+        if (t[i] < 5 | t[j] < 5) { 
         flag <- 1
         }
       }
     }
     if (flag == 1) {
-      cat("\n   Warning: Some comparisons involve sample sizes were less than 5.\n   Compounded Type I error rate may be high. Consider a priori amalgamation.\n")
+      cat("   Warning: Some comparisons involve sample sizes were less than 5.\n")
+      cat("   Compounded Type I error rate may be high. Consider a priori amalgamation.\n")
     }
 
   # Convert missing values to NA
     fixed[fixed == -1] <- NA
     loc.count[loc.count == -1] <- NA
+  # Convert to percentages if requested  
     fixed <- round(fixed*100/loc.count,4)
   # Tidy up adding row and column names
     rownames(fixed)<-levels(gl.mat.sum$popn)
