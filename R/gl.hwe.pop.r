@@ -7,7 +7,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' HWEperpop(gi=gi, pvalue = 0.05, plot = TRUE)
+#' gl.hwe.pop(gi=gi, pvalue = 0.05, plot = TRUE)
 #' }
 
 #########
