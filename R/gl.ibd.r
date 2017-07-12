@@ -1,7 +1,7 @@
 #' Isolation by distance
 #' 
 #' This functions performs an isolation by distance analysis based on a mantel test and also produces an isolation by distance plot. If a genlight object with coordinates is provided) then a Euclidean and genetic distance matrix are calculated (currently. Currently only pairwise Fst between population is implemented. Coordinates are expected as lat long and converted to Google Earth Mercator projection. If coordinates are already projected, set projected=TRUE. If such an object is provided an isolation by distance analysis and plot is performed on log(Euclidean distance) against population based pairwise Fst/1-Fst (see  Rousseau's distance measure. Genetics April 1, 1997 vol. 145 no. 4 1219-1228)
-#' You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial \url{adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}, using functions from the \link[vegan]{mantel}, \link[StAMPP]{stamppFst} and \link[dismo]{Mercator} packages.
+#' You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), using the functions  \link[vegan]{mantel} (package vegan), \link[StAMPP]{stamppFst} (package StAMPP) and \link[dismo]{Mercator} (package dismo).
 #' 
 #' @importFrom vegan mantel
 #' @importFrom MASS kde2d
@@ -85,7 +85,7 @@ if (plot)
   plot(Dgeo, Dgen, pch=20,cex=0.8)
   image(dens, col=transp(myPal(300),.7), add=TRUE)
   points(Dgeo, Dgen, pch=20,cex=0.8)
-   abline(lm(Dgen~Dgeo))
+  abline(lm(Dgen~Dgeo))
   title("Isolation by distance")
   } else {
     plot(Dgeo, Dgen)
