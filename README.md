@@ -28,6 +28,9 @@ browseVignettes("dartR")
 ```
 to access it.
 
+
+----
+
 #### Manual installation of the latest version 
 
 To install the latest package manually follow the description below:
