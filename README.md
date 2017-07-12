@@ -3,6 +3,8 @@
 
 ### Importing and Analysing DArT type snp and silicodart data
 
+---
+
 #### Changelog (list of newly integrated functions)
 
 [Changelog](https://github.com/green-striped-gecko/dartR/wiki/dartR-wiki)
