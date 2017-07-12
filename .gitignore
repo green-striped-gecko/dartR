@@ -3,4 +3,4 @@
 .RData
 .Ruserdata
 dartR.Rproj
-
+.Rbuildignore
