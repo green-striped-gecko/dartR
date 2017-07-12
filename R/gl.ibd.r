@@ -82,9 +82,10 @@ if (plot)
   # from adegenet tutorial
   dens <- kde2d(Dgeo,Dgen, n=300)
   myPal <- colorRampPalette(c("white","blue","gold", "orange", "red"))
-  plot(Dgeo, Dgen, pch=20,cex=0.5)
+  plot(Dgeo, Dgen, pch=16,cex=0.8)
   image(dens, col=transp(myPal(300),.7), add=TRUE)
-  abline(lm(Dgen~Dgeo))
+  points(Dgeo, Dgen, pch=16,cex=0.8)
+   abline(lm(Dgen~Dgeo))
   title("Isolation by distance")
   } else {
     plot(Dgeo, Dgen)
