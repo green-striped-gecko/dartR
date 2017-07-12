@@ -7,6 +7,7 @@
 
 [Changelog](https://github.com/green-striped-gecko/dartR/wiki/dartR-wiki)
 
+----
 
 #### Installation via CRAN
 
