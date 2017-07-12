@@ -28,7 +28,7 @@ This functions performs an isolation by distance analysis based on a mantel test
 You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial \url{adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}, using functions from the \link[vegan]{mantel}, \link[StAMPP]{stamppFst} and \link[dismo]{Mercator} packages.
 }
 \examples{
-#' \dontrun{
+\dontrun{
 gl <- gl.ibd(gl=testset.gl)
 }
 }

@@ -24,7 +24,7 @@
 #' @references 
 #' Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
 #' @examples 
-#' #' \dontrun{
+#' \dontrun{
 #' gl <- gl.ibd(gl=testset.gl)
 #' }
 
@@ -54,9 +54,10 @@ Dgeo <- dist(pop.xy)
 Dgeo <- log(Dgeo)
 Dgen <- as.dist(stamppFst(gl, nboots=1))
 Dgen <- Dgen/(1-Dgen)
-### order both matrices to be alphabetically
+### order both matrices to be alphabetically as levels in genlight
 ordering <- levels(pop(gl))
 Dgen <- as.dist(as.matrix(Dgen)[ordering, ordering])
+Dgeo <- as.dist(as.matrix(Dgeo)[ordering, ordering])
 }
 
 miss=FALSE
