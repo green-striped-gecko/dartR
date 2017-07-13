@@ -8,19 +8,19 @@
 #' @param gl -- name of the genlight object from which the distance matrix was calculated [required]
 #' @param recode.table -- name of the new recode.table to receive the population reassignments 
 #' arising from the amalgamation of populations [default tmp.csv]
-#' @param t -- the threshold distance value for amalgamating populations [default 0]
+#' @param tpop -- the threshold percentage fixed difference for amalgamating populations [default 0]
 #' @param iter -- a parameter to indicate the cycle when gl.collapse() is used interatively [default 1]
 #' @return The new genlight object with recoded populations
 #' @import adegenet
 #' @export
 #' @author Arthur Georges and Aaron Adamnack (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' fd <- gl.fixed.diff(testset.gl, t=0.05)
-#' gl <- gl.collapse(fd, testset.gl, recode.table="testset_recode.csv",t=0.026)
+#' fd <- gl.fixed.diff(testset.gl, tloc=0.05)
+#' gl <- gl.collapse(fd, testset.gl, recode.table="testset_recode.csv",tpop=0.026)
 
-gl.collapse <- function(fd, gl, recode.table="tmp.csv", t=0, iter=1) {
+gl.collapse <- function(fd, gl, recode.table="tmp.csv", tpop=0, iter=1) {
 
-  cat(paste("Creating a new recode_pop table by amalgamating populations for which d <",t,"\n"))
+  cat(paste("Creating a new recode_pop table by amalgamating populations for which fd <",tpop,"\n"))
 
 # Replace the upper matrix and diagonal with NA
   fd[upper.tri(fd,diag=FALSE)]<-NA
@@ -29,21 +29,21 @@ gl.collapse <- function(fd, gl, recode.table="tmp.csv", t=0, iter=1) {
 # Extract the column names
   pops <- variable.names(fd)
 # Accommodate rounding error
-  if (t==0) {t <- 0.0001}
-# Initialize a list to hold the populations that differ by <= t
+  if (tpop==0) {tpop <- 0.0001}
+# Initialize a list to hold the populations that differ by <= tpop
   zero.list <- list()
 
 # For each population
   for(i in 1:npops){
-  # Identify the other populations for which d <= t
+  # Identify the other populations for which d <= tpop
   # Pull out the rows with a zero and the columns with a zero
-    rowlist<-which(fd[i,] <= t)
-    collist<-which(fd[,i] <= t)
+    rowlist<-which(fd[i,] <= tpop)
+    collist<-which(fd[,i] <= tpop)
   # Create a list of unique populations and assign to population i
     zero.list[[i]]<-unique(c(rowlist,collist))
   }
 
-# Retain the lists of populations with d <= t against each population
+# Retain the lists of populations with fd <= tpop against each population
   hold <- zero.list
 
 # Set a counter for the repeat loop
@@ -117,7 +117,7 @@ gl.collapse <- function(fd, gl, recode.table="tmp.csv", t=0, iter=1) {
     # Recode the data file (genlight object)
     gl <- gl.recode.pop(gl, pop.recode=recode.table)
   } else {
-    cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed, no further improvement at d =", t,"\n"))
+    cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed, no further improvement at fd% =", tpop,"\n"))
   }
 
   return(gl)

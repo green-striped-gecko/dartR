@@ -14,16 +14,16 @@
 #' that SNP allele frequencies of 95,5 and 5,95 percent will be regarded as fixed.
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
-#' @param t -- threshold value for tollerance in when a difference is regarded as fixed [default 0]
+#' @param tloc -- threshold value for tolerance in when a difference at a locus is regarded as fixed [default 0]
 #' @return Matrix of percent fixed differences (lower matrix), number of loci (upper matrix)
 #' @import adegenet utils
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' mat <- gl.fixed.diff(testset.gl, t=0.05)
+#' mat <- gl.fixed.diff(testset.gl, tloc=0.05)
 #' @seealso \code{\link{is.fixed}}
 
-gl.fixed.diff <- function(gl, t=0) {
+gl.fixed.diff <- function(gl, tloc=0) {
 x <- gl
 
   # Checking for and removing monomorphic loci
@@ -31,6 +31,7 @@ x <- gl
     if (nLoc(x2) < nLoc(x)) {
       cat("Warning: Monomorphic loci present and will be used in percentage fixed difference calculations\n")
     }
+    rm(x2)
 
   # Calculate percent allele frequencies
     gl.mat.sum <- gl.percent.freq(x)
@@ -71,7 +72,7 @@ x <- gl
           countk<-countk+1
           if (!is.na(n1+n2)) {
           # Compare and if not missing, increment
-            cf <- is.fixed(gl.mat.sum$frequency[j],gl.mat.sum$frequency[k],t=0)
+            cf <- is.fixed(gl.mat.sum$frequency[j],gl.mat.sum$frequency[k],t=tloc)
             if (!is.na(cf)) {
               if (fixed[countj,countk] == -1) {
                 fixed[countj,countk] <- cf
@@ -101,7 +102,7 @@ x <- gl
       }
     }
     if (flag == 1) {
-      cat("   Warning: Some comparisons involve sample sizes were less than 5.\n")
+      cat("\n   Warning: Some comparisons involve sample sizes were less than 5.\n")
       cat("   Compounded Type I error rate may be high. Consider a priori amalgamation.\n")
     }
 

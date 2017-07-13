@@ -11,25 +11,25 @@
 #' @param gl -- name of the genlight object from which the distance matricies are to be calculated [required]
 #' @param prefix -- a string to be used as a prefix in generating the matricies of fixed differences (stored to disk) and the recode
 #' tables (also stored to disk) [default "collapse"]
-#' @param threshold -- the threshold distance value for amalgamating populations [default 0]
+#' @param tloc -- threshold value for tolerance in when a difference at a locus is regarded as fixed [default 0]
+#' @param tpop -- threshold percentage fixed difference for amalgamating populations [default 0]
 #' @return The new genlight object with recoded populations.
 #' @import reshape2
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' fd <- gl.collapse.recursive(testset.gl, prefix="testset",threshold=0.026)
+#' fd <- gl.collapse.recursive(testset.gl, prefix="testset",tloc=0,tpop=0.026)
 
-gl.collapse.recursive <- function(gl, prefix="collapse", threshold=0) {
-
-# Open a file to receive the analysis listing an add header text
-#  l.name <- paste0(prefix,"_output.lst")
-#  write("FIXED DIFFERENCE ANALYSIS\n", file=l.name)
+gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=0) {
   
+  tl<-tloc
+  tp<-tpop
+
 # Set the iteration counter
   count <- 1
 # Create the initial distance matrix
   cat("Calculating an initial fixed difference matrix\n")
-  fd <- gl.fixed.diff(gl, t=threshold)
+  fd <- gl.fixed.diff(gl, tloc=tl)
 # Construct a filename for the fd matrix
   d.name <- paste0(prefix,"_matrix_",count,".csv")
 # Output the fd matrix for the first iteration to file
@@ -40,18 +40,18 @@ gl.collapse.recursive <- function(gl, prefix="collapse", threshold=0) {
 
 # Repeat until no change to the fixed difference matrix
   cat("Collapsing the initial fixed difference matrix iteratively until no further change\n")
-  cat(paste("     threshold =",threshold,"\n"))
+  cat(paste("     threshold % =",tp,"\n"))
   repeat {
     cat(paste("\nITERATION ", count,"\n"))
   # Construct a filename for the pop.recode table
     recode.name <- paste0(prefix,"_recode_",count,".csv")
   # Collapse the matrix, write the new pop.recode table to file
-    gl <- gl.collapse(fd, gl, recode.table=recode.name, t=threshold, iter=count)
+    gl <- gl.collapse(fd, gl, recode.table=recode.name, tpop=tp, iter=count)
   #  calculate the fixed difference matrix fd
-    fd <- gl.fixed.diff(gl, t=threshold)
+    fd <- gl.fixed.diff(gl, t=tl)
   # If it is not different in dimensions from previous, break
     if (dim(fd)[1] == fd.hold) {
-      cat(paste("\nNo further amalgamation of populations at d < ",threshold,"\n"))
+      cat(paste("\nNo further amalgamation of populations at fd% < ",tp,"\n"))
       break
     }
   # Otherwise, construct a filename for the collapsed fd matrix
@@ -64,6 +64,8 @@ gl.collapse.recursive <- function(gl, prefix="collapse", threshold=0) {
     fd.hold <- dim(fd)[1]
     count <- count + 1
   }
-
+  cat("Fixed difference at a locus defined with tolerance",tl,"\n")
+  cat("Threshold number of fixed differences for amalgamating populations fd% <",tp,"\n")
+  
   return(gl)
 }
