@@ -32,4 +32,3 @@ x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, t=1)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

@@ -41,4 +41,3 @@ input with the OFoutput parameter.  It plots a histogram of the FST (by
 default, the uncorrected FSTs used by OutFLANK) of loci and overlays the
 inferred null histogram.
 }
-

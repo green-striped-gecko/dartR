@@ -44,4 +44,3 @@ Github repository: Whitlock & Lotterhos: \url{https://github.com/whitlock/OutFLA
 \seealso{
 \code{\link{util.outflank}}, \code{\link{util.outflank.plotter}}, \code{\link{util.outflank.MakeDiploidFSTMat}}
 }
-

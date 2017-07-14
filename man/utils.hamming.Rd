@@ -56,4 +56,3 @@ utils.hamming(str1,str2)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

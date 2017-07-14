@@ -19,4 +19,3 @@ Returns a data frame in the form needed for the main OutFLANK function.
 \description{
 Creates OutFLANK input file from individual genotype info.
 }
-

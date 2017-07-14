@@ -75,4 +75,3 @@ Steps:
 \author{
 Bernd Gruber (glbugs@aerg.canberra.edu.au); original implementation of Whitlock & Lotterhos
 }
-

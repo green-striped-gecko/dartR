@@ -24,4 +24,3 @@ Filter function to facilitate analysing of dart data
 gl.hwe.pop(gi=gi, pvalue = 0.05, plot = TRUE)
 }
 }
-

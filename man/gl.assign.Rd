@@ -66,4 +66,3 @@ x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.95, t=1)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

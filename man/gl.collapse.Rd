@@ -34,4 +34,3 @@ gl <- gl.collapse(fd, testset.gl[1:20,], recode.table="testset_recode.csv",t=0.0
 \author{
 Arthur Georges and Aaron Adamnack (glbugs@aerg.canberra.edu.au)
 }
-
