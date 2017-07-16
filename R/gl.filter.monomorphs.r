@@ -6,7 +6,7 @@
 #' the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
 #'
 #' @param x -- name of the input genlight object [required]
-#' @param v -- verbose if TRUE, silent if FALSE [default TRUE]
+#' @param v -- verbosty: 0, silent; 1, brief, 2; verbose if TRUE, silent if FALSE [default 1]
 #' @return A genlight object with monomorphic loci removed
 #' @import adegenet plyr utils
 #' @export
@@ -16,27 +16,27 @@
 #' gl <- gl.filter.monomorphs(gl)
 #' }
 
-gl.filter.monomorphs <- function (gl, v=TRUE) {
+gl.filter.monomorphs <- function (gl, v=1) {
 x <- gl
 
-  if (v==TRUE) {cat("Identifying monomorphic loci\n")}
+  if (v==1) {cat("Identifying monomorphic loci\n")}
 # Create a vector to hold test results
   a <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {a[i] <- NA}
 # Set up the progress counter
-  if (v==TRUE) {pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")}
-  if (v==TRUE) {getTxtProgressBar(pb)}
+  if (v==1) {pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")}
+  if (v==1) {getTxtProgressBar(pb)}
 # Identify polymorphic, monomorphic and 'all na' loci
   # Set a <- TRUE if monomorphic, or if all NAs
   xmat <-as.matrix(x)
   for (i in (1:nLoc(x))) {
     a[i] <- all(xmat[,i]==0,na.rm=TRUE) || all(xmat[,i]==2,na.rm=TRUE)
     if (all(is.na(xmat[,i]))) {a[i] <- NA}
-    if (v==TRUE) {setTxtProgressBar(pb, i/nLoc(x))}
+    if (v==1) {setTxtProgressBar(pb, i/nLoc(x))}
   }
 # Count the number of monomorphic loci (TRUE), polymorphic loci (FALSE) and loci with no scores (all.na)
   counts <- count(a)
-  if (v==TRUE) {
+  if (v==1) {
     cat("\nPolymorphic loci:", counts[1,2], "\nMonomorphic loci:", counts[2,2], "\nLoci with no scores (all NA):" , counts[3,2] ,"\n")
   }
     #Treat all na loci as monomorphic
