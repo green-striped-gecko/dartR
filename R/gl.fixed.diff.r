@@ -10,31 +10,49 @@
 #' probability of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if comparison
 #' between two populations involves sample sizes less than 5, taking into account allele drop-out.
 #'
-#' Tollerance in the definition of a fixed difference is provided by the t parameter. For example, t=0.05 means
+#' Tolerance in the definition of a fixed difference is provided by the tloc parameter. For example, tloc=0.05 means
 #' that SNP allele frequencies of 95,5 and 5,95 percent will be regarded as fixed.
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
-#' @param t -- threshold value for tollerance in when a difference is regarded as fixed
-#' @param probar -- switch to output progress bar [default is false]
-#' @return Matrix of fixed differences
+gl <- gl.filter.monomorphs(gl)#' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
+#' @param pc -- logical value indicating whether to report fixed difference counts (pc=FALSE) or percentages (pc=TRUE) [default TRUE]
+#' @param v -- verbosity = 0, silent; 1, brief; 2, verbose [default 1]
+#' @return Matrix of percent fixed differences (lower matrix), number of loci (upper matrix)
 #' @import adegenet utils
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' #only used the first 20 individuals due to runtime reasons 
-#' mat <- gl.fixed.diff(testset.gl[1:20,], t=0.05)
-#' mat
+#' mat <- gl.fixed.diff(testset.gl, tloc=0.05)
 #' @seealso \code{\link{is.fixed}}
 
-gl.fixed.diff <- function(gl, t=0, probar=FALSE) {
+gl.fixed.diff <- function(gl, tloc=0, pc=FALSE, v=1) {
 x <- gl
+
+  # Checking for and removing monomorphic loci
+    if (v > 0 && pc==TRUE) {
+      x2 <- gl.filter.monomorphs(x,v=0)
+      if (nLoc(x2) < nLoc(x)) {
+        cat("Warning: Monomorphic loci are present and will be used in percentage fixed difference calculations\n")
+      }
+      rm(x2)
+    }
 
   # Calculate percent allele frequencies
     gl.mat.sum <- gl.percent.freq(x)
 
   # GENERATE A MATRIX OF PAIRWISE FIXED DIFFERENCES
-
-   cat("Calculating pairwise fixed differences\n")
+    
+  # Report samples sizes for each population
+    if (v > 0){
+      cat("Populations, aggregations and sample sizes")
+      print(table(pop(x)))
+      if (min(table(pop(x))) < 5 ){
+        cat("Warning: fixed differences can arise through sampling error if sample sizes are small\n")
+        cat("  Some sample sizes are small (N < 5)\n")
+      }
+      cat("\n")
+      cat("Calculating pairwise fixed differences\n")
+    }  
    
   # Establish an array to hold the fixed differences and sample sizes
     npops<-nlevels(gl.mat.sum$popn)
@@ -43,10 +61,12 @@ x <- gl
     loc.count <- array(-1, c(npops, npops))
 
     # Set up the progress counter
-    if (probar) {
+
+    if (v > 0){
       pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
       getTxtProgressBar(pb)
     }
+    
 
     # Cycle through the data to sum the fixed differences into a square matrix
     flag <- 0
@@ -65,7 +85,7 @@ x <- gl
           countk<-countk+1
           if (!is.na(n1+n2)) {
           # Compare and if not missing, increment
-            cf <- is.fixed(gl.mat.sum$frequency[j],gl.mat.sum$frequency[k],t=0)
+            cf <- is.fixed(gl.mat.sum$frequency[j],gl.mat.sum$frequency[k],t=tloc)
             if (!is.na(cf)) {
               if (fixed[countj,countk] == -1) {
                 fixed[countj,countk] <- cf
@@ -78,7 +98,9 @@ x <- gl
           }
         }
       }
-     if(probar) setTxtProgressBar(pb, i/nloci)
+
+      if (v > 0){setTxtProgressBar(pb, i/nloci)}
+
     }
 
   # Cycle through the populations to determine sample sizes
@@ -89,19 +111,21 @@ x <- gl
     for (i in 1:(length(t)-1)) {
       for (j in i:length(t)) {
         ind.count[i,j] <- t[i] + t[j]
-        if (i < 5 | j < 5) { 
+        if (t[i] < 5 | t[j] < 5) { 
         flag <- 1
         }
       }
     }
-    if (flag == 1) {
-      cat("\n   Warning: Some comparisons involve sample sizes were less than 5.\n   Compounded Type I error rate may be high. Consider a priori amalgamation.\n")
+    if (flag == 1 && v > 0) {
+      cat("\n   Warning: Some comparisons involved sample sizes that were less than 5.\n")
+      cat("   Compounded Type I error rate may be high. Consider a priori amalgamation.\n")
     }
 
   # Convert missing values to NA
     fixed[fixed == -1] <- NA
     loc.count[loc.count == -1] <- NA
-    fixed <- round(fixed*100/loc.count,4)
+  # Convert to percentages if requested  
+    if ( pc ) {fixed <- round(fixed*100/loc.count,4)}
   # Tidy up adding row and column names
     rownames(fixed)<-levels(gl.mat.sum$popn)
     colnames(fixed)<-levels(gl.mat.sum$popn)
@@ -110,15 +134,15 @@ x <- gl
     colnames(loc.count)<-levels(gl.mat.sum$popn)
     loc.count <- loc.count[order(rownames(loc.count)), order(colnames(loc.count))]
     
-    # Put the sample sizes in the upper matrix, percent fixed differences in the lower matrix
+    # Put the SNP locus counts in the upper matrix, percent fixed differences in the lower matrix
 
     if (npops == 1) {
-      cat("All populations amalgamated into one\n")
+      if (v > 0){cat("All populations amalgamated into one\n")}
       fixed = 0
     } else {
       for (i in 1:npops-1) {
         for (j in (i+1):npops) {
-          fixed[i,j] <- ind.count[i,j]
+          fixed[i,j] <- round(loc.count[i,j],0)
         }
       }
     }

@@ -15,6 +15,7 @@
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param pop.recode -- name of the csv file containing the population reassignments [required]
+#' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
 #' @return A genlight or genind object with the recoded and reduced data
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
@@ -27,7 +28,7 @@
 #' 
 #'
 
-gl.recode.pop <- function(gl, pop.recode){
+gl.recode.pop <- function(gl, pop.recode, v=1){
 x <- gl
 
   if(class(x)!="genind" & class(x)!="genlight") {
@@ -35,8 +36,10 @@ x <- gl
   }
 
 # RECODE POPULATIONS
-  cat("Processing",class(x),"object\n")
-  cat("  Reassigning entities to populations as per ", pop.recode, "\n")
+  if (v==2) {
+    cat("Processing",class(x),"object\n")
+    cat("  Reassigning entities to populations as per ", pop.recode, "\n")
+  }
   recode.table <- read.csv(pop.recode, stringsAsFactors=FALSE, header=FALSE);
 # Error check
   if(length(unique(pop(x))) != length(unique(recode.table[,1]))) {
@@ -53,16 +56,20 @@ x <- gl
   pop(x) <- pop.list
 
 # Remove rows flagged for deletion
-  cat("  Removing entities flagged for deletion in ", pop.recode, "\n")
+  if (v==2) {
+    cat("  Removing entities flagged for deletion in ", pop.recode, "\n")
+  }  
   x2 <- x[!x$pop=="delete" & !x$pop=="Delete"]
   
-  x2 <- gl.filter.monomorphs(x2)
+  x2 <- gl.filter.monomorphs(x2, v=0)
 
 # REPORT A SUMMARY
-  cat("Summary of recoded dataset\n")
-  cat(paste("  No. of loci:",nLoc(x2),"\n"))
-  cat(paste("  No. of individuals:", nInd(x2),"\n"))
-  cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+  if (v==2) {
+    cat("Summary of recoded dataset\n")
+    cat(paste("  No. of loci:",nLoc(x2),"\n"))
+    cat(paste("  No. of individuals:", nInd(x2),"\n"))
+    cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+  }
 
     return <- x2
 }
