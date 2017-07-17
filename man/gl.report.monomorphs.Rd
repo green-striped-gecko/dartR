@@ -20,9 +20,8 @@ A DArT dataset will not have monomorphic loci, but they can arise when populatio
 Retaining monomorphic loci unnecessarily increases the size of the dataset.
 }
 \examples{
-gl <- gl.report.monomorphs(testset.gl)
+gl2 <- gl.report.monomorphs(testset.gl)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

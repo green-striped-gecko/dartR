@@ -4,17 +4,19 @@
 \alias{gl.fixed.diff}
 \title{Generate a matrix of fixed differences from a genelight or genind object \{adegenet\}}
 \usage{
-gl.fixed.diff(gl, t = 0, probar = FALSE)
+gl.fixed.diff(gl, tloc = 0, pc = FALSE, v = 1)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
-\item{t}{-- threshold value for tollerance in when a difference is regarded as fixed}
+\item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]}
 
-\item{probar}{-- switch to output progress bar [default is false]}
+\item{pc}{-- logical value indicating whether to report fixed difference counts (pc=FALSE) or percentages (pc=TRUE) [default TRUE]}
+
+\item{v}{-- verbosity = 0, silent; 1, brief; 2, verbose [default 1]}
 }
 \value{
-Matrix of fixed differences
+Matrix of percent fixed differences (lower matrix), number of loci (upper matrix)
 }
 \description{
 This script takes SNP data grouped into populations in a genlight object (DArTSeq)
@@ -28,18 +30,15 @@ many loci are examined. Simulations suggest that sample sizes of n1=5 and n2=5 i
 probability of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if comparison
 between two populations involves sample sizes less than 5, taking into account allele drop-out.
 
-Tollerance in the definition of a fixed difference is provided by the t parameter. For example, t=0.05 means
+Tolerance in the definition of a fixed difference is provided by the tloc parameter. For example, tloc=0.05 means
 that SNP allele frequencies of 95,5 and 5,95 percent will be regarded as fixed.
 }
 \examples{
-#only used the first 20 individuals due to runtime reasons 
-mat <- gl.fixed.diff(testset.gl[1:20,], t=0.05)
-mat
-}
-\author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+mat <- gl.fixed.diff(testset.gl, tloc=0.05)
 }
 \seealso{
 \code{\link{is.fixed}}
 }
-
+\author{
+Arthur Georges (glbugs@aerg.canberra.edu.au)
+}

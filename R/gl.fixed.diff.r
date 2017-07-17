@@ -14,7 +14,7 @@
 #' that SNP allele frequencies of 95,5 and 5,95 percent will be regarded as fixed.
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
-gl <- gl.filter.monomorphs(gl)#' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
+#' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
 #' @param pc -- logical value indicating whether to report fixed difference counts (pc=FALSE) or percentages (pc=TRUE) [default TRUE]
 #' @param v -- verbosity = 0, silent; 1, brief; 2, verbose [default 1]
 #' @return Matrix of percent fixed differences (lower matrix), number of loci (upper matrix)

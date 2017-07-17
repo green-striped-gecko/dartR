@@ -24,7 +24,6 @@ This script calculates the number of private alleles possessed by a focal indivi
 provenance when compared to a series of target populations.
 }
 \examples{
-x <- testset.gl
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, t=1)
 
@@ -32,4 +31,3 @@ x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, t=1)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

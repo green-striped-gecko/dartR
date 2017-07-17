@@ -34,4 +34,3 @@ p_value <- prob.hwe(hets, hom_1, hom_2)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

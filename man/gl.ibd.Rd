@@ -32,13 +32,12 @@ You can provide also your own genetic and Euclidean distance matrix. The functio
 gl <- gl.ibd(gl=testset.gl)
 }
 }
-\author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
-}
 \references{
 Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
 }
 \seealso{
 \link[vegan]{mantel}, \link[StAMPP]{stamppFst}, \link[dismo]{Mercator}
 }
-
+\author{
+Bernd Gruber (glbugs@aerg.canberra.edu.au)
+}

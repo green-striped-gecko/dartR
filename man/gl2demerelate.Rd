@@ -23,4 +23,3 @@ df <- gl2demerelate(gl)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

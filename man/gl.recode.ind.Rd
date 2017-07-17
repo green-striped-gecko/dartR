@@ -33,10 +33,9 @@ with all values missing and deletes them (using gl.filter.monomorphs.r)
    gl <- gl.recode.ind(testset.gl, ind.recode="testset_pop_recode.csv")
 }
 }
-\author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
-}
 \seealso{
 \code{\link{gl.filter.monomorphs}}
 }
-
+\author{
+Arthur Georges (glbugs@aerg.canberra.edu.au)
+}

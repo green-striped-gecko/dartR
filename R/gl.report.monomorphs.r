@@ -11,10 +11,11 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' gl <- gl.report.monomorphs(testset.gl)
+#' gl2 <- gl.report.monomorphs(testset.gl)
 
 gl.report.monomorphs <- function (gl) {
-x <- gl
+
+  x <- gl
 
   cat("Identifying monomorphic loci\n")
 # Create vectors to hold test results

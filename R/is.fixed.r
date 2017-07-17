@@ -12,6 +12,7 @@
 #' @param t -- threshold value for tolerance in when a difference is regarded as fixed [default 0]
 #' @return TRUE (fixed difference) or FALSE (alleles shared) or NA (one or both s1 or s2 missing)
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @export 
 #' @examples
 #' is.fixed(s1=100, s2=0, t=0)
 #' is.fixed(96, 4, t=0.05)

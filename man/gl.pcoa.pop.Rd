@@ -32,4 +32,3 @@ pcoa <- gl.pcoa.pop(testset.gl, c="cailliez", m="minkowski")
 \author{
 Arthur Georges (gl.bugs@aerg.canberra.edu.au)
 }
-

@@ -28,4 +28,3 @@ result <- gl2phylip(testset.gl, outfile="test.txt", 1000)
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
-

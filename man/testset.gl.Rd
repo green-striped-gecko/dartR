@@ -15,4 +15,3 @@ A genlight object created via the read.dart functions
 Arthur Georges \email{(glbugs@aerg.canberra.edu.au}
 }
 \keyword{datasets}
-

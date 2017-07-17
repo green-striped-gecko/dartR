@@ -22,4 +22,3 @@ The script writes out the a file in faststructure format.
 \author{
 Bernd Gruber (glbugs@aerg.canberra.edu.au)
 }
-
