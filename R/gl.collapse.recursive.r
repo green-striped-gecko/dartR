@@ -88,7 +88,7 @@ gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, v=1) {
     } else {  
       cat("using fixed differences defined for each locus with tolerance",tloc,"\n")
     }   
-    cat("Number of fixed differences allowing population amalgamation fd <",tpop,"(",round((tpop*100/nLoc(gl)),4),"%)\n")
+    cat("Number of fixed differences allowing population amalgamation fd <=",tpop,"(",round((tpop*100/nLoc(gl)),4),"%)\n")
     cat("Resultant recode tables and fd matricies output with prefix",prefix,"\n")
     cat("NOTE: Lower matrix, percent fixed differences; upper matrix, no. of loci\n")
   }
