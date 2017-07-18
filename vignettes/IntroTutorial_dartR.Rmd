@@ -309,6 +309,93 @@ The individual metadata are held in the genlight object as a dataframe named ind
 gl@other$ind.metrics$sex[1:10]
 ```
 
+## Importing data from other formats
+
+In the table below we list possible avenues to load data from other formats and most importantly also from text simple files.
+
+Import path  | Package | Pathway* | Description 
+------------------|------------|--------|------------------------
+gl.read.dart | dartR |  --- |based on DaRT data [with optional meta data for individuals]
+read.loci    | pegas |  loci2genind, gi2gl | data set are provided as a csv text file (?read.loci)
+read.vcfR   | pegas |  vcfR2genlight   | vcf text file (vcfR package)
+read.fstat | adegenet | gi2gl | Fstat format (version 2.9.3) by Jerome Goudet
+read.genetix | adegenet | gi2gl | Format Belkhir K., Borsa P., Chikhi L., Raufaste N. & Bonhomme F. (1996-2004) GENETIX 
+read.structure | adegenet | gi2gl | Structure format of Pritchard, J.; Stephens, M. & Donnelly, P. (2000)
+read.PLINK  | adegenet | --- |  Data provided in PLINK format 
+fasta2genlight | adegenet | --- | Extracts SNPs data from fasta format (?adegenet)
+read.genetable | PopGenReport | gi2gl |csv text file based on df2genind Adamack & Gruber (2014) (?read.genetable)
+*Pathway provides the order of functions needed to convert data to genlight, --- indicates that the function direclty  converts to a ```genlight``` object
+
+
+Below we exemplify an import from a text file. Provided with the package is a simple data set in a text file format (editable via Excel or Calc) or any text editor.
+To convert your data into a genlight object you can arrange your data set in the same format and also attach already meta data for individuals (will be stored in the \@other slot under data), coordinates as lat longs and population structure.
+
+To have a look at the format in the provided file type:
+
+```{r}
+read.csv( paste(.libPaths()[1],"/dartR/extdata/platy.csv",sep="" ))
+```
+
+We now have to specify each of the columns to be able to read it into R as a genind format using ```read.genetable``` from the PopGenReport package. For a detailed explanation see ```?read.genetable```.
+
+```{r}
+#you might need to install PopGenReport via
+#install.packages("PopGenReport")
+library(PopGenReport) 
+platy <- read.genetable( paste(.libPaths()[1],"/dartR/extdata/platy.csv",
+sep="" ), ind=1, pop=2, lat=3, long=4, other.min=5, other.max=6, oneColPerAll=FALSE,sep="/")
+
+platy
+
+```
+
+To convert the genind to a genlight object simply type:
+
+```{r}
+platy.gl <- (gi2gl(platy))
+```
+
+The resulting genlight object has already some of the meta data as provided in the table but not in the right place (pop, indNames ploidy, loc.n.all and latlong in the ``@other``` slot are already there).
+
+For example to put the individual meta data (group, age) into the right slot in a genlight object we need to move it into the ```@other$ind.metrcis``` slot.
+
+```{r}
+platy.gl@other$ind.metrics <- platy.gl@other$data
+```
+
+If there are additional data available for the loci (e.g. via a csv file) we can also attach that via the ```@other$loc.metrics``` slot using ```read.csv```. For demonstratation we will create some random loci meta data with the code below and store it into a ```data.frame``` called ```df.loc```. We create two columns: TrimmedSequnce (containing the sequence data for each loci, trimmed to a consistent length, and removing the adaptors), and a quality index (ranging from zero to one indicating the reproducibility of repeated runs for that loci).
+
+```{r}
+ts <- sapply(1:nLoc(platy.gl), function(x) paste(sample(c("A","T","G","C"), 50, replace = T),
+                                                 collapse = ""))
+df.loc <- data.frame(RepAvg = runif(nLoc(platy.gl)),  TrimmedSequence=ts)
+
+platy.gl@other$loc.metrics <- df.loc
+
+```
+
+The last line of code stores the loci metadata in the right location and we can use our filter and report function now on the genlight object as before.
+
+```{r}
+gl.report.callrate(platy.gl)
+gl2 <- gl.filter.repavg(platy.gl, t=0.5)
+```
+
+Some of the function require additional meta data, e.g. the gl2fasta need sequnce data (TrimmedSequnce), the position of the SNP in the sequence for each loci ```@position``` and the type of allelels for each loci ```@loc.all```. If such data is available they information needs to be stored in the correct slots to work with the function. The code below exports our genlight object to a fasta format.
+
+```{r}
+platy.gl@position <- as.integer(runif(nLoc(platy.gl),2,49))
+platy.gl@loc.all <- testset.gl@loc.all[1:6]
+```
+
+
+And finally we can use the ```gl2fasta``` function (using method 1, see explanation via ?gl2fasta):
+
+```{r, eval=FALSE}
+gl2fasta(platy.gl)
+```
+
+
 # Subsetting and Recoding Data
 
 ## Filtering
@@ -366,7 +453,7 @@ gl2 <- gl.filter.dups(gl)
 5.	Filter out monomorphic loci
 
 ```{r}
-gl2 <- gl.filter.monomorphs(gl)
+gl2 <- gl.filter.monomorphs(gl, v=0)
 ```
 
 
@@ -481,7 +568,7 @@ gl.make.recode.ind(gl, outfile=file.path(tempdir(),"new_ind_assignments.csv"))
 This will generate a csv file with two columns, the first containing the existing individual names, and the second also containing those names ready for editing. This editing is best done in Excel.
 
 The population reassignments are then applied using
-```{r}
+```{r, eval=FALSE}
 glnew3 <- gl.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))
 
 ```

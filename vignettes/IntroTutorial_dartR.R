@@ -64,6 +64,44 @@ names(gl@other$loc.metrics)
 gl@other$ind.metrics$sex[1:10]
 
 ## ------------------------------------------------------------------------
+read.csv( paste(.libPaths()[1],"/dartR/extdata/platy.csv",sep="" ))
+
+## ------------------------------------------------------------------------
+#you might need to install PopGenReport via
+#install.packages("PopGenReport")
+library(PopGenReport) 
+platy <- read.genetable( paste(.libPaths()[1],"/dartR/extdata/platy.csv",
+sep="" ), ind=1, pop=2, lat=3, long=4, other.min=5, other.max=6, oneColPerAll=FALSE,sep="/")
+
+platy
+
+
+## ------------------------------------------------------------------------
+platy.gl <- (gi2gl(platy))
+
+## ------------------------------------------------------------------------
+platy.gl@other$ind.metrics <- platy.gl@other$data
+
+## ------------------------------------------------------------------------
+ts <- sapply(1:nLoc(platy.gl), function(x) paste(sample(c("A","T","G","C"), 50, replace = T),
+                                                 collapse = ""))
+df.loc <- data.frame(RepAvg = runif(nLoc(platy.gl)),  TrimmedSequence=ts)
+
+platy.gl@other$loc.metrics <- df.loc
+
+
+## ------------------------------------------------------------------------
+gl.report.callrate(platy.gl)
+gl2 <- gl.filter.repavg(platy.gl, t=0.5)
+
+## ------------------------------------------------------------------------
+platy.gl@position <- as.integer(runif(nLoc(platy.gl),2,49))
+platy.gl@loc.all <- testset.gl@loc.all[1:6]
+
+## ---- eval=FALSE---------------------------------------------------------
+#  gl2fasta(platy.gl)
+
+## ------------------------------------------------------------------------
 gl2 <- gl.filter.callrate(gl, method = "loc", threshold = 0.95)
 
 ## ------------------------------------------------------------------------
@@ -78,7 +116,7 @@ gl2 <- gl.filter.repavg(gl, t=1)
 #  
 
 ## ------------------------------------------------------------------------
-gl2 <- gl.filter.monomorphs(gl)
+gl2 <- gl.filter.monomorphs(gl, v=0)
 
 ## ------------------------------------------------------------------------
 gl2 <- gl.filter.hamming(testset.gl, t=0.25, probar = F)
@@ -119,9 +157,9 @@ indNames(gl)[1:10]
 ## ------------------------------------------------------------------------
 gl.make.recode.ind(gl, outfile=file.path(tempdir(),"new_ind_assignments.csv"))
 
-## ------------------------------------------------------------------------
-glnew3 <- gl.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))
-
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))
+#  
 
 ## ---- eval=F-------------------------------------------------------------
 #  gl <- gl.edit.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))

@@ -11,8 +11,8 @@ Check ?read.genetable in pacakge PopGenReport for details on the format.
 \examples{
 \dontrun{
 library(PopGenReport)
-read.csv( paste(.libPaths()[1],"/PopGenReport/extdata/platypus1c.csv",sep="" ))
-platy <- read.genetable( paste(.libPaths()[1],"/PopGenReport/extdata/platypus1c.csv",
+read.csv( paste(.libPaths()[1],"/dartR/extdata/platy.csv",sep="" ))
+platy <- read.genetable( paste(.libPaths()[1],"/dartR/extdata/platy.csv",
 sep="" ), ind=1, pop=2, lat=3, long=4, other.min=5, other.max=6, oneColPerAll=FALSE,
 sep="/")
 platy.gl <- (gi2gl(platy))

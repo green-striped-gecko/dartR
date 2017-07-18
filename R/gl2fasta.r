@@ -53,13 +53,13 @@ gl2fasta <- function(gl, method=1, outfile="output.fasta") {
     stop("Fatal Error: Specify a genlight object\n")
   }
   if(length(gl@other$loc.metrics$TrimmedSequence) != nLoc(gl)) {
-    stop("Fatal Error: Data must include Trimmed Sequences for each loci\n")
+    stop("Fatal Error: Data must include Trimmed Sequences for each loci in a column called 'TrimmedSequence' in the @other$loc.metrics slot.\n")
   }
   if(length(gl@position) != nLoc(gl)) {
-     stop("Fatal Error: Data must include position information for each loci\n")
+     stop("Fatal Error: Data must include position information for each loci in the @position slot.\n")
   }
   if(length(gl@loc.all) != nLoc(gl)) {
-    stop("Fatal Error: Data must include Trimmed Sequences\n")
+    stop("Fatal Error: Data must include type of alleles in the @loc.all slot.\n")
   }
   
   if(method==1){
