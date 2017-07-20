@@ -4,12 +4,14 @@
 \alias{gl.pcoa}
 \title{PCoA ordination (glPca)}
 \usage{
-gl.pcoa(gl, nfactors = 5)
+gl.pcoa(gl, nfactors = 5, v = TRUE)
 }
 \arguments{
 \item{gl}{Name of the genlight object containing the SNP genotypes by specimen and population [required]}
 
 \item{nfactors}{Number of dimensions to retain in the output file [default 5]}
+
+\item{v}{-- verbose if TRUE, silent if FALSE [default TRUE]}
 }
 \value{
 An object of class glPca containing the eigenvalues, factor scores and factor loadings

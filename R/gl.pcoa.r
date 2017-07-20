@@ -7,6 +7,7 @@
 #'
 #' @param gl Name of the genlight object containing the SNP genotypes by specimen and population [required]
 #' @param nfactors Number of dimensions to retain in the output file [default 5]
+#' @param v -- verbose if TRUE, silent if FALSE [default TRUE]
 #' @import adegenet
 #' @return An object of class glPca containing the eigenvalues, factor scores and factor loadings
 #' @export
@@ -14,18 +15,20 @@
 #' @examples
 #' pcoa <- gl.pcoa(testset.gl, nfactors=3)
 
-gl.pcoa <- function(gl, nfactors=5) {
+gl.pcoa <- function(gl, nfactors=5, v=TRUE) {
 x <- gl
 
-cat("Performing a PCoA, individuals as entities, SNP loci as attributes\n")
+    if (v==TRUE) {cat("Performing a PCoA, individuals as entities, SNP loci as attributes\n")}
     pcoa <- glPca(x, nf=nfactors, parallel=FALSE)
 
     e <- pcoa$eig[pcoa$eig > sum(pcoa$eig/length(pcoa$eig))]
     e <- round(e*100/sum(pcoa$eig),1)
-    cat(paste("Ordination yielded",length(e),"informative dimensions from",nInd(x)-1,"original dimensions\n"))
-    cat(paste("  PCoA Axis 1 explains",e[1],"% of the total variance\n"))
-    cat(paste("  PCoA Axis 1 and 2 combined explain",e[1]+e[2],"% of the total variance\n"))
-    cat(paste("  PCoA Axis 1-3 combined explain",e[1]+e[2]+e[3],"% of the total variance\n"))
-
+    if (v==TRUE) {
+      cat(paste("Ordination yielded",length(e),"informative dimensions from",nInd(x)-1,"original dimensions\n"))
+      cat(paste("  PCoA Axis 1 explains",e[1],"% of the total variance\n"))
+      cat(paste("  PCoA Axis 1 and 2 combined explain",e[1]+e[2],"% of the total variance\n"))
+      cat(paste("  PCoA Axis 1-3 combined explain",e[1]+e[2]+e[3],"% of the total variance\n"))
+    }
+    
     return(pcoa)
 }

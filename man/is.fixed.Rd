@@ -11,7 +11,7 @@ is.fixed(s1, s2, t = 0)
 
 \item{s2}{-- percentage SNP allele frequency for the second population [required]}
 
-\item{t}{-- threshold value for tollerance in when a difference is regarded as fixed [default 0]}
+\item{t}{-- threshold value for tolerance in when a difference is regarded as fixed [default 0]}
 }
 \value{
 TRUE (fixed difference) or FALSE (alleles shared) or NA (one or both s1 or s2 missing)
@@ -26,22 +26,8 @@ Tollerance in the definition of a fixed difference is provided by the t paramete
 that SNP allele frequencies of 95,5 and 5,95 percent will be reported as fixed (TRUE).
 }
 \examples{
-
-is.fixed(0,100)
-is.fixed(100,0)
-is.fixed(80,0)
-is.fixed(100,NA)
-is.fixed(0,NA)
-is.fixed(NA,0)
-is.fixed(NaN,100)
-is.fixed(NaN,0)
-is.fixed(100,NaN)
-is.fixed(0,NaN)
-is.fixed(NaN,NaN)
-is.fixed(NA,NA)
 is.fixed(s1=100, s2=0, t=0)
 is.fixed(96, 4, t=0.05)
-
 }
 \seealso{
 \code{\link{gl.fixed.diff}}

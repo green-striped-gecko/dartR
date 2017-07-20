@@ -6,7 +6,7 @@
 #' @importFrom vegan mantel
 #' @importFrom MASS kde2d
 #' @importFrom grDevices colorRampPalette
-#' @importFrom graphics abline title
+#' @importFrom graphics abline title points
 #' @importFrom stats as.dist lm
 #' @importFrom StAMPP stamppFst
 #' @importFrom dismo Mercator
@@ -37,8 +37,10 @@ if (class(gl)=="genlight")
 {
   cat("Standard analysis performed on the genlight object. Mantel test and plot will be Fst/1-Fst versus log(distance)\n")
 if (nrow(gl@other$latlong)!=nInd(gl)) stop("Cannot find coordinates for each individual in slot @other$latlong")
+#rename long to lon if necessary
+if  (sum(match(names(gl@other$latlong),"long"), na.rm=T)==1) gl@other$latlong$lon <- gl@other$latlong$long
 
-
+  
 #project coordinates into Mercator () needs lon/lat order
 if (!projected) {
   xy <- Mercator(gl@other$latlong[,c("lon","lat")]) 
