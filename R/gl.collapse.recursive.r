@@ -15,6 +15,7 @@
 #' tables (also stored to disk) [default "collapse"]
 #' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
 #' @param tpop -- max number of fixed differences allowed in amalgamating populations [default 0]
+#' @param nlimit -- number of individuals combined, taking into account missing data, required for a pair of populations to be examined for fixed differences [default 2]
 #' @param v -- verbosity = 0, silent; 1, brief; 2, verbose [default 1]
 #' @return A new genlight object with recoded populations after amalgamations are complete.
 #' @import reshape2
@@ -23,14 +24,14 @@
 #' @examples
 #' fd <- gl.collapse.recursive(testset.gl, prefix="testset",tloc=0,tpop=2)
 
-gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, v=1) {
+gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, nlimit=10, v=1) {
   
 # Set the iteration counter
   count <- 1
   
 # Create the initial distance matrix
   if (v==2) {cat("Calculating an initial fixed difference matrix\n")}
-  fd <- gl.fixed.diff(gl, tloc=tloc, v=v)
+  fd <- gl.fixed.diff(gl, tloc=tloc, nlimit=nlimit, v=v)
   
 # Store the length of the fd matrix
   fd.hold <- dim(fd)[1]
@@ -62,7 +63,7 @@ gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, v=1) {
       gl <- gl.collapse(fd, gl, recode.table=recode.name, tpop=tpop, v=v)
       
     #  calculate the fixed difference matrix fd
-      fd <- gl.fixed.diff(gl, tloc=tloc, pc=FALSE, v=v)
+      fd <- gl.fixed.diff(gl, tloc=tloc, pc=FALSE, nlimit=nlimit, v=v)
       
     # If it is not different in dimensions from previous, break
       if (dim(fd)[1] == fd.hold) {
