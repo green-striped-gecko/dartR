@@ -42,7 +42,16 @@ A summary of the capabilities of {dartR} is as follows:
  
 #Using this Vignette 
  
-To use this vignette interactively, you need to install and load the {dartR} package, and set the default directory using setwd().  To install the {dartR} package visit the github page for instructions (https://github.com/green-striped-gecko/dartR) and make it available into the current project via library(dartR). A brief description on the installation procedure is given below:
+To use this vignette interactively, you need to install and load the {dartR} package, and set the default directory using setwd().  To install the {dartR} package visit the github page for instructions (https://github.com/green-striped-gecko/dartR) and make it available into the current project via library(dartR). A brief description on the installation procedure is given below. There are two ways to install dartR, either via CRAN (prefered) or via github (latest, but untested version).
+
+## Installation via CRAN
+
+As dartR is now a fully fledged package, simply type:
+```{r, eval=FALSE}
+install.packages("dartR")
+```
+
+## Manual installation via github (with all dependencies)
 
 ```{r, eval=FALSE}
 # Install and attach library dartR
@@ -65,6 +74,8 @@ To test if you installation was successful include the library by typing:
 [Please note library adegenet will output some lines as it is not possible to easily suppress those lines]
 
 If some packages have not been loaded, an error message will be given and you will need to install the package manually.
+
+Once installed and invoked into your current R session. We need to prepare our session, so it points to a certain working directory. The working directory is the location on your hard drive, that holds your data and also where intermediate and final output files will be exported if not directed otherwise.
 
 To set the default directory, use the following with the appropriate directory specified:
 

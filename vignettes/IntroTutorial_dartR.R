@@ -2,6 +2,9 @@
 knitr::opts_chunk$set(echo = TRUE)
 
 ## ---- eval=FALSE---------------------------------------------------------
+#  install.packages("dartR")
+
+## ---- eval=FALSE---------------------------------------------------------
 #  # Install and attach library dartR
 #    install.packages("devtools")
 #    library(devtools)
