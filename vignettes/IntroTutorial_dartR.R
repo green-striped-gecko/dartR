@@ -11,9 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #    source("http://bioconductor.org/biocLite.R")
 #    biocLite("qvalue", suppressUpdates=T)
 #    biocLite("SNPRelate", suppressUpdates=T)
-#    install_github("whitlock/OutFLANK")
 #    install_github("green-striped-gecko/dartR")
-#  
 
 ## ------------------------------------------------------------------------
  library(dartR)
@@ -33,7 +31,7 @@ m <- as.matrix(gl)
 as.matrix(gl)[1:5,1:3]
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  gl <- gl.read.dart(filename = "testset.csv",covfilename = " ind_metrics.csv")
+#  gl <- gl.read.dart(filename = "testset.csv", covfilename = " ind_metrics.csv")
 #  
 
 ## ------------------------------------------------------------------------
@@ -54,6 +52,9 @@ nPop(gl)
 
 ## ------------------------------------------------------------------------
 levels(pop(gl))[1:5]
+
+## ---- eval=FALSE---------------------------------------------------------
+#  gl <- gl.read.dart(filename="mydata.csv", covfilename = "my.metadata.csv")
 
 ## ------------------------------------------------------------------------
 #Only the entries for the first ten individuals are shown
@@ -269,6 +270,9 @@ gl.tree.nj(glnew, type="fan")
 #  gl.collapse.recursive(gl, t=0)
 #  
 
+## ---- fig.height=4-------------------------------------------------------
+gl <- gl.ibd(gl=testset.gl[1:180,])
+
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl <- testset.gl
 #  phy <- gl2phylip(gl, outfile="turtle.phy", bstrap=1000)
@@ -302,13 +306,14 @@ x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, t=0)
 x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.95, t=1)
 
 ## ------------------------------------------------------------------------
+gl <- testset.gl
 gi <- gl2gi(gl, probar=FALSE)
 
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl2 <- gi2gl(gi)
 
-## ---- eval=TRUE----------------------------------------------------------
+## ---- eval=T-------------------------------------------------------------
 glnew <- gl2nhyb(gl, outfile = file.path(tempdir(),"nhyb.txt"))
 
 ## ---- eval=FALSE---------------------------------------------------------
