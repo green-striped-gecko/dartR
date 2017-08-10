@@ -248,7 +248,7 @@ levels(pop(glnew)) <- c(rep("Cooper",13), rep("MDB", 8 ), rep("Emmac_Coast",7),"
 gl.pcoa.plot(pc, glnew, labels="pop", xaxis=1, yaxis=2)
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  gl.pcoa.plot(pc, gl.new, labels="interactive", xaxis=1, yaxis=2)
+#  gl.pcoa.plot(pc, glnew, labels="interactive", xaxis=1, yaxis=2)
 #  ggplotly()
 #  
 

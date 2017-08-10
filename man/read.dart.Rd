@@ -4,10 +4,7 @@
 \alias{read.dart}
 \title{Import DarT data to R}
 \usage{
-read.dart(filename, nas = "-", topskip = NULL, stdmetrics = c("AlleleID",
-  "SNP", "SnpPosition", "RepAvg", "CallRate", "AvgCountRef", "AvgCountSnp",
-  "FreqHomRef", "FreqHomSnp", "FreqHets", "OneRatioSnp"), addmetrics = NULL,
-  lastmetric = "RepAvg")
+read.dart(filename, nas = "-", topskip = NULL, lastmetric = "RepAvg")
 }
 \arguments{
 \item{filename}{path to file (csv file only currently)}
@@ -16,21 +13,11 @@ read.dart(filename, nas = "-", topskip = NULL, stdmetrics = c("AlleleID",
 
 \item{topskip}{a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.}
 
-\item{stdmetrics}{a vector of column headings that are extracted. AlleleID and its format is compulsory, the rest are needed for filtering.}
-
-\item{addmetrics}{add additional headers/columns by name}
-
 \item{lastmetric}{specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.}
 }
 \value{
 a list of length 5. #dart format (one or two rows) #individuals, #snps, #non genetic metrics, #genetic data (still two line format, rows=snps, columns=individuals)
 }
 \description{
-Import DarT data to R
-}
-\examples{
-{
-dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
-dart <-read.dart(dartfile)
-}
+Internal function called by gl.read.dart
 }

@@ -5,8 +5,6 @@
 #' @param filename path to file (csv file only currently)
 #' @param nas a character specifying NAs (default is "-")
 #' @param topskip a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.
-#' @param stdmetrics a vector of column headings that are extracted. AlleleID and its format is compulsory, the rest are needed for filtering.
-#' @param addmetrics add additional headers/columns by name
 #' @param lastmetric specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.
 #' @param covfilename the name of the file that has entails additional information on individuals. For the require format check 
 #' @param probar show progress bar
@@ -18,9 +16,9 @@
 #' gl <- gl.read.dart(dartfile, covfilename = covfilename, probar=TRUE)
 #' }
 
-gl.read.dart <- function(filename, covfilename=NULL, nas = "-", topskip=NULL, stdmetrics =c("AlleleID", "SNP","SnpPosition","RepAvg","CallRate", "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets","OneRatioSnp"), addmetrics=NULL, lastmetric ="RepAvg", probar=TRUE)
+gl.read.dart <- function(filename, covfilename=NULL, nas = "-", topskip=NULL, lastmetric ="RepAvg", probar=TRUE)
 {
-  dout <-read.dart(filename = filename, nas=nas, topskip=topskip, stdmetrics = stdmetrics, addmetrics = addmetrics, lastmetric = lastmetric)
+  dout <-read.dart(filename = filename, nas=nas, topskip=topskip, lastmetric = lastmetric)
   glout <- dart2genlight(dout, covfilename = covfilename,probar = probar)
 return(glout)
 }

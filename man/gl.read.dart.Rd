@@ -5,9 +5,7 @@
 \title{Import DarT data into R and conver it to a genlight object}
 \usage{
 gl.read.dart(filename, covfilename = NULL, nas = "-", topskip = NULL,
-  stdmetrics = c("AlleleID", "SNP", "SnpPosition", "RepAvg", "CallRate",
-  "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets",
-  "OneRatioSnp"), addmetrics = NULL, lastmetric = "RepAvg", probar = TRUE)
+  lastmetric = "RepAvg", probar = TRUE)
 }
 \arguments{
 \item{filename}{path to file (csv file only currently)}
@@ -17,10 +15,6 @@ gl.read.dart(filename, covfilename = NULL, nas = "-", topskip = NULL,
 \item{nas}{a character specifying NAs (default is "-")}
 
 \item{topskip}{a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.}
-
-\item{stdmetrics}{a vector of column headings that are extracted. AlleleID and its format is compulsory, the rest are needed for filtering.}
-
-\item{addmetrics}{add additional headers/columns by name}
 
 \item{lastmetric}{specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.}
 
