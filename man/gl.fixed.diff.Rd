@@ -4,12 +4,15 @@
 \alias{gl.fixed.diff}
 \title{Generate a matrix of fixed differences from a genelight or genind object \{adegenet\}}
 \usage{
-gl.fixed.diff(gl, tloc = 0, pc = FALSE, v = 1)
+gl.fixed.diff(gl, tloc = 0, nlimit = 2, pc = FALSE, v = 1)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
 \item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]}
+
+\item{nlimit}{-- number of individuals with non-missing SNP scores in the two populations combined, required for 
+scoring of fixed differences [default 2]}
 
 \item{pc}{-- logical value indicating whether to report fixed difference counts (pc=FALSE) or percentages (pc=TRUE) [default TRUE]}
 
@@ -20,7 +23,6 @@ Matrix of percent fixed differences (lower matrix), number of loci (upper matrix
 }
 \description{
 This script takes SNP data grouped into populations in a genlight object (DArTSeq)
-or presence absence data (SilicoDArT) grouped into populations in a genind object
 and generates a matrix of fixed differences between populations taken pairwise
 }
 \details{
@@ -28,13 +30,16 @@ A fixed difference at a locus occurs when two populations share no alleles. The 
 is that when sample sizes are finite, fixed differences will occur through sampling error, compounded when
 many loci are examined. Simulations suggest that sample sizes of n1=5 and n2=5 is adequate to reduce the
 probability of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if comparison
-between two populations involves sample sizes less than 5, taking into account allele drop-out.
-
-Tolerance in the definition of a fixed difference is provided by the tloc parameter. For example, tloc=0.05 means
-that SNP allele frequencies of 95,5 and 5,95 percent will be regarded as fixed.
+between two populations involves sample sizes less than 5, taking into account allele drop-out. The minimum sample 
+size for scoring fixed differences between two populations can be set with the parameter nlimit.
+An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
+level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
+This adjustment can be done with the tloc parameter. For example, tloc=0.05 means that SNP allele frequencies of 
+95,5 and 5,95 percent will be regarded as fixed when comparing two populations at a locus.
 }
 \examples{
-mat <- gl.fixed.diff(testset.gl, tloc=0.05)
+#only used the first 20 individuals due to runtime reasons 
+mat <- gl.fixed.diff(testset.gl[1:20,], tloc=0.05, nlimit=5)
 }
 \seealso{
 \code{\link{is.fixed}}

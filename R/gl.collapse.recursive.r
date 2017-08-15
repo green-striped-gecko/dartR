@@ -25,8 +25,6 @@
 #' fd <- gl.collapse.recursive(testset.gl[1:20,], prefix="testset",tloc=0,tpop=2)
 
 gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, nlimit=10, v=1) {
->>>>>>> arthurgeorges-master
-  
 # Set the iteration counter
   count <- 1
   

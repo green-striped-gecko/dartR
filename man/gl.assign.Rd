@@ -20,8 +20,7 @@ gl.assign(gl, id, nmin = 10, dim = NULL, alpha = 0.99, t = 0)
 \item{t}{-- populations to retain for consideration; those for which the focal individual has less than or equal to t loci with private alleles [default 0]}
 }
 \value{
-A genlight object containing the focal individual (assigned to population "unknown") and 
-populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
+A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 }
 \description{
 This script assigns an individual of unknown provenance to one or more target populations based on first, an analysis

@@ -22,7 +22,9 @@ A DArT dataset will not have monomorphic loci, but they can arise when populatio
 the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
 }
 \examples{
-gl2 <- gl.filter.monomorphs(testset.gl)
+\dontrun{
+gl <- gl.filter.monomorphs(gl)
+}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
