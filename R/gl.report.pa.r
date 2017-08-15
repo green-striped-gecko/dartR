@@ -18,10 +18,10 @@
 
 gl.report.pa <- function (gl, id, nmin=10, t=0) {
 x <- gl
-
   cat("IDENTIFYING LOCI WITH PRIVATE ALLELES\n\n")
 # Set a recommended minimum population size
   hard.min <- 10
+
 # Assign the unknown individual to population 'unknown'
   v <- as.vector(pop(x))
   v[indNames(x)==id] <- "unknown"
@@ -50,7 +50,6 @@ x <- gl
     stop("Terminating execution")
   }
   cat("Assigning",n,"unknown individual(s) to",N,"target populations\n")
-
 # CALCULATE NUMBER OF LOCI WITH PRIVATE ALLELES
 # For each unknown individual
   for (i in 1:n) {
@@ -97,7 +96,6 @@ x <- gl
         gl <- x[index,]
         gl <- gl.filter.monomorphs(gl, v=FALSE)
         cat("Data retained for the unknown individual and remaining candidate source populations (",t,"or less loci with private alleles)\n")
-
   }  
   return(gl)
 }

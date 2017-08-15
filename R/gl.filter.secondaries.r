@@ -4,25 +4,42 @@
 #' These multiple SNP loci within a fragment (secondaries) are likely to be linked, and so you may wish to remove secondaries.
 #' This script filters out loci after ordering the genlight object on based on reproducibility, PIC in that order.
 #'
+<<<<<<< HEAD
 #' @param gl -- name of the genlight object containing the SNP data [required]
+=======
+#' @param x -- name of the genlight object containing the SNP data [required]
+>>>>>>> arthurgeorges-master
 #' @return The reduced genlight, plus a summary
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
+<<<<<<< HEAD
 #' result <- gl.report.secondaries(testset.gl)
 #' result2 <- gl.filter.secondaries(testset.gl)
+=======
+#' load("testset.Rdata")
+#' result <- gl.report.secondaries(gl)
+#' result2 <- gl.filter.secondaries(gl)
+>>>>>>> arthurgeorges-master
 
 
 gl.filter.secondaries <- function(gl) {
 
+<<<<<<< HEAD
 
   
   if(class(gl) == "genlight") {
+=======
+  x <- gl
+  
+  if(class(x) == "genlight") {
+>>>>>>> arthurgeorges-master
     cat("Filtering a genlight object\n")
   } else {
     cat("Fatal Error: Specify either a genlight object\n")
     stop()
   }
+<<<<<<< HEAD
   cat("Total number of SNP loci:",nLoc(gl),"\n")
   
 # Sort the genlight object on AlleleID (asc), RepAvg (desc), AvgPIC (desc) 
@@ -33,13 +50,29 @@ gl.filter.secondaries <- function(gl) {
 # Identify and remove secondaries from the genlight object, including the metadata
   gl <- gl[,duplicated(b)==FALSE]
   gl@other$loc.metrics <- gl@other$loc.metrics[duplicated(b)==FALSE,]
+=======
+  cat("Total number of SNP loci:",nLoc(x),"\n")
+  
+# Sort the genlight object on AlleleID (asc), RepAvg (desc), AvgPIC (desc) 
+  x <- x[,order(x@other$loc.metrics$AlleleID,-x@other$loc.metrics$RepAvg,-x@other$loc.metrics$AvgPIC)]
+# Extract the clone ID number
+  a <- strsplit(as.character(x@other$loc.metrics$AlleleID),"\\|")
+  b <- unlist(a)[ c(TRUE,FALSE,FALSE) ]
+# Identify and remove secondaries from the genlight object, including the metadata
+  x <- x[,duplicated(b)==FALSE]
+  x@other$loc.metrics <- x@other$loc.metrics[duplicated(b)==FALSE,]
+>>>>>>> arthurgeorges-master
   
 # Report secondaries from the genlight object
 
   cat("   Number of secondaries:",table(duplicated(b))[2],"\n")
   cat("   Number of loci after secondaries removed:",table(duplicated(b))[1],"\n")
 
+<<<<<<< HEAD
   return(gl)
+=======
+  return(x)
+>>>>>>> arthurgeorges-master
   
 }  
 

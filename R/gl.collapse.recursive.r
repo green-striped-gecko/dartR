@@ -1,4 +1,6 @@
-
+#' Recursively collapse a distance matrix by amalgamating populations
+#'
+#' This script generates a fixed difference matrix from a genlight object \{adegenet\} and from it generates a population recode
 #' table used to amalgamate populations with a fixed difference count less than or equal to a specified tpop. 
 #' The script then repeats the process until there is no further amalgamation of populations.
 #' 
@@ -7,29 +9,30 @@
 #' yield a final table with no fixed differences less than or equal to the specified threshold, tpop. 
 #' The intermediate and final recode tables and distance matricies are stored to disk as csv files for use with other analyses. 
 #' In particular, the recode tables can be edited to replace populaton labels with meaninful names and reapplied in sequence.
-#'
 #' @param gl -- name of the genlight object from which the distance matricies are to be calculated [required]
 #' @param prefix -- a string to be used as a prefix in generating the matricies of fixed differences (stored to disk) and the recode
 #' tables (also stored to disk) [default "collapse"]
 #' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
 #' @param tpop -- max number of fixed differences allowed in amalgamating populations [default 0]
+#' @param nlimit -- number of individuals combined, taking into account missing data, required for a pair of populations to be examined for fixed differences [default 2]
 #' @param v -- verbosity = 0, silent; 1, brief; 2, verbose [default 1]
 #' @return A new genlight object with recoded populations after amalgamations are complete.
 #' @import reshape2
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' fd <- gl.collapse.recursive(testset.gl, prefix="testset",tloc=0,tpop=2)
+#' #only used the first 20 individuals due to runtime reasons
+#' fd <- gl.collapse.recursive(testset.gl[1:20,], prefix="testset",tloc=0,tpop=2)
 
-gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, v=1) {
+gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, nlimit=10, v=1) {
+>>>>>>> arthurgeorges-master
   
 # Set the iteration counter
   count <- 1
   
 # Create the initial distance matrix
   if (v==2) {cat("Calculating an initial fixed difference matrix\n")}
-  fd <- gl.fixed.diff(gl, tloc=tloc, v=v)
-  
+  fd <- gl.fixed.diff(gl, tloc=tloc, nlimit=nlimit, v=v)
 # Store the length of the fd matrix
   fd.hold <- dim(fd)[1]
   
@@ -60,8 +63,8 @@ gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, v=1) {
       gl <- gl.collapse(fd, gl, recode.table=recode.name, tpop=tpop, v=v)
       
     #  calculate the fixed difference matrix fd
-      fd <- gl.fixed.diff(gl, tloc=tloc, pc=FALSE, v=v)
-      
+
+      fd <- gl.fixed.diff(gl, tloc=tloc, pc=FALSE, nlimit=nlimit, v=v)
     # If it is not different in dimensions from previous, break
       if (dim(fd)[1] == fd.hold) {
         cat(paste("\nNo further amalgamation of populations at fd <= ",tpop,"\n"))
@@ -86,7 +89,7 @@ gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, v=1) {
     } else {  
       cat("using fixed differences defined for each locus with tolerance",tloc,"\n")
     }   
-    cat("Number of fixed differences allowing population amalgamation fd <",tpop,"(",round((tpop*100/nLoc(gl)),4),"%)\n")
+    cat("Number of fixed differences allowing population amalgamation fd <=",tpop,"(",round((tpop*100/nLoc(gl)),4),"%)\n")
     cat("Resultant recode tables and fd matricies output with prefix",prefix,"\n")
     cat("NOTE: Lower matrix, percent fixed differences; upper matrix, no. of loci\n")
   }

@@ -38,11 +38,9 @@
 #' @param dim -- number of dimensions to retain in the dimension reduction [default k, number of populations]
 #' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.99]
 #' @param t -- populations to retain for consideration; those for which the focal individual has less than or equal to t loci with private alleles [default 0]
-#' @return A genlight object containing the focal individual (assigned to population "unknown") and 
-#' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
-#' @export
+#' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @importFrom stats dnorm qnorm
-
+#' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' x <- testset.gl
@@ -66,8 +64,6 @@ x <- gl
     cat("There are no further populations to compare for assignment.",levels(pop(x2))[1],"is the best assignment\n")
     stop("Terminating execution")
   }
-
-  
   cat("\n\nCOMPUTING ASSIGNMENT BASED ON CONFIDENCE ENVELOPES\n\n")
 # Ordinate a reduced space of K = nPop(x2) dimensions
   pcoa <- gl.pcoa(x2, nfactors=nPop(x2),v=FALSE)
@@ -84,8 +80,6 @@ x <- gl
     sec.est <- nPop(x2)
   # From a hard set maximum
     third.est <- 8
-
-
     cat("  Number of populations, including the unknown:",sec.est,"\n")
     cat("  Number of dimensions with substantial eigenvalues:",first.est,"\n")
     cat("  Hard coded upper limit to dimensions:",third.est,"\n")
@@ -98,7 +92,6 @@ x <- gl
 
 # Plot the PCoA
     suppressMessages(print(gl.pcoa.plot(pcoa,x2, xaxis=1, yaxis=2, ellipse=TRUE, p=alpha)))
-
 # Add population names to the scores   
   c <- cbind(pcoa$scores,as.character(pop(x2)))
   colnames(c)[dim+1]<- "pop"
@@ -110,8 +103,6 @@ x <- gl
   
 
   cat("\nLikelihood Index for assignment of unknown",id,"to listed populations\n\n") 
-
-
 # For each population
   p <- as.factor(clouds[,"pop"])
   for (i in 1:length(levels(p))) {
@@ -154,10 +145,8 @@ x <- gl
   df <- df[rev(order(df$Index)),]
   print(df)
   best <- as.character(df$Population[df$Assign=="yes"][1])
-
   cat("  Index is a weighted log-likelihood\n")
   cat("  CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
   cat("  Best assignment is the population with the largest value of the Index, in this case",best,"\n")
   return(df)
 }
-

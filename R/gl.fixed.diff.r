@@ -1,20 +1,23 @@
 #' Generate a matrix of fixed differences from a genelight or genind object \{adegenet\}
 #'
 #' This script takes SNP data grouped into populations in a genlight object (DArTSeq)
-#' or presence absence data (SilicoDArT) grouped into populations in a genind object
 #' and generates a matrix of fixed differences between populations taken pairwise
 #'
 #' A fixed difference at a locus occurs when two populations share no alleles. The challenge with this approach
 #' is that when sample sizes are finite, fixed differences will occur through sampling error, compounded when
 #' many loci are examined. Simulations suggest that sample sizes of n1=5 and n2=5 is adequate to reduce the
 #' probability of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if comparison
-#' between two populations involves sample sizes less than 5, taking into account allele drop-out.
-#'
-#' Tolerance in the definition of a fixed difference is provided by the tloc parameter. For example, tloc=0.05 means
-#' that SNP allele frequencies of 95,5 and 5,95 percent will be regarded as fixed.
+#' between two populations involves sample sizes less than 5, taking into account allele drop-out. The minimum sample 
+#' size for scoring fixed differences between two populations can be set with the parameter nlimit.
+#' An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
+#' level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
+#' This adjustment can be done with the tloc parameter. For example, tloc=0.05 means that SNP allele frequencies of 
+#' 95,5 and 5,95 percent will be regarded as fixed when comparing two populations at a locus.
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
+#' @param nlimit -- number of individuals with non-missing SNP scores in the two populations combined, required for 
+#' scoring of fixed differences [default 2]
 #' @param pc -- logical value indicating whether to report fixed difference counts (pc=FALSE) or percentages (pc=TRUE) [default TRUE]
 #' @param v -- verbosity = 0, silent; 1, brief; 2, verbose [default 1]
 #' @return Matrix of percent fixed differences (lower matrix), number of loci (upper matrix)
@@ -22,12 +25,37 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' mat <- gl.fixed.diff(testset.gl, tloc=0.05)
+#' #only used the first 20 individuals due to runtime reasons 
+#' mat <- gl.fixed.diff(testset.gl[1:20,], tloc=0.05, nlimit=5)
 #' @seealso \code{\link{is.fixed}}
 
-gl.fixed.diff <- function(gl, tloc=0, pc=FALSE, v=1) {
+gl.fixed.diff <- function(gl, tloc=0, nlimit=2, pc=FALSE, v=1) {
 x <- gl
 
+# Checking parameter values
+
+  if(class(gl) == "genlight") {
+    cat("Analysing a genlight object\n")
+  } else {
+    cat("Fatal Error: Specify a genlight object\n")
+    stop()
+  }
+  if (tloc < 0 ) {
+    cat("Error: Parameter tloc should be positive in the range 0 to 0.5, reset to zero\n")
+    tloc <- 0
+  }
+  if (tloc > 0.5 ) {
+    cat("Error: Parameter tloc should be positive in the range 0 to 0.5, reset to 0.5\n")
+    tloc <- 0.5
+  }
+  if (nlimit < 2) {
+    cat("Error: Minimum value for nlimit is 2 individuals, reset to 2\n")
+    nlimit=2
+  }
+  if (v < 0 || v > 2) {
+    cat("Error: Verbosity must be set to one of 0, silent; 1, brief; 2, verbose. Reset to default of 1\n")
+    v=1
+  }
   # Checking for and removing monomorphic loci
     if (v > 0 && pc==TRUE) {
       x2 <- gl.filter.monomorphs(x,v=0)
@@ -66,8 +94,6 @@ x <- gl
       pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
       getTxtProgressBar(pb)
     }
-    
-
     # Cycle through the data to sum the fixed differences into a square matrix
     flag <- 0
     for (i in 1:nloci) {                           # For each locus
@@ -84,6 +110,7 @@ x <- gl
           n2 <- gl.mat.sum$nobs[k]
           countk<-countk+1
           if (!is.na(n1+n2)) {
+          if ((n1+n2) >= nlimit) {
           # Compare and if not missing, increment
             cf <- is.fixed(gl.mat.sum$frequency[j],gl.mat.sum$frequency[k],t=tloc)
             if (!is.na(cf)) {
@@ -96,11 +123,11 @@ x <- gl
               }
             }
           }
+          }
         }
       }
 
       if (v > 0){setTxtProgressBar(pb, i/nloci)}
-
     }
 
   # Cycle through the populations to determine sample sizes
@@ -117,7 +144,8 @@ x <- gl
       }
     }
     if (flag == 1 && v > 0) {
-      cat("\n   Warning: Some comparisons involved sample sizes that were less than 5.\n")
+
+      cat("\n   Warning: Some comparisons involve sample sizes were less than 5.\n")
       cat("   Compounded Type I error rate may be high. Consider a priori amalgamation.\n")
     }
 

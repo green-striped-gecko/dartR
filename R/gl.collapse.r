@@ -14,13 +14,13 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' fd <- gl.fixed.diff(testset.gl, tloc=0.05)
+#' #only used the first 20 individuals due to runtime reasons 
+#' fd <- gl.fixed.diff(testset.gl[1:20,], tloc=0.05)
 #' gl <- gl.collapse(fd, testset.gl, recode.table="testset_recode.csv",tpop=1)
 
 gl.collapse <- function(fd, gl, recode.table="tmp.csv", tpop=0, v=1) {
   
   if( v==2) {cat(paste("Creating a new recode_pop table by amalgamating populations for which fd <=",tpop,"\n"))}
-
 # Replace the upper matrix to create a symmetrical matrix of fd
   fd[upper.tri(fd,diag=FALSE)]<-0
   fd <- fd + t(fd)
@@ -51,6 +51,18 @@ gl.collapse <- function(fd, gl, recode.table="tmp.csv", tpop=0, v=1) {
 # Pull out the unique aggregations  
   zero.list <- unique(zero.list)
   
+# Amalgamate populations
+  for (i in 1:(length(zero.list)-1)) {
+    for (j in 2:length(zero.list)) {
+      if (length(intersect(zero.list[[i]],zero.list[[j]])) > 0 ) {
+        zero.list[[i]] <- union(zero.list[[i]],zero.list[[j]])
+        zero.list[[j]] <- union(zero.list[[i]],zero.list[[j]])
+      }
+    }
+  }
+  for (i in 1:length(zero.list)) {
+    zero.list <- unique(zero.list)
+  }
 # Print out the results of the aggregations 
   cat("\n\nPOPULATION GROUPINGS\n")
   
@@ -82,7 +94,7 @@ gl.collapse <- function(fd, gl, recode.table="tmp.csv", tpop=0, v=1) {
   x <- gl.recode.pop(gl, pop.recode=recode.table)
   
   if(setequal(levels(pop(x)),levels(pop(gl)))) { 
-    cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed at fd =", tpop,"\n"))
+    cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed at fd <=", tpop,"\n"))
     return(gl)
   } else {
     return(x)
