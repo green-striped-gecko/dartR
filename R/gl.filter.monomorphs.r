@@ -4,75 +4,52 @@
 #'
 #' A DArT dataset will not have monomorphic loci, but they can arise when populations are deleted by assignment or by using
 #' the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
-#'
 #' @param gl -- name of the input genlight object [required]
-#' @param probar -- switch to output progress bar [default is false]
+#' @param v -- verbosty: 0, silent; 1, brief, 2; verbose if TRUE, silent if FALSE [default 1]
 #' @return A genlight object with monomorphic loci removed
 #' @import adegenet plyr utils
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' gl <- gl.filter.monomorphs(testset.gl)
+#' \dontrun{
+#' gl <- gl.filter.monomorphs(gl)
+#' }
 
-gl.filter.monomorphs <- function (gl, probar=FALSE) {
+gl.filter.monomorphs <- function (gl,v=1) {
+
 x <- gl
 
-  cat("Identifying monomorphic loci\n")
-  # Create vectors to hold test results
-  # homozygote reference
+  if (v==1) {cat("Identifying monomorphic loci\n")}
+# Create a vector to hold test results
   a <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {a[i] <- NA}
-  # homozygote alternate
-  b <- vector(mode="logical", length=nLoc(x))
-  for (i in 1:nLoc(x)) {b[i] <- NA}
-  # heterozygote 
-  c <- vector(mode="logical", length=nLoc(x))
-  for (i in 1:nLoc(x)) {c[i] <- NA}
-  # NA
-  d <- vector(mode="logical", length=nLoc(x))
-  for (i in 1:nLoc(x)) {d[i] <- NA}
-  # NA
-  index <- vector(mode="logical", length=nLoc(x))
-  for (i in 1:nLoc(x)) {index[i] <- NA}
-  
 # Set up the progress counter
-  if (probar) {
-    pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-    getTxtProgressBar(pb)
-  }
-  # Identify polymorphic, monomorphic and 'all na' loci
-  # Set a,b,c,d <- TRUE if monomorphic, or if all NAs
+  if (v==1) {pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")}
+  if (v==1) {getTxtProgressBar(pb)}
+# Identify polymorphic, monomorphic and 'all na' loci
+  # Set a <- TRUE if monomorphic, or if all NAs
   xmat <-as.matrix(x)
   for (i in (1:nLoc(x))) {
-    if (all(is.na(xmat[,i]))) {
-      d[i] <- TRUE
-      a[i] <- FALSE
-      b[i] <- FALSE
-      c[i] <- FALSE
-    } else {
-      a[i] <- all(xmat[,i]==0,na.rm=TRUE)
-      b[i] <- all(xmat[,i]==2,na.rm=TRUE)
-      c[i] <- all(xmat[,i]==1,na.rm=TRUE)
-      d[i] <- FALSE
-    }
-    ##cat(xmat[,i],a[i],b[i],c[i],d[i],"\n")
-  if (probar)  setTxtProgressBar(pb, i/nLoc(x))
+    a[i] <- all(xmat[,i]==0,na.rm=TRUE) || all(xmat[,i]==2,na.rm=TRUE)
+    if (all(is.na(xmat[,i]))) {a[i] <- NA}
+    if (v==1) {setTxtProgressBar(pb, i/nLoc(x))}
   }
-  s1 <- sum(a,na.rm=TRUE) + sum(b,na.rm=TRUE) + sum(c,na.rm=TRUE)
-  s2 <- s1 + sum(d,na.rm=TRUE)
-  polym <- nLoc(x) - s2
-  cat("\nBreakdown of", nLoc(x), "loci\n")
-  cat("  Polymorphic loci:", polym, "retained\n  Monomorphic loci:", s1, "deleted\n  Loci with no scores (all NA):" , sum(d) ,"deleted\n")
-
+# Count the number of monomorphic loci (TRUE), polymorphic loci (FALSE) and loci with no scores (all.na)
+  counts <- count(a)
+  if (v==1) {
+    cat("\nPolymorphic loci:", counts[1,2], "\nMonomorphic loci:", counts[2,2], "\nLoci with no scores (all NA):" , counts[3,2] ,"\n")
+  }
+    #Treat all na loci as monomorphic
+  # TRUE if monomorphic or all na
+  a[is.na(a)] <- TRUE
 # Write the polymorphic loci to a new genlight object
 #  cat("Deleting monomorphic loci and loci with no scores\n")
-  for (i in (1:nLoc(x))) {
-    index[i] <- !(a[i] == TRUE || b[i] == TRUE || c[i] == TRUE || d[i] == TRUE)
-  }
-  x <- x[,(index)]
-  x@other$loc.metrics <- x@other$loc.metrics[(index),]
+  x <- x[,(a==FALSE)]
+  x@other$loc.metrics <- x@other$loc.metrics[(a==FALSE),]
 
 return <- x
 
 }
+
+
 

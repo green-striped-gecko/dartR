@@ -38,10 +38,9 @@
 #' @param dim -- number of dimensions to retain in the dimension reduction [default k, number of populations]
 #' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.99]
 #' @param t -- populations to retain for consideration; those for which the focal individual has less than or equal to t loci with private alleles [default 0]
-#' @return A genlight object containing the focal individual (assigned to population "unknown") and 
-#' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
-#' @export
+#' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @importFrom stats dnorm qnorm
+#' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' x <- testset.gl
@@ -66,8 +65,9 @@ x <- gl
     stop("Terminating execution")
   }
 
+  cat("\n\nCOMPUTING ASSIGNMENT BASED ON CONFIDENCE ENVELOPES\n\n")
 # Ordinate a reduced space of K = nPop(x2) dimensions
-  pcoa <- gl.pcoa(x2, nfactors=nPop(x2))
+  pcoa <- gl.pcoa(x2, nfactors=nPop(x2),v=FALSE)
 #  gl.pcoa.plot(pcoa,x2, xaxis=3, yaxis=4, ellipse=TRUE)
   
 # Determine the number of dimensions for confidence envelope (the ordination and dimension reduction)
@@ -80,36 +80,18 @@ x <- gl
     sec.est <- nPop(x2)
   # From a hard set maximum
     third.est <- 8
-    
+    cat("  Number of populations, including the unknown:",sec.est,"\n")
+    cat("  Number of dimensions with substantial eigenvalues:",first.est,"\n")
+    cat("  Hard coded upper limit to dimensions:",third.est,"\n")
+    cat("  User specified dimensions to retain:",dim,"\n")
     dim <- min(first.est, sec.est, third.est, dim)
-#    flag1 <- FALSE
-#    flag2 <- FALSE
-#    flag3 <- FALSE
-#    if (is.null(dim)) {
-#      if (first.est < sec.est) {
-#        dim <- first.est
-#        flag2 <- TRUE
-#      } else {
-#        dim <- sec.est
-#        flag3 <- TRUE
-#      }
-#    }  
-#    if (dim >= third.est) {
-#      dim <- third.est
-#      flag1 <- TRUE
-#    }
-#    if (flag2 & !flag1) {cat("Dimension of confidence envelope set at",dim,"using using eigenvalues\n")}
-#    if (flag3 & !flag1) {cat("Dimension of confidence envelope set at",dim,"using number of populations\n")}
-#    if (flag1) {cat("Dimension of confidence envelope set at",dim,"which is an operational maximum\n")}
     cat("Dimension of confidence envelope set at",dim,"\n")
 
 # Re-run the PCoA with calculated dimension
-    cat("\nRe-running the PCoA with nfactors =",dim,"\n")
     pcoa <- gl.pcoa(x2, nfactors=dim)
 
 # Plot the PCoA
-    print(gl.pcoa.plot(pcoa,x2, xaxis=1, yaxis=2, ellipse=TRUE, p=alpha))
-  
+    suppressMessages(print(gl.pcoa.plot(pcoa,x2, xaxis=1, yaxis=2, ellipse=TRUE, p=alpha)))
 # Add population names to the scores   
   c <- cbind(pcoa$scores,as.character(pop(x2)))
   colnames(c)[dim+1]<- "pop"
@@ -119,7 +101,8 @@ x <- gl
   unknown <- c[c[,"pop"]=="unknown",]
   unknown <- as.numeric(unknown[1:dim])
   
-  cat("\nProbability of assignment of unknown",id,"to listed populations\n\n") 
+
+  cat("\nLikelihood Index for assignment of unknown",id,"to listed populations\n\n") 
 
 # For each population
   p <- as.factor(clouds[,"pop"])
@@ -163,10 +146,8 @@ x <- gl
   df <- df[rev(order(df$Index)),]
   print(df)
   best <- as.character(df$Population[df$Assign=="yes"][1])
-  cat("Index is a weighted log-likelihood\n")
-  cat("CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
-  cat("Best assignment is the population with the largest value of the Index, in this case",best,"\n")
+  cat("  Index is a weighted log-likelihood\n")
+  cat("  CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
+  cat("  Best assignment is the population with the largest value of the Index, in this case",best,"\n")
   return(df)
 }
-
-

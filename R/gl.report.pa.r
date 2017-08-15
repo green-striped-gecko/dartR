@@ -20,10 +20,10 @@
 gl.report.pa <- function (gl, id, nmin=10, t=0) {
 x <- gl
 
-# Set the hard minimum for target population sample size
-  hard.min <- 10
-
   cat("IDENTIFYING LOCI WITH PRIVATE ALLELES\n\n")
+  
+# Set a recommended minimum population size
+  hard.min <- 10
 
 # Assign the unknown individual to population 'unknown'
   v <- as.vector(pop(x))
@@ -35,23 +35,24 @@ x <- gl
 # Remove all known populations with less than nmin individuals
   pop.keep <- levels(pop(knowns))[table(pop(knowns)) >= nmin]
   pop.toss <- levels(pop(knowns))[table(pop(knowns)) < nmin]
-  cat("Discarding",length(pop.toss),"populations with sample size less than",nmin,"\n",pop.toss,"\n\n")
-  cat("Retaining",length(pop.keep),"populations with sample size greater than or equal to",nmin,"\n",pop.keep,"\n\n")
+
+  cat("Discarding",length(pop.toss),"populations with sample size less than",nmin,":",pop.toss,"\n\n")
+  cat("Retaining",length(pop.keep),"populations with sample size greater than or equal to",nmin,":",pop.keep,"\n\n")
   knowns <- knowns[pop(knowns) %in% pop.keep]
   pop.warn <- levels(pop(knowns))[table(pop(knowns)) < hard.min]
   if (length(pop.warn >= 1)) {
-    cat("Warning: Some retained populations have sample sizes less than",hard.min,"\n",pop.warn,"\n")
-    cat("  Risk is that private alleles arising as sampling error may be reported\n\n")
+    cat("Warning: Some retained populations have sample sizes less than",hard.min,":",pop.warn,"\n")
+    cat("  Risk of private alleles arising as sampling error\n\n")
   }  
 # Calculate the number of individuals in the unknown population and the number of target populations 
   n <- length(pop(unknowns))
   N <- length(levels(pop(knowns)))
   if (n != 1) {
-    cat("Fatal Error: Number of unknown focal individuals > 1; population 'unknown' already in use\n")
+
+    cat("Fatal Error: Number of unknown focal individuals > 1; population label 'unknown' already in use\n")
     stop("Terminating execution")
   }
-  cat("Assigning",n,"unknown focal individual(s) to",N,"target populations\n")
-
+  cat("Assigning",n,"unknown individual(s) to",N,"target populations\n")
 # CALCULATE NUMBER OF LOCI WITH PRIVATE ALLELES
 # For each unknown individual
   for (i in 1:n) {
@@ -85,19 +86,19 @@ x <- gl
       # Calculate the number of loci with private alleles in the focal individual
         count <- nLoc(x)-count-count.NA
       # Print out results 
-        cat("Focal individual:",id,"\n")
-#        cat("Number of target populations:",N,"\n")
-#        cat("  Minimum sample size:",nmin,"\n")
-        cat("Total number of SNP loci: ",nLoc(x),"\n")
+
+        cat("Unknown individual:",id,"\n")
+        cat("Total number of SNP loci: ",nLoc(x),"\n\n")
         cat("Table showing number of loci with private alleles\n")
         for (m in levels(as.factor(count))) {
           cat("  ",m,levels(pop(knowns))[count==m],"\n")
-        }   
-#        cat("Threshold for population retention:",t,"private alleles in the focal individual\n")
+        }  
+      # Save the data in a new gl object
+        cat("\n")
         index <- ((pop(x) %in% levels(pop(knowns))[count<=t]) | (as.character(pop(x)) == "unknown"))
         gl <- x[index,]
-        gl <- gl.filter.monomorphs(gl)
-        cat("Saved data for the focal individual and populations for which that individual has",t,"or less loci with private alleles\n")
+        gl <- gl.filter.monomorphs(gl, v=FALSE)
+        cat("Data retained for the unknown individual and remaining candidate source populations (",t,"or less loci with private alleles)\n")
   }  
   return(gl)
 }
