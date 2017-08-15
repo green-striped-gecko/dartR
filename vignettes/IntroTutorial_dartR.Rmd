@@ -436,8 +436,8 @@ function  |   explanation
  | gl.filter.callrate() | Calculate call rate (proportion with non-missing scores) for each locus or individual and remove those loci or individuals below a specified threshold.
  | gl.report.repavg() | Report the number of loci or individuals for which the reproducibility (averaged over the two allelic states) exceeds a range of thresholds.
  | gl.filter.repavg() | Remove those loci or individuals for which the reproducibility (averaged over the two allelic states) falls below a specified threshold.
- | gl.report.dups() | Report the number of sequence tags with multiple SNP loci, and the number of SNP loci that are part of  or individuals for which the reproducibility (averaged over the two allelic states) exceeds a range of thresholds.
- | gl.filter.dups() | Remove all but one locus where there is more than one locus per sequence tag.
+ | gl.report.secondaries() | Report the number of sequence tags with multiple SNP loci, and the number of SNP loci that are part of  or individuals for which the reproducibility (averaged over the two allelic states) exceeds a range of thresholds.
+ | gl.filter.secondaries() | Remove all but one locus where there is more than one locus per sequence tag.
  | gl.report.monomorphs() | Report the number of monomorphic loci and the number of loci for which the scores are all missing (NA).
  | gl.filter.monomorphs() | Remove all monomorphic loci, including loci for which the scores are all missing (NA).
  | gl.report.hamming() | Report the distribution of pairwise Hamming distances between trimmed sequence tags. 
@@ -459,7 +459,7 @@ Filtering of data is often necessary to make sure only high quality loci (few mi
 1. Filter by repeatability (```gl.filter.repavg``` in DartR) (a meassurement of quality per loci)
 2. Fitler by monomorphic loci (```gl.filter.monomorphs```)(as they do not provide information for population structure and simply slow the analysis)
 3. Filter by amount of missing data (```gl.filter.callrate, method="loc"```) per locus
-4. Filter by duplicated snps in the same fragment (```gl.filter.dups```)
+4. Filter by duplicated snps in the same fragment (```gl.filter.secondary```)
 5. Filter by amount of missing data per individual (```gl.filter.callrate, method="ind"```)
 
 Additional filter could be excluding possible loci under selection (```gl.outflank```), check loci for linkage disequilibrium (```gl.report.ld```) or filter for loci out of Hardy-Weinberg-Equilibrium (```gl.filter.hwe```)
@@ -486,7 +486,7 @@ gl2 <- gl.filter.repavg(gl, t=1)
 
 4.	Filter out multiple snps in single sequence tags (!!!!!produces an error currently!!!!!)
 ```{r, eval=F, echo=F}
-gl2 <- gl.filter.dups(gl)
+gl2 <- gl.filter.secondary(gl)
 
 ```
 
