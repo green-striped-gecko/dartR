@@ -14,10 +14,12 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
+#' \dontrun{
 #' #only used the first 20 individuals due to runtime reasons 
 #' fd <- gl.fixed.diff(testset.gl[1:20,], tloc=0.05)
 #' gl <- gl.collapse(fd, testset.gl, recode.table="testset_recode.csv",tpop=1)
-
+#' }
+#' 
 gl.collapse <- function(fd, gl, recode.table="tmp.csv", tpop=0, v=1) {
   
   if( v==2) {cat(paste("Creating a new recode_pop table by amalgamating populations for which fd <=",tpop,"\n"))}
