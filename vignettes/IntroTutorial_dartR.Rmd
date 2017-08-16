@@ -26,12 +26,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #What is dartR?
  
-Package ```dartR``` is an R package for a) loading DArT $\textsuperscript{TM}$ SNP and SilicoDArT data generated from the commercial service provided by Diversity Arrays Technology Pty Ltd; (b) applying filters to those data based on locus metadata such as call rate, information content or reproducibility; (c) assigning individuals to populations and selecting subsets of individuals or populations; (d) visualization using Principal Coordinates Analysis (PCoA), (e) initial calculation of indices such as heterozygosity and Fst  ; and (f) providing a conduit to a range of standard data formats and R packages for analysis. Though the majority of functions are.
+Package ```dartR``` is an R package for a) loading DArT $\textsuperscript{TM}$ SNP and SilicoDArT data generated from the commercial service provided by Diversity Arrays Technology Pty Ltd; (b) applying filters to those data based on locus metadata such as call rate, information content or reproducibility; (c) assigning individuals to populations and selecting subsets of individuals or populations; (d) visualization using Principal Coordinates Analysis (PCoA), (e) initial calculation of indices such as heterozygosity and Fst  ; and (f) providing a conduit to a range of standard data formats and R packages for analysis. 
 
-Provided the data are in the ```genlight``` format (package ```adegenet```), the package can be used to analyse SNP data from sources other than DArT $\textsuperscript{TM}$).
-Please note we will give a detailed example below and outline several ways how to import data from other formats into ```genlight```.
+Provided the data are in the ```genlight``` format (package ```adegenet```), the package can be used to analyse SNP data from sources other than DArT $\textsuperscript{TM}$.
+Please note we provide give a detailed example below and outline several ways how to import data from other formats into ```genlight```.
 
-In most cases, the scripts in {dartR} are wrappers for scripts included in other already available packages, to provide easy access to these packages for analyzing DArT data, and to provide some enhanced output diagnostics. Relatively few scripts provide novel analyses. We make no apologies for this, as the objective of ```dartR``` is to provide fundamental tools for accessing and manipulating SNP data in preparation for analysis by the vast suite of packages available in R through the CRAN repository, and  make them easier accessible for users not deeply accustomed with the R language, without "re-inventing the wheeel".
+In most cases, the scripts in {dartR} are wrappers for scripts included in other already available packages, to provide easy access to these packages for analyzing DArT data, and to provide some enhanced output diagnostics. Relatively few scripts provide novel analyses. We make no apologies for this, as the objective of ```dartR``` is to provide fundamental tools for accessing and manipulating SNP data in preparation for analysis by the vast suite of packages available in R through the CRAN repository, and  make them easily accessible for users not deeply accustomed with the R language, without "re-inventing the wheeel".
  
 A summary of the capabilities of ```dartR``` is as follows:
 
@@ -71,15 +71,15 @@ install.packages("dartR")
   install_github("green-striped-gecko/dartR")
 ```
 
-To test if you installation was successful include the library by typing:
+To test if your installation was successful include the library by typing:
 
 ```{r}
  library(dartR)
 ```
 
-Please note that library adegenet will output some lines as it is not easy to suppress those lines.
+Please note that library adegenet will output some lines as it installs, which are not easy to suppress.
 
-If some packages have not been loaded, an error message will be given and you will need to install those package manually.
+If some packages have not been loaded, an error message will be given and you will need to install those package manually. (see a detailed description of the process at the [Github repository](https://github.com/green-striped-gecko/dartR): 
 
 Once installed and invoked into your current R session, we need to prepare our session, so it points to a certain working directory. The working directory is the location on your hard drive, that holds your data and also is where intermediate and final output files will be exported if not directed otherwise.
 
@@ -90,7 +90,7 @@ To set the default directory, use the following with the appropriate directory s
 setwd("c:/your.working.directory/")
 ```
 
-Note that the file specification uses forward slashes, which works for the three main Operating Systems (Linux, Windows and MacOS).
+Note that the file specification uses forward slashes, irrespective of which operating system you use (Linux, Windows or MacOS).
 
 The dartR library contains test datasets that form the basis of the commands and exercises below. We recommend that you rename the test data set to ```gl```, in case you want to make alterations to it. If you wish to run the vignette code with your data, simply rename your data set to ```gl```, after you have loaded it into R.
 
@@ -459,7 +459,7 @@ Filtering of data is often necessary to make sure only high quality loci (few mi
 1. Filter by repeatability (```gl.filter.repavg``` in DartR) (a meassurement of quality per loci)
 2. Fitler by monomorphic loci (```gl.filter.monomorphs```)(as they do not provide information for population structure and simply slow the analysis)
 3. Filter by amount of missing data (```gl.filter.callrate, method="loc"```) per locus
-4. Filter by duplicated snps in the same fragment (```gl.filter.secondary```)
+4. Filter by duplicated snps in the same fragment (```gl.filter.secondaries```)
 5. Filter by amount of missing data per individual (```gl.filter.callrate, method="ind"```)
 
 Additional filter could be excluding possible loci under selection (```gl.outflank```), check loci for linkage disequilibrium (```gl.report.ld```) or filter for loci out of Hardy-Weinberg-Equilibrium (```gl.filter.hwe```)
@@ -819,7 +819,7 @@ Note that we did not need to re run the PCoA analysis, only to recode the pop la
 
 There are other options for gl.pcoa.plot() that allow the axes to be scaled on the basis of proportion of variation explained, to select other combinations of axes to plot, and for adding confidence ellipses. Use the R help facility to explore these additional options. 
 
-Note that there is one point that seems intermediate between Emydura macquarii from the coast, and Emydura subglobosa (from northern Australia west of the Great Dividing Range). How do we find out what individual that point represents? Replot the data using labels="interactive" to prime the plot for analysis using ggplotly {plotly}:
+Note that there is one point that seems intermediate between *Emydura macquarii* from the coast, and Emydura subglobosa (from northern Australia west of the Great Dividing Range). How do we find out what individual that point represents? Replot the data using labels="interactive" to prime the plot for analysis using ggplotly {plotly}:
 
 The commands
 
@@ -907,7 +907,7 @@ When the number of loci examined gets up into the 10s of thousands and the sampl
 
 # Isolation by distance plot
 
-This functions performs an isolation by distance analysis based on a mantel test and also produces an isolation by distance plot. If a genlight object with coordinates (in the \@other\$latlong slot) is provided, then a Euclidean and genetic distance matrix are calculated (currently only pairwise Fst between population is implemented as default). Coordinates are expected as lat long and converted to Google Earth Mercator projections to avoid distortions. If coordinates are already projected in a suitable coordinate system, you can set projected=TRUE and no projection is applied. 
+This functions performs an isolation by distance analysis based on a mantel test and also produces an isolation by distance plot. If a genlight object with coordinates (in the \@other\$latlong slot) is provided, then a Euclidean and genetic distance matrix are calculated (currently only pairwise Fst between population is implemented by default). Coordinates are expected as lat long and converted to Google Earth Mercator projections to avoid distortions. If coordinates are already projected in a suitable coordinate system, you can set projected=TRUE and no projection is applied. 
 An isolation by distance analysis will be carried out and a plot will be returned, based on log(Euclidean distance) against between population pairwise Fst/1-Fst (see Rousseau's distance measure. Genetics April 1, 1997 vol. 145 no. 4 1219-1228) You can also provide your own genetic and Euclidean distance matrix, then simply the mantel and isolation by distance plot will be returned. The function is based on code provided by the adegenet tutorial (http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf), using the functions mantel (package vegan), stamppFst (package StAMPP) and Mercator (package dismo).
 
 An example run (using only a subset of the test data):
@@ -1026,7 +1026,7 @@ An Assignment Index is calculated in the same way for a notional individual resi
 x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, t=0)
 ```
 
-In this example, the unknown individual, UC_00146, is assigned to only one population, EmmaclGeor, so the assignment problem is resolved. This individual does indeed come from the Georges tributary of the Macleay River.
+In this example, the unknown individual, UC_00146, is assigned to only one population, EmmaclGeor, so the assignment problem is resolved. This individual does indeed come from the Georges Creek, a tributary of the Macleay River.
 
 If we are worried that the 1 locus with a private allele out of 255 loci for populations EmmacBurnBara, EmmacRichCasi, and  EmmacTweeUki is less than substantial evidence, we can proceed to analyse the data further using ```gl.assign```. We would take this step also if there were more than one population scoring 0 private alleles. The code below yields the results of the private alleles analysis again, but in addition computes assignment based on confidence envelopes:
 
@@ -1076,7 +1076,7 @@ gl2 gdsfmt() | Outputs a gl object to a file in gds format that can subsequently
 
 ## NewHybrids
 
-NewHybrids (Anderson and Thompson, 2002) employs a statistical method for identifying species hybrids using data on multiple, unlinked markers which does not require that allele frequencies be known in the parental species. The probability model used is one in which parentals and various classes of hybrids (F1’s, F2’s, and various backcrosses) form a mixture from which the sample is drawn. Using the framework of Bayesian model-based clustering, NewHybrids computes, using Markov chain Monte Carlo, the relative likelihood (posterior probability) that each individual belongs to each of the distinct hybrid classes. NewHybrids is limited to ca 200 loci because of memory constraints, so the best 200 available loci were selected on the basis of their being different and fixed in each of the two nominated parental populations, and then on avgPIC. 
+NewHybrids (Anderson and Thompson, 2002) employs a statistical method for identifying species hybrids using data on multiple, unlinked markers which does not require that allele frequencies be known in the parental species. The probability model used is one in which parentals and various classes of hybrids (F1s, F2s, and various backcrosses) form a mixture from which the sample is drawn. Using the framework of Bayesian model-based clustering, NewHybrids computes, using Markov chain Monte Carlo, the relative likelihood (posterior probability) that each individual belongs to each of the distinct hybrid classes. NewHybrids is limited to ca 200 loci because of memory constraints, so the best 200 available loci were selected on the basis of their being different and fixed in each of the two nominated parental populations, and then on avgPIC. 
 
 To generate an input file for NewHybrids, use the function
 
@@ -1134,16 +1134,16 @@ gds <- snpgdsOpen("gl2gds.gds")
 and undertake the range of analyses available in {SNPRelate}, including
 
 option  |   explanation
-------- | ------------------------------------------------------
+------------------ | ------------------------------------------------------
 LD-pruning | A pruned set of loci which are in approximate linkage equilibrium will avoid the strong influence of locus clusters on relatedness analysis
 PCoA | with some nice diagnostic plots
 Relatedness | Identity-by-descent estimation can be done by either the method of moments (MoM) or maximum likelihood estimation (MLE) 
 IBS | Identity by State analysis and Multidimensional Scaling (MDS) for displaying relationships
 
 
-## Faststructure
+## FastSTRUCTURE
 
-STRUCTURE is one of the most widely used population analysis tools that allows researchers to assess patterns of genetic structure in a set of samples (Porras-Hurtado et al., 2013). STRUCTURE is freely available software for population analysis developed (Pritchard et al., 2000). STRUCTURE analyses differences in the distribution of genetic variants amongst populations and places individuals into groups where they share similar patterns of variation. STRUCTURE both identifies populations from the data and assigns individuals to those populations. fastSTRUCTURE is an improved implementation to analyse large quantities of data (Raj et al., 2014).
+STRUCTURE is one of the most widely used population analysis tools that allows researchers to assess patterns of genetic structure in a set of samples (Porras-Hurtado et al., 2013). STRUCTURE is freely available software for population analysis (Pritchard et al., 2000). STRUCTURE analyses differences in the distribution of genetic variants amongst populations and places individuals into groups where they share similar patterns of variation. STRUCTURE both identifies populations from the data and assigns individuals to those populations. FastSTRUCTURE is an improved implementation to analyse large quantities of data (Raj et al., 2014).
 
 To generate an input file for fastSTRUCTURE, use the function (this format can also be used for input to STRUCTURE, though the meta data options are not supported yet):
 

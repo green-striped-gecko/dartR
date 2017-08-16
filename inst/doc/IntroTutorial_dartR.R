@@ -116,7 +116,7 @@ gl2 <- gl.filter.callrate(gl, method="ind", threshold = 0.90)
 gl2 <- gl.filter.repavg(gl, t=1)
 
 ## ---- eval=F, echo=F-----------------------------------------------------
-#  gl2 <- gl.filter.dups(gl)
+#  gl2 <- gl.filter.secondary(gl)
 #  
 
 ## ------------------------------------------------------------------------
