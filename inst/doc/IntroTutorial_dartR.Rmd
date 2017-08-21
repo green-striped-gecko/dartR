@@ -378,9 +378,15 @@ platy
 
 To convert the genind to a genlight object simply type:
 
-```{r}
-platy.gl <- (gi2gl(platy))
+```{r, eval=FALSE}
+platy.gl <- (gi2gl(platy)
 ```
+
+
+```{r, echo=FALSE}
+platy.gl <- (gi2gl(platy, parallel = FALSE))
+```
+
 
 The resulting genlight object has already some of the meta data as provided in the table but not in the right place (pop, indNames ploidy, loc.n.all and latlong in the ``@other``` slot are already there).
 
@@ -773,6 +779,7 @@ The script ```gl.pcoa()```  is essentially a wrapper for ```glPca()``` of packag
 pc <- gl.pcoa(gl, nfactors=5)
 ```
 
+Please note, in case you are using a non-windows system you can use the argument '''parallel=TRUE''', which speeds up the calculation.
 The resultant object pc contains the eigenvalues, factor scores and factor loadings that can be accessed for subsequent analyses.
 
 ```{r}
