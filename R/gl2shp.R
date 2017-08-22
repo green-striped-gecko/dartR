@@ -8,10 +8,10 @@
 #' @param v -- verbosity: if v=0 no output, v=1 reports name and path of output file. default 1
 #' @export
 #' @importFrom rgdal writeOGR
-#' @importFrom sp SpatialPointsDataFrame coordinates
+#' @importFrom sp SpatialPointsDataFrame coordinates<- CRS proj4string<-
 #' @author Bernd Guber (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' @dontrun {
+#' \dontrun{
 #' gl2shp(testset.gl)
 #'}
 

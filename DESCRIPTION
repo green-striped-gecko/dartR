@@ -53,7 +53,9 @@ Imports:
     dismo,
     DBI,
     qvalue, 
-    plotly
+    plotly,
+    sp,
+    rgdal
 Suggests:
     knitr,
     rmarkdown,
