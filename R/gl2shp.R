@@ -12,6 +12,7 @@
 #' @author Bernd Guber (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' \dontrun{
+#' 
 #' gl2shp(testset.gl)
 #'}
 
@@ -29,13 +30,13 @@ gl2shp <- function(gl, proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
   
   toremove <- which(!complete.cases(gl@other$latlong))
   if (v==1) cat(paste("Removed", length(toremove),"individual(s) due to missing coordinates.\n" ))
-  if (v==1) cat(paste("Removed: ", indNames(gl)[toremove],"\n"))
+  if (v==1 & (length(toremove)>0)) cat(paste("Removed: ", indNames(gl)[toremove],"\n"))
   glpoints <- glpoints[complete.cases(glpoints),]
   
   
   glpoints$id <- 1:nrow(glpoints)
   
-  coordinates(glpoints) <- c("lon","lat")
+  sp::coordinates(glpoints) <- c("lon","lat")
   
   #create allsites point shp files
   spdf = SpatialPointsDataFrame(glpoints, data.frame(glpoints))
