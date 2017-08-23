@@ -1,55 +1,89 @@
 #' Converts genlight objects to STRUCTURE formated files
 #'
-#' This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststruture version as well). It is based on the code provided by Lindsay Clark (originally for genind objects: [Lindsay happy to link to your github repo if you want]) and this function is basically a wrapper around his genind2structure function.
-#' @param gl -- genlight containing lat longs  [required]
-#' @param pops -- switch if population column should be added
+#' This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststruture version as well). It is based on the code provided by Lindsay Clark (see \url{https://github.com/lvclark/R_genetics_conv})  and this function is basically a wrapper around his numeric2structure function.
+#' @param gl -- genlight containing lat longs [required]
+#' @param indNames -- switch if individuals names should be added (defult to indNames in gl)
+#' @param addcolumns -- additional columns to be added  before genotypes
+#' @param ploidy -- defaults to 2
+#' @param exportMarkerNames -- switch if loci names should be included (locNames(gl))
 #' @param outfile -- name (path) of the output shape file
 #' @param outpath -- path of the output file. Default is to tempdir(). If to be saved in the current working directory change to "."
 #' @param v -- verbosity: if v=0 no output, v=1 reports name and path of output file. default 1
 #' @export
-#' @author Lindsay V. Clark [your email], wrapper by Bernd Gruber 
+#' @author Lindsay V. Clark [lvclark@illinois.edu], wrapper by Bernd Gruber 
 #' @examples
 #' \dontrun{
 #' gl2structure(testset.gl)
 #'}
 
 
+gl2structure <- function(gl, indNames =NULL, addcolumns = NULL, ploidy = 2,exportMarkerNames = TRUE, outfile="gl.str", outpath=getwd(), v=1)
+ {
+   if(!"genlight" %in% class(gl)){
+     stop("Function was designed for genlight objects.")
+   }
+nInd <- nInd(gl)
+if (is.null(indNames)) indNames=indNames(gl)
+if(length(indNames) != nInd){
+stop("Number of individuals does not match between indNames and genmat.")
+}
 
-gl2structure <- function(gl, pops=FALSE, outfile="gl.str",  outpath=getwd(), v=1){
-  if(!"genlight" %in% class(gl)){
-    warning("Function was designed for genlight objects.")
+if (!is.null(addcolumns) && is.null(dim(addcolumns))) addcolumns <- data.frame(pop=addcolumns)
+
+if(!is.null(addcolumns) && nrow(addcolumns) != nInd){
+stop("Number of individuals does not match between addColumns and gl.")
+}
+genmat <- as.matrix(gl)
+if(!all(genmat %in% c(0:ploidy,NA))){
+stop("genmat must only contain 0, 1, 2... ploidy and NA")
+}
+if(length(outfile) != 1 || !is.character(outfile)){
+stop("file must be a single character string.")
+}
+if(length(ploidy) != 1 || !is.numeric(ploidy)){
+stop("ploidy must be a single number")
+}
+if(!exportMarkerNames %in% c(TRUE, FALSE)){
+stop("exportMarkerNames must be TRUE or FALSE")
+}
+  
+  # make sets of possible genotypes
+  G <- list()
+  for(i in 0:ploidy){
+  G[[i + 1]] <- c(rep(1, ploidy - i), rep(2, i))
   }
-  # internally convert to genind
-  gi <- gl2gi(gl, v = 0)
-  # get the max ploidy of the dataset
-  pl <- max(gi@ploidy)
-  # get the number of individuals
-  S <- nInd(gi)
-  # column of individual names to write; set up data.frame
-  tab <- data.frame(ind=rep(indNames(gi), each=pl))
-  # column of pop ids to write
-  if(pops){
-    popnums <- 1:nPop(gi)
-    names(popnums) <- as.character(unique(pop(gi)))
-    popcol <- rep(popnums[as.character(pop(gi))], each=pl)
-    tab <- cbind(tab, data.frame(pop=popcol))
+  G[[ploidy + 2]] <- rep(-9, ploidy) # for missing data
+  
+  # set up data frame for Structure
+  StructTab <- data.frame(ind = rep(indNames, each = ploidy))
+  # add any additional columns
+  if(!is.null(addcolumns)){
+  
+  for(i in 1:dim(addcolumns)[2]){
+ StructTab <- data.frame(StructTab, rep(addcolumns[,i], each = ploidy))
+ if(!is.null(dimnames(addcolumns)[[2]])){
+ names(StructTab)[i + 1] <- dimnames(addcolumns)[[2]][i]
+ } else {
+ names(StructTab)[i + 1] <- paste("X", i, sep = "")
+ }
   }
-  loci <- locNames(gi)
-  # add columns for genotypes
-  tab <- cbind(tab, matrix(-9, nrow=dim(tab)[1], ncol=nLoc(gi), dimnames=list(NULL,loci)))
-  # begin going through loci
-  for(L in loci){
-    thesegen <- gi@tab[,grep(paste(L, ".", sep=""), dimnames(gi@tab)[[2]], fixed=TRUE), drop=FALSE] # genotypes by locus
-    al <- 1:dim(thesegen)[2] # numbered alleles
-    for(s in 1:S){
-      if(all(!is.na(thesegen[s,]))){
-        tabrows <- (1:dim(tab)[1])[tab[[1]] == indNames(gi)[s]] # index of rows in output to write to
-        tabrows <- tabrows[1:sum(thesegen[s,])] # subset if this is lower ploidy than max ploidy
-        tab[tabrows,L] <- rep(al, times = thesegen[s,])
-      }
-    }
   }
-  # export table
-  write.table(tab, file=file.path(outpath, outfile), sep="\t", quote=FALSE, row.names=FALSE)
+  
+  # add genetic data
+  for(i in 1:dim(genmat)[2]){
+  thesegen <- genmat[,i] + 1
+  thesegen[is.na(thesegen)] <- ploidy + 2
+  StructTab[[dimnames(genmat)[[2]][i]]] <- unlist(G[thesegen])
+  }
+  
+  # add marker name header
+  if(exportMarkerNames){
+  cat(paste(locNames(gl), collapse = "\t"), sep = "\n", file = outfile)
+  }
+  
+  # export all data
+  write.table(StructTab, row.names = FALSE, col.names = FALSE, append = TRUE,
+ sep = "\t", file = outfile, quote = FALSE)
   if (v==1)  cat(paste("Structure file saved as:", outfile,"\nin folder:",outpath))
 }
+

@@ -4,13 +4,20 @@
 \alias{gl2structure}
 \title{Converts genlight objects to STRUCTURE formated files}
 \usage{
-gl2structure(gl, pops = FALSE, outfile = "gl.str", outpath = getwd(),
+gl2structure(gl, indNames = NULL, addcolumns = NULL, ploidy = 2,
+  exportMarkerNames = TRUE, outfile = "gl.str", outpath = getwd(),
   v = 1)
 }
 \arguments{
-\item{gl}{-- genlight containing lat longs  [required]}
+\item{gl}{-- genlight containing lat longs [required]}
 
-\item{pops}{-- switch if population column should be added}
+\item{indNames}{-- switch if individuals names should be added (defult to indNames in gl)}
+
+\item{addcolumns}{-- additional columns to be added  before genotypes}
+
+\item{ploidy}{-- defaults to 2}
+
+\item{exportMarkerNames}{-- switch if loci names should be included (locNames(gl))}
 
 \item{outfile}{-- name (path) of the output shape file}
 
@@ -19,7 +26,7 @@ gl2structure(gl, pops = FALSE, outfile = "gl.str", outpath = getwd(),
 \item{v}{-- verbosity: if v=0 no output, v=1 reports name and path of output file. default 1}
 }
 \description{
-This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststruture version as well). It is based on the code provided by Lindsay Clark (originally for genind objects: [Lindsay happy to link to your github repo if you want]) and this function is basically a wrapper around his genind2structure function.
+This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststruture version as well). It is based on the code provided by Lindsay Clark (see \url{https://github.com/lvclark/R_genetics_conv})  and this function is basically a wrapper around his numeric2structure function.
 }
 \examples{
 \dontrun{
@@ -27,5 +34,5 @@ gl2structure(testset.gl)
 }
 }
 \author{
-Lindsay V. Clark [your email], wrapper by Bernd Gruber
+Lindsay V. Clark [lvclark@illinois.edu], wrapper by Bernd Gruber
 }

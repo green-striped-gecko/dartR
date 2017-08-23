@@ -759,7 +759,7 @@ recpops<- factor(rep(LETTERS[1:5],50))
 glsub <- gl
 pop(glsub)<-recpops
 
-gi <- gl2gi(glsub, probar = FALSE)
+gi <- gl2gi(glsub)
 round(pairwise_D(gi),4)
 round(pairwise_Gst_Hedrick(gi),4)
 round(pairwise_Gst_Nei(gi),4)
@@ -1056,7 +1056,7 @@ The genlight objects for managing SNP data are a relatively recent development, 
 
 ```{r}
 gl <- testset.gl
-gi <- gl2gi(gl, probar=FALSE)
+gi <- gl2gi(gl, v=0)
 
 ```
 

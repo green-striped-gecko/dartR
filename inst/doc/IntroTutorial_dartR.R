@@ -224,7 +224,7 @@ recpops<- factor(rep(LETTERS[1:5],50))
 glsub <- gl
 pop(glsub)<-recpops
 
-gi <- gl2gi(glsub, probar = FALSE)
+gi <- gl2gi(glsub)
 round(pairwise_D(gi),4)
 round(pairwise_Gst_Hedrick(gi),4)
 round(pairwise_Gst_Nei(gi),4)
@@ -310,7 +310,7 @@ x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.95, t=1)
 
 ## ------------------------------------------------------------------------
 gl <- testset.gl
-gi <- gl2gi(gl, probar=FALSE)
+gi <- gl2gi(gl, v=0)
 
 
 ## ---- eval=FALSE---------------------------------------------------------
