@@ -9,6 +9,7 @@
 #' @export
 #' @importFrom rgdal writeOGR
 #' @importFrom sp SpatialPointsDataFrame coordinates<- CRS proj4string<-
+#' @importFrom stats complete.cases
 #' @author Bernd Guber (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' \dontrun{
