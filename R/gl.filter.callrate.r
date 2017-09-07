@@ -70,6 +70,7 @@
         if (length(x3) > 0) {
           cat("List of individuals deleted because of low call rate\n",indNames(x3),"\n")
           cat("   from populations\n",as.character(pop(x3)),"\n")
+          x2 <- gl.filter.monomorphs(x2, v=0)
         }
       }  
   }  else {
