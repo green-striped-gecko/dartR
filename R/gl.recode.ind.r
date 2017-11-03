@@ -10,10 +10,14 @@
 #' and the analyses. Recoding individuals can be done with a recode table (csv).
 #' 
 #' The script, having deleted individuals, identifies resultant monomorphic loci or loci
-#' with all values missing and deletes them (using gl.filter.monomorphs.r)
+#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also
+#' recalculates statistics made redundant by the deletion of individuals from the dataset.
+#' 
+#' The script returns a genlight object with the new individual labels and the recalculated locus metadata.
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param ind.recode -- name of the csv file containing the individual relabelling [required]
+#' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
 #' @return A genlight or genind object with the recoded and reduced data
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
@@ -25,7 +29,7 @@
 #' 
 #'
 
-gl.recode.ind <- function(gl, ind.recode){
+gl.recode.ind <- function(gl, ind.recode, v=1){
 x <- gl
 
   if(class(x)!="genind" & class(x)!="genlight") {
@@ -50,11 +54,21 @@ x <- gl
   }
   indNames(x) <- ind.list
 
-# Remove rows flagged for deletion
-  cat("  Removing entities flagged for deletion in ", ind.recode, "\n")
-  x2 <- x[!x$ind.names=="delete" & !x$ind.names=="Delete"]
+  # If there are individuals to be deleted, then recalculate relevant locus metadata and remove monomorphic loci
   
-  x2 <- gl.filter.monomorphs(x2)
+  if ("delete" %in% x$ind.names | "Delete" %in% x$ind.names) {
+    # Remove rows flagged for deletion
+      cat("Deleting individuals or samples flagged for deletion\n")
+      x2 <- x[!x$ind.names=="delete" & !x$ind.names=="Delete"]
+    # Remove monomorphic loci
+      x2 <- gl.filter.monomorphs(x2,v=v)
+    # Recalculate statistics
+      x2 <- utils.recalc.avgpic(x2,v=v)
+      x2 <- utils.recalc.callrate(x2,v=v)
+      x2 <- utils.recalc.freqhets(x2,v=v)
+      x2 <- utils.recalc.freqhomref(x2,v=v)
+      x2 <- utils.recalc.freqhomsnp(x2,v=v)
+  }
 
 # REPORT A SUMMARY
   cat("Summary of recoded dataset\n")

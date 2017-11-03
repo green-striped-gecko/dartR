@@ -16,7 +16,7 @@ utils.recalc.freqhomsnp <- function(gl, v=1) {
  x <- gl
    
   if(class(x) == "genlight") {
-     cat("Reporting for a genlight object\n")
+     #cat("Reporting for a genlight object\n")
    } else {
      cat("Fatal Error: Specify a genlight object\n")
      stop()

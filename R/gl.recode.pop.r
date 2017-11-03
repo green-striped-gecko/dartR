@@ -11,7 +11,10 @@
 #' The keyword Delete used as a new population assignment will result in the associated specimen being dropped from the dataset.
 #' 
 #' The script, having deleted populations, identifies resultant monomorphic loci or loci
-#' with all values missing and deletes them (using gl.filter.monomorphs.r)
+#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also
+#' recalculates statistics made redundant by the deletion of individuals from the dataset.
+#' 
+#' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param pop.recode -- name of the csv file containing the population reassignments [required]
@@ -55,13 +58,21 @@ x <- gl
   }
   pop(x) <- pop.list
 
-# Remove rows flagged for deletion
-  if (v==2) {
-    cat("  Removing entities flagged for deletion in ", pop.recode, "\n")
-  }  
-  x2 <- x[!x$pop=="delete" & !x$pop=="Delete"]
+  # If there are populations to be deleted, then recalculate relevant locus metadata and remove monomorphic loci
   
-  x2 <- gl.filter.monomorphs(x2, v=0)
+  if ("delete" %in% x$pop | "Delete" %in% x$pop) {
+    # Remove rows flagged for deletion
+    cat("Deleting populations flagged for deletion\n")
+    x2 <- x[!x$pop=="delete" & !x$pop=="Delete"]
+    # Remove monomorphic loci
+    x2 <- gl.filter.monomorphs(x2,v=v)
+    # Recalculate statistics
+    x2 <- utils.recalc.avgpic(x2,v=v)
+    x2 <- utils.recalc.callrate(x2,v=v)
+    x2 <- utils.recalc.freqhets(x2,v=v)
+    x2 <- utils.recalc.freqhomref(x2,v=v)
+    x2 <- utils.recalc.freqhomsnp(x2,v=v)
+  }
 
 # REPORT A SUMMARY
   if (v==2) {

@@ -17,13 +17,15 @@
 #' parent genlight object.
 #' 
 #' The script, having deleted individuals, identifies resultant monomorphic loci or loci
-#' with all values missing and deletes them (using gl.filter.monomorphs.r)
+#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also
+#' recalculates statistics made redundant by the deletion of individuals from the dataset.
 #' 
-#' The script returns a genlight object with the new individual labels.
+#' The script returns a genlight object with the new individual labels and the recalculated locus metadata.
 #' 
 #' @param gl Name of the genlight object for which individuals are to be relabelled.[required]
 #' @param ind.recode Name of the file to output the new assignments [optional]
 #' @return An object of class ("genlight") with the revised individual labels
+#' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
 #' @import utils
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
@@ -35,7 +37,7 @@
 #' }
 #' #Ammended Georges 9-Mar-17
 
-gl.edit.recode.ind <- function(gl, ind.recode=NULL) {
+gl.edit.recode.ind <- function(gl, ind.recode=NULL, v=1) {
   
 # Take assignments from gl  
 
@@ -71,6 +73,22 @@ gl.edit.recode.ind <- function(gl, ind.recode=NULL) {
   gl <- gl[!gl$ind.names=="delete" & !gl$ind.names=="Delete"]
   
   gl <- gl.filter.monomorphs(gl)
+  
+  # If there are individuals to be deleted, then recalculate relevant locus metadata and remove monomorphic loci
+  
+  if ("delete" %in% gl$ind.names | "Delete" %in% gl$ind.names) {
+    # Remove rows flagged for deletion
+    cat("Deleting individuals flagged for deletion\n")
+    gl <- gl[!gl$ind.names=="delete" & !gl$ind.names=="Delete"]
+    # Remove monomorphic loci
+    gl <- gl.filter.monomorphs(gl,v=v)
+    # Recalculate statistics
+    gl <- utils.recalc.avgpic(gl,v=v)
+    gl <- utils.recalc.callrate(gl,v=v)
+    gl <- utils.recalc.freqhets(gl,v=v)
+    gl <- utils.recalc.freqhomref(gl,v=v)
+    gl <- utils.recalc.freqhomsnp(gl,v=v)
+  }
   
   return(gl)
   
