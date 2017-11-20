@@ -82,12 +82,14 @@ gl.edit.recode.ind <- function(gl, ind.recode=NULL, v=1) {
     gl <- gl[!gl$ind.names=="delete" & !gl$ind.names=="Delete"]
     # Remove monomorphic loci
     gl <- gl.filter.monomorphs(gl,v=v)
-    # Recalculate statistics
-    gl <- utils.recalc.avgpic(gl,v=v)
-    gl <- utils.recalc.callrate(gl,v=v)
-    gl <- utils.recalc.freqhets(gl,v=v)
-    gl <- utils.recalc.freqhomref(gl,v=v)
-    gl <- utils.recalc.freqhomsnp(gl,v=v)
+    if (recalc) {
+      # Recalculate statistics
+      gl <- utils.recalc.avgpic(gl,v=v)
+      gl <- utils.recalc.callrate(gl,v=v)
+      gl <- utils.recalc.freqhets(gl,v=v)
+      gl <- utils.recalc.freqhomref(gl,v=v)
+      gl <- utils.recalc.freqhomsnp(gl,v=v)
+    }
   }
   
   return(gl)

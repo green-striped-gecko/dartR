@@ -17,7 +17,8 @@
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param ind.recode -- name of the csv file containing the individual relabelling [required]
-#' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
+#' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]
+#' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
 #' @return A genlight or genind object with the recoded and reduced data
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
@@ -29,7 +30,7 @@
 #' 
 #'
 
-gl.recode.ind <- function(gl, ind.recode, v=1){
+gl.recode.ind <- function(gl, ind.recode, recalc=TRUE, v=1){
 x <- gl
 
   if(class(x)!="genind" & class(x)!="genlight") {
@@ -62,12 +63,14 @@ x <- gl
       x2 <- x[!x$ind.names=="delete" & !x$ind.names=="Delete"]
     # Remove monomorphic loci
       x2 <- gl.filter.monomorphs(x2,v=v)
-    # Recalculate statistics
+    if (recalc) {
+      # Recalculate statistics
       x2 <- utils.recalc.avgpic(x2,v=v)
       x2 <- utils.recalc.callrate(x2,v=v)
       x2 <- utils.recalc.freqhets(x2,v=v)
       x2 <- utils.recalc.freqhomref(x2,v=v)
       x2 <- utils.recalc.freqhomsnp(x2,v=v)
+    }
   }
 
 # REPORT A SUMMARY

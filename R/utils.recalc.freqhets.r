@@ -24,7 +24,7 @@ utils.recalc.freqhets <- function(gl, v=1) {
 
   # Do the deed
      t <- as.matrix(x)
-     for (i in 1:nInd(x)) {
+     for (i in 1:nLoc(x)) {
        x@other$loc.metrics$FreqHets[i] <- length(which(t[,i] == 1))/(nInd(x)-length(which(is.na(t[,i]))))
      }
 

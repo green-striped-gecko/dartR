@@ -14,9 +14,8 @@
 #' result <- utils.recalc.avgpic(testset.gl)
 
 utils.recalc.avgpic <- function(gl, v=1) {
- x <- gl
-   
-  if(class(x) == "genlight") {
+
+  if(class(gl) == "genlight") {
      #cat("Reporting for a genlight object\n")
    } else {
      cat("Fatal Error: Specify a genlight object\n")
@@ -24,24 +23,24 @@ utils.recalc.avgpic <- function(gl, v=1) {
   }
 
   # Do the deed
-     t <- as.matrix(x)
-     for (i in 1:nInd(x)) {
+     t <- as.matrix(gl)
+     for (i in 1:nLoc(gl)) {
        c0 <- length(t[t[,i]==0 & !is.na(t[,i]),i])
        c1 <- length(t[t[,i]==1 & !is.na(t[,i]),i])
        c2 <- length(t[t[,i]==2 & !is.na(t[,i]),i])
        c <- (c0+c1+c2)
-       x@other$loc.metrics$OneRatioRef[i] <- (c0+c1)/c
-       x@other$loc.metrics$OneRatioSnp[i] <- (c1+c2)/c
-       OneRatioRef <- x@other$loc.metrics$OneRatioRef[i]
-       OneRatioSnp <- x@other$loc.metrics$OneRatioSnp[i]
+       gl@other$loc.metrics$OneRatioRef[i] <- (c0+c1)/c
+       gl@other$loc.metrics$OneRatioSnp[i] <- (c1+c2)/c
+       OneRatioRef <- gl@other$loc.metrics$OneRatioRef[i]
+       OneRatioSnp <- gl@other$loc.metrics$OneRatioSnp[i]
        ZeroRatioRef <- 1 - OneRatioRef
        ZeroRatioSnp <- 1 - OneRatioSnp
-       x@other$loc.metrics$PICRef[i] <- 1 - ((OneRatioRef*OneRatioRef) + (ZeroRatioRef*ZeroRatioRef))
-       x@other$loc.metrics$PICSnp[i] <- 1 - ((OneRatioSnp*OneRatioSnp) + (ZeroRatioSnp*ZeroRatioSnp))
-       x@other$loc.metrics$avgPIC[i] <- (x@other$loc.metrics$PICRef[i] + x@other$loc.metrics$PICSnp[i])/2
+       gl@other$loc.metrics$PICRef[i] <- 1 - ((OneRatioRef*OneRatioRef) + (ZeroRatioRef*ZeroRatioRef))
+       gl@other$loc.metrics$PICSnp[i] <- 1 - ((OneRatioSnp*OneRatioSnp) + (ZeroRatioSnp*ZeroRatioSnp))
+       gl@other$loc.metrics$avgPIC[i] <- (gl@other$loc.metrics$PICRef[i] + gl@other$loc.metrics$PICSnp[i])/2
      }
 
    if (v>0) {cat("OneRatioRef, OneRatioSnp, PICRef, PICSnp, and AvgPIC recalculated\n")}
    
-   return(x)
+   return(gl)
 }

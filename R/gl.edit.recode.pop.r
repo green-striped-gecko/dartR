@@ -25,7 +25,8 @@
 #' 
 #' @param gl Name of the genlight object for which populations are to be reassigned.[required]
 #' @param pop.recode Name of the file to output the new assignments [optional]
-#' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
+#' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]
+#' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
 #' @return An object of class ("genlight") with the revised population assignments
 #' @import utils
 #' @export
@@ -79,12 +80,14 @@ gl.edit.recode.pop <- function(gl, pop.recode=NULL, v=1) {
       gl <- gl[!gl$pop=="delete" & !gl$pop=="Delete"]
     # Remove monomorphic loci
       gl <- gl.filter.monomorphs(gl,v=v)
+    if (recalc) {
     # Recalculate statistics
       gl <- utils.recalc.avgpic(gl,v=v)
       gl <- utils.recalc.callrate(gl,v=v)
       gl <- utils.recalc.freqhets(gl,v=v)
       gl <- utils.recalc.freqhomref(gl,v=v)
       gl <- utils.recalc.freqhomsnp(gl,v=v)
+    }  
   }
   return(gl)
   
