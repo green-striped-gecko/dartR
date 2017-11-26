@@ -1,9 +1,9 @@
-#' Remove populations from a genelight \{adegenet\} object
+#' Remove all but specified populations from a genelight \{adegenet\} object
 #'
 #' Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart(). 
 #'
-#' The script, having deleted populations, identifies resultant monomorphic loci or loci
-#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also
+#' The script, having deleted the specified populations, optionally identifies resultant monomorphic loci or loci
+#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
 #' recalculates statistics made redundant by the deletion of individuals from the dataset.
 #' 
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
@@ -11,18 +11,19 @@
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param pop.list -- a list of populations to be removed [required]
 #' @param recalc -- Recalculate the locus metadata statistics [default TRUE]
+#' @param mono.rm -- Remove monomorphic loci [default TRUE]
 #' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
 #' @return A genlight object with the reduced data
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' \dontrun{
-#'    gl <- gl.delete.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+#'    gl <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' 
 
-gl.delete.pop <- function(gl, pop.list, recalc=TRUE, v=1){
+gl.keep.pop <- function(gl, pop.list, recalc=TRUE, mono.rm=TRUE, v=1){
 x <- gl
 
   if(class(x)!="genlight") {
@@ -39,11 +40,11 @@ x <- gl
   
   # Remove rows flagged for deletion
     cat("Deleting populations flagged for deletion\n")
-    x2 <- x[!x$pop%in%pop.list]
+    x2 <- x[x$pop%in%pop.list]
   # Remove monomorphic loci
-    x2 <- gl.filter.monomorphs(x2,v=0)
+    if (mono.rm) {x2 <- gl.filter.monomorphs(x2,v=0)}
+  # Recalculate statistics
     if (recalc) {
-    # Recalculate statistics
       x2 <- utils.recalc.avgpic(x2,v=v)
       x2 <- utils.recalc.callrate(x2,v=v)
       x2 <- utils.recalc.freqhets(x2,v=v)
@@ -57,9 +58,14 @@ x <- gl
     cat(paste("  No. of loci:",nLoc(x2),"\n"))
     cat(paste("  No. of individuals:", nInd(x2),"\n"))
     cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
-    if (!recalc) {"Note: Locus metrics not recalculated\n"}
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
-
+  if (v==1) {  
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
+  }
+    
     return <- x2
 }
 

@@ -17,8 +17,8 @@
 #' supplied, will generate a table using the population assignments in the 
 #' parent genlight object.
 #' 
-#' The script, having deleted populations, identifies resultant monomorphic loci or loci
-#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also
+#' The script, having deleted populations, optionally identifies resultant monomorphic loci or loci
+#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
 #' recalculates statistics made redundant by the deletion of individuals from the dataset.
 #' 
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
@@ -26,6 +26,7 @@
 #' @param gl Name of the genlight object for which populations are to be reassigned.[required]
 #' @param pop.recode Name of the file to output the new assignments [optional]
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]
+#' @param mono.rm -- Remove monomorphic loci [default TRUE]
 #' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
 #' @return An object of class ("genlight") with the revised population assignments
 #' @import utils
@@ -41,7 +42,7 @@
 #
 # Ammended Georges 29-Oct-16
 
-gl.edit.recode.pop <- function(gl, pop.recode=NULL, v=1) {
+gl.edit.recode.pop <- function(gl, pop.recode=NULL, recalc=TRUE, mono.rm=TRUE, v=1) {
   
 # Take assignments from gl  
 
@@ -79,15 +80,29 @@ gl.edit.recode.pop <- function(gl, pop.recode=NULL, v=1) {
       cat("Deleting populations flagged for deletion\n")
       gl <- gl[!gl$pop=="delete" & !gl$pop=="Delete"]
     # Remove monomorphic loci
-      gl <- gl.filter.monomorphs(gl,v=v)
-    if (recalc) {
+      if(mono.rm) {gl <- gl.filter.monomorphs(gl,v=v)}
     # Recalculate statistics
-      gl <- utils.recalc.avgpic(gl,v=v)
-      gl <- utils.recalc.callrate(gl,v=v)
-      gl <- utils.recalc.freqhets(gl,v=v)
-      gl <- utils.recalc.freqhomref(gl,v=v)
-      gl <- utils.recalc.freqhomsnp(gl,v=v)
+      if (recalc) {
+        gl <- utils.recalc.avgpic(gl,v=v)
+        gl <- utils.recalc.callrate(gl,v=v)
+        gl <- utils.recalc.freqhets(gl,v=v)
+        gl <- utils.recalc.freqhomref(gl,v=v)
+        gl <- utils.recalc.freqhomsnp(gl,v=v)
     }  
+  }
+  
+  # REPORT A SUMMARY
+  if (v==2) {
+    cat("Summary of recoded dataset\n")
+    cat(paste("  No. of loci:",nLoc(x2),"\n"))
+    cat(paste("  No. of individuals:", nInd(x2),"\n"))
+    cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
+  }
+  if (v==1) {  
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
   return(gl)
   

@@ -9,8 +9,8 @@
 #' because of the potential for breaking the "chain of evidence" between the samples themselves
 #' and the analyses. Recoding individuals can be done with a recode table (csv).
 #' 
-#' The script, having deleted individuals, identifies resultant monomorphic loci or loci
-#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also
+#' The script, having deleted individuals, optionally identifies resultant monomorphic loci or loci
+#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
 #' recalculates statistics made redundant by the deletion of individuals from the dataset.
 #' 
 #' The script returns a genlight object with the new individual labels and the recalculated locus metadata.
@@ -18,6 +18,7 @@
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param ind.recode -- name of the csv file containing the individual relabelling [required]
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]
+#' @param mono.rm -- Remove monomorphic loci [default TRUE]
 #' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
 #' @return A genlight or genind object with the recoded and reduced data
 #' @export
@@ -30,7 +31,7 @@
 #' 
 #'
 
-gl.recode.ind <- function(gl, ind.recode, recalc=TRUE, v=1){
+gl.recode.ind <- function(gl, ind.recode, recalc=TRUE, mono.rm=TRUE, v=1){
 x <- gl
 
   if(class(x)!="genind" & class(x)!="genlight") {
@@ -61,23 +62,31 @@ x <- gl
     # Remove rows flagged for deletion
       cat("Deleting individuals or samples flagged for deletion\n")
       x2 <- x[!x$ind.names=="delete" & !x$ind.names=="Delete"]
-    # Remove monomorphic loci
-      x2 <- gl.filter.monomorphs(x2,v=v)
-    if (recalc) {
-      # Recalculate statistics
-      x2 <- utils.recalc.avgpic(x2,v=v)
-      x2 <- utils.recalc.callrate(x2,v=v)
-      x2 <- utils.recalc.freqhets(x2,v=v)
-      x2 <- utils.recalc.freqhomref(x2,v=v)
-      x2 <- utils.recalc.freqhomsnp(x2,v=v)
-    }
+    #  Remove monomorphic loci
+      if (mono.rm) {x2 <- gl.filter.monomorphs(x2,v=v)}
+      if (recalc) {
+    # Recalculate statistics
+        x2 <- utils.recalc.avgpic(x2,v=v)
+        x2 <- utils.recalc.callrate(x2,v=v)
+        x2 <- utils.recalc.freqhets(x2,v=v)
+        x2 <- utils.recalc.freqhomref(x2,v=v)
+        x2 <- utils.recalc.freqhomsnp(x2,v=v)
+      }
   }
 
 # REPORT A SUMMARY
-  cat("Summary of recoded dataset\n")
-  cat(paste("  No. of loci:",nLoc(x2),"\n"))
-  cat(paste("  No. of individuals:", nInd(x2),"\n"))
-  cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+  if (v==2) {
+    cat("Summary of recoded dataset\n")
+    cat(paste("  No. of loci:",nLoc(x2),"\n"))
+    cat(paste("  No. of individuals:", nInd(x2),"\n"))
+    cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
+  }
+  if (v==1) {  
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
+  }
 
     return(x2)
 }
