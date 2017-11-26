@@ -53,6 +53,7 @@ gl.collapse <- function(fd, gl, recode.table="tmp.csv", tpop=0, v=1) {
   zero.list <- unique(zero.list)
   
 # Amalgamate populations
+  if (length(zero.list) > 1) {
   for (i in 1:(length(zero.list)-1)) {
     for (j in 2:length(zero.list)) {
       if (length(intersect(zero.list[[i]],zero.list[[j]])) > 0 ) {
@@ -64,6 +65,7 @@ gl.collapse <- function(fd, gl, recode.table="tmp.csv", tpop=0, v=1) {
   for (i in 1:length(zero.list)) {
     zero.list <- unique(zero.list)
   }
+  }  
 
 # Print out the results of the aggregations 
   cat("\n\nPOPULATION GROUPINGS\n")

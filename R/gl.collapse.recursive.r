@@ -62,6 +62,11 @@ gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, nlimit=
     # Collapse the matrix, write the new pop.recode table to file
       gl <- gl.collapse(fd, gl, recode.table=recode.name, tpop=tpop, v=v)
       
+      if (nPop(gl) == 1)  {
+        cat("All populations amalgamated to one\n")
+        break
+      }
+      
     #  calculate the fixed difference matrix fd
       fd <- gl.fixed.diff(gl, tloc=tloc, pc=FALSE, nlimit=nlimit, v=v)
       

@@ -29,7 +29,7 @@
   }
   cat("Note: Missing values most commonly arise from restriction site mutation.\n\n")
   
-  if (method != "ind") {
+  if (method != "ind" & method != "loc") {
    cat("Method set to loc\n")
   }
    
