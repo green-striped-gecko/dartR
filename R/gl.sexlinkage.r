@@ -5,12 +5,15 @@
 #' of the homogametic sex.
 #' 
 #' This script will identify loci with alleles that behave in this way, as putative sex specific SNP markers.
+#' 
+#' Sex of the individuals for which sex is known with certainty is to be held in the variable x@other$ind.metrics$sex, 
+#' as M for male, F for female, NA otherwise.
 #'
 #' @param gl -- name of the genlight object containing the SNP data [required]
-#' @param tm -- tolerance, that is tm=0.95 means that only 95% of males need be heterozygous in an XY system (females
-#' in a ZW system) [default 0]
-#' @param tf -- tolerance, that is tf=0.95 means that only 95% of females need be homozygous in an XY system (males
-#' in a ZW system) [default 0]
+#' @param t.het -- tolerance, that is tm=0.05 means that 5% of the heterogametic sex can be homozygous and still 
+#' be regarded as consistent with a sex specific marker [default 0]
+#' @param t.hom -- tolerance, that is tf=0.05 means that 5% of the homogametic sex can be heterozygous and still
+#' be regarded as consistent with a sex specific marker [default 0]
 #' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
 #' @return The list of sex specific loci
 #' @export
@@ -18,11 +21,12 @@
 #' @examples
 #' result <- gl.sexlinkage(testset.gl)
 
-gl.sexlinkage <- function(gl, tm=0, tf=0, v=1) {
+gl.sexlinkage <- function(gl, t.het=0, t.hom=0, v=1) {
   x <- gl
+  sex <- x@other$ind.metrics$sex
 
 # Extract the data for the females
-  matf <- as.matrix(x[x@other$ind.metrics$Sex=="F"])
+  matf <- as.matrix(x[sex=="F"])
   # For each individual
     f <- array(data=NA, dim=c(ncol(matf),3))
     for (i in 1:ncol(matf)) {
@@ -35,7 +39,7 @@ gl.sexlinkage <- function(gl, tm=0, tf=0, v=1) {
     colnames(dff) <- c("F0","F1","F2")
 
 # Extract the data for the males
-  matm <- as.matrix(x[x@other$ind.metrics$Sex=="M"])
+  matm <- as.matrix(x[sex=="M"])
 # For each individual
   m <- array(data=NA, dim=c(ncol(matm),3))
   for (i in 1:ncol(matm)) {
@@ -48,25 +52,47 @@ gl.sexlinkage <- function(gl, tm=0, tf=0, v=1) {
   colnames(dfm) <- c("M0","M1","M2")
 
 # Combine the two files
-df <- cbind(dff,dfm)
-
+  Trimmed_Sequence <- gl@other$loc.metrics$TrimmedSequence
+  df <- cbind(dff,dfm,Trimmed_Sequence)
+  a <- strsplit(row.names(df), split="\\|")
+  a <- do.call(rbind,a)
+  a <- strsplit(a[,2],"-")
+  a <- do.call(rbind,a)
+  a <- as.numeric(a[,1])
+  
+  df$Trimmed_Sequence <- as.character(df$Trimmed_Sequence)
+  b <- substr(df$Trimmed_Sequence,1,a)
+  c <- substr(df$Trimmed_Sequence,a+1,a+1)
+  c <- tolower(c)
+  d <- substr(df$Trimmed_Sequence,a+2,nchar(df$Trimmed_Sequence))
+  
+  df$Trimmed_Sequence <- paste0(b,c,d)
+  
 # Check for hets in all males, homs in all females (XY); ditto for ZW
-zw <- df[df$F1/(df$F0+df$F1+df$F2)==(1-tf) && df$M1/(df$M0+df$M1+df$M2)==(0+tm),]
-xy <- df[df$F1/(df$F0+df$F1+df$F2)==(0+tf) && df$M1/(df$M0+df$M1+df$M2)==(1-tm),]
+sumf <- df$F0+df$F1+df$F2
+summ <- df$M0+df$M1+df$M2
+zw <- df[df$F1/(sumf)>=(1-t.hom) & df$M1/(summ)<=(0+t.het),]
+xy <- df[df$F1/(sumf)<=(0+t.het) & df$M1/(summ)>=(1-t.hom),]
 
 if (nrow(zw) == 0){
   cat("No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
 } else {
-  cat("Sex linked loci consistent with female heterogamety (ZZ/ZW)\n")
+  cat("\nSex linked loci consistent with female heterogamety (ZZ/ZW)\n")
+  cat(paste("  Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n")) 
+  cat(paste("  for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
   cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   print(zw)
+  cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
 }
-if (nrow(zw) == 0){
+if (nrow(xy) == 0){
   cat("No sex linked markers consistent with male heterogamety (XX/XY)\n")
 } else {
-  cat("Sex linked loci consistent with male heterogamety (XX/XY)\n")
+  cat("\nSex linked loci consistent with male heterogamety (XX/XY)\n")
+  cat(paste("  Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,";\n")) 
+  cat(paste("  for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
   cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   print(xy)
+  cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
 }
 
 list <- c(zw,xy)
