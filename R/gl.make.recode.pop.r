@@ -1,31 +1,27 @@
-#' Create a proforma recode_ind_table file for reassigning individual (=specimen) names
+#' Create a proforma recode_pop_table file for reassigning population names
 #'
-#' Renaming individuals may be required when there have been errors in labelling arising
-#' in the process from sample to DArT files. There may be occasions where renaming
-#' individuals is required for preparation of figures. Caution needs to be exercised
-#' because of the potential for breaking the "chain of evidence" between the samples themselves
-#' and the analyses. REcoding individuals can be done with a recode table (csv).
+#' Renaming populations may be required when there have been errors in assignment arising
+#' in the process from sample to DArT files or when one wishes to amalgamate populations, or delete populations.
+#' Recoding populations can also be done with a recode table (csv).
 #'
 #' This script facilitates 
 #' the construction of a recode table by producing a proforma file with
-#' current individual (=specimen) names in two identical columns. Edit the second
-#' column to reassign individual names. Use keyword Delete to delete an individual.
+#' current population names in two identical columns. Edit the second
+#' column to reassign populations. Use keyword Delete to delete a population.
 #' 
-#' Apply the recoding using gl.recode.ind(). Deleting individuals
-#' can potentially generate monomorphic loci or loci with all
-#' values missing. Clean this up with gl.filter.monomorphic().
+#' Apply the recoding using gl.recode.pop(). 
 #'
-#' @param x -- name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]
-#' @param outfile -- name of the new proforma file [default recode_ind_table.csv]
-#' @return A vector containing the new individual names
+#' @param x -- name of the genlight object containing the SNP data [required]
+#' @param outfile -- name of the new proforma file [default recode_pop_table.csv]
+#' @return A vector containing the new population names
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' \dontrun{
-#' result <- gl.make.recode.ind(gl, outfile="Emmac_recode_ind.csv")
+#' result <- gl.make.recode.pop(gl, outfile="Emmac_recode_pop.csv")
 #' }
 
- gl.make.recode.pop <- function(x, outfile="recode_ind_table.csv") {
+ gl.make.recode.pop <- function(x, outfile="recode_pop_table.csv") {
 
  mat <- cbind(levels(pop(x)),levels(pop(x)))
  write.table(mat, file=outfile, sep=",", row.names=FALSE, col.names=FALSE)
