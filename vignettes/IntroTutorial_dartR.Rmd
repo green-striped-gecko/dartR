@@ -783,7 +783,7 @@ recpops<- factor(rep(LETTERS[1:5],50))
 glsub <- gl
 pop(glsub)<-recpops
 
-gi <- gl2gi(glsub)
+gi <- gl2gi(glsub, v=0) #v=0 suppresses output
 round(pairwise_D(gi),4)
 round(pairwise_Gst_Hedrick(gi),4)
 round(pairwise_Gst_Nei(gi),4)

@@ -17,6 +17,10 @@ knitr::opts_chunk$set(echo = TRUE)
  library(dartR)
 
 ## ---- eval=FALSE---------------------------------------------------------
+#  source("https://bioconductor.org/biocLite.R")
+#  biocLite("SNPRelate")
+
+## ---- eval=FALSE---------------------------------------------------------
 #  # Set the default working directory (change this to suit)
 #  setwd("c:/your.working.directory/")
 
@@ -205,8 +209,16 @@ dim(glsub2@other$ind.metrics)
 dim(glsub2@other$loc.metrics)
 
 ## ------------------------------------------------------------------------
-d <- gl.dist(gl[1:5,1:10])
-d
+gl.dist(gl[1:7,1:100], method="euclidean")
+gl.dist(gl[1:7, 1:100], method="manhattan")
+
+
+## ------------------------------------------------------------------------
+glind7 <- gl[1:7,]  #copy and store the original dataset in glind
+pop(glind7) <- indNames(glind7)# redefine the population information
+
+gl.dist(glind7[1:7,], method="euclidean")
+data.frame(ind=1:7, indNames=indNames(gl)[1:7], pop=pop(gl)[1:7])
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  library(StAMPP) #you may need to install the package
@@ -224,7 +236,7 @@ recpops<- factor(rep(LETTERS[1:5],50))
 glsub <- gl
 pop(glsub)<-recpops
 
-gi <- gl2gi(glsub)
+gi <- gl2gi(glsub, v=0) #v=0 suppresses output
 round(pairwise_D(gi),4)
 round(pairwise_Gst_Hedrick(gi),4)
 round(pairwise_Gst_Nei(gi),4)
@@ -246,9 +258,16 @@ gl.pcoa.plot(pc, gl, labels="pop", xaxis=1, yaxis=2)
 #  glnew <- gl.edit.recode.pop(gl)
 
 ## ------------------------------------------------------------------------
-glnew <- gl
-levels(pop(glnew)) <- c(rep("Cooper",13), rep("MDB", 8 ), rep("Emmac_Coast",7),"EmsubRopeMata" ,  "EmvicVictJasp")
+glnew <- testset.gl
+levels(pop(glnew)) <- c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
+rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
 gl.pcoa.plot(pc, glnew, labels="pop", xaxis=1, yaxis=2)
+
+## ---- eval=FALSE---------------------------------------------------------
+#  install.packages("devtools")
+#  library(devtools)
+#  install_github("hadley/ggplot2")
+#  library(ggplot2)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl.pcoa.plot(pc, glnew, labels="interactive", xaxis=1, yaxis=2)
