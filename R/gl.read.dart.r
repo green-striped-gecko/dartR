@@ -8,7 +8,7 @@
 #' @param stdmetrics a vector of column headings that are extracted. AlleleID and its format is compulsory, the rest are needed for filtering.
 #' @param addmetrics add additional headers/columns by name
 #' @param lastmetric specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.
-#' @param ind.metafile the name of the file that has entails additional information on individuals. For the require format check
+#' @param ind.metafile the name of the file that has entails additional information on individuals. For the required format check
 #' @param covfilename depreciated, use ind.metafile parameter 
 #' @param probar show progress bar
 #' @return a dart genlight object that contains individuals [if data were provided] and loci meta data [from a DArT report]. The dart genlight object can then be fed into a number of initial screening, export and export functions provided by the package. For some of the function it is necessary to have the metadata that was provided from DArT. Please check the vignette for more information. Additional information can also be found in the help documents for  \code{\link{read.dart}} and \code{\link{dart2genlight}}. 
@@ -21,7 +21,9 @@
 
 gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-", topskip=NULL, stdmetrics =c("AlleleID", "SNP","SnpPosition","RepAvg","CallRate", "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets","OneRatioSnp"), addmetrics=NULL, lastmetric ="RepAvg", probar=TRUE)
 {
-  if (is.null(ind.metafile)) {ind.metafile <- covfilename}
+  if (is.null(ind.metafile)) {
+    ind.metafile <- covfilename
+  }
   dout <-read.dart(filename = filename, nas=nas, topskip=topskip, stdmetrics = stdmetrics, addmetrics = addmetrics, lastmetric = lastmetric)
   glout <- dart2genlight(dout, ind.metafile = ind.metafile, probar = probar)
 return(glout)
