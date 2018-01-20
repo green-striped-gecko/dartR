@@ -67,6 +67,8 @@ gl.sexlinkage <- function(gl, t.het=0, t.hom=0, v=1) {
   d <- substr(df$Trimmed_Sequence,a+2,nchar(df$Trimmed_Sequence))
   
   df$Trimmed_Sequence <- paste0(b,c,d)
+  df$AvgCountRef <- gl@other$loc.metrics$AvgCountRef
+  df$AvgCountSnp <- gl@other$loc.metrics$AvgCountSnp
   
 # Check for hets in all males, homs in all females (XY); ditto for ZW
 sumf <- df$F0+df$F1+df$F2
@@ -83,6 +85,7 @@ if (nrow(zw) == 0){
   cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   print(zw)
   cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
+  cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
 }
 if (nrow(xy) == 0){
   cat("No sex linked markers consistent with male heterogamety (XX/XY)\n")
@@ -93,7 +96,8 @@ if (nrow(xy) == 0){
   cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   print(xy)
   cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-}
+  cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+  }
 
 list <- c(zw,xy)
 

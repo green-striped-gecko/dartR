@@ -9,7 +9,7 @@
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
-#' @param pop.list -- a list of populations to be removed [required]
+#' @param pop.list -- a list of populations to be kept [required]
 #' @param recalc -- Recalculate the locus metadata statistics [default TRUE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
 #' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
