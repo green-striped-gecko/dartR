@@ -33,7 +33,7 @@ The distance measure can be one of "manhattan", "euclidean", "canberra", "bray",
 dist stats or vegdist vegan for definitions.
 }
 \examples{
-gl.dist(testset.gl, method="gower", diag=TRUE)
+gl.dist(testset.gl, method="euclidean", diag=TRUE)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

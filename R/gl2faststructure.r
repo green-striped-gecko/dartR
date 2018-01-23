@@ -32,7 +32,7 @@ gl2faststructure <- function(gl, outfile="gl.str", probar=TRUE)
     if (probar)   setTxtProgressBar(pb, i/nrow(x))  
   }
   close(zz)
-  close(pb)
+  if (probar) close(pb)
   #gi <-read.structure("project_data.str", ask=F, n.ind=50, n.loc=100, col.pop=0, col.lab = 1, onerowperind = TRUE, sep="\t")
   cat(paste0("Saved faststructure file: ",getwd(),"/", outfile, "\n") )
   cat(paste("Consists of", nrow(x), "individuals and ", ncol(x), "loci."))

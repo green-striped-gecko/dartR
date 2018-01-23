@@ -9,7 +9,6 @@
 #' probability of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if comparison
 #' between two populations involves sample sizes less than 5, taking into account allele drop-out. The minimum sample 
 #' size for scoring fixed differences between two populations can be set with the parameter nlimit.
-#'
 #' An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
 #' level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
 #' This adjustment can be done with the tloc parameter. For example, tloc=0.05 means that SNP allele frequencies of 
@@ -26,7 +25,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' mat <- gl.fixed.diff(testset.gl, tloc=0.05, nlimit=5)
+#' #only used the first 20 individuals due to runtime reasons 
+#' mat <- gl.fixed.diff(testset.gl[1:20,], tloc=0.05, nlimit=5)
 #' @seealso \code{\link{is.fixed}}
 
 gl.fixed.diff <- function(gl, tloc=0, nlimit=2, pc=FALSE, v=1) {
@@ -56,7 +56,6 @@ x <- gl
     cat("Error: Verbosity must be set to one of 0, silent; 1, brief; 2, verbose. Reset to default of 1\n")
     v=1
   }
-
   # Checking for and removing monomorphic loci
     if (v > 0 && pc==TRUE) {
       x2 <- gl.filter.monomorphs(x,v=0)
@@ -90,11 +89,11 @@ x <- gl
     loc.count <- array(-1, c(npops, npops))
 
     # Set up the progress counter
+
     if (v > 0){
       pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
       getTxtProgressBar(pb)
     }
-    
     # Cycle through the data to sum the fixed differences into a square matrix
     flag <- 0
     for (i in 1:nloci) {                           # For each locus
@@ -127,6 +126,7 @@ x <- gl
           }
         }
       }
+
       if (v > 0){setTxtProgressBar(pb, i/nloci)}
     }
 
@@ -144,6 +144,7 @@ x <- gl
       }
     }
     if (flag == 1 && v > 0) {
+
       cat("\n   Warning: Some comparisons involve sample sizes were less than 5.\n")
       cat("   Compounded Type I error rate may be high. Consider a priori amalgamation.\n")
     }

@@ -15,13 +15,13 @@
 #' @param p -- The power of the Minkowski distance
 #' @return A matrix of distances between populations (class dist)
 #' @import adegenet
-#' @import permute
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
+#' @importFrom reshape2 dcast
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' gl.dist(testset.gl, method="gower", diag=TRUE)
+#' gl.dist(testset.gl, method="euclidean", diag=TRUE)
 
 gl.dist <- function(gl, method="euclidean", binary=FALSE, diag=TRUE, upper=FALSE, p=NULL) {
   x <- gl

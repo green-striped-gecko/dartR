@@ -4,10 +4,12 @@
 \alias{gi2gl}
 \title{Converts a genind object to genlight object}
 \usage{
-gi2gl(gi)
+gi2gl(gi, parallel = TRUE)
 }
 \arguments{
 \item{gi}{-- a genind object}
+
+\item{parallel}{-- switch to deactivate parallel version. Default set to TRUE. Only for testing purpose.}
 }
 \value{
 A genlight object, with all slots filled.

@@ -4,12 +4,12 @@
 \alias{gl2gi}
 \title{Converts a genlight object to genind object}
 \usage{
-gl2gi(gl, probar = TRUE)
+gl2gi(gl, v = 1)
 }
 \arguments{
 \item{gl}{-- a genlight object}
 
-\item{probar}{-- switch on/off progress bar}
+\item{v}{-- level of verbosity. v=0 is silent, v=1 returns more detailed output during conversion.}
 }
 \value{
 A genind object, with all slots filled.

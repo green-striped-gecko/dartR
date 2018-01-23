@@ -1,21 +1,16 @@
 #' Import DarT data to R
 #'
+#' Internal function called by gl.read.dart
 #' @param filename path to file (csv file only currently)
 #' @param nas a character specifying NAs (default is "-")
 #' @param topskip a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.
-#' @param stdmetrics a vector of column headings that are extracted. AlleleID and its format is compulsory, the rest are needed for filtering.
-#' @param addmetrics add additional headers/columns by name
 #' @param lastmetric specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.
 #' @return a list of length 5. #dart format (one or two rows) #individuals, #snps, #non genetic metrics, #genetic data (still two line format, rows=snps, columns=individuals)
-#' @export
-#' @examples{
-#' dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
-#' dart <-read.dart(dartfile)
-#' }
 
 
 
-read.dart <- function(filename, nas = "-", topskip=NULL, stdmetrics =c("AlleleID", "SNP","SnpPosition","RepAvg","CallRate", "AvgCountRef", "AvgCountSnp", "FreqHomRef", "FreqHomSnp", "FreqHets","OneRatioSnp"), addmetrics=NULL, lastmetric ="RepAvg")
+
+read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="RepAvg")
 {
   
   if (is.null(topskip))
@@ -60,24 +55,24 @@ read.dart <- function(filename, nas = "-", topskip=NULL, stdmetrics =c("AlleleID
   
   
   
-  stdmetricscols <- which(  names(snpraw)   %in% stdmetrics )
-  
-  if (length(stdmetricscols) != length(stdmetrics))
-  { cat(paste("\nCould not find all standard metrics.\n",stdmetrics[!(stdmetrics %in% names(snpraw)   )]
-              ," is missing.\n Carefully check the spelling of your headers!\n"))
-    stop()
-  }
-  
-  if (!is.null(addmetrics)) 
-  {
-    addmetricscols <- which(  names(snpraw)   %in% addmetrics )
-    if (length(addmetricscols) != length(addmetrics))
-    { cat(paste("\nCould not find all additional metrics.\n",addmetrics[!(addmetrics %in% names(snpraw)   )]
-                ," is missing.\n Carefully check the spelling of your headers! or set addmetrics to NULL\n"))
-      stop()
-    }
-    stdmetricscols <- c(stdmetricscols, addmetricscols)
-  } 
+  stdmetricscols <- 1:lmet
+  # 
+  # if (length(stdmetricscols) != length(stdmetrics))
+  # { cat(paste("\nCould not find all standard metrics.\n",stdmetrics[!(stdmetrics %in% names(snpraw)   )]
+  #             ," is missing.\n Carefully check the spelling of your headers!\n"))
+  #   stop()
+  # }
+  # 
+  # if (!is.null(addmetrics)) 
+  # {
+  #   addmetricscols <- which(  names(snpraw)   %in% addmetrics )
+  #   if (length(addmetricscols) != length(addmetrics))
+  #   { cat(paste("\nCould not find all additional metrics.\n",addmetrics[!(addmetrics %in% names(snpraw)   )]
+  #               ," is missing.\n Carefully check the spelling of your headers! or set addmetrics to NULL\n"))
+  #     stop()
+  #   }
+  #   stdmetricscols <- c(stdmetricscols, addmetricscols)
+  # } 
   cat ("Added the following covmetrics:\n")
   cat (paste(paste(names(snpraw)[stdmetricscols], collapse=" "),".\n"))
   covmetrics <-  snpraw[,stdmetricscols]

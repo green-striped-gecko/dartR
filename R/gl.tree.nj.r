@@ -11,9 +11,6 @@
 #' @import adegenet
 #' @importFrom stringr str_pad
 #' @importFrom ape nj root plot.phylo
-#' @importFrom ape nj
-#' @importFrom ape root
-#' @importFrom ape plot.phylo
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples

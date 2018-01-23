@@ -11,9 +11,9 @@ gl.filter.hwe(gl, p = 0.05, basis = "any", bon = TRUE)
 
 \item{p}{-- level of significance (per locus) [Default 0.05]}
 
-\item{bon}{-- apply bonferroni correction to significance levels for filtering [default TRUE]}
+\item{basis}{-- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]}
 
-\item{pop}{-- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]}
+\item{bon}{-- apply bonferroni correction to significance levels for filtering [default TRUE]}
 }
 \value{
 a genlight object with the loci departing significantly from HWE removed

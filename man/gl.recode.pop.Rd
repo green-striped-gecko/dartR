@@ -4,12 +4,14 @@
 \alias{gl.recode.pop}
 \title{Recode population assignments in a genelight or genind object \{adegenet\}}
 \usage{
-gl.recode.pop(gl, pop.recode)
+gl.recode.pop(gl, pop.recode, v = 1)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
 \item{pop.recode}{-- name of the csv file containing the population reassignments [required]}
+
+\item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
 }
 \value{
 A genlight or genind object with the recoded and reduced data

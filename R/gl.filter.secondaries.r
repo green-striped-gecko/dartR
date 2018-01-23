@@ -4,20 +4,17 @@
 #' These multiple SNP loci within a fragment (secondaries) are likely to be linked, and so you may wish to remove secondaries.
 #' This script filters out loci after ordering the genlight object on based on reproducibility, PIC in that order.
 #'
-#' @param x -- name of the genlight object containing the SNP data [required]
+#' @param gl -- name of the genlight object containing the SNP data [required]
 #' @return The reduced genlight, plus a summary
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' load("testset.Rdata")
-#' result <- gl.report.secondaries(gl)
-#' result2 <- gl.filter.secondaries(gl)
-
+#' result <- gl.report.secondaries(testset.gl)
+#' result2 <- gl.filter.secondaries(testset.gl)
 
 gl.filter.secondaries <- function(gl) {
 
   x <- gl
-  
   if(class(x) == "genlight") {
     cat("Filtering a genlight object\n")
   } else {
@@ -34,14 +31,12 @@ gl.filter.secondaries <- function(gl) {
 # Identify and remove secondaries from the genlight object, including the metadata
   x <- x[,duplicated(b)==FALSE]
   x@other$loc.metrics <- x@other$loc.metrics[duplicated(b)==FALSE,]
-  
+
 # Report secondaries from the genlight object
 
   cat("   Number of secondaries:",table(duplicated(b))[2],"\n")
   cat("   Number of loci after secondaries removed:",table(duplicated(b))[1],"\n")
-
   return(x)
-  
 }  
 
 

@@ -4,10 +4,12 @@
 \alias{gl.filter.monomorphs}
 \title{Remove monomorphic loci, including those with all NAs}
 \usage{
-gl.filter.monomorphs(gl)
+gl.filter.monomorphs(gl, v = 1)
 }
 \arguments{
 \item{gl}{-- name of the input genlight object [required]}
+
+\item{v}{-- verbosty: 0, silent; 1, brief, 2; verbose if TRUE, silent if FALSE [default 1]}
 }
 \value{
 A genlight object with monomorphic loci removed
@@ -20,7 +22,9 @@ A DArT dataset will not have monomorphic loci, but they can arise when populatio
 the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
 }
 \examples{
-gl <- gl.filter.monomorphs(testset.gl)
+\dontrun{
+gl <- gl.filter.monomorphs(gl)
+}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

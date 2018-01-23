@@ -4,10 +4,12 @@
 \alias{gl.percent.freq}
 \title{Generate percentage allele frequencies by locus and population}
 \usage{
-gl.percent.freq(gl)
+gl.percent.freq(gl, v = 1)
 }
 \arguments{
 \item{gl}{-- name of the genlight containing the SNP genotypes or genind object containing the presence/absence data [required]}
+
+\item{v}{-- verbosity = 0, silent; 1, brief; 2, verbose [default 1]}
 }
 \value{
 A matrix with allele frequencies (genelight) or presence/absence frequencies (genind) broken down by population and locus

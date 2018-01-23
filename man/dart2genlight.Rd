@@ -17,7 +17,7 @@ dart2genlight(dart, covfilename = NULL, probar = TRUE)
 a genlight object is returned. Including all available slots are filled. loc.names, ind.names, pop, lat, lon (if provided via the covariate file)
 }
 \description{
-converts a dart file (read via \code{read.dart}) into an genlight object \code{\link{adegenet}}
+converts a dart file (read via \code{read.dart}) into an genlight object \code{\link{adegenet}}. Internal function called by gl.read.dart
 }
 \details{
 the covariate file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (perferable in decimal degrees WGS1984 format). Additional columns with individual covariates can be imported (e.g. age, gender).

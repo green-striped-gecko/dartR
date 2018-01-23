@@ -9,7 +9,7 @@
 #' sequence and terminating at the last base of the shorter sequence. 
 #' 
 #' The Hamming distance between the rows of a matrix can be computed quickly 
-#' by exploiting the fact that the dot product of two binary vectors x and (1 – y) 
+#' by exploiting the fact that the dot product of two binary vectors x and (1-y)
 #' counts the corresponding elements that are different between x and y.
 #' This matrix multiplication can also be used for matrices with more than two possible 
 #' values, and different types of elements, such as DNA sequences.
@@ -28,12 +28,13 @@
 #' initial common restriction enzyme recognition sequence is ignored.
 #'
 #' The algorithm is that of Johann de Jong 
-#' \url(https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/)
+#' \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 #'
 #' @param str1 -- string containing the first sequence [required]
 #' @param str2 -- string containing the second sequence [required]
 #' @param r -- number of bases in the restriction enzyme recognition sequence [default = 4]
 #' @return Hamming distance between the two strings
+#' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' str1 <- "aatgGCTAG"

@@ -9,7 +9,6 @@
 #' yield a final table with no fixed differences less than or equal to the specified threshold, tpop. 
 #' The intermediate and final recode tables and distance matricies are stored to disk as csv files for use with other analyses. 
 #' In particular, the recode tables can be edited to replace populaton labels with meaninful names and reapplied in sequence.
-#'
 #' @param gl -- name of the genlight object from which the distance matricies are to be calculated [required]
 #' @param prefix -- a string to be used as a prefix in generating the matricies of fixed differences (stored to disk) and the recode
 #' tables (also stored to disk) [default "collapse"]
@@ -22,17 +21,16 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' fd <- gl.collapse.recursive(testset.gl, prefix="testset",tloc=0,tpop=2)
+#' #only used the first 20 individuals due to runtime reasons
+#' fd <- gl.collapse.recursive(testset.gl[1:20,], prefix="testset",tloc=0,tpop=2)
 
 gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, nlimit=10, v=1) {
-  
 # Set the iteration counter
   count <- 1
   
 # Create the initial distance matrix
   if (v==2) {cat("Calculating an initial fixed difference matrix\n")}
   fd <- gl.fixed.diff(gl, tloc=tloc, nlimit=nlimit, v=v)
-  
 # Store the length of the fd matrix
   fd.hold <- dim(fd)[1]
   
@@ -68,8 +66,8 @@ gl.collapse.recursive <- function(gl, prefix="collapse", tloc=0, tpop=2, nlimit=
       }
       
     #  calculate the fixed difference matrix fd
+
       fd <- gl.fixed.diff(gl, tloc=tloc, pc=FALSE, nlimit=nlimit, v=v)
-      
     # If it is not different in dimensions from previous, break
       if (dim(fd)[1] == fd.hold) {
         cat(paste("\nNo further amalgamation of populations at fd <= ",tpop,"\n"))

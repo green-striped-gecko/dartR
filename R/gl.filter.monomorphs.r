@@ -4,8 +4,7 @@
 #'
 #' A DArT dataset will not have monomorphic loci, but they can arise when populations are deleted by assignment or by using
 #' the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
-#'
-#' @param x -- name of the input genlight object [required]
+#' @param gl -- name of the input genlight object [required]
 #' @param v -- verbosty: 0, silent; 1, brief, 2; verbose if TRUE, silent if FALSE [default 1]
 #' @return A genlight object with monomorphic loci removed
 #' @import adegenet plyr utils
@@ -16,7 +15,8 @@
 #' gl <- gl.filter.monomorphs(gl)
 #' }
 
-gl.filter.monomorphs <- function (gl, v=1) {
+gl.filter.monomorphs <- function (gl,v=1) {
+
 x <- gl
 
   if (v==1) {cat("Identifying monomorphic loci\n")}
@@ -44,11 +44,10 @@ x <- gl
   a[is.na(a)] <- TRUE
 # Write the polymorphic loci to a new genlight object
 #  cat("Deleting monomorphic loci and loci with no scores\n")
+
   x <- x[,(a==FALSE)]
   x@other$loc.metrics <- x@other$loc.metrics[(a==FALSE),]
-
-return <- x
-
+return (x)
 }
 
 

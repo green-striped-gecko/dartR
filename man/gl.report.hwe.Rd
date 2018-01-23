@@ -11,7 +11,7 @@ gl.report.hwe(gl, p = 0.05, subset = "each")
 
 \item{p}{-- level of significance (per locus) [Default 0.05]}
 
-\item{pop}{-- list populations to combine in the analysis | each | all [Default "all"]}
+\item{subset}{-- list populations to combine in the analysis | each | all [Default "all"]}
 }
 \value{
 a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes

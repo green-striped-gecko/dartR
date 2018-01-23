@@ -2,26 +2,27 @@
 ### pairwise LD function across all loci
 ############################################
 #' Calculates pairwise population based Linkage Disequilibirum across all loci using the specifyied number of cores
-#' @description this function is implemented in a parallel fashion to speed up the process. There is also the ability to restart the function if crashed by specifying the chunkfile names or restarting the function exactly in the same way as in the first run. This is implemented as sometimes due to connectivity loss between cores the function my crash half way. 
+#' @description this function is implemented in a parallel fashion to speed up the process. There is also the ability to restart the function if crashed by specifying the chunkfile names or restarting the function exactly in the same way as in the first run. This is implemented as sometimes due to connectivity loss between cores the function my crash half way. Also remove loci with have only missing value before running the function.
 #' 
-#' @param gi a genind object created via \code{\link{gl2gi}}
+#' @param gi a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)
 #' @param name character string for rdata file. If not given genind object name is used
 #' @param save switch if results are saved in a file
 #' @param nchunks how many subchunks will be used (the less the faster, but if the routine crashes more bits are lost
 #' @param ncores how many cores should be used
 #' @param chunkname the name of the chunks for saving, default is NULL 
-#' @return returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed.
+#' @return returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed. The final output is a data frame that holds all statistics of pairwise LD between loci. (See ?LD in package genetics for details).
 #' @export
-#' @import data.table 
+#' @importFrom data.table rbindlist setnames
 #' @import parallel 
 #' @import foreach
-#' @import data.table
 #' @importFrom doParallel registerDoParallel
 #' @author Bernd Gruber (glbugs@@aerg.canberra.edu.au)
 
 
-gi.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL)
+gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL)
 {
+  # convert genlight to genind 
+  if (class(gi)=="genlight") gi <- gl2gi(gi)
   #library(doParallel)
   #library(adegenet)
   #library(data.table)
@@ -216,21 +217,9 @@ if (save)
     filename <- paste0("LD_",name,".rdata")
   } else
   {
-    fx <- deparse(substitute(gi))
-    #cat(paste('name:',fx,"\n"))
-    fx <- gsub("\\[|\\]|[.]|[:]|[,]|[&]|[%]","_",fx) 
-    fx <- gsub("__","_", fx)
-    fx <- gsub(" ","", fx)
-    fx <- gsub("_$","",fx)
-    if (length(fx)>0) 
-    {
-      nobj <- paste0("LD_",fx)
-      filename=paste0(fx,".rdata") 
-    } else
-    {
       filename="LDallp.rdata"
       nobj <- "LDallp"
-    }
+    
   }
   cat(paste0("\n Results are saved as object ", nobj," under ", filename,".\n"))
   (cat(paste("Once you have checked you can delete your LD_chunks_",chunkname,"files.\n")))

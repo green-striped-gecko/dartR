@@ -9,20 +9,16 @@
 #' @param t -- populations to retain in the output genlight object; those for which the focal individual has less than or equal to t loci with private alleles [default 0]
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and 
 #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
-#' @import 
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' x <- testset.gl
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 #' x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, t=1)
 #' 
 
 gl.report.pa <- function (gl, id, nmin=10, t=0) {
 x <- gl
-
   cat("IDENTIFYING LOCI WITH PRIVATE ALLELES\n\n")
-  
 # Set a recommended minimum population size
   hard.min <- 10
 
@@ -36,6 +32,7 @@ x <- gl
 # Remove all known populations with less than nmin individuals
   pop.keep <- levels(pop(knowns))[table(pop(knowns)) >= nmin]
   pop.toss <- levels(pop(knowns))[table(pop(knowns)) < nmin]
+
   cat("Discarding",length(pop.toss),"populations with sample size less than",nmin,":",pop.toss,"\n\n")
   cat("Retaining",length(pop.keep),"populations with sample size greater than or equal to",nmin,":",pop.keep,"\n\n")
   knowns <- knowns[pop(knowns) %in% pop.keep]
@@ -48,11 +45,11 @@ x <- gl
   n <- length(pop(unknowns))
   N <- length(levels(pop(knowns)))
   if (n != 1) {
+
     cat("Fatal Error: Number of unknown focal individuals > 1; population label 'unknown' already in use\n")
     stop("Terminating execution")
   }
   cat("Assigning",n,"unknown individual(s) to",N,"target populations\n")
-
 # CALCULATE NUMBER OF LOCI WITH PRIVATE ALLELES
 # For each unknown individual
   for (i in 1:n) {
@@ -86,6 +83,7 @@ x <- gl
       # Calculate the number of loci with private alleles in the focal individual
         count <- nLoc(x)-count-count.NA
       # Print out results 
+
         cat("Unknown individual:",id,"\n")
         cat("Total number of SNP loci: ",nLoc(x),"\n\n")
         cat("Table showing number of loci with private alleles\n")
