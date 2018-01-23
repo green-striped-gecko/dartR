@@ -9,21 +9,25 @@
 #' in the process from sample to DArT files. There may be occasions where renaming
 #' individuals is required for preparation of figures. Caution needs to be exercised
 #' because of the potential for breaking the "chain of evidence" between the samples themselves
-#' and the analyses. REcoding individuals can be done with a recode table (csv).
+#' and the analyses. Recoding individuals can also be done with a recode table (csv).
 #' 
 #' This script will input an existing recode table for editting and
 #' optionally save it as a new table, or if the name of an input table is not
 #' supplied, will generate a table using the individual labels in the 
 #' parent genlight object.
 #' 
-#' The script, having deleted individuals, identifies resultant monomorphic loci or loci
-#' with all values missing and deletes them (using gl.filter.monomorphs.r)
+#' The script, having deleted individuals, optionally identifies resultant monomorphic loci or loci
+#' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
+#' recalculates statistics made redundant by the deletion of individuals from the dataset.
 #' 
-#' The script returns a genlight object with the new individual labels.
+#' The script returns a genlight object with the new individual labels and the recalculated locus metadata.
 #' 
 #' @param gl Name of the genlight object for which individuals are to be relabelled.[required]
 #' @param ind.recode Name of the file to output the new assignments [optional]
+#' @param recalc -- Recalculate the locus metadata statistics [default TRUE]
+#' @param mono.rm -- Remove monomorphic loci [default TRUE]
 #' @return An object of class ("genlight") with the revised individual labels
+#' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
 #' @import utils
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
@@ -35,7 +39,7 @@
 #' }
 #' #Ammended Georges 9-Mar-17
 
-gl.edit.recode.ind <- function(gl, ind.recode=NULL) {
+gl.edit.recode.ind <- function(gl, ind.recode=NULL, recalc=TRUE, mono.rm=TRUE, v=1) {
   
 # Take assignments from gl  
 
@@ -66,11 +70,37 @@ gl.edit.recode.ind <- function(gl, ind.recode=NULL) {
   cat("Assigning new individual (=specimen) names\n")
   indNames(gl) <- ind.list
   
-  # Remove rows flagged for deletion
-  cat("Deleting individuals flagged for deletion\n")
-  gl <- gl[!gl$ind.names=="delete" & !gl$ind.names=="Delete"]
+  # If there are individuals to be deleted, then recalculate relevant locus metadata and remove monomorphic loci
   
-  gl <- gl.filter.monomorphs(gl)
+  if ("delete" %in% gl$ind.names | "Delete" %in% gl$ind.names) {
+    # Remove rows flagged for deletion
+    cat("Deleting individuals flagged for deletion\n")
+    gl <- gl[!gl$ind.names=="delete" & !gl$ind.names=="Delete"]
+    # Remove monomorphic loci
+    if(mono.rm) {gl <- gl.filter.monomorphs(gl,v=v)}
+    # Recalculate statistics
+    if (recalc) {
+      gl <- utils.recalc.avgpic(gl,v=v)
+      gl <- utils.recalc.callrate(gl,v=v)
+      gl <- utils.recalc.freqhets(gl,v=v)
+      gl <- utils.recalc.freqhomref(gl,v=v)
+      gl <- utils.recalc.freqhomsnp(gl,v=v)
+    }
+  }
+
+  # REPORT A SUMMARY
+  if (v==2) {
+    cat("Summary of recoded dataset\n")
+    cat(paste("  No. of loci:",nLoc(x2),"\n"))
+    cat(paste("  No. of individuals:", nInd(x2),"\n"))
+    cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
+  }
+  if (v==1) {  
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
+  }
   
   return(gl)
   

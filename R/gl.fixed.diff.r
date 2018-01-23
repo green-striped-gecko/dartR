@@ -34,7 +34,7 @@ x <- gl
 
 # Checking parameter values
 
-  if(class(gl) == "genlight") {
+  if(class(x) == "genlight") {
     cat("Analysing a genlight object\n")
   } else {
     cat("Fatal Error: Specify a genlight object\n")
@@ -112,7 +112,7 @@ x <- gl
           if (!is.na(n1+n2)) {
           if ((n1+n2) >= nlimit) {
           # Compare and if not missing, increment
-            cf <- is.fixed(gl.mat.sum$frequency[j],gl.mat.sum$frequency[k],t=tloc)
+            cf <- is.fixed(gl.mat.sum$frequency[j],gl.mat.sum$frequency[k],tloc=tloc)
             if (!is.na(cf)) {
               if (fixed[countj,countk] == -1) {
                 fixed[countj,countk] <- cf

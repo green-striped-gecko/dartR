@@ -9,23 +9,29 @@
 #'
 #' @param s1 -- percentage SNP allele frequency for the first population [required]
 #' @param s2 -- percentage SNP allele frequency for the second population [required]
-#' @param t -- threshold value for tolerance in when a difference is regarded as fixed [default 0]
+#' @param tloc -- threshold value for tolerance in when a difference is regarded as fixed [default 0]
 #' @return TRUE (fixed difference) or FALSE (alleles shared) or NA (one or both s1 or s2 missing)
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @export 
 #' @examples
-#' is.fixed(s1=100, s2=0, t=0)
-#' is.fixed(96, 4, t=0.05)
+#' is.fixed(s1=100, s2=0, tloc=0)
+#' is.fixed(96, 4, tloc=0.05)
 #' @seealso \code{\link{gl.fixed.diff}}
 
-is.fixed<-function(s1, s2, t=0){
+is.fixed<-function(s1, s2, tloc=0){
 
   if (is.na(s1) | is.na(s2)) {
     result<-NA
   } else {
+    # Transform to fixed, if outside tollerance
+    if(s1 <= tloc*100) {s1 <- 0}
+    if(s1 >= 100-tloc*100) {s1 <- 100}
+    if(s2 <= tloc*100) {s2 <- 0}
+    if(s2 >= 100-tloc*100) {s2 <- 100}
+    # Score
     result<-0
-    if ((s1<=t*100) & (s2>=(100-t*100))) {result<-1}
-    if ((s2<=t*100) & (s1>=(100-t*100))) {result<-1}
+    if ((s1==0) & (s2==100)) {result <- 1}
+    if ((s1==100) & (s2==0)) {result <- 1}
   }
   return(result)
 }
@@ -43,3 +49,4 @@ is.fixed<-function(s1, s2, t=0){
 # is.fixed(0,NaN)
 # is.fixed(NaN,NaN)
 # is.fixed(NA,NA)
+# is.fixed(50,50,tloc=0.05)

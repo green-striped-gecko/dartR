@@ -5,7 +5,7 @@
 #'
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @param t -- threshold value below which loci will be removed [default 0.95]
-#' @return     Returns a genlight object retaining loci with a RepAvg less than the specified threshold deleted.
+#' @return     Returns a genlight object retaining loci with a RepAvg greater than the specified threshold deleted.
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples

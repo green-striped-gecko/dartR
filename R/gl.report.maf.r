@@ -1,7 +1,6 @@
 #' Report minor allele frequency for loci
 #'
 #' Minor allele frequencies are reported for every loci. Also the number of individuals that have been used to calculate allele frequencies are reported to be able to discard frequencies of loci where only a few individuals are available.
-#'
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @param minind -- minimum number of individuals required to calculate the minor allele frequency. Please note allelefrequncies for such loci are still reported, but a warning is issued if the number is below minind.
 #' @param plot -- switch if a histogram of the distribution of allele frequencies should be provided

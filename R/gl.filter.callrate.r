@@ -8,13 +8,15 @@
 #' @param gl -- name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]
 #' @param method -- "loc" to specify that loci are to be filtered, "ind" to specify that specimens are to be filtered [default "loc"]
 #' @param threshold -- threshold value below which loci will be removed [default 0.95]
+#' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]
+#' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
 #' @return The reduced genlight or genind object, plus a summary
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8)
 
- gl.filter.callrate <- function(gl, method="loc", threshold=0.95) {
+ gl.filter.callrate <- function(gl, method="loc", threshold=0.95, recalc=TRUE, v=1) {
  x <- gl
    
   if(class(x) == "genlight") {
@@ -26,6 +28,10 @@
      stop()
   }
   cat("Note: Missing values most commonly arise from restriction site mutation.\n\n")
+  
+  if (method != "ind" & method != "loc") {
+   cat("Method set to loc\n")
+  }
    
   if( method == "loc" ) {
     # Determine starting number of loci and individuals
@@ -51,32 +57,38 @@
     # Determine starting number of loci and individuals
       n0 <- nInd(x)
       cat("Initial no. of individuals =", n0, "\n")
-      # Calculate the individual call rate
+    # Calculate the individual call rate
       ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)
-      # Check that there are some individuals left
+    # Check that there are some individuals left
       if (sum(ind.call.rate >= threshold) == 0) stop(paste("Maximum individual call rate =",max(ind.call.rate),". Nominated threshold of",threshold,"too stringent.\n No individuals remain.\n"))
-      # Extract those individuals with a call rate greater or equal to the threshold
+    # Extract those individuals with a call rate greater or equal to the threshold
       x2 <- x[ind.call.rate >= threshold,]
-      # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus filtering
+    # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus filtering
       if( class(x) == "genlight") {
         cat ("Filtering a genlight object\n  no. of individuals deleted =", (n0-nInd(x2)), "\nIndividuals retained =", nInd(x2),"\n")
       }
       if( class(x) == "genind") {
         cat ("Filtering a genind object\n  No. of individuals deleted =", (n0-nInd(x2)), "\n  Individuals retained =", nInd(x2),"\n")
       }
-      # Report individuals that are excluded on call rate
+    # Report individuals that are excluded on call rate
       if (any(ind.call.rate <= threshold)) {
         x3 <- x[ind.call.rate <= threshold,]
         if (length(x3) > 0) {
           cat("List of individuals deleted because of low call rate\n",indNames(x3),"\n")
           cat("   from populations\n",as.character(pop(x3)),"\n")
+            # Remove monomorphic loci
+              x2 <- gl.filter.monomorphs(x2,v=0)
+              if (recalc) {
+                # Recalculate statistics
+                x2 <- utils.recalc.avgpic(x2,v=v)
+                x2 <- utils.recalc.callrate(x2,v=v)
+                x2 <- utils.recalc.freqhets(x2,v=v)
+                x2 <- utils.recalc.freqhomref(x2,v=v)
+                x2 <- utils.recalc.freqhomsnp(x2,v=v)
+              }
         }
       }  
-  }  else {
-      cat("Fatal Error: the method parameter must be specified as either loc or ind\n")
-      stop()
-  }
-
+   }
    # REPORT A SUMMARY
    cat("Summary of filtered dataset\n")
    cat(paste("  Call Rate >",threshold,"\n"))

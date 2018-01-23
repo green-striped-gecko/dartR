@@ -26,6 +26,10 @@ x <- gl
   }
   cat("Note: Missing values most commonly arise from restriction site mutation.\n\n")
   
+  if (method != "ind") {
+    cat("Method set to loc\n")
+  }
+  
   if(method == "loc") {
     # Function to determine the loss of loci for a given filter cut-off
     s <- function(gl, percentile) {
@@ -61,9 +65,9 @@ x <- gl
     s2 <- function(gl, percentile, i=ind.call.rate) {
       a <- length(i) - length(i[i<=percentile])
       if (percentile == 1) {
-        cat(paste0("Individuals no missing values = ",a," [",round((a*100/nInd(x)),digits=1),"%] across loci\n"))
+        cat(paste0("Individuals no missing values = ",a," [",round((a*100/nInd(x)),digits=1),"%] across loci; all individuals would be filtered\n"))
       } else {
-        cat(paste0("Individuals with less than ",(1-percentile)*100,"% missing values = ",a," [",round((a*100/nInd(x)),digits=1),"%]\n"))
+        cat(paste0("     with less than or equal to ",(1-percentile)*100,"% = ",a," [",round((a*100/nInd(x)),digits=1),"%]; ",nInd(x)-a," individuals would be filtered\n"))
       }
       return(a)
     }
