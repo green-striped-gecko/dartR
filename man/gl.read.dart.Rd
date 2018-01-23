@@ -4,13 +4,15 @@
 \alias{gl.read.dart}
 \title{Import DarT data into R and conver it to a genlight object}
 \usage{
-gl.read.dart(filename, covfilename = NULL, nas = "-", topskip = NULL,
-  lastmetric = "RepAvg", probar = TRUE)
+gl.read.dart(filename, ind.metafile = NULL, covfilename = NULL, nas = "-",
+  topskip = NULL, lastmetric = "RepAvg", probar = TRUE)
 }
 \arguments{
 \item{filename}{path to file (csv file only currently)}
 
-\item{covfilename}{the name of the file that has entails additional information on individuals. For the require format check}
+\item{ind.metafile}{the name of the file that has entails additional information on individuals. For the required format check}
+
+\item{covfilename}{depreciated, use ind.metafile parameter}
 
 \item{nas}{a character specifying NAs (default is "-")}
 
@@ -30,6 +32,6 @@ This function is a wrapper function that allows you to convert you dart file int
 {
 dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
 covfilename <- system.file("extdata","testset_metadata.csv", package="dartR")
-gl <- gl.read.dart(dartfile, covfilename = covfilename, probar=TRUE)
+gl <- gl.read.dart(dartfile, ind.metafile = covfilename, probar=TRUE)
 }
 }

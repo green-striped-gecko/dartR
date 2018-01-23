@@ -92,8 +92,8 @@ gl2nhyb <- function(gl, outfile="nhyb.txt", p0=NULL, p1=NULL, t=0, m="random") {
         if (as.character(gl2$locus[i]) != as.character(gl2$locus[i+1])) {
           cat("Warning: Loci do not agree for the is.fixed comparison\n")
         }
-        if (!is.na(is.fixed(gl2$frequency[i],gl2$frequency[i+1], t=thold))) {
-          if (is.fixed(gl2$frequency[i],gl2$frequency[i+1], t=thold)) {
+        if (!is.na(is.fixed(gl2$frequency[i],gl2$frequency[i+1], tloc=thold))) {
+          if (is.fixed(gl2$frequency[i],gl2$frequency[i+1], tloc=thold)) {
             fixed.loci[i] <- as.character(gl2$locus[i])
           }
         }

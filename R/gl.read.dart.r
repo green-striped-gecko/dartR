@@ -22,7 +22,7 @@ gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-
   if (is.null(ind.metafile)) {
     ind.metafile <- covfilename
   }
-  dout <-read.dart(filename = filename, nas=nas, topskip=topskip, stdmetrics = stdmetrics, addmetrics = addmetrics, lastmetric = lastmetric)
+  dout <-read.dart(filename = filename, nas=nas, topskip=topskip, lastmetric = lastmetric)
   glout <- dart2genlight(dout, ind.metafile = ind.metafile, probar = probar)
 return(glout)
 }

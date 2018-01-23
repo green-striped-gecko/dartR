@@ -94,9 +94,9 @@ gl.edit.recode.pop <- function(gl, pop.recode=NULL, recalc=TRUE, mono.rm=TRUE, v
   # REPORT A SUMMARY
   if (v==2) {
     cat("Summary of recoded dataset\n")
-    cat(paste("  No. of loci:",nLoc(x2),"\n"))
-    cat(paste("  No. of individuals:", nInd(x2),"\n"))
-    cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+    cat(paste("  No. of loci:",nLoc(gl),"\n"))
+    cat(paste("  No. of individuals:", nInd(gl),"\n"))
+    cat(paste("  No. of populations: ", length(levels(factor(pop(gl)))),"\n"))
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }

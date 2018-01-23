@@ -4,7 +4,8 @@
 \alias{gl.filter.callrate}
 \title{Filter loci or specimens in a genlight \{adegenet\} object based on call rate}
 \usage{
-gl.filter.callrate(gl, method = "loc", threshold = 0.95)
+gl.filter.callrate(gl, method = "loc", threshold = 0.95, recalc = TRUE,
+  v = 1)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
@@ -12,6 +13,10 @@ gl.filter.callrate(gl, method = "loc", threshold = 0.95)
 \item{method}{-- "loc" to specify that loci are to be filtered, "ind" to specify that specimens are to be filtered [default "loc"]}
 
 \item{threshold}{-- threshold value below which loci will be removed [default 0.95]}
+
+\item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]}
+
+\item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
 }
 \value{
 The reduced genlight or genind object, plus a summary

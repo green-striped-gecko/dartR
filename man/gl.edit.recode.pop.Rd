@@ -4,12 +4,19 @@
 \alias{gl.edit.recode.pop}
 \title{Create or edit a population re-assignment table}
 \usage{
-gl.edit.recode.pop(gl, pop.recode = NULL)
+gl.edit.recode.pop(gl, pop.recode = NULL, recalc = TRUE, mono.rm = TRUE,
+  v = 1)
 }
 \arguments{
 \item{gl}{Name of the genlight object for which populations are to be reassigned.[required]}
 
 \item{pop.recode}{Name of the file to output the new assignments [optional]}
+
+\item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]}
+
+\item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
+
+\item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
 }
 \value{
 An object of class ("genlight") with the revised population assignments
@@ -33,10 +40,11 @@ optionally save it as a new table, or if the name of an input table is not
 supplied, will generate a table using the population assignments in the 
 parent genlight object.
 
-The script, having deleted populations, identifies resultant monomorphic loci or loci
-with all values missing and deletes them (using gl.filter.monomorphs.r)
+The script, having deleted populations, optionally identifies resultant monomorphic loci or loci
+with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
+recalculates statistics made redundant by the deletion of individuals from the dataset.
 
-The script returns a genlight object with the new population assignments.
+The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 }
 \examples{
 \dontrun{

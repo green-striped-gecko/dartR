@@ -4,14 +4,14 @@
 \alias{is.fixed}
 \title{Test to see if two populations are fixed at a given locus}
 \usage{
-is.fixed(s1, s2, t = 0)
+is.fixed(s1, s2, tloc = 0)
 }
 \arguments{
 \item{s1}{-- percentage SNP allele frequency for the first population [required]}
 
 \item{s2}{-- percentage SNP allele frequency for the second population [required]}
 
-\item{t}{-- threshold value for tolerance in when a difference is regarded as fixed [default 0]}
+\item{tloc}{-- threshold value for tolerance in when a difference is regarded as fixed [default 0]}
 }
 \value{
 TRUE (fixed difference) or FALSE (alleles shared) or NA (one or both s1 or s2 missing)
@@ -26,8 +26,8 @@ Tollerance in the definition of a fixed difference is provided by the t paramete
 that SNP allele frequencies of 95,5 and 5,95 percent will be reported as fixed (TRUE).
 }
 \examples{
-is.fixed(s1=100, s2=0, t=0)
-is.fixed(96, 4, t=0.05)
+is.fixed(s1=100, s2=0, tloc=0)
+is.fixed(96, 4, tloc=0.05)
 }
 \seealso{
 \code{\link{gl.fixed.diff}}

@@ -7,7 +7,7 @@
 #' This script will identify loci with alleles that behave in this way, as putative sex specific SNP markers.
 #' 
 #' Sex of the individuals for which sex is known with certainty is to be held in the variable x@other$ind.metrics$sex, 
-#' as M for male, F for female, NA otherwise.
+#' as M for male, F for female, NA otherwise. The script abbreviates the entries here to the first character. So coding of "Female" and "Male" works as well. Character are also converted to upper cases.
 #'
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @param t.het -- tolerance, that is tm=0.05 means that 5% of the heterogametic sex can be homozygous and still 
@@ -23,7 +23,7 @@
 
 gl.sexlinkage <- function(gl, t.het=0, t.hom=0, v=1) {
   x <- gl
-  sex <- x@other$ind.metrics$sex
+  sex <- toupper(substr(x@other$ind.metrics$sex,1,1))
 
 # Extract the data for the females
   matf <- as.matrix(x[sex=="F"])

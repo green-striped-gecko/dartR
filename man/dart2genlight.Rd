@@ -4,12 +4,15 @@
 \alias{dart2genlight}
 \title{Convert DarT to genlight}
 \usage{
-dart2genlight(dart, covfilename = NULL, probar = TRUE)
+dart2genlight(dart, ind.metafile = NULL, covfilename = NULL,
+  probar = TRUE)
 }
 \arguments{
 \item{dart}{a dart object created via read.dart}
 
-\item{covfilename}{optional file in csv format with covariates for each individual (see details for explanation)}
+\item{ind.metafile}{optional file in csv format with covariates for each individual (see details for explanation)}
+
+\item{covfilename}{depreciated, use parameter ind.metafile}
 
 \item{probar}{show progress bar}
 }

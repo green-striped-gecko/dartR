@@ -11,7 +11,7 @@
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' result <- utils.recalc.avgpic(testset.gl)
+#' result <- dartR:::utils.recalc.avgpic(testset.gl)
 
 utils.recalc.avgpic <- function(gl, v=1) {
 

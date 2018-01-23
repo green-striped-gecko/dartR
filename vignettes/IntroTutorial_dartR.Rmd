@@ -1,15 +1,3 @@
------------------------------------------------------------------
---                                                             --
------------------------------------------------------------------
---
---      Text1 - 
---
---      Copyright(c) University of Canberra 2000
---
---      Author: ARTHUR GEORGES
---      Created on: 20/1/2018 8:55:02 PM
---      Last change: AG  20/1/2018 8:55:02 PM
---
 ---
 title: "Introduction to dartR"
 author: "Bernd Gruber, Peter Unmack, Oliver Berry & Arthur Georges"
@@ -629,7 +617,7 @@ Again, you can check that the new assignments have been applied with ```levels(p
 
 ## Deleting populations
 
-You can delete selected populations from a genlight object using the �Delete� keyword in the population recode file. By reassigning populations to Delete, you are flagging them for deletion, and when the recode table is applied, individuals belonging to those populations will be deleted from the genlight object, and any resultant monomorphic loci will be removed.
+You can delete selected populations from a genlight object using the "Delete" keyword in the population recode file. By reassigning populations to Delete, you are flagging them for deletion, and when the recode table is applied, individuals belonging to those populations will be deleted from the genlight object, and any resultant monomorphic loci will be removed.
 
 Again, you can check that the new assignments have been applied and requested populations deleted with ```levels(pop(gl))```.
 
@@ -657,7 +645,7 @@ metadata, and for removing resultant monomorphic loci.
 
 ## Relabeling individuals
 
-Recall that the genlight object contains labels for each individual. It obtains these names from the csv datafile provided by DArT at the time of reading these data in. There may be reasons for changing these individual labels � there may have been a mistake, or new names need to be provided in preparation for analyses to be included in publications. 
+Recall that the genlight object contains labels for each individual. It obtains these names from the csv datafile provided by DArT at the time of reading these data in. There may be reasons for changing these individual labels - there may have been a mistake, or new names need to be provided in preparation for analyses to be included in publications. 
 
 
 Individual recode tables are csv files (comma delimited text files) that can be used to rename individuals in the genlight object or for deleting individuals from the genlight object.
@@ -696,7 +684,7 @@ Again, you can check that the new assignments have been applied with ```indNames
 
 ## Deleting individuals
 
-You can delete selected individuals from a genlight object using the �Delete� keyword in the individual recode file. By renaming individuals to Delete, you are flagging them for deletion, and when the recode table is applied, those individuals will be deleted from the genlight object, and any resultant monomorphic loci will be removed.
+You can delete selected individuals from a genlight object using the "Delete" keyword in the individual recode file. By renaming individuals to Delete, you are flagging them for deletion, and when the recode table is applied, those individuals will be deleted from the genlight object, and any resultant monomorphic loci will be removed.
 Again, you can check that the new assignments have been applied and requested populations deleted with ```indNames(gl)```.
 
 If only a few populations are involved, then the best option is to use the gl.drop.pop or gl.keep.pop functions.
@@ -798,7 +786,7 @@ For those not fully versed in R, there are the above {dartR} filters to achieve 
 
 # Genetic Distance
 
-SNP data are multivariable data, in the sense that each individual (entity) has an allele profile (state) for each of several loci (attributes). It is a simple data matrix because SNPs are bi-allelic, that is, each locus can have one of three allelic states � aa, ab or bb, coded in a genlight object as 0, 1 or 2 respectively. One allele (the most common allele) is assigned to the reference allele, and the other to the alternate (or in DArT documentation, the SNP allele).
+SNP data are multivariable data, in the sense that each individual (entity) has an allele profile (state) for each of several loci (attributes). It is a simple data matrix because SNPs are bi-allelic, that is, each locus can have one of three allelic states - aa, ab or bb, coded in a genlight object as 0, 1 or 2 respectively. One allele (the most common allele) is assigned to the reference allele, and the other to the alternate (or in DArT documentation, the SNP allele).
 
 An obvious first choice in exploring the data is to construct a distance matrix between individuals based on the genetic profiles, or to construct a distance matrix between populations based on their allele frequency profiles.
 
@@ -888,7 +876,7 @@ The resultant object pc contains the eigenvalues, factor scores and factor loadi
 names(pc)
 ```
 
-The eigenvalues give the scaling factor for the eigenvectors (PCoA axis 1 � n), the scores give the coordinates of the points (the entities, be they individuals or populations) in the new ordinated space, and the loadings give the correlations of the original variables (the loci) against the new axes. Loci that load high on axis 1 are influential in discrimination among the entities in the direction of axis 1.
+The eigenvalues give the scaling factor for the eigenvectors (PCoA axis 1 - n), the scores give the coordinates of the points (the entities, be they individuals or populations) in the new ordinated space, and the loadings give the correlations of the original variables (the loci) against the new axes. Loci that load high on axis 1 are influential in discrimination among the entities in the direction of axis 1.
 
 For example the percentage of variation the is represented by the axes can be calculated and visualised via:
 
@@ -908,7 +896,7 @@ gl.pcoa.plot(pc, gl, labels="pop", xaxis=1, yaxis=2)
 
 ```
 
-You can see that this plot is very busy, and that the many labels are displaced quite some distance from their associated points.  This is because there is a tradeoff between avoiding overlap of the labels and proximity of the labels � you can use colour to identify which labels go with which points. 
+You can see that this plot is very busy, and that the many labels are displaced quite some distance from their associated points.  This is because there is a tradeoff between avoiding overlap of the labels and proximity of the labels - you can use colour to identify which labels go with which points. 
 More sensibly, recoding populations would be in order. We could use
 
 ```{r,eval=FALSE}
@@ -1027,7 +1015,7 @@ phy <- gl2phylip(gl, outfile="turtle.phy", bstrap=1000)
 A full series of distance matrices and associated recode tables have been filed to disk for later interrogation and use.
 
 
-The outcome is unequivocal. All of the coastal Emydura macquarii and those from the Murray-Darling basin amalgamate into one OTU on the basis of no fixed differences between them (Group 1.1). The Cooper Creek animals form a separate diagnosable unit (OTU) (Group 1.2). The populations that did not amalgamate � outgroup taxa Emydura victoriae and Emydura subglobosa � remain well supported. 
+The outcome is unequivocal. All of the coastal Emydura macquarii and those from the Murray-Darling basin amalgamate into one OTU on the basis of no fixed differences between them (Group 1.1). The Cooper Creek animals form a separate diagnosable unit (OTU) (Group 1.2). The populations that did not amalgamate outgroup taxa - Emydura victoriae and Emydura subglobosa - remain well supported. 
 
 
 You can see the power of this approach for defining diagnosable taxa, taxa that are free of contemporary or recent geneflow and so on independent evolutionary trajectories.
@@ -1093,7 +1081,7 @@ gl2fasta(gl, method=2, outfile="nohets.fasta")
 ```
 
 
-which concatenates the sequences of the DNA fragments, trimmed of adaptors, into a fastA file, having first randomly allocated the heterozygotic states. This set of �composite haplotypes� is then suitable for analysis using the diverse range of phylogenetic packages available.
+which concatenates the sequences of the DNA fragments, trimmed of adaptors, into a fastA file, having first randomly allocated the heterozygotic states. This set of "composite haplotypes"" is then suitable for analysis using the diverse range of phylogenetic packages available.
 The reason for including the full trimmed sequences, most of the bases of which are monomorphic across individuals, is to allow for application of various mutational models in likelihood analysis. These require estimates of base frequencies and the frequency of transitions and transversions and the software to generate these estimates and factor them in to the phylogenetic analysis e.g. ModelTest (Posada and Crandall 1998) require the full sequence information.
 
 
@@ -1137,7 +1125,7 @@ gl.report.bases(testset.gl)
 # Population Assignment
 
 
-Assigning individuals of unknown provenance to populations of known provenance is a challenging exercise, and several approaches have been suggested. Perhaps the simplest is to calculate the probabilities of yielding the observed genotype of the unknown individual given the observed allele frequencies in each the target population. Using this approach, the individual is assigned notionally to those populations for which this probability is highest; populations for which the probability is lower than some level of significance are eliminated from further consideration. This approach was first applied in a study of microsatellite markers in bear populations (Paetkau et al. 2004) and subsequently applied using classical and Bayesian approaches to estimating probabilities (G�tz and Thaller 1998; Blanchong et al. 2002).
+Assigning individuals of unknown provenance to populations of known provenance is a challenging exercise, and several approaches have been suggested. Perhaps the simplest is to calculate the probabilities of yielding the observed genotype of the unknown individual given the observed allele frequencies in each the target population. Using this approach, the individual is assigned notionally to those populations for which this probability is highest; populations for which the probability is lower than some level of significance are eliminated from further consideration. This approach was first applied in a study of microsatellite markers in bear populations (Paetkau et al. 2004) and subsequently applied using classical and Bayesian approaches to estimating probabilities (Goetz and Thaller 1998; Blanchong et al. 2002).
 
 Unfortunately, the sheer number of SNPs generated by next generation sequencing technologies, often in the 10s or 100s of thousands, makes the assumption of independence of the loci untenable. Linkage is the problem and for most organisms, there is insufficient genomic knowledge to overcome this directly. Similarly, the sample sizes used in studies of population assignment are typically small, and inappropriate for tests of sufficient power to identify loci that can be regarded as independent. Lack of independence is a problem computationally because it is a prerequisite for combining the probabilities (or likelihoods) of the observed genotype at each locus as a product (or by summation of log values) to yield an overall probability of assignment for the unknown genotype. We have taken an alternate approach.
 

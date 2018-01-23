@@ -2,39 +2,43 @@
 % Please edit documentation in R/gl.recode.pop.r
 \name{gl.recode.pop}
 \alias{gl.recode.pop}
-\title{Recode population assignments in a genelight or genind object \{adegenet\}}
+\title{Recode population assignments in a genelight object \{adegenet\}}
 \usage{
-gl.recode.pop(gl, pop.recode, v = 1)
+gl.recode.pop(gl, pop.recode, recalc = TRUE, mono.rm = TRUE, v = 1)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
 \item{pop.recode}{-- name of the csv file containing the population reassignments [required]}
 
+\item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]}
+
+\item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
+
 \item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
 }
 \value{
-A genlight or genind object with the recoded and reduced data
+A genlight object with the recoded and reduced data
 }
 \description{
-This script recodes population assignments and/or deletes populations from a DaRT genlight SNP file or a SilicoDArT genind file
-based on information provided in a csv file.
+This script recodes population assignments and/or deletes populations from a DaRT genlight SNP file 
+based on information provided in a csv population recode file.
 }
 \details{
-Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart() or
-gl.read.silicodart(). Recoding can be used to amalgamate populations or to selectively delete or retain populations.
+Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart(). 
+Recoding can be used to amalgamate populations or to selectively delete or retain populations.
 
-The population recode file contains a list of populations in the genelight or genind object as
+The population recode file contains a list of populations in the genelight object as
 the first column of the csv file, and the new population assignments in the second column of the csv file.
 The keyword Delete used as a new population assignment will result in the associated specimen being dropped from the dataset.
 
-The script, having deleted populations, identifies resultant monomorphic loci or loci
-with all values missing and deletes them (using gl.filter.monomorphs.r)
+The script, having deleted populations, optionally identifies resultant monomorphic loci or loci
+with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
+recalculates the locus metadata as appropriate.
 }
 \examples{
 \dontrun{
    gl <- gl.recode.pop(gl, pop.recode="pop_recode_table_0.csv")
-   glind <- gl.recode.pop(glind, pop.recode="pop_recode_table_0.csv")
 }
 }
 \seealso{

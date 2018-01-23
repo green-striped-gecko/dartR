@@ -31,7 +31,7 @@ x <- gl
 # REMOVE POPULATIONS
   if (v==2) {
     cat("Processing",class(x),"object\n")
-    cat("  Deleteing individuals", pop.list, "\n")
+    cat("  Deleteing individuals", ind.list, "\n")
   }
 
 # Delete listed individualss, recalculate relevant locus metadata and remove monomorphic loci

@@ -4,12 +4,18 @@
 \alias{gl.recode.ind}
 \title{Recode individual (=specimen) labels in a genelight or genind object \{adegenet\}}
 \usage{
-gl.recode.ind(gl, ind.recode)
+gl.recode.ind(gl, ind.recode, recalc = TRUE, mono.rm = TRUE, v = 1)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
 \item{ind.recode}{-- name of the csv file containing the individual relabelling [required]}
+
+\item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]}
+
+\item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
+
+\item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
 }
 \value{
 A genlight or genind object with the recoded and reduced data
@@ -25,8 +31,11 @@ individuals is required for preparation of figures. Caution needs to be exercise
 because of the potential for breaking the "chain of evidence" between the samples themselves
 and the analyses. Recoding individuals can be done with a recode table (csv).
 
-The script, having deleted individuals, identifies resultant monomorphic loci or loci
-with all values missing and deletes them (using gl.filter.monomorphs.r)
+The script, having deleted individuals, optionally identifies resultant monomorphic loci or loci
+with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
+recalculates statistics made redundant by the deletion of individuals from the dataset.
+
+The script returns a genlight object with the new individual labels and the recalculated locus metadata.
 }
 \examples{
 \dontrun{

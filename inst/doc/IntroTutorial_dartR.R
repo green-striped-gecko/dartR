@@ -35,13 +35,13 @@ m <- as.matrix(gl)
 as.matrix(gl)[1:5,1:3]
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  gl <- gl.read.dart(filename = "testset.csv", covfilename = " ind_metrics.csv")
-#  
+#  gl <- gl.read.dart(filename = "testset.csv", ind.metafile = " ind_metrics.csv")
 
 ## ------------------------------------------------------------------------
 dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
-covfilename <- system.file("extdata","testset_metadata.csv", package="dartR")
-gl <- gl.read.dart(filename=dartfile, covfilename = covfilename, probar=FALSE)
+
+metafile <- system.file("extdata","testset_metadata.csv", package="dartR")
+gl <- gl.read.dart(filename=dartfile, ind.metafile = metafile, probar=FALSE)
 
 ## ------------------------------------------------------------------------
 gl
@@ -58,6 +58,7 @@ nPop(gl)
 levels(pop(gl))[1:5]
 
 ## ---- eval=FALSE---------------------------------------------------------
+#  
 #  gl <- gl.read.dart(filename="mydata.csv", covfilename = "my.metadata.csv")
 
 ## ------------------------------------------------------------------------
@@ -148,32 +149,48 @@ table(pop(gl))
 barplot(table(pop(gl)), las=2)
 
 ## ---- eval=T-------------------------------------------------------------
-gl.make.recode.pop(gl, outfile = file.path(tempdir(),"new_pop_assignments.csv"))
+gl.make.recode.pop(gl, outfile = "new_pop_assignments.csv")
+
 
 ## ------------------------------------------------------------------------
-glnew <- gl.recode.pop(gl, pop.recode=file.path(tempdir(),"new_pop_assignments.csv"))
+
+glnew <- gl.recode.pop(gl, pop.recode="new_pop_assignments.csv")
+
 
 ## ------------------------------------------------------------------------
 levels(pop(gl))
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  glnew2 <- gl.edit.recode.pop(gl, pop.recode = file.path(tempdir(),"new_pop_assingments.csv"))
+#  
+#  glnew2 <- gl.edit.recode.pop(gl)
+#  
+
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.keep.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 
 ## ------------------------------------------------------------------------
 #only first 10 entries are shown
 indNames(gl)[1:10]
 
 
-
 ## ------------------------------------------------------------------------
-gl.make.recode.ind(gl, outfile=file.path(tempdir(),"new_ind_assignments.csv"))
+gl.make.recode.ind(gl, outfile="new_ind_assignments.csv")
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  glnew3 <- gl.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))
+#  glnew3 <- gl.recode.ind(gl, ind.recode="new_ind_assignments.csv")
 #  
 
 ## ---- eval=F-------------------------------------------------------------
-#  gl <- gl.edit.recode.ind(gl, ind.recode=file.path(tempdir(),"new_ind_assignments.csv"))
+#  gl <- gl.edit.recode.ind(gl, ind.recode="new_ind_assignments.csv")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.keep.ind(gl, ind.list=c("AA019073","AA004859"))
+
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.drop.pop(gl, ind.list=c("AA019073","AA004859"))
 
 ## ------------------------------------------------------------------------
 gl_new <- gl[gl$pop!="EmmacBrisWive", ]
@@ -211,7 +228,6 @@ dim(glsub2@other$loc.metrics)
 ## ------------------------------------------------------------------------
 gl.dist(gl[1:7,1:100], method="euclidean")
 gl.dist(gl[1:7, 1:100], method="manhattan")
-
 
 ## ------------------------------------------------------------------------
 glind7 <- gl[1:7,]  #copy and store the original dataset in glind
@@ -279,6 +295,7 @@ gl.pcoa.scree(pc)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl.pcoa.plot.3d(pc, glnew)
+#  
 
 ## ------------------------------------------------------------------------
 gl.tree.nj(glnew, type="fan")
@@ -291,6 +308,17 @@ gl.tree.nj(glnew, type="fan")
 #  gl <- testset.gl
 #  gl.collapse.recursive(gl, t=0)
 #  
+#  
+#  Under ideal conditions, the true phylogeny can be uniquely recovered from the true measures of divergence between OTUs. So one approach to recovering phylogenies is to extract the phylogeny that is most consistent with the estimated distances between OTUs. To avoid introducing artificial departure of the distances from the underlying tree, a metric distance needs to be chosen, and for SNP datasets we choose Euclidean Distance. This differs from Rogers D (Rogers, 1972) by a constant multiplier, and so the two measures are essentially the same.
+#  
+#  The script for distance phylogeny is gl2phylip() which calculates Euclidean distances using dist {stats} then outputs the data in a form suitable for input to the Phylip package written by Joseph Felsenstein (http://evolution.genetics.washington.edu/phylip.html) (Felsenstein, 1989). The input file can include replicated distance matrices for the purpose of bootstrapping.
+#  
+#  Assuming the data have been appropriately filtered before saving, the commands to do this are
+#  
+
+## ---- eval=FALSE---------------------------------------------------------
+#  gl <- testset.gl
+#  phy <- gl2phylip(gl, outfile="turtle.phy", bstrap=1000)
 
 ## ---- fig.height=4-------------------------------------------------------
 gl <- gl.ibd(gl=testset.gl[1:180,])
@@ -312,6 +340,7 @@ gl.report.bases(testset.gl)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl2fasta(gl, method=1, outfile="ambcodes.fasta")
+#  
 #  
 
 ## ---- eval=FALSE---------------------------------------------------------
@@ -348,6 +377,7 @@ glnew <- gl2nhyb(gl, outfile = file.path(tempdir(),"nhyb.txt"))
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl.new <- gl2phylip(outfile = "phyinput.txt", bstrap = 1000)
+#  
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl2gds(gl, outfile="test.gds")

@@ -7,10 +7,9 @@
 #'
 #' @param gl Name of the genlight object containing the SNP genotypes by specimen and population [required]
 #' @param nfactors Number of dimensions to retain in the output file [default 5]
-#' @param parallel TRUE if parallel processing is required [default FALSE]
+#' @param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE]
 #' @param n.cores Number of cores to use if parallel processing is requested [default 16]
 #' @param v -- verbose if TRUE, silent if FALSE [default TRUE]
-#' @param parallel should parallel version be used (does fail under Windows)
 #' @import adegenet
 #' @return An object of class glPca containing the eigenvalues, factor scores and factor loadings
 #' @export

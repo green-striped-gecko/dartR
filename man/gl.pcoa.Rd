@@ -4,16 +4,18 @@
 \alias{gl.pcoa}
 \title{PCoA ordination (glPca)}
 \usage{
-gl.pcoa(gl, nfactors = 5, v = TRUE, parallel = FALSE)
+gl.pcoa(gl, nfactors = 5, parallel = FALSE, n.cores = 16, v = TRUE)
 }
 \arguments{
 \item{gl}{Name of the genlight object containing the SNP genotypes by specimen and population [required]}
 
 \item{nfactors}{Number of dimensions to retain in the output file [default 5]}
 
-\item{v}{-- verbose if TRUE, silent if FALSE [default TRUE]}
+\item{parallel}{TRUE if parallel processing is required (does fail under Windows) [default FALSE]}
 
-\item{parallel}{should parallel version be used (does fail under Windows)}
+\item{n.cores}{Number of cores to use if parallel processing is requested [default 16]}
+
+\item{v}{-- verbose if TRUE, silent if FALSE [default TRUE]}
 }
 \value{
 An object of class glPca containing the eigenvalues, factor scores and factor loadings

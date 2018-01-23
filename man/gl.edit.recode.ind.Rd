@@ -4,12 +4,19 @@
 \alias{gl.edit.recode.ind}
 \title{Create or edit a individual (=specimen) names and create an recode_ind file}
 \usage{
-gl.edit.recode.ind(gl, ind.recode = NULL)
+gl.edit.recode.ind(gl, ind.recode = NULL, recalc = TRUE, mono.rm = TRUE,
+  v = 1)
 }
 \arguments{
 \item{gl}{Name of the genlight object for which individuals are to be relabelled.[required]}
 
 \item{ind.recode}{Name of the file to output the new assignments [optional]}
+
+\item{recalc}{-- Recalculate the locus metadata statistics [default TRUE]}
+
+\item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
+
+\item{v}{-- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]}
 }
 \value{
 An object of class ("genlight") with the revised individual labels
@@ -25,17 +32,18 @@ Renaming individuals may be required when there have been errors in labelling ar
 in the process from sample to DArT files. There may be occasions where renaming
 individuals is required for preparation of figures. Caution needs to be exercised
 because of the potential for breaking the "chain of evidence" between the samples themselves
-and the analyses. REcoding individuals can be done with a recode table (csv).
+and the analyses. Recoding individuals can also be done with a recode table (csv).
 
 This script will input an existing recode table for editting and
 optionally save it as a new table, or if the name of an input table is not
 supplied, will generate a table using the individual labels in the 
 parent genlight object.
 
-The script, having deleted individuals, identifies resultant monomorphic loci or loci
-with all values missing and deletes them (using gl.filter.monomorphs.r)
+The script, having deleted individuals, optionally identifies resultant monomorphic loci or loci
+with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
+recalculates statistics made redundant by the deletion of individuals from the dataset.
 
-The script returns a genlight object with the new individual labels.
+The script returns a genlight object with the new individual labels and the recalculated locus metadata.
 }
 \examples{
 \dontrun{
