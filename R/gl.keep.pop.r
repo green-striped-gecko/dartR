@@ -23,7 +23,7 @@
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' 
 
-gl.keep.pop <- function(gl, pop.list, recalc=TRUE, mono.rm=TRUE, v=1){
+gl.keep.pop <- function(gl, pop.list, recalc=FALSE, mono.rm=TRUE, v=1){
 x <- gl
 
   if(class(x)!="genlight") {
@@ -45,11 +45,7 @@ x <- gl
     if (mono.rm) {x2 <- gl.filter.monomorphs(x2,v=0)}
   # Recalculate statistics
     if (recalc) {
-      x2 <- utils.recalc.avgpic(x2,v=v)
-      x2 <- utils.recalc.callrate(x2,v=v)
-      x2 <- utils.recalc.freqhets(x2,v=v)
-      x2 <- utils.recalc.freqhomref(x2,v=v)
-      x2 <- utils.recalc.freqhomsnp(x2,v=v)
+      gl <- gl.recalc.metrics(x2,v=v)
     }
 
 # REPORT A SUMMARY
@@ -58,10 +54,8 @@ x <- gl
     cat(paste("  No. of loci:",nLoc(x2),"\n"))
     cat(paste("  No. of individuals:", nInd(x2),"\n"))
     cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
-    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
-    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
-  if (v==1) {  
+  if (v>=1) {  
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }

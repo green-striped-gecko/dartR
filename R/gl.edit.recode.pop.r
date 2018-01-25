@@ -83,11 +83,7 @@ gl.edit.recode.pop <- function(gl, pop.recode=NULL, recalc=TRUE, mono.rm=TRUE, v
       if(mono.rm) {gl <- gl.filter.monomorphs(gl,v=v)}
     # Recalculate statistics
       if (recalc) {
-        gl <- utils.recalc.avgpic(gl,v=v)
-        gl <- utils.recalc.callrate(gl,v=v)
-        gl <- utils.recalc.freqhets(gl,v=v)
-        gl <- utils.recalc.freqhomref(gl,v=v)
-        gl <- utils.recalc.freqhomsnp(gl,v=v)
+        gl.recalc.metrics(gl,v=v)
     }  
   }
   
@@ -97,10 +93,8 @@ gl.edit.recode.pop <- function(gl, pop.recode=NULL, recalc=TRUE, mono.rm=TRUE, v
     cat(paste("  No. of loci:",nLoc(x2),"\n"))
     cat(paste("  No. of individuals:", nInd(x2),"\n"))
     cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
-    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
-    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
-  if (v==1) {  
+  if (v>=1) {  
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
