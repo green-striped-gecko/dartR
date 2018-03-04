@@ -44,7 +44,11 @@ gl.percent.freq<- function(gl, v=1) {
   f <- melt(f, na.rm=FALSE)
   sum <- melt(sum, na.rm=FALSE)
   
-  m <- cbind(sum,nobs[,3],nmissing[,3],f[,3],n[,3])
+  if(nPop(gl) == 1) {
+    m <- cbind(levels(pop(gl)),rownames(sum),sum,nobs,nmissing,f,n)
+  } else {
+    m <- cbind(sum,nobs[,3],nmissing[,3],f[,3],n[,3])
+  }  
   colnames(m) <- c("popn","locus","sum","nobs","nmissing","frequency","n")
   
   if(v>0) {cat("  Calculation of allele frequencies complete\n\n")}

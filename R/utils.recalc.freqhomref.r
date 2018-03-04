@@ -5,16 +5,15 @@
 #' This script recalculates the FreqHomRef and places these recalculated values in the appropriate place in the genlight object.
 #' Note that the frequency of the homozygote reference SNPS is calculated from the individuals that could be scored.
 #'
-#' @param gl -- name of the genlight object containing the SNP data [required]
+#' @param x -- name of the genlight object containing the SNP data [required]
 #' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' result <- utils.recalc.freqhomref(testset.gl)
 
-utils.recalc.freqhomref <- function(gl, v=1) {
- x <- gl
-   
+utils.recalc.freqhomref <- function(x, v=1) {
+
   if(class(x) == "genlight") {
      #cat("Reporting for a genlight object\n")
    } else {

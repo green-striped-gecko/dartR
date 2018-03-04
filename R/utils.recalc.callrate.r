@@ -12,9 +12,8 @@
 #' @examples
 #' result <- utils.recalc.callrate(testset.gl)
 
-utils.recalc.callrate <- function(gl, v=1) {
- x <- gl
-   
+utils.recalc.callrate <- function(x, v=1) {
+ 
   if(class(x) == "genlight") {
      #cat("Modifying a genlight object\n")
    } else {

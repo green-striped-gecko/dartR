@@ -8,7 +8,7 @@
 #' 
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #'
-#' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
+#' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param pop.list -- a list of populations to be kept [required]
 #' @param recalc -- Recalculate the locus metadata statistics [default TRUE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
@@ -21,10 +21,10 @@
 #'    gl <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}
+#' @seealso \code{\link{gl.recalc.metrics}}
 #' 
 
-gl.keep.pop <- function(gl, pop.list, recalc=FALSE, mono.rm=TRUE, v=1){
-x <- gl
+gl.keep.pop <- function(x, pop.list, recalc=FALSE, mono.rm=FALSE, v=1){
 
   if(class(x)!="genlight") {
     cat("Fatal Error: genlight object required for gl.recode.pop.r!\n"); stop()
@@ -40,26 +40,38 @@ x <- gl
   
   # Remove rows flagged for deletion
     cat("Deleting populations flagged for deletion\n")
-    x2 <- x[x$pop%in%pop.list]
+    x <- x[x$pop%in%pop.list]
   # Remove monomorphic loci
-    if (mono.rm) {x2 <- gl.filter.monomorphs(x2,v=0)}
+    if (mono.rm) {x <- gl.filter.monomorphs(x,v=0)}
   # Recalculate statistics
     if (recalc) {
-      gl <- gl.recalc.metrics(x2,v=v)
+      x <- utils.recalc.avgpic(x,v=v)
+      x <- utils.recalc.callrate(x,v=v)
+      x <- utils.recalc.freqhets(x,v=v)
+      x <- utils.recalc.freqhomref(x,v=v)
+      x <- utils.recalc.freqhomsnp(x,v=v)
     }
 
 # REPORT A SUMMARY
   if (v==2) {
     cat("Summary of recoded dataset\n")
-    cat(paste("  No. of loci:",nLoc(x2),"\n"))
-    cat(paste("  No. of individuals:", nInd(x2),"\n"))
-    cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+    cat(paste("  No. of loci:",nLoc(x),"\n"))
+    cat(paste("  No. of individuals:", nInd(x),"\n"))
+    cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
   }
-  if (v>=1) {  
-    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
-    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
-  }
+    if (v>0) {  
+      if (!recalc) {
+        cat("Note: Locus metrics not recalculated\n")
+      } else {
+        cat("Note: Locus metrics recalculated\n")
+      }
+      if (!mono.rm) {
+        cat("note: Resultant monomorphic loci not deleted\n")
+      } else {
+        cat("note: Resultant monomorphic loci deleted\n")
+      }
+    }
     
-    return <- x2
+    return <- x
 }
 
