@@ -7,21 +7,21 @@
 #' in the genlight object.
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' result <- utils.recalc.avgpic(testset.gl)
 
-utils.recalc.avgpic <- function(x, v=1) {
+utils.recalc.avgpic <- function(x, v=2) {
 
-  if(class(x) == "genlight") {
-     #cat("Reporting for a genlight object\n")
-   } else {
-     cat("Fatal Error: Specify a genlight object\n")
-     stop()
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
   }
-
+  if (v > 0) {
+    cat("Starting utils.recalc.avgpic: Recalculating OneRatioRef, OneRatioSnp, PICRef, PICSnp and AvgPIC\n")
+  }
+  
   # Do the deed
      t <- as.matrix(x)
      for (i in 1:nLoc(x)) {
@@ -40,7 +40,9 @@ utils.recalc.avgpic <- function(x, v=1) {
        x@other$loc.metrics$avgPIC[i] <- (x@other$loc.metrics$PICRef[i] + x@other$loc.metrics$PICSnp[i])/2
      }
 
-   if (v>0) {cat("OneRatioRef, OneRatioSnp, PICRef, PICSnp, and AvgPIC recalculated\n")}
+     if (v > 0) {
+       cat("Completed utils.recalc.avgpic\n\n")
+     }
    
    return(x)
 }

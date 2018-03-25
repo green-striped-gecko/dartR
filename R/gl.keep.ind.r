@@ -10,7 +10,7 @@
 #' @param ind.list -- a list of individuals to be removed [required]
 #' @param recalc -- Recalculate the locus metadata statistics [default TRUE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
-#' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
@@ -21,23 +21,25 @@
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
 
-gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, v=1){
+gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, v=2){
 
 
+  if (v > 0) {
+    cat("Starting gl.keep.ind: Deleting all but selected individuals\n")
+  }
+  
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.drop.ind\n"); stop()
+    cat("Fatal Error: genlight object required for gl.keep.ind.r!\n"); stop("Execution terminated\n")
+  }
+  
+  # REMOVE INDIVIDUALS
+  if (v > 1) {
+    cat("  Retaining only individuals", pop.list, "\n")
   }
 
-# REMOVE POPULATIONS
-  if (v==2) {
-    cat("Processing",class(x),"object\n")
-    cat("  Deleteing individuals", pop.list, "\n")
-  }
-
-# Delete listed individualss, recalculate relevant locus metadata and remove monomorphic loci
+# Delete listed individuals, recalculate relevant locus metadata and remove monomorphic loci
   
   # Remove rows flagged for deletion
-    cat("Deleting individuals flagged for deletion\n")
     x <- x[x$ind.names%in%ind.list]
   # Remove monomorphic loci
     if (mono.rm) {x <- gl.filter.monomorphs(x,v=0)}
@@ -51,23 +53,22 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, v=1){
     }
 
 # REPORT A SUMMARY
-  if (v==2) {
+  if (v > 2) {
     cat("Summary of recoded dataset\n")
     cat(paste("  No. of loci:",nLoc(x),"\n"))
     cat(paste("  No. of individuals:", nInd(x),"\n"))
     cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
   }
-    if (v>0) {  
+    if (v > 1) {  
       if (!recalc) {
         cat("Note: Locus metrics not recalculated\n")
-      } else {
-        cat("Note: Locus metrics recalculated\n")
       }
       if (!mono.rm) {
-        cat("note: Resultant monomorphic loci not deleted\n")
-      } else {
-        cat("note: Resultant monomorphic loci deleted\n")
+        cat("Note: Resultant monomorphic loci not deleted\n")
       }
+    }
+    if (v > 0) {
+      cat("Completed gl.keep.ind\n\n")
     }
     
     return <- x

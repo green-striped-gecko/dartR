@@ -7,23 +7,32 @@
 #' This script will identify loci with alleles that behave in this way, as putative sex specific SNP markers.
 #' 
 #' Sex of the individuals for which sex is known with certainty is to be held in the variable x@other$ind.metrics$sex, 
-#' as M for male, F for female, NA otherwise.
+#' as M for male, F for female, NA otherwise. The script abbreviates the entries here to the first character. So coding of "Female" and "Male" works as well. Character are also converted to upper cases.
 #'
-#' @param gl -- name of the genlight object containing the SNP data [required]
+#' @param x -- name of the genlight object containing the SNP data [required]
 #' @param t.het -- tolerance, that is tm=0.05 means that 5% of the heterogametic sex can be homozygous and still 
 #' be regarded as consistent with a sex specific marker [default 0]
 #' @param t.hom -- tolerance, that is tf=0.05 means that 5% of the homogametic sex can be heterozygous and still
 #' be regarded as consistent with a sex specific marker [default 0]
-#' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The list of sex specific loci
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' result <- gl.sexlinkage(testset.gl)
 
-gl.sexlinkage <- function(gl, t.het=0, t.hom=0, v=1) {
-  x <- gl
-  sex <- x@other$ind.metrics$sex
+gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
+
+  if (v > 0) {
+    cat("Starting gl.sexlinkage: Identifying sex linked loci\n")
+  }
+  
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.sexlinkage!\n"); stop("Execution terminated\n")
+  }
+
+# Extract the sex variable from whereever it may be -- might need alteration    
+  sex <- toupper(substr(x@other$ind.metrics$sex,1,1))
 
 # Extract the data for the females
   matf <- as.matrix(x[sex=="F"])
@@ -52,7 +61,7 @@ gl.sexlinkage <- function(gl, t.het=0, t.hom=0, v=1) {
   colnames(dfm) <- c("M0","M1","M2")
 
 # Combine the two files
-  Trimmed_Sequence <- gl@other$loc.metrics$TrimmedSequence
+  Trimmed_Sequence <- x@other$loc.metrics$TrimmedSequence
   df <- cbind(dff,dfm,Trimmed_Sequence)
   a <- strsplit(row.names(df), split="\\|")
   a <- do.call(rbind,a)
@@ -67,14 +76,14 @@ gl.sexlinkage <- function(gl, t.het=0, t.hom=0, v=1) {
   d <- substr(df$Trimmed_Sequence,a+2,nchar(df$Trimmed_Sequence))
   
   df$Trimmed_Sequence <- paste0(b,c,d)
-  df$AvgCountRef <- gl@other$loc.metrics$AvgCountRef
-  df$AvgCountSnp <- gl@other$loc.metrics$AvgCountSnp
+  df$AvgCountRef <- x@other$loc.metrics$AvgCountRef
+  df$AvgCountSnp <- x@other$loc.metrics$AvgCountSnp
   
 # Check for hets in all males, homs in all females (XY); ditto for ZW
-sumf <- df$F0+df$F1+df$F2
-summ <- df$M0+df$M1+df$M2
-zw <- df[df$F1/(sumf)>=(1-t.hom) & df$M1/(summ)<=(0+t.het),]
-xy <- df[df$F1/(sumf)<=(0+t.het) & df$M1/(summ)>=(1-t.hom),]
+  sumf <- df$F0+df$F1+df$F2
+  summ <- df$M0+df$M1+df$M2
+  zw <- df[df$F1/(sumf)>=(1-t.hom) & df$M1/(summ)<=(0+t.het),]
+  xy <- df[df$F1/(sumf)<=(0+t.het) & df$M1/(summ)>=(1-t.hom),]
 
 if (nrow(zw) == 0){
   cat("No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
@@ -99,8 +108,8 @@ if (nrow(xy) == 0){
   cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
   }
 
-list <- c(zw,xy)
+l <- list(zw,xy)
 
-return(list)
+return(l)
 
 }

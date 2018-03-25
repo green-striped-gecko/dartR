@@ -4,8 +4,8 @@
 #'
 #' A DArT dataset will not have monomorphic loci, but they can arise when populations are deleted by assignment or by using
 #' the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
-#' @param gl -- name of the input genlight object [required]
-#' @param v -- verbosty: 0, silent; 1, brief, 2; verbose if TRUE, silent if FALSE [default 1]
+#' @param x -- name of the input genlight object [required]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with monomorphic loci removed
 #' @import adegenet plyr utils
 #' @export
@@ -15,28 +15,31 @@
 #' gl <- gl.filter.monomorphs(gl)
 #' }
 
-gl.filter.monomorphs <- function (gl,v=1) {
+gl.filter.monomorphs <- function (x, v=2, pb=TRUE) {
 
-x <- gl
+  if (v > 0) {
+    cat("Starting gl.filter.monomorphs: Deleting monomorphic loci\n")
+  }
 
-  if (v==1) {cat("Identifying monomorphic loci\n")}
 # Create a vector to hold test results
   a <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {a[i] <- NA}
 # Set up the progress counter
-  if (v==1) {pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")}
-  if (v==1) {getTxtProgressBar(pb)}
+  if (v > 1 && pb == TRUE) {
+    progress <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+    getTxtProgressBar(progress)
+  }
 # Identify polymorphic, monomorphic and 'all na' loci
   # Set a <- TRUE if monomorphic, or if all NAs
   xmat <-as.matrix(x)
   for (i in (1:nLoc(x))) {
     a[i] <- all(xmat[,i]==0,na.rm=TRUE) || all(xmat[,i]==2,na.rm=TRUE)
     if (all(is.na(xmat[,i]))) {a[i] <- NA}
-    if (v==1) {setTxtProgressBar(pb, i/nLoc(x))}
+    if (v > 1 && pb == TRUE) {setTxtProgressBar(progress, i/nLoc(x))}
   }
 # Count the number of monomorphic loci (TRUE), polymorphic loci (FALSE) and loci with no scores (all.na)
-  counts <- count(a)
-  if (v==1) {
+  counts <- plyr::count(a)
+  if (v > 2) {
     cat("\nPolymorphic loci:", counts[1,2], "\nMonomorphic loci:", counts[2,2], "\nLoci with no scores (all NA):" , counts[3,2] ,"\n")
   }
     #Treat all na loci as monomorphic
@@ -47,6 +50,11 @@ x <- gl
 
   x <- x[,(a==FALSE)]
   x@other$loc.metrics <- x@other$loc.metrics[(a==FALSE),]
+  
+  if (v > 0) {
+    cat("Completed gl.filter.monomorphs\n\n")
+  }
+  
 return (x)
 }
 

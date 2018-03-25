@@ -12,19 +12,22 @@
 #' The script returns a genlight object with the recalculated locus metadata.
 #'
 #' @param x -- name of the genlight object containing SNP genotypes [required]
-#' @param mono.rm -- Remove monomorphic loci [default TRUE]
-#' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the recalculated locus metadata
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' \dontrun{
-#'    gl <- gl.recalc.metrics(testset.gl, mono.rm=TRUE, v=2)
+#'    gl <- gl.recalc.metrics(testset.gl, v=2)
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}
 
 
-gl.recalc.metrics <- function(x, mono.rm=FALSE, v=1){
+gl.recalc.metrics <- function(x, v=2){
+  
+  if (v > 0) {
+    cat("Starting gl.recalc.metrics: Recalculating locus metrics\n")
+  }
 
 # Recalculate statistics
   x <- utils.recalc.avgpic(x,v=v)
@@ -33,18 +36,13 @@ gl.recalc.metrics <- function(x, mono.rm=FALSE, v=1){
   x <- utils.recalc.freqhomref(x,v=v)
   x <- utils.recalc.freqhomsnp(x,v=v)
   
-# Optionally remove resultant monomorphic loci
-  if (mono.rm) {x <- gl.filter.monomorphs(x,v=0)}
-  
-  if (v>0) {  
+  if (v > 1) {  
     cat("Note: Locus metrics recalculated\n")
-    if (!mono.rm) {
-      cat("note: Resultant monomorphic loci not deleted\n")
-    } else {
-      cat("note: Resultant monomorphic loci deleted\n")
-    }
+  }
+  if (v > 0) {
+    cat("Completed gl.recalc.metrics\n\n")
   }
   
   return <- x
-  
+
 }  

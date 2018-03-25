@@ -2,65 +2,68 @@
 #'
 #' This is a support script, called by gl.collapse.recursive.
 #' 
-#' The script takes two populations, generates allele frequency profiles for them, then takes two samples
-#' from those profiles to estimate the rate by which fixed differences are generated for a given pair
-#' of sample sizes. It then calculates the rate of fixed differences for effectively samples of
-#' infinite size, and subtracts the two to get an expected rate of false positives. The expected
-#' rate of false positives is used to compute a threshold above which the two populations can be
-#' considered distinct.
+#' The script takes two populations and generates allele frequency profiles for them. It then samples
+#’ an allele frequency for each, at random, and estimates a sampling distribution for those two allele
+#’ frequencies. Drawing two samples from those sampling distributions, it calculates whether or not they
+#’ represent a fixed difference. This is applied to all loci, and the number of fixed differences so
+#’ generated are counted, as an expectation. The script distinguished between true fixed differences (with
+#’ a tolerance of delta), and false positives. The simulation is repeated a given number of times 
+#’ (default=1000)to provide an expectation of the number of false positives, given the observed allele 
+#’ frequency profiles and the sample sizes. The probability of the observed count of fixed differences is
+#’ greater than the expected number of false positives is calculated.
 #'
 #' @param gl -- name of the genlight containing the SNP genotypes [required]
 #' @param poppair -- labels of two populations for comparison in the form c(popA,popB) [required]
 #' @param obs -- observed number of fixed differences between the two populations [required]
 #' @param reps -- number of replications to undertake in the simulation [default 1000]
 #' @param delta -- the threshold value for the minor allele frequency to regard the difference between two populations to be fixed [default 0.02]
-#' @param v -- verbosity = 0, silent; 1, brief; 2, verbose [default 1]
-#' @return Expected count of fixed differences arising from loci that are not considered to represent a fixed difference between the two focal populations.
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @return A list containing the following square matricies
+#'         [[1]] observed fixed differences;
+#'         [[2]] mean expected number of false positives for each comparison;
+#'         [[3]] standard deviation of the no. of false positives for each comparison;
+#'         [[4]] probability the observed fixed differences arose by chance for each comparison;
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 
-gl.utils.fdsim<- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=1) {
+gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=2) {
   
+  if (v > 0) {
+    cat("Starting gl.utils.fdsim: Using simulation to estimate frequency of false positives\n")
+  }
   # Determine data type
-  if(class(gl)=="genlight"){
-    cat("Using SNP data from a genlight object\n")
-  } else {
+  if(!(class(gl)=="genlight")){
     cat("Fatal Error: Input data must be a genlight object\n")
-    stop()
+    stop("Execution terminated\n")
   }
   
-  if (is.null(obs)) {
-    cat("Warning: Number of observed fixed differences not supplied, set to NA.\n")
-    obs <- NA
-  }
-  
-  if (!(poppair[1] %in% levels(pop(gl)))){
+   if (!(poppair[1] %in% levels(pop(gl)))){
     cat("Fatal Error: Population A mislabelled\n")
-    stop()
+     stop("Execution terminated\n")
   }
   if (!(poppair[2] %in% levels(pop(gl)))){
     cat("Fatal Error: Population B mislabelled\n")
-    stop()
+    stop("Execution terminated\n")
   }
   
   # Extract the data for the two nominated populations
   if (length(poppair) == 2) {
-    pair <- gl.keep.pop(gl, poppair, recalc=FALSE, mono.rm = TRUE)
+    pair <- gl.keep.pop(gl, poppair, recalc=FALSE, mono.rm = TRUE, v=v)
   } else {
     cat("Fatal Error: Must specify two populations labels from the genlight object, e.g. poppair=c(popA,popB)\n")
-    stop()
+    stop("Execution terminated\n")
   }  
 
-  if (v==2) {
-    cat("Comparing two populations",poppair[1],"and",poppair[2],"\n")
+  if (v > 1) {cat("Comparing ",poppair[1],"and",poppair[2],"\n")}
+  if (v > 2) {
     cat("Sample sizes:",table(pop(pair)),"\n")
     cat("No. of loci:",nLoc(pair),"\n")
     cat("No. of observed fixed differences:",obs,"\n")
   }
 
   # Calculate the percentage frequencies
-  rf <- gl.percent.freq(pair)
+  rf <- gl.percent.freq(pair, v=v)
   
   # Disaggregate the data for the two populations
   rfA <- rf[rf$popn==poppair[1],]
@@ -74,8 +77,16 @@ gl.utils.fdsim<- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=1) {
   fd <- array(data=NA,dim=nLoc(pair))
   falsepos <- array(data=NA,dim=reps)
   
+  # Caclulate the observed fixed differences
+  if (is.null(obs)) {
+    fdmat <- gl.fixed.diff(pair)
+    obs <- fdmat[2,1]
+  }
+
   # Calculate the rate of false positives, given delta and actual sample sizes
-  cat("Calculating false positve rate with",reps,"replications for",poppair[1],"vs",poppair[2],". Please be patient\n\n")
+  if (v > 1) {
+    cat("Calculating false positive rate with",reps,"replications. Please be patient\n")
+  }
   for (j in 1:reps){ # Repeat reps times
     for (i in 1:nLoc(pair)) {
       # Eliminate from consideration loci for which either frequency is missing
@@ -109,13 +120,17 @@ gl.utils.fdsim<- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=1) {
   # Calculate the probability of the observed FD count, given the simulated result
   nprob <- pnorm(obs, mean=mn, sd=sdev, lower.tail=FALSE)
   
-  if (v==2) {
+  if (v > 2) {
     cat("Threshold minor allele frequency for generating a false positive:",delta,"\n")
     cat("Estimated mean count of false positives:",round(mean(falsepos),1),"\n")
     cat("Estimated SD of the count of false positives:",round(sd(falsepos),2),"\n")
     cat("Prob that observed count of",obs,"are false positives:",nprob,"\n")
   }
   
-  return(mn)
+  l <- list(observed=obs,mnexpected=mn,sdexpected=sdev,prob=nprob)
   
+  if (v > 0) {
+    cat("Completed gl.utils.fdsim\n\n")
+  }
+  return(l)
 }
