@@ -42,7 +42,7 @@
 #
 # Ammended Georges 29-Oct-16
 
-gl.edit.recode.pop <- function(gl, pop.recode=NULL, recalc=TRUE, mono.rm=TRUE, v=1) {
+gl.edit.recode.pop <- function(gl, pop.recode=NULL, recalc=FALSE, mono.rm=TRUE, v=1) {
   
 # Take assignments from gl  
 
