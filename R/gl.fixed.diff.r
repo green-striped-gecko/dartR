@@ -29,8 +29,8 @@
 #'         [[3]] $pcfd -- percent fixed differences;,
 #'         [[4]] $nobs -- mean no. of individuals used in each comparison;,
 #'         [[5]] $nloc -- total number of loci used in each comparison;,
-#'         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation],
-#'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
+#'         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation], otherwise NAs
+#'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation], otherwise NAs
 #' @import adegenet utils
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
@@ -38,7 +38,7 @@
 #' fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, v=1 )
 #' @seealso \code{\link{is.fixed}}
 
-gl.fixed.diff <- function(x, tloc=0, test=FALSE, delta=0.02, reps=1000, rm.global.monomorphs=TRUE, pb=TRUE, v=2) {
+gl.fixed.diff <- function(x, tloc=0, test=FALSE, delta=0.02, reps=1000, rm.global.monomorphs=FALSE, pb=FALSE, v=2) {
 
   if (v > 0) {
     if (tloc > 0) {cat("Starting gl.fixed.diff: Comparing populations for fixed differences with tolerance",tloc,"\n")}
