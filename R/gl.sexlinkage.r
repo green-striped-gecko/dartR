@@ -65,9 +65,9 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
   df <- cbind(dff,dfm,Trimmed_Sequence)
   a <- strsplit(row.names(df), split="\\|")
   a <- do.call(rbind,a)
-  a <- strsplit(a[,2],"-")
+  a <- strsplit(a[,1],"-")
   a <- do.call(rbind,a)
-  a <- as.numeric(a[,1])
+  a <- as.numeric(a[,2])
   
   df$Trimmed_Sequence <- as.character(df$Trimmed_Sequence)
   b <- substr(df$Trimmed_Sequence,1,a)

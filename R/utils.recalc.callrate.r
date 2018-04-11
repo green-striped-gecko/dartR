@@ -22,7 +22,7 @@ utils.recalc.callrate <- function(x, v=2) {
   }
 
   # Do the deed
-     x@other$loc.metrics$CallRate <- 1-(glNA(gl,alleleAsUnit=FALSE))/nInd(gl)
+     x@other$loc.metrics$CallRate <- 1-(glNA(x,alleleAsUnit=FALSE))/nInd(x)
 
   if (v > 0) {
     cat("Completed utils.recalc.callrate\n\n")

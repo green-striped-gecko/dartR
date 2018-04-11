@@ -101,7 +101,7 @@ gl.collapse.pval <- function(fd, prefix="fd.sig", delta=0.02, reps=1000, alpha=0
   
   # Recode the data file (genlight object)
   x2 <- gl.recode.pop(fd$gl, pop.recode=recode.table, v=v)
-  fd2 <- gl.fixed.diff(x2,tloc=tloc,test=TRUE,delta=delta,reps=reps,v=v)
+  fd2 <- gl.fixed.diff(x2,test=TRUE,delta=delta,reps=reps,v=v)
   
   # Return the matricies
   if (v > 1) {
