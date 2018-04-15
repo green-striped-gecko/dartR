@@ -1,4 +1,4 @@
-#' Convert a genlight object to gds format SNPRelate
+#' Convert a genlight object to nexus format PAUP SVDquartets
 #'
 #' Package SNPRelate relies on a bit-level representation of a SNP dataset that competes with \{adegenet\} genlight
 #' objects and associated files. This function saves a genlight object to a gds format file.
