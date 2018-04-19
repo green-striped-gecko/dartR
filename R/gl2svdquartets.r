@@ -13,11 +13,11 @@
 #' @importFrom
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' gl2sdvquartets(testset.gl)
+#' gl2svdquartets(testset.gl)
 
-gl2sdvquartets <- function(x, outfile="sdv.nex") {
+gl2svdquartets <- function(x, outfile="svd.nex") {
   
-  cat(paste("Starting gl2sdvquartets: Create nexus file suitable for sdvquartets\n\n"))
+  if (v > 0) {cat(paste("Starting gl2svdquartets: Create nexus file suitable for svdquartets\n\n"))}
 
 # Extract the reference base and the alternate base for each locus
   v <- as.character(x@other$loc.metrics$SNP)
@@ -36,6 +36,8 @@ gl2sdvquartets <- function(x, outfile="sdv.nex") {
   m <- df[,3:(nLoc(x)+2)]
 
   #Initialize The first base of the sequence for each individual  
+  refseq <- array(data=NA,dim=nInd(x))
+  altseq <- array(data=NA,dim=nInd(x))
   for (ind in 1:nInd(x)) {
     if (is.na(m[ind,1])) {
       refseq[ind] <- "?"; altseq[ind] <- "?"
@@ -73,7 +75,9 @@ gl2sdvquartets <- function(x, outfile="sdv.nex") {
     altseq[ind] <- paste0(indlabels[ind],"_2   ",altseq[ind])
   }
   
-# Createthe taxpartition (popname : 25-60)
+# Create the taxpartition (popname : 25-60)
+  a <- array(data=NA,dim=length(poplabels))
+  b <- array(data=NA,dim=length(poplabels))
   a[1] <- 1
   b <- table(poplabels)
   for (i in 2:length(b)) {
@@ -119,6 +123,8 @@ gl2sdvquartets <- function(x, outfile="sdv.nex") {
   cat("end;\n")
   
   sink()
+  
+  if (v > 0) {cat("gl2svdquartets Completed\n")}
   
   return(NULL)
 
