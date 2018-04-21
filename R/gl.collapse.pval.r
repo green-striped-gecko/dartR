@@ -12,7 +12,14 @@
 #' table (also stored to disk) [default "fd_sig"]
 #' @param alpha -- significance level for test of false positives [default 0.05]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return A new genlight object with recoded populations after amalgamations are complete.
+#' @return A list containing the gl object x and the following square matricies
+#'         [[1]] $gl -- the input genlight object;
+#'         [[2]] $fd -- raw fixed differences;
+#'         [[3]] $pcfd -- percent fixed differences;
+#'         [[4]] $nobs -- mean no. of individuals used in each comparison;
+#'         [[5]] $nloc -- total number of loci used in each comparison;
+#'         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation], otherwise NAs
+#'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation], otherwise NAs
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
