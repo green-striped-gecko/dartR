@@ -1,16 +1,3 @@
------------------------------------------------------------------
---                                                             --
------------------------------------------------------------------
---
---      Text1 - 
---
---      Copyright(c) University of Canberra 2000
---
---      Author: ARTHUR GEORGES
---      Created on: 20/1/2018 8:55:02 PM
---      Last change: AG  20/1/2018 8:55:02 PM
---
----
 title: "Introduction to dartR"
 author: "Bernd Gruber, Peter Unmack, Oliver Berry & Arthur Georges"
 date: '`r Sys.Date()`'
@@ -1206,6 +1193,8 @@ One such approach is to use SVD Quartets, that is, to estimate the relationships
 This is implemented in dartR using script gl2svdquartets(), which generates the nexus file for input to PAUP for the analysis.
 
 There are two approaches to preparing the data. The first enters the genotypes using two lines, one for reference state, one for alternate state. The second approach enters one genotype per line, accommodating the heterozygosity by using standard ambiguity codes. These are given as options in gl2svdquartets().
+
+If using either of these approaches, it is important to filter out secondary SNPs from sequence tags using gl.filter.secondaries(), prior to analysis.
 
 # Population Assignment
 

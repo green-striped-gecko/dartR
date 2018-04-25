@@ -6,6 +6,7 @@
 #' the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily increases the size of the dataset.
 #' @param x -- name of the input genlight object [required]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param pb -- display progress bar [FALSE]
 #' @return A genlight object with monomorphic loci removed
 #' @import adegenet plyr utils
 #' @export
@@ -15,7 +16,9 @@
 #' gl <- gl.filter.monomorphs(gl)
 #' }
 
-gl.filter.monomorphs <- function (x, v=2, pb=TRUE) {
+# Last edit:25-Apr-18
+
+gl.filter.monomorphs <- function (x, v=2, pb=FALSE) {
 
   if (v > 0) {
     cat("Starting gl.filter.monomorphs: Deleting monomorphic loci\n")
@@ -40,13 +43,17 @@ gl.filter.monomorphs <- function (x, v=2, pb=TRUE) {
 # Count the number of monomorphic loci (TRUE), polymorphic loci (FALSE) and loci with no scores (all.na)
   counts <- plyr::count(a)
   if (v > 2) {
-    cat("\nPolymorphic loci:", counts[1,2], "\nMonomorphic loci:", counts[2,2], "\nLoci with no scores (all NA):" , counts[3,2] ,"\n")
+    if (pb) {cat("\n")}
+    cat("  Polymorphic loci:", counts[1,2], "\n")
+    cat("  Monomorphic loci:", counts[2,2], "\n")
+    if (is.na(counts[3,2])) {counts[3,2] <- 0}
+    cat("  Loci with no scores (all NA):" , counts[3,2] ,"\n")
   }
-    #Treat all na loci as monomorphic
-  # TRUE if monomorphic or all na
+
+  #Treat all na loci as monomorphic
   a[is.na(a)] <- TRUE
 # Write the polymorphic loci to a new genlight object
-#  cat("Deleting monomorphic loci and loci with no scores\n")
+  if (v > 1) {cat("  Deleting monomorphic loci and loci with all NA scores\n")}
 
   x <- x[,(a==FALSE)]
   x@other$loc.metrics <- x@other$loc.metrics[(a==FALSE),]
@@ -57,6 +64,3 @@ gl.filter.monomorphs <- function (x, v=2, pb=TRUE) {
   
 return (x)
 }
-
-
-

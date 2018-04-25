@@ -23,43 +23,52 @@
 #' Only one of two loci are retained if their Hamming distance is less that a specified
 #' percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 #'
-#' @param gl -- genlight object [required]
+#' @param x -- genlight object [required]
 #' @param t -- a threshold Hamming distance for filtering loci [default 0.2]
 #' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
-#' @param probar -- switch to output progress bar [default is false]
+#' @param pb -- switch to output progress bar [default FALSE]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a genlight object filtered on Hamming distance.
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
 #' gl <- gl.filter.hamming(testset.gl, t=0.25)
 
-gl.filter.hamming <- function(gl=gl, t=0.2, rs=5, probar=TRUE) {
+# Last edit:25-Apr-18
+
+gl.filter.hamming <- function(x=gl, t=0.2, rs=5, pb=FALSE, v=2) {
   
-  x <- gl
   n0 <- nLoc(x)
   
   if(class(x) == "genlight") {
-    cat("Analysing a genlight object\n")
+    if (v > 2) {cat("Reporting for a genlight object\n")}
+  } else if (class(x) == "genind") {
+    if (v > 2) {cat("Reporting for a genind object\n")}
   } else {
-    cat("Fatal Error: Specify a genlight object\n")
+    cat("Fatal Error: Specify either a genlight or a genind object\n")
     stop()
   }
+  
   if(length(x@other$loc.metrics$TrimmedSequence) == 0) {
     cat("Fatal Error: Data must include Trimmed Sequences\n"); stop()
   }
   
+  if (v > 0) {cat("Starting gl.filter.hamming: Filtering on Hamming Distance\n")}
+  if (v > 2) {
+    cat("  Note: Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n")
+    cat("  Note: Calculating pairwise Hamming distances between trimmed reference sequence tags\n")
+  }
+  
   x@other$loc.metrics$TrimmedSequence <- as.character(x@other$loc.metrics$TrimmedSequence)
   
-  cat("Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n")
-  cat("Calculating pairwise Hamming distances between trimmed reference sequence tags\n")
   count=0
-  #flag <- rep(FALSE,(nLoc(x)-1))
   nL <- nLoc(x)
   index <- rep(TRUE,(nL-1))
-  if (probar) {
-    pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-    getTxtProgressBar(pb)
+  if (pb) {
+    pbar <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+    getTxtProgressBar(pbar)
   }
+  if (v > 1) {cat("  Calculating Hamming distances between sequence tags\n")}
   for (i in 1:(nL-1)){
     s1 <- x@other$loc.metrics$TrimmedSequence[i]
     for (j in ((i+1):nL)){
@@ -70,7 +79,7 @@ gl.filter.hamming <- function(gl=gl, t=0.2, rs=5, probar=TRUE) {
         break
       }
     }
-  if (probar)  setTxtProgressBar(pb, i/(nL-1))
+  if (pb)  setTxtProgressBar(pbar, i/(nL-1))
   }
   #index <- flag
   x <- x[,(index)]
@@ -78,13 +87,16 @@ gl.filter.hamming <- function(gl=gl, t=0.2, rs=5, probar=TRUE) {
   x@other$loc.metrics <- x@other$loc.metrics[(index),]
   
   # REPORT A SUMMARY
-  cat("\n\nSummary of filtered dataset\n")
-  cat(paste("  Initial No. of loci:",n0,"\n"))
-  cat(paste("  Hamming d >",t,"\n"))
-  cat(paste("  Loci deleted",(n0-nLoc(x)),"\n"))
-  cat(paste("  Final No. of loci:",nLoc(x),"\n"))
-  cat(paste("  No. of individuals:", nInd(x),"\n"))
-  cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
-
+  if (v > 2){
+    cat("\n  Summary of filtered dataset\n")
+    cat(paste("    Initial No. of loci:",n0,"\n"))
+    cat(paste("    Hamming d >",t,"\n"))
+    cat(paste("    Loci deleted",(n0-nLoc(x)),"\n"))
+    cat(paste("    Final No. of loci:",nLoc(x),"\n"))
+    cat(paste("    No. of individuals:", nInd(x),"\n"))
+    cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n\n"))
+  }
+  
+  if ( v > 0) {cat("gl.filter.hamming completed\n")}
   return <- x
 }
