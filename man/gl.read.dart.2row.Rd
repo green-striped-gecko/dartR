@@ -5,7 +5,7 @@
 \title{Import SNP data from DArT and convert to  genlight \{agegenet\} format (gl)}
 \usage{
 gl.read.dart.2row(datafile, topskip, nmetavar, nas = "-",
-  ind.metafile = NULL)
+  ind.metafile = NULL, pbar = TRUE, v = 2)
 }
 \arguments{
 \item{datafile}{-- name of csv file containing the DartSeq data in 2-row format (csv) [required]}
@@ -17,6 +17,10 @@ gl.read.dart.2row(datafile, topskip, nmetavar, nas = "-",
 \item{nas}{-- missing data character [default "-"]}
 
 \item{ind.metafile}{-- name of csv file containing metadata assigned to each entity (individual) [default NULL]}
+
+\item{pbar}{-- display progress bar [FALSE]}
+
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 An object of class ("genlight") containing the SNP data, and locus and individual metadata

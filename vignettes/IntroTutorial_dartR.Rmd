@@ -529,7 +529,7 @@ gl2 <- gl.filter.monomorphs(gl, v=0)
 6.	Filter out loci with trimmed sequence tags that are too similar (possible paralogues). Only works if TrimmedSequence is available in the loci metadata, therefore we use another test data set here.
 
 ```{r}
-gl2 <- gl.filter.hamming(testset.gl, t=0.25, probar = F)
+gl2 <- gl.filter.hamming(testset.gl, t=0.25, pb = F)
 ```
 Note: This filter and its accompanying report function is slow when there are many loci. Recommended that it be applied after all other filtering, and only if less than 20,000 loci remain. May require an overnight run.
 
@@ -635,7 +635,7 @@ will delete all individuals listed.
 
 Alternatively, reassignment and deletion of populations can be effected using a recode table, that is, a table stored as a csv file containing the old population assignments and the new population assignments as two columns. The quickest way to construct a recode table for an active genlight object is using
 
-```{r, eval=T}
+```{r, eval=FALSE}
 gl.make.recode.pop(gl, outfile = "new_pop_assignments.csv")
 
 ```
@@ -650,7 +650,7 @@ This will generate a csv file with two columns, the first containing the existin
 
 The population reassignments are then applied using:
 
-```{r}
+```{r, eval=FALSE}
 
 glnew <- gl.recode.pop(gl, pop.recode="new_pop_assignments.csv")
 
@@ -705,7 +705,7 @@ indNames(gl)[1:10]
 
 The quickest way to rename individuals is to construct a recode table for an active genlight object is using 
 
-```{r}
+```{r, eval=FALSE}
 gl.make.recode.ind(gl, outfile="new_ind_assignments.csv")
 ```
 
@@ -1304,19 +1304,14 @@ gl2 gdsfmt() | Outputs a gl object to a file in gds format that can subsequently
 
 NewHybrids (Anderson and Thompson, 2002) employs a statistical method for identifying species hybrids using data on multiple, unlinked markers which does not require that allele frequencies be known in the parental species. The probability model used is one in which parentals and various classes of hybrids (F1s, F2s, and various backcrosses) form a mixture from which the sample is drawn. Using the framework of Bayesian model-based clustering, NewHybrids computes, using Markov chain Monte Carlo, the relative likelihood (posterior probability) that each individual belongs to each of the distinct hybrid classes. NewHybrids is limited to ca 200 loci because of memory constraints, so the best 200 available loci were selected on the basis of their being different and fixed in each of the two nominated parental populations, and then on avgPIC. 
 
-To generate an input file for NewHybrids, use the function
+To run a NewHybrids analysis you need to have installed NewHybrids (http://ib.berkeley.edu/labs/slatkin/eriq/software/software.htm#NewHybs)[http://ib.berkeley.edu/labs/slatkin/eriq/software/software.htm#NewHybs]. 
 
-```{r, eval=T}
-glnew <- gl2nhyb(gl, outfile = file.path(tempdir(),"nhyb.txt"))
+```{r, eval=F}
+glnew <- gl.nhybrids(testset.gl)
 ```
 
-with appropriate options set, for example:
 
-```{r, eval=FALSE}
-gl.new <- gl2nhyb(gl, outfile = "nhyb.txt", p0 = NULL,p1 = NULL, t = 0, m = "random")
-
-```
-Refer to help (?gl2nhyb) for further information.
+Refer to help (?gl.nhybrids) for further information.
 This function compares two sets of parental populations to identify loci that exhibit a fixed difference, returns an genlight object with the reduced data, and creates an input file for the program NewHybrids using the top 200 loci. In the absence of two identified parental populations, the script will select a random set 200 loci only (method=random) or the first 200 loci ranked on information content (AvgPIC).
 
 The resultant NewHybrids input file is then passed to the program NewHybrids outside the R environment. Refer to the NewHybrids documentation to continue.

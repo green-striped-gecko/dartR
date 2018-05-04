@@ -4,10 +4,10 @@
 \alias{gl.assign}
 \title{Assign an individual of unknown provenance to population}
 \usage{
-gl.assign(gl, id, nmin = 10, dim = NULL, alpha = 0.99, t = 0)
+gl.assign(x, id, nmin = 10, dim = NULL, alpha = 0.01, t = 0, v = 2)
 }
 \arguments{
-\item{gl}{-- name of the input genlight object [required]}
+\item{x}{-- name of the input genlight object [required]}
 
 \item{id}{-- identity label of the focal individual whose provenance is unknown [required]}
 
@@ -15,9 +15,11 @@ gl.assign(gl, id, nmin = 10, dim = NULL, alpha = 0.99, t = 0)
 
 \item{dim}{-- number of dimensions to retain in the dimension reduction [default k, number of populations]}
 
-\item{alpha}{-- probability level for bounding ellipses in the PCoA plot [default 0.99]}
+\item{alpha}{-- probability level for bounding ellipses in the PCoA plot [default 0.05]}
 
 \item{t}{-- populations to retain for consideration; those for which the focal individual has less than or equal to t loci with private alleles [default 0]}
+
+\item{v}{-- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default 2]}
 }
 \value{
 A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
@@ -59,7 +61,7 @@ Each of these approaches provides evidence, none are 100% definitive. They need 
 \examples{
 x <- testset.gl
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.95, t=1)
+x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.05, t=1)
 
 }
 \author{
