@@ -19,7 +19,7 @@
 #'    gl <- gl.merge.pop(testset.gl, old=c("EmsubRopeMata","EmvicVictJasp"), new="Outgroup")
 #' }
 
-gl.merge.pop <- function(x, old=Null, new=Null, v=2) {
+gl.merge.pop <- function(x, old=NULL, new=NULL, v=2) {
 
   if (v > 0) {
     if (length(old) == 1) {

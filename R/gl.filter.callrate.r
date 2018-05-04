@@ -5,7 +5,7 @@
 #' lower than a specified value. The script will also filter out loci (or specimens) in SilicoDArT (presence/absence) datasets where the call rate
 #' is lower than the specified value. In this case, the data are missing owing to low coverage.
 #'
-#' @param  -- name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]
+#' @param  x name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]
 #' @param method -- "loc" to specify that loci are to be filtered, "ind" to specify that specimens are to be filtered [default "loc"]
 #' @param threshold -- threshold value below which loci will be removed [default 0.95]
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]

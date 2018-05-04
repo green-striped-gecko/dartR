@@ -10,6 +10,8 @@
 #' @param fd -- name of the list of matricies output by gl.collapse.recursive run with test=TRUE [required]
 #' @param prefix -- a string to be used as a prefix in generating the matrix of fixed differences (stored to disk) and the recode
 #' table (also stored to disk) [default "fd_sig"]
+#' @param delta Default 0.02
+#' @param reps number of repetition. Default 1000.
 #' @param alpha -- significance level for test of false positives [default 0.05]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A list containing the gl object x and the following square matricies
@@ -22,8 +24,6 @@
 #'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation], otherwise NAs
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
-#' @examples
-#' fd <- gl.collapse.recursive(fd, prefix="test", alpha=0.05, v=2)
 
 gl.collapse.pval <- function(fd, prefix="fd.sig", delta=0.02, reps=1000, alpha=0.05, v=2) {
   

@@ -7,9 +7,9 @@
 utils.recalc.callrate(x, v = 2)
 }
 \arguments{
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{gl}{-- name of the genlight object containing the SNP data [required]}
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 The modified genlight object

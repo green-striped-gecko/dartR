@@ -13,6 +13,10 @@ gl.collapse.pval(fd, prefix = "fd.sig", delta = 0.02, reps = 1000,
 \item{prefix}{-- a string to be used as a prefix in generating the matrix of fixed differences (stored to disk) and the recode
 table (also stored to disk) [default "fd_sig"]}
 
+\item{delta}{Default 0.02}
+
+\item{reps}{number of repetition. Default 1000.}
+
 \item{alpha}{-- significance level for test of false positives [default 0.05]}
 
 \item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
@@ -35,9 +39,6 @@ the resultant OTUs.
 }
 \details{
 The recode table and final distance matrix are stored to disk as csv files.
-}
-\examples{
-fd <- gl.collapse.recursive(fd, prefix="test", alpha=0.05, v=2)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

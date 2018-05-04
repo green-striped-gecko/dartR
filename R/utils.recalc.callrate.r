@@ -5,7 +5,7 @@
 #' but the call rate will change when some individuals are removed from the dataset. This script recalculates the callrate
 #' and places these recalculated values in the appropriate place in the genlight object.
 #'
-#' @param gl -- name of the genlight object containing the SNP data [required]
+#' @param x -- name of the genlight object containing the SNP data [required]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)

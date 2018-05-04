@@ -8,6 +8,8 @@ gl.filter.callrate(x, method = "loc", threshold = 0.95, recalc = TRUE,
   v = 2)
 }
 \arguments{
+\item{x}{name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
+
 \item{method}{-- "loc" to specify that loci are to be filtered, "ind" to specify that specimens are to be filtered [default "loc"]}
 
 \item{threshold}{-- threshold value below which loci will be removed [default 0.95]}
@@ -15,8 +17,6 @@ gl.filter.callrate(x, method = "loc", threshold = 0.95, recalc = TRUE,
 \item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]}
 
 \item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
-
-\item{--}{name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
 }
 \value{
 The reduced genlight or genind object, plus a summary

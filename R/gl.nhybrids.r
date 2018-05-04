@@ -34,10 +34,10 @@
 #' @param t -- sets the level at which a gene frequency difference is considered to be fixed [default 0]
 #' @param method -- specifies the method (random or AvgPIC) to select 200 loci for NewHybrids [default random]
 #' @param nhyb.directory -- directory that holds the NewHybrids executable file e.g. C:/NewHybsPC [default NULL]
-#' @param burnIn -- number of sweeps to use in the burn in [default 10000]
+#' @param BurnIn -- number of sweeps to use in the burn in [default 10000]
 #' @param sweeps -- number  of  sweeps  to  use  in  computing  the  actual Monte Carlo averages [default 10000]
 #' @param GtypFile -- name of a file containing the genotype frequency classes [default TwoGensGtypFreq.txt]
-#' @param AFPrior -- name of the file containing prior allele frequency information [default NULL]
+#' @param AFPriorFile -- name of the file containing prior allele frequency information [default NULL]
 #' @param PiPrior -- Jeffreys-like priors or Uniform priors for the parameter pi [default Jeffreys]
 #' @param ThetaPrior -- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
@@ -138,7 +138,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt",
         cat("  No fixed differences between parental populations \n")
         if(method=="random") {cat("    Selecting ca 200 random loci\n")}
         if (method=="avgpic") {cat("    Selecting 200 loci with most information content (AvgPIC)\n")}
-        tmp <- gl.subsample.loci(gl, 200, method=m)
+        tmp <- gl.subsample.loci(gl, 200, method=method)
         gl2 <- as.matrix(tmp)
         flag <- "bothparnonefixed"
       } else {
@@ -158,7 +158,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt",
       cat("  Only one parental population specified \n")
       if(method=="random") {cat("    Selecting ca 200 random loci\n")}
       if (method=="avgpic") {cat("    Selecting 200 loci with most information content (AvgPIC)\n")}
-      tmp <- gl.subsample.loci(gl, 200, method=m)
+      tmp <- gl.subsample.loci(gl, 200, method=method)
       gl2 <- as.matrix(tmp)
       gl.reduced <- NULL
       flag <- "onepar"

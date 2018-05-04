@@ -24,19 +24,19 @@ gl.nhybrids(gl, outfile = "nhyb.txt", p0 = NULL, p1 = NULL, t = 0,
 
 \item{nhyb.directory}{-- directory that holds the NewHybrids executable file e.g. C:/NewHybsPC [default NULL]}
 
+\item{BurnIn}{-- number of sweeps to use in the burn in [default 10000]}
+
 \item{sweeps}{-- number  of  sweeps  to  use  in  computing  the  actual Monte Carlo averages [default 10000]}
 
 \item{GtypFile}{-- name of a file containing the genotype frequency classes [default TwoGensGtypFreq.txt]}
+
+\item{AFPriorFile}{-- name of the file containing prior allele frequency information [default NULL]}
 
 \item{PiPrior}{-- Jeffreys-like priors or Uniform priors for the parameter pi [default Jeffreys]}
 
 \item{ThetaPrior}{-- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]}
 
 \item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
-
-\item{burnIn}{-- number of sweeps to use in the burn in [default 10000]}
-
-\item{AFPrior}{-- name of the file containing prior allele frequency information [default NULL]}
 }
 \value{
 The reduced genlight object, if parentals are provided; output of NewHybrids to disk
