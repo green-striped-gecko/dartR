@@ -16,7 +16,9 @@ Package SNPRelate relies on a bit-level representation of a SNP dataset that com
 objects and associated files. This function saves a genlight object to a gds format file.
 }
 \examples{
+\dontrun{
 gl2gds(testset.gl)
+}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

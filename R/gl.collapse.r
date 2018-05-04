@@ -24,8 +24,10 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
+#' \dontrun{
 #' fd <- gl.fixed.diff(testset.gl, tloc=0.05)
 #' gl <- gl.collapse(fd, recode.table="testset_recode.csv",tpop=1)
+#' }
 
 gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, v=2) {
   
