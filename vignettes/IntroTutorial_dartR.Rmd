@@ -254,7 +254,7 @@ To load your own data in, you need the csv file provided by DArT (e.g. mydata.cs
 
 ```{r, eval=FALSE}
 
-gl <- gl.read.dart(filename="mydata.csv", covfilename = "my.metadata.csv")
+gl <- gl.read.dart(filename="mydata.csv", ind.metafile = "my.metadata.csv")
 ```
 
 # Working with DArT Genlight Objects
@@ -488,7 +488,7 @@ Filtering of data is often necessary to make sure only high quality loci (few mi
 2. Fitler by monomorphic loci (```gl.filter.monomorphs```)(as they do not provide information for population structure and simply slow the analysis)
 3. Filter by amount of missing data (```gl.filter.callrate, method="loc"```) per locus
 4. Filter to remove all but one of multiple snps in the same fragment (```gl.filter.secondaries```)
-5. Filter by amount of missing data per individual (```gl.filter.callrate, method="ind"```)
+5. Filter individuals by amount of missing data (```gl.filter.callrate, method="ind"```)
 
 Additional filters to apply could be for excluding possible loci under selection (```gl.outflank```), checking loci for linkage disequilibrium (```gl.report.ld```) or filtering for loci out of Hardy-Weinberg-Equilibrium (```gl.filter.hwe```)
 
@@ -547,7 +547,7 @@ Note that filters that result in the removal of populations or individual have o
 
 ## Population (=higher level grouping) reassignment
 
-Recall that the metadata file provided when the data are initially input contains information assigned to each individual including, often at a minimum, population assignment. Population recode tables are csv files (comma delimited text files) that can be used to reassign individuals to different populations (groups), thus amalgamating populations or deleting populations from the genlight object.
+Recall that the metadata file provided when the data are initially input contains information assigned to each individual including, often at a minimum, population assignment. There are various ways to reassign individuals to populations, rename populations or individuals, delete populations or individuals after the data have been read in to a genlight object. 
 
 
 The initial population assignments via the metafile can be viewed via:
@@ -568,8 +568,72 @@ It is easy to create a barplot on the number of individuals per population:
 barplot(table(pop(gl)), las=2)
 ```
 
+If you have only a few reassignments, the simplest way is to use one or more of the scripts
 
-You can reassign individuals to new populations using a recode table, that is, a table containing the old population assignments and the new population assignments as two columns. The quickest way to construct a recode table for an active genlight object is using
+gl <- gl.keep.pop(gl, c(pop1, pop5, pop7))               # Retains only populations 1, 5 and 7
+gl <- gl.drop.pop(gl, c(pop2, pop3, pop4, pop6))         # Deletes populations 2, 3, 4, 6
+gl <- gl.merge.pop(gl, old=c("pop1","pop2"), new="pop1") # Merges populations 1 and 2 as pop1
+gl <- gl.merge.pop(gl, old=c("pop1"), new="outgroup")    # Renames population 1 to a population labelled outgroup
+
+Try these out for yourself.
+
+If only a few populations are involved, then the best option is to use the gl.drop.pop or gl.keep.pop functions.
+
+```{r, eval=FALSE}
+glnew3 <- gl.keep.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+```
+will delete all individuals in all populations except those listed.
+
+```{r, eval=FALSE}
+glnew3 <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+```
+will delete all individuals in the listed populations.
+
+```{r, eval=FALSE}
+glnew3 <- gl.merge.pop(gl, old=c("EmsubRopeMata","EmvicVictJasp"), new="outgroup")
+```
+will reassign individuals in populations EmsubRopeMata and EmvicVictJasp to a new population called outgroup.
+
+```{r, eval=FALSE}
+glnew3 <- gl.merge.pop(gl, old="EmsubRopeMata", new="Emydura_victoriae")
+```
+will rename population EmvicVictJasp to Emydura_victoriae.
+
+Note that there is an option for recalculating the relevant individual
+metadata, and for removing resultant monomorphic loci.
+
+## Individual reassignment
+
+You can reassign individuals to new populations in a number of ways.A similar set of scripts apply to individuals.
+
+The initial individual labels entered at the time of reading the data into the genlight object can be viewed via:
+
+```{r}
+#individual names
+indNames(gl)
+
+```
+
+The individuals can be manipulated using
+
+gl <- gl.keep.ind(gl, c(ind1, ind5, ind7))               # Retains only individuals labelled ind1, 5 and 7
+gl <- gl.drop.pop(gl, c(ind2, ind3, ind4, ind6))         # Deletes populations 2, 3, 4, 6
+
+Try these out for yourself, by listing the individuals using indNames() and then deleting a selected few.
+
+```{r, eval=FALSE}
+glnew3 <- gl.keep.ind(gl, ind.list=c("AA019073","AA004859"))
+```
+will delete all individuals except those listed.
+
+```{r, eval=FALSE}
+glnew3 <- gl.drop.pop(gl, ind.list=c("AA019073","AA004859"))
+```
+will delete all individuals listed.
+
+## Recode tables
+
+Alternatively, reassignment and deletion of populations can be effected using a recode table, that is, a table stored as a csv file containing the old population assignments and the new population assignments as two columns. The quickest way to construct a recode table for an active genlight object is using
 
 ```{r, eval=T}
 gl.make.recode.pop(gl, outfile = "new_pop_assignments.csv")
@@ -577,7 +641,7 @@ gl.make.recode.pop(gl, outfile = "new_pop_assignments.csv")
 ```
 
 ```{block, type="hint"}
-Please note we are using the ```tempdir()``` to read/write files to a location in all examples. Feel free to change that to your needs by just providing a path to the folder of your liking.
+Please note we are using the ```tempdir()``` to read/write files to a location in all examples. Feel free to change that to your needs by just providing a path to the folder of your liking. Normally, this would be your working directory specified with setwd().
 ```
 
 
@@ -611,11 +675,10 @@ glnew2 <- gl.edit.recode.pop(gl)
 ```
 
 This command will bring up a window with a table showing the existing population assignments, with a second column available for editing. When the window is closed, the assignments will be applied. If you have optionally nominated a pop.recode file, a recode table will be written to file for future use.
+
 Again, you can check that the new assignments have been applied with ```levels(pop(gl))```.
 
-
-
-## Deleting populations
+###Deleting populations with a recode table
 
 You can delete selected populations from a genlight object using the "Delete" keyword in the population recode file. By reassigning populations to Delete, you are flagging them for deletion, and when the recode table is applied, individuals belonging to those populations will be deleted from the genlight object, and any resultant monomorphic loci will be removed.
 
@@ -627,26 +690,9 @@ Try deleting some populations, say the outgroup populations (EmsubRopeMata and E
 ```table(pop(gl))```
 ```
 
-
-If only a few populations are involved, then the best option is to use the gl.drop.pop or gl.keep.pop functions.
-
-```{r, eval=FALSE}
-glnew3 <- gl.keep.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-```
-will delete all individuals in all populations except those listed.
-
-```{r, eval=FALSE}
-glnew3 <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-```
-will delete all individuals in the listed populations.
-
-Note that there are options for recalculating the relevant individual
-metadata, and for removing resultant monomorphic loci.
-
-## Relabeling individuals
+### Relabeling and deleting individuals with a recode table
 
 Recall that the genlight object contains labels for each individual. It obtains these names from the csv datafile provided by DArT at the time of reading these data in. There may be reasons for changing these individual labels - there may have been a mistake, or new names need to be provided in preparation for analyses to be included in publications. 
-
 
 Individual recode tables are csv files (comma delimited text files) that can be used to rename individuals in the genlight object or for deleting individuals from the genlight object.
 These population assignments can be viewed using
@@ -685,22 +731,19 @@ Again, you can check that the new assignments have been applied with ```indNames
 ## Deleting individuals
 
 You can delete selected individuals from a genlight object using the "Delete" keyword in the individual recode file. By renaming individuals to Delete, you are flagging them for deletion, and when the recode table is applied, those individuals will be deleted from the genlight object, and any resultant monomorphic loci will be removed.
+
 Again, you can check that the new assignments have been applied and requested populations deleted with ```indNames(gl)```.
-
-If only a few populations are involved, then the best option is to use the gl.drop.pop or gl.keep.pop functions.
-
-```{r, eval=FALSE}
-glnew3 <- gl.keep.ind(gl, ind.list=c("AA019073","AA004859"))
-```
-will delete all individuals except those listed.
-
-```{r, eval=FALSE}
-glnew3 <- gl.drop.pop(gl, ind.list=c("AA019073","AA004859"))
-```
-will delete all individuals listed.
 
 Note that there are options for recalculating the relevant individual
 metadata, and for removing resultant monomorphic loci.
+
+## Recalculating locus metadata
+
+When you delete individuals or populations, many of the locus metadata (such as Call Rate) are no longer correct. You can recalculate the locus metadata using the script
+
+gl <- gl.recalc.metrics(gl)
+
+This is obviously important if you are drawing upon locus metadata in your calculations or filtering. The script will also optionally remove monomorphic loci.
 
 ## Using R commands to manipulate the genlight object
 
@@ -982,13 +1025,32 @@ gl.tree.nj(glnew, type="fan")
 
 # Fixed Difference Analysis
 
-The PCoA approach outlined above considers allele frequency differences between individuals or populations as a basis for constructing a distance matrix which is then used by the PCoA algorithms to execute the ordination. There is some advantage in considering only fixed differences between populations, that is, allelic differences where the alleles have come to fixation to alternative states in populations taken pairwise.
+The PCoA approach outlined above considers allele frequency differences between individuals or populations as a basis for constructing a distance matrix which is then used by the PCoA algorithms to execute the ordination. 
 
-A fixed difference between two populations at a specific locus occurs when the population share no alleles at that locus. Allele frequencies may ebb and wane, but once a locus becomes fixed for an allele or suite of alleles, there is no returning until you get mutation or gene flow.  The accumulation of fixed differences between two populations is considered a robust indication of lack of gene flow. In a nutshell, fixed differences are summed over populations taken pairwise, and when two populations have no fixed differences (or insubstantial fixed differences), the populations are amalgamated and the process repeated until there is no further reduction (Georges and Adams, 1996). The final set of taxa are diagnosable by the presence or absence of a set of alleles at multiple loci.
+There is some advantage in considering only fixed differences between populations to examine structure, that is, to use allelic differences where the alleles have come to fixation to alternative states in populations taken pairwise.
+
+A fixed difference between two populations at a specific locus occurs when the population share no alleles at that locus. Allele frequencies may ebb and wane, but once a locus becomes fixed for an allele or suite of alleles, there is no returning save a convergent mutation (rare) or gene flow.  The acquistion of a fixed difference between two populations is a significant biological event. Because it takes only one individual to disperse between two populations per generation to retard divergence, the accumulation of fixed differences between two populations is considered a robust indication of lack of gene flow. 
+
+In a nutshell, fixed differences are summed over populations taken pairwise, and when two populations have no fixed differences (or insubstantial fixed differences), the populations are amalgamated and the process repeated until there is no further reduction (Georges and Adams, 1996). The final set of taxa are diagnosable by the presence or absence of a set of alleles at multiple loci.
+
+As samples taken from populations for sequencing are finite, there are sampling issued to consider. There is an asymmetry in these considerations. Populations can be amalgamated on the basis of shared alleles at all loci with confidence, because it only takes one individual from one population to share alleles at a locus with the other population to conlude that there is no fixed difference at that locus. So the process of amalgamating populations based on shared alleles at all loci is robust.
+
+This is not the case when interpeting fixed differences between two populations as a basis for their diagnosability. Because of the finite sample sizes, an observed fixed difference may have arisen because the populations from which the samples were drawn do not share alleles at a particular locus, or because there is a non-trivial probability that the observed fixed difference arose through sampling error (a false positive).
+
+Distinguishing between real fixed differences and false positives is difficult, because we do not have knowledge of the true allele fequencies for each of the two populations being compared. Our approach to dealing with this is to turn to simulation. Briefly, we take the observed allele frequencies for the two populations under consideration, take random samples of the allele profiles for each of the observed n1 and n2 individuals, count the number of fixed differences, and repeat this, say 1000 times. This provides an estimate of the expected number of fixed differences for the two populations.
+
+Because the two populations may have true fixed differences, this estimate of expected fixed differences conflates true fixed differences with false positives. We accommodate this by asking you to make a judgement. How extreme does the divergence between the two populations have to be (say 99:1%, 1:99%) for you to regard a sample fixed difference (100:0, 0:100) as a positive rather than a false positive? A value of delta = 0.02 (98:2, 2:98) might be a reasonable compromise. Then, any fixed differences that arise in the samples from true allele frequencies of less extreme than 98:2, 2:98 are considered false positives. This decision accommodates the possiblity of true fixed differences in the populations from which we draw the simulated samples.
+
+The script gl.collapse.recursive() optionally calculates the expected number of false positives (and its standard error), and compares it with the observed number of fixed differences to yield a p value for the statistical significance of the the result.
+
+The script gl.collapse.pval() takes the final set amalgamated populations arising from gl.collapse.recursive(), and further amalgamates populations based on lack of statistical significance of the observed fixed differences.
+
+The resulting set of aggregated populations can be regarded as diagnostic OTUs for which you can be confident there is strong support for lack of recent or contemporary gene flow between them, such that phylogenetic approaches to extracting a bifrucating pattern of ancestry and descent are appropriate.
+
 The script
 
 ```{r, eval=FALSE}
-gl.collapse.recursive(gl, t=0)
+fd <- gl.collapse.recursive(gl, t=0)
 ```
 
 will ultimately yield a grouping of aggregate populations that are diagnosable from each other by one or more fixed allelic differences. Here is the output, abridged:
@@ -997,37 +1059,45 @@ Let's refresh the data again, to bring back in the outgroups, then run the analy
 
 ```{r, echo=FALSE, eval=FALSE}
 gl <- testset.gl
-gl.collapse.recursive(gl, t=0)
+fd <- gl.collapse.recursive(gl, t=0)
 
-
-Under ideal conditions, the true phylogeny can be uniquely recovered from the true measures of divergence between OTUs. So one approach to recovering phylogenies is to extract the phylogeny that is most consistent with the estimated distances between OTUs. To avoid introducing artificial departure of the distances from the underlying tree, a metric distance needs to be chosen, and for SNP datasets we choose Euclidean Distance. This differs from Rogers D (Rogers, 1972) by a constant multiplier, and so the two measures are essentially the same.
-
-The script for distance phylogeny is gl2phylip() which calculates Euclidean distances using dist {stats} then outputs the data in a form suitable for input to the Phylip package written by Joseph Felsenstein (http://evolution.genetics.washington.edu/phylip.html) (Felsenstein, 1989). The input file can include replicated distance matrices for the purpose of bootstrapping. 
-
-Assuming the data have been appropriately filtered before saving, the commands to do this are
-
-```{r, eval=FALSE}
-gl <- testset.gl
-phy <- gl2phylip(gl, outfile="turtle.phy", bstrap=1000)
 ```
 
+The output comprises a list of matricies.
 
-A full series of distance matrices and associated recode tables have been filed to disk for later interrogation and use.
+fd$gl -- input genlight object;
+fd$fd -- raw fixed differences;
+fd$pcfd -- percent fixed differences
+fd$nobs -- mean no. of individuals used in each comparison
+fd$nloc -- total number of loci used in each comparison
+fd$expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation]
+fd$prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]
 
+A full series of distance matrices and associated recode tables have been filed to disk for later interrogation and use
+
+An option to statistically compare the number of observed fixed differences with those expected to arise by chance given the finite sample sizes is available using test=TRUE. Populations can then be further amalgamated based on lack of significance using the script gl.collapse.pval().
+
+```{r, echo=FALSE, eval=FALSE}
+gl <- testset.gl
+fd <- gl.collapse.recursive(gl, test=TRUE, delta=0.02, reps=1000, t=0, v=3)
+fd.sig <- gl.collapse.pval(fd, prefix="fd_sig", delta=0.02, alpha=0.05, v=3)
+
+```
+
+The output is a list of matricies as above, but for the aggregated populations. 
 
 The outcome is unequivocal. All of the coastal Emydura macquarii and those from the Murray-Darling basin amalgamate into one OTU on the basis of no fixed differences between them (Group 1.1). The Cooper Creek animals form a separate diagnosable unit (OTU) (Group 1.2). The populations that did not amalgamate outgroup taxa - Emydura victoriae and Emydura subglobosa - remain well supported. 
 
-
 You can see the power of this approach for defining diagnosable taxa, taxa that are free of contemporary or recent geneflow and so on independent evolutionary trajectories.
 
-One challenge to this approach stems from low sample sizes. The probability of all alleles in one such population having one allelic state, say the homozygous reference allele 0/0 (2-row format), and all the individuals in the other population having the alternate allelic state, homozygous 1/1, by chance alone depends on the allelic frequency in the parent populations and on the sample size (2n for diploids). 
+##Distance Phylogeny on resultant OTUs
+ 
+The script for distance phylogeny is gl2phylip() which calculates Euclidean distances using dist {stats} then outputs the data in a form suitable for input to the Phylip package written by Joseph Felsenstein (http://evolution.genetics.washington.edu/phylip.html) (Felsenstein, 1989). The input file can include replicated distance matrices for the purpose of bootstrapping. 
 
-
-```{block, type="hint"}
-The consequence of low sample sizes is to generate spurious fixed differences, that is, fixed differences arising via sampling error. The probability of such errors compounds as more and more SNP loci are examined
+```{r, eval=FALSE}
+gl <- fd.sig$gl
+phy <- gl2phylip(gl, outfile="turtle.phy", bstrap=1000)
 ```
-
-When the number of loci examined gets up into the 10s of thousands and the sample sizes are small (say < 5 individuals per population), the probability of a spurious fixed difference between two populations rises to unacceptable levels. To manage this, it is wise to ensure that all populations are sampled with 10 or more individuals (2n=20), whereby the probability of generating spurious fixed differences is vanishingly small. The compounded probability of one spurious fixed difference in 100,000 loci is complicated to calculate without detailed knowledge of parental allele frequencies, but remains manageably small for n=10. 
 
 # Isolation by distance plot
 
@@ -1053,7 +1123,7 @@ There are a number of approaches and a large range of software packages for reco
 
 ## Distance Methods
 
-Under ideal conditions, the true phylogeny can be uniquely recovered from the true measures of divergence between OTUs. So one approach to recovering phylogenies is to extract the phylogeny that is most consistent with the estimated distances between OTUs. To avoid introducing artificial departure of the distances from the underlying tree, a metric distance needs to be chosen, and for SNP datasets we choose Euclidean Distance. This differs from Rogers D (Rogers, 1972) by a constant multiplier, and so the two measures are essentially the same.
+Under ideal conditions, the true phylogeny can be uniquely recovered from the true measures of divergence between OTUs (that is, tree distances define a unique tree). So one approach to recovering phylogenies is to extract the phylogeny that is most consistent with the estimated distances between OTUs. To avoid introducing artificial departure of the distances from the underlying tree, a metric distance needs to be chosen, and for SNP datasets we choose Euclidean Distance. This differs from Rogers D (Rogers, 1972) by a constant multiplier, and so the two measures are essentially the same.
 
 The script for distance phylogeny is gl2phylip() which calculates Euclidean distances using dist {stats} then outputs the data in a form suitable for input to the Phylip package written by Joseph Felsenstein (http://evolution.genetics.washington.edu/phylip.html) (Felsenstein, 1989). The input file can include replicated distance matrices for the purpose of bootstrapping. 
 
@@ -1074,16 +1144,15 @@ As with allozyme data sets of the past, SNP datasets present particular challeng
 
 One way of overcoming this is to randomly allocate the SNP state for heterozygous loci to one or the other homozygous states, that is, to add background noise to the data from which the phylogenetic signal can still be extracted without introducing a systematic bias. We convert diplotypes to haplotypes amenable to phylogenetic analysis with ```gl2fasta()``` using method 1 to 4 (see ?gl2fasta for an explanation or the various methods availalbe)
 
-
 The way to do this is to use the command: 
 ```{r, eval=FALSE}
 gl2fasta(gl, method=2, outfile="nohets.fasta")
 ```
 
 
-which concatenates the sequences of the DNA fragments, trimmed of adaptors, into a fastA file, having first randomly allocated the heterozygotic states. This set of "composite haplotypes"" is then suitable for analysis using the diverse range of phylogenetic packages available.
-The reason for including the full trimmed sequences, most of the bases of which are monomorphic across individuals, is to allow for application of various mutational models in likelihood analysis. These require estimates of base frequencies and the frequency of transitions and transversions and the software to generate these estimates and factor them in to the phylogenetic analysis e.g. ModelTest (Posada and Crandall 1998) require the full sequence information.
+which concatenates the sequences of the DNA fragments, trimmed of adaptors, into a fastA file, having first randomly allocated the heterozygotic states. This set of "composite haplotypes" is then suitable for analysis using the diverse range of phylogenetic packages available.
 
+The reason for including the full trimmed sequences, most of the bases of which are monomorphic across individuals, is to allow for application of various mutational models in likelihood analysis. These require estimates of base frequencies and the frequency of transitions and transversions and the software to generate these estimates and factor them in to the phylogenetic analysis e.g. ModelTest (Posada and Crandall 1998) require the full sequence information.
 
 The base frequencies and transition and transversion ratios can in any case be obtained using
 
@@ -1097,7 +1166,6 @@ Monomorphic sites are parsimony uninformative, so a more compact output fastA fi
 ```{r, eval=FALSE}
 gl2fasta(gl, method=4, outfile="nohets.fasta")
 
-
 ```
 
 ## Using Ambiguity Codes
@@ -1106,24 +1174,35 @@ Another common approach is to output the concatenated sequences using ambiguity 
 ```{r, eval=FALSE}
 gl2fasta(gl, method=1, outfile="ambcodes.fasta")
 
-
 ```
 
 Maximum likelihood packages like RAxML Stamatakis (2014) cater for the ambiguities by adjusting tip likelihoods as described by Felsenstein (2004:255).
 Again, it is possible to output only the variable sites to the fastA file.
+
 ```{r, eval=FALSE}
 gl2fasta(gl, method=3, outfile="ambcodes.fasta")
 
 ```
 
-
 These data can be used in some Maximum Likelihood software by providing base frequencies and transition and transversion ratios separately. They can be calculated with
+
 ```{r}
 gl.report.bases(testset.gl)
 ```
 
-# Population Assignment
+##SVD Quartets
 
+Concatenating the sequence tags or using data comprising of the SNP locus alone has been heavily criticised in some quarters because the approach does not accommodate the possibility that the phylogeny for each SNP may depart from the species tree. Gene trees need to be estimated separately and then combined to estimate the species tree.
+
+One such approach is to use SVD Quartets, that is, to estimate the relationships between taxa taken four at a time, then combine these to estimate the species tree.
+
+This is implemented in dartR using script gl2svdquartets(), which generates the nexus file for input to PAUP for the analysis.
+
+There are two approaches to preparing the data. The first enters the genotypes using two lines, one for reference state, one for alternate state. The second approach enters one genotype per line, accommodating the heterozygosity by using standard ambiguity codes. These are given as options in gl2svdquartets().
+
+If using either of these approaches, it is important to filter out secondary SNPs from sequence tags using gl.filter.secondaries(), prior to analysis.
+
+# Population Assignment
 
 Assigning individuals of unknown provenance to populations of known provenance is a challenging exercise, and several approaches have been suggested. Perhaps the simplest is to calculate the probabilities of yielding the observed genotype of the unknown individual given the observed allele frequencies in each the target population. Using this approach, the individual is assigned notionally to those populations for which this probability is highest; populations for which the probability is lower than some level of significance are eliminated from further consideration. This approach was first applied in a study of microsatellite markers in bear populations (Paetkau et al. 2004) and subsequently applied using classical and Bayesian approaches to estimating probabilities (Goetz and Thaller 1998; Blanchong et al. 2002).
 
@@ -1234,13 +1313,15 @@ glnew <- gl2nhyb(gl, outfile = file.path(tempdir(),"nhyb.txt"))
 with appropriate options set, for example:
 
 ```{r, eval=FALSE}
-gl.new <- gl2nhyb(gl, outfile = "nhyb.txt", p0 = NULL,p1 = NULL, t = 0,   m = "random")
+gl.new <- gl2nhyb(gl, outfile = "nhyb.txt", p0 = NULL,p1 = NULL, t = 0, m = "random")
 
 ```
 Refer to help (?gl2nhyb) for further information.
 This function compares two sets of parental populations to identify loci that exhibit a fixed difference, returns an genlight object with the reduced data, and creates an input file for the program NewHybrids using the top 200 loci. In the absence of two identified parental populations, the script will select a random set 200 loci only (method=random) or the first 200 loci ranked on information content (AvgPIC).
 
 The resultant NewHybrids input file is then passed to the program NewHybrids outside the R environment. Refer to the NewHybrids documentation to continue.
+
+If you have New Hybrids installed on your machine, then providing the directory with the New Hybrids executable (e.g. C:/workspace/R_analysis/NewHybsPC) will result in the analysis being executed. The advantage of this is that the final output is a little more elaborative.
 
 
 ## Phylip

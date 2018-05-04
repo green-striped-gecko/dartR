@@ -5,22 +5,22 @@
 #' This script recalculates the FreqHomRef and places these recalculated values in the appropriate place in the genlight object.
 #' Note that the frequency of the homozygote reference SNPS is calculated from the individuals that could be scored.
 #'
-#' @param gl -- name of the genlight object containing the SNP data [required]
-#' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
+#' @param x -- name of the genlight object containing the SNP data [required]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' result <- dartR:::utils.recalc.freqhomref(testset.gl)
 
-utils.recalc.freqhomref <- function(gl, v=1) {
- x <- gl
-   
-  if(class(x) == "genlight") {
-     #cat("Reporting for a genlight object\n")
-   } else {
-     cat("Fatal Error: Specify a genlight object\n")
-     stop()
+utils.recalc.freqhomref <- function(x, v=2) {
+
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for utils.recalc.freqhomref!\n"); stop("Execution terminated\n")
   }
+  if (v > 0) {
+    cat("Starting utils.recalc.freqhomref: Recalculating frequency of homozygotes, reference allele\n")
+  }
+  
 
   # Do the deed
      t <- as.matrix(x)
@@ -28,7 +28,9 @@ utils.recalc.freqhomref <- function(gl, v=1) {
        x@other$loc.metrics$FreqHomRef[i] <- length(which(t[,i] == 0))/(nInd(x)-length(which(is.na(t[,i]))))
      }
 
-   if (v>0) {cat("FreqHomRef recalculated\n")}
+     if (v > 0) {
+       cat("Completed utils.recalc.freqhomref\n\n")
+     }
    
    return(x)
 }
