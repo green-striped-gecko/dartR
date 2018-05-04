@@ -25,7 +25,7 @@ returns a list of the following components: Dgen (the genetic distance matrix), 
 }
 \description{
 This functions performs an isolation by distance analysis based on a mantel test and also produces an isolation by distance plot. If a genlight object with coordinates is provided) then a Euclidean and genetic distance matrix are calculated (currently. Currently only pairwise Fst between population is implemented. Coordinates are expected as lat long and converted to Google Earth Mercator projection. If coordinates are already projected, set projected=TRUE. If such an object is provided an isolation by distance analysis and plot is performed on log(Euclidean distance) against population based pairwise Fst/1-Fst (see  Rousseau's distance measure. Genetics April 1, 1997 vol. 145 no. 4 1219-1228)
-You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), using the functions  \link[vegan]{mantel} (package vegan), \link[StAMPP]{stamppFst} (package StAMPP) and Mercator in package dismo).
+You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), using the functions  \link[vegan]{mantel} (package vegan), \link[StAMPP]{stamppFst} (package StAMPP) and Mercator in package dismo.
 }
 \examples{
 \dontrun{
@@ -34,6 +34,9 @@ gl <- gl.ibd(gl=testset.gl)
 }
 \references{
 Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
+}
+\seealso{
+\link[vegan]{mantel}, \link[StAMPP]{stamppFst}
 }
 \author{
 Bernd Gruber (glbugs@aerg.canberra.edu.au)
