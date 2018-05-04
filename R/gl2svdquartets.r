@@ -19,7 +19,9 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
+#' \dontrun{
 #' gl2svdquartets(testset.gl)
+#' }
 
 gl2svdquartets <- function(x, outfile="svd.nex", method=2, v=2) {
   

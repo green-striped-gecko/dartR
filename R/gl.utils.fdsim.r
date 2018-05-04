@@ -1,17 +1,8 @@
 #' Estimate the rate of false positives in a fixed difference analysis
 #'
 #' This is a support script, called by gl.collapse.recursive.
-#' 
-#' The script takes two populations and generates allele frequency profiles for them. It then samples
-#’ an allele frequency for each, at random, and estimates a sampling distribution for those two allele
-#’ frequencies. Drawing two samples from those sampling distributions, it calculates whether or not they
-#’ represent a fixed difference. This is applied to all loci, and the number of fixed differences so
-#’ generated are counted, as an expectation. The script distinguished between true fixed differences (with
-#’ a tolerance of delta), and false positives. The simulation is repeated a given number of times 
-#’ (default=1000)to provide an expectation of the number of false positives, given the observed allele 
-#’ frequency profiles and the sample sizes. The probability of the observed count of fixed differences is
-#’ greater than the expected number of false positives is calculated.
-#'
+#' The script takes two populations and generates allele frequency profiles for them. It then samples an allele frequency for each, at random, and estimates a sampling distribution for those two allele frequencies. Drawing two samples from those sampling distributions, it calculates whether or not they represent a fixed difference. This is applied to all loci, and the number of fixed differences so
+#' generated are counted, as an expectation. The script distinguished between true fixed differences (with a tolerance of delta), and false positives. The simulation is repeated a given number of times (default=1000) to provide an expectation of the number of false positives, given the observed allele frequency profiles and the sample sizes. The probability of the observed count of fixed differences is greater than the expected number of false positives is calculated.
 #' @param gl -- name of the genlight containing the SNP genotypes [required]
 #' @param poppair -- labels of two populations for comparison in the form c(popA,popB) [required]
 #' @param obs -- observed number of fixed differences between the two populations [required]

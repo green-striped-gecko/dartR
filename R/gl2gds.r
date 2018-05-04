@@ -11,7 +11,9 @@
 #' @importFrom SNPRelate snpgdsCreateGeno snpgdsOpen snpgdsSummary snpgdsClose
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
+#' \dontrun{
 #' gl2gds(testset.gl)
+#' }
 
 gl2gds <- function(gl, outfile="gl2gds.gds") {
   

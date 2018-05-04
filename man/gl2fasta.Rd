@@ -48,9 +48,11 @@ The script writes out the composite haplotypes for each individual as a fastA fi
 'TrimmedSequence' to be among the locus metrics (\code{@other$loc.metrics}) and information of the type of alleles (slot loc.all e.g. "G/A") and the position of the SNP in slot position of the ```genlight``` object (see testset.gl@position and testset.gl@loc.all for how to format these slots.)
 }
 \examples{
+\dontrun{
 gl <- gl.filter.repavg(testset.gl,t=1)
 gl <- gl.filter.callrate(testset.gl,t=.98)
 gl2fasta(gl, method=1, outfile="test.fasta")
+}
 }
 \author{
 Bernd Gruber and Arthur Georges (glbugs@aerg.canberra.edu.au)
