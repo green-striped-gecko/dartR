@@ -4,16 +4,18 @@
 \alias{gl.filter.hamming}
 \title{Filters loci in a genlight object based on pairwise Hamming distance between sequence tags}
 \usage{
-gl.filter.hamming(gl = gl, t = 0.2, rs = 5, probar = TRUE)
+gl.filter.hamming(x = gl, t = 0.2, rs = 5, pb = FALSE, v = 2)
 }
 \arguments{
-\item{gl}{-- genlight object [required]}
+\item{x}{-- genlight object [required]}
 
 \item{t}{-- a threshold Hamming distance for filtering loci [default 0.2]}
 
 \item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 4]}
 
-\item{probar}{-- switch to output progress bar [default is false]}
+\item{pb}{-- switch to output progress bar [default FALSE]}
+
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 a genlight object filtered on Hamming distance.

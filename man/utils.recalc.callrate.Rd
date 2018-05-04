@@ -4,12 +4,12 @@
 \alias{utils.recalc.callrate}
 \title{A utility script to recalculate the callrate by locus after some populations have been deleted}
 \usage{
-utils.recalc.callrate(gl, v = 1)
+utils.recalc.callrate(x, v = 2)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing the SNP data [required]}
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 
-\item{v}{-- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]}
+\item{gl}{-- name of the genlight object containing the SNP data [required]}
 }
 \value{
 The modified genlight object

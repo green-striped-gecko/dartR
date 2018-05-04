@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2gds.r
 \name{gl2gds}
 \alias{gl2gds}
-\title{Convert a genlight object to gds format SNPRelate}
+\title{Convert a genlight object to nexus format PAUP SVDquartets}
 \usage{
 gl2gds(gl, outfile = "gl2gds.gds")
 }

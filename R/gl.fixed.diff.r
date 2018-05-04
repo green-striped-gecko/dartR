@@ -9,172 +9,188 @@
 #' probability of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if comparison
 #' between two populations involves sample sizes less than 5, taking into account allele drop-out. The minimum sample 
 #' size for scoring fixed differences between two populations can be set with the parameter nlimit.
+#'
 #' An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
 #' level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
 #' This adjustment can be done with the tloc parameter. For example, tloc=0.05 means that SNP allele frequencies of 
 #' 95,5 and 5,95 percent will be regarded as fixed when comparing two populations at a locus.
 #'
-#' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
+#' @param x -- name of the genlight object containing SNP genotypes [required]
 #' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
-#' @param nlimit -- number of individuals with non-missing SNP scores in the two populations combined, required for 
-#' scoring of fixed differences [default 2]
-#' @param pc -- logical value indicating whether to report fixed difference counts (pc=FALSE) or percentages (pc=TRUE) [default TRUE]
-#' @param v -- verbosity = 0, silent; 1, brief; 2, verbose [default 1]
-#' @return Matrix of percent fixed differences (lower matrix), number of loci (upper matrix)
+#' @param test -- if TRUE, calculate p values for the observed fixed differences [default FALSE]
+#' @param reps -- number of replications to undertake in the simulation to estimate probability of false positives [default 1000]
+#' @param delta -- the threshold value for the minor allele frequency to regard the difference between two populations to be fixed [default 0.02]
+#' @param rm.global.monomorphs -- if TRUE, loci that are monomorphic across all individuals are removed before computation [default TRUE]
+#' @param pb -- if TRUE, show a progress bar on time consuming loops [default FALSE]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @return A list containing the gl object x and the following square matricies
+#'         [[1]] $gl -- the input genlight object;,
+#'         [[2]] $fd -- raw fixed differences;,
+#'         [[3]] $pcfd -- percent fixed differences;,
+#'         [[4]] $nobs -- mean no. of individuals used in each comparison;,
+#'         [[5]] $nloc -- total number of loci used in each comparison;,
+#'         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation],
+#'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
 #' @import adegenet utils
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' #only used the first 20 individuals due to runtime reasons 
-#' mat <- gl.fixed.diff(testset.gl[1:20,], tloc=0.05, nlimit=5)
+#' fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, v=1 )
 #' @seealso \code{\link{is.fixed}}
 
-gl.fixed.diff <- function(gl, tloc=0, nlimit=2, pc=FALSE, v=1) {
-x <- gl
+gl.fixed.diff <- function(x, tloc=0, test=FALSE, delta=0.02, reps=1000, rm.global.monomorphs=TRUE, pb=TRUE, v=2) {
 
+  if (v > 0) {
+    if (tloc > 0) {cat("Starting gl.fixed.diff: Comparing populations for fixed differences with tolerance",tloc,"\n")}
+    if (tloc == 0) {cat("Starting gl.fixed.diff: Comparing populations for absolute fixed differences\n")}
+  }
+  
 # Checking parameter values
 
-  if(class(x) == "genlight") {
-    cat("Analysing a genlight object\n")
-  } else {
+  if(!(class(x) == "genlight")) {
     cat("Fatal Error: Specify a genlight object\n")
-    stop()
+    stop("Execution terminated\n")
   }
-  if (tloc < 0 ) {
-    cat("Error: Parameter tloc should be positive in the range 0 to 0.5, reset to zero\n")
-    tloc <- 0
+  if (tloc > 0.5 || tloc < 0 ) {
+    cat("Fatal Error: Parameter tloc should be positive in the range 0 to 0.5, reset to default of 0\n")
+    stop("Execution terminated\n")
   }
-  if (tloc > 0.5 ) {
-    cat("Error: Parameter tloc should be positive in the range 0 to 0.5, reset to 0.5\n")
-    tloc <- 0.5
+  v <- as.integer(v)
+  if (v < 0 || v > 5){
+    cat("  Fatal Error: Parameter v must be between 0 and 5\n"); stop("Execution terminated\n")
   }
-  if (nlimit < 2) {
-    cat("Error: Minimum value for nlimit is 2 individuals, reset to 2\n")
-    nlimit=2
-  }
-  if (v < 0 || v > 2) {
-    cat("Error: Verbosity must be set to one of 0, silent; 1, brief; 2, verbose. Reset to default of 1\n")
-    v=1
-  }
-  # Checking for and removing monomorphic loci
-    if (v > 0 && pc==TRUE) {
-      x2 <- gl.filter.monomorphs(x,v=0)
-      if (nLoc(x2) < nLoc(x)) {
-        cat("Warning: Monomorphic loci are present and will be used in percentage fixed difference calculations\n")
-      }
-      rm(x2)
+  
+  # Checking count of populations
+    if(nPop(x) < 2) {
+      cat("Fatal Error: Distance calculation requires at least two populations, one or none present\n")
+      stop("Execution terminated\n")
     }
 
+  # Checking for and removing monomorphic loci
+      x2 <- gl.filter.monomorphs(x,v=0)
+      if (nLoc(x2) < nLoc(x)) {
+        if(!rm.global.monomorphs) {
+          if (v > 0) {cat("  Warning: Globally monomorphic loci retained, used in calculations\n")}
+        } else {  
+          if (v > 1) {cat("  Globally monomorphic loci removed\n")}
+        x <- x2  
+        }  
+      }
+      rm(x2)
+
   # Calculate percent allele frequencies
-    gl.mat.sum <- gl.percent.freq(x)
+    ftable <- gl.percent.freq(x, v=v)
 
   # GENERATE A MATRIX OF PAIRWISE FIXED DIFFERENCES
     
   # Report samples sizes for each population
-    if (v > 0){
+    if (v > 2){
       cat("Populations, aggregations and sample sizes")
       print(table(pop(x)))
-      if (min(table(pop(x))) < 5 ){
-        cat("Warning: fixed differences can arise through sampling error if sample sizes are small\n")
-        cat("  Some sample sizes are small (N < 5)\n")
-      }
-      cat("\n")
-      cat("Calculating pairwise fixed differences\n")
-    }  
-   
+    }
+    if (min(table(pop(x))) < 10 && v > 1 ){
+        cat("Warning: Fixed differences can arise through sampling error if sample sizes are small\n")
+        cat("  Some sample sizes are small (N < 10, minimum in dataset =",min(table(pop(x))),")\n")
+        if (!test) {cat("  Recommend manually amalgamating populations or setting test=TRUE to allow evaluation of statistical significance\n")}
+    }
+
   # Establish an array to hold the fixed differences and sample sizes
-    npops<-nlevels(gl.mat.sum$popn)
-    nloci<-nlevels(gl.mat.sum$locus)
-    fixed <- array(-1, c(npops, npops))
-    loc.count <- array(-1, c(npops, npops))
+    npops<-nlevels(ftable$popn)
+    nloci<-nlevels(ftable$locus)
+    fixed.matrix <- array(-1, c(npops, npops))
+    exp.matrix <- array(-1, c(npops, npops))
+    pcfixed.matrix <- array(-1, c(npops, npops))
+    ind.count.matrix <- array(-1, c(npops, npops))
+    loc.count.matrix <- array(-1, c(npops, npops))
+    p.false.pos.matrix <- array(-1, c(npops, npops))
 
     # Set up the progress counter
-
-    if (v > 0){
-      pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-      getTxtProgressBar(pb)
+    if (v > 1 & pb){
+      progress <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
+      getTxtProgressBar(progress)
+      cat("\n")
     }
+    
     # Cycle through the data to sum the fixed differences into a square matrix
-    flag <- 0
-    for (i in 1:nloci) {                           # For each locus
-      countj<-0
-      startj <- (i-1)*(npops)+1
-      endj <- i*npops
-      for (j in startj:endj){    # For each population against that locus
-        n1 <- gl.mat.sum$nobs[j]
-        countj<-countj+1
-        countk<-0
-        startk <- (i-1)*(npops)+1
-        endk <- i*npops
-        for (k in startk:endk) { # For each population, compare pairwise
-          n2 <- gl.mat.sum$nobs[k]
-          countk<-countk+1
-          if (!is.na(n1+n2)) {
-          if ((n1+n2) >= nlimit) {
-          # Compare and if not missing, increment
-            cf <- is.fixed(gl.mat.sum$frequency[j],gl.mat.sum$frequency[k],tloc=tloc)
-            if (!is.na(cf)) {
-              if (fixed[countj,countk] == -1) {
-                fixed[countj,countk] <- cf
-                loc.count[countj,countk] <- 1
-              } else {
-                fixed[countj,countk] <- fixed[countj,countk] + cf
-                loc.count[countj,countk] <- loc.count[countj,countk] + 1
+    if (v > 1) {
+      cat("Comparing populations pairwise -- this may take time. Please be patient\n")
+    }
+    for (popi in 1:(npops-1)){      # For each population
+      for (popj in (popi+1):npops) { # For each other population
+        # Pull out the data for each population
+          p1 <- ftable[ftable$popn==levels(pop(x))[popi],]
+          p2 <- ftable[ftable$popn==levels(pop(x))[popj],]
+        # Calculate fixed differences
+          fixed <- c(rep(0,nloci))
+          for (i in 1:nloci) {       # For each locus
+            fixed[i] <- is.fixed(p1$frequency[i],p2$frequency[i],tloc=tloc)
+          }
+        # Calculate stats across loci
+          fixed.matrix[popi,popj] <- sum(fixed, na.rm=TRUE)
+          loc.count.matrix[popi,popj] <- sum(!is.na(fixed))
+          pcfixed.matrix[popi,popj] <- round(fixed.matrix[popi,popj]*100/sum(!is.na(fixed)),0)
+          ind.count.matrix[popi,popj] <- round(mean(p1$nobs[p1$nobs>0])+mean(p2$nobs[p2$nobs>0]),1)
+          # Make full matrix and add row and column names    
+            fixed.matrix[popj,popi] <- fixed.matrix[popi,popj]
+            fixed.matrix[popi,popi] <- 0; fixed.matrix[npops,npops] <- 0
+            rownames(fixed.matrix)<-levels(pop(x))
+            colnames(fixed.matrix)<-levels(pop(x))
+            
+            loc.count.matrix[popj,popi] <- loc.count.matrix[popi,popj]
+            loc.count.matrix[popi,popi] <- NA; loc.count.matrix[npops,npops] <- NA
+            rownames(loc.count.matrix)<-levels(pop(x))
+            colnames(loc.count.matrix)<-levels(pop(x))
+            
+            pcfixed.matrix[popj,popi] <- pcfixed.matrix[popi,popj]
+            pcfixed.matrix[popi,popi] <- 0; pcfixed.matrix[npops,npops] <- 0
+            rownames(pcfixed.matrix)<-levels(pop(x))
+            colnames(pcfixed.matrix)<-levels(pop(x))
+            
+            ind.count.matrix[popj,popi] <- ind.count.matrix[popi,popj]
+            ind.count.matrix[popi,popi] <- NA; ind.count.matrix[npops,npops] <- NA
+            rownames(ind.count.matrix)<-levels(pop(x))
+            colnames(ind.count.matrix)<-levels(pop(x))
+          
+        # Calculate the probability that the observed differences are false positives
+            if (test) {
+              if (v > 1) {
+                cat("    Testing for significance of fixed differences -- this may take a month of Sundays. Please be very patient\n")
               }
+            outlist <- gl.utils.fdsim(x,c(levels(pop(x))[popi],levels(pop(x))[popj]),obs=fixed.matrix[popi,popj],delta=delta,reps=reps,v=v)
+            p.false.pos.matrix[popi,popj] <- round(outlist$prob,4)
+            exp.matrix[popi,popj] <- round(outlist$mnexpected,1)
+          # Make full matrix and add row and column names    
+            exp.matrix[popj,popi] <- exp.matrix[popi,popj]
+            exp.matrix[popi,popi] <- 0; exp.matrix[npops,npops] <- 0
+            rownames(exp.matrix)<-levels(pop(x))
+            colnames(exp.matrix)<-levels(pop(x))
+            
+            p.false.pos.matrix[popj,popi] <- p.false.pos.matrix[popi,popj]
+            p.false.pos.matrix[popi,popi] <- 0; p.false.pos.matrix[npops,npops] <- 0
+            rownames(p.false.pos.matrix)<-levels(pop(x))
+            colnames(p.false.pos.matrix)<-levels(pop(x))
             }
-          }
-          }
-        }
-      }
-
-      if (v > 0){setTxtProgressBar(pb, i/nloci)}
+      }    
+      if (v > 1 & pb){setTxtProgressBar(progress, popi/(npops-1))}
     }
 
-  # Cycle through the populations to determine sample sizes
-    
-    ind.count <- array(-1, c(npops, npops))
-    flag <- 0
-    t  <- table(pop(x))
-    for (i in 1:(length(t)-1)) {
-      for (j in i:length(t)) {
-        ind.count[i,j] <- t[i] + t[j]
-        if (t[i] < 5 | t[j] < 5) { 
-        flag <- 1
-        }
-      }
-    }
-    if (flag == 1 && v > 0) {
-
-      cat("\n   Warning: Some comparisons involve sample sizes were less than 5.\n")
-      cat("   Compounded Type I error rate may be high. Consider a priori amalgamation.\n")
-    }
-
-  # Convert missing values to NA
-    fixed[fixed == -1] <- NA
-    loc.count[loc.count == -1] <- NA
-  # Convert to percentages if requested  
-    if ( pc ) {fixed <- round(fixed*100/loc.count,4)}
-  # Tidy up adding row and column names
-    rownames(fixed)<-levels(gl.mat.sum$popn)
-    colnames(fixed)<-levels(gl.mat.sum$popn)
-    fixed <- fixed[order(rownames(fixed)), order(colnames(fixed))]
-    rownames(loc.count)<-levels(gl.mat.sum$popn)
-    colnames(loc.count)<-levels(gl.mat.sum$popn)
-    loc.count <- loc.count[order(rownames(loc.count)), order(colnames(loc.count))]
-    
-    # Put the SNP locus counts in the upper matrix, percent fixed differences in the lower matrix
-
-    if (npops == 1) {
-      if (v > 0){cat("All populations amalgamated into one\n")}
-      fixed = 0
-    } else {
-      for (i in 1:npops-1) {
-        for (j in (i+1):npops) {
-          fixed[i,j] <- round(loc.count[i,j],0)
-        }
-      }
+  # Return the matricies
+    if (v > 1) {
+      cat("Returning a list containing the following square matricies:\n",
+      "         [[1]] $gl -- input genlight object;\n",
+      "         [[2]] $fd -- raw fixed differences;\n",
+      "         [[3]] $pcfd -- percent fixed differences;\n",
+      "         [[4]] $nobs -- mean no. of individuals used in each comparison;\n",
+      "         [[5]] $nloc -- total number of loci used in each comparison;\n",
+      "         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation]\n",
+      "         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n")
     }
     
-  # Return the matrix
-    return(fixed)
+    l <- list(gl=x,fd=fixed.matrix,pcfd=pcfixed.matrix,nobs=ind.count.matrix,nloc=loc.count.matrix,expobs=exp.matrix,pval=p.false.pos.matrix)
+
+    if (v > 0) {
+      cat("Completed gl.fixed.diff\n\n")
+    }
+    return(l)
 }
+

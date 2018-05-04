@@ -4,7 +4,7 @@
 #' and generate a table of allele frequencies for each population and locus
 #'
 #' @param gl -- name of the genlight containing the SNP genotypes or genind object containing the presence/absence data [required]
-#' @param v -- verbosity = 0, silent; 1, brief; 2, verbose [default 1]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A matrix with allele frequencies (genelight) or presence/absence frequencies (genind) broken down by population and locus
 #' @export
 #' @import adegenet
@@ -15,20 +15,19 @@
 #' m <-  gl.percent.freq(testset.gl)
 #' m
 
-gl.percent.freq<- function(gl, v=1) {
+gl.percent.freq<- function(gl, v=2) {
 
 # Determine data type
-  if(class(gl)=="genlight"){
-    cat("Using SNP data from a genlight object\n")
-  } else if(class(gl)=="genind"){
-    cat("Using RFP data (SilicoDArT) from a genind object\n")
-  } else {
-    cat("Fatal Error: Input data must be a genlight or genind object\n")
-    stop
+  if(!(class(gl)=="genlight")){
+    cat("Fatal Error: Input data must be a genlight object\n")
+    stop("Execution terminated\n")
   }
   
-  if(v>0) {cat("  Tallying allele frequencies, this may take some time\n")}
-
+  if (v > 0) {
+    cat("Starting gl.percent.freq: Calculating allele frequencies for populations\n")
+    cat("  This may take some time -- be patient\n")
+  }
+  
 # Calculate the required statistics, to be backward compatible 
   nmissing <- apply(as.matrix(gl),2, tapply, pop(gl), function(x){sum(is.na(x))})
   nobs <- apply(as.matrix(gl),2, tapply, pop(gl), function(x){sum(!is.na(x))}) 
@@ -44,10 +43,15 @@ gl.percent.freq<- function(gl, v=1) {
   f <- melt(f, na.rm=FALSE)
   sum <- melt(sum, na.rm=FALSE)
   
-  m <- cbind(sum,nobs[,3],nmissing[,3],f[,3],n[,3])
+  if(nPop(gl) == 1) {
+    m <- cbind(levels(pop(gl)),rownames(sum),sum,nobs,nmissing,f,n)
+  } else {
+    m <- cbind(sum,nobs[,3],nmissing[,3],f[,3],n[,3])
+  }  
   colnames(m) <- c("popn","locus","sum","nobs","nmissing","frequency","n")
   
-  if(v>0) {cat("  Calculation of allele frequencies complete\n\n")}
+  if(v > 0) {cat("Completed gl.percent.freq\n\n")}
+  
   return(m)
   
 }
