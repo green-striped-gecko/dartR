@@ -52,7 +52,9 @@ This adjustment can be done with the tloc parameter. For example, tloc=0.05 mean
 95,5 and 5,95 percent will be regarded as fixed when comparing two populations at a locus.
 }
 \examples{
+\dontrun{
 fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, v=1 )
+}
 }
 \seealso{
 \code{\link{is.fixed}}

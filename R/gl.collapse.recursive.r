@@ -41,7 +41,9 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
+#' \dontrun{
 #' fd <- gl.collapse.recursive(testset.gl, prefix="testset", test=TRUE, tloc=0, tpop=2, v=2)
+#' }
 
 gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRUE, alpha=0.05, delta=0.02, reps=1000, v=2) {
   

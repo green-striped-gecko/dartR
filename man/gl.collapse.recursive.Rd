@@ -59,7 +59,9 @@ The intermediate and final recode tables and distance matricies are stored to di
 In particular, the recode tables can be edited to replace populaton labels with meaninful names and reapplied in sequence.
 }
 \examples{
+\dontrun{
 fd <- gl.collapse.recursive(testset.gl, prefix="testset", test=TRUE, tloc=0, tpop=2, v=2)
+}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

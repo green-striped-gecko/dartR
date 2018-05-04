@@ -35,7 +35,9 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
+#' \dontrun{
 #' fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, v=1 )
+#' }
 #' @seealso \code{\link{is.fixed}}
 
 gl.fixed.diff <- function(x, tloc=0, test=FALSE, delta=0.02, reps=1000, rm.global.monomorphs=TRUE, pb=TRUE, v=2) {
