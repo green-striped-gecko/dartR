@@ -11,7 +11,7 @@ WC_FST_Diploids_2Alleles<-function(Sample_Mat){
   p_ave = sum(sample_sizes*p_freqs)/(n_ave*n_pops)
   
   s2 = sum(sample_sizes*(p_freqs - p_ave)^2)/((n_pops-1)*n_ave)
-  if(s2==0){return(0); break}  
+  if(s2==0){return(0)}  
   
   h_freqs = Sample_Mat[,2]/sample_sizes
   h_ave = sum(sample_sizes*h_freqs)/(n_ave*n_pops)
@@ -58,16 +58,14 @@ util.outflank.MakeDiploidFSTMat <- function(SNPmat,locusNames,popNames){
   ### Check that SNPmat has appropriate values (0, 1, 2, or 9, only)
   snplevs <- levels(as.factor(unlist(SNPmat)))
   ls <- paste(snplevs, collapse="")
-  if(ls!="012" & ls!="0129"){print("Error: Your snp matrix does not have 0,1, and 2"); break}
+  if(ls!="012" & ls!="0129"){print("Error: Your snp matrix does not have 0,1, and 2")}
   
   ### Checking that locusNames and popNames have the same lengths as the columns and rows of SNPmat
   if(dim(SNPmat)[1]!=length(popname) ){
-    print("Error: your population names do not match your SNP matrix")
-    break}
+    print("Error: your population names do not match your SNP matrix")}
   
   if(dim(SNPmat)[2]!=length(locusname)){
-    print("Error:  your locus names do not match your SNP matrix")
-    break}
+    print("Error:  your locus names do not match your SNP matrix")}
   
   writeLines("Calculating FSTs, may take a few minutes...")
   
