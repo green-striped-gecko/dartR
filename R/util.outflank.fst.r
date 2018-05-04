@@ -82,7 +82,7 @@ WC_FST_FiniteSample_Diploids_2Alleles_NoCorr<-function(Sample_Mat){
   p_ave = sum(sample_sizes*p_freqs)/(n_ave*n_pops)
   s2 = sum(sample_sizes*(p_freqs - p_ave)^2)/((n_pops-1)*n_ave)
 
-  if(s2==0){return(1); break}  
+  if(s2==0){return(1)}  
   
   h_freqs = Sample_Mat[,2]/sample_sizes
   h_ave = sum(sample_sizes*h_freqs)/(n_ave*n_pops)
@@ -113,7 +113,7 @@ WC_FST_FiniteSample_Diploids_2Alleles<-function(Sample_Mat){
   p_ave = sum(sample_sizes*p_freqs)/(n_ave*n_pops)
 
   s2 = sum(sample_sizes*(p_freqs - p_ave)^2)/((n_pops-1)*n_ave)
-  if(s2==0){return(1); break}	
+  if(s2==0){return(1)}	
   
   h_freqs = Sample_Mat[,2]/sample_sizes
   h_ave = sum(sample_sizes*h_freqs)/(n_ave*n_pops)
