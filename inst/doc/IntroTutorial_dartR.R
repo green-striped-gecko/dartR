@@ -59,7 +59,7 @@ levels(pop(gl))[1:5]
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  
-#  gl <- gl.read.dart(filename="mydata.csv", covfilename = "my.metadata.csv")
+#  gl <- gl.read.dart(filename="mydata.csv", ind.metafile = "my.metadata.csv")
 
 ## ------------------------------------------------------------------------
 #Only the entries for the first ten individuals are shown
@@ -131,7 +131,7 @@ gl2 <- gl.filter.repavg(gl, t=1)
 gl2 <- gl.filter.monomorphs(gl, v=0)
 
 ## ------------------------------------------------------------------------
-gl2 <- gl.filter.hamming(testset.gl, t=0.25, probar = F)
+gl2 <- gl.filter.hamming(testset.gl, t=0.25, pb = F)
 
 ## ---- eval=F-------------------------------------------------------------
 #  gl2 <- gl.filter.callrate(gl, method = "loc", threshold = 0.95)
@@ -148,14 +148,37 @@ table(pop(gl))
 ## ---- fig.height=5-------------------------------------------------------
 barplot(table(pop(gl)), las=2)
 
-## ---- eval=T-------------------------------------------------------------
-gl.make.recode.pop(gl, outfile = "new_pop_assignments.csv")
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.keep.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.merge.pop(gl, old=c("EmsubRopeMata","EmvicVictJasp"), new="outgroup")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.merge.pop(gl, old="EmsubRopeMata", new="Emydura_victoriae")
 
 ## ------------------------------------------------------------------------
+#individual names
+indNames(gl)
 
-glnew <- gl.recode.pop(gl, pop.recode="new_pop_assignments.csv")
 
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.keep.ind(gl, ind.list=c("AA019073","AA004859"))
+
+## ---- eval=FALSE---------------------------------------------------------
+#  glnew3 <- gl.drop.pop(gl, ind.list=c("AA019073","AA004859"))
+
+## ---- eval=FALSE---------------------------------------------------------
+#  gl.make.recode.pop(gl, outfile = "new_pop_assignments.csv")
+#  
+
+## ---- eval=FALSE---------------------------------------------------------
+#  
+#  glnew <- gl.recode.pop(gl, pop.recode="new_pop_assignments.csv")
+#  
 
 ## ------------------------------------------------------------------------
 levels(pop(gl))
@@ -165,19 +188,13 @@ levels(pop(gl))
 #  glnew2 <- gl.edit.recode.pop(gl)
 #  
 
-## ---- eval=FALSE---------------------------------------------------------
-#  glnew3 <- gl.keep.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-
-## ---- eval=FALSE---------------------------------------------------------
-#  glnew3 <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-
 ## ------------------------------------------------------------------------
 #only first 10 entries are shown
 indNames(gl)[1:10]
 
 
-## ------------------------------------------------------------------------
-gl.make.recode.ind(gl, outfile="new_ind_assignments.csv")
+## ---- eval=FALSE---------------------------------------------------------
+#  gl.make.recode.ind(gl, outfile="new_ind_assignments.csv")
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  glnew3 <- gl.recode.ind(gl, ind.recode="new_ind_assignments.csv")
@@ -185,12 +202,6 @@ gl.make.recode.ind(gl, outfile="new_ind_assignments.csv")
 
 ## ---- eval=F-------------------------------------------------------------
 #  gl <- gl.edit.recode.ind(gl, ind.recode="new_ind_assignments.csv")
-
-## ---- eval=FALSE---------------------------------------------------------
-#  glnew3 <- gl.keep.ind(gl, ind.list=c("AA019073","AA004859"))
-
-## ---- eval=FALSE---------------------------------------------------------
-#  glnew3 <- gl.drop.pop(gl, ind.list=c("AA019073","AA004859"))
 
 ## ------------------------------------------------------------------------
 gl_new <- gl[gl$pop!="EmmacBrisWive", ]
@@ -302,22 +313,21 @@ gl.tree.nj(glnew, type="fan")
 
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  gl.collapse.recursive(gl, t=0)
+#  fd <- gl.collapse.recursive(gl, t=0)
 
 ## ---- echo=FALSE, eval=FALSE---------------------------------------------
 #  gl <- testset.gl
-#  gl.collapse.recursive(gl, t=0)
+#  fd <- gl.collapse.recursive(gl, t=0)
 #  
-#  
-#  Under ideal conditions, the true phylogeny can be uniquely recovered from the true measures of divergence between OTUs. So one approach to recovering phylogenies is to extract the phylogeny that is most consistent with the estimated distances between OTUs. To avoid introducing artificial departure of the distances from the underlying tree, a metric distance needs to be chosen, and for SNP datasets we choose Euclidean Distance. This differs from Rogers D (Rogers, 1972) by a constant multiplier, and so the two measures are essentially the same.
-#  
-#  The script for distance phylogeny is gl2phylip() which calculates Euclidean distances using dist {stats} then outputs the data in a form suitable for input to the Phylip package written by Joseph Felsenstein (http://evolution.genetics.washington.edu/phylip.html) (Felsenstein, 1989). The input file can include replicated distance matrices for the purpose of bootstrapping.
-#  
-#  Assuming the data have been appropriately filtered before saving, the commands to do this are
+
+## ---- echo=FALSE, eval=FALSE---------------------------------------------
+#  gl <- testset.gl
+#  fd <- gl.collapse.recursive(gl, test=TRUE, delta=0.02, reps=1000, t=0, v=3)
+#  fd.sig <- gl.collapse.pval(fd, prefix="fd_sig", delta=0.02, alpha=0.05, v=3)
 #  
 
 ## ---- eval=FALSE---------------------------------------------------------
-#  gl <- testset.gl
+#  gl <- fd.sig$gl
 #  phy <- gl2phylip(gl, outfile="turtle.phy", bstrap=1000)
 
 ## ---- fig.height=4-------------------------------------------------------
@@ -336,11 +346,9 @@ gl.report.bases(testset.gl)
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl2fasta(gl, method=4, outfile="nohets.fasta")
 #  
-#  
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl2fasta(gl, method=1, outfile="ambcodes.fasta")
-#  
 #  
 
 ## ---- eval=FALSE---------------------------------------------------------
@@ -364,12 +372,8 @@ gi <- gl2gi(gl, v=0)
 ## ---- eval=FALSE---------------------------------------------------------
 #  gl2 <- gi2gl(gi)
 
-## ---- eval=T-------------------------------------------------------------
-glnew <- gl2nhyb(gl, outfile = file.path(tempdir(),"nhyb.txt"))
-
-## ---- eval=FALSE---------------------------------------------------------
-#  gl.new <- gl2nhyb(gl, outfile = "nhyb.txt", p0 = NULL,p1 = NULL, t = 0,   m = "random")
-#  
+## ---- eval=F-------------------------------------------------------------
+#  glnew <- gl.nhybrids(testset.gl)
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  glnew <- gl2phylip(outfile = "phyinput.txt")

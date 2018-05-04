@@ -4,12 +4,14 @@
 \alias{gl.filter.repavg}
 \title{Filter loci in a genlight \{adegenet\} object based on average reproducibility of alleles at a locus}
 \usage{
-gl.filter.repavg(gl, t = 1)
+gl.filter.repavg(x, t = 1, v = 2)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{t}{-- threshold value below which loci will be removed [default 0.95]}
+
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 Returns a genlight object retaining loci with a RepAvg greater than the specified threshold deleted.
@@ -20,7 +22,7 @@ RepAvg is the proportion of alleles that give a reproducible result, averaged ov
 }
 \examples{
 gl.report.repavg(testset.gl)
-result <- gl.filter.repavg(testset.gl, t=0.95)
+result <- gl.filter.repavg(testset.gl, t=0.95, v=3)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

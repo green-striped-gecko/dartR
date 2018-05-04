@@ -4,10 +4,10 @@
 \alias{gl.recode.pop}
 \title{Recode population assignments in a genelight object \{adegenet\}}
 \usage{
-gl.recode.pop(gl, pop.recode, recalc = TRUE, mono.rm = TRUE, v = 1)
+gl.recode.pop(x, pop.recode, recalc = TRUE, mono.rm = TRUE, v = 1)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
+\item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
 \item{pop.recode}{-- name of the csv file containing the population reassignments [required]}
 
@@ -15,7 +15,7 @@ gl.recode.pop(gl, pop.recode, recalc = TRUE, mono.rm = TRUE, v = 1)
 
 \item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
 
-\item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object with the recoded and reduced data

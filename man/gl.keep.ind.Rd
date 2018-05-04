@@ -4,10 +4,10 @@
 \alias{gl.keep.ind}
 \title{Remove all but the specified individuals from a genelight \{adegenet\} object}
 \usage{
-gl.keep.ind(gl, ind.list, recalc = TRUE, mono.rm = TRUE, v = 1)
+gl.keep.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE, v = 2)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
+\item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
 \item{ind.list}{-- a list of individuals to be removed [required]}
 
@@ -15,7 +15,7 @@ gl.keep.ind(gl, ind.list, recalc = TRUE, mono.rm = TRUE, v = 1)
 
 \item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
 
-\item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object with the reduced data
@@ -35,6 +35,8 @@ The script returns a genlight object with the individuals deleted and, optionall
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}}
+
+\code{\link{gl.recalc.metrics}}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

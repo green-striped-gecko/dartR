@@ -4,11 +4,11 @@
 \alias{gl.filter.callrate}
 \title{Filter loci or specimens in a genlight \{adegenet\} object based on call rate}
 \usage{
-gl.filter.callrate(gl, method = "loc", threshold = 0.95, recalc = TRUE,
-  v = 1)
+gl.filter.callrate(x, method = "loc", threshold = 0.95, recalc = TRUE,
+  v = 2)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
+\item{x}{name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
 
 \item{method}{-- "loc" to specify that loci are to be filtered, "ind" to specify that specimens are to be filtered [default "loc"]}
 
@@ -16,7 +16,7 @@ gl.filter.callrate(gl, method = "loc", threshold = 0.95, recalc = TRUE,
 
 \item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]}
 
-\item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 The reduced genlight or genind object, plus a summary
@@ -28,7 +28,7 @@ lower than a specified value. The script will also filter out loci (or specimens
 is lower than the specified value. In this case, the data are missing owing to low coverage.
 }
 \examples{
-result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8)
+result <- gl.filter.callrate(testset.gl, method="ind", t=0.8)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

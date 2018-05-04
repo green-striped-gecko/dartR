@@ -5,28 +5,29 @@
 #' but the call rate will change when some individuals are removed from the dataset. This script recalculates the callrate
 #' and places these recalculated values in the appropriate place in the genlight object.
 #'
-#' @param gl -- name of the genlight object containing the SNP data [required]
-#' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
+#' @param x -- name of the genlight object containing the SNP data [required]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' result <- dartR:::utils.recalc.callrate(testset.gl)
 
-utils.recalc.callrate <- function(gl, v=1) {
- x <- gl
-   
-  if(class(x) == "genlight") {
-     #cat("Modifying a genlight object\n")
-   } else {
-     cat("Fatal Error: Specify a genlight object\n")
-     stop()
+utils.recalc.callrate <- function(x, v=2) {
+ 
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
+  }
+  if (v > 0) {
+    cat("Starting utils.recalc.callrate: Recalculating CallRate\n")
   }
 
   # Do the deed
-     x@other$loc.metrics$CallRate <- 1-(glNA(gl,alleleAsUnit=FALSE))/nInd(gl)
+     x@other$loc.metrics$CallRate <- 1-(glNA(x,alleleAsUnit=FALSE))/nInd(x)
 
-   if (v>0) {cat("Callrate recalculated\n")}
-   
+  if (v > 0) {
+    cat("Completed utils.recalc.callrate\n\n")
+  }
+     
    return(x)
 }
 

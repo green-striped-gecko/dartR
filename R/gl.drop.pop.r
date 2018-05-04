@@ -8,11 +8,11 @@
 #' 
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #'
-#' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
+#' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param pop.list -- a list of populations to be removed [required]
 #' @param recalc -- Recalculate the locus metadata statistics [default TRUE]
-#' @param mono.rm -- Remove monomorphic loci [default TRUE]
-#' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
+#' @param mono.rm -- Remove monomorphic loci [default FALSE]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
@@ -21,50 +21,51 @@
 #'    gl <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}
+#' @seealso \code{\link{gl.recalc.metrics}}
 #' 
 
-gl.drop.pop <- function(gl, pop.list, recalc=TRUE, mono.rm=TRUE, v=1){
-x <- gl
+gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=FALSE, v=2){
 
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.recode.pop.r!\n"); stop()
+    cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
+  }
+  if (v > 0) {
+    cat("Starting gl.drop.pop: Deleting selected populations\n")
   }
 
 # REMOVE POPULATIONS
-  if (v==2) {
-    cat("Processing",class(x),"object\n")
-    cat("  Deleteing populations", pop.list, "\n")
+  if (v > 1) {
+    cat("  Deleting populations", pop.list, "\n")
   }
 
 # Delete listed populations, recalculate relevant locus metadata and remove monomorphic loci
   
   # Remove rows flagged for deletion
-    cat("Deleting populations flagged for deletion\n")
-    x2 <- x[!x$pop%in%pop.list]
+    x <- x[!x$pop%in%pop.list]
   # Remove monomorphic loci
-    if (mono.rm) {x2 <- gl.filter.monomorphs(x2,v=0)}
+    if (mono.rm) {x <- gl.filter.monomorphs(x,v=0)}
   # Recalculate statistics
-    if (recalc) {
-      x2 <- utils.recalc.avgpic(x2,v=v)
-      x2 <- utils.recalc.callrate(x2,v=v)
-      x2 <- utils.recalc.freqhets(x2,v=v)
-      x2 <- utils.recalc.freqhomref(x2,v=v)
-      x2 <- utils.recalc.freqhomsnp(x2,v=v)
-    }
+    if (recalc) {gl.recalc.metrics(x,v=v)}
 
 # REPORT A SUMMARY
-  if (v==2) {
+  if (v > 2) {
     cat("Summary of recoded dataset\n")
-    cat(paste("  No. of loci:",nLoc(x2),"\n"))
-    cat(paste("  No. of individuals:", nInd(x2),"\n"))
-    cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
-    if (!recalc) {"Note: Locus metrics not recalculated\n"}
+    cat(paste("  No. of loci:",nLoc(x),"\n"))
+    cat(paste("  No. of individuals:", nInd(x),"\n"))
+    cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
   }
-    if (v==1) {  
-      if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
-      if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
+    if (v > 1) {  
+      if (!recalc) {
+        cat("Note: Locus metrics not recalculated\n")
+      }
+      if (!mono.rm) {
+        cat("Note: Resultant monomorphic loci not deleted\n")
+      }
+    }
+    if (v > 0) {
+      cat("Completed gl.drop.pop\n\n")
     }
     
-    return <- x2
+    return <- x
 }
 

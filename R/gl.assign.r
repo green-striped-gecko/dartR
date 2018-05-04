@@ -32,12 +32,13 @@
 #' 
 #' Each of these approaches provides evidence, none are 100% definitive. They need to be interpreted cautiously.
 #'
-#' @param gl -- name of the input genlight object [required]
+#' @param x -- name of the input genlight object [required]
 #' @param id -- identity label of the focal individual whose provenance is unknown [required]
 #' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
 #' @param dim -- number of dimensions to retain in the dimension reduction [default k, number of populations]
-#' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.99]
+#' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.05]
 #' @param t -- populations to retain for consideration; those for which the focal individual has less than or equal to t loci with private alleles [default 0]
+#' @param v -- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default 2]
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @importFrom stats dnorm qnorm
 #' @export
@@ -45,12 +46,27 @@
 #' @examples
 #' x <- testset.gl
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#' x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.95, t=1)
+#' x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.05, t=1)
 #' 
 
-gl.assign <- function (gl, id, nmin=10, dim=NULL, alpha= 0.99, t=0) {
-x <- gl
+gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.01, t=0, v=2) {
+  
+  if (v >= 1) {
+    cat("Starting gl.assign\n")
+  }
+  
+  alpha <- 1-alpha
 
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.recode.pop.r!\n"); stop()
+  }
+  if (!(id %in% indNames(x))) {
+    cat("Fatal Error: Unknown must be listed among the genotypes in the genlight object!\n"); stop()
+  }
+  if (alpha >1 || alpha <0) {
+    cat("Fatal Error: Value of alpha must be between 0 and 1, typically 0.05!\n"); stop()
+  }
+  
 # Identify populations that can be eliminated on the basis of private alleles
 # Retain the remainder for analysis
   x2 <- gl.report.pa(x, id=id, nmin=nmin, t=t)
@@ -148,5 +164,9 @@ x <- gl
   cat("  Index is a weighted log-likelihood\n")
   cat("  CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
   cat("  Best assignment is the population with the largest value of the Index, in this case",best,"\n")
+  
+  if (v >= 1) {
+    cat("Completed gl.assign\n\n")
+  }
   return(df)
 }

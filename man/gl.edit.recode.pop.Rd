@@ -4,7 +4,7 @@
 \alias{gl.edit.recode.pop}
 \title{Create or edit a population re-assignment table}
 \usage{
-gl.edit.recode.pop(gl, pop.recode = NULL, recalc = TRUE, mono.rm = TRUE,
+gl.edit.recode.pop(gl, pop.recode = NULL, recalc = FALSE, mono.rm = TRUE,
   v = 1)
 }
 \arguments{

@@ -80,11 +80,7 @@ gl.edit.recode.ind <- function(gl, ind.recode=NULL, recalc=TRUE, mono.rm=TRUE, v
     if(mono.rm) {gl <- gl.filter.monomorphs(gl,v=v)}
     # Recalculate statistics
     if (recalc) {
-      gl <- utils.recalc.avgpic(gl,v=v)
-      gl <- utils.recalc.callrate(gl,v=v)
-      gl <- utils.recalc.freqhets(gl,v=v)
-      gl <- utils.recalc.freqhomref(gl,v=v)
-      gl <- utils.recalc.freqhomsnp(gl,v=v)
+      gl.recalc.metrics(gl,v=v)
     }
   }
 
@@ -97,7 +93,7 @@ gl.edit.recode.ind <- function(gl, ind.recode=NULL, recalc=TRUE, mono.rm=TRUE, v
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
-  if (v==1) {  
+  if (v>=1) {  
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
