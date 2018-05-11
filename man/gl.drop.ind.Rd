@@ -29,9 +29,7 @@ recalculates statistics made redundant by the deletion of individuals from the d
 The script returns a genlight object with the individuals deleted and, optionally, the recalculated locus metadata.
 }
 \examples{
-\dontrun{
    gl <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"))
-}
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}}

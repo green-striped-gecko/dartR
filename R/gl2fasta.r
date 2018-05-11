@@ -32,6 +32,7 @@
 #' @param gl -- name of the DArT genlight object [required]
 #' @param method -- 1 | 2 | 3 | 4. Type method=0 for a list of options  [method=1]
 #' @param outfile -- name of the output file (fasta format) [output.fasta]
+#' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @return A new gl object with all loci rendered homozygous
 #' @export
 #' @import adegenet
@@ -43,13 +44,13 @@
 #' @import stringr
 #' @author Bernd Gruber and Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
 #' gl <- gl.filter.repavg(testset.gl,t=1)
 #' gl <- gl.filter.callrate(testset.gl,t=.98)
 #' gl2fasta(gl, method=1, outfile="test.fasta")
-#' }
 
-gl2fasta <- function(gl, method=1, outfile="output.fasta") {
+
+gl2fasta <- function(gl, method=1, outfile="output.fasta", outpath=tempdir()) {
+  outfile <- file.path(outpath, outfile)
   
   if(class(gl) != "genlight") {
     stop("Fatal Error: Specify a genlight object\n")

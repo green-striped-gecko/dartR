@@ -29,6 +29,7 @@
 #'
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- name of the file that will be the input file for NewHybrids [default nhyb.txt]
+#' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @param p0 -- list of populations to be regarded as parental population 0 [default NULL]
 #' @param p1 -- list of populations to be regarded as parental population 1 [default NULL]
 #' @param t -- sets the level at which a gene frequency difference is considered to be fixed [default 0]
@@ -46,8 +47,8 @@
 #' @importFrom MASS write.matrix
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' m <- gl.nhybrids(gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), t=0, method="random")
+#' \donttest{
+#' m <- gl.nhybrids(testset.gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), t=0, method="random")
 #' 
 #' m <- gl.nhybrids(testset.gl, outfile="nhyb.txt", 
 #' p0=NULL, p1=NULL, 
@@ -57,7 +58,7 @@
 #' v=3)
 #' }
 
-gl.nhybrids <- function(gl, outfile="nhyb.txt", 
+gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     p0=NULL, p1=NULL, 
                     t=0, 
                     method="random",
@@ -70,6 +71,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt",
                     ThetaPrior = "Jeffreys",
                     v=2) {
 
+  outfile <- file.path(outpath, outfile)
   if(class(gl)!="genlight") {
     cat("Fatal Error: genlight object required for gl2nhyb.r!\n"); stop()
   }

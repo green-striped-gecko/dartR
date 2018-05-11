@@ -5,6 +5,7 @@
 #'
 #' @param gl Name of the genlight object containing the SNP data or a genind object containing presence absence data [required]
 #' @param outfile Name of the file to become the input file for phylip [default phyinput.txt]
+#' @param outpath path where to save the output file (set to tempdir by default)
 #' @param bstrap Number of bootstrap replicates [default 1]
 #' @return Matrix of Euclidean distances between populations
 #' @import adegenet utils
@@ -12,13 +13,15 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' result <- gl2phylip(testset.gl, outfile="test.txt", 1000)
+#' \donttest{
+#' result <- gl2phylip(testset.gl, outfile="test.txt", bstrap=10)
 #' }
 
 
-gl2phylip <- function(gl, outfile="phyinput.txt", bstrap=1) {
-x <- gl
+gl2phylip <- function(gl, outfile="phyinput.txt", outpath=tempdir(), bstrap=1) {
+
+    outfile <- file.path(outpath, outfile)
+    x <- gl
 
     if(class(x)!="genlight") {
       cat("Fatal Error: genlight object required for gl2phylip!\n"); stop()

@@ -17,7 +17,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'    gl <- gl.recalc.metrics(testset.gl, v=2)
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}

@@ -24,7 +24,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' fd <- gl.fixed.diff(testset.gl, tloc=0.05)
 #' gl <- gl.collapse(fd, recode.table="testset_recode.csv",tpop=1)
 #' }

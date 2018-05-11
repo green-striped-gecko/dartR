@@ -13,18 +13,19 @@
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- name of the new proforma file [default recode_pop_table.csv]
+#' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @return A vector containing the new population names
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' result <- gl.make.recode.pop(gl, outfile="Emmac_recode_pop.csv")
+#' \donttest{
+#' result <- gl.make.recode.pop(testset.gl, outfile="Emmac_recode_pop.csv")
 #' }
 
- gl.make.recode.pop <- function(x, outfile="recode_pop_table.csv") {
+ gl.make.recode.pop <- function(x, outfile="recode_pop_table.csv", outpath=tempdir()) {
 
  mat <- cbind(levels(pop(x)),levels(pop(x)))
- write.table(mat, file=outfile, sep=",", row.names=FALSE, col.names=FALSE)
+ write.table(mat, file=file.path(outpath, outfile), sep=",", row.names=FALSE, col.names=FALSE)
  
  cat(paste("Proforma recode table written to:",outfile,"\n"))
  

@@ -6,17 +6,19 @@
 #' 
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- file name of the output file (including extension).
+#' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @return NULL
 #' @export
 #' @importFrom SNPRelate snpgdsCreateGeno snpgdsOpen snpgdsSummary snpgdsClose
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' gl2gds(testset.gl)
 #' }
 
-gl2gds <- function(gl, outfile="gl2gds.gds") {
-  
+gl2gds <- function(gl, outfile="gl2gds.gds", outpath=tempdir()) {
+
+  outfile <- file.path(outpath, outfile)
   cat(paste("Converting gl object to gds formatted file", outfile, "\n\n"))
 
 # Load the R packages: gdsfmt and SNPRelate

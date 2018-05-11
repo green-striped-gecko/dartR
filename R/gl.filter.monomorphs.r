@@ -12,9 +12,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' gl <- gl.filter.monomorphs(gl)
-#' }
+#' gl <- gl.filter.monomorphs(testset.gl)
 
 # Last edit:25-Apr-18
 

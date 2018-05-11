@@ -9,7 +9,7 @@
 Check ?read.genetable in pacakge PopGenReport for details on the format.
 }
 \examples{
-\dontrun{
+\donttest{
 library(PopGenReport)
 read.csv( paste(.libPaths()[1],"/dartR/extdata/platy.csv",sep="" ))
 platy <- read.genetable( paste(.libPaths()[1],"/dartR/extdata/platy.csv",

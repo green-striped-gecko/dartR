@@ -45,7 +45,7 @@ NULL
 #' @author Bernd Gruber \email{(glbugs@@aerg.canberra.edu.au}
 #' @keywords datasets
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' library(PopGenReport)
 #' read.csv( paste(.libPaths()[1],"/dartR/extdata/platy.csv",sep="" ))
 #' platy <- read.genetable( paste(.libPaths()[1],"/dartR/extdata/platy.csv",

@@ -28,7 +28,7 @@ with all values missing and deletes them (using gl.filter.monomorphs.r).
 The script returns a genlight object with the recalculated locus metadata.
 }
 \examples{
-\dontrun{
+\donttest{
    gl <- gl.recalc.metrics(testset.gl, v=2)
 }
 }

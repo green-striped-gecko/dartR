@@ -12,6 +12,7 @@
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- file name of the output file (including extension).
+#' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @param method -- method = 1, nexus file with two lines per individual; method = 2, nexus
 #' file with one line per individual, ambiguity codes [default 2]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
@@ -19,11 +20,11 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
 #' gl2svdquartets(testset.gl)
-#' }
 
-gl2svdquartets <- function(x, outfile="svd.nex", method=2, v=2) {
+gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=2) {
+
+  outfile <- file.path(outpath, outfile)
   
   if (v > 0) {cat(paste("Starting gl2svdquartets: Create nexus file\n\n"))}
   if (v > 1) {cat(paste("    Extacting SNP bases and creating records for each individual\n"))}

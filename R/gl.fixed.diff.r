@@ -35,7 +35,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, v=1 )
 #' }
 #' @seealso \code{\link{is.fixed}}

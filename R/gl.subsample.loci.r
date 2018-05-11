@@ -11,9 +11,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' result <- gl.subsample.loci(gl, n=200, method="avgPIC")
-#' }
+#' result <- gl.subsample.loci(testset.gl, n=200, method="avgPIC")
 
 gl.subsample.loci <- function(gl, n, method="random") {
 x <- gl

@@ -24,9 +24,9 @@
 #' @references 
 #' Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
 #' @examples 
-#' \dontrun{
-#' gl <- gl.ibd(gl=testset.gl)
-#' }
+#' #individual 185 deleted as it is the only inidividual in a population
+#' gl <- gl.ibd(gl=testset.gl[-185,])
+
 
 gl.ibd <- function(gl=NULL, Dgen=NULL, Dgeo=NULL, projected=FALSE, permutations=999, plot=TRUE) {
 

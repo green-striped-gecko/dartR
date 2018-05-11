@@ -4,12 +4,15 @@
 \alias{gl.make.recode.ind}
 \title{Create a proforma recode_ind file for reassigning individual (=specimen) names}
 \usage{
-gl.make.recode.ind(x, outfile = "default_recode_ind.csv")
+gl.make.recode.ind(x, outfile = "default_recode_ind.csv",
+  outpath = tempdir())
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
 
 \item{outfile}{-- name of the new proforma file [default default_recode_ind.csv]}
+
+\item{outpath}{-- path where to save the output file (set to tempdir by default)}
 }
 \value{
 A vector containing the new individual names
@@ -32,9 +35,7 @@ can potentially generate monomorphic loci or loci with all
 values missing. Clean this up with gl.filter.monomorphic().
 }
 \examples{
-\dontrun{
-result <- gl.make.recode.ind(gl, outfile="Emmac_recode_ind.csv")
-}
+result <- gl.make.recode.ind(testset.gl, outfile="Emmac_recode_ind.csv")
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

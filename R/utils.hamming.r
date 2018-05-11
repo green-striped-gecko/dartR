@@ -36,10 +36,6 @@
 #' @return Hamming distance between the two strings
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
-#' @examples
-#' str1 <- "aatgGCTAG"
-#' str2 <- "aatgGCTcG"
-#' utils.hamming(str1,str2)
 
 utils.hamming <- function(str1, str2, r=4) {
   # Make the strings the same length and remove the recognition sequence

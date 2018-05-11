@@ -47,11 +47,8 @@ recalculates statistics made redundant by the deletion of individuals from the d
 The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 }
 \examples{
-\dontrun{
-gl <- gl.edit.recode.pop(gl)
-gl <- gl.edit.recode.pop(gl, pop.recode="pop.recode.table.csv")
-gl <- gl.edit.recode.pop(gl, pop.recode="pop.recode.table.csv", 
-pop.recode.new="recode.table.minus.hybrids.csv")
+\donttest{
+gl <- gl.edit.recode.pop(testset.gl)
 }
 }
 \author{

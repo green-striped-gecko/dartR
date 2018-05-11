@@ -4,19 +4,21 @@
 \alias{gl2gds}
 \title{Convert a genlight object to nexus format PAUP SVDquartets}
 \usage{
-gl2gds(gl, outfile = "gl2gds.gds")
+gl2gds(gl, outfile = "gl2gds.gds", outpath = tempdir())
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing the SNP data [required]}
 
 \item{outfile}{-- file name of the output file (including extension).}
+
+\item{outpath}{-- path where to save the output file (set to tempdir by default)}
 }
 \description{
 Package SNPRelate relies on a bit-level representation of a SNP dataset that competes with \{adegenet\} genlight
 objects and associated files. This function saves a genlight object to a gds format file.
 }
 \examples{
-\dontrun{
+\donttest{
 gl2gds(testset.gl)
 }
 }

@@ -33,11 +33,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' gl <- gl.edit.recode.pop(gl)
-#' gl <- gl.edit.recode.pop(gl, pop.recode="pop.recode.table.csv")
-#' gl <- gl.edit.recode.pop(gl, pop.recode="pop.recode.table.csv", 
-#' pop.recode.new="recode.table.minus.hybrids.csv")
+#' \donttest{
+#' gl <- gl.edit.recode.pop(testset.gl)
 #' }
 #
 # Ammended Georges 29-Oct-16

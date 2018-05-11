@@ -25,8 +25,3 @@ converts a dart file (read via \code{read.dart}) into an genlight object \code{\
 \details{
 the covariate file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (perferable in decimal degrees WGS1984 format). Additional columns with individual covariates can be imported (e.g. age, gender).
 }
-\examples{
-\dontrun{
-dgl <- dart2genlight(dart, "covariates.csv")
-}
-}

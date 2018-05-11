@@ -49,7 +49,7 @@ The SNP matrix, locus names (constructed from the AlleleID, SNP and SnpPosition 
 specimen metadata are combined into a genlight object. Refer to the genlight documentation (Package adegenet) for further details.
 }
 \examples{
-\dontrun{
+\donttest{
 gl <- gl.read.dart.2row(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
 nmetavar=16, nas="-", ind.metafile="metadata.csv" )
 }

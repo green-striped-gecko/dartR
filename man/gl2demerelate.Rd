@@ -16,9 +16,7 @@ A dataframe suitable as input to package \{Demerelate\}
 Create a dataframe suitable for input to package \{Demerelate\} from a genlight \{adegenet\} object
 }
 \examples{
-\dontrun{
-df <- gl2demerelate(gl)
-}
+df <- gl2demerelate(testset.gl)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

@@ -28,9 +28,7 @@ to rename populations.
 The script returns a genlight object with the new population assignments.
 }
 \examples{
-\dontrun{
    gl <- gl.merge.pop(testset.gl, old=c("EmsubRopeMata","EmvicVictJasp"), new="Outgroup")
-}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

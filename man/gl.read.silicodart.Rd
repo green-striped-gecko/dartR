@@ -45,7 +45,7 @@ The data matrix, locus names (forced to be unique), locus metadata, specimen nam
 specimen metadata are combined into a genInd object. Refer to the documentation for \{adegenet\} for further details.
 }
 \examples{
-\dontrun{
+\donttest{
 glind <- gl.read.silicodart(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
 nmetavar=16, nas="-", ind.metafile="metadata.csv" )
 }

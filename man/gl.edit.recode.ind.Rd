@@ -46,10 +46,10 @@ recalculates statistics made redundant by the deletion of individuals from the d
 The script returns a genlight object with the new individual labels and the recalculated locus metadata.
 }
 \examples{
-\dontrun{
-gl <- gl.edit.recode.ind(gl)
-gl <- gl.edit.recode.ind(gl, pop.recode="ind.recode.table.csv")
-gl <- gl.edit.recode.ind(gl, pop.recode="ind.recode.table.csv", 
+\donttest{
+gl <- gl.edit.recode.ind(testset.gl)
+gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
+gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
 }
 #Ammended Georges 9-Mar-17
 }
