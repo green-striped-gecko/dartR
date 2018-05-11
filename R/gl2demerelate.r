@@ -5,9 +5,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' df <- gl2demerelate(gl)
-#' }
+#' df <- gl2demerelate(testset.gl)
 
 gl2demerelate <- function(gl) {
 

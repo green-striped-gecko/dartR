@@ -20,7 +20,8 @@ This functions performs a HWE test for every population (rows) and loci (columns
 Filter function to facilitate analysing of dart data
 }
 \examples{
-\dontrun{
-gl.hwe.pop(gi=gi, pvalue = 0.05, plot = TRUE)
+\donttest{
+library(parallel)
+gl.hwe.pop(testset.gl, pvalue = 0.05, plot = TRUE)
 }
 }

@@ -12,10 +12,7 @@
 #' @importFrom stats complete.cases
 #' @author Bernd Guber (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' 
 #' gl2shp(testset.gl)
-#'}
 
 gl2shp <- function(gl, proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",  outfile="gl", outpath=tempdir(), v=1)
 {

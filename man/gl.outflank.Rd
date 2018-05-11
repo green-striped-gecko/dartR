@@ -32,7 +32,7 @@ Function to identify loci under selection per population using the outflank meth
 this function is a wrapper around the outflank function provided by Whitlock and Lotterhus. To be able to run this function the packages qvalue (from bioconductor) and outflank (from github) needs to be installed. To do so see example below.
 }
 \examples{
-\dontrun{
+\donttest{
 gl.outflank(gi, plot = TRUE)
 }
 }

@@ -5,7 +5,7 @@
 \title{Converts genlight objects to STRUCTURE formated files}
 \usage{
 gl2structure(gl, indNames = NULL, addcolumns = NULL, ploidy = 2,
-  exportMarkerNames = TRUE, outfile = "gl.str", outpath = getwd(),
+  exportMarkerNames = TRUE, outfile = "gl.str", outpath = tempdir(),
   v = 1)
 }
 \arguments{
@@ -26,13 +26,13 @@ gl2structure(gl, indNames = NULL, addcolumns = NULL, ploidy = 2,
 \item{v}{-- verbosity: if v=0 no output, v=1 reports name and path of output file. default 1}
 }
 \description{
-This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststruture version as well). It is based on the code provided by Lindsay Clark (see \url{https://github.com/lvclark/R_genetics_conv})  and this function is basically a wrapper around his numeric2structure function.
+This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststruture version as well). It is based on the code provided by Lindsay Clark (see \url{https://github.com/lvclark/R_genetics_conv})  and this function is basically a wrapper around her numeric2structure function. See also: Lindsay Clark. (2017, August 22). lvclark/R_genetics_conv: R_genetics_conv 1.1 (Version v1.1). Zenodo: \url{http://doi.org/10.5281/zenodo.846816}.
 }
 \examples{
-\dontrun{
+\donttest{
 gl2structure(testset.gl)
 }
 }
 \author{
-Lindsay V. Clark [lvclark@illinois.edu], wrapper by Bernd Gruber
+Bernd Gruber (wrapper) and Lindsay V. Clark [lvclark@illinois.edu]
 }

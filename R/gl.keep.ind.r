@@ -15,9 +15,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
 #'    gl <- gl.keep.ind(testset.gl, ind.list=c("AA019073","AA004859"))
-#' }
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
 

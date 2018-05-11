@@ -23,7 +23,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'    gl <- gl.recode.pop(gl, pop.recode="pop_recode_table_0.csv")
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}

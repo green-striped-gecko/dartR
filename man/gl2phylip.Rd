@@ -4,12 +4,14 @@
 \alias{gl2phylip}
 \title{Create a Phylip input distance matrix from a genlight (SNP) or genind (SilicoDarT) \{adegenet\} object}
 \usage{
-gl2phylip(gl, outfile = "phyinput.txt", bstrap = 1)
+gl2phylip(gl, outfile = "phyinput.txt", outpath = tempdir(), bstrap = 1)
 }
 \arguments{
 \item{gl}{Name of the genlight object containing the SNP data or a genind object containing presence absence data [required]}
 
 \item{outfile}{Name of the file to become the input file for phylip [default phyinput.txt]}
+
+\item{outpath}{path where to save the output file (set to tempdir by default)}
 
 \item{bstrap}{Number of bootstrap replicates [default 1]}
 }
@@ -21,8 +23,8 @@ This function calculates and returns a matrix of Euclidean distances between pop
 and produces an input file for the phylogenetic program Phylip (Joe Felsenstein).
 }
 \examples{
-\dontrun{
-result <- gl2phylip(testset.gl, outfile="test.txt", 1000)
+\donttest{
+result <- gl2phylip(testset.gl, outfile="test.txt", bstrap=10)
 }
 }
 \author{

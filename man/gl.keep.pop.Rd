@@ -31,9 +31,7 @@ recalculates statistics made redundant by the deletion of individuals from the d
 The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 }
 \examples{
-\dontrun{
    gl <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-}
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}}

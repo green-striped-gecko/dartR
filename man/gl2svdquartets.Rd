@@ -4,12 +4,15 @@
 \alias{gl2svdquartets}
 \title{Convert a genlight object to nexus format PAUP SVDquartets}
 \usage{
-gl2svdquartets(x, outfile = "svd.nex", method = 2, v = 2)
+gl2svdquartets(x, outfile = "svd.nex", outpath = tempdir(), method = 2,
+  v = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{outfile}{-- file name of the output file (including extension).}
+
+\item{outpath}{-- path where to save the output file (set to tempdir by default)}
 
 \item{method}{-- method = 1, nexus file with two lines per individual; method = 2, nexus
 file with one line per individual, ambiguity codes [default 2]}
@@ -28,9 +31,7 @@ ambiguity codes (method=2).
 Reference: Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent, Bioinformatics, 30: 3317-3324
 }
 \examples{
-\dontrun{
 gl2svdquartets(testset.gl)
-}
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

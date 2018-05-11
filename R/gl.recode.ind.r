@@ -24,7 +24,7 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'    gl <- gl.recode.ind(testset.gl, ind.recode="testset_pop_recode.csv")
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}

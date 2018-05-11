@@ -4,12 +4,14 @@
 \alias{gl.write.csv}
 \title{Write out data from a gl object \link{adegenet} to csv file}
 \usage{
-gl.write.csv(gl, outfile = NULL)
+gl.write.csv(gl, outfile = "outfile.csv", outpath = tempdir())
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing SNP genotypes [required]}
 
 \item{outfile}{-- name of the csv file to write the data to [required]}
+
+\item{outpath}{-- path where to save the output file (set to tempdir by default)}
 }
 \value{
 saves a glenlight object to csv
@@ -24,9 +26,7 @@ The data coding differs from the DArT 1 row format in that 0 = reference homozyg
 alternate homozygous, 1 = heterozyous, and NA = missing SNP assignment.
 }
 \examples{
-\dontrun{
-gl.write.csv(gl, outfile="SNP_1row.csv")
-}
+gl.write.csv(testset.gl, outfile="SNP_1row.csv")
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

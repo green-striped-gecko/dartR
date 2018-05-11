@@ -4,15 +4,18 @@
 \alias{gl.nhybrids}
 \title{Create an input file for the program NewHybrids and run it if NewHybrids is installed}
 \usage{
-gl.nhybrids(gl, outfile = "nhyb.txt", p0 = NULL, p1 = NULL, t = 0,
-  method = "random", nhyb.directory = NULL, BurnIn = 10000,
-  sweeps = 10000, GtypFile = "TwoGensGtypFreq.txt", AFPriorFile = NULL,
-  PiPrior = "Jeffreys", ThetaPrior = "Jeffreys", v = 2)
+gl.nhybrids(gl, outfile = "nhyb.txt", outpath = tempdir(), p0 = NULL,
+  p1 = NULL, t = 0, method = "random", nhyb.directory = NULL,
+  BurnIn = 10000, sweeps = 10000, GtypFile = "TwoGensGtypFreq.txt",
+  AFPriorFile = NULL, PiPrior = "Jeffreys", ThetaPrior = "Jeffreys",
+  v = 2)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing the SNP data [required]}
 
 \item{outfile}{-- name of the file that will be the input file for NewHybrids [default nhyb.txt]}
+
+\item{outpath}{-- path where to save the output file (set to tempdir by default)}
 
 \item{p0}{-- list of populations to be regarded as parental population 0 [default NULL]}
 
@@ -71,8 +74,8 @@ the analysis (method=random) and combine the resultant posterior probabilites
 should 200 loci be considered insufficient.
 }
 \examples{
-\dontrun{
-m <- gl.nhybrids(gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), t=0, method="random")
+\donttest{
+m <- gl.nhybrids(testset.gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), t=0, method="random")
 
 m <- gl.nhybrids(testset.gl, outfile="nhyb.txt", 
 p0=NULL, p1=NULL, 

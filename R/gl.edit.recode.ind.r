@@ -32,10 +32,10 @@
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' gl <- gl.edit.recode.ind(gl)
-#' gl <- gl.edit.recode.ind(gl, pop.recode="ind.recode.table.csv")
-#' gl <- gl.edit.recode.ind(gl, pop.recode="ind.recode.table.csv", 
+#' \donttest{
+#' gl <- gl.edit.recode.ind(testset.gl)
+#' gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
+#' gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
 #' }
 #' #Ammended Georges 9-Mar-17
 

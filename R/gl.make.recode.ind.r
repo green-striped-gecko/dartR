@@ -17,16 +17,15 @@
 #' 
 #' @param x -- name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]
 #' @param outfile -- name of the new proforma file [default default_recode_ind.csv]
+#' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @return A vector containing the new individual names
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' result <- gl.make.recode.ind(gl, outfile="Emmac_recode_ind.csv")
-#' }
+#' result <- gl.make.recode.ind(testset.gl, outfile="Emmac_recode_ind.csv")
 
- gl.make.recode.ind <- function(x, outfile="default_recode_ind.csv") {
-
+ gl.make.recode.ind <- function(x, outfile="default_recode_ind.csv", outpath=tempdir()) {
+ outfile <- file.path(outpath, outfile)
  mat <- cbind(indNames(x),indNames(x))
  write.table(mat, file=outfile, sep=",", row.names=FALSE, col.names=FALSE)
  

@@ -9,15 +9,17 @@
 #'
 #' @param gl -- name of the genlight object containing SNP genotypes [required]
 #' @param outfile -- name of the csv file to write the data to [required]
+#' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @return saves a glenlight object to csv
+#' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
-#' gl.write.csv(gl, outfile="SNP_1row.csv")
-#' }
+#' gl.write.csv(testset.gl, outfile="SNP_1row.csv")
 
-gl.write.csv <- function(gl, outfile=NULL) {
-x <- gl
+gl.write.csv <- function(gl, outfile="outfile.csv", outpath=tempdir()) {
+
+  outfile <- file.path(outpath, outfile)
+  x <- gl
 
 # Add individual names and population names to rows
   x1 <- cbind.data.frame(pop(x),as.matrix(x))

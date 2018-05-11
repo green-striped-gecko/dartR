@@ -15,9 +15,8 @@
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' \dontrun{
 #'    gl <- gl.merge.pop(testset.gl, old=c("EmsubRopeMata","EmvicVictJasp"), new="Outgroup")
-#' }
+
 
 gl.merge.pop <- function(x, old=NULL, new=NULL, v=2) {
 

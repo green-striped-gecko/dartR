@@ -32,7 +32,7 @@
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' gl <- gl.read.dart.2row(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
 #' nmetavar=16, nas="-", ind.metafile="metadata.csv" )
 #' }

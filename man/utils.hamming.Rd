@@ -48,11 +48,6 @@ initial common restriction enzyme recognition sequence is ignored.
 The algorithm is that of Johann de Jong 
 \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 }
-\examples{
-str1 <- "aatgGCTAG"
-str2 <- "aatgGCTcG"
-utils.hamming(str1,str2)
-}
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
