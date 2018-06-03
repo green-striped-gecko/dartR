@@ -1,30 +1,34 @@
 #' Convert a genlight object to nexus format PAUP SVDquartets
 #'
 #' The output nexus file contains the snp data in one of two forms, depending upon what you regard
-#' as most appropriate. One form, that used by Chifman and Kubatko, has two lines per individual,
-#' one providing the reference SNP the second providing the alternate SNP (method=1). 
-#' A second form, recommended by Dave Swofford, has
+#' as most appropriate.  
+#' One form, recommended by Dave Swofford, has
 #' a single line per individual, resolving heterozygous SNPs by replacing them with standard
-#' ambiguity codes (method=2).
+#' ambiguity codes (method=1).
+#' A second form, that used by Chifman and Kubatko, has two lines per individual,
+#' one providing the reference SNP the second providing the alternate SNP (method=2).
 #'
 #' Reference: Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent, Bioinformatics, 30: 3317-3324
 #' 
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- file name of the output file (including extension).
-#' @param outpath -- path where to save the output file (set to tempdir by default)
-#' @param method -- method = 1, nexus file with two lines per individual; method = 2, nexus
-#' file with one line per individual, ambiguity codes [default 2]
+#' @param method -- method = 1, nexus file with one line per individual, ambiguity codes; 
+#' method = 2, nexus file with two lines per individual [default 1]
+#' @param nreps -- number of bootstrap replicates to request of PAUP [default 10,000]
+#' @param nthreads -- PAUP parameter to include in the outfile: number of cores available for the analysis [default 4]
+#' @param logfile -- PAUP parameter to include in the outfile: name of the file that PAUP will log the analysis information [default svd.txt]
+#' @param treefile -- PAUP parameter to include in the outfile: name of the file that PAUP will direct tree results [default svd.tre]
+#' @param savetree -- PAUP parameter to include in the outfile: name of the file that PAUP will direct tree results [default svd_boot.tre]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @export
+#' @importFrom
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' gl2svdquartets(testset.gl)
 
-gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=2) {
-
-  outfile <- file.path(outpath, outfile)
+gl2svdquartets <- function(x, outfile="svd.nex", method=1, nreps=10000, nthreads=4, logfile="svd.txt", treefile="svd.tre", savetree="svd_boot.tre", v=2) {
   
   if (v > 0) {cat(paste("Starting gl2svdquartets: Create nexus file\n\n"))}
   if (v > 1) {cat(paste("    Extacting SNP bases and creating records for each individual\n"))}
@@ -60,7 +64,7 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   refseq <- array(data=NA,dim=nInd(x))
   altseq <- array(data=NA,dim=nInd(x))
   ambseq <- array(data=NA,dim=nInd(x))
-  if (method == 1) {
+  if (method == 2) {
     for (ind in 1:nInd(x)) {
       refseq[ind] <- paste0(indlabels[ind],"_1   ")
       altseq[ind] <- paste0(indlabels[ind],"_2   ")
@@ -73,7 +77,7 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
 
 # progressively add the bases  
   for (ind in 1:nInd(x)) {
-    for (loc in 2:nLoc(x)){
+    for (loc in 1:nLoc(x)){
     if (is.na(m[ind,loc])) {
       refseq[ind] <- paste0(refseq[ind],"?")
       altseq[ind] <- paste0(altseq[ind],"?")
@@ -112,10 +116,14 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   sink(outfile)
   cat("#nexus\n")
   cat("BEGIN DATA;\n")
-  cat(paste0("     dimensions ntax = ",2*nInd(x)," nchar = ",nLoc(x)," ;\n"))
+  if (method == 2) {
+    cat(paste0("     dimensions ntax = ",2*nInd(x)," nchar = ",nLoc(x)," ;\n"))
+  } else {
+    cat(paste0("     dimensions ntax = ",nInd(x)," nchar = ",nLoc(x)," ;\n"))
+  }  
   cat("     format datatype = dna gap = - ;\n\n")
   cat("matrix\n")
-  if (method == 1) {
+  if (method == 2) {
     for (i in 1:nInd(x)){
       cat(paste0(refseq[i],"\n"))
       cat(paste0(altseq[i],"\n"))
@@ -135,17 +143,18 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   cat("       ",paste0(plabels[length(plabels)]," : ",a[length(plabels)],"-",b[length(plabels)],";\n"))
   cat("end;\n\n")
   cat("begin paup;\n")
-  cat("log file=svd.txt;\n")
-  cat("lset nthreads=3;\n")
+  cat("log file=",logfile,";\n")
+  cat("lset nthreads=",nthreads,";\n")
   cat("SVDQuartets\n")
   cat("    evalQuartets=random\n")
   cat("    speciesTree=yes\n")
   cat("    partition=pops\n")
   cat("    bootstrap=standard\n")
-  cat("    nreps=10000\n")
+  cat("    nreps=",nreps,"\n")
   cat("    ambigs=distribute\n")
-  cat("    treeFile=svd.tre;\n")
-  cat("savetrees file=svd_boot.tre from=1 to=1 maxdecimals=2;\n")
+  cat("    treeFile=",treefile,"\n")
+  cat("    nthreads==",nthreads,";\n")
+  cat("savetrees file=",savetree," from=1 to=1 maxdecimals=2;\n")
   cat("log stop;\n")
   cat("quit;\n")
   cat("end;\n")
@@ -153,9 +162,12 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   sink()
   
   if (v > 2) {cat(paste("    Records written to",outfile,":",nInd(x),"\n"))}
+  if (v > 2) {cat(paste("    Log written to",logfile,"\n"))}
+  if (v > 2) {cat(paste("    Trees written to svd_boot.tre\n"))}
   if (v > 0) {cat("gl2svdquartets Completed\n")}
   
   return(NULL)
 
 }
+
 
