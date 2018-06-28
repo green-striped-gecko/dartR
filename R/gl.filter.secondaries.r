@@ -39,12 +39,15 @@ gl.filter.secondaries <- function(x, method="random", v=2) {
 # Sort the genlight object on AlleleID (asc), RepAvg (desc), AvgPIC (desc) 
   if (method == "best") {
     if (v > 1){cat("  Selecting one SNP per sequence tag based on best RepAvg and AvgPIC\n")}
-    x <- x[,order(x@other$loc.metrics$AlleleID,-x@other$loc.metrics$RepAvg,-x@other$loc.metrics$AvgPIC)]
+    loc.order <- order(x@other$loc.metrics$AlleleID,-x@other$loc.metrics$RepAvg,-x@other$loc.metrics$AvgPIC)
+    x <- x[, loc.order]
+    x@other$loc.metrics <- x@other$loc.metrics[loc.order, ]
   } else {
     if (v > 1){cat("  Selecting one SNP per sequence tag at random\n")}
     n <- length(x@other$loc.metrics$AlleleID)
     index <- sample(1:(n+10000),size=n,replace=FALSE)
     x <- x[,order(index)]
+    x@other$loc.metrics <- x@other$loc.metrics[order(index), ]
   }
 # Extract the clone ID number
   a <- strsplit(as.character(x@other$loc.metrics$AlleleID),"\\|")
