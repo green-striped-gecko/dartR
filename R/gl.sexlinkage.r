@@ -15,14 +15,20 @@
 #' @param t.hom -- tolerance, that is tf=0.05 means that 5% of the homogametic sex can be heterozygous and still
 #' be regarded as consistent with a sex specific marker [default 0]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param na.rm -- logical: should NAs in sex assignments be ignored?
 #' @return The list of sex specific loci
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' result <- gl.sexlinkage(testset.gl)
 
-gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
+gl.sexlinkage <- function(x, t.het = 0, t.hom = 0, v = 2, na.rm = FALSE) {
 
+  # remove NAs from data set
+  if (na.rm & any(is.na(x@other$ind.metrics$sex))) {
+    x <- x[!is.na(x@other$ind.metrics$sex)]
+  }
+  
   if (v > 0) {
     cat("Starting gl.sexlinkage: Identifying sex linked loci\n")
   }
