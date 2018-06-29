@@ -82,6 +82,7 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
 # Check for hets in all males, homs in all females (XY); ditto for ZW
   sumf <- df$F0+df$F1+df$F2
   summ <- df$M0+df$M1+df$M2
+  df <- df[(sumf > 0) & (summ > 0), ]
   zw <- df[df$F1/(sumf)>=(1-t.hom) & df$M1/(summ)<=(0+t.het),]
   xy <- df[df$F1/(sumf)<=(0+t.het) & df$M1/(summ)>=(1-t.hom),]
 
