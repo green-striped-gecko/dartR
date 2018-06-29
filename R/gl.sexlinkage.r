@@ -80,35 +80,40 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
 # Check for hets in all males, homs in all females (XY); ditto for ZW
   sumf <- df$F0+df$F1+df$F2
   summ <- df$M0+df$M1+df$M2
+  df_zero_sum <- df[(sumf == 0) | (summ == 0), ]
   df <- df[(sumf > 0) & (summ > 0), ]
-  zw <- df[df$F1/(sumf)>=(1-t.hom) & df$M1/(summ)<=(0+t.het),]
-  xy <- df[df$F1/(sumf)<=(0+t.het) & df$M1/(summ)>=(1-t.hom),]
-
-if (nrow(zw) == 0){
-  cat("No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
-} else {
-  cat("\nSex linked loci consistent with female heterogamety (ZZ/ZW)\n")
-  cat(paste("  Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n")) 
-  cat(paste("  for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
-  cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
-  print(zw)
-  cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-  cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
-}
-if (nrow(xy) == 0){
-  cat("No sex linked markers consistent with male heterogamety (XX/XY)\n")
-} else {
-  cat("\nSex linked loci consistent with male heterogamety (XX/XY)\n")
-  cat(paste("  Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,";\n")) 
-  cat(paste("  for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
-  cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
-  print(xy)
-  cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-  cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+  zw <- df[df$F1/(sumf[sumf > 0])>=(1-t.hom) & df$M1/(summ[summ > 0])<=(0+t.het),]
+  xy <- df[df$F1/(sumf[sumf > 0])<=(0+t.het) & df$M1/(summ[summ > 0])>=(1-t.hom),]
+  
+  if (nrow(zw) == 0){
+    cat("No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
+  } else {
+    cat("\nSex linked loci consistent with female heterogamety (ZZ/ZW)\n")
+    cat(paste("  Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n")) 
+    cat(paste("  for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
+    cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
+    print(zw)
+    cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
+    cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
   }
-
-l <- list(zw,xy)
-
-return(l)
-
+  if (nrow(xy) == 0){
+    cat("No sex linked markers consistent with male heterogamety (XX/XY)\n")
+  } else {
+    cat("\nSex linked loci consistent with male heterogamety (XX/XY)\n")
+    cat(paste("  Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,";\n")) 
+    cat(paste("  for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
+    cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
+    print(xy)
+    cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
+    cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+  }
+  if (nrow(df_zero_sum) != 0){
+    cat("\nSound loci with zero alleles for one sex\n")
+    print(df_zero_sum)
+  } 
+  
+  l <- list(zw,xy, df_zero_sum)
+  
+  l
+  
 }
