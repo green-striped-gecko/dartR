@@ -63,9 +63,7 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
 # Combine the two files
   Trimmed_Sequence <- x@other$loc.metrics$TrimmedSequence
   df <- cbind(dff,dfm,Trimmed_Sequence)
-  a <- strsplit(row.names(df), split="\\|")
-  a <- do.call(rbind,a)
-  a <- strsplit(a[,2],"-")
+  a <- strsplit(row.names(df), split="-")
   a <- do.call(rbind,a)
   a <- as.numeric(a[,1])
   
