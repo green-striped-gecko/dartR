@@ -82,8 +82,10 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
   summ <- df$M0+df$M1+df$M2
   df_zero_sum <- df[(sumf == 0) | (summ == 0), ]
   df <- df[(sumf > 0) & (summ > 0), ]
-  zw <- df[df$F1/(sumf[sumf > 0])>=(1-t.hom) & df$M1/(summ[summ > 0])<=(0+t.het),]
-  xy <- df[df$F1/(sumf[sumf > 0])<=(0+t.het) & df$M1/(summ[summ > 0])>=(1-t.hom),]
+  zw <- df[df$F1/(sumf[(sumf > 0) & (summ > 0)]) >= (1 - t.hom) &
+             df$M1/(summ[(sumf > 0) & (summ > 0)]) <= (0 + t.het), ]
+  xy <- df[df$F1/(sumf[(sumf > 0) & (summ > 0)]) <= (0 + t.het) &
+             df$M1/(summ[(sumf > 0) & (summ > 0)]) >= (1 - t.hom), ]
   
   if (nrow(zw) == 0){
     cat("No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
@@ -108,7 +110,7 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
     cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
   }
   if (nrow(df_zero_sum) != 0){
-    cat("\nSound loci with zero alleles for one sex\n")
+    cat("\nFound loci with zero alleles for one sex\n")
     print(df_zero_sum)
   } 
   
