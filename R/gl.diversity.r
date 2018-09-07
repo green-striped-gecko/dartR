@@ -15,8 +15,7 @@
 
 ### To be done:
 
-# a table and matrix on the number of loci used
-# adjust for population sizes (switch)
+# adjust calculation of betas for population sizes (switch)
 
 
 gl.diversity <- function(gl, spectrumplot=TRUE) {
@@ -27,6 +26,10 @@ if  (is.null(pop(gl)))  pop(gl)<- factor(rep("all", nInd(gl)))
 pops <- seppop(gl)
      
   ##0Halpha (average number of alleles, ignoring missing values)
+
+nlocpop <- lapply(pops, function(x) sum(!is.na(colMeans(as.matrix(x)))))
+nlocpop$totalloc <- nLoc(gl)
+
 zero_H_alpha <- lapply(pops, function(x) mean(((colMeans(as.matrix(x), na.rm=T) %% 2)>0)+1-1, na.rm = T))
 
 
@@ -53,6 +56,29 @@ npops <- length(pops)
 if (npops>1)
 {
 pairs <- t(combn(npops,2))
+
+#missing loci 
+#zero_H_beta
+nlocpairpop <- apply(pairs,1, function(x)  {
+  pop1 <- pops[[x[1]]]
+  pop2 <- pops[[x[2]]]
+  pp1 <- colMeans(as.matrix(pop1), na.rm = T)/2
+  pp2 <- colMeans(as.matrix(pop2), na.rm = T)/2
+  index <- !is.na(pp1) & !is.na(pp2)
+  return(sum(index))
+  
+} )
+
+
+
+mat_nloc_pops <- matrix(NA, nrow = npops, ncol = npops)
+mat_nloc_pops[lower.tri(mat_nloc_pops)] <- nlocpairpop
+colnames(mat_nloc_pops) <- rownames(mat_nloc_pops) <- names(pops)
+
+
+
+
+
 #zero_H_beta
 zero_H_beta <- apply(pairs,1, function(x)  {
   
@@ -71,6 +97,8 @@ zero_H_beta <- apply(pairs,1, function(x)  {
   return(mean(abs(pp1-pp2)))
   
 } )
+
+
 
 
 mat_zero_H_beta <- matrix(NA, nrow = npops, ncol = npops)
@@ -135,7 +163,7 @@ cx <- max(1-(max(-12+nrow(fs),0)*0.025),0.5)
 bb<-  barplot(fs, beside = T, names.arg = rep(rownames(fs),3), ylim=c(1,2.2), main="q-profile", col=rainbow(npops), las=2, xpd=FALSE, cex.names=cx)
  text(colMeans(bb), rep(2.1,3), labels = c("q=0", "q=1", "q=2")) 
 }
-return(list(
+return(list(nlocpop=unlist(nlocpop), nlocpairpop = mat_nloc_pops,
   zero_H_alpha= unlist(zero_H_alpha), one_H_alpha=unlist(one_H_alpha),two_H_alpha=unlist(two_H_alpha) ,
   zero_D_alpha= zero_D_alpha, one_D_alpha=one_D_alpha,two_D_alpha=two_D_alpha ,
   zero_H_beta=mat_zero_H_beta, one_H_beta=mat_one_H_beta, two_H_beta=mat_two_H_beta, zero_D_beta = mat_zero_D_beta, one_D_beta = mat_one_D_beta, two_D_beta = mat_two_D_beta))
