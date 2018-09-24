@@ -68,6 +68,7 @@ one_D_alpha_sd <- unlist(lapply(one_H_alpha_es, function(x) x[[4]]))
 #two_H_alpha
 two_H_alpha_es <- lapply(pops, function(x) {
   p<- colMeans(as.matrix(x), na.rm = T)/2
+
   p <- p[!is.na(p)] #ignore loci with just missing data
   dummys <- (1-(p*p+(1-p)*(1-p)))
   
@@ -145,17 +146,18 @@ colnames(mat_zero_D_beta) <- rownames(mat_zero_D_beta) <- names(pops)
 #one_H_beta
 # calculate one_H_alpha_all for combined pops
 p<- colMeans(as.matrix(gl), na.rm = T)/2
-i1 <- !is.na(p)#ignore loci with just missing data
+i0 <- which(!is.na(p))#ignore loci with just missing data
 #p <- p[!is.na(p)] #ignore loci with just missing data
 logp <- ifelse(!is.finite(log(p)), 0, log(p))
 log1_p <- ifelse(!is.finite(log(1-p)), 0, log(1-p))
 one_H_alpha_all <- -(p*logp + (1-p)*log1_p)
 
 one_H_beta_es <- apply(pairs,1, function(x) { 
-  i2 <- !is.na(colMeans(as.matrix(pops[[x[1]]]), na.rm = T)/2)
-  i3 <- !is.na(colMeans(as.matrix(pops[[x[2]]]), na.rm = T)/2)
-  index <- i1 & i2 & i3
-  dummys <- one_H_alpha_all[index]-(one_H_alpha_es[[x[1]]]$dummys[index]+ one_H_alpha_es[[x[2]]]$dummys[index])/2
+  i1 <- which(!is.na(colMeans(as.matrix(pops[[x[1]]]), na.rm = T)/2))
+  i2 <- which(!is.na(colMeans(as.matrix(pops[[x[2]]]), na.rm = T)/2))
+  tt <- table(c(i0,i1,i2))
+  index <-as.numeric(names(tt)[tt==3])
+  dummys <- one_H_alpha_all[i0 %in% index]-(one_H_alpha_es[[x[1]]]$dummys[i1 %in% index]+ one_H_alpha_es[[x[2]]]$dummys[i2 %in% index])/2
   return(list(estH=mean(dummys), sdH=sd(dummys), estD=mean(exp(dummys)), sdD=sd(exp(dummys))))
 })
 
@@ -178,18 +180,19 @@ colnames(mat_one_D_beta) <- rownames(mat_one_D_beta) <- names(pops)
 #two_H_beta
 # calculate two_H_alpha_all for combined pops
 p<- colMeans(as.matrix(gl), na.rm = T)/2
-i1 <- !is.na(p)#ignore loci with just missing data
+i0 <- which(!is.na(p))#ignore loci with just missing data
 #p <- p[!is.na(p)] #ignore loci with just missing data
 two_H_alpha_all <- (1-(p*p+(1-p)*(1-p)))  
 
 two_H_beta_es <- apply(pairs,1, function(x) {
   
-  i2 <- !is.na(colMeans(as.matrix(pops[[x[1]]]), na.rm = T)/2)
-  i3 <- !is.na(colMeans(as.matrix(pops[[x[2]]]), na.rm = T)/2)
-  index <- i1 & i2 & i3
+  i1 <- which(!is.na(colMeans(as.matrix(pops[[x[1]]]), na.rm = T)/2))
+  i2 <- which(!is.na(colMeans(as.matrix(pops[[x[2]]]), na.rm = T)/2))
+  tt <- table(c(i0,i1,i2))
+  index <-as.numeric(names(tt)[tt==3])
   
-  m2Ha <- (two_H_alpha_es[[x[1]]]$dummys[index]+ two_H_alpha_es[[x[2]]]$dummys[index])/2
-  dummys <- ((two_H_alpha_all[index]-m2Ha[index])/(1-m2Ha))*(npops/(npops-1))
+  m2Ha <- (two_H_alpha_es[[x[1]]]$dummys[i1 %in% index]+ two_H_alpha_es[[x[2]]]$dummys[i2 %in% index])/2
+  dummys <- ((two_H_alpha_all[i0 %in% index]-m2Ha)/(1-m2Ha))*(npops/(npops-1))
 #Johst-D
     return(list(estH=mean(dummys), sdH=sd(dummys), estD=mean(exp(dummys)), sdD=sd(exp(dummys))) )
  # return((two_H_beta_all-m2Ha)/two_H_beta_all  )
