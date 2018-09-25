@@ -4,6 +4,8 @@
 #'
 #' @param gl genlight object containing the SNP genotypes  [required]
 #' @param spectrumplot switch to provide a plot [TRUE]
+#' @param probar report on progress. Silent if set to FALSE. [Default is TRUE]
+#' @param table prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.
 #' 
 #' @return a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
 #' @export
@@ -20,34 +22,40 @@
 # adjust calculation of betas for population sizes (switch)
 
 
-gl.diversity <- function(gl, spectrumplot=TRUE, verbose=2) {
+gl.diversity <- function(gl, spectrumplot=TRUE, probar=TRUE, table="DH") {
 
 if  (is.null(pop(gl)))  pop(gl)<- factor(rep("all", nInd(gl)))
 
 #split in pops
 pops <- seppop(gl)
-     
 
-
+if (probar){
+pb <- txtProgressBar(0,8, style = 3, width = 20) 
+cat(" Counting missing loci...           ")     
+}
 #number of missing loci
 
 nlocpop <- lapply(pops, function(x) sum(!is.na(colMeans(as.matrix(x), na.rm = T))))
-nlocpop$totalloc <- nLoc(gl)
+#nlocpop$totalloc <- nLoc(gl)
 
-
-
+if (probar){
+setTxtProgressBar(pb, 1)
+cat(" Calculating zero_H/D_alpha ...           ")
 ##0Halpha (average number of alleles, ignoring missing values and sd)
+}
 zero_H_alpha_es <- lapply(pops, function(x) {
   dummys <- ((colMeans(as.matrix(x), na.rm=T) %% 2)>0)+1-1 
-  return( list(estH=mean(dummys,  na.rm = T), sdH=sd(dummys, na.rm=T),estD =mean(dummys, na.rm = T)+1, sdD=sd(dummys, na.rm = T)+1)) 
+  return( list(estH=mean(dummys,  na.rm = T), sdH=sd(dummys, na.rm=T),estD =mean(dummys, na.rm = T)+1, sdD=sd(dummys, na.rm = T))) 
 })
 zero_H_alpha <- unlist(lapply(zero_H_alpha_es, function(x) x[[1]]))
 zero_H_alpha_sd <- unlist(lapply(zero_H_alpha_es, function(x) x[[2]]))
 zero_D_alpha <- unlist(lapply(zero_H_alpha_es, function(x) x[[3]]))
 zero_D_alpha_sd <- unlist(lapply(zero_H_alpha_es, function(x) x[[4]]))
 
-
-
+if (probar){
+setTxtProgressBar(pb, 2)
+cat(" Calculating one_H/D_alpha ...          ")
+}
 ### one_H_alpha
 one_H_alpha_es <- lapply(pops, function(x) {
   p<- colMeans(as.matrix(x), na.rm = T)/2
@@ -63,8 +71,10 @@ one_H_alpha <- unlist(lapply(one_H_alpha_es, function(x) x[[1]]))
 one_H_alpha_sd <- unlist(lapply(one_H_alpha_es, function(x) x[[2]]))
 one_D_alpha <- unlist(lapply(one_H_alpha_es, function(x) x[[3]]))
 one_D_alpha_sd <- unlist(lapply(one_H_alpha_es, function(x) x[[4]]))
-
-
+if (probar){
+setTxtProgressBar(pb, 3)
+cat(" Calculating two_H/D_alpha ...           ")
+}
 #two_H_alpha
 two_H_alpha_es <- lapply(pops, function(x) {
   p<- colMeans(as.matrix(x), na.rm = T)/2
@@ -89,8 +99,11 @@ npops <- length(pops)
 
 if (npops>1)
 {
+if(probar){
+  setTxtProgressBar(pb, 4)
+  cat(" Counting pairwise missing loci...")  
+}
 pairs <- t(combn(npops,2))
-
 ### pairwise missing loci 
 nlocpairpop <- apply(pairs,1, function(x)  {
   pop1 <- pops[[x[1]]]
@@ -104,7 +117,10 @@ mat_nloc_pops <- matrix(NA, nrow = npops, ncol = npops)
 mat_nloc_pops[lower.tri(mat_nloc_pops)] <- nlocpairpop
 colnames(mat_nloc_pops) <- rownames(mat_nloc_pops) <- names(pops)
 
-
+if (probar){
+setTxtProgressBar(pb, 5)
+cat(" Calculating zero_H/D_beta ...         ")
+}
 #zero_H_beta
 zero_H_beta_es <- apply(pairs,1, function(x)  {
   
@@ -142,6 +158,10 @@ mat_zero_D_beta[lower.tri(mat_zero_D_beta)] <- zero_D_beta
 mat_zero_D_beta[pairs] <- zero_D_beta_sd
 colnames(mat_zero_D_beta) <- rownames(mat_zero_D_beta) <- names(pops)
 
+if (probar){
+  setTxtProgressBar(pb, 6)
+  cat(" Calculating one_H/D_beta ...    ")
+}
 
 #one_H_beta
 # calculate one_H_alpha_all for combined pops
@@ -175,6 +195,11 @@ mat_one_D_beta <- matrix(NA, nrow = npops, ncol = npops)
 mat_one_D_beta[lower.tri(mat_one_D_beta)] <- one_D_beta
 mat_one_D_beta[pairs] <- one_D_beta_sd
 colnames(mat_one_D_beta) <- rownames(mat_one_D_beta) <- names(pops)
+
+if (probar){
+  setTxtProgressBar(pb, 7)
+  cat(" Calculating two_H/D_beta...    ")
+}
 
 
 #two_H_beta
@@ -216,6 +241,12 @@ colnames(mat_two_D_beta) <- rownames(mat_two_D_beta) <- names(pops)
 } # npops>1  
 
 
+if (probar){
+  setTxtProgressBar(pb, 8)
+  cat(" Done.                               ")
+}
+
+
 if (spectrumplot)
 {
 
@@ -223,7 +254,51 @@ fs <- cbind(zero_D_alpha, one_D_alpha, two_D_alpha)
 cx <- max(1-(max(-12+nrow(fs),0)*0.025),0.5)
 bb<-  barplot(fs, beside = T, names.arg = rep(rownames(fs),3), ylim=c(1,2.15), main="q-profile", col=rainbow(npops), las=2, xpd=FALSE, cex.names=cx)
  text(colMeans(bb), rep(2.1,3), labels = c("q=0", "q=1", "q=2")) 
+
+ sds <- cbind(zero_D_alpha_sd, one_D_alpha_sd, two_D_alpha_sd)
+ up <- fs+sds
+ low <- fs-sds
+ for (i in 1:ncol(bb))
+ {
+   for (ii in 1:nrow(bb))
+   {
+     arrows(x0 = bb[ii,i], y0 = up[ii,i], x1=bb[ii,i], y1=low[ii,i] ,angle = 90, code = 3, length = 0)
+   }
+ }
+
+} #end spectrumplot
+
+if (!is.na(match(table, c("H", "DH","HD"))))
+{
+tt <- data.frame(nloci=unlist(nlocpop),"m_0Ha"= zero_H_alpha, "sd_0Ha"= zero_H_alpha_sd,"m_1Ha"= one_H_alpha, "sd_1Ha"= one_H_alpha_sd, "m_2Ha"= two_H_alpha, "sd_2Ha"= two_H_alpha_sd)
+print(knitr::kable(tt, digits = 3))
+
+cat("\n\n0_H_beta")
+print(knitr::kable(mat_zero_H_beta, digits = 3), )
+cat("\n\n1_H_beta")
+print(knitr::kable(mat_one_H_beta, digits = 3))
+cat("\n\n2_H_beta")
+print(knitr::kable(mat_two_H_beta, digits = 3))
+
+
+
 }
+
+if (!is.na(match(table, c("D", "DH","HD"))))
+{
+  tt <- data.frame(nloci=unlist(nlocpop),"m_0Da"= zero_D_alpha, "sd_0Da"= zero_D_alpha_sd,"m_1Da"= one_D_alpha, "sd_1Da"= one_D_alpha_sd, "m_2Da"= two_D_alpha, "sd_2Da"= two_D_alpha_sd)
+  print(knitr::kable(tt, digits = 3))
+
+  cat("\n\n0_D_beta")  
+  print(knitr::kable(mat_zero_D_beta, digits = 3))
+  cat("\n\n1_D_beta")
+  print(knitr::kable(mat_one_D_beta, digits = 3))
+  cat("\n\n2_D_beta")
+  print(knitr::kable(mat_two_D_beta, digits = 3))
+  
+}
+
+
 return(list(  nlocpop=unlist(nlocpop), 
               nlocpairpop = mat_nloc_pops,
               
@@ -249,6 +324,7 @@ return(list(  nlocpop=unlist(nlocpop),
               one_D_beta = mat_one_D_beta, 
               two_D_beta = mat_two_D_beta))
 }
+
 
 
 

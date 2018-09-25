@@ -4,12 +4,16 @@
 \alias{gl.diversity}
 \title{Calculate diversity indices for SNPs}
 \usage{
-gl.diversity(gl, spectrumplot = TRUE, verbose = 2)
+gl.diversity(gl, spectrumplot = TRUE, probar = TRUE, table = "DH")
 }
 \arguments{
 \item{gl}{genlight object containing the SNP genotypes  [required]}
 
 \item{spectrumplot}{switch to provide a plot [TRUE]}
+
+\item{probar}{report on progress. Silent if set to FALSE. [Default is TRUE]}
+
+\item{table}{prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.}
 }
 \value{
 a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
