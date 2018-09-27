@@ -272,6 +272,10 @@ if (!is.na(match(table, c("H", "DH","HD"))))
 {
 tt <- data.frame(nloci=unlist(nlocpop),"m_0Ha"= zero_H_alpha, "sd_0Ha"= zero_H_alpha_sd,"m_1Ha"= one_H_alpha, "sd_1Ha"= one_H_alpha_sd, "m_2Ha"= two_H_alpha, "sd_2Ha"= two_H_alpha_sd)
 print(knitr::kable(tt, digits = 3))
+if (npops>1)
+{
+cat("\n\npairwise non-missing loci")  
+print(knitr::kable(mat_nloc_pops, digits = 3))
 
 cat("\n\n0_H_beta")
 print(knitr::kable(mat_zero_H_beta, digits = 3), )
@@ -279,50 +283,67 @@ cat("\n\n1_H_beta")
 print(knitr::kable(mat_one_H_beta, digits = 3))
 cat("\n\n2_H_beta")
 print(knitr::kable(mat_two_H_beta, digits = 3))
-
-
-
+}
 }
 
 if (!is.na(match(table, c("D", "DH","HD"))))
 {
   tt <- data.frame(nloci=unlist(nlocpop),"m_0Da"= zero_D_alpha, "sd_0Da"= zero_D_alpha_sd,"m_1Da"= one_D_alpha, "sd_1Da"= one_D_alpha_sd, "m_2Da"= two_D_alpha, "sd_2Da"= two_D_alpha_sd)
   print(knitr::kable(tt, digits = 3))
-
-  cat("\n\n0_D_beta")  
+  if (npops>1)
+  {
+  cat("\n\npairwise non-missing loci")  
+  print(knitr::kable(mat_nloc_pops, digits = 3))
+    cat("\n\n0_D_beta")  
   print(knitr::kable(mat_zero_D_beta, digits = 3))
   cat("\n\n1_D_beta")
   print(knitr::kable(mat_one_D_beta, digits = 3))
   cat("\n\n2_D_beta")
   print(knitr::kable(mat_two_D_beta, digits = 3))
-  
+  }
 }
-
-
-return(list(  nlocpop=unlist(nlocpop), 
-              nlocpairpop = mat_nloc_pops,
-              
-              zero_H_alpha=    zero_H_alpha,
-              zero_H_alpha_sd= zero_H_alpha_sd,
-              one_H_alpha=     one_H_alpha,
-              one_H_alpha_sd=  one_H_alpha_sd,
-              two_H_alpha=     two_H_alpha,
-              two_H_alpha_sd=  two_H_alpha_sd,
-            
-              zero_D_alpha   = zero_D_alpha, 
-              zero_D_alpha_sd= zero_D_alpha_sd,
-              one_D_alpha    = one_D_alpha,
-              one_D_alpha_sd = one_D_alpha_sd,
-              two_D_alpha    = two_D_alpha,
-              two_D_alpha_sd = two_D_alpha_sd,
-            
-              zero_H_beta=mat_zero_H_beta, 
-              one_H_beta=mat_one_H_beta, 
-              two_H_beta=mat_two_H_beta, 
-            
-              zero_D_beta = mat_zero_D_beta, 
-              one_D_beta = mat_one_D_beta, 
-              two_D_beta = mat_two_D_beta))
+if (npops>1) out <-
+  list(  nlocpop=unlist(nlocpop), 
+         nlocpairpop = mat_nloc_pops,
+         
+         zero_H_alpha=    zero_H_alpha,
+         zero_H_alpha_sd= zero_H_alpha_sd,
+         one_H_alpha=     one_H_alpha,
+         one_H_alpha_sd=  one_H_alpha_sd,
+         two_H_alpha=     two_H_alpha,
+         two_H_alpha_sd=  two_H_alpha_sd,
+         
+         zero_D_alpha   = zero_D_alpha, 
+         zero_D_alpha_sd= zero_D_alpha_sd,
+         one_D_alpha    = one_D_alpha,
+         one_D_alpha_sd = one_D_alpha_sd,
+         two_D_alpha    = two_D_alpha,
+         two_D_alpha_sd = two_D_alpha_sd,
+         
+         zero_H_beta=mat_zero_H_beta, 
+         one_H_beta=mat_one_H_beta, 
+         two_H_beta=mat_two_H_beta, 
+         
+         zero_D_beta = mat_zero_D_beta, 
+         one_D_beta = mat_one_D_beta, 
+         two_D_beta = mat_two_D_beta) else out <- 
+  list(  nlocpop=unlist(nlocpop), 
+         
+         zero_H_alpha=    zero_H_alpha,
+         zero_H_alpha_sd= zero_H_alpha_sd,
+         one_H_alpha=     one_H_alpha,
+         one_H_alpha_sd=  one_H_alpha_sd,
+         two_H_alpha=     two_H_alpha,
+         two_H_alpha_sd=  two_H_alpha_sd,
+         
+         zero_D_alpha   = zero_D_alpha, 
+         zero_D_alpha_sd= zero_D_alpha_sd,
+         one_D_alpha    = one_D_alpha,
+         one_D_alpha_sd = one_D_alpha_sd,
+         two_D_alpha    = two_D_alpha,
+         two_D_alpha_sd = two_D_alpha_sd)
+         
+return(out)
 }
 
 
