@@ -4,6 +4,7 @@
 #'
 #' @param gl genlight object containing the SNP genotypes  [required]
 #' @param spectrumplot switch to provide a plot [TRUE]
+#' @param confiplot switch if confidence intervals (1 sd) should be drawn [default: FALSE]
 #' @param probar report on progress. Silent if set to FALSE. [Default is TRUE]
 #' @param table prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.
 #' 
@@ -22,7 +23,7 @@
 # adjust calculation of betas for population sizes (switch)
 
 
-gl.diversity <- function(gl, spectrumplot=TRUE, probar=TRUE, table="DH") {
+gl.diversity <- function(gl, spectrumplot=TRUE,confiplot=FALSE, probar=TRUE, table="DH") {
 
 if  (is.null(pop(gl)))  pop(gl)<- factor(rep("all", nInd(gl)))
 
@@ -258,7 +259,8 @@ bb<-  barplot(fs, beside = T, names.arg = rep(rownames(fs),3), ylim=c(1,2.15), m
  sds <- cbind(zero_D_alpha_sd, one_D_alpha_sd, two_D_alpha_sd)
  up <- fs+sds
  low <- fs-sds
- for (i in 1:ncol(bb))
+if (confiplot)
+  for (i in 1:ncol(bb))
  {
    for (ii in 1:nrow(bb))
    {
