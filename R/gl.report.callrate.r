@@ -4,8 +4,9 @@
 #' at one or both of the the restriction enzyme recognition sites. This script reports the number of missing values for each
 #' of several percentiles. The script gl.filter.callrate() will filter out the loci with call rates below a specified threshold.
 #'
-#' @param gl -- name of the genlight or genind object containing the SNP data [required]
+#' @param x -- name of the genlight or genind object containing the SNP data [required]
 #' @param method specify the type of report by locus (method="loc") or individual (method="ind") [default method="loc"]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return Mean call rate by locus (method="loc") or individual (method="ind")
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
@@ -13,22 +14,22 @@
 #' gl.report.callrate(testset.gl)
 
 
-gl.report.callrate <- function(gl, method="loc") {
-x <- gl
+gl.report.callrate <- function(x, method="loc", v=2) {
 
-  if(class(x) == "genlight") {
-    cat("Reporting for a genlight object\n")
-  } else if (class(x) == "genind") {
-    cat("Reporting for a genind object\n")
-  } else {
-    cat("Fatal Error: Specify either a genlight or a genind object\n")
-    stop()
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.report.callrate!\n"); stop()
   }
-  cat("Note: Missing values most commonly arise from restriction site mutation.\n\n")
+  if (v >= 1) {
+    cat("Starting gl.report.callrate\n")
+  }
+  if (v >= 3){cat("Note: Missing values most commonly arise from restriction site mutation.\n\n")}
   
   if (method != "ind") {
-    cat("Method set to loc\n")
+    if (v>=2){cat("Method set to loc\n")}
   }
+  
+  # Recalculate the call rate
+    x <- utils.recalc.callrate(x, v=v)
   
   if(method == "loc") {
     # Function to determine the loss of loci for a given filter cut-off
@@ -87,6 +88,11 @@ x <- gl
     df <- data.frame(cbind(b,c)) 
     names(df) <- c("Cutoff","SNPs")
   }
+  
+  if (v >= 1) {
+    cat("gl.report.callrate Completed\n")
+  }
 
-  return("Completed")
+  a <- NULL
+  return(a)
 }

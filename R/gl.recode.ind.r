@@ -1,6 +1,6 @@
 #' Recode individual (=specimen) labels in a genelight or genind object \{adegenet\}
 #'
-#' This script recodes individual labels and/or deletes individuals from a DaRT genlight SNP file or a SilicoDArT genind file
+#' This script recodes individual labels and/or deletes individuals from a DaRT genlight SNP file
 #' based on information provided in a csv file.
 #'
 #' Renaming individuals may be required when there have been errors in labelling arising
@@ -15,7 +15,7 @@
 #' 
 #' The script returns a genlight object with the new individual labels and the recalculated locus metadata.
 #'
-#' @param gl -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
+#' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param ind.recode -- name of the csv file containing the individual relabelling [required]
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
@@ -31,11 +31,10 @@
 #' 
 #'
 
-gl.recode.ind <- function(gl, ind.recode, recalc=TRUE, mono.rm=TRUE, v=1){
-x <- gl
+gl.recode.ind <- function(x, ind.recode, recalc=TRUE, mono.rm=TRUE, v=1){
 
-  if(class(x)!="genind" & class(x)!="genlight") {
-    cat("Fatal Error: genind or genlight object required for gl.recode.ind.r!\n"); stop()
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.recode.ind.r!\n"); stop()
   }
 
 # RELABEL INDIVIDUALS
@@ -66,16 +65,14 @@ x <- gl
       if (mono.rm) {x2 <- gl.filter.monomorphs(x2,v=v)}
       if (recalc) {
     # Recalculate statistics
-        x2 <- utils.recalc.avgpic(x2,v=v)
-        x2 <- utils.recalc.callrate(x2,v=v)
-        x2 <- utils.recalc.freqhets(x2,v=v)
-        x2 <- utils.recalc.freqhomref(x2,v=v)
-        x2 <- utils.recalc.freqhomsnp(x2,v=v)
+        x2 <- gl.recalc.metrics(x2,v=v)
       }
+  } else {
+    x2 <- x
   }
 
 # REPORT A SUMMARY
-  if (v==2) {
+  if (v >= 2) {
     cat("Summary of recoded dataset\n")
     cat(paste("  No. of loci:",nLoc(x2),"\n"))
     cat(paste("  No. of individuals:", nInd(x2),"\n"))
@@ -83,9 +80,18 @@ x <- gl
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
-  if (v==1) {  
-    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
-    if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
+  
+  if (v >= 2) {  
+    if (!recalc) {
+      cat("Note: Locus metrics not recalculated\n")
+    } else {
+      cat("Note: Locus metrics recalculated\n")
+    }
+    if (!mono.rm) {
+      cat("Note: Resultant monomorphic loci not deleted\n")
+    } else{
+      cat("Note: Resultant monomorphic loci deleted\n")
+    }
   }
 
     return(x2)

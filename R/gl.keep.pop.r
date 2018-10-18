@@ -10,7 +10,7 @@
 #'
 #' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param pop.list -- a list of populations to be kept [required]
-#' @param recalc -- Recalculate the locus metadata statistics [default TRUE]
+#' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
@@ -22,18 +22,24 @@
 #' @seealso \code{\link{gl.recalc.metrics}}
 #' 
 
-gl.keep.pop <- function(x, pop.list, recalc=FALSE, mono.rm=FALSE, v=2){
+gl.keep.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, v=2){
 
-  if (v > 0) {
-    cat("Starting gl.keep.pop: Deleting all but selected populations\n")
-  }
-  
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.keep.pop.r!\n"); stop("Execution terminated\n")
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+  if (length(pop.list) == 0) {
+    cat("Fatal Error: list of populations to drop required!\n"); stop("Execution terminated\n")
+  }
+  test <- pop.list%in%levels(pop(x))
+  if (!all(test,na.rm=FALSE)) {
+    cat("Fatal Error: some of the listed populations are not present in the dataset!\n"); stop("Execution terminated\n")
+  }
+  if (v >= 1) {
+    cat("Starting gl.keep.pop: Deleting all but selected populations\n")
   }
 
 # REMOVE POPULATIONS
-  if (v > 1) {
+  if (v >= 2) {
     cat("  Retaining only populations", pop.list, "\n")
   }
 
@@ -47,21 +53,25 @@ gl.keep.pop <- function(x, pop.list, recalc=FALSE, mono.rm=FALSE, v=2){
     if (recalc) {gl.recalc.metrics(x,v=v)}
 
 # REPORT A SUMMARY
-  if (v > 2) {
+  if (v >= 3) {
     cat("Summary of recoded dataset\n")
     cat(paste("  No. of loci:",nLoc(x),"\n"))
     cat(paste("  No. of individuals:", nInd(x),"\n"))
     cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
   }
-    if (v > 1) {  
+    if (v >= 2) {  
       if (!recalc) {
         cat("Note: Locus metrics not recalculated\n")
+      } else {
+        cat("Note: Locus metrics recalculated\n")
       }
       if (!mono.rm) {
         cat("Note: Resultant monomorphic loci not deleted\n")
+      } else{
+        cat("Note: Resultant monomorphic loci deleted\n")
       }
     }
-    if (v > 0) {
+    if (v >= 1) {
       cat("Completed gl.keep.pop\n\n")
     }
     
