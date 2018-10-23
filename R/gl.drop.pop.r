@@ -24,6 +24,8 @@
 
 gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, v=2){
 
+# ERROR CHECKING
+  
   if(class(x)!="genlight") {
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
@@ -34,11 +36,19 @@ gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, v=2){
   if (!all(test,na.rm=FALSE)) {
     cat("Fatal Error: some of the listed populations are not present in the dataset!\n"); stop("Execution terminated\n")
   }
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }
+  
+#FLAG SCRIPT START
+  
   if (v >= 1) {
     cat("Starting gl.drop.pop: Deleting selected populations\n")
   }
 
 # REMOVE POPULATIONS
+  
   if (v >= 2) {
     cat("  Deleting populations", pop.list, "\n")
   }
@@ -48,33 +58,38 @@ gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, v=2){
   # Remove rows flagged for deletion
     x <- x[!x$pop%in%pop.list]
   # Remove monomorphic loci
-    if (mono.rm) {x <- gl.filter.monomorphs(x,v=0)}
+    if (mono.rm) {x <- gl.filter.monomorphs(x,v=v)}
   # Recalculate statistics
     if (recalc) {gl.recalc.metrics(x,v=v)}
 
 # REPORT A SUMMARY
+    
   if (v >= 3) {
     cat("Summary of recoded dataset\n")
     cat(paste("  No. of loci:",nLoc(x),"\n"))
     cat(paste("  No. of individuals:", nInd(x),"\n"))
     cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
   }
-    if (v >= 2) {  
-      if (!recalc) {
-        cat("Note: Locus metrics not recalculated\n")
-      } else {
-        cat("Note: Locus metrics recalculated\n")
-      }
-      if (!mono.rm) {
-        cat("Note: Resultant monomorphic loci not deleted\n")
-      } else{
-        cat("Note: Resultant monomorphic loci deleted\n")
-      }
+  if (v >= 2) {  
+    if (!recalc) {
+      cat("Note: Locus metrics not recalculated\n")
+    } else {
+      cat("Note: Locus metrics recalculated\n")
     }
-    if (v > 0) {
-      cat("Completed gl.drop.pop\n\n")
+    if (!mono.rm) {
+      cat("Note: Resultant monomorphic loci not deleted\n")
+    } else{
+      cat("Note: Resultant monomorphic loci deleted\n")
     }
+  }
+
+# FLAG SCRIPT END
     
-    return <- x
+  if (v > 0) {
+    cat("Completed gl.drop.pop\n\n")
+  }
+    
+  return <- x
+  
 }
 

@@ -7,10 +7,15 @@
 #' 
 #' Because this filter operates on call rate, and previously applied functions may not have recalculated locus metrics, this function recalculates Call Rate before filtering.
 #' Recalculaton after filtering remains optional, with no recalculation as the default.
-#'
+#' 
+#' Note that when filtering individuals on call rate, the initial call rate is calculated and compared against the threshold. After filtering, if mono.rm=TRUE, the removal of
+#' monomorphic loci will alter the call rates. Some individuals with a call rate initially greater than the nominated threshold, and so retained, may come to have a call rate
+#' lower than the threshold. If this is a problem, repeated iterations of this function will resolve the issue.
+#' 
 #' @param  x name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]
 #' @param method -- "loc" to specify that loci are to be filtered, "ind" to specify that specimens are to be filtered [default "loc"]
-#' @param threshold -- threshold value below which loci will be removed [default 0.95]
+#' @param t -- threshold value below which loci will be removed [default 0.95]
+#' @param plot specify if a histogram of call rate is to be produced [default FALSE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
@@ -20,67 +25,115 @@
 #' @examples
 #' result <- gl.filter.callrate(testset.gl, method="ind", t=0.8)
 
-# Last edit:25-Apr-18
+# Last edit:23-Oct-18
 
- gl.filter.callrate <- function(x, method="loc", threshold=0.95, mono.rm=TRUE, recalc=FALSE, v=2) {
+ gl.filter.callrate <- function(x, method="loc", t=0.95, mono.rm=TRUE, recalc=FALSE, plot=FALSE, v=2) {
+   
+# ERROR CHECKING
    
    if(class(x)!="genlight") {
      cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
    }
+   if (method != "ind" & method != "loc") {
+     cat("    Warning: method must be either \"loc\" or \"ind\", set to \"loc\" \n")
+     method <- "loc"
+   }
+   if (v < 0 | v > 5){
+     cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+     v <- 2
+   }
+   if (t < 0 | t > 1){
+     cat("    Warning: threshold t must be an integer between 0 and 1, set to 0.95\n")
+     t <- 0.95
+   }
+   
+# FLAG SCRIPT START
    
    if (v >= 1) {cat("Starting gl.filter.callrate: Filtering on Call Rate\n")}
    if (v >= 3) {cat("Note: Missing values most commonly arise from restriction site mutation\n")}
 
-  if (method != "ind" & method != "loc") {
-    method <- "loc"
-    if (v >= 3) {cat("Method set to loc\n")}
-  }
+# RECALCULATE THE CALL RATE, BRING IT UP TO DATE IN CASE gl.recalc.metrics HAS NOT BEEN RUN
    
+   x <- utils.recalc.callrate(x, v=v)
+   
+# FOR METHOD BASED ON LOCUS    
+
   if( method == "loc" ) {
     # Determine starting number of loci and individuals
-    if (v >= 2) {cat("  Removing loci based on Call Rate, threshold =",threshold,"\n")}
+    if (v >= 2) {cat("  Removing loci based on Call Rate, threshold =",t,"\n")}
     n0 <- nLoc(x)
     if (v >= 3) {cat("Initial no. of loci =", n0, "\n")}
 
-    # Recalculate the call rate
-      x <- utils.recalc.callrate(x, v=v)
-      
     # Remove loci with NA count <= 1-t
-      x2 <- x[ ,glNA(x,alleleAsUnit=FALSE)<=((1-threshold)*nInd(x))]
-      x2@other$loc.metrics <- x@other$loc.metrics[glNA(x,alleleAsUnit=FALSE)<=((1-threshold)*nInd(x)),]
+      x2 <- x[ ,glNA(x,alleleAsUnit=FALSE)<=((1-t)*nInd(x))]
+      x2@other$loc.metrics <- x@other$loc.metrics[glNA(x,alleleAsUnit=FALSE)<=((1-t)*nInd(x)),]
       if (v > 2) {cat ("  No. of loci deleted =", (n0-nLoc(x2)),"\n")}
+      
+      # Plot a histogram of Call Rate
+      
+      if (plot) {
+        hist(x@other$loc.metrics$CallRate, 
+             main="Histogram Call Rate by Locus\n[post-filtering]", 
+             xlab="Call Rate", 
+             border="blue", 
+             col="red",
+             xlim=c(min(x@other$loc.metrics$CallRate),1)
+        )
+      }  
 
+# FOR METHOD BASED ON INDIVIDUALS    
+      
   } else if ( method == "ind" ) {
+    
     # Determine starting number of loci and individuals
-    if (v > 1) {cat("  Removing individuals based on Call Rate, threshold t =",threshold,"\n")}
+    if (v > 1) {cat("  Removing individuals based on Call Rate, threshold t =",t,"\n")}
       n0 <- nInd(x)
-      if (v > 2) {cat("Initial no. of individuals =", n0, "\n")}
+    if (v > 2) {cat("Initial no. of individuals =", n0, "\n")}
+      
     # Calculate the individual call rate
       ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)
     # Check that there are some individuals left
-      if (sum(ind.call.rate >= threshold) == 0) stop(paste("Maximum individual call rate =",max(ind.call.rate),". Nominated threshold of",t,"too stringent.\n No individuals remain.\n"))
+      if (sum(ind.call.rate >= t) == 0) stop(paste("Maximum individual call rate =",max(ind.call.rate),". Nominated threshold of",t,"too stringent.\n No individuals remain.\n"))
+      
     # Extract those individuals with a call rate greater or equal to the threshold
-      x2 <- x[ind.call.rate >= threshold,]
+      x2 <- x[ind.call.rate >= t,]
+
     # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus filtering
         if (v > 2) {cat ("Filtering a genlight object\n  no. of individuals deleted =", (n0-nInd(x2)), "\nIndividuals retained =", nInd(x2),"\n")}
+      
     # Report individuals that are excluded on call rate
-      if (any(ind.call.rate <= threshold)) {
-        x3 <- x[ind.call.rate <= threshold,]
+      if (any(ind.call.rate <= t)) {
+        x3 <- x[ind.call.rate <= t,]
         if (length(x3) > 0) {
           if (v >= 2) {
-            cat("  List of individuals deleted because of low call rate:",indNames(x3))
-            cat(" from populations:",as.character(pop(x3)),"\n")
+            cat("  Individuals deleted (CallRate <= ",t,":\n")
+            cat(paste0(indNames(x3),"[",as.character(pop(x3)),"],"))
           }  
             # Remove monomorphic loci
               if (mono.rm) {x2 <- gl.filter.monomorphs(x2,v=v)}
               if (recalc) { x2 <- gl.recalc.metrics(x2, v=v)}
         }
       }  
+    # Recalculate the callrate
+      ind.call.rate <- 1 - rowSums(is.na(as.matrix(x2)))/nLoc(x2)
+      # cat(min(ind.call.rate),"\n")
+      
+      # Plot a histogram of Call Rate
+      
+      if (plot) {
+        hist(ind.call.rate, 
+             main="Histogram Call Rate by Individual\n[post-filtering]", 
+             xlab="Call Rate", 
+             border="blue", 
+             col="red"
+             #xlim=c(min(ind.call.rate2),1)
+        )
+      }  
    }
    # REPORT A SUMMARY
    if (v > 2) {
      cat("Summary of filtered dataset\n")
-     cat(paste("  Call Rate >",threshold,"\n"))
+     cat(paste("  Call Rate >",t,"\n"))
      cat(paste("  No. of loci:",nLoc(x2),"\n"))
      cat(paste("  No. of individuals:", nInd(x2),"\n"))
      cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
@@ -91,11 +144,13 @@
        cat("Note: Locus metrics not recalculated\n")
      } else {
        cat("Note: Locus metrics recalculated\n")
+       cat("  Warning: Some individuals with a CallRate initially >=",t,"may have a CallRate lower than",t,"when recalculated after filtering and removing monomorphic loci\n")
      }
      if (!mono.rm & method=="ind") {
        cat("Note: Resultant monomorphic loci not deleted\n")
      } else{
        cat("Note: Resultant monomorphic loci deleted\n")
+       cat("  Warning: Some individuals with a CallRate initially >=",t,"may have a CallRate lower than",t,"when recalculated after filtering and removing monomorphic loci\n")
      }
    }
    

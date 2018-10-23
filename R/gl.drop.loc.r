@@ -13,6 +13,8 @@
 
 gl.drop.loc <- function(x, loc.list, v=2){
 
+# ERROR CHECKING
+  
   if(class(x)!="genlight") {
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
@@ -23,16 +25,24 @@ gl.drop.loc <- function(x, loc.list, v=2){
   if (!all(test,na.rm=FALSE)) {
     cat("Fatal Error: some of the listed loci are not present in the dataset!\n"); stop("Execution terminated\n")
   }
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }
+  
+# FLAG SCRIPT START
+  
   if (v >= 1) {
     cat("Starting gl.drop.loc: Deleting selected loci\n")
   }
 
-# REMOVE POPULATIONS
+# REMOVE LOCI
+  
   if (v >= 2) {
     cat("  Deleting selected loci", loc.list, "\n")
   }
 
-# Delete listed loci
+  # Delete listed loci
   
   # Remove rows flagged for deletion
     index <- !locNames(x)%in%loc.list
@@ -40,6 +50,7 @@ gl.drop.loc <- function(x, loc.list, v=2){
     x@other$loc.metrics <- x@other$loc.metrics[index,]
 
 # REPORT A SUMMARY
+    
   if (v >= 3) {
     cat("Summary of recoded dataset\n")
     cat(paste("  No. of loci:",nLoc(x),"\n"))
@@ -47,10 +58,13 @@ gl.drop.loc <- function(x, loc.list, v=2){
     cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
   }
 
+# FLAG SCRIPT END
+    
   if (v >= 1) {
       cat("Completed gl.drop.loc\n\n")
   }
     
-    return <- x
+  return <- x
+  
 }
 
