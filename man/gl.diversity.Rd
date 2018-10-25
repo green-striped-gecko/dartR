@@ -4,12 +4,15 @@
 \alias{gl.diversity}
 \title{Calculate diversity indices for SNPs}
 \usage{
-gl.diversity(gl, spectrumplot = TRUE, probar = TRUE, table = "DH")
+gl.diversity(gl, spectrumplot = TRUE, confiplot = FALSE, probar = TRUE,
+  table = "DH")
 }
 \arguments{
 \item{gl}{genlight object containing the SNP genotypes  [required]}
 
 \item{spectrumplot}{switch to provide a plot [TRUE]}
+
+\item{confiplot}{switch if confidence intervals (1 sd) should be drawn [default: FALSE]}
 
 \item{probar}{report on progress. Silent if set to FALSE. [Default is TRUE]}
 

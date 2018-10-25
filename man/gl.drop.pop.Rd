@@ -4,16 +4,16 @@
 \alias{gl.drop.pop}
 \title{Remove specified populations from a genelight \{adegenet\} object}
 \usage{
-gl.drop.pop(x, pop.list, recalc = FALSE, mono.rm = FALSE, v = 2)
+gl.drop.pop(x, pop.list, recalc = FALSE, mono.rm = TRUE, v = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
 \item{pop.list}{-- a list of populations to be removed [required]}
 
-\item{recalc}{-- Recalculate the locus metadata statistics [default TRUE]}
+\item{recalc}{-- Recalculate the locus metadata statistics [default FALSE]}
 
-\item{mono.rm}{-- Remove monomorphic loci [default FALSE]}
+\item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
 
 \item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }

@@ -11,7 +11,6 @@
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @export
-#' @importFrom
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' gl2treemix(testset.gl)
@@ -32,6 +31,7 @@ gl2treemix <- function(x, outfile="treemix_input.gz", outpath=tempdir(), v=2) {
   freq$n <- NULL
 
 # Output the file
+  outfile <- file.path(outpath, outfile)
   if (v > 1) {cat(paste("    Writing results to treemix input file",outfile,"\n"))}
   sink(outfile)
 

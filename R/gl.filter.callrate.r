@@ -14,7 +14,7 @@
 #' 
 #' @param  x name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]
 #' @param method -- "loc" to specify that loci are to be filtered, "ind" to specify that specimens are to be filtered [default "loc"]
-#' @param t -- threshold value below which loci will be removed [default 0.95]
+#' @param threshold -- threshold value below which loci will be removed [default 0.95]
 #' @param plot specify if a histogram of call rate is to be produced [default FALSE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]
@@ -27,7 +27,7 @@
 
 # Last edit:23-Oct-18
 
- gl.filter.callrate <- function(x, method="loc", t=0.95, mono.rm=TRUE, recalc=FALSE, plot=FALSE, v=2) {
+ gl.filter.callrate <- function(x, method="loc", threshold=0.95, mono.rm=TRUE, recalc=FALSE, plot=FALSE, v=2) {
    
 # ERROR CHECKING
    
@@ -42,9 +42,9 @@
      cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
      v <- 2
    }
-   if (t < 0 | t > 1){
+   if (threshold < 0 | threshold > 1){
      cat("    Warning: threshold t must be an integer between 0 and 1, set to 0.95\n")
-     t <- 0.95
+     threshold <- 0.95
    }
    
 # FLAG SCRIPT START
@@ -60,13 +60,13 @@
 
   if( method == "loc" ) {
     # Determine starting number of loci and individuals
-    if (v >= 2) {cat("  Removing loci based on Call Rate, threshold =",t,"\n")}
+    if (v >= 2) {cat("  Removing loci based on Call Rate, threshold =",threshold,"\n")}
     n0 <- nLoc(x)
     if (v >= 3) {cat("Initial no. of loci =", n0, "\n")}
 
-    # Remove loci with NA count <= 1-t
-      x2 <- x[ ,glNA(x,alleleAsUnit=FALSE)<=((1-t)*nInd(x))]
-      x2@other$loc.metrics <- x@other$loc.metrics[glNA(x,alleleAsUnit=FALSE)<=((1-t)*nInd(x)),]
+    # Remove loci with NA count <= 1-threshold
+      x2 <- x[ ,glNA(x,alleleAsUnit=FALSE)<=((1-threshold)*nInd(x))]
+      x2@other$loc.metrics <- x@other$loc.metrics[glNA(x,alleleAsUnit=FALSE)<=((1-threshold)*nInd(x)),]
       if (v > 2) {cat ("  No. of loci deleted =", (n0-nLoc(x2)),"\n")}
       
       # Plot a histogram of Call Rate
@@ -86,27 +86,27 @@
   } else if ( method == "ind" ) {
     
     # Determine starting number of loci and individuals
-    if (v > 1) {cat("  Removing individuals based on Call Rate, threshold t =",t,"\n")}
+    if (v > 1) {cat("  Removing individuals based on Call Rate, threshold =",threshold,"\n")}
       n0 <- nInd(x)
     if (v > 2) {cat("Initial no. of individuals =", n0, "\n")}
       
     # Calculate the individual call rate
       ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)
     # Check that there are some individuals left
-      if (sum(ind.call.rate >= t) == 0) stop(paste("Maximum individual call rate =",max(ind.call.rate),". Nominated threshold of",t,"too stringent.\n No individuals remain.\n"))
+      if (sum(ind.call.rate >= threshold) == 0) stop(paste("Maximum individual call rate =",max(ind.call.rate),". Nominated threshold of",t,"too stringent.\n No individuals remain.\n"))
       
     # Extract those individuals with a call rate greater or equal to the threshold
-      x2 <- x[ind.call.rate >= t,]
+      x2 <- x[ind.call.rate >= threshold,]
 
     # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus filtering
         if (v > 2) {cat ("Filtering a genlight object\n  no. of individuals deleted =", (n0-nInd(x2)), "\nIndividuals retained =", nInd(x2),"\n")}
       
     # Report individuals that are excluded on call rate
-      if (any(ind.call.rate <= t)) {
-        x3 <- x[ind.call.rate <= t,]
+      if (any(ind.call.rate <= threshold)) {
+        x3 <- x[ind.call.rate <= threshold,]
         if (length(x3) > 0) {
           if (v >= 2) {
-            cat("  Individuals deleted (CallRate <= ",t,":\n")
+            cat("  Individuals deleted (CallRate <= ",threshold,":\n")
             cat(paste0(indNames(x3),"[",as.character(pop(x3)),"],"))
           }  
             # Remove monomorphic loci
@@ -133,7 +133,7 @@
    # REPORT A SUMMARY
    if (v > 2) {
      cat("Summary of filtered dataset\n")
-     cat(paste("  Call Rate >",t,"\n"))
+     cat(paste("  Call Rate >",threshold,"\n"))
      cat(paste("  No. of loci:",nLoc(x2),"\n"))
      cat(paste("  No. of individuals:", nInd(x2),"\n"))
      cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
@@ -144,13 +144,13 @@
        cat("Note: Locus metrics not recalculated\n")
      } else {
        cat("Note: Locus metrics recalculated\n")
-       cat("  Warning: Some individuals with a CallRate initially >=",t,"may have a CallRate lower than",t,"when recalculated after filtering and removing monomorphic loci\n")
+       cat("  Warning: Some individuals with a CallRate initially >=",threshold,"may have a CallRate lower than",threshold,"when recalculated after filtering and removing monomorphic loci\n")
      }
      if (!mono.rm & method=="ind") {
        cat("Note: Resultant monomorphic loci not deleted\n")
      } else{
        cat("Note: Resultant monomorphic loci deleted\n")
-       cat("  Warning: Some individuals with a CallRate initially >=",t,"may have a CallRate lower than",t,"when recalculated after filtering and removing monomorphic loci\n")
+       cat("  Warning: Some individuals with a CallRate initially >=",threshold,"may have a CallRate lower than",threshold,"when recalculated after filtering and removing monomorphic loci\n")
      }
    }
    

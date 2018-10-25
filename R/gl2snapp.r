@@ -10,7 +10,6 @@
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @export
-#' @importFrom
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
 #' gl2snapp(testset.gl)
@@ -32,6 +31,7 @@ gl2snapp <- function(x, outfile="snapp.nex", outpath=tempdir(), v=2) {
   poplabels <- df[,2]
   
 # Create the snapp file
+  outfile <- file.path(outpath, outfile)
   if (v > 1) {cat(paste("    Writing results to nexus file",outfile,"\n"))}
 
   sink(outfile)

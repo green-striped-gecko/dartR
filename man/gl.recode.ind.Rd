@@ -4,10 +4,10 @@
 \alias{gl.recode.ind}
 \title{Recode individual (=specimen) labels in a genelight or genind object \{adegenet\}}
 \usage{
-gl.recode.ind(gl, ind.recode, recalc = TRUE, mono.rm = TRUE, v = 1)
+gl.recode.ind(x, ind.recode, recalc = TRUE, mono.rm = TRUE, v = 1)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
+\item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
 \item{ind.recode}{-- name of the csv file containing the individual relabelling [required]}
 
@@ -21,7 +21,7 @@ gl.recode.ind(gl, ind.recode, recalc = TRUE, mono.rm = TRUE, v = 1)
 A genlight or genind object with the recoded and reduced data
 }
 \description{
-This script recodes individual labels and/or deletes individuals from a DaRT genlight SNP file or a SilicoDArT genind file
+This script recodes individual labels and/or deletes individuals from a DaRT genlight SNP file
 based on information provided in a csv file.
 }
 \details{
