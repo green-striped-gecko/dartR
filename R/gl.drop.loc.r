@@ -3,6 +3,7 @@
 #' This script deletes selected loci from the nominated dataset.
 #' 
 #' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
+#' @param loc.list -- vector of loci names to be droped.
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export

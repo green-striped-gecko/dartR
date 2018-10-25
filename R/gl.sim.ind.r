@@ -19,13 +19,13 @@
 #' founder <- glSim(n.ind = 20, n.snp.nonstruc = 50, ploidy=2)
 #' #number of fixed loci in the first generation
 #' 
-#' res <- sum(colMeans(as.matrix(founder), na.rm=T) %%2 ==0)
+#' res <- sum(colMeans(as.matrix(founder), na.rm=TRUE) %%2 ==0)
 #' simgl <- founder
 #' #49 generations of only 10 individuals
 #' for (i in 2:50) 
 #' {
 #'    simgl <- gl.sim.ind(simgl, n=10, popname="sims")
-#'    res[i]<- sum(colMeans(as.matrix(simgl), na.rm=T) %%2 ==0)
+#'    res[i]<- sum(colMeans(as.matrix(simgl), na.rm=TRUE) %%2 ==0)
 #' }
 #' plot(1:50, res, type="b", xlab="generation", ylab="# fixed loci")
 #' 
