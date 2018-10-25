@@ -9,6 +9,8 @@ gl.drop.loc(x, loc.list, v = 2)
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
+\item{loc.list}{-- vector of loci names to be droped.}
+
 \item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
