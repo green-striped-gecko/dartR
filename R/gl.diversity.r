@@ -19,7 +19,6 @@
  
 
 ### To be done:
-
 # adjust calculation of betas for population sizes (switch)
 
 
