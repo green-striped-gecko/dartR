@@ -21,6 +21,7 @@ This function reports seperates the genlight object by populations and reports f
 if no gl2 is provided, the function uses the pop(gl) hierachy to determine pairs of population, otherwise it runs a single comparison between gl and gl2. Hint: in case you want to run comparison between individuals you can simply redefine your pop(gl) via indNames(gl) [Assuming individual names are unique]
  
 Definition of fixed and private allels
+
 The table shows a cross table of possible cases of allele frequencies between two populations (0=homozygote for Allele 1,x= both Alleles are present, 1=homozygote for Allele 2)
 
 p: cases where there is a private allele in pop1 compared to pop2 (but not vice versa)
