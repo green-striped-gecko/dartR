@@ -4,8 +4,10 @@
 #' at one or both of the the restriction enzyme recognition sites. This script reports the number of missing values for each
 #' of several percentiles. The script gl.filter.callrate() will filter out the loci with call rates below a specified threshold.
 #'
-#' @param gl -- name of the genlight or genind object containing the SNP data [required]
+#' @param x -- name of the genlight or genind object containing the SNP data [required]
 #' @param method specify the type of report by locus (method="loc") or individual (method="ind") [default method="loc"]
+#' @param plot specify if a histogram of call rate is to be produced [default TRUE]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return Mean call rate by locus (method="loc") or individual (method="ind")
 #' @export
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
@@ -13,24 +15,50 @@
 #' gl.report.callrate(testset.gl)
 
 
-gl.report.callrate <- function(gl, method="loc") {
-x <- gl
-
-  if(class(x) == "genlight") {
-    cat("Reporting for a genlight object\n")
-  } else if (class(x) == "genind") {
-    cat("Reporting for a genind object\n")
-  } else {
-    cat("Fatal Error: Specify either a genlight or a genind object\n")
-    stop()
-  }
-  cat("Note: Missing values most commonly arise from restriction site mutation.\n\n")
+gl.report.callrate <- function(x, method="loc", plot=TRUE, v=2) {
   
-  if (method != "ind") {
-    cat("Method set to loc\n")
+# ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.report.callrate!\n"); stop()
   }
+  if (method != "ind" & method != "loc") {
+    cat("    Warning: method must be either \"loc\" or \"ind\", set to \"loc\" \n")
+    method <- "loc"
+  }
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }
+  
+# FLAG SCRIPT START
+  
+  if (v >= 1) {
+    cat("Starting gl.report.callrate\n")
+  }
+  if (v >= 3){cat("Note: Missing values most commonly arise from restriction site mutation.\n\n")}
+  
+
+# RECALCULATE THE CALL RATE, BRING IT UP TO DATE IN CASE gl.recalc.metrics HAS NOT BEEN RUN
+  
+    x <- utils.recalc.callrate(x, v=v)
+
+# FOR METHOD BASED ON LOCUS    
   
   if(method == "loc") {
+    
+    # Plot a histogram of Call Rate
+    
+    if (plot) {
+      hist(x@other$loc.metrics$CallRate, 
+         main="Histogram Call Rate by Locus", 
+         xlab="Call Rate", 
+         border="blue", 
+         col="red",
+         xlim=c(min(x@other$loc.metrics$CallRate),1)
+      )
+    }  
+ 
     # Function to determine the loss of loci for a given filter cut-off
     s <- function(gl, percentile) {
       a <- sum(glNA(x,alleleAsUnit=FALSE)<=((1-percentile)*nInd(x)))
@@ -58,10 +86,28 @@ x <- gl
     names(df) <- c("Cutoff","SNPs")
     
   }
+
+# FOR METHOD BASED ON INDIVIDUAL   
     
   if(method == "ind") {
-    # Function to determine the loss of individuals for a given filter cut-off
+    
+    # Calculate the call rate by individual
     ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)
+    
+    # Plot a histogram of Call Rate
+    
+    if (plot) {
+      hist(ind.call.rate, 
+        main="Histogram Call Rate by Individual", 
+        xlab="Call Rate", 
+        border="blue", 
+        col="red",
+        xlim=c(min(ind.call.rate),1)
+      )
+    }  
+    
+    # Function to determine the loss of individuals for a given filter cut-off
+
     s2 <- function(gl, percentile, i=ind.call.rate) {
       a <- length(i) - length(i[i<=percentile])
       if (percentile == 1) {
@@ -71,12 +117,14 @@ x <- gl
       }
       return(a)
     }
+    
     # Define vectors to hold the x and y axis values
     b <- vector()
     c <- vector()
+    
     # Generate x and y values
     for (i in seq(0,100,by=5)) {
-      c[i+1] <- s2(x,((100-i)/100),ind.call.rate)
+      c[i+1] <- s2(x,percentile=((100-i)/100),i=ind.call.rate)
       b[i+1] <- i
       if (!is.na(c[i+1])) {
         if ((round(c[i+1]*100/nInd(x))) == 100) {break}
@@ -87,6 +135,13 @@ x <- gl
     df <- data.frame(cbind(b,c)) 
     names(df) <- c("Cutoff","SNPs")
   }
+  
+  if (v >= 1) {
+    cat("gl.report.callrate Completed\n")
+  }
 
-  return("Completed")
+  a <- NULL
+  
+  return()
+  
 }
