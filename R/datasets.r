@@ -1,5 +1,15 @@
 #' A genlight object created via the read.dart functions
 #'
+#'This a test data set to test the validity of functions within dartR and is based on a DArT SNp data set of foxes across Australia. It contains 100 individuals and 1000 SNPs.
+#' @name foxes.gl
+#' @format genlight object
+#' @docType data
+#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
+#' @keywords datasets
+"foxes.gl"
+
+#' A genlight object created via the read.dart functions
+#'
 #' @name testset.gl
 #' @format genlight object
 #' @docType data
