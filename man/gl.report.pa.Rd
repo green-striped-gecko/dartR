@@ -4,16 +4,18 @@
 \alias{gl.report.pa}
 \title{Report number of private alleles possessed by an individual of unknown provenance}
 \usage{
-gl.report.pa(gl, id, nmin = 10, t = 0)
+gl.report.pa(x, id, nmin = 10, threshold = 0, v = 2)
 }
 \arguments{
-\item{gl}{-- name of the input genlight object [required]}
+\item{x}{-- name of the input genlight object [required]}
 
 \item{id}{-- identity label of the focal individual whose provenance is unknown [required]}
 
 \item{nmin}{-- minimum sample size for a target population to be included in the analysis [default 10]}
 
-\item{t}{-- populations to retain in the output genlight object; those for which the focal individual has less than or equal to t loci with private alleles [default 0]}
+\item{threshold}{-- retain those populations for which the focal individual has private alleles less or equal in number than the threshold [default 0]}
+
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object containing the focal individual (assigned to population "unknown") and 
@@ -23,9 +25,13 @@ populations for which the focal individual is not distinctive (number of loci wi
 This script calculates the number of private alleles possessed by a focal individual of unknown
 provenance when compared to a series of target populations.
 }
+\details{
+A private allele is an allele possessed by the focal individual, but absent from the target population. It differs from a fixed allelic difference in that the focal individual
+may be heterozygous, in which case can share one but not both of its alleles with the target population.
+}
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, t=1)
+x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, threshold=1, v=3)
 
 }
 \author{

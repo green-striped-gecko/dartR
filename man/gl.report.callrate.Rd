@@ -4,12 +4,16 @@
 \alias{gl.report.callrate}
 \title{Report summary of Call Rate for loci or individuals}
 \usage{
-gl.report.callrate(gl, method = "loc")
+gl.report.callrate(x, method = "loc", plot = TRUE, v = 2)
 }
 \arguments{
-\item{gl}{-- name of the genlight or genind object containing the SNP data [required]}
+\item{x}{-- name of the genlight or genind object containing the SNP data [required]}
 
 \item{method}{specify the type of report by locus (method="loc") or individual (method="ind") [default method="loc"]}
+
+\item{plot}{specify if a histogram of call rate is to be produced [default TRUE]}
+
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 Mean call rate by locus (method="loc") or individual (method="ind")
