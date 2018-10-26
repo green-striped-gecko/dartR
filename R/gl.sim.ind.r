@@ -15,9 +15,9 @@
 #' glsim <- gl.sim.ind(testset.gl, n=10, popname="sims")
 #' glsim
 #' ###Simulate drift over 10 generation 
-#' assuming a bottleneck of only 10 individuals
-#' [ignoring mating and mutation]
-#' #Simulate 20 individuals with no structure
+#' # assuming a bottleneck of only 10 individuals
+#' # [ignoring effect of mating and mutation]
+#' # Simulate 20 individuals with no structure and 50 SNP loci
 #' founder <- glSim(n.ind = 20, n.snp.nonstruc = 50, ploidy=2)
 #' #number of fixed loci in the first generation
 #' 
