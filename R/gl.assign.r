@@ -37,22 +37,23 @@
 #' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
 #' @param dim -- number of dimensions to retain in the dimension reduction [default k, number of populations]
 #' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.05]
-#' @param t -- populations to retain for consideration; those for which the focal individual has less than or equal to t loci with private alleles [default 0]
-#' @param v -- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default 2]
+#' @param threshold -- populations to retain for consideration; those for which the focal individual has less than or equal to threshold loci with private alleles [default 0]
+#' @param v -- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default 3]
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @importFrom stats dnorm qnorm
 #' @export
 #' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #' @examples
-#' x <- testset.gl
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#' x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.05, t=1)
+#' x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.05, threshold=1)
 #' 
 
-gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.01, t=0, v=2) {
+gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, v=3) {
   
-  if (v >= 1) {
-    cat("Starting gl.assign\n")
+  # ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   
   alpha <- 1-alpha
@@ -61,15 +62,36 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.01, t=0, v=2) {
     cat("Fatal Error: genlight object required for gl.recode.pop.r!\n"); stop()
   }
   if (!(id %in% indNames(x))) {
-    cat("Fatal Error: Unknown must be listed among the genotypes in the genlight object!\n"); stop()
+    cat("Fatal Error: Unknown must be listed among the individuals in the genlight object!\n"); stop()
   }
-  if (alpha >1 || alpha <0) {
-    cat("Fatal Error: Value of alpha must be between 0 and 1, typically 0.05!\n"); stop()
+  if (alpha > 1 || alpha < 0) {
+    cat("Warning: Value of alpha must be between 0 and 1, set to 0.05\n");
+    alpha <- 0.05
+    alpha <- 1- alpha
+  }
+  if (!is.null(dim)) {
+    if(dim < 1) {
+      cat("Warning: Value of dim must be greater than zero, set to NULL\n");
+      dim <- NULL
+    }  
+  }
+  if (threshold < 0) {
+    cat("Warning: Threshold value cannot be negative, set to 0\n")
+    threshold <- 0
+  }
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }
+  
+  # FLAG SCRIPT START  
+  if (v >= 1) {
+    cat("Starting gl.assign: Assign and individual to a population\n\n")
   }
   
 # Identify populations that can be eliminated on the basis of private alleles
 # Retain the remainder for analysis
-  x2 <- gl.report.pa(x, id=id, nmin=nmin, t=t)
+  x2 <- gl.report.pa(x, id=id, nmin=nmin, threshold=threshold, v=v)
 
 # Check that there is more than one population to assign (excluding 'unknown')
   if (nPop(x2)==1) {
@@ -77,8 +99,8 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.01, t=0, v=2) {
     stop("Terminating execution")
   }
   if (nPop(x2)==2) {
-    cat("There are no further populations to compare for assignment.",levels(pop(x2))[1],"is the best assignment\n")
-    stop("Terminating execution")
+    return(cat("There are no further populations to compare for assignment.",levels(pop(x2))[1],"is the best assignment\n"))
+    #stop("Terminating execution")
   }
   cat("\n\nCOMPUTING ASSIGNMENT BASED ON CONFIDENCE ENVELOPES\n\n")
 # Ordinate a reduced space of K = nPop(x2) dimensions
@@ -99,9 +121,13 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.01, t=0, v=2) {
     cat("  Number of populations, including the unknown:",sec.est,"\n")
     cat("  Number of dimensions with substantial eigenvalues:",first.est,"\n")
     cat("  Hard coded upper limit to dimensions:",third.est,"\n")
-    cat("  User specified dimensions to retain:",dim,"\n")
+    if (is.null(dim)){
+      cat("  User specified dimensions to retain: Not specified\n")
+    } else {
+      cat("  User specified dimensions to retain:",dim,"\n")
+    }  
     dim <- min(first.est, sec.est, third.est, dim)
-    cat("Dimension of confidence envelope set at",dim,"\n")
+    cat("    Dimension of confidence envelope set at",dim,"\n")
 
 # Re-run the PCoA with calculated dimension
     pcoa <- gl.pcoa(x2, nfactors=dim)
@@ -163,7 +189,7 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.01, t=0, v=2) {
   best <- as.character(df$Population[df$Assign=="yes"][1])
   cat("  Index is a weighted log-likelihood\n")
   cat("  CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
-  cat("  Best assignment is the population with the largest value of the Index, in this case",best,"\n")
+  cat("  Best assignment is the population with the largest value of the Index, in this case",best,"\n\n")
   
   if (v >= 1) {
     cat("Completed gl.assign\n\n")
