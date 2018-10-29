@@ -51,7 +51,6 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
   
 # Check for status -- any populations with loc > loc.limit; ind > ind.limit; and is nPop > 1
   
-  flag <- 0
   count <- 0
   for (popn in popNames(x)) {
     genl <- x[pop(x)==popn]
@@ -68,10 +67,12 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
   if (count == 0) {
     if (v >= 3) {cat("  No populations met minimum limits on no of individuals or loci, reporting for overall\n")}
     title.str <- "Minor Allele Frequency\nOverall"
+    flag <- 0
   }
   if (count == 1) {
     if (v >= 3) {cat("  Only one population met minimum limits on no of individuals or loci\n")}
     title.str <- paste("Minor Allele Frequency\n",popn.hold)
+    flag <- 0
   }  
   if (nPop(x) == 1) {
     flag <- 0
@@ -82,6 +83,10 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
 # Calculate and plot overall MAF
   
   if (v >= 3) {cat("  Calculating MAF across populations\n")}
+  
+  #cat("1Pops: ",nPop(x),"\n")
+  #cat("1Inds: ",nInd(x),"\n")
+  #cat("1Locs: ",nLoc(x),"\n")
   
   homref <- x@other$loc.metrics$FreqHomRef
   homalt <- x@other$loc.metrics$FreqHomSnp
@@ -109,19 +114,24 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
     for (popn in popNames(x)) {
       genl <- x[pop(x)==popn]
       genl <- gl.filter.monomorphs(genl, v = 0)
+      if (nLoc(genl) >= loc.limit) {
       genl <- dartR:::utils.recalc.freqhets(genl,v=0)
       genl <- dartR:::utils.recalc.freqhomref(genl,v=0)
       genl <- dartR:::utils.recalc.freqhomsnp(genl,v=0)
       homref <- genl@other$loc.metrics$FreqHomRef
       homalt <- genl@other$loc.metrics$FreqHomSnp
       het <- genl@other$loc.metrics$FreqHets
+      
+      #cat(popn,"Pops: ",nPop(genl),"\n")
+      #cat(popn,"Inds: ",nInd(genl),"\n")
+      #cat(popn,"Locs******: ",nLoc(genl),"\n")
     
       maf <- array(0,length(homref))
       for (i in 1:length(homref)){
         maf[i] <- min((homref[i]*2 + het[i]), (homalt[i]*2 + het[i]))/2
       }
         
-      if (plot.count <= 6 & nInd(genl) >= ind.limit) {
+      if (plot.count <= 6) {
         maf <- maf[maf<maf.limit]
         hist(maf, 
             breaks=seq(0,maf.limit,len=10), 
@@ -132,13 +142,14 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
         )
         plot.count <- plot.count + 1
       }  
+      }
         
       if (plot.count == 7) {
         layout(matrix(c(1,2,3,4,5,6,7,8,9), 3, 3, byrow = TRUE))
         cat ("  Overflow of plots across multiple pages\n") 
       }
         
-      if (plot.count >= 7 & nInd(genl) >= ind.limit){
+      if (plot.count >= 7){
         maf <- maf[maf<maf.limit]
         hist(maf, 
            breaks=seq(0,maf.limit,len=10), 
@@ -152,9 +163,14 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
     }   
   } 
   
-  if (v > 0) {
-    cat("Completed gl.report.maf\n  Refer to histograms\n\n")
-  }
+  
+    if (v > 0) {
+      if(plot.count > 6) {
+        cat("Completed gl.report.maf\n  Refer to histograms which extend over multiple screens\n\n")
+      } else {
+        cat("Completed gl.report.maf\n  Refer to histograms\n\n")
+      }
+    }
   
   return()
 }  
