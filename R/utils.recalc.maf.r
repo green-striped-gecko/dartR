@@ -44,7 +44,7 @@ utils.recalc.maf <- function(x, v=2) {
     if (v >= 3){
       cat("  Locus metric maf does not exist, creating slot @other$loc.metrics$maf\n")
     }
-    x@other$loc.metrics$maf <- array(NA,length(homref))
+    x@other$loc.metrics$maf <- array(NA,nLoc(x))
   } else {
     if (v >= 3){cat("  Recalculating  minor allele frequency\n")}
   }
@@ -53,7 +53,7 @@ utils.recalc.maf <- function(x, v=2) {
   homalt <- x@other$loc.metrics$FreqHomSnp
   het <- x@other$loc.metrics$FreqHets
   
-  for (i in 1:length(homref)){
+  for (i in 1:nLoc(x)){
     x@other$loc.metrics$maf[i] <- min((homref[i]*2 + het[i]), (homalt[i]*2 + het[i]))/2
   }
   
