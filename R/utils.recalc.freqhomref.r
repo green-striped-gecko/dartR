@@ -20,7 +20,12 @@ utils.recalc.freqhomref <- function(x, v=2) {
   if (v > 0) {
     cat("Starting utils.recalc.freqhomref: Recalculating frequency of homozygotes, reference allele\n")
   }
-  
+  if (is.null(x@other$loc.metrics$FreqHomRef)) {
+    x@other$loc.metrics$FreqHomRef <- array(NA,nLoc(x))
+    if (v >= 3){
+      cat("  Locus metric FreqHomRef does not exist, creating slot @other$loc.metrics$FreqHomRef\n")
+    }
+  }  
 
   # Do the deed
      t <- as.matrix(x)
