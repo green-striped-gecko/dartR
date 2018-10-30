@@ -1,10 +1,13 @@
 #' Calculates the genomic relatedness matrix
 #' 
 #' The G matrix is calculated by centering the allele frequency matrix  of the second allele by substracting 2 times the allefrequency
-#' 
 #'@param gl -- a genlight object 
 #'@param plotheatmap -- a switch if a heatmap should be shown [Default:TRUE] 
+#'@param return.imputed switch if loci with imputed data should be returned (see ?A.mat in package rrBLUP)
+#'@param ... paramters passed to function A.mat from package rrBLUP
 #'@return a genomic relatedness matrix 
+#'@importFrom stats heatmap
+#'@importFrom rrBLUP A.mat
 #'@export
 #'  
 #'@examples

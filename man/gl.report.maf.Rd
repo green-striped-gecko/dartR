@@ -2,28 +2,27 @@
 % Please edit documentation in R/gl.report.maf.r
 \name{gl.report.maf}
 \alias{gl.report.maf}
-\title{Report minor allele frequency for loci}
+\title{Report minor allele frequency (MAF) for each locus in a genlight {adegenet} object}
 \usage{
-gl.report.maf(gl, minind = 5, plot = TRUE)
+gl.report.maf(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, v = 2)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{minind}{-- minimum number of individuals required to calculate the minor allele frequency. Please note allelefrequncies for such loci are still reported, but a warning is issued if the number is below minind.}
+\item{maf.limit}{-- show histograms maf range <= maf.limit [default 0.5]}
 
-\item{plot}{-- switch if a histogram of the distribution of allele frequencies should be provided}
-}
-\value{
-the functions returns a list with two slots (vectors). maf contains the minor allele frequency and n the number of individuals the minor allele frequency is based on.
+\item{ind.limit}{-- show histograms only for populations of size greater than ind.limit [default 5]}
+
+\item{loc.limit}{-- show histograms only for populations with more than loc.limit polymorphic loci [default 30]}
+
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \description{
-Minor allele frequencies are reported for every loci. Also the number of individuals that have been used to calculate allele frequencies are reported to be able to discard frequencies of loci where only a few individuals are available.
+Summary of minor allele frequencies across loci is reported as histograms.
 }
 \examples{
-frequ <- gl.report.maf(testset.gl)
-summary(frequ$maf)
-summary(frequ$n)
+f <- gl.report.maf(testset.gl)
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
+Arthur Georges (glbugs@aerg.canberra.edu.au)
 }
