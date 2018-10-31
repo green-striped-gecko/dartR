@@ -10,7 +10,7 @@
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' result <- dartR:::utils.recalc.freqhets(testset.gl)
+#' #result <- dartR:::utils.recalc.freqhets(testset.gl)
 
 utils.recalc.freqhets <- function(x, v=2) {
 

@@ -26,7 +26,7 @@ If the locus metadata OneRatioRef|Snp, PICRef|Snp and/or AvgPIC do not exist, th
 creates and populates them.
 }
 \examples{
-result <- dartR:::utils.recalc.avgpic(testset.gl)
+#result <- dartR:::utils.recalc.avgpic(testset.gl)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

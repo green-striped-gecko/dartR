@@ -10,7 +10,7 @@
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' result <- dartR:::utils.recalc.freqhomref(testset.gl)
+#' #result <- dartR:::utils.recalc.freqhomref(testset.gl)
 
 utils.recalc.freqhomref <- function(x, v=2) {
 

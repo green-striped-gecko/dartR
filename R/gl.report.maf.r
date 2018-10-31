@@ -45,7 +45,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
   
   if (v >= 3) {cat("  Removing monomorphic loci and recalculating FreqHoms, FreqHets, and MAF\n")}
   
-  x <- dartR:::utils.recalc.maf(x,v=v)
+  x <- utils.recalc.maf(x,v=v)
 
 # Check for status -- any populations with loc > loc.limit; ind > ind.limit; and is nPop > 1
   
@@ -106,7 +106,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
       genl <- x[pop(x)==popn]
       genl <- gl.filter.monomorphs(genl, v = 0)
       if (nLoc(genl) >= loc.limit) {
-      genl <- dartR:::utils.recalc.maf(genl,v=0)
+      genl <- utils.recalc.maf(genl,v=0)
       maf <- genl@other$loc.metrics$maf
       
       #cat(popn,"Pops: ",nPop(genl),"\n")
