@@ -43,13 +43,10 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
   
 # Recalculate the relevant loc.metrics
   
-  if (v >= 3) {cat("  Removing monomorphic loci and recalculating FreqHoms and FreqHets\n")}
+  if (v >= 3) {cat("  Removing monomorphic loci and recalculating FreqHoms, FreqHets, and MAF\n")}
   
-  x <- gl.filter.monomorphs(x, v = 0)
-  x <- dartR:::utils.recalc.freqhets(x,v=0)
-  x <- dartR:::utils.recalc.freqhomref(x,v=0)
-  x <- dartR:::utils.recalc.freqhomsnp(x,v=0)
-  
+  x <- dartR:::utils.recalc.maf(x,v=v)
+
 # Check for status -- any populations with loc > loc.limit; ind > ind.limit; and is nPop > 1
   
   count <- 0
@@ -89,14 +86,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
   #cat("1Inds: ",nInd(x),"\n")
   #cat("1Locs: ",nLoc(x),"\n")
   
-  homref <- x@other$loc.metrics$FreqHomRef
-  homalt <- x@other$loc.metrics$FreqHomSnp
-  het <- x@other$loc.metrics$FreqHets
-  
-  maf <- array(0,length(homref))
-  for (i in 1:length(homref)){
-    maf[i] <- min((homref[i]*2 + het[i]), (homalt[i]*2 + het[i]))/2
-  }
+  maf <- x@other$loc.metrics$maf
 
     if (flag == 1){
       layout(matrix(c(1,1,1,2,3,4,5,6,7), 3, 3, byrow = TRUE))
@@ -110,28 +100,19 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
   
   if (v >= 3) {cat("  Calculating MAF by population\n")}
   
+  plot.count <- 1
   if (flag == 1){   
-    plot.count <- 1
     for (popn in popNames(x)) {
       genl <- x[pop(x)==popn]
       genl <- gl.filter.monomorphs(genl, v = 0)
       if (nLoc(genl) >= loc.limit) {
-      genl <- dartR:::utils.recalc.freqhets(genl,v=0)
-      genl <- dartR:::utils.recalc.freqhomref(genl,v=0)
-      genl <- dartR:::utils.recalc.freqhomsnp(genl,v=0)
-      homref <- genl@other$loc.metrics$FreqHomRef
-      homalt <- genl@other$loc.metrics$FreqHomSnp
-      het <- genl@other$loc.metrics$FreqHets
+      genl <- dartR:::utils.recalc.maf(genl,v=0)
+      maf <- genl@other$loc.metrics$maf
       
       #cat(popn,"Pops: ",nPop(genl),"\n")
       #cat(popn,"Inds: ",nInd(genl),"\n")
       #cat(popn,"Locs******: ",nLoc(genl),"\n")
     
-      maf <- array(0,length(homref))
-      for (i in 1:length(homref)){
-        maf[i] <- min((homref[i]*2 + het[i]), (homalt[i]*2 + het[i]))/2
-      }
-        
       if (plot.count <= 6) {
         maf <- maf[maf<maf.limit]
         hist(maf, 

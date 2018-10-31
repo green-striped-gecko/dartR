@@ -61,5 +61,5 @@ utils.recalc.maf <- function(x, v=2) {
     cat("Completed gl.filter.maf\n\n")
   }
   
-  return()
+  return(x)
 }  
