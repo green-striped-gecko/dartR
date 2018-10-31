@@ -144,13 +144,12 @@
        cat("Note: Locus metrics not recalculated\n")
      } else {
        cat("Note: Locus metrics recalculated\n")
-       cat("  Warning: Some individuals with a CallRate initially >=",threshold,"may have a CallRate lower than",threshold,"when recalculated after filtering and removing monomorphic loci\n")
      }
      if (!mono.rm & method=="ind") {
        cat("Note: Resultant monomorphic loci not deleted\n")
      } else{
        cat("Note: Resultant monomorphic loci deleted\n")
-       cat("  Warning: Some individuals with a CallRate initially >=",threshold,"may have a CallRate lower than",threshold,"when recalculated after filtering and removing monomorphic loci\n")
+       cat("  Warning: Some individuals with a CallRate initially >=",threshold,"may have a CallRate lower than",threshold,"when recalculated after removing monomorphic loci\n")
      }
    }
    
