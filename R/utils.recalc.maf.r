@@ -10,7 +10,7 @@
 #' @return The modified genlight dataset
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' f <- utils.recalc.maf(testset.gl)
+#' f <- dartR:::utils.recalc.maf(testset.gl)
 
 
 utils.recalc.maf <- function(x, v=2) {
