@@ -6,7 +6,7 @@
 #'@param return.imputed switch if loci with imputed data should be returned (see ?A.mat in package rrBLUP)
 #'@param ... parameters passed to function A.mat from package rrBLUP
 #'@return a genomic relatedness matrix 
-#'@importFrom stats heatmap
+#'@importFrom stats heatmap cov var
 #'@export
 #'  
 #'@examples
