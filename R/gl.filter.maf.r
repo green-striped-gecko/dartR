@@ -39,7 +39,7 @@ gl.filter.maf <- function(x, threshold=0.05, v=2) {
   
   if (v >= 3) {cat("  Removing monomorphic loci and recalculating FreqHoms and FreqHets\n")}
 
-  x <- dartR:::utils.recalc.maf(x,v=v)
+  x <- utils.recalc.maf(x,v=v)
   
   # Remove loci with NA count <= 1-threshold
   index <- x@other$loc.metrics$maf < threshold
@@ -56,5 +56,5 @@ gl.filter.maf <- function(x, threshold=0.05, v=2) {
         cat("Completed gl.filter.maf\n\n")
   }
   
-  return()
+  return(x2)
 }  

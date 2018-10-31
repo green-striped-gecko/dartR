@@ -10,6 +10,10 @@ gl.grm(gl, plotheatmap = TRUE, return.imputed = FALSE, ...)
 \item{gl}{-- a genlight object}
 
 \item{plotheatmap}{-- a switch if a heatmap should be shown [Default:TRUE]}
+
+\item{return.imputed}{switch if loci with imputed data should be returned (see ?A.mat in package rrBLUP)}
+
+\item{...}{parameters passed to function A.mat from package rrBLUP}
 }
 \value{
 a genomic relatedness matrix

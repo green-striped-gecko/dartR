@@ -34,9 +34,9 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   #snp <- strsplit(snp,":")
   #snp <- unlist(lapply(snp, `[`, 2))
   #snp <- strsplit(snp,">")
-  ref <- unname(sapply(testset.gl@loc.all, function(x) strsplit(x, split = "/")[1][[1]][1]))
+  ref <- unname(sapply(x@loc.all, function(x) strsplit(x, split = "/")[1][[1]][1]))
   #ref <- unlist(lapply(snp, `[`, 1))
-  alt <-  unname(sapply(testset.gl@loc.all, function(x) strsplit(x, split = "/")[1][[1]][2]))
+  alt <-  unname(sapply(x@loc.all, function(x) strsplit(x, split = "/")[1][[1]][2]))
   #alt <- unlist(lapply(snp, `[`, 2))
   
 # Sort the data on population

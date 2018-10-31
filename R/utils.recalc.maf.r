@@ -10,7 +10,7 @@
 #' @return The modified genlight dataset
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' f <- utils.recalc.maf(testset.gl)
+#' #f <- dartR:::utils.recalc.maf(testset.gl)
 
 
 utils.recalc.maf <- function(x, v=2) {
@@ -33,9 +33,9 @@ utils.recalc.maf <- function(x, v=2) {
   if (v >= 3) {cat("  Removing monomorphic loci and recalculating FreqHoms and FreqHets\n")}
   
   x <- gl.filter.monomorphs(x, v = v)
-  x <- dartR:::utils.recalc.freqhets(x,v=v)
-  x <- dartR:::utils.recalc.freqhomref(x,v=v)
-  x <- dartR:::utils.recalc.freqhomsnp(x,v=v)
+  x <- utils.recalc.freqhets(x,v=v)
+  x <- utils.recalc.freqhomref(x,v=v)
+  x <- utils.recalc.freqhomsnp(x,v=v)
   
   # Calculate and plot overall MAF
   
