@@ -18,7 +18,7 @@
 #' f <- gl.filter.maf(testset.gl, threshold=0.05)
 
 
-gl.filter.maf <- function(x, threshold=0.05, v=2) {
+gl.filter.maf <- function(x, threshold=0.01, v=2) {
   
   if(class(x)!="genlight") {
     cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
