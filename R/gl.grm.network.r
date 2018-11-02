@@ -5,7 +5,8 @@
 #' 
 #' The threshold for relatedness to be represented as a link in the network is specified as a quantile. Those relatedness measures above the quantile are
 #' plotted as links, those below the quantile are not. Often you are looking for relatedness outliers in comparison with the overall relatedness among individuals,
-#' so a very conservative quantile is used (e.g. 0.004), but ultimately, this decsion is made as a matter of trial and error.
+#' so a very conservative quantile is used (e.g. 0.004), but ultimately, this decsion is made as a matter of trial and error. One way to approach this trial and error
+#' is to try to achieve a sparse set of links between unrelated 'background' individuals so that the stronger links are preferentially shown.
 #' 
 #' There are several layouts from which to choose. The most popular are given as options in this script.
 #' 
@@ -25,6 +26,7 @@
 #'@param alpha -- upper threshold to determine which links between nodes to display [default: 0.995]
 #'@param title -- title for the plot [default: "Network based on G-matrix of genetic relatedness"]
 #'@return NULL 
+#'@importfrom igraph plot layout_with_kk layout_with_fr layout_with_drl V graph_from_data_frame delete_edges
 #'@export
 #'@author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #'  
@@ -110,4 +112,3 @@ gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, nod
     return(NULL)
   
 }  
-
