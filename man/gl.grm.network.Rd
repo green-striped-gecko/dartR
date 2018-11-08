@@ -42,7 +42,7 @@ is to try to achieve a sparse set of links between unrelated 'background' indivi
 There are several layouts from which to choose. The most popular are given as options in this script.
 
 fr -- Fruchterman, T.M.J. and Reingold, E.M. (1991). Graph Drawing by Force-directed Placement. Software -- Practice and Experience 21:1129-1164.
-kk -- Kamada, T. and Kawai, S.: An Algorithm for Drawing General Undirected Graphs. Information Processing Letters 31:7–15, 1989. 
+kk -- Kamada, T. and Kawai, S.: An Algorithm for Drawing General Undirected Graphs. Information Processing Letters 31:7-15, 1989. 
 drl -- Martin, S., Brown, W.M., Klavans, R., Boyack, K.W., DrL: Distributed Recursive (Graph) Layout. SAND Reports 2936:1-10, 2008.
 
 colors of node symbols are those of the rainbow.
