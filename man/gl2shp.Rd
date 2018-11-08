@@ -2,13 +2,16 @@
 % Please edit documentation in R/gl2shp.R
 \name{gl2shp}
 \alias{gl2shp}
-\title{Convert genlight objects to ESRI shapefiles}
+\title{Convert genlight objects to ESRI shapefiles or kml files}
 \usage{
-gl2shp(gl, proj4 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
+gl2shp(gl, type = "shp",
+  proj4 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
   outfile = "gl", outpath = tempdir(), v = 1)
 }
 \arguments{
 \item{gl}{-- genlight containing lat longs  [required]}
+
+\item{type}{-- type of output "kml" or "shp"}
 
 \item{proj4}{-- proj4string of data set. If not provided WGS84 is taken as default. (see spatialreference.org for other projections)}
 

@@ -25,14 +25,18 @@
 #'@param node.label.color -- color of the text of the node labels [default: "black"]
 #'@param alpha -- upper threshold to determine which links between nodes to display [default: 0.995]
 #'@param title -- title for the plot [default: "Network based on G-matrix of genetic relatedness"]
+#'@param v -- verbosity. If zero silent, max 3.
 #'@return NULL 
-#'@importfrom igraph plot layout_with_kk layout_with_fr layout_with_drl V graph_from_data_frame delete_edges
+#'@importFrom igraph layout_with_kk layout_with_fr layout_with_drl graph_from_data_frame delete_edges V E 
+#'@importFrom grDevices rgb
+#'@importFrom graphics legend
 #'@export
 #'@author Arthur Georges (glbugs@@aerg.canberra.edu.au)
 #'  
 #'@examples
-#'gl.grm.network(G,x)  
+#'#gl.grm.network(G,x)  
 
+#layout_with_kk layout_with_fr layout_with_drl graph_from_data_frame delete_edges V
 
 gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, node.label.size=0.7, node.label.color="black", alpha=0.004, title="Network based on G-matrix of genetic relatedness", v=3){
 
@@ -60,6 +64,7 @@ gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, nod
       count <- count + 1
     }
   }
+  
   colnames(links) <- c("from","to","weight")
   
   nodes <- data.frame(cbind(x$ind.names, as.character(pop(x))))
@@ -71,7 +76,7 @@ gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, nod
   my_colors <- colors[pop(x)]
   
   q <- quantile(links$weight, p = 1-alpha)
-  network.FS <- delete_edges(network, E(network)[weight < q ])
+  network.FS <- delete_edges(network, E(network)[links$weight < q ])
   
   if (method=="fr"){
     layout.name <- "Fruchterman-Reingold layout"
@@ -88,7 +93,7 @@ gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, nod
   title <- paste(title,"\n[",layout.name,"]")
 
   if (node.label) {
-    node.label <- V(network)$name
+    node.label <- igraph::V(network)$name
   } else {
     node.label <- NA
     node.label.size <- NA
@@ -109,6 +114,6 @@ gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, nod
   
     legend("bottomleft", legend=levels(pop(x))  , col = colors , bty = "n", pch=20 , pt.cex = 3, cex = 1, text.col=colors , horiz = FALSE, inset = c(0.1, 0.1))
     
-    return(NULL)
+    return(invisible())
   
 }  
