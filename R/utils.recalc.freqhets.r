@@ -10,7 +10,7 @@
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' result <- dartR:::utils.recalc.freqhets(testset.gl)
+#' #result <- dartR:::utils.recalc.freqhets(testset.gl)
 
 utils.recalc.freqhets <- function(x, v=2) {
 
@@ -19,6 +19,12 @@ utils.recalc.freqhets <- function(x, v=2) {
   }
   if (v > 0) {
     cat("Starting utils.recalc.freqhets: Recalculating frequency of heterozygotes\n")
+  }
+  if (is.null(x@other$loc.metrics$FreqHets)) {
+    x@other$loc.metrics$FreqHets <- array(NA,nLoc(x))
+    if (v >= 3){
+      cat("  Locus metric FreqHets does not exist, creating slot @other$loc.metrics$FreqHets\n")
+    }
   }
 
   # Do the deed

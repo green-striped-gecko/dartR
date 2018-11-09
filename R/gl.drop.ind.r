@@ -27,12 +27,14 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=TRUE, v=2){
   if(class(x)!="genlight") {
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-  if (length(ind.list) == 0) {
-    cat("Fatal Error: list of individuals to drop required!\n"); stop("Execution terminated\n")
+  for (case in ind.list){
+    if (!(case%in%indNames(x))){
+      cat("Warning: Listed individual",case,"not present in the dataset -- ignored\n")
+      ind.list <- ind.list[!(ind.list==case)]
+    }
   }
-  test <- ind.list%in%indNames(x)
-  if (!all(test,na.rm=FALSE)) {
-    cat("Fatal Error: some of the listed individuals are not present in the dataset!\n"); stop("Execution terminated\n")
+  if (length(ind.list) == 0) {
+    cat("Fatal Error: no individuals to drop!\n"); stop("Execution terminated\n")
   }
   if (v < 0 | v > 5){
     cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")

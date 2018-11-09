@@ -30,7 +30,7 @@ Calculate a statistic for each locus by group
  by the index variable.
 }
 \examples{
-result <- dartR:::gl.gene.freq(testset.gl, method=pop(gl), stat="mean")
+#result <- dartR:::gl.gene.freq(testset.gl, method=pop(gl), stat="mean")
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

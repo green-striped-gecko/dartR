@@ -10,7 +10,7 @@
 #' @return The modified genlight object
 #' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
 #' @examples
-#' result <- dartR:::utils.recalc.callrate(testset.gl)
+#' #result <- dartR:::utils.recalc.callrate(testset.gl)
 
 utils.recalc.callrate <- function(x, v=2) {
  
@@ -20,7 +20,12 @@ utils.recalc.callrate <- function(x, v=2) {
   if (v > 0) {
     cat("Starting utils.recalc.callrate: Recalculating CallRate\n")
   }
-
+  if (is.null(x@other$loc.metrics$CallRate)) {
+    x@other$loc.metrics$CallRate <- array(NA,nLoc(x))
+    if (v >= 3){
+      cat("  Locus metric CallRate does not exist, creating slot @other$loc.metrics$CallRate\n")
+    }
+  }
   # Do the deed
      x@other$loc.metrics$CallRate <- 1-(glNA(x,alleleAsUnit=FALSE))/nInd(x)
 

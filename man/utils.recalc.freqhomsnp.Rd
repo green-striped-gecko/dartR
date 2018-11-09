@@ -21,7 +21,7 @@ This script recalculates the FreqHomSnp and places these recalculated values in 
 Note that the frequency of the homozygote alternate SNPS is calculated from the individuals that could be scored.
 }
 \examples{
-result <- dartR:::utils.recalc.freqhomsnp(testset.gl)
+#result <- dartR:::utils.recalc.freqhomsnp(testset.gl)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

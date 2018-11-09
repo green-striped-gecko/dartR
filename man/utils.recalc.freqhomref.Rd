@@ -21,7 +21,7 @@ This script recalculates the FreqHomRef and places these recalculated values in 
 Note that the frequency of the homozygote reference SNPS is calculated from the individuals that could be scored.
 }
 \examples{
-result <- dartR:::utils.recalc.freqhomref(testset.gl)
+#result <- dartR:::utils.recalc.freqhomref(testset.gl)
 }
 \author{
 Arthur Georges (glbugs@aerg.canberra.edu.au)

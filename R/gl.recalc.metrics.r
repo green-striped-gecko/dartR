@@ -32,10 +32,8 @@ gl.recalc.metrics <- function(x, v=2){
 # Recalculate statistics
   x <- utils.recalc.avgpic(x,v=v)
   x <- utils.recalc.callrate(x,v=v)
-  x <- utils.recalc.freqhets(x,v=v)
-  x <- utils.recalc.freqhomref(x,v=v)
-  x <- utils.recalc.freqhomsnp(x,v=v)
-  
+  x <- utils.recalc.maf(x,v=v)
+
   if (v > 1) {  
     cat("Note: Locus metrics recalculated\n")
   }

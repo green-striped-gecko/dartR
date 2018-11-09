@@ -1,7 +1,8 @@
-#' Convert genlight objects to ESRI shapefiles
+#' Convert genlight objects to ESRI shapefiles or kml files
 #'
 #' This function exports cordinates in a genlight object to a point shape file (including also individual meta data if available). Coordinates are provided under gl@other$latlong and assumed to be in WGS84 coordinates if no proj4 string is provided. 
 #' @param gl -- genlight containing lat longs  [required]
+#' @param type -- type of output "kml" or "shp" 
 #' @param proj4 -- proj4string of data set. If not provided WGS84 is taken as default. (see spatialreference.org for other projections)
 #' @param outfile -- name (path) of the output shape file
 #' @param outpath -- path of the output file. Default is to tempdir(). If to be saved in the current working directory change to "."
@@ -14,7 +15,7 @@
 #' @examples
 #' gl2shp(testset.gl)
 
-gl2shp <- function(gl, proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",  outfile="gl", outpath=tempdir(), v=1)
+gl2shp <- function(gl, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",  outfile="gl", outpath=tempdir(), v=1)
 {
   if (is.null(gl@other$latlong)) stop("No coordinates provided in slot: gl@other$latlong")
   if (nrow(gl@other$latlong)!=nInd(gl)) stop("Number of coordinates provided is different from the number of individuals in the data set.")
@@ -40,7 +41,10 @@ gl2shp <- function(gl, proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
   spdf = SpatialPointsDataFrame(glpoints, data.frame(glpoints))
   proj4string(spdf) <- CRS(proj4)
   #if (!is.null(reproj4)) spdf <- project(spdf, proj = reproj4, inv = TRUE)
-  writeOGR(spdf, dsn=outpath, layer=outfile, driver="ESRI Shapefile", overwrite_layer=TRUE)
+  if (type=="shp") writeOGR(spdf, dsn=outpath, layer=outfile, driver="ESRI Shapefile", overwrite_layer=TRUE)
 
-  if (v==1)  cat(paste("Shapefile saved as:", paste(outfile,".shp", sep=""),"\nin folder:",outpath))
+  if (type=="kml") writeOGR(spdf,  driver = 'KML', dsn = paste0(file.path(outpath,outfile),".kml"), layer = outfile,, overwrite_layer=TRUE)
+  
+  
+  if (v==1)  cat(paste("Shapefile saved as:", paste0(outfile,".",type),"\nin folder:",outpath,"\n"))
 }

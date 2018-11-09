@@ -1,3 +1,33 @@
+#' A simulated genlight object created to run a landscape genetic example
+#'
+#'This a test data set to run a landscape genetics example. It contains 10 populations of 30 individuals each and each individual has 300 loci. There are no covariates for individuals or loci.
+#' @name possums.gl
+#' @format genlight object
+#' @docType data
+#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
+#' @keywords datasets
+"possums.gl"
+
+#' A simulated rasteer object created to run a landscape genetic example
+#'
+#'This a test data set to run a landscape genetics example. The landscapes is a simulated resistance layer.
+#' @name landscape.sim
+#' @format raster object
+#' @docType data
+#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
+#' @keywords datasets
+"landscape.sim"
+
+#' A genlight object created via the read.dart functions
+#'
+#'This a test data set to test the validity of functions within dartR and is based on a DArT SNp data set of foxes across Australia. It contains 100 individuals and 1000 SNPs.
+#' @name foxes.gl
+#' @format genlight object
+#' @docType data
+#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
+#' @keywords datasets
+"foxes.gl"
+
 #' A genlight object created via the read.dart functions
 #'
 #' @name testset.gl
