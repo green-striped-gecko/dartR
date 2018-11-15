@@ -28,7 +28,7 @@
 #' @return A plot of the ordination
 #' @export
 #' @import ggplot2 directlabels tidyr
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' gl <- testset.gl
 #' levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),

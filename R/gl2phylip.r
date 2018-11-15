@@ -11,7 +11,7 @@
 #' @import adegenet utils
 #' @importFrom stats dist
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' \donttest{
 #' result <- gl2phylip(testset.gl, outfile="test.txt", bstrap=10)

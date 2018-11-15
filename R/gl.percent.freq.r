@@ -10,7 +10,7 @@
 #' @import adegenet
 #' @importFrom reshape2 melt
 #' @importFrom plyr ddply
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' m <-  gl.percent.freq(testset.gl)
 #' m

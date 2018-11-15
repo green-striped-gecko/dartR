@@ -15,7 +15,7 @@
 #'        reference line showing the average eigenvalue for the unordinated variables is shown. [default TRUE]
 #' @return The scree plot
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' pcoa <- gl.pcoa(testset.gl)
 #' gl.pcoa.scree(pcoa)

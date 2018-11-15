@@ -19,7 +19,7 @@
 
 #' @return returns a list of the following components: Dgen (the genetic distance matrix), Dgeo (the Euclidean distance matrix), mantel (the statistics of the mantel test)
 #' @export
-#' @author Bernd Gruber (glbugs@@aerg.canberra.edu.au)
+#' @author Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @seealso \link[vegan]{mantel}, \link[StAMPP]{stamppFst}
 #' @references 
 #' Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.

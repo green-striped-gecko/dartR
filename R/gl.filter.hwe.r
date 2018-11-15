@@ -17,7 +17,7 @@
 #' @param basis -- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]
 #' @param bon -- apply bonferroni correction to significance levels for filtering [default TRUE]  
 #' @return a genlight object with the loci departing significantly from HWE removed
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @export
 #' @examples
 #' list <- gl.filter.hwe(testset.gl,0.05, bon=TRUE)
