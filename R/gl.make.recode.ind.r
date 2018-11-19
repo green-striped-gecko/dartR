@@ -27,7 +27,7 @@
  gl.make.recode.ind <- function(x, outfile="default_recode_ind.csv", outpath=tempdir()) {
  outfile <- file.path(outpath, outfile)
  mat <- cbind(indNames(x),indNames(x))
- write.table(mat, file=outfile, sep=",", row.names=FALSE, col.names=FALSE)
+ write.table(mat, file=outfile, sep="," , row.names=FALSE, col.names=FALSE)
  
  cat(paste("Proforma recode table written to:",outfile,"\n"))
  
