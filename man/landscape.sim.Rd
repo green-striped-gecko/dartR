@@ -12,6 +12,6 @@ landscape.sim
 This a test data set to run a landscape genetics example. The landscapes is a simulated resistance layer.
 }
 \author{
-Bernd Gruber \email{(bernd@aerg.canberra.edu.au}
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \keyword{datasets}

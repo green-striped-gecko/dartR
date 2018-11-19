@@ -9,6 +9,6 @@
 This test data set is provided to show a typical recode file format.
 }
 \author{
-Arthur Georges \email{(glbugs@aerg.canberra.edu.au}
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \keyword{datasets}

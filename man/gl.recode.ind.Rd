@@ -46,5 +46,5 @@ The script returns a genlight object with the new individual labels and the reca
 \code{\link{gl.filter.monomorphs}}
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

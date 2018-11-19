@@ -12,6 +12,6 @@ foxes.gl
 This a test data set to test the validity of functions within dartR and is based on a DArT SNp data set of foxes across Australia. It contains 100 individuals and 1000 SNPs.
 }
 \author{
-Bernd Gruber \email{(bernd@aerg.canberra.edu.au}
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \keyword{datasets}

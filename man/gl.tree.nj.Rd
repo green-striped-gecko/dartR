@@ -26,5 +26,5 @@ distances calculated from the genlight object.
 gl.tree.nj(testset.gl,type="fan")
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

@@ -25,5 +25,5 @@ This script calculates pairwise fst values based on the implementation in the St
 gl.fst.pop(possums.gl, nboots=1)
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
+Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

@@ -25,5 +25,5 @@ to subsample, random and based on information content (avgPIC)
 result <- gl.subsample.loci(testset.gl, n=200, method="avgPIC")
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

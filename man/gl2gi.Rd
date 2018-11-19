@@ -21,5 +21,5 @@ Converts a genlight object to genind object
 this function uses a faster version of df2genind (from the adgegenet package)
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
+Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

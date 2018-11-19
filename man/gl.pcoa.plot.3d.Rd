@@ -46,5 +46,5 @@ pcoa <- gl.pcoa(testset.gl, nfactor=5)
 gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 }
