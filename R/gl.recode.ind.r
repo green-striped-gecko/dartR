@@ -22,7 +22,7 @@
 #' @param v -- verbosity: 0, silent; 1, brief; 2, verbose [default 1]
 #' @return A genlight or genind object with the recoded and reduced data
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' \donttest{
 #'    gl <- gl.recode.ind(testset.gl, ind.recode="testset_pop_recode.csv")

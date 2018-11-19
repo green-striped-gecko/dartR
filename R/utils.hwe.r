@@ -9,7 +9,7 @@
 #' @param x -- a genlight object containting the SNP profiles for a population [Required]
 #' @param prob -- level of significance [Default 0.05]
 #' @return Locus, Hom_1, Het, Hom_2, N, Prob, Sig, BonSig)
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' 
 utils.hwe <- function (x, prob=0.05) {
   m <- as.matrix(x)  

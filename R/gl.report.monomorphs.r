@@ -9,7 +9,7 @@
 #' @return A report on loci, polymorphic, monomorphic, all NAs
 #' @import adegenet plyr utils
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' gl2 <- gl.report.monomorphs(testset.gl)
 

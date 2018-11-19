@@ -31,7 +31,7 @@
 #'@importFrom grDevices rgb
 #'@importFrom graphics legend
 #'@export
-#'@author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#'@author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #'  
 #'@examples
 #'#gl.grm.network(G,x)  

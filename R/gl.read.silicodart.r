@@ -28,7 +28,7 @@
 #' @param ind.metafile -- name of csv file containing metadata assigned to each entity (individual) [default NULL]
 #' @return An object of class ("genInd") containing the presence/absence data, and locus and individual metadata
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' \donttest{
 #' glind <- gl.read.silicodart(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 

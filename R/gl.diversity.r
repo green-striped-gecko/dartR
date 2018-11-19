@@ -11,7 +11,7 @@
 #' @return a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
 #' @export
 #' @importFrom graphics arrows
-#' @author Bernd Gruber (glbugs@@aerg.canberra.edu.au), Contributors: William B. Sherwin, Alexander Sentinella 
+#' @author Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr), Contributors: William B. Sherwin, Alexander Sentinella 
 #' @references 
 #' Sherwin, W.B., Chao, A., Johst, L., Smouse, P.E. (2017). Information Theory Broadens the Spectrum of Molecular Ecology and Evolution. TREE 32(12) 948-963. doi:10.1016/j.tree.2017.09.12
 #' 
