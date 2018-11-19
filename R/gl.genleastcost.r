@@ -58,7 +58,7 @@
 #' lgrMMRR(gen.mat = glc$gen.mat, cost.mats = glc$cost.mats, eucl.mat = glc$eucl.mat)
 #' }
 #' @export
-genleastcost <- function(cats, fric.raster, gen.distance, NN=NULL, pathtype="leastcost", plotpath=TRUE, theta=1)
+gl.genleastcost <- function(cats, fric.raster, gen.distance, NN=NULL, pathtype="leastcost", plotpath=TRUE, theta=1)
 {
 ### helper mmod function until mmod is updated
 
