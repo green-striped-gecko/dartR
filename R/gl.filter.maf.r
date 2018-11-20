@@ -13,7 +13,7 @@
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The reduced genlight dataset
 #' @export
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' f <- gl.filter.maf(testset.gl, threshold=0.05)
 
@@ -42,7 +42,7 @@ gl.filter.maf <- function(x, threshold=0.01, v=2) {
   x <- utils.recalc.maf(x,v=v)
   
   # Remove loci with NA count <= 1-threshold
-  index <- x@other$loc.metrics$maf < threshold
+  index <- x@other$loc.metrics$maf >= threshold
   x2 <- x[ ,index]
   x2@other$loc.metrics <- x@other$loc.metrics[index,]
  
