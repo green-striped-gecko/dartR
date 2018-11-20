@@ -21,5 +21,5 @@ Converts a genind object to genlight object
 Be aware due to ambiguity which one is the reference allele a combination of gi2gl(gl2gi(gl)) does not return an identical object (but in terms of analysis this conversions are equivalent)
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
+Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

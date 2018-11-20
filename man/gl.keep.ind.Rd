@@ -37,5 +37,5 @@ The script returns a genlight object with the individuals deleted and, optionall
 \code{\link{gl.recalc.metrics}}
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

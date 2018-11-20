@@ -28,5 +28,5 @@ This function exports cordinates in a genlight object to a point shape file (inc
 gl2shp(testset.gl)
 }
 \author{
-Bernd Guber (glbugs@aerg.canberra.edu.au)
+Bernd Guber (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

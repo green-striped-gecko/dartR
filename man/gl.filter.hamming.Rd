@@ -49,5 +49,5 @@ percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 gl <- gl.filter.hamming(testset.gl, t=0.25)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

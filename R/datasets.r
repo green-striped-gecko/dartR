@@ -4,7 +4,7 @@
 #' @name possums.gl
 #' @format genlight object
 #' @docType data
-#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "possums.gl"
 
@@ -14,7 +14,7 @@
 #' @name landscape.sim
 #' @format raster object
 #' @docType data
-#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "landscape.sim"
 
@@ -24,7 +24,7 @@
 #' @name foxes.gl
 #' @format genlight object
 #' @docType data
-#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "foxes.gl"
 
@@ -33,7 +33,7 @@
 #' @name testset.gl
 #' @format genlight object
 #' @docType data
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr}
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "testset.gl"
 
@@ -43,7 +43,7 @@
 #' @name testset_SNPs_2Row
 #' @format csv
 #' @docType data
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr}
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 NULL
 
@@ -53,7 +53,7 @@ NULL
 #' @name testset_pop_recode
 #' @format csv
 #' @docType data
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr}
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 NULL
 
@@ -62,7 +62,7 @@ NULL
 #' @name testset_metadata
 #' @format csv
 #' @docType data
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr}
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 NULL
 
@@ -72,7 +72,7 @@ NULL
 #' @name platy
 #' @format csv
 #' @docType data
-#' @author Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr}
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 #' @examples 
 #' \donttest{

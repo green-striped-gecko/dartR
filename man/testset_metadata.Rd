@@ -9,6 +9,6 @@
 Metadata file. Can be integrated via the dart2genlight function.
 }
 \author{
-Arthur Georges \email{(glbugs@aerg.canberra.edu.au}
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \keyword{datasets}

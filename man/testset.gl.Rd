@@ -12,6 +12,6 @@ testset.gl
 A genlight object created via the read.dart functions
 }
 \author{
-Arthur Georges \email{(glbugs@aerg.canberra.edu.au}
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \keyword{datasets}

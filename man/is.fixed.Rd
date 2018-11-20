@@ -33,5 +33,5 @@ is.fixed(96, 4, tloc=0.05)
 \code{\link{gl.fixed.diff}}
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
 }

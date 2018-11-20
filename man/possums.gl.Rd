@@ -12,6 +12,6 @@ possums.gl
 This a test data set to run a landscape genetics example. It contains 10 populations of 30 individuals each and each individual has 300 loci. There are no covariates for individuals or loci.
 }
 \author{
-Bernd Gruber \email{(bernd@aerg.canberra.edu.au}
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \keyword{datasets}
