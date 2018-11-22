@@ -42,9 +42,8 @@ To install the packages and all dependencies copy paste the script below into yo
 ```{r}
 install.packages("devtools")
 library(devtools)
-source("http://bioconductor.org/biocLite.R")
-biocLite("qvalue", suppressUpdates=T)
-biocLite("SNPRelate", suppressUpdates=T)
+install.packages("BiocManager")
+BiocManager::install(c("SNPRelate", "qvalue"))
 install_github("green-striped-gecko/dartR")
 library(dartR)
 ```
