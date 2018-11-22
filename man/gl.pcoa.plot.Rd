@@ -5,7 +5,8 @@
 \title{Bivariate plot of the results of a PCoA ordination}
 \usage{
 gl.pcoa.plot(glPca, data, scale = FALSE, ellipse = FALSE, p = 0.95,
-  labels = "pop", hadjust = 1.5, vadjust = 1, xaxis = 1, yaxis = 2)
+  labels = "pop", hadjust = 1.5, vadjust = 1, xaxis = 1,
+  yaxis = 2)
 }
 \arguments{
 \item{glPca}{Name of the glPca object containing the factor scores and eigenvalues [required]}

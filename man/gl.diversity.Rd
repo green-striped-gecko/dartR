@@ -4,8 +4,8 @@
 \alias{gl.diversity}
 \title{Calculate diversity indices for SNPs}
 \usage{
-gl.diversity(gl, spectrumplot = TRUE, confiplot = FALSE, probar = TRUE,
-  table = "DH")
+gl.diversity(gl, spectrumplot = TRUE, confiplot = FALSE,
+  probar = TRUE, table = "DH")
 }
 \arguments{
 \item{gl}{genlight object containing the SNP genotypes  [required]}

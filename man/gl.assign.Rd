@@ -4,8 +4,8 @@
 \alias{gl.assign}
 \title{Assign an individual of unknown provenance to population}
 \usage{
-gl.assign(x, id, nmin = 10, dim = NULL, alpha = 0.05, threshold = 0,
-  v = 3)
+gl.assign(x, id, nmin = 10, dim = NULL, alpha = 0.05,
+  threshold = 0, v = 3)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}

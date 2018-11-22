@@ -4,8 +4,8 @@
 \alias{gl.filter.callrate}
 \title{Filter loci or specimens in a genlight \{adegenet\} object based on call rate}
 \usage{
-gl.filter.callrate(x, method = "loc", threshold = 0.95, mono.rm = TRUE,
-  recalc = FALSE, plot = FALSE, v = 2)
+gl.filter.callrate(x, method = "loc", threshold = 0.95,
+  mono.rm = TRUE, recalc = FALSE, plot = FALSE, v = 2)
 }
 \arguments{
 \item{x}{name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}

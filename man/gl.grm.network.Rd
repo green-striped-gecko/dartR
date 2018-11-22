@@ -4,8 +4,9 @@
 \alias{gl.grm.network}
 \title{Represents a genomic relatedness matrix as a network}
 \usage{
-gl.grm.network(G, x, method = "fr", node.size = 3, node.label = FALSE,
-  node.label.size = 0.7, node.label.color = "black", alpha = 0.004,
+gl.grm.network(G, x, method = "fr", node.size = 3,
+  node.label = FALSE, node.label.size = 0.7,
+  node.label.color = "black", alpha = 0.004,
   title = "Network based on G-matrix of genetic relatedness", v = 3)
 }
 \arguments{

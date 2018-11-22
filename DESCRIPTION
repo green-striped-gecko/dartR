@@ -21,6 +21,7 @@ Description: Functions are provided that facilitate the import and analysis of
     are available for visualization after PCoA (Principle Coordinate Analysis), or to facilitate transfer of data
     between genlight/genind objects and newhybrids, related, phylip, structure, faststructure packages.
 VignetteBuilder: knitr
+Encoding: UTF-8
 Depends:
     R (>= 3.1.1),
     adegenet (>= 2.0.0)
@@ -69,4 +70,4 @@ Suggests:
     rmarkdown
 License: GPL-2
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
