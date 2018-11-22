@@ -26,7 +26,7 @@
 #' @importFrom graphics hist
 #' @importFrom stats sd
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.report.hamming(testset.gl)
 

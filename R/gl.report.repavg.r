@@ -6,7 +6,7 @@
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @return -- the mean call rate
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.report.repavg(testset.gl)
 

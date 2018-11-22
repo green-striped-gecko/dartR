@@ -24,5 +24,5 @@ This script deletes selected loci from the nominated dataset.
 
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

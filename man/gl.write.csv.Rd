@@ -29,5 +29,5 @@ alternate homozygous, 1 = heterozyous, and NA = missing SNP assignment.
 gl.write.csv(testset.gl, outfile="SNP_1row.csv")
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

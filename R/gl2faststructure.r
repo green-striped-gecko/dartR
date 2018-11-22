@@ -9,7 +9,7 @@
 #' @param probar switch to show/hide progress bar
 #' @return NULL
 #' @export
-#' @author Bernd Gruber (glbugs@aerg.canberra.edu.au)
+#' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @import adegenet
 #' @importFrom utils getTxtProgressBar setTxtProgressBar txtProgressBar 
 

@@ -9,7 +9,7 @@
 #' ranked on information content (AvgPIC) are chosen [default "random"]
 #' @return A genlight object with n loci
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' result <- gl.subsample.loci(testset.gl, n=200, method="avgPIC")
 

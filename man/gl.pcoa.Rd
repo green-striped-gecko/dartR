@@ -30,5 +30,5 @@ converting the eigenvalues to percentages.
 pcoa <- gl.pcoa(testset.gl, nfactors=3)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

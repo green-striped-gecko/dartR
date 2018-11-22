@@ -22,5 +22,5 @@ Uses the exact calculations contained in function prob.hwe() as developed by
 Wigginton, JE, Cutler, DJ, and Abecasis, GR.
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

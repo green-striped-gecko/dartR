@@ -4,8 +4,8 @@
 \alias{gl.edit.recode.pop}
 \title{Create or edit a population re-assignment table}
 \usage{
-gl.edit.recode.pop(gl, pop.recode = NULL, recalc = FALSE, mono.rm = TRUE,
-  v = 1)
+gl.edit.recode.pop(gl, pop.recode = NULL, recalc = FALSE,
+  mono.rm = TRUE, v = 1)
 }
 \arguments{
 \item{gl}{Name of the genlight object for which populations are to be reassigned.[required]}
@@ -52,5 +52,5 @@ gl <- gl.edit.recode.pop(testset.gl)
 }
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -16,7 +16,7 @@
 #'         [[4]] probability the observed fixed differences arose by chance for each comparison;
 #' @export
 #' @importFrom stats pnorm rbinom
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 
 gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=2) {
   

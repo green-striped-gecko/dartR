@@ -20,5 +20,5 @@ Recodes in the quite specific faststructure format (e.g first six columns need t
 The script writes out the a file in faststructure format.
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
+Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -22,7 +22,7 @@
 #'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
 #' @import adegenet
 #' @export
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
 #' fd <- gl.fixed.diff(testset.gl, tloc=0.05)

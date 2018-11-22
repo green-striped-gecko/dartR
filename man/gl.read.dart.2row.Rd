@@ -55,5 +55,5 @@ nmetavar=16, nas="-", ind.metafile="metadata.csv" )
 }
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

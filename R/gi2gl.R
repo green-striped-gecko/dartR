@@ -4,7 +4,7 @@
 #' @param parallel -- switch to deactivate parallel version. Default set to TRUE. Only for testing purpose. 
 #' @return A genlight object, with all slots filled.
 #' @export
-#' @author Bernd Gruber (glbugs@@aerg.canberra.edu.au)
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @details Be aware due to ambiguity which one is the reference allele a combination of gi2gl(gl2gi(gl)) does not return an identical object (but in terms of analysis this conversions are equivalent)
 
 

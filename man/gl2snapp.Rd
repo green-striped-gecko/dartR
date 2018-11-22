@@ -25,5 +25,5 @@ Reference: Bryant, D., Bouckaert, R., Felsenstein, J., Rosenberg, N.A. and RoyCh
 gl2snapp(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

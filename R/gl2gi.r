@@ -4,7 +4,7 @@
 #' @param v -- level of verbosity. v=0 is silent, v=1 returns more detailed output during conversion.
 #' @return A genind object, with all slots filled.
 #' @export
-#' @author Bernd Gruber (glbugs@@aerg.canberra.edu.au)
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @details this function uses a faster version of df2genind (from the adgegenet package)
 
 gl2gi <- function(gl, v=1) {

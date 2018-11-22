@@ -30,5 +30,5 @@ single populations, use sepPop and lapply.
 f <- gl.filter.maf(testset.gl, threshold=0.05)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

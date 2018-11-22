@@ -40,5 +40,5 @@ as implimented in utils.hamming.r
 gl.report.hamming(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

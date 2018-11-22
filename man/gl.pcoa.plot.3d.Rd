@@ -4,8 +4,8 @@
 \alias{gl.pcoa.plot.3d}
 \title{3D interactive plot of the results of a PCoA ordination}
 \usage{
-gl.pcoa.plot.3d(x, gl, title = "PCoA", xaxis = 1, yaxis = 2, zaxis = 3,
-  shape = "sphere", radius = 2, legend = "topright")
+gl.pcoa.plot.3d(x, gl, title = "PCoA", xaxis = 1, yaxis = 2,
+  zaxis = 3, shape = "sphere", radius = 2, legend = "topright")
 }
 \arguments{
 \item{x}{-- name of the glPca object containing the factor scores and eigenvalues [required]}
@@ -46,5 +46,5 @@ pcoa <- gl.pcoa(testset.gl, nfactor=5)
 gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

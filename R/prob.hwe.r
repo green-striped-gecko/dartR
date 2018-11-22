@@ -12,7 +12,7 @@
 #' @param obs_hom2 -- count of homozygotes, alternate state
 #' @return Exact probability of agreement with HWE
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' hets <- 20
 #' hom_1 <- 5

@@ -32,5 +32,5 @@ pcoa <- gl.pcoa(testset.gl)
 gl.pcoa.scree(pcoa)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

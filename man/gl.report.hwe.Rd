@@ -39,5 +39,5 @@ list <- gl.report.hwe(testset.gl,0.05, subset="all")
 list <- gl.report.hwe(testset.gl,0.05, subset="each")
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

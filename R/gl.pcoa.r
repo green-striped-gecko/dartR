@@ -13,7 +13,7 @@
 #' @import adegenet
 #' @return An object of class glPca containing the eigenvalues, factor scores and factor loadings
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' pcoa <- gl.pcoa(testset.gl, nfactors=3)
 

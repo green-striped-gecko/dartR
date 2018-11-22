@@ -15,15 +15,19 @@
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the recalculated locus metadata
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
-#'    gl <- gl.recalc.metrics(testset.gl, v=2)
-#' }
+#'   gl <- gl.recalc.metrics(testset.gl, v=2)
 #' @seealso \code{\link{gl.filter.monomorphs}}
 
 
 gl.recalc.metrics <- function(x, v=2){
+  
+  
+  if (is.null(x@other$loc.metrics)) {
+    cat("No loc.metrics found in gl@other, therefore it will be created to hold the loci metrics. Be aware that some metrics such as TrimmedSequence and RepAvg cannot be created and therefore not all functions within the package can be used (e.g. gl2fasta, gl.filter.RepAvg)\n")
+    x@other$loc.metrics <- data.frame(nr=1:nLoc(x))
+  }
   
   if (v > 0) {
     cat("Starting gl.recalc.metrics: Recalculating locus metrics\n")
@@ -41,6 +45,6 @@ gl.recalc.metrics <- function(x, v=2){
     cat("Completed gl.recalc.metrics\n\n")
   }
   
-  return <- x
+  return (x)
 
 }  

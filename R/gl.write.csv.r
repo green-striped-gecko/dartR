@@ -12,7 +12,7 @@
 #' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @return saves a glenlight object to csv
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.write.csv(testset.gl, outfile="SNP_1row.csv")
 

@@ -35,5 +35,5 @@ x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, threshold=1, v=3)
 
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

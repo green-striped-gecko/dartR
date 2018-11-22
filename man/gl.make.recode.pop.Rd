@@ -4,7 +4,8 @@
 \alias{gl.make.recode.pop}
 \title{Create a proforma recode_pop_table file for reassigning population names}
 \usage{
-gl.make.recode.pop(x, outfile = "recode_pop_table.csv", outpath = tempdir())
+gl.make.recode.pop(x, outfile = "recode_pop_table.csv",
+  outpath = tempdir())
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -35,5 +36,5 @@ result <- gl.make.recode.pop(testset.gl, outfile="Emmac_recode_pop.csv")
 }
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

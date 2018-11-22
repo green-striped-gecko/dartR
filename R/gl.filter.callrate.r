@@ -21,9 +21,9 @@
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The reduced genlight or genind object, plus a summary
 #' @export
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.filter.callrate(testset.gl, method="ind", t=0.8)
+#' result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8)
 
 # Last edit:23-Oct-18
 
@@ -34,16 +34,19 @@
    if(class(x)!="genlight") {
      cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
    }
+   
+   if (v < 0 | v > 5){
+     cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+     v <- 2
+   }  
+   
    if (method != "ind" & method != "loc") {
      cat("    Warning: method must be either \"loc\" or \"ind\", set to \"loc\" \n")
      method <- "loc"
    }
-   if (v < 0 | v > 5){
-     cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-     v <- 2
-   }
+
    if (threshold < 0 | threshold > 1){
-     cat("    Warning: threshold t must be an integer between 0 and 1, set to 0.95\n")
+     cat("    Warning: threshold must be an integer between 0 and 1, set to 0.95\n")
      threshold <- 0.95
    }
    
@@ -149,7 +152,7 @@
        cat("Note: Resultant monomorphic loci not deleted\n")
      } else{
        cat("Note: Resultant monomorphic loci deleted\n")
-       cat("  Warning: Some individuals with a CallRate initially >=",threshold,"may have a CallRate lower than",threshold,"when recalculated after removing monomorphic loci\n")
+       cat("  Warning: Some individuals with a CallRate initially >=",threshold,"may have a CallRate lower than",threshold,"when call rate is recalculated after removing resultant monomorphic loci\n")
      }
    }
    

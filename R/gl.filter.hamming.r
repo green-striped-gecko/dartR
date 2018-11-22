@@ -24,30 +24,30 @@
 #' percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 #'
 #' @param x -- genlight object [required]
-#' @param t -- a threshold Hamming distance for filtering loci [default 0.2]
+#' @param threshold -- a threshold Hamming distance for filtering loci [default 0.2]
 #' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
 #' @param pb -- switch to output progress bar [default FALSE]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a genlight object filtered on Hamming distance.
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl <- gl.filter.hamming(testset.gl, t=0.25)
+#' gl <- gl.filter.hamming(testset.gl, threshold=0.25)
 
-# Last edit:25-Apr-18
-
-gl.filter.hamming <- function(x=gl, t=0.2, rs=5, pb=FALSE, v=2) {
+gl.filter.hamming <- function(x=gl, threshold=0.2, rs=5, pb=FALSE, v=2) {
   
   n0 <- nLoc(x)
   
-  if(class(x) == "genlight") {
-    if (v > 2) {cat("Reporting for a genlight object\n")}
-  } else if (class(x) == "genind") {
-    if (v > 2) {cat("Reporting for a genind object\n")}
-  } else {
-    cat("Fatal Error: Specify either a genlight or a genind object\n")
-    stop()
+  # ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+  
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }  
   
   if(length(x@other$loc.metrics$TrimmedSequence) == 0) {
     cat("Fatal Error: Data must include Trimmed Sequences\n"); stop()
@@ -74,14 +74,14 @@ gl.filter.hamming <- function(x=gl, t=0.2, rs=5, pb=FALSE, v=2) {
     for (j in ((i+1):nL)){
       count <- count + 1
       s2 <- x@other$loc.metrics$TrimmedSequence[j]
-      if(utils.hamming(s1,s2,r=rs) <= t) {
+      if(utils.hamming(s1,s2,r=rs) <= threshold) {
         index[i] <- FALSE
         break
       }
     }
   if (pb)  setTxtProgressBar(pbar, i/(nL-1))
   }
-  #index <- flag
+
   x <- x[,(index)]
   # That pesky genlight bug
   x@other$loc.metrics <- x@other$loc.metrics[(index),]
@@ -90,7 +90,7 @@ gl.filter.hamming <- function(x=gl, t=0.2, rs=5, pb=FALSE, v=2) {
   if (v > 2){
     cat("\n  Summary of filtered dataset\n")
     cat(paste("    Initial No. of loci:",n0,"\n"))
-    cat(paste("    Hamming d >",t,"\n"))
+    cat(paste("    Hamming d >",threshold,"\n"))
     cat(paste("    Loci deleted",(n0-nLoc(x)),"\n"))
     cat(paste("    Final No. of loci:",nLoc(x),"\n"))
     cat(paste("    No. of individuals:", nInd(x),"\n"))
@@ -98,5 +98,7 @@ gl.filter.hamming <- function(x=gl, t=0.2, rs=5, pb=FALSE, v=2) {
   }
   
   if ( v > 0) {cat("gl.filter.hamming completed\n")}
-  return <- x
+
+  return(x)
+  
 }

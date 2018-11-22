@@ -42,7 +42,7 @@
 #' @importFrom methods new
 #' @importFrom stats dist nobs optimize pchisq variable.names
 #' @import stringr
-#' @author Bernd Gruber and Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Bernd Gruber and Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl <- gl.filter.repavg(testset.gl,t=1)
 #' gl <- gl.filter.callrate(testset.gl,t=.98)

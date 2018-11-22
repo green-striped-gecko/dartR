@@ -10,7 +10,7 @@
 #' @return NULL
 #' @export
 #' @importFrom graphics layout
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' f <- gl.report.maf(testset.gl)
 

@@ -45,7 +45,7 @@
 #' @return The reduced genlight object, if parentals are provided; output of NewHybrids to disk
 #' @export
 #' @importFrom MASS write.matrix
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
 #' m <- gl.nhybrids(testset.gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), t=0, method="random")

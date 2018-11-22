@@ -22,6 +22,6 @@ gl.report.repavg(platy.gl)
 }
 }
 \author{
-Bernd Gruber \email{(glbugs@aerg.canberra.edu.au}
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \keyword{datasets}

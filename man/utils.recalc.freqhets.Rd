@@ -24,5 +24,5 @@ Note that the frequency of the homozygote reference SNPS is calculated from the 
 #result <- dartR:::utils.recalc.freqhets(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

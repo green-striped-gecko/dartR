@@ -41,5 +41,5 @@ the resultant OTUs.
 The recode table and final distance matrix are stored to disk as csv files.
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -12,7 +12,7 @@
 #' @importFrom stringr str_pad
 #' @importFrom ape nj root plot.phylo
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.tree.nj(testset.gl,type="fan")
 

@@ -13,7 +13,7 @@
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'    gl <- gl.keep.ind(testset.gl, ind.list=c("AA019073","AA004859"))
 #' @seealso \code{\link{gl.filter.monomorphs}}

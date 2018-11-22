@@ -4,8 +4,8 @@
 \alias{gl.diversity}
 \title{Calculate diversity indices for SNPs}
 \usage{
-gl.diversity(gl, spectrumplot = TRUE, confiplot = FALSE, probar = TRUE,
-  table = "DH")
+gl.diversity(gl, spectrumplot = TRUE, confiplot = FALSE,
+  probar = TRUE, table = "DH")
 }
 \arguments{
 \item{gl}{genlight object containing the SNP genotypes  [required]}
@@ -30,5 +30,5 @@ Sherwin, W.B., Chao, A., Johst, L., Smouse, P.E. (2017). Information Theory Broa
 Chao et al. 2014
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au), Contributors: William B. Sherwin, Alexander Sentinella
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella
 }

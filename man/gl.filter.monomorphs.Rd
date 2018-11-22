@@ -27,5 +27,5 @@ the delete option in gl.pop.recode(). Retaining monomorphic loci unnecessarily i
 gl <- gl.filter.monomorphs(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -10,18 +10,23 @@
 #' @import adegenet
 #' @importFrom reshape2 melt
 #' @importFrom plyr ddply
-#' @author Arthur Georges (glbugs@@aerg.canberra.edu.au)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' m <-  gl.percent.freq(testset.gl)
 #' m
 
 gl.percent.freq<- function(gl, v=2) {
 
-# Determine data type
-  if(!(class(gl)=="genlight")){
-    cat("Fatal Error: Input data must be a genlight object\n")
-    stop("Execution terminated\n")
+  # ERROR CHECKING
+  
+  if(class(gl)!="genlight") {
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+  
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }  
   
   if (v > 0) {
     cat("Starting gl.percent.freq: Calculating allele frequencies for populations\n")

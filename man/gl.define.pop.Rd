@@ -28,5 +28,5 @@ The script returns a genlight object with the new population assignment.
    gl <- gl.define.pop(testset.gl, ind.list=c("AA019073","AA004859"), new="newguys")
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

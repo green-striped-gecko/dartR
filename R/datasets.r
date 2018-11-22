@@ -4,19 +4,9 @@
 #' @name possums.gl
 #' @format genlight object
 #' @docType data
-#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "possums.gl"
-
-#' A simulated rasteer object created to run a landscape genetic example
-#'
-#'This a test data set to run a landscape genetics example. The landscapes is a simulated resistance layer.
-#' @name landscape.sim
-#' @format raster object
-#' @docType data
-#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
-#' @keywords datasets
-"landscape.sim"
 
 #' A genlight object created via the read.dart functions
 #'
@@ -24,7 +14,7 @@
 #' @name foxes.gl
 #' @format genlight object
 #' @docType data
-#' @author Bernd Gruber \email{(bernd@@aerg.canberra.edu.au}
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "foxes.gl"
 
@@ -33,7 +23,7 @@
 #' @name testset.gl
 #' @format genlight object
 #' @docType data
-#' @author Arthur Georges \email{(glbugs@@aerg.canberra.edu.au}
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "testset.gl"
 
@@ -43,7 +33,7 @@
 #' @name testset_SNPs_2Row
 #' @format csv
 #' @docType data
-#' @author Arthur Georges \email{(glbugs@@aerg.canberra.edu.au}
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 NULL
 
@@ -53,7 +43,7 @@ NULL
 #' @name testset_pop_recode
 #' @format csv
 #' @docType data
-#' @author Arthur Georges \email{(glbugs@@aerg.canberra.edu.au}
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 NULL
 
@@ -62,7 +52,7 @@ NULL
 #' @name testset_metadata
 #' @format csv
 #' @docType data
-#' @author Arthur Georges \email{(glbugs@@aerg.canberra.edu.au}
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 NULL
 
@@ -72,7 +62,7 @@ NULL
 #' @name platy
 #' @format csv
 #' @docType data
-#' @author Bernd Gruber \email{(glbugs@@aerg.canberra.edu.au}
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 #' @examples 
 #' \donttest{

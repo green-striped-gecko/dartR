@@ -38,5 +38,5 @@ Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statis
 \link[vegan]{mantel}, \link[StAMPP]{stamppFst}
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }
