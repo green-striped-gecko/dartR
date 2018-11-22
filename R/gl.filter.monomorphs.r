@@ -10,18 +10,27 @@
 #' @return A genlight object with monomorphic loci removed
 #' @import adegenet plyr utils
 #' @export
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' gl <- gl.filter.monomorphs(testset.gl)
 
-# Last edit:25-Apr-18
-
 gl.filter.monomorphs <- function (x, v=2, pb=FALSE) {
 
+# ERROR CHECKING
+  
+    if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+  
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }
+  
   if (v > 0) {
     cat("Starting gl.filter.monomorphs: Deleting monomorphic loci\n")
   }
-
+  
 # Create a vector to hold test results
   a <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {a[i] <- NA}

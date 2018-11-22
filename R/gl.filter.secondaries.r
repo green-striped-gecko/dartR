@@ -5,14 +5,14 @@
 #' These multiple SNP loci within a fragment (secondaries) are likely to be linked, 
 #' and so you may wish to remove secondaries.
 #' This script filters out loci after ordering the genlight object on based on 
-#' reproducibility, avgPIC in that order (method="best") or at random (method="random")
+#' repeatability, avgPIC in that order (method="best") or at random (method="random")
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param method -- method of selecting SNP locus to retain, best or random [random]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The reduced genlight, plus a summary
 #' @export
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 #' @examples
 #' result <- gl.report.secondaries(testset.gl)
 #' result2 <- gl.filter.secondaries(testset.gl)
@@ -21,13 +21,19 @@
 
 gl.filter.secondaries <- function(x, method="random", v=2) {
 
-  if(class(x) == "genlight") {
-    if (v > 2) {cat("Reporting for a genlight object\n")}
-  } else if (class(x) == "genind") {
-    if (v > 2) {cat("Reporting for a genind object\n")}
-  } else {
-    cat("Fatal Error: Specify either a genlight or a genind object\n")
-    stop()
+  # ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+  
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }
+  
+  if (method != "best" && method != "random"){
+    cat("    Warning: method must be specified, set to \'random\'\n")
   }
 
   if (v > 0) {
