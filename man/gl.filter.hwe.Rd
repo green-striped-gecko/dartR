@@ -4,16 +4,18 @@
 \alias{gl.filter.hwe}
 \title{Filters loci that show significant departure from Hardy-Weinberg Equilibrium}
 \usage{
-gl.filter.hwe(gl, p = 0.05, basis = "any", bon = TRUE)
+gl.filter.hwe(x, alpha = 0.05, basis = "any", bon = TRUE, v = 2)
 }
 \arguments{
-\item{gl}{-- a genlight object containing the SNP genotypes [Required]}
+\item{x}{-- a genlight object containing the SNP genotypes [Required]}
 
-\item{p}{-- level of significance (per locus) [Default 0.05]}
+\item{alpha}{-- level of significance (per locus) [Default 0.05]}
 
 \item{basis}{-- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]}
 
 \item{bon}{-- apply bonferroni correction to significance levels for filtering [default TRUE]}
+
+\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 a genlight object with the loci departing significantly from HWE removed
@@ -33,8 +35,8 @@ Note that power to detect departures from HWE is affected by sample size and tha
 effective filtering may require substantial sample sizes (n > 20).
 }
 \examples{
-list <- gl.filter.hwe(testset.gl,0.05, bon=TRUE)
+list <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE)
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 }

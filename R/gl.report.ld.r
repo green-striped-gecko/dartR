@@ -16,7 +16,7 @@
 #' @import parallel 
 #' @import foreach
 #' @importFrom doParallel registerDoParallel
-#' @author Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 
 
 gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL)

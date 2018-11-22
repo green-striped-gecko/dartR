@@ -24,7 +24,7 @@
 #' \tab \strong{1} \tab p,f\tab p \tab   -\cr
 #' }
 #' @export
-#' @author Bernd Gruber (glbugs@aerg.canberra.edu.au)
+#' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.report.pa.pop(testset.gl[1:20,])
 #' 

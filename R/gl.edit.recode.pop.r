@@ -31,7 +31,7 @@
 #' @return An object of class ("genlight") with the revised population assignments
 #' @import utils
 #' @export
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
 #' gl <- gl.edit.recode.pop(testset.gl)

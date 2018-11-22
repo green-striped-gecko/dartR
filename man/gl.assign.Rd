@@ -65,5 +65,5 @@ x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.05, threshold=1)
 
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

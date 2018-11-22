@@ -9,7 +9,7 @@
 #' @return A matrix of distances between populations (class dist), if nboots =1, otherwise a list with Fsts (in a matrix), Pvalues (a matrix of pvalues), Bootstraps results (data frame of all runs). Hint: Use \code{as.matrix(as.dist(fsts))} if you want to have a squared matrix with symmetric entries returned, instead of a dist object.
 #' @importFrom StAMPP stamppFst
 #' @export
-#' @author Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.fst.pop(possums.gl, nboots=1)
 

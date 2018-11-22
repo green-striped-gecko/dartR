@@ -44,5 +44,5 @@ gl <- gl.collapse(fd, recode.table="testset_recode.csv",tpop=1)
 }
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -16,7 +16,7 @@
 #' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @return A vector containing the new population names
 #' @export
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
 #' result <- gl.make.recode.pop(testset.gl, outfile="Emmac_recode_pop.csv")

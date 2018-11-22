@@ -40,8 +40,8 @@ monomorphic loci will alter the call rates. Some individuals with a call rate in
 lower than the threshold. If this is a problem, repeated iterations of this function will resolve the issue.
 }
 \examples{
-result <- gl.filter.callrate(testset.gl, method="ind", t=0.8)
+result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 }
