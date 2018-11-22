@@ -29,5 +29,5 @@ result <- gl.report.secondaries(testset.gl)
 result2 <- gl.filter.secondaries(testset.gl)
 }
 \author{
-Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

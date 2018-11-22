@@ -24,5 +24,5 @@ and plots as a barchart ordered on heterozygosity.
 gl.report.heterozygosity(testset.gl)
 }
 \author{
-Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

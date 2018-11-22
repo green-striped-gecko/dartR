@@ -36,5 +36,5 @@ result <- gl.make.recode.pop(testset.gl, outfile="Emmac_recode_pop.csv")
 }
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

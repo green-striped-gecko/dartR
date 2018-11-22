@@ -39,5 +39,5 @@ The script returns a genlight object with the new population assignments and the
 \code{\link{gl.recalc.metrics}}
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

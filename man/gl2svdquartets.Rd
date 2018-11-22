@@ -34,5 +34,5 @@ Reference: Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data und
 gl2svdquartets(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

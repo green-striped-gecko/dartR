@@ -52,5 +52,5 @@ colors of node symbols are those of the rainbow.
 #gl.grm.network(G,x)  
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

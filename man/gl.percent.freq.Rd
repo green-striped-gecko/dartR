@@ -23,5 +23,5 @@ m <-  gl.percent.freq(testset.gl)
 m
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -60,5 +60,5 @@ fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, v=1 )
 \code{\link{is.fixed}}
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

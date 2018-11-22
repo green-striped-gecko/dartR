@@ -25,5 +25,5 @@ gl.report.repavg(testset.gl)
 result <- gl.filter.repavg(testset.gl, threshold=0.95, v=3)
 }
 \author{
-Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

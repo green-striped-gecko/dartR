@@ -29,5 +29,5 @@ result <- gl2phylip(testset.gl, outfile="test.txt", bstrap=10)
 }
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

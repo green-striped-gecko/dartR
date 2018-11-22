@@ -19,5 +19,5 @@ Create a dataframe suitable for input to package \{Demerelate\} from a genlight 
 df <- gl2demerelate(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -38,5 +38,5 @@ effective filtering may require substantial sample sizes (n > 20).
 list <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE)
 }
 \author{
-Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

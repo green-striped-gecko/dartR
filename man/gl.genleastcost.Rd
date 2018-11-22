@@ -48,5 +48,5 @@ Wasserman, T. N., Cushman, S. A., Schwartz, M. K. and Wallin, D. O. (2010). Spat
 \code{\link{landgenreport}}, \code{\link{popgenreport}}, \code{\link{wassermann}}, \code{\link{lgrMMRR}}
 }
 \author{
-Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -70,7 +70,7 @@ utils.recalc.avgpic <- function(x, v=2) {
        ZeroRatioSnp <- 1 - OneRatioSnp
        x@other$loc.metrics$PICRef[i] <- 1 - ((OneRatioRef*OneRatioRef) + (ZeroRatioRef*ZeroRatioRef))
        x@other$loc.metrics$PICSnp[i] <- 1 - ((OneRatioSnp*OneRatioSnp) + (ZeroRatioSnp*ZeroRatioSnp))
-       x@other$loc.metrics$avgPIC[i] <- (x@other$loc.metrics$PICRef[i] + x@other$loc.metrics$PICSnp[i])/2
+       x@other$loc.metrics$AvgPIC[i] <- (x@other$loc.metrics$PICRef[i] + x@other$loc.metrics$PICSnp[i])/2
      }
 
      if (v > 0) {

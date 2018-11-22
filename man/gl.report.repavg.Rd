@@ -20,5 +20,5 @@ RepAvg is the proportion of alleles that give a reproducible result, averaged ov
 gl.report.repavg(testset.gl)
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

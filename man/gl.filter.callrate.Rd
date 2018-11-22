@@ -43,5 +43,5 @@ lower than the threshold. If this is a problem, repeated iterations of this func
 result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8)
 }
 \author{
-Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

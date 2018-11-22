@@ -58,5 +58,5 @@ gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1
 gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1, xaxis=1, yaxis=3)
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

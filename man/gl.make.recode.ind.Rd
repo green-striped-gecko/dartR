@@ -38,5 +38,5 @@ values missing. Clean this up with gl.filter.monomorphic().
 result <- gl.make.recode.ind(testset.gl, outfile="Emmac_recode_ind.csv")
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -35,5 +35,5 @@ as M for male, F for female, NA otherwise. The script abbreviates the entries he
 result <- gl.sexlinkage(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

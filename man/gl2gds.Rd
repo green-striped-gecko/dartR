@@ -23,5 +23,5 @@ gl2gds(testset.gl)
 }
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

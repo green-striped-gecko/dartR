@@ -28,13 +28,11 @@ with all values missing and deletes them (using gl.filter.monomorphs.r).
 The script returns a genlight object with the recalculated locus metadata.
 }
 \examples{
-\donttest{
-   gl <- gl.recalc.metrics(testset.gl, v=2)
-}
+  gl <- gl.recalc.metrics(testset.gl, v=2)
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}}
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

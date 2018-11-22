@@ -25,5 +25,5 @@ Summary of minor allele frequencies across loci is reported as histograms.
 f <- gl.report.maf(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

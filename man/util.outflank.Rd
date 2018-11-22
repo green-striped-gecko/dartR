@@ -73,5 +73,5 @@ user directly.
 Steps:
 }
 \author{
-Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr); original implementation of Whitlock & Lotterhos
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}); original implementation of Whitlock & Lotterhos
 }

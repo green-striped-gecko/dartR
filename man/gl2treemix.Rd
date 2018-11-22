@@ -27,5 +27,5 @@ Reference: Pickrell and Pritchard (2012). Inference of population splits and mix
 gl2treemix(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
