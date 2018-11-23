@@ -18,6 +18,13 @@ if (v==1) {
 #convert to genind....
 x <- as.matrix(gl[,])
 if (v==1) pb <- txtProgressBar(min=0, max=1, style=3, initial=NA)
+#if (is.null(gl@loc.all)) 
+  gl@loc.all <- rep("C/T", nLoc(gl))
+
+
+homs1 <- paste(substr(gl@loc.all,1,1),"/",substr(gl@loc.all,1,1), sep = "")
+hets <-  gl@loc.all
+homs2 <- paste(substr(gl@loc.all,3,3),"/",substr(gl@loc.all,3,3), sep = "")
 
 for (i in 1:nrow(x))
   {
@@ -27,7 +34,8 @@ for (i in 1:nrow(x))
     inp <- x[i,ii]
     if (!is.na(inp))
       {
-      if (inp==0) x[i,ii] <- "A/A" else if (inp==1) x[i,ii] <- "A/B" else if (inp==2) x[i,ii] <- "B/B"
+      
+      if (inp==0) x[i,ii] <- homs1[ii] else if (inp==1) x[i,ii] <- hets[ii] else if (inp==2) x[i,ii] <- homs2[ii]
       }
     }
 if (v==1)   setTxtProgressBar(pb, i/nrow(x))
