@@ -75,7 +75,16 @@ library(dartR)
 
 **without any error** (warnings if you are using an older version of R are okay) and you are done. 
 
+In case you want to have the latest version of the package you can download the developer version via:
+
+```{r}I
+install_github("green-striped-gecko/dartR@dev")
+```
+**!!Please note the here it is quite likely that some functions might not work, or even the install might break with an error.!!**
+
+
 Have fun working with dartR! Any issues you encounter please use the issues tab on github or contact us via email under glbugs@aerg.canberra.edu.au
+
 
 Cheers, Bernd & Arthur
 
