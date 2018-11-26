@@ -20,7 +20,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl2svdquartets(testset.gl)
+#' gl2svdquartets(testset.gl[1:20,1:100])
 
 gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=2) {
 

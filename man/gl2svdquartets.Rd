@@ -31,7 +31,7 @@ ambiguity codes (method=2).
 Reference: Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent, Bioinformatics, 30: 3317-3324
 }
 \examples{
-gl2svdquartets(testset.gl)
+gl2svdquartets(testset.gl[1:20,1:100])
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
