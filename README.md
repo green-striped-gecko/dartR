@@ -31,7 +31,7 @@ to access it.
 
 ----
 
-#### Manual installation of the latest version 
+#### Manual installation of the latest version (R>3.5)
 
 To install the latest package manually follow the description below:
 
@@ -48,6 +48,20 @@ install_github("green-striped-gecko/dartR")
 library(dartR)
 ```
 
+
+#### Manual installation of the latest version  (R<3.5)
+
+The BiocManager package is not available for R<3.5, hence you may need to use the following code:
+
+
+```{r}
+install.packages("devtools")
+library(devtools)
+source("https://bioconductor.org/biocLite.R")
+BiocInstaller::biocLite(c("SNPRelate", "qvalue"))
+install_github("green-striped-gecko/dartR")
+library(dartR)
+```
 
 Unfortunately sometimes to us unkown reasons R is not able to install all dependent packages and breaks with an error message. 
 Then you need to install packages "by hand". For example you may find:
