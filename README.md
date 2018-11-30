@@ -55,11 +55,9 @@ The BiocManager package is not available for R<3.5, hence you may need to use th
 
 
 ```{r}
-install.packages("devtools")
-library(devtools)
 source("https://bioconductor.org/biocLite.R")
 BiocInstaller::biocLite(c("SNPRelate", "qvalue"))
-install_github("green-striped-gecko/dartR")
+install.packages("dartR")
 library(dartR)
 ```
 
