@@ -21,7 +21,7 @@
 #' The SNP matrix, locus names (constructed from the AlleleID, SNP and SnpPosition to be unique), locus metadata, specimen names,
 #' specimen metadata are combined into a genlight object. Refer to the genlight documentation (Package adegenet) for further details.
 #'
-#' @param datafile -- name of csv file containing the DartSeq data in 2-row format (csv) [required]
+#' @param filename -- name of csv file containing the DartSeq data in 2-row format (csv) [required]
 #' @param topskip -- number of rows to skip before the header row (containing the specimen identities [required]
 #' @param nmetavar -- number of columns containing the locus metadata (e.g. AlleleID, RepAvg) [required]
 #' @param nas -- missing data character [default "-"]
@@ -33,22 +33,22 @@
 #' @export
 #' @examples
 #' \donttest{
-#' gl <- gl.read.dart.2row(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
+#' gl <- gl.read.dart.2row(filename="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
 #' nmetavar=16, nas="-", ind.metafile="metadata.csv" )
 #' }
 
 # Last edit:25-Apr-18
 
-gl.read.dart.2row <- function(datafile,topskip,nmetavar, nas="-",ind.metafile=NULL,pbar=TRUE,v=2) {
+gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile=NULL, pbar=TRUE, v=2) {
 
 # INPUT THE DATA TO PRELIMINARY STORAGE
   
   if ( v > 0) {cat("Starting gl.read.dart.2row: Reading DArT csv file\n")}
   if (v > 1){
-    cat("  Reading data from file:", datafile,"\n")
+    cat("  Reading data from file:", filename,"\n")
     cat("    This may take some time, please wait!\n")
   }  
-  x <- read.csv(datafile, na.strings=nas, skip = topskip, check.names=FALSE)
+  x <- read.csv(filename, na.strings=nas, skip = topskip, check.names=FALSE)
   if (v > 1){
     cat("  The following locus metadata was identified: ", names(x[1:nmetavar]),"\n")
   }  
@@ -190,14 +190,17 @@ if (!is.null(ind.metafile)) {
     if (sum(ind.metadata[,id.col] == names(snpdata)) == nind ) {
       if (v > 1) {cat ("  Ids of individual metadata file match!\n")}
     }else {
-      cat("Fatal Error: Ids in files ",datafile,"and ",ind.metafile," do not match\n     or not in the same order!\n\n");stop()
+      cat("Fatal Error: Ids in files ",filename,"and ",ind.metafile," do not match\n     or not in the same order!\n\n");stop()
     }
   }
   pop.col = match( "pop", names(ind.metadata))
   
 # Check for population assignment
   if (is.na(pop.col)) {
-    if (v > 1) {cat ("  Warning: No pop column present\n")}
+    if (v > 1) {
+      cat ("  Warning: No pop column present, creating it with missning values\n")
+      pop(gl) <- array(NA,nInd(gl))
+    }
   } else {
     pop(gl) <- as.factor(ind.metadata[,pop.col])
     if (v > 1){cat("  Populations assigned to individuals\n")}
