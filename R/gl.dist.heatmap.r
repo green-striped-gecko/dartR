@@ -8,7 +8,8 @@
 #' @param values -- if TRUE, and the number of rows is <= 20, distances are added to the body of the heatmap [default = TRUE]
 #' @param rank -- if TRUE, then the distance matrix will be reordered to group like with like, otherwise order will be displayed as given [default FALSE]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @import stats dist
+#' @importfrom stats dist
+#' @import graphics
 #' @return NULL
 #' @export
 #' @author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
