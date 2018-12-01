@@ -10,7 +10,7 @@
 #' @return A genlight object with monomorphic loci removed
 #' @import adegenet plyr utils
 #' @export
-#' @author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl <- gl.filter.monomorphs(testset.gl)
 

@@ -5,7 +5,8 @@
 \title{Bivariate plot of the results of a PCoA ordination}
 \usage{
 gl.pcoa.plot(glPca, data, scale = FALSE, ellipse = FALSE, p = 0.95,
-  labels = "pop", hadjust = 1.5, vadjust = 1, xaxis = 1, yaxis = 2)
+  labels = "pop", hadjust = 1.5, vadjust = 1, xaxis = 1,
+  yaxis = 2)
 }
 \arguments{
 \item{glPca}{Name of the glPca object containing the factor scores and eigenvalues [required]}
@@ -49,6 +50,7 @@ ggplotly() friendly. Running ggplotyly() with no parameters will replot the data
 over them. Refer to the plotly package for further information. Do not forget to load the library via library(plotly).
 }
 \examples{
+library(plotly) #needed for lables="interactive"
 gl <- testset.gl
 levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
 rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
@@ -57,5 +59,5 @@ gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1
 gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1, xaxis=1, yaxis=3)
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

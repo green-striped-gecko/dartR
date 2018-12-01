@@ -10,7 +10,7 @@
 #' @import adegenet
 #' @importFrom reshape2 melt
 #' @importFrom plyr ddply
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' m <-  gl.percent.freq(testset.gl)
 #' m
@@ -19,7 +19,7 @@ gl.percent.freq<- function(gl, v=2) {
 
   # ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(class(gl)!="genlight") {
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   

@@ -4,7 +4,8 @@
 \alias{gl2fasta}
 \title{Concatenates DArT trimmed sequences and outputs a fastA file.}
 \usage{
-gl2fasta(gl, method = 1, outfile = "output.fasta", outpath = tempdir())
+gl2fasta(gl, method = 1, outfile = "output.fasta",
+  outpath = tempdir())
 }
 \arguments{
 \item{gl}{-- name of the DArT genlight object [required]}
@@ -55,5 +56,5 @@ gl <- gl.filter.callrate(testset.gl,t=.98)
 gl2fasta(gl, method=1, outfile="test.fasta")
 }
 \author{
-Bernd Gruber and Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Bernd Gruber and Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

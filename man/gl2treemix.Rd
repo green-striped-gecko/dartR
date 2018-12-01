@@ -4,7 +4,8 @@
 \alias{gl2treemix}
 \title{Convert a genlight object to a treemix input file}
 \usage{
-gl2treemix(x, outfile = "treemix_input.gz", outpath = tempdir(), v = 2)
+gl2treemix(x, outfile = "treemix_input.gz", outpath = tempdir(),
+  v = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -26,5 +27,5 @@ Reference: Pickrell and Pritchard (2012). Inference of population splits and mix
 gl2treemix(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

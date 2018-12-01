@@ -11,7 +11,7 @@
 #' @importFrom rgdal writeOGR
 #' @importFrom sp SpatialPointsDataFrame coordinates<- CRS proj4string<-
 #' @importFrom stats complete.cases
-#' @author Bernd Guber (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Bernd Guber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl2shp(testset.gl)
 

@@ -7,7 +7,7 @@
 #' @return An object of class "amova" which is a list with a table of sums of square deviations (SSD), mean square deviations (MSD), and the number of degrees of freedom, and a vector of variance components.
 #' @importFrom StAMPP stamppNeisD
 #' @export
-#' @author Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 
 gl.amova <- function(x, nperm=100)
 {

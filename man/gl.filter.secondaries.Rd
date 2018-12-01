@@ -22,12 +22,12 @@ separately with the same CloneID (=AlleleID).
 These multiple SNP loci within a fragment (secondaries) are likely to be linked, 
 and so you may wish to remove secondaries.
 This script filters out loci after ordering the genlight object on based on 
-reproducibility, avgPIC in that order (method="best") or at random (method="random")
+repeatability, avgPIC in that order (method="best") or at random (method="random")
 }
 \examples{
 result <- gl.report.secondaries(testset.gl)
 result2 <- gl.filter.secondaries(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

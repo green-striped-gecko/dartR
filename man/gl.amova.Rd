@@ -18,5 +18,5 @@ An object of class "amova" which is a list with a table of sums of square deviat
 This script performs an AMOVA based on the genetic distance matrix from stamppNeisD() [package StAMPP] using the amova() function from the package PEGAS for exploring within and between population variation. For detailed information use their help pages: ?pegas::amova, ?StAMPP::stamppAmova
 }
 \author{
-Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

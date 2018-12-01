@@ -42,7 +42,7 @@
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @importFrom stats dnorm qnorm
 #' @export
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 #' x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.05, threshold=1)

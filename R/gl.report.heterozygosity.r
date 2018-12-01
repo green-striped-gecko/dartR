@@ -8,7 +8,7 @@
 #' 
 #' @param gl -- a genlight object containing the SNP genotypes [Required]
 #' @return a dataframe containing population labels, observed heterozygosities and sample sizes
-#' @author Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @importFrom grDevices rainbow
 #' @importFrom graphics par

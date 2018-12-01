@@ -4,7 +4,8 @@
 \alias{gl.collapse}
 \title{Collapse a distance matrix by amalgamating populations}
 \usage{
-gl.collapse(fd, recode.table = "tmp.csv", tpop = 0, tloc = 0, v = 2)
+gl.collapse(fd, recode.table = "tmp.csv", tpop = 0, tloc = 0,
+  v = 2)
 }
 \arguments{
 \item{fd}{-- name of the list of matricies produced by gl.fixed.diff() [required]}
@@ -43,5 +44,5 @@ gl <- gl.collapse(fd, recode.table="testset_recode.csv",tpop=1)
 }
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

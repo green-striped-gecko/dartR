@@ -24,5 +24,5 @@ and places these recalculated values in the appropriate place in the genlight ob
 #result <- dartR:::utils.recalc.callrate(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

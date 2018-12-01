@@ -12,7 +12,7 @@
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The reduced genlight, plus a summary
 #' @export
-#' @author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' result <- gl.report.secondaries(testset.gl)
 #' result2 <- gl.filter.secondaries(testset.gl)

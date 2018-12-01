@@ -23,7 +23,7 @@
 #'         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation], otherwise NAs
 #'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation], otherwise NAs
 #' @export
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 
 gl.collapse.pval <- function(fd, prefix="fd.sig", delta=0.02, reps=1000, alpha=0.05, v=2) {
   

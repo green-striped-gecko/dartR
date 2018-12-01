@@ -13,7 +13,7 @@
 #' transversion frequencies.
 #' @export
 #' @import adegenet stringr
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' lst <- gl.report.bases(testset.gl)
 #' lst

@@ -24,5 +24,5 @@ places these recalculated values in the appropriate place in the genlight object
 #f <- dartR:::utils.recalc.maf(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

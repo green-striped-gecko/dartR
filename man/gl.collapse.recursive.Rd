@@ -64,5 +64,5 @@ fd <- gl.collapse.recursive(testset.gl, prefix="testset", test=TRUE, tloc=0, tpo
 }
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

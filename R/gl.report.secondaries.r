@@ -7,7 +7,7 @@
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @return 1
 #' @export
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.report.secondaries(testset.gl)
 

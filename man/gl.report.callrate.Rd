@@ -27,5 +27,5 @@ of several percentiles. The script gl.filter.callrate() will filter out the loci
 gl.report.callrate(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

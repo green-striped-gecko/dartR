@@ -30,7 +30,7 @@
 #' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
 #' @import utils
 #' @export
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
 #' gl <- gl.edit.recode.ind(testset.gl)

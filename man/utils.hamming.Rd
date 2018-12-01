@@ -49,5 +49,5 @@ The algorithm is that of Johann de Jong
 \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -27,5 +27,5 @@ returns calculation of pairwise LD across all loci between subpopulation. This f
 this function is implemented in a parallel fashion to speed up the process. There is also the ability to restart the function if crashed by specifying the chunkfile names or restarting the function exactly in the same way as in the first run. This is implemented as sometimes due to connectivity loss between cores the function my crash half way. Also remove loci with have only missing value before running the function.
 }
 \author{
-Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

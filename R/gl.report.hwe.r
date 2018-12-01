@@ -19,7 +19,7 @@
 #' @return a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
 #' and alternate SNP homozygotes; probability of departure from H-W equilibrium,
 #' and per locus significance with and without Bonferroni Correction.
-#' @author Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @examples
 #' list <- gl.report.hwe(testset.gl,0.05, subset=c("EmmacMaclGeor", "EmmacCoopCully"))

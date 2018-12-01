@@ -10,8 +10,8 @@ default, the uncorrected FSTs used by OutFLANK) of loci and overlays the
 inferred null histogram.}
 \usage{
 util.outflank.plotter(OFoutput, withOutliers = TRUE, NoCorr = TRUE,
-  Hmin = 0.1, binwidth = 0.005, Zoom = FALSE, RightZoomFraction = 0.05,
-  titletext = NULL)
+  Hmin = 0.1, binwidth = 0.005, Zoom = FALSE,
+  RightZoomFraction = 0.05, titletext = NULL)
 }
 \arguments{
 \item{OFoutput}{The output of the function OutFLANK()}

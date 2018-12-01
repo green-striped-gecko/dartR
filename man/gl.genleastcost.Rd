@@ -30,13 +30,15 @@ This function calculates the pairwise distances (Euclidean, cost path distances 
 }
 \examples{
 \dontrun{
-glc <- gl.genleastcost(x=possums.gl,fric.raster=landscape.sim ,
-gen.distance = "D", NN=8, pathtype = "leastcost",plotpath = T)
-wassermann(eucl.mat = glc$eucl.mat, cost.mat = glc$cost.mats, 
-gen.mat = glc$gen.mat)
-lgrMMRR(gen.mat = glc$gen.mat, cost.mats = glc$cost.mats, 
-eucl.mat = glc$eucl.mat)
+data(possums.gl)
+library(raster)  #needed for that example
+landscape.sim <- readRDS(system.file("extdata","landscape.sim.rdata", package="dartR"))
+glc <- gl.genleastcost(x=possums.gl,fric.raster=landscape.sim , 
+gen.distance = "D", NN=8, pathtype = "leastcost",plotpath = TRUE)
+wassermann(eucl.mat = glc$eucl.mat, cost.mat = glc$cost.mats,  gen.mat = glc$gen.mat)
+lgrMMRR(gen.mat = glc$gen.mat, cost.mats = glc$cost.mats,  eucl.mat = glc$eucl.mat)
 }
+
 }
 \references{
 Cushman, S., Wasserman, T., Landguth, E. and Shirk, A. (2013). Re-Evaluating Causal Modeling with Mantel Tests in Landscape Genetics. Diversity, 5(1), 51-72.
@@ -47,5 +49,5 @@ Wasserman, T. N., Cushman, S. A., Schwartz, M. K. and Wallin, D. O. (2010). Spat
 \code{\link{landgenreport}}, \code{\link{popgenreport}}, \code{\link{wassermann}}, \code{\link{lgrMMRR}}
 }
 \author{
-Bernd Gruber (bugs? Post to https://groups.google.com/d/forum/dartr)
+Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

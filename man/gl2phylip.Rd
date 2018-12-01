@@ -4,7 +4,8 @@
 \alias{gl2phylip}
 \title{Create a Phylip input distance matrix from a genlight (SNP) or genind (SilicoDarT) \{adegenet\} object}
 \usage{
-gl2phylip(gl, outfile = "phyinput.txt", outpath = tempdir(), bstrap = 1)
+gl2phylip(gl, outfile = "phyinput.txt", outpath = tempdir(),
+  bstrap = 1)
 }
 \arguments{
 \item{gl}{Name of the genlight object containing the SNP data or a genind object containing presence absence data [required]}
@@ -28,5 +29,5 @@ result <- gl2phylip(testset.gl, outfile="test.txt", bstrap=10)
 }
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

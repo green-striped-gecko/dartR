@@ -24,5 +24,5 @@ Note that the frequency of the homozygote alternate SNPS is calculated from the 
 #result <- dartR:::utils.recalc.freqhomsnp(testset.gl)
 }
 \author{
-Arthur Georges (glbugs@aerg.canberra.edu.au)
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

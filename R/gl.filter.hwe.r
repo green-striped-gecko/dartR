@@ -18,7 +18,7 @@
 #' @param bon -- apply bonferroni correction to significance levels for filtering [default TRUE] 
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a genlight object with the loci departing significantly from HWE removed
-#' @author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @examples
 #' list <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE)
@@ -54,11 +54,11 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, v=2) {
     for (i in poplist) {
       count <- count + 1
       if (count==1) {
-        result <- dartR:::utils.hwe(i, prob=alpha)
+        result <- utils.hwe(i, prob=alpha)
         Population <- rep(names(poplist)[count],nrow(result))
         result <- cbind(Population,result)
       } else {
-        r <- dartR:::utils.hwe(i, prob=alpha)
+        r <- utils.hwe(i, prob=alpha)
         Population <- rep(names(poplist)[count],nrow(r))
         r <- cbind(Population,r)
         result <- rbind(result, r)

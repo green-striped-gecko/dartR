@@ -63,13 +63,12 @@ install.packages("dartR")
 ## Manual installation via Github (with all dependencies)
 
 ```{r, eval=FALSE}
-# Install and attach library dartR
-  install.packages("devtools")
-  library(devtools)
-  source("http://bioconductor.org/biocLite.R")
-  biocLite("qvalue", suppressUpdates=T)
-  biocLite("SNPRelate", suppressUpdates=T)
-  install_github("green-striped-gecko/dartR")
+install.packages("devtools")
+library(devtools)
+install.packages("BiocManager")
+BiocManager::install(c("SNPRelate", "qvalue"))
+install_github("green-striped-gecko/dartR")
+library(dartR)
 ```
 
 
@@ -81,11 +80,10 @@ To test if your installation was successful include the library by typing:
  library(dartR)
 ```
 
-If some packages have not been loaded, an error message will be given and you will need to install those package manually (see a detailed description of the process at the [Github repository](https://github.com/green-striped-gecko/dartR). A common problem is also that a package from bioiconductor is not installed (SNPRelate). To fix this problem type:
+If some packages have not been loaded, an error message will be given and you will need to install those package manually (see a detailed description of the process at the [Github repository](https://github.com/green-striped-gecko/dartR). A common problem is also that a package from bioiconductor is not installed (SNPRelate or qvalue). To fix this problem type:
 
 ```{r, eval=FALSE}
-source("https://bioconductor.org/biocLite.R")
-biocLite("SNPRelate")
+BiocManager::install(c("SNPRelate", "qvalue"))
 ```
 ## Setting the working directory
 

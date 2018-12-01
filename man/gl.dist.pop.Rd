@@ -43,5 +43,5 @@ tallies the total number of private alleles possessed by one or the other popula
 gl.dist.pop(testset.gl, method="euclidean", diag=TRUE)
 }
 \author{
-Arthur Georges (bugs? Post to https://groups.google.com/d/forum/dartr)
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -3,7 +3,7 @@
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @return A dataframe suitable as input to package \{Demerelate\}
 #' @export
-#' @author Arthur Georges (glbugs@aerg.canberra.edu.au)
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' df <- gl2demerelate(testset.gl)
 

@@ -43,5 +43,5 @@ gl.report.pa.pop(testset.gl[1:20,])
 
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
+Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }
