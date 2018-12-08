@@ -33,6 +33,7 @@
 #' @param method -- 1 | 2 | 3 | 4. Type method=0 for a list of options  [method=1]
 #' @param outfile -- name of the output file (fasta format) [output.fasta]
 #' @param outpath -- path where to save the output file (set to tempdir by default)
+#' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
 #' @return A new gl object with all loci rendered homozygous
 #' @export
 #' @import adegenet
@@ -49,7 +50,7 @@
 #' gl2fasta(gl, method=1, outfile="test.fasta")
 
 
-gl2fasta <- function(gl, method=1, outfile="output.fasta", outpath=tempdir()) {
+gl2fasta <- function(gl, method=1, outfile="output.fasta", outpath=tempdir(), probar=TRUE) {
   outfile <- file.path(outpath, outfile)
   
   if(class(gl) != "genlight") {

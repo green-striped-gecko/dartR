@@ -26,7 +26,7 @@
 #' @param nmetavar -- number of columns containing the locus metadata (e.g. AlleleID, RepAvg) [required]
 #' @param nas -- missing data character [default "-"]
 #' @param ind.metafile -- name of csv file containing metadata assigned to each entity (individual) [default NULL]
-#' @param pbar -- display progress bar [FALSE]
+#' @param probar -- display progress bar [FALSE]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return An object of class ("genlight") containing the SNP data, and locus and individual metadata
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -39,7 +39,7 @@
 
 # Last edit:25-Apr-18
 
-gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile=NULL, pbar=TRUE, v=2) {
+gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile=NULL, probar=TRUE, v=2) {
 
 # INPUT THE DATA TO PRELIMINARY STORAGE
   
@@ -118,7 +118,7 @@ gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile
     cat("\n  Starting conversion to genlight object ....\n")
     cat("    Please note conversion of bigger data sets will take some time!\n")
   }  
-  if(pbar){
+  if(probar){
     pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
     getTxtProgressBar(pb)
   }
@@ -162,7 +162,7 @@ gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile
     g <- gsub("1/1",1,g)
     g <- gsub("NA/NA",NA,g)
     x[,i] <- as.numeric(g)
-    if (pbar){setTxtProgressBar(pb, i/nind)}
+    if (probar){setTxtProgressBar(pb, i/nind)}
   }
 # Create the genlight object
   gl <- new("genlight", gen=t(x), ploidy=2, ind.names=colnames(snpdata), loc.names=locname ,loc.all=state2, position=pos, parallel=F)

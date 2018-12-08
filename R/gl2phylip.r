@@ -49,10 +49,6 @@ gl2phylip <- function(gl, outfile="phyinput.txt", outpath=tempdir(), bstrap=1) {
     # Check if bootstrap replicates are required
     if (bstrap > 1) {
 
-      # Set up the progress counter
-      #pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-      #getTxtProgressBar(pb)
-
     # Repeat for each bootstrap replicate
       for (j in (2:bstrap)) {
 
@@ -76,7 +72,6 @@ gl2phylip <- function(gl, outfile="phyinput.txt", outpath=tempdir(), bstrap=1) {
           cat(row.names(d)[i],d[i,],"\n")
         }
       }
-      #setTxtProgressBar(pb, j)
     }
     sink()
     return(d)
