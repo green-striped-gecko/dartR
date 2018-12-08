@@ -41,13 +41,14 @@ gl.report.callrate <- function(x, method="loc", plot=TRUE, v=2) {
 
 # RECALCULATE THE CALL RATE, BRING IT UP TO DATE IN CASE gl.recalc.metrics HAS NOT BEEN RUN
   
-    x <- utils.recalc.callrate(x, v=v)
+    x <- dartR:::utils.recalc.callrate(x, v=v)
 
 # FOR METHOD BASED ON LOCUS    
   
   if(method == "loc") {
     
-    # Plot a histogram of Call Rate
+  # Plot a histogram of Call Rate
+    par(mfrow = c(2, 1),pty="m")
     
     if (plot) {
       hist(x@other$loc.metrics$CallRate, 
@@ -55,38 +56,42 @@ gl.report.callrate <- function(x, method="loc", plot=TRUE, v=2) {
          xlab="Call Rate", 
          border="blue", 
          col="red",
-         xlim=c(min(x@other$loc.metrics$CallRate),1)
+         xlim=c(min(x@other$loc.metrics$CallRate),1),
+         breaks=100
       )
+      glPlot(x)
     }  
- 
-    # Function to determine the loss of loci for a given filter cut-off
-    s <- function(gl, percentile) {
-      a <- sum(glNA(x,alleleAsUnit=FALSE)<=((1-percentile)*nInd(x)))
-      if (percentile == 1) {
-        cat(paste0("  Loci with no missing values = ",a," [",round((a*100/nLoc(x)),digits=1),"%]\n"))
-      } else {
-        cat(paste0("    < ",(1-percentile)*100,"% missing values = ",a," [",round((a*100/nLoc(x)),digits=1),"%]\n"))
-      }
-      return(a)
-    }
-    # Define vectors to hold the x and y axis values
-    b <- vector()
-    c <- vector()
-    # Generate x and y values
-    for (i in seq(0,100,by=5)) {
-      c[i+1] <- s(x,((100-i)/100))
-      b[i+1] <- i
-      if (!is.na(c[i+1])) {
-        if ((round(c[i+1]*100/nLoc(x))) == 100) {break}
-      }
-    }
-    b <- 1-(b[!is.na(b)])/100
-    c <- c[!is.na(c)]
-    df <- data.frame(cbind(b,c)) 
-    names(df) <- c("Cutoff","SNPs")
-    
-  }
 
+    
+  # Print out some statistics
+    
+    cat("  Miniumum Call Rate: ",round(min(x@other$loc.metrics$CallRate),2),"\n")
+    cat("  Maximum Call Rate: ",round(max(x@other$loc.metrics$CallRate),2),"\n")
+    cat("  Average Call Rate: ",round(mean(x@other$loc.metrics$CallRate),3),"\n")
+    cat("  Missing Rate Overall: ",round(sum(is.na(as.matrix(x)))/(nLoc(x)*nInd(x)),2),"\n\n")
+
+  # Determine the loss of loci for a given filter cut-off
+    retained <- array(NA,21)
+    pc.retained <- array(NA,21)
+    filtered <- array(NA,21)
+    pc.filtered <- array(NA,21)
+    percentile <- array(NA,21)
+    crate <- x@other$loc.metrics$CallRate
+    for (index in 1:21) {
+      i <- (index-1)*5
+      percentile[index] <- i/100
+      retained[index] <- length(crate[crate>=percentile[index]])
+      pc.retained[index] <- round(retained[index]*100/nLoc(x),1)
+      filtered[index] <- nLoc(x) - retained[index]
+      pc.filtered[index] <- 100 - pc.retained[index]
+    }
+    df <- cbind(percentile,retained,pc.retained,filtered,pc.filtered)
+    df <- data.frame(df)
+    colnames(df) <- c("Threshold", "Retained", "Percent", "Filtered", "Percent")
+    df <- df[order(-df$Threshold),]
+    print(df)
+  }
+  
 # FOR METHOD BASED ON INDIVIDUAL   
     
   if(method == "ind") {
@@ -102,46 +107,44 @@ gl.report.callrate <- function(x, method="loc", plot=TRUE, v=2) {
         xlab="Call Rate", 
         border="blue", 
         col="red",
-        xlim=c(min(ind.call.rate),1)
+        xlim=c(min(ind.call.rate),1),
+        breaks=100
       )
+      glPlot(x)
     }  
     
-    # Function to determine the loss of individuals for a given filter cut-off
+    cat("  Miniumum Call Rate: ",round(min(ind.call.rate),2),"\n")
+    cat("  Maximum Call Rate: ",round(max(ind.call.rate),2),"\n")
+    cat("  Average Call Rate: ",round(mean(ind.call.rate),3),"\n")
+    cat("  Missing Rate Overall: ",round(sum(is.na(as.matrix(x)))/(nLoc(x)*nInd(x)),2),"\n\n")
 
-    s2 <- function(gl, percentile, i=ind.call.rate) {
-      a <- length(i) - length(i[i<=percentile])
-      if (percentile == 1) {
-        cat(paste0("Individuals no missing values = ",a," [",round((a*100/nInd(x)),digits=1),"%] across loci; all individuals would be filtered\n"))
-      } else {
-        cat(paste0("     with less than or equal to ",(1-percentile)*100,"% = ",a," [",round((a*100/nInd(x)),digits=1),"%]; ",nInd(x)-a," individuals would be filtered\n"))
-      }
-      return(a)
+    # Determine the loss of individuals for a given filter cut-off
+    retained <- array(NA,21)
+    pc.retained <- array(NA,21)
+    filtered <- array(NA,21)
+    pc.filtered <- array(NA,21)
+    percentile <- array(NA,21)
+    crate <- ind.call.rate
+    for (index in 1:21) {
+      i <- (index-1)*5
+      percentile[index] <- i/100
+      retained[index] <- length(crate[crate>=percentile[index]])
+      pc.retained[index] <- round(retained[index]*100/nInd(x),1)
+      filtered[index] <- nInd(x) - retained[index]
+      pc.filtered[index] <- 100 - pc.retained[index]
     }
-    
-    # Define vectors to hold the x and y axis values
-    b <- vector()
-    c <- vector()
-    
-    # Generate x and y values
-    for (i in seq(0,100,by=5)) {
-      c[i+1] <- s2(x,percentile=((100-i)/100),i=ind.call.rate)
-      b[i+1] <- i
-      if (!is.na(c[i+1])) {
-        if ((round(c[i+1]*100/nInd(x))) == 100) {break}
-      }
-    }
-    b <- 1-(b[!is.na(b)])/100
-    c <- nInd(x) - c[!is.na(c)]
-    df <- data.frame(cbind(b,c)) 
-    names(df) <- c("Cutoff","SNPs")
+    df <- cbind(percentile,retained,pc.retained,filtered,pc.filtered)
+    df <- data.frame(df)
+    colnames(df) <- c("Threshold", "Retained", "Percent", "Filtered", "Percent")
+    df <- df[order(-df$Threshold),]
+    rownames(df) <- NULL
+    print(df)
   }
-  
+
   if (v >= 1) {
     cat("gl.report.callrate Completed\n")
   }
 
-  a <- NULL
-  
-  return()
+  return(df)
   
 }
