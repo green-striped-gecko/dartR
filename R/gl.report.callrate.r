@@ -8,7 +8,7 @@
 #' @param method specify the type of report by locus (method="loc") or individual (method="ind") [default method="loc"]
 #' @param plot specify if a histogram of call rate is to be produced [default TRUE]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return Mean call rate by locus (method="loc") or individual (method="ind")
+#' @return Tabulation of CallRate against Threshold
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -34,9 +34,9 @@ gl.report.callrate <- function(x, method="loc", plot=TRUE, v=2) {
 # FLAG SCRIPT START
   
   if (v >= 1) {
-    cat("Starting gl.report.callrate\n")
+    cat("Starting gl.report.callrate: Reporting distribution of Call Rate\n")
   }
-  if (v >= 3){cat("Note: Missing values most commonly arise from restriction site mutation.\n\n")}
+  if (v >= 4){cat("Note: Missing values most commonly arise from restriction site mutation.\n\n")}
   
 
 # RECALCULATE THE CALL RATE, BRING IT UP TO DATE IN CASE gl.recalc.metrics HAS NOT BEEN RUN
@@ -62,9 +62,10 @@ gl.report.callrate <- function(x, method="loc", plot=TRUE, v=2) {
       glPlot(x)
     }  
 
-    
   # Print out some statistics
     
+    cat("No. of loci =", nLoc(x), "\n")
+    cat("No. of individuals =", nInd(x), "\n")
     cat("  Miniumum Call Rate: ",round(min(x@other$loc.metrics$CallRate),2),"\n")
     cat("  Maximum Call Rate: ",round(max(x@other$loc.metrics$CallRate),2),"\n")
     cat("  Average Call Rate: ",round(mean(x@other$loc.metrics$CallRate),3),"\n")
@@ -89,6 +90,7 @@ gl.report.callrate <- function(x, method="loc", plot=TRUE, v=2) {
     df <- data.frame(df)
     colnames(df) <- c("Threshold", "Retained", "Percent", "Filtered", "Percent")
     df <- df[order(-df$Threshold),]
+    rownames(df) <- NULL
     print(df)
   }
   
@@ -113,6 +115,8 @@ gl.report.callrate <- function(x, method="loc", plot=TRUE, v=2) {
       glPlot(x)
     }  
     
+    cat("No. of loci =", nLoc(x), "\n")
+    cat("No. of individuals =", nInd(x), "\n")
     cat("  Miniumum Call Rate: ",round(min(ind.call.rate),2),"\n")
     cat("  Maximum Call Rate: ",round(max(ind.call.rate),2),"\n")
     cat("  Average Call Rate: ",round(mean(ind.call.rate),3),"\n")
@@ -141,6 +145,7 @@ gl.report.callrate <- function(x, method="loc", plot=TRUE, v=2) {
     print(df)
   }
 
+# FLAG SCRIPT END
   if (v >= 1) {
     cat("gl.report.callrate Completed\n")
   }

@@ -7,15 +7,31 @@
 #'
 #' @param x -- name of the input genlight object [required]
 #' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
-#' @return A report on loci, polymorphic, monomorphic, all NAs
+#' @return NULL
 #' @import adegenet plyr utils
 #' @export
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl2 <- gl.report.monomorphs(testset.gl)
 
-gl.report.monomorphs <- function (x, probar=TRUE) {
-
+gl.report.monomorphs <- function (x, probar=FALSE) {
+  
+# ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.report.repavg!\n"); stop()
+  }
+  
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }
+  
+# FLAG SCRIPT START
+  if (v >= 1) {
+    cat("Starting gl.report.monomorphs: Reporting frequency of monomorphic loci\n")
+  }
+ 
   cat("Identifying monomorphic loci\n")
 # Create vectors to hold test results
   # homozygote reference
@@ -58,9 +74,14 @@ gl.report.monomorphs <- function (x, probar=TRUE) {
   s2 <- s1 - sum(d,na.rm=TRUE)
   polym <- nLoc(x) - s2
   cat("\nBreakdown of", nLoc(x), "loci\n")
-  cat("  Polymorphic loci:", polym, "\n  Monomorphic loci:", s1, "\n  Loci with no scores (all NA):" , sum(d) ,"\n")
+  cat("  Monomorphic loci:", s1,"\n  Polymorphic loci:", polym, "\n  Loci with no scores (all NA):" , sum(d) ,"\n")
 
-return(x)
+# FLAG SCRIPT END
+  if (v >= 1) {
+    cat("gl.report.monomorphs Completed\n")
+  }
+  
+return(NULL)
 
 }
 

@@ -1,6 +1,6 @@
 #' Report minor allele frequency (MAF) for each locus in a genlight {adegenet} object
 #'
-#' Summary of minor allele frequencies across loci is reported as histograms.
+#' This script provides summary histograms of MAF for each population in the dataset as a basis for decisions on filtering.
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param maf.limit -- show histograms maf range <= maf.limit [default 0.5]
@@ -21,7 +21,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
     cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
   }
   if (v > 0) {
-    cat("Starting gl.report.maf: Minimum Allele Frequency\n")
+    cat("Starting gl.report.maf: Minor Allele Frequency\n")
   }
   if (maf.limit > 0.5 | maf.limit <= 0) {
     cat("Warning: maf.limit must be in the range (0,0.5], set to 0.5\n")
@@ -148,11 +148,11 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, v=2) {
   
     if (v > 0) {
       if(plot.count > 6) {
-        cat("Completed gl.report.maf\n  Refer to histograms which extend over multiple screens\n\n")
+        cat("Completed gl.report.maf once plots are displayed\n  Refer to histograms which extend over multiple screens\n\n")
       } else {
-        cat("Completed gl.report.maf\n  Refer to histograms\n\n")
+        cat("Completed gl.report.maf once plots are displayed\n  Refer to histograms\n\n")
       }
     }
   
-  return()
+  return(NULL)
 }  

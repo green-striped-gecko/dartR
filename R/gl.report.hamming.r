@@ -22,9 +22,10 @@
 #'
 #' @param x -- genlight object [required]
 #' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
+#' @param plot specify if a histogram of Hamming distance is to be produced [default TRUE]
 #' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default = TRUE]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return Histogram of Hamming distance for the gl object
+#' @return Tabulation of loc lost against Threshold
 #' @importFrom graphics hist
 #' @importFrom stats sd
 #' @export
@@ -32,7 +33,7 @@
 #' @examples
 #' gl.report.hamming(testset.gl)
 
-gl.report.hamming <- function(x, rs=5, probar=TRUE, v=2) {
+gl.report.hamming <- function(x, rs=5, plot=TRUE, probar=TRUE, v=2) {
   
 # ERROR CHECKING
   
@@ -63,7 +64,7 @@ gl.report.hamming <- function(x, rs=5, probar=TRUE, v=2) {
   s <- as.character(x@other$loc.metrics$TrimmedSequence)
 
   if (nLoc(x)==1) {
-    cat("Only one locus. No distances calculated.\n")
+    cat("Only one locus. No Hamming distances calculated.\n")
   } else {
     cat("Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n")
     cat("Calculating pairwise Hamming distances between trimmed reference sequence tags\n")
@@ -89,14 +90,56 @@ gl.report.hamming <- function(x, rs=5, probar=TRUE, v=2) {
     if (probar) {setTxtProgressBar(pb, i/(nL-1))}
   }
   }
-   mn <- round(mean(d),2)
-   sdev <- round(sd(d),2)
-   mi <- round(min(d),2)
-   mx <- round(max(d),2)
-   cat(paste0("\n\n  Mean Hamming Distance ",mn,"+/-",sdev,"SD (",mi," - ",mx,")\n"))
-   hist(d, main="Hamming D", c="red")
-   result <- hist(d, plot=FALSE)
 
+  # Plot a histogram of Hamming distance
+  par(mfrow = c(2, 1),pty="m")
+  
+  if (plot) {
+    hist(d, 
+         main="Hamming distance between Loci taken pairwise", 
+         xlab="Hamming distance", 
+         border="blue", 
+         col="red",
+         xlim=c(0,1),
+         breaks=100
+    )
+  }  
+   
+   xlimit <- min(d)
+   
+   cat("No. of loci =", nLoc(x), "\n")
+   cat("No. of individuals =", nInd(x), "\n")
+   cat("  Miniumum Hamming distance: ",round(min(d),2),"\n")
+   cat("  Maximum Hamming distance: ",round(max(d),2),"\n")
+   #cat("  Mean Hamming distance: ",round(mean(d),3),"\n\n")
+   cat(paste0("  Mean Hamming Distance ",mn,"+/-",sdev," SD\n\n"))
 
-   return(result)
+   # Determine the loss of loci for a given filter cut-off
+   retained <- array(NA,21)
+   pc.retained <- array(NA,21)
+   filtered <- array(NA,21)
+   pc.filtered <- array(NA,21)
+   percentile <- array(NA,21)
+   for (index in 1:21) {
+     i <- (index-1)*5
+     percentile[index] <- i/100
+     retained[index] <- length(d[d >= percentile[index]])
+     pc.retained[index] <- round(retained[index]*100/((((nL-1)*nL)/2)),1)
+     filtered[index] <- ((((nL-1)*nL)/2)) - retained[index]
+     pc.filtered[index] <- 100 - pc.retained[index]
+   }
+   df <- cbind(percentile,retained,pc.retained,filtered,pc.filtered)
+   df <- data.frame(df)
+   colnames(df) <- c("Threshold", "Retained", "Percent", "Filtered", "Percent")
+   df <- df[order(-df$Threshold),]
+   rownames(df) <- NULL
+   cat("Note: The data below are calculated from pairwise distances between",nL,"loci, for which there are",((((nL-1)*nL)/2)), "distances\n")
+   print(df)
+   
+   # FLAG SCRIPT END
+   if (v >= 1) {
+     cat("gl.report.hamming Completed\n")
+   }
+
+   return(df)
 }

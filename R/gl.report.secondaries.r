@@ -4,27 +4,75 @@
 #' These multiple SNP loci within a fragment are likely to be linked, and so you may wish to remove secondaries.
 #' This script reports duplicate loci.
 #'
-#' @param gl -- name of the genlight object containing the SNP data [required]
-#' @return 1
+#' @param x -- name of the genlight object containing the SNP data [required]
+#' @param plot -- if TRUE, will produce a frequency plot the number of SNPs per sequence tag [default = TRUE] 
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @return NULL
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.report.secondaries(testset.gl)
 
 
-gl.report.secondaries <- function(gl) {
-x <- gl
-  
-  if(class(x) == "genlight") {
-    cat("Reporting for a genlight object\n")
-  } else {
-    cat("Fatal Error: Specify a genlight or a genind object\n")
-    stop()
-  }
+gl.report.secondaries <- function(x, plot=TRUE, v=2) {
 
+# ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.report.repavg!\n"); stop()
+  }
+  
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }  
+  
+# FLAG SCRIPT START
+  if (v >= 1) {
+    cat("Starting gl.report.secondaries: Reporting frequency of secondary SNPs within a single sequence tag\n")
+  }
+  
 # Extract the clone ID number
   a <- strsplit(as.character(x@other$loc.metrics$AlleleID),"\\|")
   b <- unlist(a)[ c(TRUE,FALSE,FALSE) ]
+  
+  nloc.with.secondaries <- table(duplicated(b))[2]
+  if (!is.na(nloc.with.secondaries)){
+    par(mfrow = c(2, 1),pty="m") 
+    if (plot) {
+      h <- hist((table(b)+0.1), 
+              main="SNP Count per sequence tag (same clone ID)", 
+              xlab="K (no. of SNPs)", 
+              border="blue", 
+              col="red",
+              xlim=c(1,max(table(b))),
+              breaks=max(table(b)),
+              xaxt = 'n'
+      )
+      axis(1, as.character(h$mids), as.character(h$mids-0.5))
+    } 
+    
+  } else {
+      if (plot) {cat("  Warning: No loci with secondaries, no plot produced\n") }
+  }
+  
+# Identify and plot loci with sequence tags with secondaries
+#  index <- strsplit(as.character(x@other$loc.metrics$AlleleID),"\\|")
+#  index <- unlist(index)[ c(TRUE,FALSE,FALSE) ]
+#    length(index)
+#  names <- names(table(index))
+#    length(names)
+#  names <- names[(table(index) > 1)]
+#    length(names[(table(index) > 1)])
+#  x2 <- x[,index %in% names]
+#  x2@other$loc.metrics <- x2@other$loc.metrics[index %in% names,]
+#  x2 <- gl.filter.repavg(x2,threshold=0.99,v=0)
+#  x2 <- gl.filter.callrate(x2,threshold=0.95,v=0)
+#
+#  glPlot(x2)
+# 
+# Takes way too long for the benefit  
+  
 # Identify secondaries in the genlight object
   cat("Total number of SNP loci:",nLoc(x),"\n")
   if (is.na(table(duplicated(b))[2])) {
@@ -34,10 +82,6 @@ x <- gl
   }  
   cat("   Number of loci after secondaries removed:",table(duplicated(b))[1],"\n")
 
-    return(1)
+    return(NULL)
   
 }  
-
-
-
-

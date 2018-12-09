@@ -8,9 +8,10 @@
 #' and transversions assume that there is no directionality, that is C>T is the same as T>C, because
 #' the reference state is arbitrary.
 #' 
-#' @param gl -- name of the DArT genlight object [required]
-#' @return Matrix containing the percent frequencies of each base (A,C,T,G) and the transition and 
-#' transversion frequencies.
+#' @param x -- name of the DArT genlight object [required]
+#' @param plot -- if TRUE, histograms of base composition are produced [default TRUE]
+#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @return Matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
 #' @export
 #' @import adegenet stringr
 #' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
@@ -18,14 +19,33 @@
 #' lst <- gl.report.bases(testset.gl)
 #' lst
 
-gl.report.bases <- function(gl) {
-x <- gl
+gl.report.bases <- function(x, plot=TRUE, v=2) {
+
+# ERROR CHECKING
   
-  if(any(names(x@other$loc.metrics) == "TrimmedSequence")) {
-    cat("Key variable TrimmedSequence found.\n\n")
-  } else {
-    cat("Fatal Error: Dataset does not include variable TrimmedSequence!\n"); stop()
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+  
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }
+  
+# FLAG SCRIPT START
+  if (v >= 1) {
+    cat("Starting gl.report.bases: Reporting base composition\n")
+  }
+  
+# DO THE JOB
+  
+  if (v >=3) {
+    if(any(names(x@other$loc.metrics) == "TrimmedSequence")) {
+      cat("Key variable TrimmedSequence found.\n\n")
+    } else {
+      cat("Fatal Error: Dataset does not include variable TrimmedSequence!\n"); stop()
+    }
+  }  
   
 # Count up the number of bases, and the number of each of ATGC, and other
   A <- sum(str_count(x@other$loc.metrics$TrimmedSequence, "A"))
@@ -35,7 +55,7 @@ x <- gl
   total <- sum(str_length(x@other$loc.metrics$TrimmedSequence))
   total.ATGC <- sum(A,G,C,T)
   if (total != total.ATGC) {
-    cat("Warning: Codes other than A, T, G and C present\n")
+    cat("  Warning: Codes other than A, T, G and C present\n")
   }
   other <- total - total.ATGC
   other <- other*100/total
@@ -86,11 +106,26 @@ x <- gl
   cat(paste("Transitions  :",round(ts,2),"\n"))
   cat(paste("Transversions:",round(tv,2),"\n"))
   cat(paste("tv/ts ratio:", round(ratio,4),"\n\n"))
-
+  
+  if (plot) {
+    par(mfrow = c(2, 1),pty="s")
+    df <- cbind(A,C,T,G)
+    barplot(df, main="Base Frequencies", col=rainbow(1), width=c(.1,.1,.1,.1))
+    df <- cbind(ts,tv)
+    title <- paste("Transitions and Transversion Rates\n (ts/tv ratio =",round(ratio,2),")")
+    barplot(df, main=title, col=rainbow(1))
+  }  
+  
 # Create return matrix
   col1 <- c("A","G","T","C","tv","ts")
   col2 <- c(round(A,2),round(G,2),round(T,2),round(C,2),round(tv,2),round(ts,2))
   matrix <- cbind(col1, col2)
+  #colnames(matrix) <- c("Base","Pcent")
+  
+# FLAG SCRIPT END
+  if (v >= 1) {
+    cat("gl.report.bases completed\n")
+  }
   
   return(matrix)
   
