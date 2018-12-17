@@ -1,7 +1,7 @@
 #' Convert a genlight object to a treemix input file
 #' 
 #' The output file contains the snp data in the format expected by treemix -- see the treemix manual. The file will be gzipped before in order to be recognised
-#' by treemix. Plotting functions provided with treemix can be obtained using source("C:/workspace/R/dartR/R/gl.treemix.plotting_funcs.r").  
+#' by treemix. Plotting functions provided with treemix will need to be sourced from the treemix download page.  
 #'
 #' Reference: Pickrell and Pritchard (2012). Inference of population splits and mixtures from genome-wide allele frequency data. PLoS Genetics https://doi.org/10.1371/journal.pgen.1002967
 #' 
