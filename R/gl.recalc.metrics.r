@@ -15,7 +15,7 @@
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the recalculated locus metadata
 #' @export
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'   gl <- gl.recalc.metrics(testset.gl, v=2)
 #' @seealso \code{\link{gl.filter.monomorphs}}
@@ -23,24 +23,40 @@
 
 gl.recalc.metrics <- function(x, v=2){
   
+# ERROR CHECKING
   
+  if(class(x)!="genlight") {
+    cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
+  }
   if (is.null(x@other$loc.metrics)) {
     cat("No loc.metrics found in gl@other, therefore it will be created to hold the loci metrics. Be aware that some metrics such as TrimmedSequence and RepAvg cannot be created and therefore not all functions within the package can be used (e.g. gl2fasta, gl.filter.RepAvg)\n")
     x@other$loc.metrics <- data.frame(nr=1:nLoc(x))
   }
+    # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+  if (v < 0 | v > 5){
+    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    v <- 2
+  }  
+  
+# SCRIPT START  
   
   if (v > 0) {
     cat("Starting gl.recalc.metrics: Recalculating locus metrics\n")
   }
 
 # Recalculate statistics
-  x <- utils.recalc.avgpic(x,v=v)
-  x <- utils.recalc.callrate(x,v=v)
-  x <- utils.recalc.maf(x,v=v)
+  x <- dartR:::utils.recalc.avgpic(x,v=v)
+  x <- dartR:::utils.recalc.callrate(x,v=v)
+  x <- dartR:::utils.recalc.maf(x,v=v)
+  x <- dartR:::utils.recalc.rdepth(x,v=v)
 
   if (v > 1) {  
     cat("Note: Locus metrics recalculated\n")
   }
+  
+  # SCRIPT END
+  
   if (v > 0) {
     cat("Completed gl.recalc.metrics\n\n")
   }
