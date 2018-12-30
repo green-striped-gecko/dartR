@@ -68,8 +68,8 @@ gl.report.repavg <- function(x) {
   
   if (plot) {
     hist(repAvg, 
-         main="Histogram Repeatbility by Locus", 
-         xlab="REpeatability", 
+         main="Repeatbility by Locus", 
+         xlab="Repeatability", 
          border="blue", 
          col="red",
          xlim=c(min(repAvg),1),
