@@ -15,8 +15,11 @@
 utils.recalc.freqhets <- function(x, v=2) {
 
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for utils.recalc.freqhets!\n"); stop("Execution terminated\n")
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+  # Work around a bug in adegenet if genlight object is created by subsetting
+  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+  
   if (v > 0) {
     cat("Starting utils.recalc.freqhets: Recalculating frequency of heterozygotes\n")
   }
@@ -34,7 +37,7 @@ utils.recalc.freqhets <- function(x, v=2) {
      }
 
      if (v > 0) {
-       cat("Completed utils.recalc.freqhets\n\n")
+       cat("Completed: utils.recalc.freqhets\n\n")
      }
      
    return(x)

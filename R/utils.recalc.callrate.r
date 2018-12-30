@@ -15,8 +15,11 @@
 utils.recalc.callrate <- function(x, v=2) {
  
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+  # Work around a bug in adegenet if genlight object is created by subsetting
+  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+  
   if (v > 0) {
     cat("Starting utils.recalc.callrate: Recalculating CallRate\n")
   }
@@ -30,7 +33,7 @@ utils.recalc.callrate <- function(x, v=2) {
      x@other$loc.metrics$CallRate <- 1-(glNA(x,alleleAsUnit=FALSE))/nInd(x)
 
   if (v > 0) {
-    cat("Completed utils.recalc.callrate\n\n")
+    cat("Completed: utils.recalc.callrate\n\n")
   }
      
    return(x)
