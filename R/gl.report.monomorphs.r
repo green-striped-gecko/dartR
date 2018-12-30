@@ -3,7 +3,7 @@
 #' This script reports the number of monomorphic loci from a genlight \{adegenet\} object
 #'
 #' A DArT dataset will not have monomorphic loci, but they can arise when populations or individuals are deleted.
-#' Retaining monomorphic loci unnecessarily increases the size of the dataset.
+#' Retaining monomorphic loci may unnecessarily increases the size of the dataset.
 #'
 #' @param x -- name of the input genlight object [required]
 #' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
@@ -21,17 +21,12 @@ gl.report.monomorphs <- function (x, probar=FALSE) {
   if(class(x)!="genlight") {
     cat("Fatal Error: genlight object required for gl.report.repavg!\n"); stop()
   }
-  
-  if (v < 0 | v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
-  }
+  # Work around a bug in adegenet if genlight object is created by subsetting
+  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
   
 # FLAG SCRIPT START
-  if (v >= 1) {
     cat("Starting gl.report.monomorphs: Reporting frequency of monomorphic loci\n")
-  }
- 
+
   cat("Identifying monomorphic loci\n")
 # Create vectors to hold test results
   # homozygote reference
@@ -77,10 +72,9 @@ gl.report.monomorphs <- function (x, probar=FALSE) {
   cat("  Monomorphic loci:", s1,"\n  Polymorphic loci:", polym, "\n  Loci with no scores (all NA):" , sum(d) ,"\n")
 
 # FLAG SCRIPT END
-  if (v >= 1) {
+
     cat("gl.report.monomorphs Completed\n")
-  }
-  
+
 return(NULL)
 
 }

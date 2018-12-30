@@ -18,14 +18,18 @@
 #'
 #' The algorithm is that of Johann de Jong 
 #' \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
-#' as implimented in utils.hamming.r
+#' as implimented in dartR:::utils.hamming.r
+#' 
+#' A histogram and or a smearplot can be requested. Note that the smearplot is computationally intensive, and will take time to 
+#' execute on large datasets.
 #'
 #' @param x -- genlight object [required]
-#' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
-#' @param plot specify if a histogram of Hamming distance is to be produced [default TRUE]
+#' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 5]
+#' @param plot specify if a histogram of Hamming distance is to be produced [default FALSE] 
+#' @param smearplot if TRUE, will produce a smearplot of individuals against loci [default FALSE]
 #' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default = TRUE]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return Tabulation of loc lost against Threshold
+#' @return Tabulation of loc that will be lost on filtering, against values of the threshold
+#' @importFrom adegenet glPlot
 #' @importFrom graphics hist
 #' @importFrom stats sd
 #' @export
@@ -33,13 +37,15 @@
 #' @examples
 #' gl.report.hamming(testset.gl)
 
-gl.report.hamming <- function(x, rs=5, plot=TRUE, probar=TRUE, v=2) {
+gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=TRUE) {
   
 # ERROR CHECKING
   
   if(class(x)!="genlight") {
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+  # Work around a bug in adegenet if genlight object is created by subsetting
+  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
 
   if(length(x@other$loc.metrics$TrimmedSequence) == 0) {
     cat("Fatal Error: Data must include Trimmed Sequences\n"); stop()
@@ -49,16 +55,10 @@ gl.report.hamming <- function(x, rs=5, plot=TRUE, probar=TRUE, v=2) {
     cat("Fatal Error: Length of restriction enzyme recognition sequence must be greater than zero, and less that the maximum length of a sequence tag; usually it is less than 9\n"); stop()
   }
 
-  if (v < 0 | v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
-  }
-
 # FLAG SCRIPT START
-  if (v >= 1) {
+
     cat("Starting gl.report.hamming: Reporting Hamming distances\n")
-  }
-  
+
 # DO THE JOB
 
   s <- as.character(x@other$loc.metrics$TrimmedSequence)
@@ -101,10 +101,12 @@ gl.report.hamming <- function(x, rs=5, plot=TRUE, probar=TRUE, v=2) {
          border="blue", 
          col="red",
          xlim=c(0,1),
-         breaks=100
-    )
+         breaks=100)
   }  
-   
+  if(smearplot){
+    glPlot(x)
+  } 
+  
    xlimit <- min(d)
    
    cat("No. of loci =", nLoc(x), "\n")
@@ -137,9 +139,7 @@ gl.report.hamming <- function(x, rs=5, plot=TRUE, probar=TRUE, v=2) {
    print(df)
    
    # FLAG SCRIPT END
-   if (v >= 1) {
      cat("gl.report.hamming Completed\n")
-   }
 
    return(df)
 }
