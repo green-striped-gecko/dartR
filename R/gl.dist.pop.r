@@ -36,6 +36,9 @@ gl.dist.pop <- function(x, method="euclidean", binary=FALSE, diag=TRUE, upper=FA
   if(class(x)!="genlight") {
     cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
   }
+  # Work around a bug in adegenet if genlight object is created by subsetting
+  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+  
   if (v > 0) {
     cat("Starting gl.dist.pop: Genetic distance\n")
   }
@@ -133,6 +136,8 @@ gl.dist.pop <- function(x, method="euclidean", binary=FALSE, diag=TRUE, upper=FA
       }
     }
     
+    dd <- as.dist(dd) 
+     
     if (v > 0) {
       cat("Completed gl.dist.pop\n\n")
     }
