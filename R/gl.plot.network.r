@@ -34,11 +34,9 @@
 #'@author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 #'  
 #'@examples
-#'#gl.dist.network(D)  
+#'#gl.plot.network(D)  
 
-#layout_with_kk layout_with_fr layout_with_drl graph_from_data_frame delete_edges V
-
-gl.dist.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALSE, node.label.size=0.7, node.label.color="black", alpha=0.005, title="Network based on genetic distance", v=3){
+gl.plot.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALSE, node.label.size=0.7, node.label.color="black", alpha=0.005, title="Network based on genetic distance", v=3){
   
 # ERROR CHECKING
   
@@ -68,7 +66,7 @@ gl.dist.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALS
 # FLAG SCRIPT START
 
 if (v >= 1) {
-  cat("Starting gl.dist.network: Displaying distance matrix\n")
+  cat("Starting gl.plot.network: Displaying distance matrix\n")
 }
 
 # DO THE JOB
@@ -95,7 +93,7 @@ if (v >= 1) {
     colnames(nodes) <- "name"
   }
   
-  network<-graph_from_data_frame(d=links, vertices=nodes, directed=FALSE)
+  network <- igraph::graph_from_data_frame(d=links, vertices=nodes, directed=FALSE)
   
   if (!is.null(x)){
     colors = rainbow(nlevels(pop(x)))
@@ -105,19 +103,19 @@ if (v >= 1) {
   }
   
   q <- quantile(links$weight, p = 1-alpha)
-  network.FS <- delete_edges(network, E(network)[links$weight < q ])
+  network.FS <- igraph::delete_edges(network, igraph::E(network)[links$weight < q ])
   
   if (method=="fr"){
     layout.name <- "Fruchterman-Reingold layout"
-    l <- layout_with_fr(network.FS)
+    l <- igraph::layout_with_fr(network.FS)
   }
   if (method=="kk"){
     layout.name <- "Kamada-Kawai layout"
-    l <- layout_with_kk(network.FS)
+    l <- igraph::layout_with_kk(network.FS)
   }
   if (method=="drl"){
     layout.name <- "DrL Graph layout"
-    l <- layout_with_drl(network.FS)
+    l <- igraph::layout_with_drl(network.FS)
   }
   title <- paste(title,"\n[",layout.name,"]")
   
@@ -150,7 +148,7 @@ if (v >= 1) {
   # FLAG SCRIPT END
   
   if (v >= 1) {
-    cat("Completed gl.dist.network\n\n")
+    cat("Completed gl.plot.network\n\n")
   }
   
   return(invisible())

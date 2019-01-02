@@ -2,7 +2,7 @@
 #'
 #' The script plots a heat map to represent the distances in the distance or dissimilarity matrix
 #'
-#' @param dst -- name of the distance matrix [required]
+#' @param D -- name of the distance matrix [required]
 #' @param ncolors -- number of colors to display [default 5]
 #' @param labels -- if TRUE, and the number of rows is <= 20, labels are added to the heatmap [default = TRUE]
 #' @param labels.cex -- size of the labels [default = 1]
@@ -20,14 +20,14 @@
 #' @examples
 #'    gl <- testset.gl[1:10,]
 #'    d <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
-#'    gl.dist.heatmap(d)
-#'    gl.dist.heatmap(d, ncolors=10, rank=TRUE, legend=TRUE)
+#'    gl.plot.heatmap(d)
+#'    gl.plot.heatmap(d, ncolors=10, rank=TRUE, legend=TRUE)
 
-gl.dist.heatmap <- function(dst, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE, values.cex=1, legend=TRUE, rank=FALSE, v=2){
+gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE, values.cex=1, legend=TRUE, rank=FALSE, v=2){
   
 # ERROR CHECKING
   
-  if(class(dst)!="dist") {
+  if(class(D)!="dist") {
     cat("Fatal Error: distance matrix required!\n"); stop("Execution terminated\n")
   }
 
@@ -42,20 +42,20 @@ gl.dist.heatmap <- function(dst, ncolors=5, labels=TRUE, labels.cex=1, values=TR
   }
   ncolors <- ncolors + 1 # to account for zero = white.
   
-  if (max(dst) == 0) {
+  if (max(D) == 0) {
     cat("    Warning: matrix contains no nonzero distances\n")
   } 
   
 # FLAG SCRIPT START
   
   if (v >= 1) {
-    cat("Starting gl.dist.heatmap: Displaying distance matrix\n")
+    cat("Starting gl.plot.heatmap: Displaying distance matrix\n")
   }
   
 # DO THE JOB
   
   # Convert the distance matrix to a numeric matrix
-  x <- as.matrix(dst)
+  x <- as.matrix(D) # Note converts to a full matrix, upper and lower
   #x <- x[1:10,1:10]
   dim <- ncol(x)
   
@@ -65,13 +65,13 @@ gl.dist.heatmap <- function(dst, ncolors=5, labels=TRUE, labels.cex=1, values=TR
   }
   
   # Check if labels and values can be plotted
-  if (dim > 20){
+  if (dim >= 30){
     if (labels){
-      cat("    Warning: too many labels to display (more than 20); consider setting labels=FALSE\n")
+      cat("    Warning: too many labels to display (more than 30); consider setting labels=FALSE\n")
       # labels=FALSE
     }
     if (values){
-      cat("    Warning: too many cells to display values within (more than 20x20), conider setting values=FALSE\n")
+      cat("    Warning: too many cells to display values within (more than 30x30), conider setting values=FALSE\n")
       #values=FALSE
     }
   }
@@ -90,7 +90,8 @@ gl.dist.heatmap <- function(dst, ncolors=5, labels=TRUE, labels.cex=1, values=TR
 
   # Plot the heat map  
   #par(pty="s",mar=c(0,0,0,11),xpd=T)
-  par(pty="s",xpd=T)
+  layout(matrix(c(1,2), 1, 2, byrow = TRUE),widths=c(0.85,0.15))
+  par(mai=c(2,2,0,0),pty="s",xpd=T)
   # colours <- heat.colors(ncolors)
   colours <- c(heat.colors(ncolors)[2:ncolors],"#FFFFFFFF")
   image(1:dim, 1:dim, x, axes = FALSE, xlab="", ylab="", col=colours)
@@ -108,6 +109,8 @@ gl.dist.heatmap <- function(dst, ncolors=5, labels=TRUE, labels.cex=1, values=TR
   
   # Add the legend
   if (legend) {
+    par(mai=c(0.2,0,0.5,0.1),pty="m",xpd=F)
+    plot.new()
     bin <- (max(as.matrix(d))-min(as.matrix(d)))/ncolors
     series <- seq(from=0, to=max(d), by=bin)
     series=as.character(signif(series,2))
@@ -116,13 +119,14 @@ gl.dist.heatmap <- function(dst, ncolors=5, labels=TRUE, labels.cex=1, values=TR
     for (i in 1:(length(series)-1)) {
       s[i] <- paste(series[i],"-",series[i+1])
     }
-    legend(x=10.7,y=10,legend=s, fill=rev(colours), title="Distance")
+    #legend(x=10.7,y=10,legend=s, fill=rev(colours), title="Distance")
+    legend("topright",legend=s, fill=rev(colours), title="Distance", cex=0.7)
   }  
 
   # FLAG SCRIPT END
   
   if (v >= 1) {
-    cat("Completed gl.dist.heatmap\n\n")
+    cat("Completed gl.plot.heatmap\n\n")
   }
   
   return()
