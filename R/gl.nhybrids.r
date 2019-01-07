@@ -242,7 +242,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     cat(c("NumIndivs ", nrow(gl2), "\n"))
     cat(c("NumLoci ", n.loci, " \n"))
     cat(c("Digits 1\nFormat Lumped \n"))
-    write.matrix(gl2[,1:(ncol(gl2))], sep=" ")
+    MASS::write.matrix(gl2[,1:(ncol(gl2))], sep=" ")
     sink()
 
 
@@ -251,7 +251,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     if (!is.null(nhyb.directory)) {
       
       #nhyb.directory.win<- gsub("/","\\\\",nhyb.directory)
-      cp <- paste("copy nhyb.txt", nhyb.directory.win)
+      cp <- paste("copy", outfile, nhyb.directory.win)
       shell(cp)
       
       # Shift default directory
@@ -298,7 +298,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       # Create the batch file
       sink("nhyb.cmd")
       cat("(\n")
-      cat("echo nhyb.txt\n")
+      cat("echo",outfile,"\n")
       cat("echo",GtypFile,"\n")
       cat("echo",AFPriorFile,"\n")
       cat("echo",rand1, rand2,"\n")
@@ -334,9 +334,9 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       cp <- paste("del aa-PofZ.txt"); shell(cp)
       cp <- paste("copy aa-Theta.hist", wd.hold.win); shell(cp)
       cp <- paste("del aa-Theta.hist"); shell(cp)
-      
-      cp <- paste("del nhyb.txt"); shell(cp)
+      cp <- paste("del", outfile); shell(cp)
       cp <- paste("del nhyb.cmd"); shell(cp)
+      #cp <- paste("Taskkill /IM NewHybrids_PC_1_1_WOG.exe /F"); shell(cp)
 
       setwd(wd.hold)
       
