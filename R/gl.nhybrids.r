@@ -2,7 +2,7 @@
 #'
 #' This function compares two sets of parental populations to identify loci
 #' that exhibit a fixed difference, returns an genlight object with the reduced data,
-#' and creates an input file for the program NewHybrids using the top 200 [or hard specified loc.limit] loci. In
+#' and creates an input file for the program NewHybrids using the top 200 (or hard specified loc.limit) loci. In
 #' the absence of two identified parental populations, the script will
 #' select a random set 200 loci only (method="random") or the first 200 loci ranked
 #' on information content (method="AvgPIC").
@@ -26,6 +26,15 @@
 #' data on RepAvg and CallRate if using the random option. One might elect to repeat
 #' the analysis (method="random") and combine the resultant posterior probabilites
 #' should 200 loci be considered insufficient.
+#' 
+#' The F1 individuals should be homozygous at all loci for which the parental populations are fixed 
+#' and different, assuming parental populations have been specified. Sampling errors 
+#' can result in this not being the case, especially where the sample
+#' sizes for the parental populations are small. Alternatively, the threshold for posterior
+#' probabilities used to determine assignment (pprob) or the definition of a fixed difference (threshold) 
+#' may be too lax. To assess the error rate in the determination
+#' of assignment of F1 individuals, a plot of the frequency of homozygous reference, heterozygotes and
+#' homozygous alternate (SNP) can be produced by setting plot=TRUE (the default).
 #'
 #' @param gl -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- name of the file that will be the input file for NewHybrids [default nhyb.txt]
@@ -33,6 +42,10 @@
 #' @param p0 -- list of populations to be regarded as parental population 0 [default NULL]
 #' @param p1 -- list of populations to be regarded as parental population 1 [default NULL]
 #' @param threshold -- sets the level at which a gene frequency difference is considered to be fixed [default 0]
+#' @param plot -- if TRUE, a plot of the frequency of homozygous reference, heterozygotes and
+#' homozygous alternate (SNP) is produced for the F1 individuals [default TRUE, applies only 
+#' if both parental populations are specified]
+#' @param pprob -- threshold level for assignment to likelihood bins [default 0.95, used only if plot=TRUE]
 #' @param method -- specifies the method (random or AvgPIC) to select 200 loci for NewHybrids [default random]
 #' @param nhyb.directory -- directory that holds the NewHybrids executable file e.g. C:/NewHybsPC [default NULL]
 #' @param BurnIn -- number of sweeps to use in the burn in [default 10000]
@@ -42,25 +55,25 @@
 #' @param PiPrior -- Jeffreys-like priors or Uniform priors for the parameter pi [default Jeffreys]
 #' @param ThetaPrior -- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]
 #' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return The reduced genlight object, if parentals are provided; output of NewHybrids to disk
+#' @return The reduced genlight object, if parentals are provided; output of NewHybrids is saved to disk
 #' @export
 #' @importFrom MASS write.matrix
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
-#' m <- gl.nhybrids(testset.gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), threshold=0, method="random")
-#' 
 #' m <- gl.nhybrids(testset.gl, outfile="nhyb.txt", 
 #' p0=NULL, p1=NULL, 
-#' nhyb.directory="C:/workspace/R_analysis/NewHybsPC",
+#' nhyb.directory="C:/workspace/R/NewHybsPC",
 #' BurnIn=100,
-#' sweeps=1000,
+#' sweeps=100,
 #' v=3)
 
 gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     p0=NULL, p1=NULL, 
                     threshold=0, 
                     method="random",
+                    plot=TRUE,
+                    pprob=0.95,
                     nhyb.directory=NULL,
                     BurnIn=10000,
                     sweeps=10000,
@@ -79,6 +92,16 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
   if (v < 0 | v > 5){
     cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     v <- 2
+  }
+  
+  if (!(method=="random" | method=="AvgPic" | method=="avgPic" | method=="AvgPIC")){
+    cat("    Warning: method must be either 'random' or AvgPic, set to 'random'\n")
+    method <- "random"
+  }
+  
+  if(pprob < 0 | pprob > 1){
+    cat("    Warning: threshold posterior probability for assignment, pprob, must be between 0 and 1, typically close to 1, set to 0.99\n")
+    pprob <- 0.99
   }
 
   if (v > 0) {
@@ -216,14 +239,6 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
       flag <- "nopar"
     }
-    # Repecify the parental names (only done above for case where both pops were specified)
-    # Replace those names with Z0 for Parental Population 0, and z1 for Parental Population 1
-    #gl.tmp <- gl
-    #indNames(gl.tmp) <- replace(indNames(gl.tmp), is.element(pop(gl.tmp), p0), "z0")
-    #indNames(gl.tmp) <- replace(indNames(gl.tmp), is.element(pop(gl.tmp), p1), "z1")
-    # Create a vector containing the flags for the parental population
-    #par.names <- indNames(gl.tmp)
-    #par.names <- replace(par.names, (par.names != "z0" & par.names != "z1"), " ")
 
     # CREATE THE NEWHYBRIDS INPUT FILE
     # Convert to NewHrbrids lumped format
@@ -287,9 +302,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       shell(cp)
       
       setwd(nhyb.directory)
-      #aaa <- getwd()
-      #cat(aaa)
-      
+
       # Set the parameters to conform with NewHybrids input
       if (GtypFile == "TwoGensGtypFreq.txt") {GtypFile <- "0"}
       if (is.null(AFPriorFile)) {AFPriorFile <- "0"}
@@ -334,8 +347,9 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       names(tbl) <- tbl[1,]
       tbl <- tbl[-1,-1]
       tbl <- cbind(indNames(gl),pop(gl),tbl)
-      names(tbl)[1] <- "id"
-      names(tbl)[2] <- "pop"
+      names(tbl) <- c("id","pop","P0","P1","F1","F2","F1xP0","F1xP1")
+      #names(tbl)[2] <- "pop"
+      
       write.csv(tbl,file="aa-pofZ.csv",row.names=FALSE)
 
   # Transfer files to default directory and housekeeping
@@ -357,8 +371,36 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       setwd(wd.hold)
       
     }
+    
+    # Analyse the F1 genotypes
+    
+      if (flag == "bothpar" & plot==TRUE) {
+        # Read in the results of the New Hybrids analysis
+          F1.test <- read.csv(file="aa-Pofz.csv")
+        # Pull out results for F1 hybrids only, defined by posterior probability >= pprob 
+          F1.test <- F1.test[(F1.test$F1 >= pprob),]
+         # Use the id of the F1 hybrids to subset the genlight object containing the loci with fixed differences used in the analysis  
+          F1.only <- gl.keep.ind(gl.fixed.used,as.character(F1.test$id),mono.rm=FALSE,v=0)
+        # Invert the matrix of data for F1 individuals only  
+          mat <- t(as.matrix(F1.only))
+        # Tally and plot the counts of homozygous reference, heterozygotes, and homozygous alternate (SNP)
+          if (v>=3) {cat("\nPlotting genotypes of",length(as.character(F1.test$id)),"F1 individuals\n")}
+          barplot(table(mat),col="red",main="F1 Genotypes")
+        # Report the results  
+          if (v>=3) {
+            cat("  No. of F1 individuals:",nInd(F1.only),"[",indNames(F1.only),"]\n")
+            cat("  No. of loci with fixed differences used in the analysis:",nLoc(F1.only),"\n")
+            cat("  No. of heterozygous loci for the F1s:",table(mat)["1"],"(",round(table(mat)["1"]*100/sum(table(mat)),2),"%)\n")
+            cat("  No. of homozygous reference loci (errors) for the F1s:",table(mat)["0"],"(",round(table(mat)["0"]*100/sum(table(mat)),2),"%)\n")
+            cat("  No. of homozygous alternate loci (errors) for the F1s:",table(mat)["2"],"(",round(table(mat)["2"]*100/sum(table(mat)),2),"%)\n")
+          }
+      }
+    
     #if (v < 2) {sink()}
-    if (v>=3) {cat("\nReturning data used by New Hybrids as genlight object\n")}
+    if (v>=3) {
+      cat("\nResults are stored in file aa-PofZ.csv\n")
+      cat("Returning data used by New Hybrids in generating the results, as a genlight object\n")
+    }
     if (v > 0) {cat("gl.nhybrids Completed\n")}
 
     return(gl2nhyb)
