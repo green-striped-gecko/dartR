@@ -31,16 +31,16 @@ gl.report.monomorphs <- function (x, probar=FALSE) {
 # Create vectors to hold test results
   # homozygote reference
   a <- vector(mode="logical", length=nLoc(x))
-  for (i in 1:nLoc(x)) {a[i] <- NA}
+  for (i in 1:nLoc(x)) {a[i] <- FALSE}
   # homozygote alternate
   b <- vector(mode="logical", length=nLoc(x))
-  for (i in 1:nLoc(x)) {b[i] <- NA}
+  for (i in 1:nLoc(x)) {b[i] <- FALSE}
   # heterozygote 
   c <- vector(mode="logical", length=nLoc(x))
-  for (i in 1:nLoc(x)) {c[i] <- NA}
+  for (i in 1:nLoc(x)) {c[i] <- FALSE}
   # NA
   d <- vector(mode="logical", length=nLoc(x))
-  for (i in 1:nLoc(x)) {d[i] <- NA}
+  for (i in 1:nLoc(x)) {d[i] <- FALSE}
   
 # Set up the progress counter
   if(probar) {
@@ -48,7 +48,7 @@ gl.report.monomorphs <- function (x, probar=FALSE) {
     getTxtProgressBar(pb)
   }
 # Identify polymorphic, monomorphic and 'all na' loci
-  # Set a,b,c,d <- TRUE if monomorphic, or if all NAs
+  # Set a,b,c <- TRUE if monomorphic, d <- TRUE if all NAs
   xmat <-as.matrix(x)
   for (i in (1:nLoc(x))) {
     if (all(is.na(xmat[,i]))) {
@@ -57,19 +57,20 @@ gl.report.monomorphs <- function (x, probar=FALSE) {
       b[i] <- FALSE
       c[i] <- FALSE
     } else {
+      d[i] <- FALSE
       a[i] <- all(xmat[,i]==0,na.rm=TRUE)
       b[i] <- all(xmat[,i]==2,na.rm=TRUE)
       c[i] <- all(xmat[,i]==1,na.rm=TRUE)
-      d[i] <- FALSE
     }
     ##cat(xmat[,i],a[i],b[i],c[i],d[i],"\n")
     if (probar) {setTxtProgressBar(pb, i/nLoc(x))}
   }
-  s1 <- sum(a,na.rm=TRUE) + sum(b,na.rm=TRUE) + sum(c,na.rm=TRUE)
-  s2 <- s1 - sum(d,na.rm=TRUE)
-  polym <- nLoc(x) - s2
+  # Calculate the number of monomorphic loci with values
+  monom <- sum(a,na.rm=TRUE) + sum(b,na.rm=TRUE)
+  allna <- sum(d,na.rm=TRUE)
+  polym <- nLoc(x) - (monom + allna)
   cat("\nBreakdown of", nLoc(x), "loci\n")
-  cat("  Monomorphic loci:", s1,"\n  Polymorphic loci:", polym, "\n  Loci with no scores (all NA):" , sum(d) ,"\n")
+  cat("  Monomorphic loci:", monom,"\n  Polymorphic loci:", polym, "\n  Loci with no scores (all NA):" , allna ,"\n")
 
 # FLAG SCRIPT END
 
