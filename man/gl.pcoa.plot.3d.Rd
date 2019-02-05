@@ -42,6 +42,7 @@ Axes can be specified from the ordination, provided they are within the range of
 This script is essentially a wrapper for function pca3d \{pca3d\} maintained by January Weiner.
 }
 \examples{
+library(rgl)  #needed for the example
 pcoa <- gl.pcoa(testset.gl, nfactor=5)
 gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
 }

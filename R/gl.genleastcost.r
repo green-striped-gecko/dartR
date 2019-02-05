@@ -22,6 +22,7 @@
 #' @examples
 #' \donttest{
 #' data(possums.gl)
+#' library(raster)  #needed for that example
 #' landscape.sim <- readRDS(system.file("extdata","landscape.sim.rdata", package="dartR"))
 #' glc <- gl.genleastcost(x=possums.gl,fric.raster=landscape.sim , 
 #' gen.distance = "D", NN=8, pathtype = "leastcost",plotpath = TRUE)
