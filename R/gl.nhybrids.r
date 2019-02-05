@@ -47,7 +47,7 @@
 #' @importFrom MASS write.matrix
 #' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' m <- gl.nhybrids(testset.gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), t=0, method="random")
 #' 
 #' m <- gl.nhybrids(testset.gl, outfile="nhyb.txt", 

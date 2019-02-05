@@ -24,7 +24,7 @@
 #' @export
 #' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'    gl <- gl.recode.ind(testset.gl, ind.recode="testset_pop_recode.csv")
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}

@@ -30,7 +30,7 @@
 #' @export
 #' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' glind <- gl.read.silicodart(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
 #' nmetavar=16, nas="-", ind.metafile="metadata.csv" )
 #' }

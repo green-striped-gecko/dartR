@@ -20,11 +20,12 @@
 #' Landguth, E. L., Cushman, S. A., Schwartz, M. K., McKelvey, K. S., Murphy, M. and Luikart, G. (2010). Quantifying the lag time to detect barriers in landscape genetics. Molecular ecology, 4179-4191.
 #' Wasserman, T. N., Cushman, S. A., Schwartz, M. K. and Wallin, D. O. (2010). Spatial scaling and multi-model inference in landscape genetics: Martes americana in northern Idaho. Landscape Ecology, 25(10), 1601-1612.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(possums.gl)
-#' landscap.sim <- readRDS(system.file("extdata","landscape.sim.rdata", package="dartR"))
+#' landscape.sim <- readRDS(system.file("extdata","landscape.sim.rdata", package="dartR"))
 #' glc <- gl.genleastcost(x=possums.gl,fric.raster=landscape.sim , 
 #' gen.distance = "D", NN=8, pathtype = "leastcost",plotpath = TRUE)
+#' library(PopGenReport)
 #' wassermann(eucl.mat = glc$eucl.mat, cost.mat = glc$cost.mats,  gen.mat = glc$gen.mat)
 #' lgrMMRR(gen.mat = glc$gen.mat, cost.mats = glc$cost.mats,  eucl.mat = glc$eucl.mat)
 #' }
