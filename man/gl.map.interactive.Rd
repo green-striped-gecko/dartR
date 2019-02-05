@@ -21,7 +21,7 @@ Creates an interactive map (based on latlong) from a genlight object
 A wrapper around the \pkg{leaflet} package. For possible background maps check as specified via the provider: \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
 }
 \examples{
-#gl.map(foxes.gl)
+#gl.map(bandicoot.gl)
 }
 \author{
 Bernd Gruber (glbugs@aerg.canberra.edu.au)

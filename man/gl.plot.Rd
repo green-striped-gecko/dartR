@@ -27,5 +27,5 @@ This function is based on the glPlot function from adegenet. It simply aims to p
 For arguments please refer to the original adegenet function ?glPlot.
 }
 \examples{
-gl.plot(foxes.gl[1:30,])
+gl.plot(bandicoot.gl[1:30,])
 }

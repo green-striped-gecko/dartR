@@ -29,7 +29,7 @@ returns a list that consists of four pairwise distance matrixes (Euclidean, Cost
 This function calculates the pairwise distances (Euclidean, cost path distances and genetic distances) of populations using a friction matrix and a spatial genind object. The genind object needs to have coordinates in the same projected coordinate system as the friction matrix. The friction matrixcan be either a single raster of a stack of several layers. If a stack is provided the specified cost distance is calculated for each layer in the stack. The output of this function can be used with the functions \code{\link[PopGenReport]{wassermann}} or \code{\link[PopGenReport]{lgrMMRR}} to test for the significance of a layer on the genetic structure.
 }
 \examples{
-\donttest{
+\dontrun{
 data(possums.gl)
 library(raster)  #needed for that example
 landscape.sim <- readRDS(system.file("extdata","landscape.sim.rdata", package="dartR"))

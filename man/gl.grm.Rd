@@ -22,5 +22,5 @@ a genomic relatedness matrix
 The G matrix is calculated by centering the allele frequency matrix  of the second allele by substracting 2 times the allefrequency
 }
 \examples{
-gl.grm(foxes.gl[1:5,1:10])  
+gl.grm(bandicoot.gl[1:5,1:10])  
 }

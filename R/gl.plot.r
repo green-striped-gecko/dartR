@@ -13,7 +13,7 @@
 #' @param ... --- additional arguments passed to glPlot function.
 #' @export
 #'@examples 
-#'gl.plot(foxes.gl[1:30,])
+#'gl.plot(bandicoot.gl[1:30,])
 gl.plot <- function (x, indlabels=indNames(x), col=NULL, legend=TRUE, posi="bottomleft", bg=rgb(1,1,1,.5),...) 
 {
   X <- t(as.matrix(x))
