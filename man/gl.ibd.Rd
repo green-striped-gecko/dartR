@@ -28,8 +28,8 @@ This functions performs an isolation by distance analysis based on a mantel test
 You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), using the functions  \link[vegan]{mantel} (package vegan), \link[StAMPP]{stamppFst} (package StAMPP) and Mercator in package dismo.
 }
 \examples{
-#' \donttest{
-gl <- gl.ibd(bandicoot.gl)
+\donttest{
+ibd <- gl.ibd(bandicoot.gl)
 }
 }
 \references{

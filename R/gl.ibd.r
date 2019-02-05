@@ -24,8 +24,8 @@
 #' @references 
 #' Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
 #' @examples 
-#' #' \donttest{
-#' gl <- gl.ibd(bandicoot.gl)
+#' \donttest{
+#' ibd <- gl.ibd(bandicoot.gl)
 #' }
 
 
