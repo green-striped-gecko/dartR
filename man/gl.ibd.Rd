@@ -29,7 +29,7 @@ You can provide also your own genetic and Euclidean distance matrix. The functio
 }
 \examples{
 #individual 185 deleted as it is the only inidividual in a population
-gl <- gl.ibd(gl=testset.gl[-185,])
+gl <- gl.ibd(foxes.gl[,1:200])
 }
 \references{
 Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
