@@ -8,7 +8,7 @@
 #' @details A wrapper around the \pkg{leaflet} package. For possible background maps check as specified via the provider: \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
 #' @author Bernd Gruber (glbugs@@aerg.canberra.edu.au)
 #' @examples 
-#' #gl.map(foxes.gl)
+#' #gl.map(bandicoot.gl)
 
 
 gl.map.interactive <- function(x, provider="Esri.NatGeoWorldMap")
