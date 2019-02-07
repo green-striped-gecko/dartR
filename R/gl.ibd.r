@@ -26,6 +26,7 @@
 #' @examples 
 #' \donttest{
 #' ibd <- gl.ibd(bandicoot.gl)
+#' ibd <- gl.ibd(bandicoot.gl,plot = FALSE)
 #' }
 
 
