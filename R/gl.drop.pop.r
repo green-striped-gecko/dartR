@@ -8,50 +8,75 @@
 #' 
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
+#' @param x -- name of the genlight object containing SNP genotypes [required]
 #' @param pop.list -- a list of populations to be removed [required]
 #' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'    gl <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
-#' 
 
-gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, v=2){
+# Last amended 3-Feb-19
 
-# ERROR CHECKING
+gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, verbose=2){
+
+# TIDY UP FILE SPECS
+
+  outfilespec <- file.path(outpath, outfile)
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
   for (case in pop.list){
     if (!(case%in%popNames(x))){
-      cat("Warning: Listed population",case,"not present in the dataset -- ignored\n")
+      cat("  Warning: Listed population",case,"not present in the dataset -- ignored\n")
       pop.list <- pop.list[!(pop.list==case)]
     }
   }
   if (length(pop.list) == 0) {
-    cat("Fatal Error: no populations listed to drop!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: no populations listed to drop!\n"); stop("Execution terminated\n")
   }
-  if (v < 0 | v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
-  }
-  
-#FLAG SCRIPT START
-  
-  if (v >= 1) {
-    cat("Starting gl.drop.pop: Deleting selected populations\n")
-  }
+# DO THE JOB
 
 # REMOVE POPULATIONS
   
-  if (v >= 2) {
+  if (verbose >= 2) {
     cat("  Deleting populations", pop.list, "\n")
   }
 
@@ -66,28 +91,28 @@ gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, v=2){
 
 # REPORT A SUMMARY
     
-  if (v >= 3) {
-    cat("Summary of recoded dataset\n")
-    cat(paste("  No. of loci:",nLoc(x),"\n"))
-    cat(paste("  No. of individuals:", nInd(x),"\n"))
-    cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
+  if (verbose >= 3) {
+    cat("  Summary of recoded dataset\n")
+    cat(paste("    No. of loci:",nLoc(x),"\n"))
+    cat(paste("    No. of individuals:", nInd(x),"\n"))
+    cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n"))
   }
-  if (v >= 2) {  
+  if (verbose >= 2) {
     if (!recalc) {
-      cat("Note: Locus metrics not recalculated\n")
+      cat("  Note: Locus metrics not recalculated\n")
     } else {
-      cat("Note: Locus metrics recalculated\n")
+      cat("  Note: Locus metrics recalculated\n")
     }
     if (!mono.rm) {
-      cat("Note: Resultant monomorphic loci not deleted\n")
+      cat("  Note: Resultant monomorphic loci not deleted\n")
     } else{
-      cat("Note: Resultant monomorphic loci deleted\n")
+      cat("  Note: Resultant monomorphic loci deleted\n")
     }
   }
 
 # FLAG SCRIPT END
     
-  if (v > 0) {
+  if (verbose > 0) {
     cat("Completed gl.drop.pop\n\n")
   }
     

@@ -9,7 +9,7 @@
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param method -- method of selecting SNP locus to retain, best or random [random]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The reduced genlight, plus a summary
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -17,39 +17,59 @@
 #' result <- gl.report.secondaries(testset.gl)
 #' result2 <- gl.filter.secondaries(testset.gl)
 
-# Last edit:25-Apr-18
+# Last amended 3-Feb-19
 
-gl.filter.secondaries <- function(x, method="random", v=2) {
+gl.filter.secondaries <- function(x, method="random", verbose=2) {
 
-  # ERROR CHECKING
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-  
-  if (v < 0 | v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
-  }
-  
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
   if (method != "best" && method != "random"){
     cat("    Warning: method must be specified, set to \'random\'\n")
   }
 
-  if (v > 0) {
-    cat("Starting gl.filter.secondaries: Deleting all but one SNP per sequence tag\n")
-  }
-  
-  if (v > 2) {cat("  Total number of SNP loci:",nLoc(x),"\n")}
+# DO THE JOB
+
+  if (verbose > 2) {cat("  Total number of SNP loci:",nLoc(x),"\n")}
   
 # Sort the genlight object on AlleleID (asc), RepAvg (desc), AvgPIC (desc) 
   if (method == "best") {
-    if (v > 1){cat("  Selecting one SNP per sequence tag based on best RepAvg and AvgPIC\n")}
+    if (verbose > 1){cat("  Selecting one SNP per sequence tag based on best RepAvg and AvgPIC\n")}
     loc.order <- order(x@other$loc.metrics$AlleleID,-x@other$loc.metrics$RepAvg,-x@other$loc.metrics$AvgPIC)
     x <- x[, loc.order]
     x@other$loc.metrics <- x@other$loc.metrics[loc.order, ]
   } else {
-    if (v > 1){cat("  Selecting one SNP per sequence tag at random\n")}
+    if (verbose > 1){cat("  Selecting one SNP per sequence tag at random\n")}
     n <- length(x@other$loc.metrics$AlleleID)
     index <- sample(1:(n+10000),size=n,replace=FALSE)
     x <- x[,order(index)]
@@ -63,7 +83,7 @@ gl.filter.secondaries <- function(x, method="random", v=2) {
   x@other$loc.metrics <- x@other$loc.metrics[duplicated(b)==FALSE,]
 
 # Report secondaries from the genlight object
-  if (v > 2) {
+  if (verbose > 2) {
     if (is.na(table(duplicated(b))[2])) { 
       nsec <- 0
     } else {  
@@ -73,7 +93,11 @@ gl.filter.secondaries <- function(x, method="random", v=2) {
     cat("    Number of loci after secondaries removed:",table(duplicated(b))[1],"\n")
   }
   
-  if ( v > 0) {cat("gl.filter.secondaries completed\n")}
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
   
   return(x)
 }  

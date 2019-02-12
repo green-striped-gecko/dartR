@@ -13,16 +13,39 @@
 #' @examples
 #' f <- gl.report.maf(testset.gl)
 
+# Last amended 3-Feb-19
 
 gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30) {
   
-  if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
-  }
-  # Work around a bug in adegenet if genlight object is created by subsetting
-  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+    cat("Starting",funname,"\n")
+
+# STANDARD ERROR CHECKING
   
-  cat("Starting gl.report.maf: Minor Allele Frequency\n")
+  if(class(x)!="genlight") {
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x))) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
 
   if (maf.limit > 0.5 | maf.limit <= 0) {
     cat("Warning: maf.limit must be in the range (0,0.5], set to 0.5\n")
@@ -39,12 +62,14 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30) {
     loc.limit <- 2
   }
 
+# DO THE JOB
+
   layout(1,1)
   
 # Recalculate the relevant loc.metrics
   
   cat("  Recalculating MAF\n")
-  x <- dartR:::utils.recalc.maf(x,v=1)
+  x <- utils.recalc.maf(x,v=1)
 
 # Check for status -- any populations with loc > loc.limit; ind > ind.limit; and is nPop > 1
   
@@ -99,7 +124,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30) {
       genl <- x[pop(x)==popn]
       genl <- gl.filter.monomorphs(genl, v = 0)
       if (nLoc(genl) >= loc.limit) {
-      genl <- dartR:::utils.recalc.maf(genl,v=0)
+      genl <- utils.recalc.maf(genl,v=0)
       maf <- genl@other$loc.metrics$maf
       
       #cat(popn,"Pops: ",nPop(genl),"\n")
@@ -139,9 +164,9 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30) {
   }
   
   if(plot.count > 6) {
-        cat("Completed gl.report.maf once plots are displayed\n  Refer to histograms which extend over multiple screens\n\n")
+        cat("Completed: gl.report.maf once plots are displayed\n  Refer to histograms which extend over multiple screens\n\n")
   } else {
-        cat("Completed gl.report.maf once plots are displayed\n  Refer to histograms\n\n")
+        cat("Completed: gl.report.maf once plots are displayed\n  Refer to histograms\n\n")
   }
   
   return(NULL)

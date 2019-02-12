@@ -13,7 +13,7 @@
 #' @param delta Default 0.02
 #' @param reps number of repetition. Default 1000.
 #' @param alpha -- significance level for test of false positives [default 0.05]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A list containing the gl object x and the following square matricies
 #'         [[1]] $gl -- the input genlight object;
 #'         [[2]] $fd -- raw fixed differences;
@@ -25,9 +25,9 @@
 #' @export
 #' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 
-gl.collapse.pval <- function(fd, prefix="fd.sig", delta=0.02, reps=1000, alpha=0.05, v=2) {
+gl.collapse.pval <- function(fd, prefix="fd.sig", delta=0.02, reps=1000, alpha=0.05, verbose=2) {
   
-  if (v > 0) {
+  if (verbose > 0) {
     cat("Starting gl.collapse.pval: Amalgamating populations with no statistically significant fixed differences\n")
   }
   if (!("fd" %in% names(fd)) ||
@@ -80,7 +80,7 @@ gl.collapse.pval <- function(fd, prefix="fd.sig", delta=0.02, reps=1000, alpha=0
   }  
   
   # Print out the results of the aggregations 
-  if(v > 1) {cat("\n\nPOPULATION GROUPINGS\n")}
+  if(verbose > 1) {cat("\n\nPOPULATION GROUPINGS\n")}
   
   for (i in 1:length(zero.list)) {
     # Create a group label
@@ -89,7 +89,7 @@ gl.collapse.pval <- function(fd, prefix="fd.sig", delta=0.02, reps=1000, alpha=0
     } else {
       replacement <- paste0(zero.list[[i]][1],"+")
     }
-    if(v > 1) {
+    if(verbose > 1) {
       cat(paste0("Group:",replacement,"\n"))
       print(as.character(zero.list[[i]]))
       cat("\n")
@@ -107,11 +107,11 @@ gl.collapse.pval <- function(fd, prefix="fd.sig", delta=0.02, reps=1000, alpha=0
     write.table(df, file=recode.table, sep=",", row.names=FALSE, col.names=FALSE)
   
   # Recode the data file (genlight object)
-  x2 <- gl.recode.pop(fd$gl, pop.recode=recode.table, v=v)
-  fd2 <- gl.fixed.diff(x2,test=TRUE,delta=delta,reps=reps,v=v)
+  x2 <- gl.recode.pop(fd$gl, pop.recode=recode.table, verbose=verbose)
+  fd2 <- gl.fixed.diff(x2,test=TRUE,delta=delta,reps=reps,verbose=verbose)
   
   # Return the matricies
-  if (v > 1) {
+  if (verbose > 1) {
     cat("Returning a list containing the following square matricies:\n",
         "         [[1]] $gl -- input genlight object;\n",
         "         [[2]] $fd -- raw fixed differences;\n",
@@ -123,18 +123,18 @@ gl.collapse.pval <- function(fd, prefix="fd.sig", delta=0.02, reps=1000, alpha=0
   }
 
   if(setequal(levels(pop(x2)),levels(pop(fd$gl)))) { 
-    if (v > 1) {cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed at alpha >=", alpha,"\n"))}
-    if (v > 0) {
+    if (verbose > 1) {cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed at alpha >=", alpha,"\n"))}
+    if (verbose > 0) {
       cat("Completed gl.collapse.pval\n")
     }
     l <- list(gl=fd$gl,fd=fd$fd,pcfd=fd$pcfd,nobs=fd$nobs,nloc=fd$nloc,expobs=fd$expobs,pval=fd$pval)
     return(l)
   } else {
-    if (v > 1) {
+    if (verbose > 1) {
       cat("\nPOPULATION GROUPINGS\n")
       print(table(pop(x2)))
     }
-    if (v > 0) {
+    if (verbose > 0) {
       cat("Completed gl.collapse.pval\n\n")
     }
     l <- list(gl=x2,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)

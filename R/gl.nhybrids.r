@@ -54,7 +54,7 @@
 #' @param AFPriorFile -- name of the file containing prior allele frequency information [default NULL]
 #' @param PiPrior -- Jeffreys-like priors or Uniform priors for the parameter pi [default Jeffreys]
 #' @param ThetaPrior -- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The reduced genlight object, if parentals are provided; output of NewHybrids is saved to disk
 #' @export
 #' @importFrom MASS write.matrix
@@ -66,7 +66,7 @@
 #' nhyb.directory="C:/workspace/R/NewHybsPC",
 #' BurnIn=100,
 #' sweeps=100,
-#' v=3)
+#' verbose=3)
 
 gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     p0=NULL, p1=NULL, 
@@ -81,7 +81,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     AFPriorFile = NULL,
                     PiPrior = "Jeffreys",
                     ThetaPrior = "Jeffreys",
-                    v=2) {
+                    verbose=2) {
 
   if(class(gl)!="genlight") {
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
@@ -89,9 +89,9 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
   # Work around a bug in adegenet if genlight object is created by subsetting
   gl@other$loc.metrics <- gl@other$loc.metrics[1:nLoc(x),]
   
-  if (v < 0 | v > 5){
+  if (verbose < 0 | verbose > 5){
     cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
+    verbose <- 2
   }
   
   if (!(method=="random" | method=="AvgPic" | method=="avgPic" | method=="AvgPIC")){
@@ -104,11 +104,11 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     pprob <- 0.99
   }
 
-  if (v > 0) {
+  if (verbose > 0) {
     cat("Starting gl.nhybrids: Assigning individual to hybrid categories\n")
   }
   
-  #if (v < 2) { sink("/dev/null") }
+  #if (verbose < 2) { sink("/dev/null") }
 
     gl.tmp <- gl
     thold<-threshold
@@ -125,7 +125,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
 
   # PROCESS AS FOLLOWS IF BOTH PARENTAL POPULATIONS ARE SPECIFIED
     if (!is.null(p0) & !is.null(p1)) {
-      if (v >= 3) {cat("  Both parental populations have been specified \n")}
+      if (verbose >= 3) {cat("  Both parental populations have been specified \n")}
 
       # Replace those names with Z0 for Parental Population 0, and z1 for Parental Population 1
       indNames(gl.tmp) <- replace(indNames(gl.tmp), is.element(pop(gl.tmp), p0), "z0")
@@ -145,10 +145,10 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       pop(gl.tmp) <- indNames(gl.tmp)
 
       # Reformat the data broken down by population and locus, and calculate allele frequencies
-      gl2 <- gl.percent.freq(gl.tmp, v=v)
+      gl2 <- gl.percent.freq(gl.tmp, verbose=verbose)
 
       # IDENTIFY LOCI WITH FIXED DIFFERENCES BETWEEN P0 AND P1
-      if ( v >= 3 ) {cat("Identifying loci with fixed difference between parental stocks\n")}
+      if ( verbose >= 3 ) {cat("Identifying loci with fixed difference between parental stocks\n")}
 
       # Establish a vector to hold the loci
       npops<-2
@@ -179,26 +179,26 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       
       # Report on the analysis
 
-      if ( v >= 3 ) {cat("  No. of fixed loci identified:",nloci,"\n")}
+      if ( verbose >= 3 ) {cat("  No. of fixed loci identified:",nloci,"\n")}
         if (nloci > loc.limit) {
-          if (v>=3){cat("  Selecting",loc.limit,"loci showing fixed differences between parentals at random\n")}
-          gl.fixed.used <- utils.subsample.loci(gl, loc.limit, method="random",v=0)
+          if (verbose>=3){cat("  Selecting",loc.limit,"loci showing fixed differences between parentals at random\n")}
+          gl.fixed.used <- utils.subsample.loci(gl, loc.limit, method="random",verbose=0)
           gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
           gl.fixed.all@other$loc.metrics <- gl@other$loc.metrics[(locNames(gl) %in% fixed.loci),]
           gl2nhyb <- gl.fixed.used
         } else {
           if (method == "random"){
-            if(v>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected at random\n")}
+            if(verbose>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected at random\n")}
             gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
             gl.fixed.used <- gl.fixed.all
-            tmp <- utils.subsample.loci(gl, 200-nloci, method="random",v=0)
+            tmp <- utils.subsample.loci(gl, 200-nloci, method="random",verbose=0)
             gl2nhyb <- cbind(gl.fixed.used,tmp)
             gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
           } else {
-            if(v>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected based on AvgPic\n")}
+            if(verbose>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected based on AvgPic\n")}
             gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
             gl.fixed.used <- gl.fixed.all
-            tmp <- utils.subsample.loci(gl, loc.limit-nloci, method="AvgPic",v=0)
+            tmp <- utils.subsample.loci(gl, loc.limit-nloci, method="AvgPic",verbose=0)
             gl2nhyb <- cbind(gl.fixed.used,tmp)
             gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
           }
@@ -207,7 +207,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
 
     # PROCESS AS FOLLOWS IF ONLY ONE PARENTAL POPULATION IS SPECIFIED
     if ((!is.null(p0) & is.null(p1)) || (is.null(p0) & !is.null(p1))) {
-      if(v>=3){cat("  Only one parental population specified \n")}
+      if(verbose>=3){cat("  Only one parental population specified \n")}
       
       # Replace those names with Z0 for Parental Population 0, and z1 for Parental Population 1
       if (!is.null(p0)){indNames(gl.tmp) <- replace(indNames(gl.tmp), is.element(pop(gl.tmp), p0), "z0")}
@@ -222,20 +222,20 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       par.names <- indNames(gl.tmp)
       par.names <- replace(par.names, (par.names != "z0" & par.names != "z1"), " ")
       
-      if(method=="random" & v>=3) {cat("    Selecting",loc.limit,"random loci\n")}
-      if (method=="avgpic" & v>=3) {cat("    Selecting",loc.limit,"loci with most information content (AvgPIC)\n")}
-      gl2nhyb <- utils.subsample.loci(gl, loc.limit, method=method, v=0)
+      if(method=="random" & verbose>=3) {cat("    Selecting",loc.limit,"random loci\n")}
+      if (method=="avgpic" & verbose>=3) {cat("    Selecting",loc.limit,"loci with most information content (AvgPIC)\n")}
+      gl2nhyb <- utils.subsample.loci(gl, loc.limit, method=method, verbose=0)
       gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
       flag <- "onepar"
     }
 
     # PROCESS AS FOLLOWS IF NO PARENTAL POPULATION IS SPECIFIED
     if (is.null(p0) & is.null(p1)) {
-      if(v>=3){cat("  No parental population specified \n")}
+      if(verbose>=3){cat("  No parental population specified \n")}
       
-      if(method=="random" & v>=3) {cat("    Selecting",loc.limit,"random loci\n")}
-      if (method=="avgpic" & v>=3) {cat("    Selecting",loc.limit,"loci with most information content (AvgPIC)\n")}
-      gl2nhyb <- utils.subsample.loci(gl, loc.limit, method=method, v=0)
+      if(method=="random" & verbose>=3) {cat("    Selecting",loc.limit,"random loci\n")}
+      if (method=="avgpic" & verbose>=3) {cat("    Selecting",loc.limit,"loci with most information content (AvgPIC)\n")}
+      gl2nhyb <- utils.subsample.loci(gl, loc.limit, method=method, verbose=0)
       gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
       flag <- "nopar"
     }
@@ -247,7 +247,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     #  1 to 12
     #  2 to 22
     #  NA to 0
-    if(v>=3){cat("\nConverting data to NewHybrids format\n")}
+    if(verbose>=3){cat("\nConverting data to NewHybrids format\n")}
     gl2 <- as.matrix(gl2nhyb)
     gl2[gl2 == 2] <- 22
     gl2[gl2 == 1] <- 12
@@ -264,12 +264,12 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     if (flag=="bothpar" || flag == "onepar" || flag == "bothparnonefixed") {
       gl2 <- cbind(rownum, par.names, gl2)
       metarows <- 2
-      if(v>=3){cat("  Adding sequential number and flagging parental stock\n")}
+      if(verbose>=3){cat("  Adding sequential number and flagging parental stock\n")}
     }
     if (flag=="nopar") {
       gl2 <- cbind(rownum, gl2)
       metarows <- 1
-      if(v>=3){cat("  Adding sequential number\n")}
+      if(verbose>=3){cat("  Adding sequential number\n")}
     }
 
     # Clear row and column names
@@ -277,7 +277,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     colnames(gl2) <- NULL
 
     # Output data file
-    if(v>=3){
+    if(verbose>=3){
       cat("  Writing the NewHybrids input file", outfile, "\n")
       cat(c("    NumIndivs ", nrow(gl2), "\n"))
       cat(c("    NumLoci ", n.loci, " \n"))
@@ -294,7 +294,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     
     if (!is.null(nhyb.directory)) {
       
-      if (v>=3){
+      if (verbose>=3){
         cat("Copying New Hybrids input file", outfile, "to",nhyb.directory.win,"\n")
         cat("Passing control to New Hybrids executable\n")
         }
@@ -380,14 +380,14 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
         # Pull out results for F1 hybrids only, defined by posterior probability >= pprob 
           F1.test <- F1.test[(F1.test$F1 >= pprob),]
          # Use the id of the F1 hybrids to subset the genlight object containing the loci with fixed differences used in the analysis  
-          F1.only <- gl.keep.ind(gl.fixed.used,as.character(F1.test$id),mono.rm=FALSE,v=0)
+          F1.only <- gl.keep.ind(gl.fixed.used,as.character(F1.test$id),mono.rm=FALSE,verbose=0)
         # Invert the matrix of data for F1 individuals only  
           mat <- t(as.matrix(F1.only))
         # Tally and plot the counts of homozygous reference, heterozygotes, and homozygous alternate (SNP)
-          if (v>=3) {cat("\nPlotting genotypes of",length(as.character(F1.test$id)),"F1 individuals\n")}
+          if (verbose>=3) {cat("\nPlotting genotypes of",length(as.character(F1.test$id)),"F1 individuals\n")}
           barplot(table(mat),col="red",main="F1 Genotypes")
         # Report the results  
-          if (v>=3) {
+          if (verbose>=3) {
             cat("  No. of F1 individuals:",nInd(F1.only),"[",indNames(F1.only),"]\n")
             cat("  No. of loci with fixed differences used in the analysis:",nLoc(F1.only),"\n")
             cat("  No. of heterozygous loci for the F1s:",table(mat)["1"],"(",round(table(mat)["1"]*100/sum(table(mat)),2),"%)\n")
@@ -396,12 +396,12 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
           }
       }
     
-    #if (v < 2) {sink()}
-    if (v>=3) {
+    #if (verbose < 2) {sink()}
+    if (verbose>=3) {
       cat("\nResults are stored in file aa-PofZ.csv\n")
       cat("Returning data used by New Hybrids in generating the results, as a genlight object\n")
     }
-    if (v > 0) {cat("gl.nhybrids Completed\n")}
+    if (verbose > 0) {cat("gl.nhybrids Completed\n")}
 
     return(gl2nhyb)
 

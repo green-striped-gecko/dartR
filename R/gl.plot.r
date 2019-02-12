@@ -12,31 +12,54 @@
 #' @param legend -- if TRUE, a legend will be added [default = TRUE]
 #' @param posi -- position of the legend [default = "bottomleft"]
 #' @param bg -- background color of the legend [default transparent white]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @param ... --- additional arguments passed to glPlot function.
 #' @export
 #'@examples 
 #'gl.plot(foxes.gl[1:30,])
 #'gl.plot(foxes.gl[1:10,],labels=TRUE)
 
-gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TRUE, posi="bottomleft", bg=rgb(1,1,1,.5), v=2,...) 
+# Last amended 3-Feb-19
+
+gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TRUE, posi="bottomleft", bg=rgb(1,1,1,.5), verbose=2,...)
 {
   
-# ERROR CHECKING
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.report.callrate!\n"); stop()
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-  if (v < 0 | v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
-  }
-  
-  # FLAG SCRIPT START
-  
-  if (v >= 1) {
-    cat("Starting gl.plot: Smear plot\n")
-  }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# DO THE JOB
   
   if (!labels){
     glPlot(x)
@@ -61,8 +84,9 @@ gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TR
   }  
   
 # FLAG SCRIPT END
-  if (v >= 1) {
-    cat("\ngl.plot Completed\n")
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
   }
   
   return(invisible())

@@ -16,25 +16,54 @@
 #' @param alpha -- level of significance (per locus) [Default 0.05]
 #' @param basis -- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]
 #' @param bon -- apply bonferroni correction to significance levels for filtering [default TRUE] 
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a genlight object with the loci departing significantly from HWE removed
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @examples
 #' list <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE)
 
-gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, v=2) {
+# Last amended 3-Feb-19
+
+gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
   
-# ERROR CHECKING
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required!\n"); stop()
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-  
-  if (v > 0) {
-    cat("Starting gl.filter.hwe: Filtering on departure from HWE\n")
-  }
-  
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
   if (alpha < 0 | alpha > 1){
     cat("    Warning: level of significance per locus alpha must be an integer between 0 and 1, set to 0.05\n")
     alpha <- 0.05
@@ -49,6 +78,8 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, v=2) {
     # Split the gl object into a list of populations
     poplist <- seppop(x)
   } 
+
+# DO THE JOB
 
   count <- 0
     for (i in poplist) {
@@ -73,7 +104,7 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, v=2) {
   }
   failed.loci <- as.character(unique(result$Locus))
 
-  if (v >= 2){
+  if (verbose >= 2){
     cat("Loci examined:", nLoc(x),"\n")
     if (bon) {
       cat("  Deleted",length(failed.loci),"loci with significant departure from HWE, bonferroni corrected, at experiment-wide alpha =",alpha,"\n")
@@ -84,12 +115,15 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, v=2) {
   
   x <- x[,!locNames(x) %in% failed.loci]
   
-  if (v >= 2){
+  if (verbose >= 2){
     cat("  Loci retained:",nLoc(x),"\n")
   }
   
-  if ( v > 0) {cat("gl.filter.hwe completed\n")}
+# FLAG SCRIPT END
 
-  # Return the result
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
+
   return(x) 
 }

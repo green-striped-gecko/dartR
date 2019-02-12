@@ -25,7 +25,7 @@
 #'@param node.label.color -- color of the text of the node labels [default: "black"]
 #'@param alpha -- upper threshold to determine which links between nodes to display [default: 0.005]
 #'@param title -- title for the plot [default: "Network based on G-matrix of genetic relatedness"]
-#'@param v -- verbosity. If zero silent, max 3.
+#'@param verbose -- verbosity. If zero silent, max 3.
 #'@return NULL 
 #'@importFrom igraph layout_with_kk layout_with_fr layout_with_drl graph_from_data_frame delete_edges V E 
 #'@importFrom grDevices rgb
@@ -34,12 +34,29 @@
 #'@author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 #'  
 #'@examples
-#'#gl.plot.network(D)  
+#'#gl.plot.network(D)
 
-gl.plot.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALSE, node.label.size=0.7, node.label.color="black", alpha=0.005, title="Network based on genetic distance", v=3){
+# Last amended 3-Feb-19 
+
+gl.plot.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALSE, node.label.size=0.7, node.label.color="black", alpha=0.005, title="Network based on genetic distance", verbose=2){
   
-# ERROR CHECKING
-  
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
   if(class(D)!="dist") {
       cat("Fatal Error: distance matrix required for gl.dist.network!\n"); stop("Execution terminated\n")
   }
@@ -49,7 +66,7 @@ gl.plot.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALS
       cat("Fatal Error: if specified, genlight object required for gl.dist.network!\n"); stop("Execution terminated\n")
     }
   } else {
-    if (v>=2) {
+    if (verbose>=2) {
       cat("Note: genlight object not specified, population assignments not available for plotting\n")
     }
   }  
@@ -58,16 +75,6 @@ gl.plot.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALS
     cat("Warning: Layout method must be one of fr, or kk, or drl, set to fr\n")
     method <- "fr"
   }
-  if (v < 0 | v > 5){
-    cat("Warning: Verbosity must take on an integer value between 0 and 5, set to 3\n")
-    v <- 3
-  }
-
-# FLAG SCRIPT START
-
-if (v >= 1) {
-  cat("Starting gl.plot.network: Displaying distance matrix\n")
-}
 
 # DO THE JOB
   
@@ -145,10 +152,10 @@ if (v >= 1) {
     legend("bottomleft", legend=levels(pop(x))  , col = colors , bty = "n", pch=20 , pt.cex = 3, cex = 1, text.col=colors , horiz = FALSE, inset = c(0.1, 0.1))
   }
   
-  # FLAG SCRIPT END
-  
-  if (v >= 1) {
-    cat("Completed gl.plot.network\n\n")
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
   }
   
   return(invisible())

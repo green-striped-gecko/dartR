@@ -14,18 +14,37 @@
 #' @examples
 #' gl2 <- gl.report.monomorphs(testset.gl)
 
+# Last amended 3-Feb-19
+
 gl.report.monomorphs <- function (x, probar=FALSE) {
   
-# ERROR CHECKING
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.report.repavg!\n"); stop()
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+
   # Work around a bug in adegenet if genlight object is created by subsetting
-  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
-  
-# FLAG SCRIPT START
-    cat("Starting gl.report.monomorphs: Reporting frequency of monomorphic loci\n")
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+# DO THE JOB
 
   cat("Identifying monomorphic loci\n")
 # Create vectors to hold test results
@@ -74,7 +93,7 @@ gl.report.monomorphs <- function (x, probar=FALSE) {
 
 # FLAG SCRIPT END
 
-    cat("gl.report.monomorphs Completed\n")
+    cat("Completed:",funname,"\n")
 
 return(NULL)
 

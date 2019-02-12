@@ -14,28 +14,37 @@
 #' @param loc.labels -- if TRUE, then the first row of the csv file is the locus labels [default TRUE]
 #' @param ind.metafile -- name of the csv file containing the metadata for individuals [optional]
 #' @param ind.metafile -- name of the csv file containing the metadata for individuals [optional]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a genlight object with the SNP data and associated metadata included.
 #' @import adegenet
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 
-gl.read.csv <- function(filename, ind.labels=TRUE, loc.labels=TRUE, ind.metafile=NULL, loc.metafile=NULL, v=2){
-  
-# ERROR CHECKING
+# Last amended 3-Feb-19
 
-  if (v < 0 || v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
-  }
+gl.read.csv <- function(filename, ind.labels=TRUE, loc.labels=TRUE, ind.metafile=NULL, loc.metafile=NULL, verbose=2){
   
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
 # FLAG SCRIPT START
-  
-  if (v >= 1) {
-    cat("Starting gl.read.csv: Input data from csv\n")
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
   }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
+# FUNCTION SPECIFIC ERROR CHECKING
+
 # DO THE JOB
+
   #FIRST THE SNP DATA
 
   # Create the SNP data matrix, indNames and LocNames
@@ -62,7 +71,7 @@ gl.read.csv <- function(filename, ind.labels=TRUE, loc.labels=TRUE, ind.metafile
   test <- paste(data,collapse="")
   test <- gsub("NA","9",test)
   if(nchar(test) > numrows*numcols) {
-      if(v >=2){
+      if(verbose >=2){
         cat("Character data detected, assume genotypes are of the form C/C, A/T, C/G, -/- etc\n")
       }
       # Check that this is true
@@ -90,7 +99,7 @@ gl.read.csv <- function(filename, ind.labels=TRUE, loc.labels=TRUE, ind.metafile
           stop()
         } 
       }
-      if ( v >= 2) {cat ("  Data confirmed as biallelic\n")}
+      if ( verbose >= 2) {cat ("  Data confirmed as biallelic\n")}
       
     # Step through and convert data to 0, 1, 2, NA
       homRef <- paste0(names(tmp)[1],"/",names(tmp)[1])
@@ -111,7 +120,7 @@ gl.read.csv <- function(filename, ind.labels=TRUE, loc.labels=TRUE, ind.metafile
       data <- apply(data,2,as.numeric)
   
   } else {
-      if (v >= 2) {cat("Numeric data detected, assume genotypes are 0 = homozygous reference, 1 = heterozygous, 2 = homozygous alternate\n")}
+      if (verbose >= 2) {cat("Numeric data detected, assume genotypes are 0 = homozygous reference, 1 = heterozygous, 2 = homozygous alternate\n")}
       # Check that this is true
       s1 <- paste(data, collapse=" ")
       s2 <- unlist(strsplit(s1, " "))
@@ -136,7 +145,7 @@ gl.read.csv <- function(filename, ind.labels=TRUE, loc.labels=TRUE, ind.metafile
   } else {
     gl <- gl.recalc.metrics(gl)
   }
-  if (v >= 2){cat(paste(" Added or updated ",names(gl@other$loc.metrics)," to the other$ind.metrics slot.\n"))}
+  if (verbose >= 2){cat(paste(" Added or updated ",names(gl@other$loc.metrics)," to the other$ind.metrics slot.\n"))}
   
   # THIRD THE INDIVIDUAL METADATA
   if(!is.null(ind.metafile)){
@@ -151,13 +160,13 @@ gl.read.csv <- function(filename, ind.labels=TRUE, loc.labels=TRUE, ind.metafile
     gl@other$ind.metrics$id <- individuals
     gl@other$ind.metrics$pop <- array(NA,nInd(gl))
   }
-  if (v >= 2){cat(paste(" Added ",names(gl@other$ind.metrics)," to the other$ind.metrics slot.\n"))}
+  if (verbose >= 2){cat(paste(" Added ",names(gl@other$ind.metrics)," to the other$ind.metrics slot.\n"))}
  
 # FLAG SCRIPT END
-      
-      if (v >= 1) {
-        cat("Completed gl.read.csv\n\n")
-      }
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
       
       return(gl)
       

@@ -3,7 +3,7 @@
 #' @param gl -- a genlight object
 #' @return a simple vector wiht Ho for each loci
 #' @export
-#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 gl.Hs <- function(gl)
 {

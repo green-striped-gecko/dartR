@@ -21,27 +21,52 @@
 #' @param mono.rm -- Remove monomorphic loci [default FALSE]
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]
 #' @param recursive -- Repeatedly filter individuals on call rate, each time removing monomorphic loci. Only applies if method="ind" and mono.rm=TRUE [default FALSE]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The reduced genlight or genind object, plus a summary
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.filter.callrate(testset.gl, plot=TRUE, method="ind", threshold=0.8, v=3)
+#' result <- gl.filter.callrate(testset.gl, plot=TRUE, method="ind", threshold=0.8, verbose=3)
 
+ gl.filter.callrate <- function(x, method="loc", threshold=0.95, mono.rm=FALSE, recalc=FALSE, recursive=FALSE, plot=FALSE, bins=25, verbose=2) {
+   
+# TIDY UP FILE SPECS
 
- gl.filter.callrate <- function(x, method="loc", threshold=0.95, mono.rm=FALSE, recalc=FALSE, recursive=FALSE, plot=FALSE, bins=25, v=2) {
-   
-# ERROR CHECKING
-   
-   if(class(x)!="genlight") {
-     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-   }
-   
-   if (v < 0 | v > 5){
-     cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-     v <- 2
-   }  
-   
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
    if (method != "ind" & method != "loc") {
      cat("    Warning: method must be either \"loc\" or \"ind\", set to \"loc\" \n")
      method <- "loc"
@@ -51,28 +76,27 @@
      cat("    Warning: threshold must be an integer between 0 and 1, set to 0.95\n")
      threshold <- 0.95
    }
-   
-# FLAG SCRIPT START
-   
-   if (v >= 1) {cat("Starting gl.filter.callrate: Filtering on Call Rate\n")}
-   if (v >= 3) {cat("Note: Missing values most commonly arise from restriction site mutation\n")}
+
+# DO THE JOB
+
+   if (verbose >= 3) {cat("Note: Missing values most commonly arise from restriction site mutation\n")}
 
 # RECALCULATE THE CALL RATE, BRING IT UP TO DATE IN CASE gl.recalc.metrics HAS NOT BEEN RUN
    
-   x <- dartR:::utils.recalc.callrate(x, v=v)
+   x <- utils.recalc.callrate(x, verbose=verbose)
    
 # FOR METHOD BASED ON LOCUS    
 
   if( method == "loc" ) {
     # Determine starting number of loci and individuals
-    if (v >= 2) {cat("  Removing loci based on Call Rate, threshold =",threshold,"\n")}
+    if (verbose >= 2) {cat("  Removing loci based on Call Rate, threshold =",threshold,"\n")}
     n0 <- nLoc(x)
-    if (v >= 3) {cat("Initial no. of loci =", n0, "\n")}
+    if (verbose >= 3) {cat("Initial no. of loci =", n0, "\n")}
 
     # Remove loci with NA count <= 1-threshold
       x2 <- x[ ,glNA(x,alleleAsUnit=FALSE)<=((1-threshold)*nInd(x))]
       x2@other$loc.metrics <- x@other$loc.metrics[glNA(x,alleleAsUnit=FALSE)<=((1-threshold)*nInd(x)),]
-      if (v > 2) {cat ("  No. of loci deleted =", (n0-nLoc(x2)),"\n")}
+      if (verbose > 2) {cat ("  No. of loci deleted =", (n0-nLoc(x2)),"\n")}
       
       # Plot a histogram of Call Rate
       
@@ -102,9 +126,9 @@
   } else if ( method == "ind" ) {
     
     # Determine starting number of loci and individuals
-    if (v > 1) {cat("  Removing individuals based on Call Rate, threshold =",threshold,"\n")}
+    if (verbose > 1) {cat("  Removing individuals based on Call Rate, threshold =",threshold,"\n")}
       n0 <- nInd(x)
-    if (v > 2) {cat("Initial no. of individuals =", n0, "\n")}
+    if (verbose > 2) {cat("Initial no. of individuals =", n0, "\n")}
       
     # Calculate the individual call rate
       ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)
@@ -118,19 +142,19 @@
       x2 <- x[ind.call.rate >= threshold,]
 
     # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus filtering
-        if (v > 2) {cat ("Filtering a genlight object\n  no. of individuals deleted =", (n0-nInd(x2)), "\nIndividuals retained =", nInd(x2),"\n")}
+        if (verbose > 2) {cat ("Filtering a genlight object\n  no. of individuals deleted =", (n0-nInd(x2)), "\nIndividuals retained =", nInd(x2),"\n")}
       
     # Report individuals that are excluded on call rate
       if (any(ind.call.rate <= threshold)) {
         x3 <- x[ind.call.rate <= threshold,]
         if (length(x3) > 0) {
-          if (v >= 2) {
+          if (verbose >= 2) {
             cat("  No. of individuals deleted (CallRate <= ",threshold,":\n")
             cat(paste0(indNames(x3),"[",as.character(pop(x3)),"],"))
           }  
             # Remove monomorphic loci
-              if (mono.rm) {x2 <- gl.filter.monomorphs(x2,v=v)}
-              if (recalc) { x2 <- gl.recalc.metrics(x2, v=v)}
+              if (mono.rm) {x2 <- gl.filter.monomorphs(x2,verbose=verbose)}
+              if (recalc) { x2 <- gl.recalc.metrics(x2, verbose=verbose)}
         }
       }  
     # Recalculate the callrate
@@ -148,19 +172,19 @@
         if (nInd(x2) == nInd(x)) {break}
         
         # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus filtering
-        if (v > 2) {cat ("ITERATION",i,"\n  No. of individuals deleted =", (n0-nInd(x2)), "\n  No. of individuals retained =", nInd(x2),"\n")}
+        if (verbose > 2) {cat ("ITERATION",i,"\n  No. of individuals deleted =", (n0-nInd(x2)), "\n  No. of individuals retained =", nInd(x2),"\n")}
         
         # Report individuals that are excluded on call rate
         if (any(ind.call.rate <= threshold)) {
           x3 <- x[ind.call.rate <= threshold,]
           if (length(x3) > 0) {
-            if (v >= 2) {
+            if (verbose >= 2) {
               cat("  List of individuals deleted (CallRate <= ",threshold,":\n")
               cat(paste0(indNames(x3),"[",as.character(pop(x3)),"],"))
             }  
             # Remove monomorphic loci
-            if (mono.rm) {x2 <- gl.filter.monomorphs(x2,v=v)}
-            if (recalc) { x2 <- gl.recalc.metrics(x2, v=v)}
+            if (mono.rm) {x2 <- gl.filter.monomorphs(x2,verbose=verbose)}
+            if (recalc) { x2 <- gl.recalc.metrics(x2, verbose=verbose)}
           }
         } 
         
@@ -195,29 +219,35 @@
    }
 
 # REPORT A SUMMARY
-   if (v > 2) {
-     cat("\nSummary of filtered dataset\n")
-     cat(paste("  Call Rate >",threshold,"\n"))
-     cat(paste("  No. of loci:",nLoc(x2),"\n"))
-     cat(paste("  No. of individuals:", nInd(x2),"\n"))
-     cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+   if (verbose > 2) {
+     cat("\n  Summary of filtered dataset\n")
+     cat(paste("    Call Rate >",threshold,"\n"))
+     cat(paste("    No. of loci:",nLoc(x2),"\n"))
+     cat(paste("    No. of individuals:", nInd(x2),"\n"))
+     cat(paste("    No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
    }
    
-   if (v >= 2) {  
-     if (!recalc & method=="ind") {
-       cat("Note: Locus metrics not recalculated\n")
-     } else {
-       cat("Note: Locus metrics recalculated\n")
-     }
-     if (!mono.rm & method=="ind") {
-       cat("Note: Resultant monomorphic loci not deleted\n")
-     } else{
-       cat("Note: Resultant monomorphic loci deleted\n")
-       if (!recursive) {cat("  Warning: Some individuals with a CallRate initially >=",threshold,"may have a CallRate lower than",threshold,"when call rate is recalculated after removing resultant monomorphic loci\n")}
+   if (verbose >= 2) {
+     if (method == "ind"){
+       if (!recalc) {
+         cat("  Note: Locus metrics not recalculated\n")
+       } else {
+         cat("  Note: Locus metrics recalculated\n")
+       }
+       if (!mono.rm) {
+         cat("  Note: Resultant monomorphic loci not deleted\n")
+       } else{
+         cat("  Note: Resultant monomorphic loci deleted\n")
+         if (!recursive) {cat("  Warning: Some individuals with a CallRate initially >=",threshold,"may have a CallRate lower than",threshold,"when call rate is recalculated after removing resultant monomorphic loci\n")}
+       }   
      }
    }
    
-   if ( v > 0) {cat("\ngl.filter.callrate completed\n")}
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
 
     return(x2)
  }

@@ -10,7 +10,7 @@
 #' @param values.cex -- size of the values to print inside each cell [default = 1]
 #' @param legend -- if TRUE, a legend will be added to the plot [default = TRUE]
 #' @param rank -- if TRUE, then the distance matrix will be reordered to group like with like, otherwise order will be displayed as given [default FALSE]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @import graphics
 #' @importFrom stats dist
 #' @importFrom grDevices heat.colors
@@ -23,19 +23,28 @@
 #'    gl.plot.heatmap(d)
 #'    gl.plot.heatmap(d, ncolors=10, rank=TRUE, legend=TRUE)
 
-gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE, values.cex=1, legend=TRUE, rank=FALSE, v=2){
+gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE, values.cex=1, legend=TRUE, rank=FALSE, verbose=2){
   
-# ERROR CHECKING
-  
-  if(class(D)!="dist") {
-    cat("Fatal Error: distance matrix required!\n"); stop("Execution terminated\n")
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
   }
 
-  if (v < 0 | v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
   }
-  
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
+  if(class(D)!="dist") {
+    cat("  Fatal Error: distance matrix of class 'dist' required!\n"); stop("Execution terminated\n")
+  }
   if (ncolors < 0){
     cat("    Warning: ncolors must be a positive integer, set to 5\n")
     ncolors <- 5
@@ -45,13 +54,7 @@ gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE
   if (max(D) == 0) {
     cat("    Warning: matrix contains no nonzero distances\n")
   } 
-  
-# FLAG SCRIPT START
-  
-  if (v >= 1) {
-    cat("Starting gl.plot.heatmap: Displaying distance matrix\n")
-  }
-  
+
 # DO THE JOB
   
   # Convert the distance matrix to a numeric matrix
@@ -123,10 +126,10 @@ gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE
     legend("topright",legend=s, fill=rev(colours), title="Distance", cex=0.7)
   }  
 
-  # FLAG SCRIPT END
-  
-  if (v >= 1) {
-    cat("Completed gl.plot.heatmap\n\n")
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
   }
   
   return()

@@ -18,19 +18,39 @@
 #' @examples
 #' gl.report.rdepth(testset.gl)
 
+# Last amended 3-Feb-19
 
 gl.report.rdepth <- function(x, plot=FALSE, smearplot=FALSE) {
 
-# ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.report.rdepth!\n"); stop()
-  }
-  # Work around a bug in adegenet if genlight object is created by subsetting
-  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
-    cat("Starting gl.report.rdepth: Reporting distribution of Read Depth (rdepth)\n")
+
+    cat("Starting",funname,"\n")
+
+# STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+    
+  if(class(x)!="genlight") {
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+# DO THE JOB
 
   rdepth <- x@other$loc.metrics$rdepth
   lower <- round(min(rdepth)-1,0)
@@ -82,9 +102,9 @@ gl.report.rdepth <- function(x, plot=FALSE, smearplot=FALSE) {
   }
   
 # FLAG SCRIPT END
-    cat("Completed: gl.report.rdepth\n")
 
-  #return(df)
+    cat("Completed:",funname,"\n")
+
   return(NULL)
 
 }

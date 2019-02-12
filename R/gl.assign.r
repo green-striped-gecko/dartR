@@ -38,29 +38,58 @@
 #' @param dim -- number of dimensions to retain in the dimension reduction [default k, number of populations]
 #' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.05]
 #' @param threshold -- populations to retain for consideration; those for which the focal individual has less than or equal to threshold loci with private alleles [default 0]
-#' @param v -- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default 3]
+#' @param verbose -- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default 3]
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @importFrom stats dnorm qnorm
 #' @export
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 #' x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.05, threshold=1)
-#' 
 
-gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, v=3) {
-  
-  # ERROR CHECKING
+# Last amended 3-Feb-19
+
+gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, verbose=3) {
+
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-  
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
   alpha <- 1-alpha
 
-  if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.recode.pop.r!\n"); stop()
-  }
   if (!(id %in% indNames(x))) {
     cat("Fatal Error: Unknown must be listed among the individuals in the genlight object!\n"); stop()
   }
@@ -79,19 +108,12 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, v=3) 
     cat("Warning: Threshold value cannot be negative, set to 0\n")
     threshold <- 0
   }
-  if (v < 0 | v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
-  }
-  
-  # FLAG SCRIPT START  
-  if (v >= 1) {
-    cat("Starting gl.assign: Assign and individual to a population\n\n")
-  }
-  
+
+# DO THE JOB
+
 # Identify populations that can be eliminated on the basis of private alleles
 # Retain the remainder for analysis
-  x2 <- gl.report.pa(x, id=id, nmin=nmin, threshold=threshold, v=v)
+  x2 <- gl.report.pa(x, id=id, nmin=nmin, threshold=threshold, verbose=verbose)
 
 # Check that there is more than one population to assign (excluding 'unknown')
   if (nPop(x2)==1) {
@@ -104,7 +126,7 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, v=3) 
   }
   cat("\n\nCOMPUTING ASSIGNMENT BASED ON CONFIDENCE ENVELOPES\n\n")
 # Ordinate a reduced space of K = nPop(x2) dimensions
-  pcoa <- gl.pcoa(x2, nfactors=nPop(x2),v=FALSE)
+  pcoa <- gl.pcoa(x2, nfactors=nPop(x2),verbose=FALSE)
 
 #  gl.pcoa.plot(pcoa,x2, xaxis=3, yaxis=4, ellipse=TRUE)
   
@@ -191,8 +213,11 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, v=3) 
   cat("  CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
   cat("  Best assignment is the population with the largest value of the Index, in this case",best,"\n\n")
   
-  if (v >= 1) {
-    cat("Completed gl.assign\n\n")
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
   }
+
   return(df)
 }

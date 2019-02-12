@@ -7,7 +7,7 @@
 #' Tests are applied to each locus across all populations pooled (subset="all"), to each locus considered within each population treated separately
 #' (subset="each") or to each locus within selected populations pooled (subset=c("pop1","pop2")). Tests for HWE are
 #' only valid if there is no population substructure (assuming random mating), and the tests have sufficient power
-#' only when there is sufficient sample size (n individuals > 20). Note also that correction for multiple comparisons is probably required
+#' only when there is sufficient sample size (say, n individuals > 20). Note also that correction for multiple comparisons is probably required
 #' if you wish to place particular importance on one or a few significant departures.
 #' 
 #' A Ternary Plot is optionally produced -- see Graffelman et al.(2008) for further details. Implementation of the Ternary Plot is via package {HardyWeinberg} 
@@ -37,18 +37,43 @@
 #' list <- gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE)
 #' list <- gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
 
+# Last amended 3-Feb-19
+
 gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alpha=0.05, bonf=TRUE) {
   
-  # ERROR CHECKING
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+    cat("Starting",funname,"\n")
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.report.repavg!\n"); stop()
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+
   # Work around a bug in adegenet if genlight object is created by subsetting
-  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
-  
-  # FLAG SCRIPT START
-  cat("Starting gl.report.HWE: Reporting Hardy-Weinberg Equilibrium\n")
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x))) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
+  # To be added
+
+# DO THE JOB
   
   # Initialize a flag to indicate if populations are to be pooled or not
   flag <- 0
@@ -97,7 +122,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   #### Single or Pooled populations
   
   if(flag == 1){
-    result <- dartR:::utils.hwe(gl, prob=alpha)
+    result <- utils.hwe(gl, prob=alpha)
     mat <- array(NA,3*dim(result)[1])
     dim(mat) <- c(dim(result)[1],3)
     mat[,1] <- as.numeric(as.character(result$Hom_1)) # for God knows why
@@ -136,11 +161,11 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
         next
       }
       if (count == 1) {
-        result <- dartR:::utils.hwe(ii, prob=p)
+        result <- utils.hwe(ii, prob=p)
         Population <- rep(names(poplist)[count],nrow(result))
         result <- cbind(Population,result)
       } else {
-        r <- dartR:::utils.hwe(ii, prob=p)
+        r <- utils.hwe(ii, prob=p)
         Population <- rep(names(poplist)[count],nrow(r))
         r <- cbind(Population,r)
         result <- rbind(result, r)
@@ -174,7 +199,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
         next
       }
       # Plot the tertiary plots
-      a <- dartR:::utils.hwe(ii, prob=alpha)
+      a <- utils.hwe(ii, prob=alpha)
       mat <- array(NA,3*dim(a)[1])
       dim(mat) <- c(dim(a)[1],3)
       mat[,1] <- as.numeric(as.character(a$Hom_1)) # for God knows why
@@ -217,8 +242,9 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   }  
   
   # CLOSE
+  
   cat("Completed: gl.report.hwe\n")
   
-  # Return the result
-  return(result) 
+  return(result)
+   
 }

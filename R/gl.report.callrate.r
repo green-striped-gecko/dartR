@@ -22,26 +22,39 @@
 
 gl.report.callrate <- function(x, method="loc", plot=FALSE, smearplot=FALSE) {
   
-# ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.report.callrate!\n"); stop()
-  }
-  # Work around a bug in adegenet if genlight object is created by subsetting
-  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
-  
-  if (method != "ind" & method != "loc") {
-    cat("    Warning: method must be either \"loc\" or \"ind\", set to \"loc\" \n")
-    method <- "loc"
-  }
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
+
+    cat("Starting",funname,"\n")
+
+# STANDARD ERROR CHECKING
   
-    cat("Starting gl.report.callrate: Reporting distribution of Call Rate\n")
+  if(class(x)!="genlight") {
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if (nLoc(tmp) < nLoc(x)) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# DO THE JOB
 
 # RECALCULATE THE CALL RATE, BRING IT UP TO DATE IN CASE gl.recalc.metrics HAS NOT BEEN RUN
   
-    x <- dartR:::utils.recalc.callrate(x, v=1)
+    x <- utils.recalc.callrate(x, verbose=1)
 
 # FOR METHOD BASED ON LOCUS    
   
@@ -150,7 +163,8 @@ gl.report.callrate <- function(x, method="loc", plot=FALSE, smearplot=FALSE) {
   }
 
 # FLAG SCRIPT END
-    cat("\ngl.report.callrate Completed\n")
+
+    cat("Completed:",funname,"\n")
 
   return(df)
   

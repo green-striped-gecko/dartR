@@ -18,12 +18,12 @@
 #'
 #' The algorithm is that of Johann de Jong 
 #' \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
-#' as implimented in dartR:::utils.hamming.r
+#' as implimented in utils.hamming.r
 #' 
 #' A histogram and or a smearplot can be requested. Note that the smearplot is computationally intensive, and will take time to 
 #' execute on large datasets.
 #'
-#' @param x -- genlight object [required]
+#' @param x -- name of the genlight object containing the SNP data [required]
 #' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 5]
 #' @param plot specify if a histogram of Hamming distance is to be produced [default FALSE] 
 #' @param smearplot if TRUE, will produce a smearplot of individuals against loci [default FALSE]
@@ -39,13 +39,35 @@
 
 gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=TRUE) {
   
-# ERROR CHECKING
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+    cat("Starting",funname,"\n")
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+
   # Work around a bug in adegenet if genlight object is created by subsetting
-  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
 
   if(length(x@other$loc.metrics$TrimmedSequence) == 0) {
     cat("Fatal Error: Data must include Trimmed Sequences\n"); stop()
@@ -54,10 +76,6 @@ gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=TRUE)
   if (rs < 0 | rs > 69){
     cat("Fatal Error: Length of restriction enzyme recognition sequence must be greater than zero, and less that the maximum length of a sequence tag; usually it is less than 9\n"); stop()
   }
-
-# FLAG SCRIPT START
-
-    cat("Starting gl.report.hamming: Reporting Hamming distances\n")
 
 # DO THE JOB
 
@@ -138,8 +156,9 @@ gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=TRUE)
    cat("Note: The data below are calculated from pairwise distances between",nL,"loci, for which there are",((((nL-1)*nL)/2)), "distances\n")
    print(df)
    
-   # FLAG SCRIPT END
-     cat("gl.report.hamming Completed\n")
+# FLAG SCRIPT END
+
+    cat("Completed:",funname,"\n")
 
    return(df)
 }
