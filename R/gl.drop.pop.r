@@ -10,24 +10,25 @@
 #'
 #' @param x -- name of the genlight object containing SNP genotypes [required]
 #' @param pop.list -- a list of populations to be removed [required]
+#' @param as.pop -- assign another metric to represent population [default NULL]
 #' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
-#' @param mono.rm -- Remove monomorphic loci [default TRUE]
+#' @param mono.rm -- Remove monomorphic loci [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'    gl <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+#'    gl <- gl.drop.pop(testset.gl, pop.list=c("Male","Unknown"),as.pop="sex")
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
 
 # Last amended 3-Feb-19
 
-gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, verbose=2){
+gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, verbose=2){
 
 # TIDY UP FILE SPECS
 
-  outfilespec <- file.path(outpath, outfile)
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
@@ -62,7 +63,16 @@ gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, verbose=2){
     if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
 
 # FUNCTION SPECIFIC ERROR CHECKING
-
+    
+  # Assign the new population list if as.pop is specified
+    
+    if (!is.null(as.pop)){
+      pop.hold <- pop(x)
+      pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
+      if (v >= 3) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
+    }
+    
+  if (verbose >= 2) {cat("  Checking for presence of nominated populations\n")}
   for (case in pop.list){
     if (!(case%in%popNames(x))){
       cat("  Warning: Listed population",case,"not present in the dataset -- ignored\n")
@@ -83,19 +93,29 @@ gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, verbose=2){
 # Delete listed populations, recalculate relevant locus metadata and remove monomorphic loci
   
   # Remove rows flagged for deletion
-    x <- x[!x$pop%in%pop.list]
+    x2 <- x[!x$pop%in%pop.list]
+    pop.hold <- pop.hold[!x$pop%in%pop.list]
+    x <- x2
   # Remove monomorphic loci
     if (mono.rm) {x <- gl.filter.monomorphs(x,v=v)}
   # Recalculate statistics
     if (recalc) {gl.recalc.metrics(x,v=v)}
 
-# REPORT A SUMMARY
+  # REPORT A SUMMARY
     
   if (verbose >= 3) {
-    cat("  Summary of recoded dataset\n")
-    cat(paste("    No. of loci:",nLoc(x),"\n"))
-    cat(paste("    No. of individuals:", nInd(x),"\n"))
-    cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n"))
+    if (!is.null(as.pop)) {
+      cat("  Summary of recoded dataset\n")
+      cat(paste("    No. of loci:",nLoc(x),"\n"))
+      cat(paste("    No. of individuals:", nInd(x),"\n"))
+      cat(paste("    No. of levels of",as.pop,"remaining: ", length(levels(factor(pop(x)))),"\n"))
+      cat(paste("    No. of populations: ", length(levels(factor(pop.hold))),"\n"))
+    } else {
+      cat("  Summary of recoded dataset\n")
+      cat(paste("    No. of loci:",nLoc(x),"\n"))
+      cat(paste("    No. of individuals:", nInd(x),"\n"))
+      cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n"))
+    }  
   }
   if (verbose >= 2) {
     if (!recalc) {
@@ -109,6 +129,13 @@ gl.drop.pop <- function(x, pop.list, recalc=FALSE, mono.rm=TRUE, verbose=2){
       cat("  Note: Resultant monomorphic loci deleted\n")
     }
   }
+  
+  # Reassign the initial population list if as.pop is specified
+    
+    if (!is.null(as.pop)){
+      pop(x) <- pop.hold
+      if (v >= 3) {cat("  Resetting population assignments to initial state\n")}
+    }
 
 # FLAG SCRIPT END
     
