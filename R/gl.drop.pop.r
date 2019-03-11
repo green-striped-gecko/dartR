@@ -69,7 +69,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     if (!is.null(as.pop)){
       pop.hold <- pop(x)
       pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
-      if (v >= 3) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
+      if (verbose >= 3) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
     }
     
   if (verbose >= 2) {cat("  Checking for presence of nominated populations\n")}
@@ -97,9 +97,9 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     pop.hold <- pop.hold[!x$pop%in%pop.list]
     x <- x2
   # Remove monomorphic loci
-    if (mono.rm) {x <- gl.filter.monomorphs(x,v=v)}
+    if (mono.rm) {x <- gl.filter.monomorphs(x,verbose=verbose)}
   # Recalculate statistics
-    if (recalc) {gl.recalc.metrics(x,v=v)}
+    if (recalc) {gl.recalc.metrics(x,verbose=verbose)}
 
   # REPORT A SUMMARY
     
@@ -134,7 +134,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     
     if (!is.null(as.pop)){
       pop(x) <- pop.hold
-      if (v >= 3) {cat("  Resetting population assignments to initial state\n")}
+      if (verbose >= 3) {cat("  Resetting population assignments to initial state\n")}
     }
 
 # FLAG SCRIPT END
