@@ -7,8 +7,7 @@
 #' is that when sample sizes are finite, fixed differences will occur through sampling error, compounded when
 #' many loci are examined. Simulations suggest that sample sizes of n1=5 and n2=5 is adequate to reduce the
 #' probability of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if comparison
-#' between two populations involves sample sizes less than 5, taking into account allele drop-out. The minimum sample 
-#' size for scoring fixed differences between two populations can be set with the parameter nlimit.
+#' between two populations involves sample sizes less than 5, taking into account allele drop-out.
 #'
 #' An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
 #' level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
