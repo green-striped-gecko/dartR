@@ -7,27 +7,68 @@
 #' a single line per individual, resolving heterozygous SNPs by replacing them with standard
 #' ambiguity codes (method=2).
 #'
-#' Reference: Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent, Bioinformatics, 30: 3317-3324
-#' 
+#' @reference: Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent. Bioinformatics 30: 3317-3324
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param outfile -- file name of the output file (including extension).
-#' @param outpath -- path where to save the output file (set to tempdir by default)
-#' @param method -- method = 1, nexus file with two lines per individual; method = 2, nexus
+#' @param outfile -- file name of the output file (including extension) [default svd.nex]
+#' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
+#' to direct output files to your working directory.#' @param method -- method = 1, nexus file with two lines per individual; method = 2, nexus
 #' file with one line per individual, ambiguity codes [default 2]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl2svdquartets(testset.gl[1:20,1:100])
 
-gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=2) {
+gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, verbose=2) {
 
-  outfile <- file.path(outpath, outfile)
+# TIDY UP FILE SPECS
+
+  outfilespec <- file.path(outpath, outfile)
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
-  if (v > 0) {cat(paste("Starting gl2svdquartets: Create nexus file\n\n"))}
-  if (v > 1) {cat(paste("    Extacting SNP bases and creating records for each individual\n"))}
+  if(class(x)!="genlight") {
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
+   if (method < 0 | method > 2) {
+     cat("  Warning: method must be either 1 or 2, set to 2, one line per individual using ambiguity codes \n")
+     method <- 2
+   }
+
+# DO THE JOB
+
+  if (verbose >= 2) {cat(paste("    Extacting SNP bases and creating records for each individual\n"))}
 
 # Extract the reference base and the alternate base for each locus
   #snp <- as.character(x@other$loc.metrics$SNP)
@@ -40,6 +81,7 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   #alt <- unlist(lapply(snp, `[`, 2))
   
 # Sort the data on population
+  if (verbose >= 2) {cat(paste("    Sorting ....\n"))}
   df <- data.frame(as.matrix(x))
   df <- cbind(indNames(x),pop(x),df)
   df <- df[order(df$pop),]
@@ -47,7 +89,8 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   poplabels <- df[,2]
   m <- df[,3:(nLoc(x)+2)]
   
-  # Create a lookup table for the ambiguity codes
+# Create a lookup table for the ambiguity codes
+  if (verbose >= 2) {cat(paste("    Creating lookup table for ambiguity codes\n"))}
   #     A  T  G  C
   #  A  A  W  R  M)
   #  T  W  T  K  Y
@@ -73,7 +116,8 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
     }
   } 
 
-# progressively add the bases  
+# progressively add the bases
+  if (verbose >= 2) {cat(paste("    Applying ambiguity codes (if method=2) and reconstructing sequences\n"))}
   for (ind in 1:nInd(x)) {
     for (loc in 2:nLoc(x)){
     if (is.na(m[ind,loc])) {
@@ -99,6 +143,7 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   }
   
 # Create the taxpartition (popname : 25-60)
+  if (verbose >= 2) {cat(paste("    Creating partition table\n"))}
   a <- array(data=NA,dim=length(poplabels))
   b <- array(data=NA,dim=length(poplabels))
   a[1] <- 1
@@ -110,8 +155,8 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   plabels <- unique(poplabels)
   
 # Create the svd file
-  if (v > 1) {cat(paste("    Writing results to nexus file",outfile,"\n"))}
-  sink(outfile)
+  if (verbose > 1) {cat(paste("    Writing results to svd nexus file",outfilespec,"\n"))}
+  sink(outfilespec)
   cat("#nexus\n")
   cat("BEGIN DATA;\n")
   cat(paste0("     dimensions ntax = ",2*nInd(x)," nchar = ",nLoc(x)," ;\n"))
@@ -154,8 +199,13 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, v=
   
   sink()
   
-  if (v > 2) {cat(paste("    Records written to",outfile,":",nInd(x),"\n"))}
-  if (v > 0) {cat("gl2svdquartets Completed\n")}
+  if (verbose > 2) {cat(paste("    Records written to",outfilespec,":",nInd(x),"\n"))}
+
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
   
   return(NULL)
 

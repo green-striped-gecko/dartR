@@ -14,22 +14,53 @@
 #' be regarded as consistent with a sex specific marker [default 0]
 #' @param t.hom -- tolerance, that is tf=0.05 means that 5% of the homogametic sex can be heterozygous and still
 #' be regarded as consistent with a sex specific marker [default 0]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The list of sex specific loci
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' result <- gl.sexlinkage(testset.gl)
 
-gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
+# Last amended 3-Feb-19
 
-  if (v > 0) {
-    cat("Starting gl.sexlinkage: Identifying sex linked loci\n")
+gl.sexlinkage <- function(x, t.het=0, t.hom=0, verbose=2) {
+
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
   }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required for gl.sexlinkage!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# DO THE JOB
 
 # Extract the sex variable from whereever it may be -- might need alteration    
   sex <- toupper(substr(x@other$ind.metrics$sex,1,1))
@@ -84,29 +115,35 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, v=2) {
   xy <- df[df$F1/(sumf)<=(0+t.het) & df$M1/(summ)>=(1-t.hom),]
 
 if (nrow(zw) == 0){
-  cat("No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
+  cat("  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
 } else {
-  cat("\nSex linked loci consistent with female heterogamety (ZZ/ZW)\n")
-  cat(paste("  Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n")) 
-  cat(paste("  for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
-  cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
+  cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n")
+  cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n"))
+  cat(paste("    for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
+  cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   print(zw)
-  cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-  cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+  cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
+  cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
 }
 if (nrow(xy) == 0){
-  cat("No sex linked markers consistent with male heterogamety (XX/XY)\n")
+  cat("  No sex linked markers consistent with male heterogamety (XX/XY)\n")
 } else {
-  cat("\nSex linked loci consistent with male heterogamety (XX/XY)\n")
-  cat(paste("  Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,";\n")) 
-  cat(paste("  for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
-  cat("  0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
+  cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n")
+  cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,";\n"))
+  cat(paste("    for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
+  cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   print(xy)
-  cat("Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-  cat("Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+  cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
+  cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
   }
 
 l <- list(zw,xy)
+
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
 
 return(l)
 

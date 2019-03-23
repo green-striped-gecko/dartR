@@ -22,12 +22,12 @@
 #' 
 #' The script returns a genlight object with the new individual labels and the recalculated locus metadata.
 #' 
-#' @param gl Name of the genlight object for which individuals are to be relabelled.[required]
+#' @param x Name of the genlight object for which individuals are to be relabelled.[required]
 #' @param ind.recode Name of the file to output the new assignments [optional]
 #' @param recalc -- Recalculate the locus metadata statistics [default TRUE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
 #' @return An object of class ("genlight") with the revised individual labels
-#' @param v -- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]
+#' @param verbose -- verbose=0, silent; verbose=1, low verbosity; verbose=2, high verbosity [default 1]
 #' @import utils
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -37,14 +37,54 @@
 #' gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
 #' gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
 #' }
-#' #Ammended Georges 9-Mar-17
 
-gl.edit.recode.ind <- function(gl, ind.recode=NULL, recalc=TRUE, mono.rm=TRUE, v=1) {
+# Last amended 3-Feb-19
+
+gl.edit.recode.ind <- function(x, ind.recode=NULL, recalc=TRUE, mono.rm=TRUE, verbose=1) {
+
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
-# Take assignments from gl  
+  if(class(x)!="genlight") {
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
 
-  cat("Extracting current individual labels from the gl object\n")
-  recode.table <- cbind(indNames(gl),indNames(gl))
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
+# DO THE JOB
+  
+# Take assignments from x
+
+  cat("Extracting current individual labels from the x object\n")
+  recode.table <- cbind(indNames(x),indNames(x))
 
 # Create recode table for editting, and bring up the editor
     new <- as.matrix(edit(recode.table))
@@ -59,45 +99,51 @@ gl.edit.recode.ind <- function(gl, ind.recode=NULL, recalc=TRUE, mono.rm=TRUE, v
   }
 
 # Apply the new assignments  
-  ind.list <- as.character(indNames(gl));
+  ind.list <- as.character(indNames(x));
   ntr <- length(new[,1])
-  for (i in 1:nInd(gl)) {
+  for (i in 1:nInd(x)) {
     for (j in 1:ntr) {
       if (ind.list[i]==new[j,1]) {ind.list[i] <- new[j,2]}
     }
   }
-  # Assigning new populations to gl
+  # Assigning new populations to x
   cat("Assigning new individual (=specimen) names\n")
-  indNames(gl) <- ind.list
+  indNames(x) <- ind.list
   
   # If there are individuals to be deleted, then recalculate relevant locus metadata and remove monomorphic loci
   
-  if ("delete" %in% gl$ind.names | "Delete" %in% gl$ind.names) {
+  if ("delete" %in% x$ind.names | "Delete" %in% x$ind.names) {
     # Remove rows flagged for deletion
     cat("Deleting individuals flagged for deletion\n")
-    gl <- gl[!gl$ind.names=="delete" & !gl$ind.names=="Delete"]
+    x <- x[!x$ind.names=="delete" & !x$ind.names=="Delete"]
     # Remove monomorphic loci
-    if(mono.rm) {gl <- gl.filter.monomorphs(gl,v=v)}
+    if(mono.rm) {x <- gl.filter.monomorphs(x,verbose=verbose)}
     # Recalculate statistics
     if (recalc) {
-      gl.recalc.metrics(gl,v=v)
+      gl.recalc.metrics(x,verbose=verbose)
     }
   }
 
   # REPORT A SUMMARY
-  if (v==2) {
+  if (verbose==2) {
     cat("Summary of recoded dataset\n")
-    cat(paste("  No. of loci:",nLoc(gl),"\n"))
-    cat(paste("  No. of individuals:", nInd(gl),"\n"))
-    cat(paste("  No. of populations: ", length(levels(factor(pop(gl)))),"\n"))
+    cat(paste("  No. of loci:",nLoc(x),"\n"))
+    cat(paste("  No. of individuals:", nInd(x),"\n"))
+    cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
-  if (v>=1) {  
+  if (verbose>=1) {
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("note: Resultant monomorphic loci not deleted\n")}
   }
   
-  return(gl)
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
+  
+  return(x)
   
 }

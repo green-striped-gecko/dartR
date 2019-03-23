@@ -6,27 +6,56 @@
 #' 
 #' The script returns a genlight object with the individuals deleted and, optionally, the recalculated locus metadata.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
+#' @param x -- name of the genlight object containing SNP genotypes [required]
 #' @param ind.list -- a list of individuals to be removed [required]
 #' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'    gl <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"))
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
-#' 
 
-gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=TRUE, v=2){
+# Last amended 3-Feb-19
 
-# ERROR CHECKING
+gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=TRUE, verbose=2){
+
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
   for (case in ind.list){
     if (!(case%in%indNames(x))){
       cat("Warning: Listed individual",case,"not present in the dataset -- ignored\n")
@@ -36,19 +65,12 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=TRUE, v=2){
   if (length(ind.list) == 0) {
     cat("Fatal Error: no individuals to drop!\n"); stop("Execution terminated\n")
   }
-  if (v < 0 | v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
-  }
 
-# FLAG SCRIPT START  
-  if (v >= 1) {
-    cat("Starting gl.drop.ind: Deleting selected individuals\n")
-  }
-  
+# DO THE JOB
+
 # REMOVE INDIVIDUALS
   
-  if (v >= 2) {
+  if (verbose >= 2) {
     cat("Processing",class(x),"object\n")
     cat("  Deleting individuals", ind.list, "\n")
   }
@@ -58,19 +80,19 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=TRUE, v=2){
   # Remove rows flagged for deletion
     x <- x[!x$ind.names%in%ind.list]
   # Remove monomorphic loci
-    if (mono.rm) {x <- gl.filter.monomorphs(x,v=v)}
+    if (mono.rm) {x <- gl.filter.monomorphs(x,verbose=verbose)}
   # Recalculate statistics
-    if (recalc) {gl.recalc.metrics(x,v=v)}
+    if (recalc) {gl.recalc.metrics(x,verbose=verbose)}
 
 # REPORT A SUMMARY
     
-  if (v >= 3) {
+  if (verbose >= 3) {
     cat("Summary of recoded dataset\n")
     cat(paste("  No. of loci:",nLoc(x),"\n"))
     cat(paste("  No. of individuals:", nInd(x),"\n"))
     cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
   }
-  if (v >= 2) {  
+  if (verbose >= 2) {
     if (!recalc) {
       cat("Note: Locus metrics not recalculated\n")
     } else {
@@ -84,9 +106,9 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=TRUE, v=2){
   }
     
 # FLAG SCRIPT END
-    
-  if (v >= 1) {
-    cat("Completed gl.drop.ind\n\n")
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
   }
     
   return <- x

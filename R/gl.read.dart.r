@@ -13,8 +13,8 @@
 #' @export
 #' @examples{
 #' dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
-#' covfilename <- system.file("extdata","testset_metadata.csv", package="dartR")
-#' gl <- gl.read.dart(dartfile, ind.metafile = covfilename, probar=TRUE)
+#' metadata <- system.file("extdata","testset_metadata.csv", package="dartR")
+#' gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=TRUE)
 #' }
 
 gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-", topskip=NULL,  lastmetric ="RepAvg", probar=TRUE)
@@ -22,7 +22,7 @@ gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-
   if (is.null(ind.metafile)) {
     ind.metafile <- covfilename
   }
-  dout <-read.dart(filename = filename, nas=nas, topskip=topskip, lastmetric = lastmetric)
-  glout <- dart2genlight(dout, ind.metafile = ind.metafile, probar = probar)
+  dout <-utils.read.dart(filename = filename, nas=nas, topskip=topskip, lastmetric = lastmetric)
+  glout <- utils.dart2genlight(dout, ind.metafile = ind.metafile, probar = probar)
 return(glout)
 }
