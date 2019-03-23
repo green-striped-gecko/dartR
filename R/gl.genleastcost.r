@@ -26,7 +26,8 @@
 #' landscape.sim <- readRDS(system.file("extdata","landscape.sim.rdata", package="dartR"))
 #' glc <- gl.genleastcost(x=possums.gl,fric.raster=landscape.sim , 
 #' gen.distance = "D", NN=8, pathtype = "leastcost",plotpath = TRUE)
-#' wassermann(eucl.mat = glc$eucl.mat, cost.mat = glc$cost.mats,  gen.mat = glc$gen.mat)
+#' library(PopGenReport)
+#' PopGenReport::wassermann(eucl.mat = glc$eucl.mat, cost.mat = glc$cost.mats,  gen.mat = glc$gen.mat)
 #' lgrMMRR(gen.mat = glc$gen.mat, cost.mats = glc$cost.mats,  eucl.mat = glc$eucl.mat)
 #' }
 #'

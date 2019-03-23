@@ -16,6 +16,7 @@
 #' @param ... --- additional arguments passed to glPlot function.
 #' @export
 #'@examples 
+#'gl.plot(bandicoot.gl[1:30,])
 #'gl.plot(foxes.gl[1:30,])
 #'gl.plot(foxes.gl[1:10,],labels=TRUE)
 

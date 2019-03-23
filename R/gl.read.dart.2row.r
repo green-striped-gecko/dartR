@@ -32,8 +32,8 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @examples
-#' \donttest{
-#' gl <- gl.read.dart.2row(filename="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
+#' \dontrun{
+#' gl <- gl.read.dart.2row(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
 #' nmetavar=16, nas="-", ind.metafile="metadata.csv" )
 #' }
 

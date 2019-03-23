@@ -60,13 +60,14 @@
 #' @importFrom MASS write.matrix
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' m <- gl.nhybrids(testset.gl, outfile="nhyb.txt", 
 #' p0=NULL, p1=NULL, 
 #' nhyb.directory="C:/workspace/R/NewHybsPC",
 #' BurnIn=100,
 #' sweeps=100,
 #' verbose=3)
+#' }
 
 gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     p0=NULL, p1=NULL, 

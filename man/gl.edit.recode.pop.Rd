@@ -47,7 +47,7 @@ recalculates statistics made redundant by the deletion of individuals from the d
 The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 }
 \examples{
-\donttest{
+\dontrun{
 gl <- gl.edit.recode.pop(testset.gl)
 }
 }

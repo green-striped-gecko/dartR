@@ -74,7 +74,7 @@ the analysis (method=random) and combine the resultant posterior probabilites
 should 200 loci be considered insufficient.
 }
 \examples{
-\donttest{
+\dontrun{
 m <- gl.nhybrids(testset.gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), t=0, method="random")
 
 m <- gl.nhybrids(testset.gl, outfile="nhyb.txt", 

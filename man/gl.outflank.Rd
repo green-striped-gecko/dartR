@@ -33,7 +33,7 @@ this function is a wrapper around the outflank function provided by Whitlock and
 }
 \examples{
 \donttest{
-gl.outflank(gi, plot = TRUE)
+gl.outflank(bandicoot.gl, plot = TRUE)
 }
 }
 \references{

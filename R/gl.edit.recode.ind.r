@@ -32,7 +32,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' gl <- gl.edit.recode.ind(testset.gl)
 #' gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
 #' gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
