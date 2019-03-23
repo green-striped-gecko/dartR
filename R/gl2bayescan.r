@@ -1,20 +1,20 @@
-#' Convert a genlight object to nexus format suitable for phylogenetic analysis by SNAPP (via BEAUti)
+#' Convert a genlight object to format suitable for input to Bayescan
 #'
-#' The output nexus file contains the snp data and relevant PAUP command lines suitable for BEAUti.
+#' The output text file contains the snp data and relevant BAyescan command lines to guide input.
 #' 
-#' @reference: Bryant, D., Bouckaert, R., Felsenstein, J., Rosenberg, N.A. and RoyChoudhury, A. (2012). Inferring species trees directly from biallelic genetic markers: bypassing gene trees in a full coalescent analysis. Molecular Biology and Evolution 29:1917-1932.
+#' @reference: Foll M and OE Gaggiotti (2008) A genome scan method to identify selected loci appropriate for both dominant and codominant markers: A Bayesian perspective. Genetics 180: 977-993.
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param outfile -- file name of the output file (including extension)[default snapp.nex]
+#' @param outfile -- file name of the output file (including extension) [default bayescan.txt]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl2snapp(testset.gl)
+#' gl2bayescan(testset.gl)
 
-gl2snapp <- function(x, outfile="snapp.nex", outpath=tempdir(), verbose=2) {
+gl2bayescan <- function(x, outfile="bayescan.txt", outpath=tempdir(), verbose=2) {
 
 # TIDY UP FILE SPECS
 
@@ -54,40 +54,31 @@ gl2snapp <- function(x, outfile="snapp.nex", outpath=tempdir(), verbose=2) {
 
 # DO THE JOB
 
-  if (verbose >= 2) {cat(paste("  Extacting SNP data and creating records for each individual\n"))}
-
-# Extract the reference base and the alternate base for each locus (excuse the contortion)
-  m <- as.matrix(x)
-  m[is.na(m)] <- "?"
-  colnames(m) <- NULL
-  df <- data.frame(m)
-  df <- cbind(indNames(x),pop(x),df)
-  df <- df[order(df$pop),]
-  indlabels <- df[,1]
-  poplabels <- df[,2]
+  if (verbose >= 2) {cat(paste("Extacting SNP data and creating records for each individual\n"))}
   
-# Create the snapp file
-  if (verbose > 1) {cat(paste("  Writing results to nexus file",outfilespec,"\n"))}
+# Prepare the data  
+  mat <- gl.percent.freq(x, verbose=verbose)
+  mat <- mat[order(mat$popn),]
 
+# Create the bayescan input file  
+  if (verbose >= 2) {cat(paste("Writing text input file for Bayescan",outfilespec,"\n"))}
   sink(outfilespec)
   
-  cat("#nexus\n")
-  cat("BEGIN DATA;\n")
-  cat(paste0("     dimensions ntax = ",nInd(x)," nchar = ",nLoc(x)," ;\n"))
-  cat("     format datatype=integerdata missing=? symbols=\"012\";\n")
-  cat("matrix\n")
-    for (i in 1:nInd(x)){
-      cat(paste0(poplabels[i],"_",indlabels[i]))
-      cat("  ")
-      cat(m[i,], sep="")
-      cat("\n")
-    }
-  cat(";\n")
-  cat("end;\n\n")
+  cat(paste0("[loci]=",nLoc(x)),"\n\n")
+  cat(paste0("[populations]=",nPop(x)),"\n\n")
 
-  sink()
+  for (i in 1:nPop(x)){
+    cat(paste0("[pop]=",i),"\n")
+    popi <- mat[mat$popn==mat$popn[i],]
+    for (j in 1:length(popi$popn)){
+      cat(j,(2*popi$nobs[j]),2,popi$sum[j],(2*popi$nobs[j]-popi$sum[j]),"\n")
+    }
+    cat("\n")
+  }
   
-  if (verbose > 2) {cat(paste("    Records written to",outfilespec,":",nInd(x),"\n"))}
+  sink()
+
+  if (verbose >= 3) {cat(paste("Records written to",outfilespec,"\n"))}
 
 # FLAG SCRIPT END
 

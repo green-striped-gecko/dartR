@@ -1,17 +1,34 @@
 #' Create a dataframe suitable for input to package \{Demerelate\} from a genlight \{adegenet\} object
 #'
 #' @param gl -- name of the genlight object containing the SNP data [required]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A dataframe suitable as input to package \{Demerelate\}
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' df <- gl2demerelate(testset.gl)
 
-gl2demerelate <- function(gl) {
+gl2demerelate <- function(gl, verbose=2) {
 
+# ERROR CHECKING
+  
   if(class(gl)!="genlight") {
-    cat("Fatal Error: genlight object required for gl2demerelate!\n"); stop()
+    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+
+  if (verbose < 0 | verbose > 5){
+    cat("    Warning: Parameter verbose must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+# FLAG SCRIPT START
+
+  if (verbose >= 1) {
+    cat("Starting gl2demelerate: Outputing data to demelerate format\n")
+  }
+  
+# DO THE JOB
+  
 
 # Convert the genlight data to a form expected by demerelate
   # Strategy is to create two identical genlight objects, converted to matricies, then
@@ -53,6 +70,10 @@ gl2demerelate <- function(gl) {
   names(df)[1] <- "Sample-ID"
   names(df)[2] <- "Population"
 #  df[,2] <- factor(df[,2])
+
+  if (verbose >= 1) {
+    cat("Completed: gl2demelerate\n")
+  }
 
   return(df)
 }

@@ -9,14 +9,15 @@
 #' @param save switch if results are saved in a file
 #' @param nchunks how many subchunks will be used (the less the faster, but if the routine crashes more bits are lost
 #' @param ncores how many cores should be used
-#' @param chunkname the name of the chunks for saving, default is NULL 
+#' @param chunkname the name of the chunks for saving [default is NULL]
+#' probar if TRUE, a progress bar is displayed for long loops [default = TRUE]
 #' @return returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed. The final output is a data frame that holds all statistics of pairwise LD between loci. (See ?LD in package genetics for details).
 #' @export
 #' @importFrom data.table rbindlist setnames
 #' @import parallel 
 #' @import foreach
 #' @importFrom doParallel registerDoParallel
-#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
 gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL)
@@ -174,7 +175,7 @@ gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkna
   ldchunks <- list()
   cl<-makeCluster(ncores) #adjust the number of cores of your computer!!!!
   registerDoParallel(cl)
-  pb <- txtProgressBar(min=0, max=nchunks, style=3, initial=NA)
+  if(probar){pbar <- txtProgressBar(min=0, max=nchunks, style=3, initial=NA)}
   for (i in 1:nchunks)
   {
     iter <- splitruns[[i]]
@@ -197,7 +198,7 @@ gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkna
         res
         }
   ldchunks[[i]] <-as.data.frame(ll)
-  setTxtProgressBar(pb, i)
+  if(probar){setTxtProgressBar(pbar, i)}
   ldc <- ldchunks[[i]]
   save(ldc, file=paste0("LD_chunks_",chunkname,"_",i+chunknr,".rdata"))
   }

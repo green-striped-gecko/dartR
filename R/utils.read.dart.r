@@ -7,53 +7,52 @@
 #' @param lastmetric specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.
 #' @return a list of length 5. #dart format (one or two rows) #individuals, #snps, #non genetic metrics, #genetic data (still two line format, rows=snps, columns=individuals)
 
-
-
-
-read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="RepAvg")
-{
+utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="RepAvg"){
   
-  if (is.null(topskip))
-  {
-  cat("Topskip not provided. Try to guess topskip...\n")    
-  tdummy <- read.csv(filename,   na.strings=nas,  check.names=FALSE, nrows = 20, header=FALSE)
+  if (is.null(topskip)) {
+    cat("Topskip not provided. Guessing topskip...\n")    
+    tdummy <- read.csv(filename,   na.strings=nas,  check.names=FALSE, nrows = 20, header=FALSE)
   
-  nskip <- sum(tdummy[,1]=="*"  )
-  if (nskip>0) { topskip <- nskip; cat(paste("Set topskip to ", nskip,". Trying to proceed...\n"))} else {
-    stop("Could not determine topskip (the number of rows that need to be skipped. Please provide it manually.\n") 
-    
-  }
+    nskip <- sum(tdummy[,1] == "*"  )
+    if (nskip > 0) { 
+      topskip <- nskip; cat(paste("Set topskip to ", nskip,". Proceeding ...\n"))
+    } else {
+      stop("Could not determine topskip (the number of rows that need to be skipped. Please provide it manually.\n") 
+    }
   }
 
-  
-  
+  snpraw <- read.csv(filename, na.strings=nas, skip = topskip, check.names=FALSE)
 
-  
-  snpraw <- read.csv(filename,   na.strings=nas, skip = topskip, check.names=FALSE)
-
-
-  if (is.character(lastmetric))
-  {
+  if (is.character(lastmetric)) {
     lmet <- which(lastmetric==names(snpraw))
-    if (length(lmet)==0)  stop (paste("Could not determine data columns based on", lastmetric,"!\n"))
-  } else lmet  <- lastmetric
+    if (length(lmet)==0)  {
+      stop (paste("Could not determine number of data columns based on", lastmetric,"!\n"))
+    }  
+  } else {
+    lmet  <- lastmetric
+  }  
   
   ind.names <- colnames(snpraw)[(lmet+1):ncol(snpraw) ]
   ind.names <- trimws(ind.names, which = "both") #trim for spaces
-  if (length(ind.names)!= length(unique(ind.names))) stop("Individual names are not unique. You need to change them!\n")
+  if (length(ind.names)!= length(unique(ind.names))) {
+    stop("Individual names are not unique. You need to change them!\n")
+  }  
   
   datas <- snpraw[, (lmet+1):ncol(snpraw)]
   
   nrows = NULL
-  if (is.null(nrows)) 
-  {
+  if (is.null(nrows)) {
     cat("Trying to determine if one row or two row format...\n")
     gnrows = 3-max(datas, na.rm = TRUE)  #if max(datas==1) then two row format, if two then one row format
     
-    if (gnrows==1 | gnrows==2)  {nrows <-gnrows;  cat(paste("Found ", nrows , " row(s) format. Proceed...\n"))} else stop("The dart format either one row or two row format. This does not seem to be the case here.\n")
+    if (gnrows==1 | gnrows==2)  {
+      nrows <-gnrows
+      cat(paste("Found ", nrows , " row(s) format. Proceed...\n"))
+    } else {
+      stop("The dart format either one row or two row format. This does not seem to be the case here.\n")
+    }
+    
   } 
-  
-  
   
   stdmetricscols <- 1:lmet
   # 
@@ -96,7 +95,9 @@ read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="RepAvg")
   ### there should be only twos (and maybe fours)
   tt <- table(table(covmetrics$uid) )
   cat(paste("Number of rows per Clone. Should be only ", nrows,"s:", names(tt),"\n "))
-  if (nrows!=as.numeric(names(tt))) cat("!!!!!Number of rows per clone does not fit with nrow format. Most likely your data are not read in correctly.!!!!!\n") 
+  if (nrows!=as.numeric(names(tt))) {
+    cat("!!!!!Number of rows per clone does not fit with nrow format. Most likely your data are not read in correctly.!!!!!\n") 
+  }  
   nind <- ncol(datas)
   nsnp <- nrow(covmetrics)/nrows
   
@@ -105,6 +106,5 @@ read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="RepAvg")
   out <- list(nrows=nrows, nind=nind, nsnp=nsnp, covmetrics= covmetrics, gendata =datas)
   
   out
-  
   
 }

@@ -5,7 +5,7 @@
 #' @param gl genlight object containing the SNP genotypes  [required]
 #' @param spectrumplot switch to provide a plot [TRUE]
 #' @param confiplot switch if confidence intervals (1 sd) should be drawn [default: FALSE]
-#' @param probar report on progress. Silent if set to FALSE. [Default is TRUE]
+#' @param pbar report on progress. Silent if set to FALSE. [Default is TRUE]
 #' @param table prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.
 #' 
 #' @return a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
@@ -23,14 +23,14 @@
 # adjust calculation of betas for population sizes (switch)
 
 
-gl.diversity <- function(gl, spectrumplot=TRUE,confiplot=FALSE, probar=TRUE, table="DH") {
+gl.diversity <- function(gl, spectrumplot=TRUE,confiplot=FALSE, pbar=TRUE, table="DH") {
 
 if  (is.null(pop(gl)))  pop(gl)<- factor(rep("all", nInd(gl)))
 
 #split in pops
 pops <- seppop(gl)
 
-if (probar){
+if (pbar){
 pb <- txtProgressBar(0,8, style = 3, width = 20) 
 cat(" Counting missing loci...           ")     
 }
@@ -39,7 +39,7 @@ cat(" Counting missing loci...           ")
 nlocpop <- lapply(pops, function(x) sum(!is.na(colMeans(as.matrix(x), na.rm = T))))
 #nlocpop$totalloc <- nLoc(gl)
 
-if (probar){
+if (pbar){
 setTxtProgressBar(pb, 1)
 cat(" Calculating zero_H/D_alpha ...           ")
 ##0Halpha (average number of alleles, ignoring missing values and sd)
@@ -53,7 +53,7 @@ zero_H_alpha_sd <- unlist(lapply(zero_H_alpha_es, function(x) x[[2]]))
 zero_D_alpha <- unlist(lapply(zero_H_alpha_es, function(x) x[[3]]))
 zero_D_alpha_sd <- unlist(lapply(zero_H_alpha_es, function(x) x[[4]]))
 
-if (probar){
+if (pbar){
 setTxtProgressBar(pb, 2)
 cat(" Calculating one_H/D_alpha ...          ")
 }
@@ -72,7 +72,7 @@ one_H_alpha <- unlist(lapply(one_H_alpha_es, function(x) x[[1]]))
 one_H_alpha_sd <- unlist(lapply(one_H_alpha_es, function(x) x[[2]]))
 one_D_alpha <- unlist(lapply(one_H_alpha_es, function(x) x[[3]]))
 one_D_alpha_sd <- unlist(lapply(one_H_alpha_es, function(x) x[[4]]))
-if (probar){
+if (pbar){
 setTxtProgressBar(pb, 3)
 cat(" Calculating two_H/D_alpha ...           ")
 }
@@ -100,7 +100,7 @@ npops <- length(pops)
 
 if (npops>1)
 {
-if(probar){
+if(pbar){
   setTxtProgressBar(pb, 4)
   cat(" Counting pairwise missing loci...")  
 }
@@ -118,7 +118,7 @@ mat_nloc_pops <- matrix(NA, nrow = npops, ncol = npops)
 mat_nloc_pops[lower.tri(mat_nloc_pops)] <- nlocpairpop
 colnames(mat_nloc_pops) <- rownames(mat_nloc_pops) <- names(pops)
 
-if (probar){
+if (pbar){
 setTxtProgressBar(pb, 5)
 cat(" Calculating zero_H/D_beta ...         ")
 }
@@ -159,7 +159,7 @@ mat_zero_D_beta[lower.tri(mat_zero_D_beta)] <- zero_D_beta
 mat_zero_D_beta[pairs] <- zero_D_beta_sd
 colnames(mat_zero_D_beta) <- rownames(mat_zero_D_beta) <- names(pops)
 
-if (probar){
+if (pbar){
   setTxtProgressBar(pb, 6)
   cat(" Calculating one_H/D_beta ...    ")
 }
@@ -197,7 +197,7 @@ mat_one_D_beta[lower.tri(mat_one_D_beta)] <- one_D_beta
 mat_one_D_beta[pairs] <- one_D_beta_sd
 colnames(mat_one_D_beta) <- rownames(mat_one_D_beta) <- names(pops)
 
-if (probar){
+if (pbar){
   setTxtProgressBar(pb, 7)
   cat(" Calculating two_H/D_beta...    ")
 }
@@ -242,7 +242,7 @@ colnames(mat_two_D_beta) <- rownames(mat_two_D_beta) <- names(pops)
 } # npops>1  
 
 
-if (probar){
+if (pbar){
   setTxtProgressBar(pb, 8)
   cat(" Done.                               ")
 }

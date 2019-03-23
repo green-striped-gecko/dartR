@@ -8,7 +8,7 @@
 #' @param obs -- observed number of fixed differences between the two populations [required]
 #' @param reps -- number of replications to undertake in the simulation [default 1000]
 #' @param delta -- the threshold value for the minor allele frequency to regard the difference between two populations to be fixed [default 0.02]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A list containing the following square matricies
 #'         [[1]] observed fixed differences;
 #'         [[2]] mean expected number of false positives for each comparison;
@@ -16,11 +16,11 @@
 #'         [[4]] probability the observed fixed differences arose by chance for each comparison;
 #' @export
 #' @importFrom stats pnorm rbinom
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 
-gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=2) {
+gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, verbose=2) {
   
-  if (v > 0) {
+  if (verbose > 0) {
     cat("Starting gl.utils.fdsim: Using simulation to estimate frequency of false positives\n")
   }
   # Determine data type
@@ -40,21 +40,21 @@ gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=2) {
   
   # Extract the data for the two nominated populations
   if (length(poppair) == 2) {
-    pair <- gl.keep.pop(gl, poppair, recalc=FALSE, mono.rm = TRUE, v=v)
+    pair <- gl.keep.pop(gl, poppair, recalc=FALSE, mono.rm = TRUE, verbose=verbose)
   } else {
     cat("Fatal Error: Must specify two populations labels from the genlight object, e.g. poppair=c(popA,popB)\n")
     stop("Execution terminated\n")
   }  
 
-  if (v > 1) {cat("Comparing ",poppair[1],"and",poppair[2],"\n")}
-  if (v > 2) {
+  if (verbose > 1) {cat("Comparing ",poppair[1],"and",poppair[2],"\n")}
+  if (verbose > 2) {
     cat("Sample sizes:",table(pop(pair)),"\n")
     cat("No. of loci:",nLoc(pair),"\n")
     cat("No. of observed fixed differences:",obs,"\n")
   }
 
   # Calculate the percentage frequencies
-  rf <- gl.percent.freq(pair, v=v)
+  rf <- gl.percent.freq(pair, verbose=verbose)
   
   # Disaggregate the data for the two populations
   rfA <- rf[rf$popn==poppair[1],]
@@ -75,7 +75,7 @@ gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=2) {
   }
 
   # Calculate the rate of false positives, given delta and actual sample sizes
-  if (v > 1) {
+  if (verbose > 1) {
     cat("Calculating false positive rate with",reps,"replications. Please be patient\n")
   }
   for (j in 1:reps){ # Repeat reps times
@@ -111,7 +111,7 @@ gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=2) {
   # Calculate the probability of the observed FD count, given the simulated result
   nprob <- pnorm(obs, mean=mn, sd=sdev, lower.tail=FALSE)
   
-  if (v > 2) {
+  if (verbose > 2) {
     cat("Threshold minor allele frequency for generating a false positive:",delta,"\n")
     cat("Estimated mean count of false positives:",round(mean(falsepos),1),"\n")
     cat("Estimated SD of the count of false positives:",round(sd(falsepos),2),"\n")
@@ -120,7 +120,7 @@ gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, v=2) {
   
   l <- list(observed=obs,mnexpected=mn,sdexpected=sdev,prob=nprob)
   
-  if (v > 0) {
+  if (verbose > 0) {
     cat("Completed gl.utils.fdsim\n\n")
   }
   return(l)
