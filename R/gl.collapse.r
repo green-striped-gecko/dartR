@@ -20,7 +20,6 @@
 #'         [[5]] $nloc -- total number of loci used in each comparison;
 #'         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation];
 #'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
-#' @import adegenet
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples

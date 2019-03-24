@@ -13,6 +13,7 @@
 #' @param top -- a flag to indicate whether or not plot only those eigenvalues greater in value than the average for the
 #'        unordinated original variables (top=TRUE) or to plot all eigenvalues (top=FALSE). If top=FALSE, then a
 #'        reference line showing the average eigenvalue for the unordinated variables is shown. [default TRUE]
+#' @param verbose specifies is completion of the function should be output to the console.
 #' @return The scree plot
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -22,7 +23,7 @@
 
 # Last amended 3-Feb-19
 
-gl.pcoa.scree <- function(x, top=TRUE) {
+gl.pcoa.scree <- function(x, top=TRUE, verbose=0) {
 
 # TIDY UP FILE SPECS
 

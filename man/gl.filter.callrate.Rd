@@ -5,7 +5,8 @@
 \title{Filter loci or specimens in a genlight \{adegenet\} object based on call rate}
 \usage{
 gl.filter.callrate(x, method = "loc", threshold = 0.95,
-  mono.rm = TRUE, recalc = FALSE, plot = FALSE, v = 2)
+  mono.rm = FALSE, recalc = FALSE, recursive = FALSE, plot = FALSE,
+  bins = 25, verbose = 2)
 }
 \arguments{
 \item{x}{name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
@@ -14,13 +15,17 @@ gl.filter.callrate(x, method = "loc", threshold = 0.95,
 
 \item{threshold}{-- threshold value below which loci will be removed [default 0.95]}
 
-\item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
+\item{mono.rm}{-- Remove monomorphic loci [default FALSE]}
 
 \item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]}
 
-\item{plot}{specify if a histogram of call rate is to be produced [default FALSE]}
+\item{recursive}{-- Repeatedly filter individuals on call rate, each time removing monomorphic loci. Only applies if method="ind" and mono.rm=TRUE [default FALSE]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{plot}{specify if histograms of call rate, before and after, are to be produced [default FALSE]}
+
+\item{bins}{-- number of bins to display in histograms [default 25]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 The reduced genlight or genind object, plus a summary
@@ -37,10 +42,11 @@ Recalculaton after filtering remains optional, with no recalculation as the defa
 
 Note that when filtering individuals on call rate, the initial call rate is calculated and compared against the threshold. After filtering, if mono.rm=TRUE, the removal of
 monomorphic loci will alter the call rates. Some individuals with a call rate initially greater than the nominated threshold, and so retained, may come to have a call rate
-lower than the threshold. If this is a problem, repeated iterations of this function will resolve the issue.
+lower than the threshold. If this is a problem, repeated iterations of this function will resolve the issue. This is done by setting mono.rm=TRUE and recursive=TRUE, 
+or it can be done manually.
 }
 \examples{
-result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8)
+result <- gl.filter.callrate(testset.gl, plot=TRUE, method="ind", threshold=0.8, verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

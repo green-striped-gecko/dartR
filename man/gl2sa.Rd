@@ -4,10 +4,12 @@
 \alias{gl2sa}
 \title{Convert genlight objects to the format used in the SNPassoc package}
 \usage{
-gl2sa(x)
+gl2sa(x, verbose = 2)
 }
 \arguments{
-\item{x}{-- genlight object}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
+
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 Returns an object of class 'snp' to be used with \pkg{SNPassoc}
@@ -18,6 +20,9 @@ This function exports a genlight object into a SNPassoc object. See \link[SNPass
 \examples{
 gl2plink(testset.gl)
 }
+\references{
+Gonz?lez, J.R., Armengol, L., Sol?, X., Guin?, E., Mercader, J.M., Estivill, X. and Moreno, V. (2017). SNPassoc: an R package to perform whole genome association studies. Bioinformatics 23:654-655.
+}
 \author{
-Bernd Guber (glbugs@aerg.canberra.edu.au)
+Bernd Guber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

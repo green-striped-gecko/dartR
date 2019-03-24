@@ -4,12 +4,12 @@
 \alias{utils.recalc.callrate}
 \title{A utility script to recalculate the callrate by locus after some populations have been deleted}
 \usage{
-utils.recalc.callrate(x, v = 2)
+utils.recalc.callrate(x, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 The modified genlight object
@@ -21,7 +21,13 @@ but the call rate will change when some individuals are removed from the dataset
 and places these recalculated values in the appropriate place in the genlight object.
 }
 \examples{
-#result <- dartR:::utils.recalc.callrate(testset.gl)
+#result <- utils.recalc.callrate(testset.gl)
+}
+\seealso{
+\code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.avgpic} for recalculating avgPIC,
+\code{utils.recalc.freqhomref} for recalculating frequency of homozygous reference, \code{utils.recalc.freqhomsnp} for recalculating frequency of homozygous alternate,
+\code{utils.recalc.freqhet} for recalculating frequency of heterozygotes, \code{gl.recalc.maf} for recalculating minor allele frequency,
+\code{gl.recalc.rdepth} for recalculating average read depth
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

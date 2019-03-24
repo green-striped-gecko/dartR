@@ -23,7 +23,6 @@
 #' @return NULL, plots an interactive 3D plot of the ordination in a separate window
 #' @export
 #' @importFrom pca3d pca3d
-#' @import adegenet
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' library(rgl)  #needed for the example
@@ -32,12 +31,11 @@
 
 # Last amended 3-Feb-19
 
-gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,
-                            shape="sphere", radius=2, legend="topright", verbose=2) {
+gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  shape="sphere", radius=2, legend="topright", verbose=2) {
 
 # TIDY UP FILE SPECS
 
-  outfilespec <- file.path(outpath, outfile)
+  #outfilespec <- file.path(outpath, outfile)
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
@@ -58,7 +56,7 @@ gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,
   }
 
   # Work around a bug in adegenet if genlight object is created by subsetting
-    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+    gl@other$loc.metrics <- gl@other$loc.metrics[1:nLoc(gl),]
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(gl)) | is.na(length(pop(gl))) | length(pop(gl)) <= 0) {

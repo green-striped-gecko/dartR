@@ -59,7 +59,10 @@ Imports:
     mmod,
     PopGenReport,
     gdistance, 
-    hierfstat
+    hierfstat,
+    poppr,
+    HardyWeinberg,
+    raster
 Suggests:
     knitr,
     rmarkdown,

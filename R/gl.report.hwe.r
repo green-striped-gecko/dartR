@@ -16,7 +16,6 @@
 #' more expensive, but applies a Fisher Exact Test of departure from HWE.
 #' 
 #' @param x -- a genlight object containing the SNP genotypes [Required]
-#' @param p -- level of significance (per locus) [Default 0.05]
 #' @param subset -- either, list populations to combine in the analysis | each | all [Default "each"] 
 #' @param plot -- if TRUE,  will produce a Ternary Plot(s) [default FALSE]
 #' @param method -- for determining the statistical signicance in the ternary plot: ChiSquare (with continuity correction) | Fisher [default "ChiSquare"]
@@ -81,7 +80,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   #### Interpret options
   
   if (subset[1] == "all") {
-    gl <- gl.filter.monomorphs(x,v=0)
+    gl <- gl.filter.monomorphs(x,verbose=0)
     if(nPop(gl) > 1) {
       cat("  Pooling all populations for HWE calculations\n")
       cat("  Warning: Significance of tests may indicate heterogeneity among populations\n\n")
@@ -93,7 +92,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   } else if (subset[1] == "each") {
     if (nPop(x) == 1){
       cat("  Calculating HWE for population",popNames(x))
-      gl <- gl.filter.monomorphs(x,v=0)
+      gl <- gl.filter.monomorphs(x,verbose=0)
       flag <- 1
     } else {
       cat("  Analysing each population separately\n")
@@ -104,7 +103,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   } else if(nPop(x[pop(x) %in% subset])){
       gl <- x[pop(x) %in% subset]
       gl@other$loc.metrics <- gl@other$loc.metrics[1:nLoc(gl),] #adegenet bug
-      gl <- gl.filter.monomorphs(gl,v=0)
+      gl <- gl.filter.monomorphs(gl,verbose=0)
       if (nPop(gl) == 1){
         cat("  Calculating HWE for population",popNames(gl),"\n")
         flag <- 1
@@ -153,7 +152,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
     npops2plot <- nPop(x)
     for (i in poplist) {
       count <- count + 1
-      ii <- gl.filter.monomorphs(i,v=0)
+      ii <- gl.filter.monomorphs(i,verbose =0)
       if (nLoc(ii) == 0){
         cat("  Warning: No heteromorphic loci in population",popNames(i),"... skipped\n")
         count <- count - 1
@@ -161,11 +160,11 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
         next
       }
       if (count == 1) {
-        result <- utils.hwe(ii, prob=p)
+        result <- utils.hwe(ii, prob=alpha)
         Population <- rep(names(poplist)[count],nrow(result))
         result <- cbind(Population,result)
       } else {
-        r <- utils.hwe(ii, prob=p)
+        r <- utils.hwe(ii, prob=alpha)
         Population <- rep(names(poplist)[count],nrow(r))
         r <- cbind(Population,r)
         result <- rbind(result, r)
@@ -194,7 +193,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
  
     # Plot the tertiary plots
     for (i in poplist) {
-      ii <- gl.filter.monomorphs(i,v=0)
+      ii <- gl.filter.monomorphs(i,verbose=0)
       if (nLoc(ii) == 0){
         next
       }
@@ -225,15 +224,15 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   #### Report the results
   
   rprob <- as.numeric(as.character(result$Prob))
-  result <- result[(rprob>0 & rprob<=p),]
+  result <- result[(rprob>0 & rprob<=alpha),]
   result <- result[order(result$Locus),]
   cat("Reporting significant departures from Hardy-Weinberg Equilibrium\n")
   if (nrow(result)==0){
     cat("No significant departures\n")
   } else {
-    cat("NB: Departures significant at the alpha level of",p,"are listed\n")
-    if (p > 0.05) {
-      cat("ns --",p,"< p < 0.05; * -- 0.05 < p < 0.01; ** -- 0.01 < p < 0.001; etc\n")
+    cat("NB: Departures significant at the alpha level of",alpha,"are listed\n")
+    if (alpha > 0.05) {
+      cat("ns --",alpha,"< p < 0.05; * -- 0.05 < p < 0.01; ** -- 0.01 < p < 0.001; etc\n")
     } else {
       cat("ns -- p > 0.05; * -- 0.05 < p < 0.01; ** -- 0.01 < p < 0.001; etc\n")
     }

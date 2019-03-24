@@ -20,7 +20,6 @@
 #' @param p -- The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [0.5]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A matrix of distances between populations (class dist)
-#' @import adegenet
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
 #' @importFrom reshape2 dcast

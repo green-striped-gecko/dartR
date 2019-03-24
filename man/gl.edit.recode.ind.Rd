@@ -4,11 +4,11 @@
 \alias{gl.edit.recode.ind}
 \title{Create or edit a individual (=specimen) names and create an recode_ind file}
 \usage{
-gl.edit.recode.ind(gl, ind.recode = NULL, recalc = TRUE,
-  mono.rm = TRUE, v = 1)
+gl.edit.recode.ind(x, ind.recode = NULL, recalc = TRUE,
+  mono.rm = TRUE, verbose = 1)
 }
 \arguments{
-\item{gl}{Name of the genlight object for which individuals are to be relabelled.[required]}
+\item{x}{Name of the genlight object for which individuals are to be relabelled.[required]}
 
 \item{ind.recode}{Name of the file to output the new assignments [optional]}
 
@@ -16,7 +16,7 @@ gl.edit.recode.ind(gl, ind.recode = NULL, recalc = TRUE,
 
 \item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
 
-\item{v}{-- v=0, silent; v=1, low verbosity; v=2, high verbosity [default 1]}
+\item{verbose}{-- verbose=0, silent; verbose=1, low verbosity; verbose=2, high verbosity [default 1]}
 }
 \value{
 An object of class ("genlight") with the revised individual labels
@@ -51,7 +51,6 @@ gl <- gl.edit.recode.ind(testset.gl)
 gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
 gl <- gl.edit.recode.ind(testset.gl, ind.recode="ind.recode.table.csv")
 }
-#Ammended Georges 9-Mar-17
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

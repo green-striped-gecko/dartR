@@ -7,7 +7,6 @@
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A matrix with allele frequencies (genelight) or presence/absence frequencies (genind) broken down by population and locus
 #' @export
-#' @import adegenet
 #' @importFrom reshape2 melt
 #' @importFrom plyr ddply
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

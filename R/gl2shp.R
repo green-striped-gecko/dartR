@@ -1,11 +1,11 @@
 #' Convert genlight objects to ESRI shapefiles or kml files
 #'
 #' This function exports cordinates in a genlight object to a point shape file (including also individual meta data if available).
-#' Coordinates are provided under gl@other$latlong and assumed to be in WGS84 coordinates, if not proj4 string is provided.
-#' @param gl -- name of the genlight object containing the SNP data and location data, lat longs  [required]
+#' Coordinates are provided under x@other$latlong and assumed to be in WGS84 coordinates, if not proj4 string is provided.
+#' @param x -- name of the genlight object containing the SNP data and location data, lat longs  [required]
 #' @param type -- type of output "kml" or "shp" [default 'shp']
 #' @param proj4 -- proj4string of data set (see spatialreference.org for projections) [default WGS84]
-#' @param outfile -- name (path) of the output shape file [default 'gl']
+#' @param outfile -- name (path) of the output shape file [default 'gl']. shp extension is added automatically.
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @export
@@ -16,7 +16,7 @@
 #' @examples
 #' gl2shp(testset.gl)
 
-gl2shp <- function(gl, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",  outfile="gl", outpath=tempdir(), verbose=2){
+gl2shp <- function(x, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",  outfile="gl", outpath=tempdir(), verbose=2){
 
 # TIDY UP FILE SPECS
 
@@ -56,25 +56,25 @@ gl2shp <- function(gl, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
-  if (is.null(gl@other$latlong)){stop("Fatal Error: No coordinates provided in slot: gl@other$latlong\n")}
+  if (is.null(x@other$latlong)){stop("Fatal Error: No coordinates provided in slot: gl@other$latlong\n")}
 
-  if (nrow(gl@other$latlong)!=nInd(gl)){stop("Fatal Error: Number of coordinates provided is different from the number of individuals in the data set\n")}
+  if (nrow(x@other$latlong)!=nInd(x)){stop("Fatal Error: Number of coordinates provided is different from the number of individuals in the data set\n")}
 
   #check if names are given as lat long instead lat lon
-  if (sum(match(names(gl@other$latlong),"long"), na.rm=T)==1) {
+  if (sum(match(names(x@other$latlong),"long"), na.rm=T)==1) {
     cat("  Warning: Names given as lat long, instead of lat lon. Rectifying\n")
-    gl@other$latlong$lon <- gl@other$latlong$long
+    x@other$latlong$lon <- x@other$latlong$long
   }  
   
 # DO THE JOB
   
-  glpoints <- gl@other$ind.metrics
-  glpoints$lat <- gl@other$latlong$lat
-  glpoints$lon <- gl@other$latlong$lon
+  glpoints <- x@other$ind.metrics
+  glpoints$lat <- x@other$latlong$lat
+  glpoints$lon <- x@other$latlong$lon
   
-  toremove <- which(!complete.cases(gl@other$latlong))
+  toremove <- which(!complete.cases(x@other$latlong))
   if (verbose >= 2) {cat(paste("Removed", length(toremove),"individual(s) due to missing coordinates.\n" ))}
-  if (verbose >= 2 & (length(toremove) > 0)) {cat(paste("Removed: ", indNames(gl)[toremove],"\n"))}
+  if (verbose >= 2 & (length(toremove) > 0)) {cat(paste("Removed: ", indNames(x)[toremove],"\n"))}
   glpoints <- glpoints[complete.cases(glpoints),]
   
   glpoints$id <- 1:nrow(glpoints)

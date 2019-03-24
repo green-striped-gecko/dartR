@@ -4,14 +4,21 @@
 \alias{gl.report.hwe}
 \title{Reports departure from Hardy-Weinberg Equilibrium}
 \usage{
-gl.report.hwe(gl, p = 0.05, subset = "each")
+gl.report.hwe(x, subset = "each", plot = FALSE, method = "ChiSquare",
+  alpha = 0.05, bonf = TRUE)
 }
 \arguments{
-\item{gl}{-- a genlight object containing the SNP genotypes [Required]}
+\item{x}{-- a genlight object containing the SNP genotypes [Required]}
 
-\item{p}{-- level of significance (per locus) [Default 0.05]}
+\item{subset}{-- either, list populations to combine in the analysis | each | all [Default "each"]}
 
-\item{subset}{-- list populations to combine in the analysis | each | all [Default "all"]}
+\item{plot}{-- if TRUE,  will produce a Ternary Plot(s) [default FALSE]}
+
+\item{method}{-- for determining the statistical signicance in the ternary plot: ChiSquare (with continuity correction) | Fisher [default "ChiSquare"]}
+
+\item{alpha}{-- level of significance for testing [default 0.05]}
+
+\item{bonf}{-- if TRUE, Bonferroni correction will be applied to the level of significance [default TRUE]}
 }
 \value{
 a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
@@ -21,23 +28,33 @@ and per locus significance with and without Bonferroni Correction.
 \description{
 Calculates the probabilities of agreement with H-W equilibrium based on observed
 frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
-Uses the exact calculations contained in function prob.hwe() as developed by
-Wigginton, JE, Cutler, DJ, and Abecasis, GR.
+Uses the exact calculations contained in function prob.hwe() as developed by Wigginton et al. (2005).
 }
 \details{
-#Input is a genlight {adegenet} object containing SNP genotypes (0 homozygous for reference SNP, 
-#1 heterozygous, 2 homozygous for alternate SNP).
+Tests are applied to each locus across all populations pooled (subset="all"), to each locus considered within each population treated separately
+(subset="each") or to each locus within selected populations pooled (subset=c("pop1","pop2")). Tests for HWE are
+only valid if there is no population substructure (assuming random mating), and the tests have sufficient power
+only when there is sufficient sample size (say, n individuals > 20). Note also that correction for multiple comparisons is probably required
+if you wish to place particular importance on one or a few significant departures.
 
-Tests are applied to all populations pooled (subset="all"), to each population treated separately
-(subset="each") or to selected populations (subset=c("pop1","pop2")). Tests for Hwe are
-only valid if there is no population substructure, and the tests have sufficient power
-only when there is sufficient sample size (n>20).
+A Ternary Plot is optionally produced -- see Graffelman et al.(2008) for further details. Implementation of the Ternary Plot is via package {HardyWeinberg} 
+(Graffelman (2015). The plot labels loci that depart significantly from HWE as red, and those not showing significant departure as green. 
+Two methods are used to determine significance. ChiSquare (with correction) is traditional but involves approximations; Fisher is computationally 
+more expensive, but applies a Fisher Exact Test of departure from HWE.
 }
 \examples{
-list <- gl.report.hwe(testset.gl,0.05, subset=c("EmmacMaclGeor", "EmmacCoopCully"))
-list <- gl.report.hwe(testset.gl,0.05, subset="all")
-list <- gl.report.hwe(testset.gl,0.05, subset="each")
+list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), plot=TRUE, bonf=FALSE)
+list <- gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE)
+list <- gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE)
+list <- gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
+}
+\references{
+Wigginton, J.E., Cutler, D.J., & Abecasis, G.R. (2005). A Note on Exact Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics 76:887-893.
+
+Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
+
+Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The HardyWeinberg Package. Journal of Statistical Software 64:1-23.
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

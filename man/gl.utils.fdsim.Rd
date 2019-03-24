@@ -5,7 +5,7 @@
 \title{Estimate the rate of false positives in a fixed difference analysis}
 \usage{
 gl.utils.fdsim(gl, poppair, obs = NULL, reps = 1000, delta = 0.02,
-  v = 2)
+  verbose = 2)
 }
 \arguments{
 \item{gl}{-- name of the genlight containing the SNP genotypes [required]}
@@ -18,7 +18,7 @@ gl.utils.fdsim(gl, poppair, obs = NULL, reps = 1000, delta = 0.02,
 
 \item{delta}{-- the threshold value for the minor allele frequency to regard the difference between two populations to be fixed [default 0.02]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A list containing the following square matricies
@@ -33,5 +33,5 @@ The script takes two populations and generates allele frequency profiles for the
 generated are counted, as an expectation. The script distinguished between true fixed differences (with a tolerance of delta), and false positives. The simulation is repeated a given number of times (default=1000) to provide an expectation of the number of false positives, given the observed allele frequency profiles and the sample sizes. The probability of the observed count of fixed differences is greater than the expected number of false positives is calculated.
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

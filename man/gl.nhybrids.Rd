@@ -5,10 +5,11 @@
 \title{Create an input file for the program NewHybrids and run it if NewHybrids is installed}
 \usage{
 gl.nhybrids(gl, outfile = "nhyb.txt", outpath = tempdir(), p0 = NULL,
-  p1 = NULL, t = 0, method = "random", nhyb.directory = NULL,
-  BurnIn = 10000, sweeps = 10000, GtypFile = "TwoGensGtypFreq.txt",
+  p1 = NULL, threshold = 0, method = "random", plot = TRUE,
+  pprob = 0.95, nhyb.directory = NULL, BurnIn = 10000,
+  sweeps = 10000, GtypFile = "TwoGensGtypFreq.txt",
   AFPriorFile = NULL, PiPrior = "Jeffreys", ThetaPrior = "Jeffreys",
-  v = 2)
+  verbose = 2)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing the SNP data [required]}
@@ -21,9 +22,15 @@ gl.nhybrids(gl, outfile = "nhyb.txt", outpath = tempdir(), p0 = NULL,
 
 \item{p1}{-- list of populations to be regarded as parental population 1 [default NULL]}
 
-\item{t}{-- sets the level at which a gene frequency difference is considered to be fixed [default 0]}
+\item{threshold}{-- sets the level at which a gene frequency difference is considered to be fixed [default 0]}
 
 \item{method}{-- specifies the method (random or AvgPIC) to select 200 loci for NewHybrids [default random]}
+
+\item{plot}{-- if TRUE, a plot of the frequency of homozygous reference, heterozygotes and
+homozygous alternate (SNP) is produced for the F1 individuals [default TRUE, applies only 
+if both parental populations are specified]}
+
+\item{pprob}{-- threshold level for assignment to likelihood bins [default 0.95, used only if plot=TRUE]}
 
 \item{nhyb.directory}{-- directory that holds the NewHybrids executable file e.g. C:/NewHybsPC [default NULL]}
 
@@ -39,30 +46,30 @@ gl.nhybrids(gl, outfile = "nhyb.txt", outpath = tempdir(), p0 = NULL,
 
 \item{ThetaPrior}{-- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-The reduced genlight object, if parentals are provided; output of NewHybrids to disk
+The reduced genlight object, if parentals are provided; output of NewHybrids is saved to disk
 }
 \description{
 This function compares two sets of parental populations to identify loci
 that exhibit a fixed difference, returns an genlight object with the reduced data,
-and creates an input file for the program NewHybrids using the top 200 loci. In
+and creates an input file for the program NewHybrids using the top 200 (or hard specified loc.limit) loci. In
 the absence of two identified parental populations, the script will
-select a random set 200 loci only (method=random) or the first 200 loci ranked
-on information content (AvgPIC).
+select a random set 200 loci only (method="random") or the first 200 loci ranked
+on information content (method="AvgPIC").
 }
 \details{
 A fixed difference occurs when a SNP allele is present in all individuals
 of one population and absent in the other. There is provision for setting
-a level of tollerance, e.g. t = 0.05 which considers alleles present
+a level of tollerance, e.g. threshold = 0.05 which considers alleles present
 at greater than 95% in one population and less than 5% in the other to be
 a fixed difference. Only the 200 loci are retained, because of limitations
 of NewHybids.
 
 If you specify a directory for the NewHybrids executable file, then the script
 will create the input file from the snp data then run NewHybrids. If the directory
-is set to NULL, the exectution will stop once the input file (nhyb.txt) has been 
+is set to NULL, the exectution will stop once the input file (default="nhyb.txt") has been 
 written to disk.
 
 Refer to the New Hybrids manual for further information on the parameters to set
@@ -70,21 +77,28 @@ Refer to the New Hybrids manual for further information on the parameters to set
 
 It is important to stringently filter the
 data on RepAvg and CallRate if using the random option. One might elect to repeat
-the analysis (method=random) and combine the resultant posterior probabilites
+the analysis (method="random") and combine the resultant posterior probabilites
 should 200 loci be considered insufficient.
+
+The F1 individuals should be homozygous at all loci for which the parental populations are fixed 
+and different, assuming parental populations have been specified. Sampling errors 
+can result in this not being the case, especially where the sample
+sizes for the parental populations are small. Alternatively, the threshold for posterior
+probabilities used to determine assignment (pprob) or the definition of a fixed difference (threshold) 
+may be too lax. To assess the error rate in the determination
+of assignment of F1 individuals, a plot of the frequency of homozygous reference, heterozygotes and
+homozygous alternate (SNP) can be produced by setting plot=TRUE (the default).
 }
 \examples{
 \dontrun{
-m <- gl.nhybrids(testset.gl, c("Pop1", "Pop4"), c("Pop7", "Pop9"), t=0, method="random")
-
 m <- gl.nhybrids(testset.gl, outfile="nhyb.txt", 
 p0=NULL, p1=NULL, 
-nhyb.directory="C:/workspace/R_analysis/NewHybsPC",
+nhyb.directory="C:/workspace/R/NewHybsPC",
 BurnIn=100,
-sweeps=1000,
-v=3)
+sweeps=100,
+verbose=3)
 }
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

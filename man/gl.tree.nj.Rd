@@ -4,19 +4,22 @@
 \alias{gl.tree.nj}
 \title{Output an nj tree to summarize genetic similarity among populations}
 \usage{
-gl.tree.nj(gl, type = "phylogram", outgroup = NULL, labelsize = 0.7)
+gl.tree.nj(x, type = "phylogram", outgroup = NULL, labelsize = 0.7,
+  verbose = 2)
 }
 \arguments{
-\item{gl}{-- Name of the genlight object containing the SNP data or a genind object containing presence absence data [required]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{type}{-- Type of dendrogram phylogram|cladogram|fan|unrooted [Default Phylogram]}
 
 \item{outgroup}{-- Vector containing the population names that are the outgroups [Default NULL]}
 
 \item{labelsize}{-- Size of the labels as a proportion of the graphics default [Default 0.7]}
+
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-A tree file of type phylo
+A tree file of class phylo
 }
 \description{
 This function is a wrapper for the nj\{ape\} function applied to Euclidian
@@ -26,5 +29,5 @@ distances calculated from the genlight object.
 gl.tree.nj(testset.gl,type="fan")
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

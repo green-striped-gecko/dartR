@@ -5,14 +5,16 @@
 \title{Create a proforma recode_pop_table file for reassigning population names}
 \usage{
 gl.make.recode.pop(x, outfile = "recode_pop_table.csv",
-  outpath = tempdir())
+  outpath = tempdir(), verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- name of the new proforma file [default recode_pop_table.csv]}
+\item{outfile}{-- file name of the output file (including extension) [default recode_pop_table.csv]}
 
-\item{outpath}{-- path where to save the output file (set to tempdir by default)}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
+
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A vector containing the new population names

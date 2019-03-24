@@ -4,16 +4,16 @@
 \alias{gl.merge.pop}
 \title{Merge two or more populations in a genelight \{adegenet\} object into one population}
 \usage{
-gl.merge.pop(x, old = NULL, new = NULL, v = 2)
+gl.merge.pop(x, old = NULL, new = NULL, verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
+\item{x}{-- name of the genlight object containing SNP genotypes [required]}
 
 \item{old}{-- a list of populations to be merged [required]}
 
 \item{new}{-- name of the new population [required]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object with the new population assignments

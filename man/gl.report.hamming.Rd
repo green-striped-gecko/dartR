@@ -4,15 +4,24 @@
 \alias{gl.report.hamming}
 \title{Calculates the pairwise Hamming distance between DArT trimmed DNA sequences}
 \usage{
-gl.report.hamming(gl, rs = 5)
+gl.report.hamming(x, rs = 5, plot = FALSE, smearplot = FALSE,
+  probar = TRUE, verbose = 0)
 }
 \arguments{
-\item{gl}{-- genlight object [required]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 4]}
+\item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 5]}
+
+\item{plot}{specify if a histogram of Hamming distance is to be produced [default FALSE]}
+
+\item{smearplot}{if TRUE, will produce a smearplot of individuals against loci [default FALSE]}
+
+\item{probar}{-- if TRUE, then a progress bar is desplayed on long loops [default = TRUE]}
+
+\item{verbose}{level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.}
 }
 \value{
-Histogram of Hamming distance for the gl object
+Tabulation of loc that will be lost on filtering, against values of the threshold
 }
 \description{
 Hamming distance is calculated as the number of base differences between two 
@@ -35,10 +44,13 @@ If a pair of DNA sequences are of differing length, the longer is truncated.
 The algorithm is that of Johann de Jong 
 \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 as implimented in utils.hamming.r
+
+A histogram and or a smearplot can be requested. Note that the smearplot is computationally intensive, and will take time to 
+execute on large datasets.
 }
 \examples{
 gl.report.hamming(testset.gl)
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

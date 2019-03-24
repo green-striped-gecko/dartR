@@ -16,12 +16,10 @@
 #' @importFrom graphics par
 #' @importFrom plyr join
 #' @importFrom pegas heterozygosity
-#' @examples
-#' tmp <- gl.report.heterozygosity(testset.gl,plot=TRUE,verbose=3)
 
 # Last amended 3-Feb-19
 
-gl.report.heterozygosity <- function(x, plot=FALSE, cex.labels=0.7, verbose=2) {
+gl.report.heterozygosity <- function(x, plot=FALSE, cex.labels=0.7,verbose=2) {
   
 # TIDY UP FILE SPECS
 

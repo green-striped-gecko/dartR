@@ -4,7 +4,8 @@
 \alias{gl.filter.hwe}
 \title{Filters loci that show significant departure from Hardy-Weinberg Equilibrium}
 \usage{
-gl.filter.hwe(x, alpha = 0.05, basis = "any", bon = TRUE, v = 2)
+gl.filter.hwe(x, alpha = 0.05, basis = "any", bon = TRUE,
+  verbose = 2)
 }
 \arguments{
 \item{x}{-- a genlight object containing the SNP genotypes [Required]}
@@ -15,7 +16,7 @@ gl.filter.hwe(x, alpha = 0.05, basis = "any", bon = TRUE, v = 2)
 
 \item{bon}{-- apply bonferroni correction to significance levels for filtering [default TRUE]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 a genlight object with the loci departing significantly from HWE removed

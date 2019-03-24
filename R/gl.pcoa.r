@@ -10,7 +10,6 @@
 #' @param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE]
 #' @param n.cores Number of cores to use if parallel processing is requested [default 16]
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @import adegenet
 #' @return An object of class glPca containing the eigenvalues, factor scores and factor loadings
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

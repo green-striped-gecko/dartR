@@ -11,7 +11,6 @@
 #' @return NULL
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
-#' @import adegenet
 #' @importFrom utils getTxtProgressBar setTxtProgressBar txtProgressBar 
 
 gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=TRUE, verbose=2){

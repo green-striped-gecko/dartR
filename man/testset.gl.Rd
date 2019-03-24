@@ -9,7 +9,7 @@
 testset.gl
 }
 \description{
-A genlight object created via the read.dart functions
+This is a test data set on turtles. 250 individuals on >30 populations.
 }
 \author{
 Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}

@@ -2,40 +2,42 @@
 % Please edit documentation in R/gl.recode.ind.r
 \name{gl.recode.ind}
 \alias{gl.recode.ind}
-\title{Recode individual (=specimen) labels in a genelight or genind object \{adegenet\}}
+\title{Recode individual (=specimen = sample) labels in a genelight object \{adegenet\}}
 \usage{
-gl.recode.ind(x, ind.recode, recalc = TRUE, mono.rm = TRUE, v = 1)
+gl.recode.ind(x, ind.recode, recalc = FALSE, mono.rm = FALSE,
+  verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
+\item{x}{-- name of the genlight object containing SNP genotypes [required]}
 
 \item{ind.recode}{-- name of the csv file containing the individual relabelling [required]}
 
-\item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default TRUE]}
+\item{recalc}{-- if TRUE, recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]}
 
-\item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
+\item{mono.rm}{-- if TRUE, remove monomorphic loci [default FALSE]}
 
-\item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight or genind object with the recoded and reduced data
 }
 \description{
 This script recodes individual labels and/or deletes individuals from a DaRT genlight SNP file
-based on information provided in a csv file.
+based on a lookup table provided as a csv file.
 }
 \details{
 Renaming individuals may be required when there have been errors in labelling arising
 in the process from sample to DArT files. There may be occasions where renaming
-individuals is required for preparation of figures. Caution needs to be exercised
-because of the potential for breaking the "chain of evidence" between the samples themselves
-and the analyses. Recoding individuals can be done with a recode table (csv).
+individuals is required for preparation of figures. When caution needs to be exercised
+because of the potential for breaking the "chain of evidence" associated with the samples,
+recoding individuals using a recode table (csv) can provide a clear record of the changes.
 
 The script, having deleted individuals, optionally identifies resultant monomorphic loci or loci
 with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
-recalculates statistics made redundant by the deletion of individuals from the dataset.
+recalculates statistics made incorrect by the deletion of individuals from the dataset.
 
-The script returns a genlight object with the new individual labels and the recalculated locus metadata.
+The script returns a genlight object with the new individual labels, the monomorphic loci optionally removed
+and the optionally recalculated locus metadata.
 }
 \examples{
 \dontrun{
@@ -43,8 +45,9 @@ The script returns a genlight object with the new individual labels and the reca
 }
 }
 \seealso{
-\code{\link{gl.filter.monomorphs}}
+\code{\link{gl.filter.monomorphs}} for filtering monomorphs, \code{\link{gl.recalc.metrics}} for recalculating locus metrics,
+\code{\link{gl.recode.pop}} for recoding populations
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

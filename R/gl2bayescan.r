@@ -2,8 +2,7 @@
 #'
 #' The output text file contains the snp data and relevant BAyescan command lines to guide input.
 #' 
-#' @reference: Foll M and OE Gaggiotti (2008) A genome scan method to identify selected loci appropriate for both dominant and codominant markers: A Bayesian perspective. Genetics 180: 977-993.
-#' 
+
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- file name of the output file (including extension) [default bayescan.txt]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
@@ -13,6 +12,8 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl2bayescan(testset.gl)
+
+#' @references Foll M and OE Gaggiotti (2008) A genome scan method to identify selected loci appropriate for both dominant and codominant markers: A Bayesian perspective. Genetics 180: 977-993.
 
 gl2bayescan <- function(x, outfile="bayescan.txt", outpath=tempdir(), verbose=2) {
 

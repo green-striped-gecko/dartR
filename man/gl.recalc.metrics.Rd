@@ -4,12 +4,12 @@
 \alias{gl.recalc.metrics}
 \title{Recalculate locus metrics when individuals or populations are deleted from a genlight \{adegenet\} object}
 \usage{
-gl.recalc.metrics(x, v = 2)
+gl.recalc.metrics(x, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes [required]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object with the recalculated locus metadata
@@ -28,11 +28,11 @@ with all values missing and deletes them (using gl.filter.monomorphs.r).
 The script returns a genlight object with the recalculated locus metadata.
 }
 \examples{
-  gl <- gl.recalc.metrics(testset.gl, v=2)
+  gl <- gl.recalc.metrics(testset.gl, verbose=2)
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}}
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

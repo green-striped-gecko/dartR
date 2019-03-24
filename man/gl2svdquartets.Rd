@@ -5,19 +5,20 @@
 \title{Convert a genlight object to nexus format PAUP SVDquartets}
 \usage{
 gl2svdquartets(x, outfile = "svd.nex", outpath = tempdir(),
-  method = 2, v = 2)
+  method = 2, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- file name of the output file (including extension).}
+\item{outfile}{-- file name of the output file (including extension) [default svd.nex]}
 
-\item{outpath}{-- path where to save the output file (set to tempdir by default)}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
+to direct output files to your working directory.}
 
 \item{method}{-- method = 1, nexus file with two lines per individual; method = 2, nexus
 file with one line per individual, ambiguity codes [default 2]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \description{
 The output nexus file contains the snp data in one of two forms, depending upon what you regard
@@ -27,11 +28,11 @@ A second form, recommended by Dave Swofford, has
 a single line per individual, resolving heterozygous SNPs by replacing them with standard
 ambiguity codes (method=2).
 }
-\details{
-Reference: Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent, Bioinformatics, 30: 3317-3324
-}
 \examples{
 gl2svdquartets(testset.gl[1:20,1:100])
+}
+\references{
+Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent. Bioinformatics 30: 3317-3324
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

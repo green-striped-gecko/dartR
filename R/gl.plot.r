@@ -17,8 +17,8 @@
 #' @export
 #'@examples 
 #'gl.plot(bandicoot.gl[1:30,])
-#'gl.plot(foxes.gl[1:30,])
-#'gl.plot(foxes.gl[1:10,],labels=TRUE)
+#'gl.plot(bandicoot.gl[1:30,])
+#'gl.plot(bandicoot.gl[1:10,],labels=TRUE)
 
 # Last amended 3-Feb-19
 

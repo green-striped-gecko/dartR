@@ -9,7 +9,7 @@
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @param bstrap Number of bootstrap replicates [default 1]
 #' @return Matrix of Euclidean distances between populations
-#' @import adegenet utils
+#' @import utils
 #' @importFrom stats dist
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -5,7 +5,7 @@
 \title{Concatenates DArT trimmed sequences and outputs a fastA file.}
 \usage{
 gl2fasta(gl, method = 1, outfile = "output.fasta",
-  outpath = tempdir())
+  outpath = tempdir(), probar = TRUE)
 }
 \arguments{
 \item{gl}{-- name of the DArT genlight object [required]}
@@ -15,6 +15,8 @@ gl2fasta(gl, method = 1, outfile = "output.fasta",
 \item{outfile}{-- name of the output file (fasta format) [output.fasta]}
 
 \item{outpath}{-- path where to save the output file (set to tempdir by default)}
+
+\item{probar}{-- if TRUE, a progress bar will be displayed for long loops [default = TRUE]}
 }
 \value{
 A new gl object with all loci rendered homozygous
@@ -56,5 +58,5 @@ gl <- gl.filter.callrate(testset.gl,t=.98)
 gl2fasta(gl, method=1, outfile="test.fasta")
 }
 \author{
-Bernd Gruber and Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

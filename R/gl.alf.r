@@ -3,6 +3,7 @@
 #' @param gl -- a genlight object
 #' @return a simple data.frame with alf1, alf2
 #' @export
+#' @rawNamespace import(adegenet, except = plot)
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 
 gl.alf <- function(gl)

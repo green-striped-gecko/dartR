@@ -5,7 +5,8 @@
 \title{3D interactive plot of the results of a PCoA ordination}
 \usage{
 gl.pcoa.plot.3d(x, gl, title = "PCoA", xaxis = 1, yaxis = 2,
-  zaxis = 3, shape = "sphere", radius = 2, legend = "topright")
+  zaxis = 3, shape = "sphere", radius = 2, legend = "topright",
+  verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the glPca object containing the factor scores and eigenvalues [required]}
@@ -25,9 +26,11 @@ gl.pcoa.plot.3d(x, gl, title = "PCoA", xaxis = 1, yaxis = 2,
 \item{radius}{-- size of the points [default 2]}
 
 \item{legend}{-- one of bottomright, bottom, bottomleft, left, topleft, top, topright, right, center [default "bottom"]}
+
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-An interactive 3D plot of the ordination in a separate window
+NULL, plots an interactive 3D plot of the ordination in a separate window
 }
 \description{
 This script takes output from the ordination undertaken using gl.pcoa() and plots the individuals in 3D space. The visualisation
@@ -47,5 +50,5 @@ pcoa <- gl.pcoa(testset.gl, nfactor=5)
 gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

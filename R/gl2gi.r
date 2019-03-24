@@ -1,6 +1,6 @@
 #' Converts a genlight object to genind object
 #' 
-#' @param x -- a genlight object
+#' @param gl -- a genlight object
 #' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
 #' @param verbose -- level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
 #' @return A genind object, with all slots filled.
@@ -17,7 +17,7 @@ if (verbose==1) {
   cat("Once finished, we recommend to save the object using >save(object, file=\"object.rdata\")\n")
 }
 #convert to genind....
-x <- as.matrix(x[,])
+x <- as.matrix(gl[,])
 
 if (probar) {pb <- txtProgressBar(min=0, max=1, style=3, initial=NA)}
 
@@ -46,7 +46,7 @@ for (i in 1:nrow(x))
   if (probar) {setTxtProgressBar(pb, i/nrow(x))}
 
 if (verbose==1) {
-  cat("\nMatrix converted.. Prepare genind object...\n")
+  cat("\nMatrix converted.. Prepare genind object...\n")}
 }
   if (probar) {close(pb)}
 
@@ -55,10 +55,8 @@ gen@other <- gl@other
 locNames(gen)<- locNames(gl)
 
 if (verbose==1)cat(paste("Finished! Took", round(proc.time()[3]-ptm),"seconds.\n") )
-gen
-}
 
-return()
+return(gen)
 
 }
 

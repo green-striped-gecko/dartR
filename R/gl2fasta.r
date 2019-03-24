@@ -36,7 +36,6 @@
 #' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
 #' @return A new gl object with all loci rendered homozygous
 #' @export
-#' @import adegenet
 #' @importFrom seqinr write.fasta
 #' @importFrom utils combn edit flush.console getTxtProgressBar read.csv setTxtProgressBar txtProgressBar write.csv write.table
 #' @importFrom graphics axis barplot box image lines text

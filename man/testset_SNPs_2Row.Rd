@@ -6,7 +6,7 @@
 \title{Testfile in DArT format (as provided by DArT)}
 \format{csv}
 \description{
-this test data set is provided to show a typical DArT file format. Can be used to create a genlight object using the read.dart function.
+This test data set is provided to show a typical DArT file format. Can be used to create a genlight object using the read.dart function.
 }
 \author{
 Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
