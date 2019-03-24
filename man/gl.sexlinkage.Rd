@@ -4,7 +4,7 @@
 \alias{gl.sexlinkage}
 \title{Identify loci that are sex linked in specimens in a genlight \{adegenet\} object}
 \usage{
-gl.sexlinkage(x, t.het = 0, t.hom = 0, v = 2)
+gl.sexlinkage(x, t.het = 0, t.hom = 0, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -15,7 +15,7 @@ be regarded as consistent with a sex specific marker [default 0]}
 \item{t.hom}{-- tolerance, that is tf=0.05 means that 5% of the homogametic sex can be heterozygous and still
 be regarded as consistent with a sex specific marker [default 0]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 The list of sex specific loci

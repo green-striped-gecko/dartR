@@ -2,23 +2,30 @@
 % Please edit documentation in R/gl2plink.r
 \name{gl2plink}
 \alias{gl2plink}
-\title{Converts a genlight object to plink file format}
+\title{Converts a genlight object to PLINK file format}
 \usage{
-gl2plink(x, outfile = "plink.csv", outpath = tempdir())
+gl2plink(x, outfile = "plink.csv", outpath = tempdir(), verbose = 2)
 }
 \arguments{
-\item{x}{-- genlight object}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- name (path) of the output plink file [default plink.csv]}
+\item{outfile}{-- file name of the output file (including extension) [default plink.csv]}
 
-\item{outpath}{-- path of the output file. Default is to tempdir(). If to be saved in the current working directory change to "."}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
+to direct output files to your working directory.}
+
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \description{
-This function exports a genlight object into plink format and save it into a file
+This function exports a genlight object into PLINK format and save it into a file
 }
 \examples{
 gl2plink(testset.gl)
 }
+\references{
+Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira MAR, Bender D, Maller J, Sklar P, de Bakker PIW, Daly MJ & Sham PC (2007).
+PLINK: a toolset for whole-genome association and population-based linkage analysis. American Journal of Human Genetics 81:551-575.
+}
 \author{
-Bernd Guber (glbugs@aerg.canberra.edu.au)
+Bernd Guber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

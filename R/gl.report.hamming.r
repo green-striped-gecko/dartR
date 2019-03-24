@@ -28,6 +28,7 @@
 #' @param plot specify if a histogram of Hamming distance is to be produced [default FALSE] 
 #' @param smearplot if TRUE, will produce a smearplot of individuals against loci [default FALSE]
 #' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default = TRUE]
+#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
 #' @return Tabulation of loc that will be lost on filtering, against values of the threshold
 #' @importFrom adegenet glPlot
 #' @importFrom graphics hist
@@ -37,7 +38,7 @@
 #' @examples
 #' gl.report.hamming(testset.gl)
 
-gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=TRUE) {
+gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=TRUE, verbose = 0) {
   
 # TIDY UP FILE SPECS
 
@@ -58,14 +59,14 @@ gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=TRUE)
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      if (verbose >= 1){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
       pop(x) <- array("pop1",dim = nLoc(x))
       pop(x) <- as.factor(pop(x))
     }
 
   # Check for monomorphic loci
     tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 1) {cat("  Warning: genlight object contains monomorphic loci\n")}
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -132,7 +133,7 @@ gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=TRUE)
    cat("  Miniumum Hamming distance: ",round(min(d),2),"\n")
    cat("  Maximum Hamming distance: ",round(max(d),2),"\n")
    #cat("  Mean Hamming distance: ",round(mean(d),3),"\n\n")
-   cat(paste0("  Mean Hamming Distance ",mn,"+/-",sdev," SD\n\n"))
+   cat(paste0("  Mean Hamming Distance ",mean(d),"+/-",sd(d)," SD\n\n"))
 
    # Determine the loss of loci for a given filter cut-off
    retained <- array(NA,21)

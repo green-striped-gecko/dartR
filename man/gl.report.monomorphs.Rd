@@ -4,24 +4,25 @@
 \alias{gl.report.monomorphs}
 \title{Report monomorphic loci, including those with all NAs}
 \usage{
-gl.report.monomorphs(gl)
+gl.report.monomorphs(x, probar = FALSE, verbose = 0)
 }
 \arguments{
-\item{gl}{-- name of the input genlight object [required]}
-}
-\value{
-A report on loci, polymorphic, monomorphic, all NAs
+\item{x}{-- name of the input genlight object [required]}
+
+\item{probar}{-- if TRUE, a progress bar will be displayed for long loops [default = TRUE]}
+
+\item{verbose}{level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.}
 }
 \description{
 This script reports the number of monomorphic loci from a genlight \{adegenet\} object
 }
 \details{
 A DArT dataset will not have monomorphic loci, but they can arise when populations or individuals are deleted.
-Retaining monomorphic loci unnecessarily increases the size of the dataset.
+Retaining monomorphic loci may unnecessarily increases the size of the dataset.
 }
 \examples{
 gl2 <- gl.report.monomorphs(testset.gl)
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -20,6 +20,7 @@
 
 #' A genlight object created via the read.dart functions
 #'
+#' This is a test data set on turtles. 250 individuals on >30 populations.
 #' @name testset.gl
 #' @format genlight object
 #' @docType data
@@ -29,7 +30,7 @@
 
 #' Testfile in DArT format (as provided by DArT)
 #' 
-#' this test data set is provided to show a typical DArT file format. Can be used to create a genlight object using the read.dart function.
+#' This test data set is provided to show a typical DArT file format. Can be used to create a genlight object using the read.dart function.
 #' @name testset_SNPs_2Row
 #' @format csv
 #' @docType data

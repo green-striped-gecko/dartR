@@ -7,8 +7,9 @@
 #'
 #' @param x -- name of the input genlight object [required]
 #' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
+#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
 #' @return NULL
-#' @import adegenet plyr utils
+#' @import plyr utils
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -16,7 +17,7 @@
 
 # Last amended 3-Feb-19
 
-gl.report.monomorphs <- function (x, probar=FALSE) {
+gl.report.monomorphs <- function (x, probar=FALSE, verbose=0) {
   
 # TIDY UP FILE SPECS
 
@@ -39,7 +40,7 @@ gl.report.monomorphs <- function (x, probar=FALSE) {
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      if (verbose >= 1){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
       pop(x) <- array("pop1",dim = nLoc(x))
       pop(x) <- as.factor(pop(x))
     }

@@ -4,14 +4,14 @@
 \alias{gl.filter.maf}
 \title{Filter loci on the basis of minor allele frequency (MAF) in a genlight {adegenet} object}
 \usage{
-gl.filter.maf(x, threshold = 0.01, v = 2)
+gl.filter.maf(x, threshold = 0.01, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{threshold}{-- threshold MAF -- loci with a MAF less than the threshold will be removed [default 0.01]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 The reduced genlight dataset

@@ -16,5 +16,5 @@ a simple vector wiht Ho for each loci
 A very simple function to report expected Heterozygosity
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

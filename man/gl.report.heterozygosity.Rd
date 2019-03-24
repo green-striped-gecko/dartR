@@ -2,27 +2,31 @@
 % Please edit documentation in R/gl.report.heterozygosity.r
 \name{gl.report.heterozygosity}
 \alias{gl.report.heterozygosity}
-\title{Reports hetrozygosity}
+\title{Reports observed and expected hetrozygosity by population}
 \usage{
-gl.report.heterozygosity(gl)
+gl.report.heterozygosity(x, plot = FALSE, cex.labels = 0.7,
+  verbose = 2)
 }
 \arguments{
-\item{gl}{-- a genlight object containing the SNP genotypes [Required]}
+\item{x}{-- a genlight object containing the SNP genotypes [Required]}
+
+\item{plot}{-- if TRUE, plots a barchart of observed heterozygosity [default FALSE]}
+
+\item{cex.labels}{-- sets the size of the population labels [default 0.7]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-a dataframe containing population labels, observed heterozygosities and sample sizes
+a dataframe containing population labels, heterozygosities and sample sizes
 }
 \description{
-Calculates the observed heterozygisities by population from a genlight object
-and plots as a barchart ordered on heterozygosity.
+Calculates the observed and expected heterozygisities by population from a genlight object
+and plots as an ordered barchart of observed heterozygosity. Also calculates the estimated variance
+for expected heterozygosity.
 }
 \details{
-#Input is a genlight {adegenet} object containing SNP genotypes (0 homozygous for reference SNP, 
-#1 heterozygous, 2 homozygous for alternate SNP).
-}
-\examples{
-gl.report.heterozygosity(testset.gl)
+Expected heterozygosity is calculated according to Nei, M. (1987) Molecular evolutionary genetics. New York: Columbia University Press, using the Pegas R package.
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

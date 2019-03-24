@@ -9,7 +9,6 @@
 #' @param labelsize -- Size of the labels as a proportion of the graphics default [Default 0.7]
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A tree file of class phylo
-#' @import adegenet
 #' @importFrom stringr str_pad
 #' @importFrom ape nj root plot.phylo
 #' @export

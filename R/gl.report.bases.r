@@ -10,15 +10,16 @@
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param plot -- if TRUE, histograms of base composition are produced [default TRUE]
+#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
 #' @return Matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
 #' @export
-#' @import adegenet stringr
+#' @import stringr
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' lst <- gl.report.bases(testset.gl)
 #' lst
 
-gl.report.bases <- function(x, plot=TRUE) {
+gl.report.bases <- function(x, plot=TRUE, verbose = 0) {
 
 # TIDY UP FILE SPECS
 
@@ -39,7 +40,7 @@ gl.report.bases <- function(x, plot=TRUE) {
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      if (verbose >= 1){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
       pop(x) <- array("pop1",dim = nLoc(x))
       pop(x) <- as.factor(pop(x))
     }

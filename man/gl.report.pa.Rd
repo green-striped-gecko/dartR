@@ -4,7 +4,7 @@
 \alias{gl.report.pa}
 \title{Report number of private alleles possessed by an individual of unknown provenance}
 \usage{
-gl.report.pa(x, id, nmin = 10, threshold = 0, v = 2)
+gl.report.pa(x, id, nmin = 10, threshold = 0, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
@@ -15,7 +15,7 @@ gl.report.pa(x, id, nmin = 10, threshold = 0, v = 2)
 
 \item{threshold}{-- retain those populations for which the focal individual has private alleles less or equal in number than the threshold [default 0]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object containing the focal individual (assigned to population "unknown") and 
@@ -31,8 +31,7 @@ may be heterozygous, in which case can share one but not both of its alleles wit
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, threshold=1, v=3)
-
+x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, threshold=1, verbose=2)
 }
 \author{
 Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})

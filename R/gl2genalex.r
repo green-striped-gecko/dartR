@@ -9,12 +9,15 @@
 #' @param outfile -- file name of the output file (including extension) [default 'genalex.csv']
 #' @param outpath -- path where to save the output file [default tempdir()]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @import from poppr genind2genalex
+#' @importFrom poppr genind2genalex
 #' @return NULL
 #' @export
 #' @author Katrin Hohwieler, wrapper Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl2genalex(testset.gl,outfile="testset.csv)
+#' \dontrun{
+#' gl2genalex(testset.gl, outfile="testset.csv")
+#' }
+
 
 gl2genalex <- function(x, outfile="genalex.csv", outpath=tempdir(), verbose=2) {
   

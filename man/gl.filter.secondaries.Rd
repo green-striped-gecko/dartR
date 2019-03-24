@@ -4,14 +4,14 @@
 \alias{gl.filter.secondaries}
 \title{Filter loci that represent secondary SNPs in a genlight \{adegenet\} object}
 \usage{
-gl.filter.secondaries(x, method = "random", v = 2)
+gl.filter.secondaries(x, method = "random", verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{method}{-- method of selecting SNP locus to retain, best or random [random]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 The reduced genlight, plus a summary
