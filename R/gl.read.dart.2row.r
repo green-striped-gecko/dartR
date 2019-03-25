@@ -21,72 +21,80 @@
 #' The SNP matrix, locus names (constructed from the AlleleID, SNP and SnpPosition to be unique), locus metadata, specimen names,
 #' specimen metadata are combined into a genlight object. Refer to the genlight documentation (Package adegenet) for further details.
 #'
-#' @param datafile -- name of csv file containing the DartSeq data in 2-row format (csv) [required]
+#' @param filename -- name of csv file containing the DartSeq data in 2-row format (csv) [required]
 #' @param topskip -- number of rows to skip before the header row (containing the specimen identities [required]
 #' @param nmetavar -- number of columns containing the locus metadata (e.g. AlleleID, RepAvg) [required]
 #' @param nas -- missing data character [default "-"]
 #' @param ind.metafile -- name of csv file containing metadata assigned to each entity (individual) [default NULL]
-#' @param pbar -- display progress bar [FALSE]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param probar -- display progress bar [FALSE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return An object of class ("genlight") containing the SNP data, and locus and individual metadata
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
-#' @examples
-#' \dontrun{
-#' gl <- gl.read.dart.2row(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
-#' nmetavar=16, nas="-", ind.metafile="metadata.csv" )
-#' }
 
-# Last edit:25-Apr-18
+gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile=NULL, probar=TRUE, verbose=2) {
 
-gl.read.dart.2row <- function(datafile,topskip,nmetavar, nas="-",ind.metafile=NULL,pbar=TRUE,v=2) {
+# ERROR CHECKING
+  
+  if (verbose < 0 | verbose > 5){
+    cat("    Warning: Parameter verbose must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+# FLAG SCRIPT START
+
+  if (verbose > 0) {
+    cat("Starting gl.read.dart.2row: reading 2Row format from file",filename,"\n")
+  }
+  
+# DO THE JOB
 
 # INPUT THE DATA TO PRELIMINARY STORAGE
   
-  if ( v > 0) {cat("Starting gl.read.dart.2row: Reading DArT csv file\n")}
-  if (v > 1){
-    cat("  Reading data from file:", datafile,"\n")
+  if ( verbose > 0) {cat("Starting gl.read.dart.2row: Reading DArT csv file\n")}
+  if (verbose >= 2){
+    cat("  Reading data from file:", filename,"\n")
     cat("    This may take some time, please wait!\n")
   }  
-  x <- read.csv(datafile, na.strings=nas, skip = topskip, check.names=FALSE)
-  if (v > 1){
+  x <- read.csv(filename, na.strings=nas, skip = topskip, check.names=FALSE)
+  if (verbose >= 2){
     cat("  The following locus metadata was identified: ", names(x[1:nmetavar]),"\n")
   }  
 # Error checks
   if(any(names(x) == "AlleleID")) {
-    if (v > 1){cat("    includes key variable AllelID\n")}
+    if (verbose >= 2){cat("    includes key variable AllelID\n")}
   } else {
       cat("Fatal Error: Dataset does not include key variable AlleleID!\n"); stop()
   }
   if(any(names(x) == "SNP")) {
-    if (v > 1){cat("  includes key variable SNP\n")}
+    if (verbose >= 2){cat("  includes key variable SNP\n")}
   } else {
     cat("Fatal Error: Dataset does not include key variable SNP!\n"); stop()
   }
   if(any(names(x) == "SnpPosition")) {
-    if (v > 1){cat("  includes key variable SnpPosition\n")}
+    if (verbose >= 2){cat("  includes key variable SnpPosition\n")}
   } else {
     cat("Fatal Error: Dataset does not include key variable SnpPosition!\n"); stop()
   }
     if(any(names(x) == "AvgPIC")) {
-      if (v > 1){cat("  includes key variable AvgPIC\n")}
+      if (verbose >= 2){cat("  includes key variable AvgPIC\n")}
   } else {
     cat("  Warning: Dataset does not include variable AvgPIC which may limit your options in later analyses!\n")
   }
   if(any(names(x) == "TrimmedSequence")) {
-    if (v > 1){cat("  includes key variable TrimmedSequence\n")}
+    if (verbose >= 2){cat("  includes key variable TrimmedSequence\n")}
   } else {
     cat("  Warning: Dataset does not include variable TrimmedSequence which may limit your options in later analyses!\n")
   }
   if(any(names(x) == "RepAvg")) {
-    if (v > 1){cat("  includes key variable RepAvg\n")}
+    if (verbose >= 2){cat("  includes key variable RepAvg\n")}
   } else {
     cat("  Warning: Dataset does not include variable RepAvg which may limit your filtering options in later analyses!\n")
   }
 
 # Extract names of the entities (individuals)
   ind.names <- colnames(x)[(nmetavar+1):ncol(x)]
-  if (v > 1){cat("  Data identified for ",ncol(x)-nmetavar, "individuals, ", nrow(x)/2, "loci")}
+  if (verbose >= 2){cat("  Data identified for ",ncol(x)-nmetavar, "individuals, ", nrow(x)/2, "loci")}
 
   # More error checks
   if (length(ind.names)!= length(unique(ind.names))) {
@@ -114,11 +122,11 @@ gl.read.dart.2row <- function(datafile,topskip,nmetavar, nas="-",ind.metafile=NU
 
 # CONVERT TO GENLIGHT FORMAT
 
-  if (v > 1){
+  if (verbose >= 2){
     cat("\n  Starting conversion to genlight object ....\n")
     cat("    Please note conversion of bigger data sets will take some time!\n")
   }  
-  if(pbar){
+  if(probar){
     pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
     getTxtProgressBar(pb)
   }
@@ -162,7 +170,7 @@ gl.read.dart.2row <- function(datafile,topskip,nmetavar, nas="-",ind.metafile=NU
     g <- gsub("1/1",1,g)
     g <- gsub("NA/NA",NA,g)
     x[,i] <- as.numeric(g)
-    if (pbar){setTxtProgressBar(pb, i/nind)}
+    if (probar){setTxtProgressBar(pb, i/nind)}
   }
 # Create the genlight object
   gl <- new("genlight", gen=t(x), ploidy=2, ind.names=colnames(snpdata), loc.names=locname ,loc.all=state2, position=pos, parallel=F)
@@ -174,7 +182,7 @@ gl.read.dart.2row <- function(datafile,topskip,nmetavar, nas="-",ind.metafile=NU
 
 # Add in extra metadata -- population assignments
 if (!is.null(ind.metafile)) {
-  if (v > 1){
+  if (verbose >= 2){
     cat("Adding population assignments and additional individual metadata from file :", ind.metafile,"\n")
   }
   ind.metadata <- read.csv(ind.metafile, header=T, stringsAsFactors=T)
@@ -188,43 +196,63 @@ if (!is.null(ind.metafile)) {
     cat ("Fatal Error: No id column present!\n") ;stop()
     } else {
     if (sum(ind.metadata[,id.col] == names(snpdata)) == nind ) {
-      if (v > 1) {cat ("  Ids of individual metadata file match!\n")}
+      if (verbose >= 2) {cat ("  Ids of individual metadata file match!\n")}
     }else {
-      cat("Fatal Error: Ids in files ",datafile,"and ",ind.metafile," do not match\n     or not in the same order!\n\n");stop()
+      cat("Fatal Error: Ids in files ",filename,"and ",ind.metafile," do not match\n     or not in the same order!\n\n");stop()
     }
   }
   pop.col = match( "pop", names(ind.metadata))
   
 # Check for population assignment
   if (is.na(pop.col)) {
-    if (v > 1) {cat ("  Warning: No pop column present\n")}
+    if (verbose >= 2) {
+      cat ("  Warning: No pop column present, creating it with missning values\n")
+      pop(gl) <- array(NA,nInd(gl))
+    }
   } else {
     pop(gl) <- as.factor(ind.metadata[,pop.col])
-    if (v > 1){cat("  Populations assigned to individuals\n")}
+    if (verbose >= 2){cat("  Populations assigned to individuals\n")}
   }
   
 # Check for latitude and longitude data
   lat.col = match( "lat", names(ind.metadata))
   lon.col = match( "lon", names(ind.metadata))
   if (is.na(lat.col)) {
-    if (v > 1) {cat ("Warning: No lat column present\n")}
+    if (verbose >= 2) {cat ("Warning: No lat column present\n")}
   }
   if (is.na(lon.col)) {
-    if (v > 1) {cat ("Warning: No lon column present\n")}
+    if (verbose >= 2) {cat ("Warning: No lon column present\n")}
   }
   if (!is.na(lat.col) & !is.na(lon.col))  {
     gl@other$latlong <- ind.metadata[,c(lat.col, lon.col)]
-    if (v > 1) {cat("  Added latlon data\n" )}
+    if (verbose >= 2) {cat("  Added latlon data\n" )}
   }
 # Check for other metadata
   other.col <- names(ind.metadata)
   if (length(other.col>0) ) {
     gl@other$ind.metrics<-ind.metadata[,other.col]
-    if (v > 1) {cat("Added ",other.col," to the other$ind.metrics slot\n")}
+    if (verbose >= 2) {cat("Added ",other.col," to the other$ind.metrics slot\n")}
   }
 }
+  
+# Calculate Read Depth
+  if (verbose >= 2) {
+    cat("  Calculating read depth for each locus\n")
+  }
+  if (is.null(gl@other$loc.metrics$rdepth)) {
+    xgl@other$loc.metrics$rdepth <- array(NA,nLoc(x))
+    for (i in 1:nLoc(x)){
+      called.ind <- round(nInd(x)*gl@other$loc.metrics$CallRate[i],0)
+      ref.count <- called.ind*gl@other$loc.metrics$OneRatioRef[i]
+      alt.count <- called.ind*gl@other$loc.metrics$OneRatioSnp[i]
+      sum.count.ref <- ref.count*gl@other$loc.metrics$AvgCountRef[i]
+      sum.count.alt <- ref.count*gl@other$loc.metrics$AvgCountSnp[i]
+      gl@other$loc.metrics$rdepth[i] <- round((sum.count.alt + sum.count.ref)/called.ind,1)
+    }
+  }
+  
 # Report
-  if (v > 0) {cat("gl.read.dart.2row completed: Genlight object created\n")}
+  if (verbose > 0) {cat("Completed: gl.read.dart.2row: Genlight object created\n")}
 
   return <- gl
 

@@ -5,7 +5,7 @@
 \title{Report minor allele frequency (MAF) for each locus in a genlight {adegenet} object}
 \usage{
 gl.report.maf(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30,
-  v = 2)
+  verbose = 0)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -16,10 +16,10 @@ gl.report.maf(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30,
 
 \item{loc.limit}{-- show histograms only for populations with more than loc.limit polymorphic loci [default 30]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.}
 }
 \description{
-Summary of minor allele frequencies across loci is reported as histograms.
+This script provides summary histograms of MAF for each population in the dataset as a basis for decisions on filtering.
 }
 \examples{
 f <- gl.report.maf(testset.gl)

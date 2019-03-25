@@ -28,7 +28,7 @@
 #' @param reps -- number of replications to undertake in the simulation to estimate probability of false positives [default 1000]
 #' @param delta -- threshold value for the population minor allele frequency (MAF) from which resultant sample fixed differences are considered true positives [default 0.02]
 #' @param alpha -- significance level for test of false positives [default 0.05]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A list containing the gl object x and the following square matricies
 #'         [[1]] $gl -- the input genlight object;
 #'         [[2]] $fd -- raw fixed differences;
@@ -42,12 +42,12 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
-#' fd <- gl.collapse.recursive(testset.gl, prefix="testset", test=TRUE, tloc=0, tpop=2, v=2)
+#' fd <- gl.collapse.recursive(testset.gl, prefix="testset", test=TRUE, tloc=0, tpop=2, verbose=2)
 #' }
 
-gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRUE, alpha=0.05, delta=0.02, reps=1000, v=2) {
+gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRUE, alpha=0.05, delta=0.02, reps=1000, verbose=2) {
   
-  if (v > 0) {
+  if (verbose > 0) {
     cat("Starting gl.collapse.recursive: Recursively amalgamating populations with",tpop,"or fewer fixed differences\n")
   }
   tpop <- as.integer(tpop)
@@ -64,16 +64,16 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
   if (tloc < 0 || tloc > 1){
     cat("  Fatal Error: Parameter tloc must be between 0 and 1, typically small (e.g. 0.05)\n"); stop("Execution terminated\n")
   }
-  v <- as.integer(v)
-  if (v < 0 || v > 5){
-    cat("  Fatal Error: Parameter v must be between 0 and 5\n"); stop("Execution terminated\n")
+  verbose <- as.integer(verbose)
+  if (verbose < 0 || verbose > 5){
+    cat("  Fatal Error: Parameter verbose must be between 0 and 5\n"); stop("Execution terminated\n")
   }
   
 # Set the iteration counter
   count <- 1
   
 # Create the initial distance matrix
-  fd <- gl.fixed.diff(x, test=FALSE, tloc=tloc, v=v)
+  fd <- gl.fixed.diff(x, test=FALSE, tloc=tloc, verbose=verbose)
   
 # Store the length of the fd matrix
   fd.hold <- dim(fd$fd)[1]
@@ -82,18 +82,18 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
   d.name <- paste0(prefix,"_matrix_",count,".csv")
   
 # Output the fd matrix for the first iteration to file
-  if (v >= 2) {cat(paste("    Writing the initial fixed difference matrix to disk:",d.name,"\n"))}
+  if (verbose >= 2) {cat(paste("    Writing the initial fixed difference matrix to disk:",d.name,"\n"))}
   write.csv(fd$fd, d.name)
 
 # Repeat until no change to the fixed difference matrix
   repeat {
-    if( v > 1 ){cat(paste("\n  Iteration:", count,"\n"))}
+    if( verbose > 1 ){cat(paste("\n  Iteration:", count,"\n"))}
     
     # Construct a filename for the pop.recode table
       recode.name <- paste0(prefix,"_recode_",count,".csv")
       
     # Collapse the matrix, write the new pop.recode table to file
-      fdcoll <- gl.collapse(fd, recode.table=recode.name, tpop=tpop, tloc=tloc, v=v)
+      fdcoll <- gl.collapse(fd, recode.table=recode.name, tpop=tpop, tloc=tloc, verbose=verbose)
       x <- fdcoll$gl
       
       if (nPop(x) == 1)  {
@@ -102,11 +102,11 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
       }
       
     #  calculate the fixed difference matrix for the collapsed dataset
-       fd <- gl.fixed.diff(x, tloc=tloc, test=FALSE, v=v)
+       fd <- gl.fixed.diff(x, tloc=tloc, test=FALSE, verbose=verbose)
       
     # If it is not different in dimensions from previous, break
       if (dim(fd$fd)[1] == fd.hold) {
-        if(v > 1) {cat(paste("\n  No further amalgamation of populations on iteration",count,"\n"))}
+        if(verbose > 1) {cat(paste("\n  No further amalgamation of populations on iteration",count,"\n"))}
         break
       }
       
@@ -115,7 +115,7 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
       d.name <- paste0(prefix,"_matrix_",count,".csv")
       
     # Output the collapsed fixed difference matrix for this iteration to file
-      if (v > 1) {cat(paste("    Writing the collapsed fixed difference matrix to disk:",d.name,"\n"))}
+      if (verbose > 1) {cat(paste("    Writing the collapsed fixed difference matrix to disk:",d.name,"\n"))}
       write.csv(fd$fd, d.name)
       
     # Hold the dimensions of the new fixed difference matrix
@@ -125,12 +125,12 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
   
     if(test) {
   
-    if( v > 1 ){cat(paste("  Computing probabilities of false positives\n"))}
-    fd <- gl.fixed.diff(x, tloc=tloc, test=TRUE, delta=delta, reps=reps, v=v)
+    if( verbose > 1 ){cat(paste("  Computing probabilities of false positives\n"))}
+    fd <- gl.fixed.diff(x, tloc=tloc, test=TRUE, delta=delta, reps=reps, verbose=verbose)
 
     }
   
-  if (v > 2) {
+  if (verbose > 2) {
     if (tloc == 0 ){
       cat("    Using absolute fixed differences\n")
     } else {  
@@ -143,7 +143,7 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
   l <- list(gl=x,fd=fd$fd,pcfd=fd$pcfd,nobs=fd$nobs,nloc=fd$nloc,expobs=fd$expobs,pval=fd$pval)
 
     # Return the matricies
-  if (v > 1) {
+  if (verbose > 1) {
     cat("Returning a list containing the following square matricies:\n",
         "         [[1]] $gl -- input genlight object;\n",
         "         [[2]] $fd -- raw fixed differences;\n",
@@ -154,7 +154,7 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
         "         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n")
   }
   
-  if (v > 0) {
+  if (verbose > 0) {
     cat("Completed gl.collapse.recursive\n\n")
   }
   

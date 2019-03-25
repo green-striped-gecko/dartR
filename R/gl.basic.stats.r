@@ -10,6 +10,6 @@
 
 gl.basic.stats <- function(gl, digits=4)
 {
-  out <- basic.stats(genind2hierfstat(gl2gi(gl, v = 0)), digits = digits)
+  out <- basic.stats(genind2hierfstat(gl2gi(gl, verbose = 0)), digits = digits)
   return(out)
 }

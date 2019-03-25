@@ -12,6 +12,7 @@
 #' @importFrom PopGenReport lgrMMRR wassermann gd.smouse gd.kosman
 #' @importFrom gdistance transition costDistance shortestPath geoCorrection
 #' @importFrom stats step
+#' @importFrom raster plot
 #' @importFrom sp Line Lines SpatialLines SpatialLinesLengths
 #' @return returns a list that consists of four pairwise distance matrixes (Euclidean, Cost, length of path and genetic) and the actual paths as spatial line objects.
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
@@ -27,7 +28,7 @@
 #' glc <- gl.genleastcost(x=possums.gl,fric.raster=landscape.sim , 
 #' gen.distance = "D", NN=8, pathtype = "leastcost",plotpath = TRUE)
 #' library(PopGenReport)
-#' wassermann(eucl.mat = glc$eucl.mat, cost.mat = glc$cost.mats,  gen.mat = glc$gen.mat)
+#' PopGenReport::wassermann(eucl.mat = glc$eucl.mat, cost.mat = glc$cost.mats,  gen.mat = glc$gen.mat)
 #' lgrMMRR(gen.mat = glc$gen.mat, cost.mats = glc$cost.mats,  eucl.mat = glc$eucl.mat)
 #' }
 #'
@@ -162,7 +163,7 @@ n.mats <- dim(fric.raster)[3] #number of rasters in the stack
 for (ci in 1:n.mats)
 {
 
-plot(fric.raster[[ci]], main=paste(names(fric.raster)[ci],":",pathtype,", NN=",NN,sep=""))
+raster::plot(fric.raster[[ci]], main=paste(names(fric.raster)[ci],":",pathtype,", NN=",NN,sep=""))
  #image(fric.raster, col=fric.raster@legend@colortable, asp=1)
 
 points(x@other$xy,cex=1, pch=16, col=rainbow(nPop(x))[as.numeric(pop(x))] )
@@ -235,7 +236,7 @@ names(mats)  <- names(fric.raster)
 #put other calculations here....
 # Calculate genetic distances across subpopulations
 
-xx <- gl2gi(x, v=0)
+xx <- gl2gi(x, verbose=0)
 
 if (gen.distance=="Gst.Nei")
 {

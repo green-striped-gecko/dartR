@@ -5,7 +5,7 @@
 \title{Collapse a distance matrix by amalgamating populations}
 \usage{
 gl.collapse(fd, recode.table = "tmp.csv", tpop = 0, tloc = 0,
-  v = 2)
+  verbose = 2)
 }
 \arguments{
 \item{fd}{-- name of the list of matricies produced by gl.fixed.diff() [required]}
@@ -17,7 +17,7 @@ arising from the amalgamation of populations [default tmp.csv]}
 
 \item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A list containing the gl object x and the following square matricies

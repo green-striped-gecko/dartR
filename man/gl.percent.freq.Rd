@@ -4,12 +4,12 @@
 \alias{gl.percent.freq}
 \title{Generate percentage allele frequencies by locus and population}
 \usage{
-gl.percent.freq(gl, v = 2)
+gl.percent.freq(x, verbose = 2)
 }
 \arguments{
-\item{gl}{-- name of the genlight containing the SNP genotypes or genind object containing the presence/absence data [required]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A matrix with allele frequencies (genelight) or presence/absence frequencies (genind) broken down by population and locus
@@ -23,5 +23,5 @@ m <-  gl.percent.freq(testset.gl)
 m
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

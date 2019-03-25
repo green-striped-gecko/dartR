@@ -4,10 +4,11 @@
 \alias{gl.pcoa}
 \title{PCoA ordination (glPca)}
 \usage{
-gl.pcoa(gl, nfactors = 5, parallel = FALSE, n.cores = 16, v = TRUE)
+gl.pcoa(x, nfactors = 5, parallel = FALSE, n.cores = 16,
+  verbose = 2)
 }
 \arguments{
-\item{gl}{Name of the genlight object containing the SNP genotypes by specimen and population [required]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{nfactors}{Number of dimensions to retain in the output file [default 5]}
 
@@ -15,7 +16,7 @@ gl.pcoa(gl, nfactors = 5, parallel = FALSE, n.cores = 16, v = TRUE)
 
 \item{n.cores}{Number of cores to use if parallel processing is requested [default 16]}
 
-\item{v}{-- verbose if TRUE, silent if FALSE [default TRUE]}
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 An object of class glPca containing the eigenvalues, factor scores and factor loadings
@@ -30,5 +31,5 @@ converting the eigenvalues to percentages.
 pcoa <- gl.pcoa(testset.gl, nfactors=3)
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

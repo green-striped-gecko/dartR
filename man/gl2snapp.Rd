@@ -4,25 +4,25 @@
 \alias{gl2snapp}
 \title{Convert a genlight object to nexus format suitable for phylogenetic analysis by SNAPP (via BEAUti)}
 \usage{
-gl2snapp(x, outfile = "snapp.nex", outpath = tempdir(), v = 2)
+gl2snapp(x, outfile = "snapp.nex", outpath = tempdir(), verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- file name of the output file (including extension).}
+\item{outfile}{-- file name of the output file (including extension)[default snapp.nex]}
 
-\item{outpath}{-- path where to save the output file [default tempdir()]}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \description{
 The output nexus file contains the snp data and relevant PAUP command lines suitable for BEAUti.
 }
-\details{
-Reference: Bryant, D., Bouckaert, R., Felsenstein, J., Rosenberg, N.A. and RoyChoudhury, A. (2012). Inferring species trees directly from biallelic genetic markers: bypassing gene trees in a full coalescent analysis. Molecular Biology and Evolution 29:1917-1932.
-}
 \examples{
 gl2snapp(testset.gl)
+}
+\references{
+Bryant, D., Bouckaert, R., Felsenstein, J., Rosenberg, N.A. and RoyChoudhury, A. (2012). Inferring species trees directly from biallelic genetic markers: bypassing gene trees in a full coalescent analysis. Molecular Biology and Evolution 29:1917-1932.
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

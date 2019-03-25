@@ -887,7 +887,7 @@ For Jost's D and G'st we suggest to use functions from the mmod  package. The di
 library(mmod) #you may need to install the package first
 #for performance reason use only a subset (and recode the populations)
 recpops<- factor(rep(LETTERS[1:5],50))
-glsub <- gl
+glsub <- testset.gl
 pop(glsub)<-recpops
 
 gi <- gl2gi(glsub, v=0) #v=0 suppresses output

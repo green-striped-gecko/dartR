@@ -19,20 +19,58 @@
 #' @param shape -- shape of the points, one of sphere, tetrahaedron or cube [default "sphere"]
 #' @param radius -- size of the points [default 2]
 #' @param legend -- one of bottomright, bottom, bottomleft, left, topleft, top, topright, right, center [default "bottom"]
-#' @return An interactive 3D plot of the ordination in a separate window
+#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @return NULL, plots an interactive 3D plot of the ordination in a separate window
 #' @export
 #' @importFrom pca3d pca3d
-#' @import adegenet
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' library(rgl)  #needed for the example
 #' pcoa <- gl.pcoa(testset.gl, nfactor=5)
 #' gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
 
-gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,
-                            shape="sphere", radius=2, legend="topright") {
+# Last amended 3-Feb-19
 
+gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  shape="sphere", radius=2, legend="topright", verbose=2) {
+
+# TIDY UP FILE SPECS
+
+  #outfilespec <- file.path(outpath, outfile)
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
+  
+  if(class(gl)!="genlight") {
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    gl@other$loc.metrics <- gl@other$loc.metrics[1:nLoc(gl),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(gl)) | is.na(length(pop(gl))) | length(pop(gl)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(gl) <- array("pop1",dim = nLoc(gl))
+      pop(gl) <- as.factor(pop(gl))
+    }
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
+# DO THE JOB
+                            
   # Extract the coordinates in a form suitable for pca3d
+    if (verbose >= 2) {cat("  Extracting coordinates of PCoA solution\n")}
     coords <- cbind(x$scores[,xaxis],x$scores[,yaxis],x$scores[,zaxis])
   
   # Convert the eigenvalues to percentages
@@ -46,8 +84,17 @@ gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,
    #t <- paste("PCoA plot of Axes", xaxis, yaxis,"and",zaxis)
   # Set the row labels to the population names
    row.names(x$scores) <- as.character(pop(gl))
-  # Plot 
+  # Plot
+    if (verbose >= 2) {cat("  Plotting three specified axes\n")}
    pca3d(coords, shape=shape, radius=radius, group=row.names(x$scores), legend=legend, 
          axe.titles=c(xlab,ylab,zlab))
+
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
+
+  return(NULL)
 }
 

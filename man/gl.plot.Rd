@@ -2,30 +2,39 @@
 % Please edit documentation in R/gl.plot.r
 \name{gl.plot}
 \alias{gl.plot}
-\title{Plotting genlight object}
+\title{Plotting genlight object as a smear plot (loci by individuals color coded for scores of 0, 1, 2 and NA)}
 \usage{
-gl.plot(x, indlabels = indNames(x), col = NULL, legend = TRUE,
-  posi = "bottomleft", bg = rgb(1, 1, 1, 0.5), ...)
+gl.plot(x, labels = FALSE, indlabels = indNames(x), col = NULL,
+  legend = TRUE, posi = "bottomleft", bg = rgb(1, 1, 1, 0.5),
+  verbose = 2, ...)
 }
 \arguments{
-\item{x}{-- a genlight object}
+\item{x}{-- a genlight object [required]}
 
-\item{indlabels}{-- labels for individuals. if not provided labels are taken from the first 8 letters from indNames.}
+\item{labels}{-- if TRUE, individual labels are added}
 
-\item{col}{-- optional color vector (see ?glPlot)}
+\item{indlabels}{-- labels for individuals [default = first 8 letters from indNames]}
 
-\item{legend}{-- a logical indicating whether a legend should be added}
+\item{col}{-- optional color vector (see ?glPlot) [default NULL]}
 
-\item{posi}{-- position of the legend}
+\item{legend}{-- if TRUE, a legend will be added [default = TRUE]}
 
-\item{bg}{-- background color of the legend [default is transparent white]}
+\item{posi}{-- position of the legend [default = "bottomleft"]}
+
+\item{bg}{-- background color of the legend [default transparent white]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 
 \item{...}{--- additional arguments passed to glPlot function.}
 }
 \description{
-This function is based on the glPlot function from adegenet. It simply aims to put labels on the individuals and scales them accordingly (if there are not too many). 
+This function is based on the glPlot function from adegenet. It adds the option to put labels on the individuals and scales them accordingly.
+If there are too many individuals, it is best to use labels=FALSE.
+ 
 For arguments please refer to the original adegenet function ?glPlot.
 }
 \examples{
 gl.plot(bandicoot.gl[1:30,])
+gl.plot(bandicoot.gl[1:30,])
+gl.plot(bandicoot.gl[1:10,],labels=TRUE)
 }

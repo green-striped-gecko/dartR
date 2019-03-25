@@ -11,7 +11,7 @@
 #' arising from the amalgamation of populations [default tmp.csv]
 #' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
 #' @param tpop -- max number of fixed differences used amalgamating populations [default 0]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A list containing the gl object x and the following square matricies
 #'         [[1]] $gl -- the new genlight object with populations collapsed;
 #'         [[2]] $fd -- raw fixed differences;
@@ -20,7 +20,6 @@
 #'         [[5]] $nloc -- total number of loci used in each comparison;
 #'         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation];
 #'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
-#' @import adegenet
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -29,9 +28,9 @@
 #' gl <- gl.collapse(fd, recode.table="testset_recode.csv",tpop=1)
 #' }
 
-gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, v=2) {
+gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, verbose=2) {
   
-  if (v > 0) {
+  if (verbose > 0) {
     cat("Starting gl.collapse: Amalgamating populations with",tpop,"or less fixed differences\n")
   }
   
@@ -77,7 +76,7 @@ gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, v=2) {
 
 
 # Print out the results of the aggregations 
-  if(v > 1) {cat("\n\nPOPULATION GROUPINGS\n")}
+  if(verbose > 1) {cat("\n\nPOPULATION GROUPINGS\n")}
   
   for (i in 1:length(zero.list)) {
     # Create a group label
@@ -86,7 +85,7 @@ gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, v=2) {
       } else {
         replacement <- paste0(zero.list[[i]][1],"+")
       }
-      if(v > 1) {
+      if(verbose > 1) {
         cat(paste0("Group:",replacement,"\n"))
         print(as.character(zero.list[[i]]))
         cat("\n")
@@ -103,11 +102,11 @@ gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, v=2) {
     write.table(df, file=recode.table, sep=",", row.names=FALSE, col.names=FALSE)
   
 # Recode the data file (genlight object)
-  x2 <- gl.recode.pop(fd$gl, pop.recode=recode.table, v=v)
-  fd2 <- gl.fixed.diff(x2,tloc=tloc,test=FALSE, v=v)
+  x2 <- gl.recode.pop(fd$gl, pop.recode=recode.table, verbose=verbose)
+  fd2 <- gl.fixed.diff(x2,tloc=tloc,test=FALSE, verbose=verbose)
   
   # Return the matricies
-  if (v > 2) {
+  if (verbose > 2) {
     cat("Returning a list containing the following square matricies:\n",
         "         [[1]] $gl -- input genlight object;\n",
         "         [[2]] $fd -- raw fixed differences;\n",
@@ -119,18 +118,18 @@ gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, v=2) {
   }
   
   if(setequal(levels(pop(x2)),levels(pop(fd$gl)))) { 
-    if (v > 1) {cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed at fd <=", tpop,"\n"))}
-    if (v > 0) {
+    if (verbose > 1) {cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed at fd <=", tpop,"\n"))}
+    if (verbose > 0) {
       cat("Completed gl.collapse\n")
     }
     l <- list(gl=fd$gl,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)
     return(l)
   } else {
-    if (v > 1) {
+    if (verbose > 1) {
       cat("\nPOPULATION GROUPINGS")
       print(table(pop(x2)))
     }
-    if (v > 0) {
+    if (verbose > 0) {
       cat("Completed gl.collapse\n\n")
     }
     l <- list(gl=x2,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)

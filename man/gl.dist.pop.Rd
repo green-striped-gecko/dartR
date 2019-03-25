@@ -4,8 +4,8 @@
 \alias{gl.dist.pop}
 \title{Calculate a distance matrix for populations defined in an \{adegenet\} genlight object}
 \usage{
-gl.dist.pop(x, method = "euclidean", binary = FALSE, diag = TRUE,
-  upper = FALSE, p = NULL, v = 2)
+gl.dist.pop(x, method = "euclidean", binary = FALSE, diag = FALSE,
+  upper = FALSE, p = NULL, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}
@@ -14,13 +14,13 @@ gl.dist.pop(x, method = "euclidean", binary = FALSE, diag = TRUE,
 
 \item{binary}{-- Perform presence/absence standardization before analysis using decostand [binary=FALSE]}
 
-\item{diag}{-- Compute and display diagonal [TRUE]}
+\item{diag}{-- Compute and display diagonal [FALSE]}
 
 \item{upper}{-- Return also upper triangle [FALSE]}
 
 \item{p}{-- The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [0.5]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A matrix of distances between populations (class dist)
@@ -43,5 +43,5 @@ tallies the total number of private alleles possessed by one or the other popula
 gl.dist.pop(testset.gl, method="euclidean", diag=TRUE)
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

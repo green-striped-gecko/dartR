@@ -4,14 +4,19 @@
 \alias{gl2faststructure}
 \title{Export DArT genlight object \{adegenet\} to faststructure format (to run faststructure elsewhere)}
 \usage{
-gl2faststructure(gl, outfile = "gl.str", probar = TRUE)
+gl2faststructure(x, outfile = "gl.str", outpath = tempdir(),
+  probar = TRUE, verbose = 2)
 }
 \arguments{
-\item{gl}{-- genlight object}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- filename of the output fastA file [default genlight.fasta]}
+\item{outfile}{-- file name of the output file (including extension) [default gl.str]}
+
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
 \item{probar}{switch to show/hide progress bar}
+
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \description{
 Recodes in the quite specific faststructure format (e.g first six columns need to be there, but are ignored...check faststructure documentation (if you find any :-( )))

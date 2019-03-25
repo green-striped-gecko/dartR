@@ -13,14 +13,27 @@
 #' @param top -- a flag to indicate whether or not plot only those eigenvalues greater in value than the average for the
 #'        unordinated original variables (top=TRUE) or to plot all eigenvalues (top=FALSE). If top=FALSE, then a
 #'        reference line showing the average eigenvalue for the unordinated variables is shown. [default TRUE]
+#' @param verbose specifies is completion of the function should be output to the console.
 #' @return The scree plot
 #' @export
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' pcoa <- gl.pcoa(testset.gl)
 #' gl.pcoa.scree(pcoa)
 
-gl.pcoa.scree <- function(x, top=TRUE) {
+# Last amended 3-Feb-19
+
+gl.pcoa.scree <- function(x, top=TRUE, verbose=0) {
+
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+    cat("Starting",funname,"\n")
+
+# DO THE JOB
 
   # Express eigenvalues as a percentage of total
     s <- sum(x$eig)
@@ -29,12 +42,12 @@ gl.pcoa.scree <- function(x, top=TRUE) {
   # If top=TRUE, consider only those eigenvalues above the average for the original unordinated variables.
     if(top==TRUE) {
       e <- e[e>mean(e)]
-      cat("Note: Only eigenvalues for dimensions that explain more that the average of the original variables are shown\n")
+      cat("  Note: Only eigenvalues for dimensions that explain more that the average of the original variables are shown\n")
     } else {
-      cat("Note: All eigenvalues shown\n")
+      cat("  Note: All eigenvalues shown\n")
     }
     top <- length(e[e>=10])
-    cat(paste("No. of axes each explaining 10% or more of total variation:",top,"\n"))
+    cat(paste("  No. of axes each explaining 10% or more of total variation:",top,"\n"))
   # Plot the scree plot
     m <- cbind(seq(1:length(e)),e)
     df <- data.frame(m)
@@ -52,6 +65,12 @@ gl.pcoa.scree <- function(x, top=TRUE) {
       geom_hline(yintercept=0) +
       geom_vline(xintercept=0)
       if(top==FALSE) {p <- p + geom_hline(yintercept=mean(e), colour="blue")}
+
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
 
    return(p)
 }

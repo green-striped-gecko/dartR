@@ -5,7 +5,7 @@
 \title{Collapse a fixed distance matrix by amalgamating populations for which fixed differences are not significant}
 \usage{
 gl.collapse.pval(fd, prefix = "fd.sig", delta = 0.02, reps = 1000,
-  alpha = 0.05, v = 2)
+  alpha = 0.05, verbose = 2)
 }
 \arguments{
 \item{fd}{-- name of the list of matricies output by gl.collapse.recursive run with test=TRUE [required]}
@@ -19,7 +19,7 @@ table (also stored to disk) [default "fd_sig"]}
 
 \item{alpha}{-- significance level for test of false positives [default 0.05]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A list containing the gl object x and the following square matricies

@@ -4,10 +4,10 @@
 \alias{gl.drop.ind}
 \title{Remove specified individuals from a genelight \{adegenet\} object}
 \usage{
-gl.drop.ind(x, ind.list, recalc = FALSE, mono.rm = TRUE, v = 2)
+gl.drop.ind(x, ind.list, recalc = FALSE, mono.rm = TRUE, verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
+\item{x}{-- name of the genlight object containing SNP genotypes [required]}
 
 \item{ind.list}{-- a list of individuals to be removed [required]}
 
@@ -15,7 +15,7 @@ gl.drop.ind(x, ind.list, recalc = FALSE, mono.rm = TRUE, v = 2)
 
 \item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object with the reduced data
@@ -37,5 +37,5 @@ The script returns a genlight object with the individuals deleted and, optionall
 \code{\link{gl.recalc.metrics}}
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

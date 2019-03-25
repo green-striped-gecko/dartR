@@ -5,7 +5,8 @@
 \title{Recursively collapse a distance matrix by amalgamating populations}
 \usage{
 gl.collapse.recursive(x, prefix = "collapse", tloc = 0, tpop = 1,
-  test = TRUE, alpha = 0.05, delta = 0.02, reps = 1000, v = 2)
+  test = TRUE, alpha = 0.05, delta = 0.02, reps = 1000,
+  verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object from which the distance matricies are to be calculated [required]}
@@ -25,7 +26,7 @@ tables (also stored to disk) [default "collapse"]}
 
 \item{reps}{-- number of replications to undertake in the simulation to estimate probability of false positives [default 1000]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A list containing the gl object x and the following square matricies
@@ -60,7 +61,7 @@ In particular, the recode tables can be edited to replace populaton labels with 
 }
 \examples{
 \donttest{
-fd <- gl.collapse.recursive(testset.gl, prefix="testset", test=TRUE, tloc=0, tpop=2, v=2)
+fd <- gl.collapse.recursive(testset.gl, prefix="testset", test=TRUE, tloc=0, tpop=2, verbose=2)
 }
 }
 \author{

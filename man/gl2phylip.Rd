@@ -2,19 +2,21 @@
 % Please edit documentation in R/gl2phylip.r
 \name{gl2phylip}
 \alias{gl2phylip}
-\title{Create a Phylip input distance matrix from a genlight (SNP) or genind (SilicoDarT) \{adegenet\} object}
+\title{Create a Phylip input distance matrix from a genlight (SNP) \{adegenet\} object}
 \usage{
-gl2phylip(gl, outfile = "phyinput.txt", outpath = tempdir(),
-  bstrap = 1)
+gl2phylip(x, outfile = "phyinput.txt", outpath = tempdir(),
+  bstrap = 1, verbose = 2)
 }
 \arguments{
-\item{gl}{Name of the genlight object containing the SNP data or a genind object containing presence absence data [required]}
+\item{x}{Name of the genlight object containing the SNP data or a genind object containing presence absence data [required]}
 
 \item{outfile}{Name of the file to become the input file for phylip [default phyinput.txt]}
 
-\item{outpath}{path where to save the output file (set to tempdir by default)}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
 \item{bstrap}{Number of bootstrap replicates [default 1]}
+
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 Matrix of Euclidean distances between populations
@@ -29,5 +31,5 @@ result <- gl2phylip(testset.gl, outfile="test.txt", bstrap=10)
 }
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

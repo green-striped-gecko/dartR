@@ -4,8 +4,8 @@
 \alias{gl.diversity}
 \title{Calculate diversity indices for SNPs}
 \usage{
-gl.diversity(gl, spectrumplot = TRUE, confiplot = FALSE,
-  probar = TRUE, table = "DH")
+gl.diversity(gl, spectrumplot = TRUE, confiplot = FALSE, pbar = TRUE,
+  table = "DH")
 }
 \arguments{
 \item{gl}{genlight object containing the SNP genotypes  [required]}
@@ -14,7 +14,7 @@ gl.diversity(gl, spectrumplot = TRUE, confiplot = FALSE,
 
 \item{confiplot}{switch if confidence intervals (1 sd) should be drawn [default: FALSE]}
 
-\item{probar}{report on progress. Silent if set to FALSE. [Default is TRUE]}
+\item{pbar}{report on progress. Silent if set to FALSE. [Default is TRUE]}
 
 \item{table}{prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.}
 }

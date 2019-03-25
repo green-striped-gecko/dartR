@@ -10,23 +10,56 @@
 #' @param id -- identity label of the focal individual whose provenance is unknown [required]
 #' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
 #' @param threshold -- retain those populations for which the focal individual has private alleles less or equal in number than the threshold [default 0]
-#' @param v -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and 
 #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @export
 #' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#' x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, threshold=1, v=3)
-#' 
+#' x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, threshold=1, verbose=2)
 
-gl.report.pa <- function (x, id, nmin=10, threshold=0, v=2) {
+# Last amended 3-Feb-19
+
+gl.report.pa <- function (x, id, nmin=10, threshold=0, verbose=2) {
   
-# ERROR CHECKING
+# TIDY UP FILE SPECS
+
+  funname <- match.call()[[1]]
+
+# FLAG SCRIPT START
+
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
+  }
+
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+
+  # Work around a bug in adegenet if genlight object is created by subsetting
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+
+  # Set a population if none is specified (such as if the genlight object has been generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
+    }
+
+  # Check for monomorphic loci
+    tmp <- gl.filter.monomorphs(x, verbose=0)
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+# FUNCTION SPECIFIC ERROR CHECKING
+
   test <- id%in%indNames(x)
   if (!all(test,na.rm=FALSE)) {
     cat("Fatal Error: nominated focal individual (of unknown provenance) is not present in the dataset!\n"); stop("Execution terminated\n")
@@ -39,16 +72,9 @@ gl.report.pa <- function (x, id, nmin=10, threshold=0, v=2) {
     cat("    Warning: the threshold for private alleles must be non-negative, set to 0\n")
     threshold <- 0
   }
-  if (v < 0 | v > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    v <- 2
-  }
-  
-  # FLAG SCRIPT START  
-  if (v >= 1) {
-    cat("Starting gl.report.pa: Identifying loci with private alleles\n\n")
-  }
-  
+
+# DO THE JOB
+
 # Set a recommended minimum population size
   hard.min <- 10
 
@@ -63,29 +89,28 @@ gl.report.pa <- function (x, id, nmin=10, threshold=0, v=2) {
   
 # Remove all known populations with less than nmin individuals
   pop.keep <- levels(pop(knowns))[table(pop(knowns)) >= nmin]
-  if (v >=2) {cat("  Retaining",length(pop.keep),"populations with sample size greater than or equal to",nmin,":",pop.keep,"\n\n")}
+  if (verbose >=2) {cat("  Retaining",length(pop.keep),"populations with sample size greater than or equal to",nmin,":",pop.keep,"\n\n")}
   pop.toss <- levels(pop(knowns))[table(pop(knowns)) < nmin]
-  if (v >=2) {cat("  Discarding",length(pop.toss),"populations with sample size less than",nmin,":",pop.toss,"\n\n")}
+  if (verbose >=2) {cat("  Discarding",length(pop.toss),"populations with sample size less than",nmin,":",pop.toss,"\n\n")}
 
   knowns <- knowns[pop(knowns) %in% pop.keep]
 
 # Warn of populations retained with sizes less than the hard wired miniumum    
   pop.warn <- levels(pop(knowns))[table(pop(knowns)) < hard.min]
   if (length(pop.warn >= 1)) {
-    if (v >=1) {cat("Warning: Some retained populations have sample sizes less than",hard.min,":",pop.warn,"\n")}
-    if (v >=1) {cat("  Substantial risk of private alleles arising as sampling error\n\n")}
+    if (verbose >=1) {cat("  Warning: Some retained populations have sample sizes less than",hard.min,":",pop.warn,"\n")}
+    if (verbose >=1) {cat("    Substantial risk of private alleles arising as sampling error\n\n")}
   }  
 
 # Report number of focal individuals (1) and number of target populations  
   n <- length(pop(unknowns))
   N <- length(levels(pop(knowns)))
   if (n != 1) {
-    if (v >=0) {
-      cat("Fatal Error: Number of unknown focal individuals > 1; population label 'unknown' already in use\n")
-      stop("Terminating execution")
+    if (verbose >=0) {
+      cat("  Fatal Error: Number of unknown focal individuals > 1; population label 'unknown' already in use\n"); stop("Terminating execution")
     }  
   }
-  if (v >=2) {cat("  Assigning",n,"unknown individual(s) to",N,"target populations\n")}
+  if (verbose >=2) {cat("  Assigning",n,"unknown individual(s) to",N,"target populations\n")}
   
 
 # CALCULATE NUMBER OF LOCI WITH PRIVATE ALLELES
@@ -130,7 +155,7 @@ gl.report.pa <- function (x, id, nmin=10, threshold=0, v=2) {
 
       # Print out results 
 
-      if (v >=3) {
+      if (verbose >=3) {
         cat("  Unknown individual:",id,"\n")
         cat("  Total number of SNP loci: ",nLoc(x),"\n\n")
         cat("  Table showing number of loci with private alleles\n")
@@ -144,8 +169,8 @@ gl.report.pa <- function (x, id, nmin=10, threshold=0, v=2) {
 
         index <- ((pop(x) %in% levels(pop(knowns))[count<=threshold]) | (as.character(pop(x)) == "unknown"))
         gl <- x[index,]
-        gl <- gl.filter.monomorphs(gl, v=0)
-        if (v >= 2) {
+        gl <- gl.filter.monomorphs(gl, verbose=0)
+        if (verbose >= 2) {
           if (threshold == 0) {
             cat("  Data retained for the unknown individual and remaining candidate source populations (zero loci with private alleles)\n")
             cat("  ",levels(pop(gl)),"\n\n")
@@ -155,10 +180,10 @@ gl.report.pa <- function (x, id, nmin=10, threshold=0, v=2) {
           }
         }
   
-  # FLAG SCRIPT END
-  
-  if (v >= 1) {
-    cat("Completed gl.report.pa\n\n")
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
   }
   
   return(gl)

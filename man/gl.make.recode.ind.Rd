@@ -5,14 +5,16 @@
 \title{Create a proforma recode_ind file for reassigning individual (=specimen) names}
 \usage{
 gl.make.recode.ind(x, outfile = "default_recode_ind.csv",
-  outpath = tempdir())
+  outpath = tempdir(), verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- name of the new proforma file [default default_recode_ind.csv]}
+\item{outfile}{-- file name of the output file (including extension) [default default_recode_ind.csv]}
 
-\item{outpath}{-- path where to save the output file (set to tempdir by default)}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
+
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A vector containing the new individual names
@@ -22,7 +24,7 @@ Renaming individuals may be required when there have been errors in labelling ar
 in the process from sample to DArT files. There may be occasions where renaming
 individuals is required for preparation of figures. Caution needs to be exercised
 because of the potential for breaking the "chain of evidence" between the samples themselves
-and the analyses. REcoding individuals can be done with a recode table (csv).
+and the analyses. Recoding individuals can be done with a recode table (csv).
 }
 \details{
 This script facilitates 
