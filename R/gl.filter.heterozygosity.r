@@ -1,4 +1,4 @@
-#' Filters individuals with average heterozygosity greater than a specified threshold
+#' Filters individuals with average heterozygosity greater than a specified threshold 
 #' 
 #' Calculates the observed and expected heterozygisities for each population (method="pop") 
 #' or the observed heterozyosity for each individual (method="ind") in a genlight object.

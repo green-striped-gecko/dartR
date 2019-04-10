@@ -1,4 +1,4 @@
-#' Assign a individual metric as pop in a genlight \{adegenet\} object
+#' Assign a individual metric as pop in a genlight \{adegenet\} object 
 #'
 #' Individuals are assigned to populations based on the individual/sample/specimen metrics file (csv)
 #'  used with gl.read.dart(). 

@@ -1,25 +1,51 @@
-#' Reports observed and expected hetrozygosity by population
+#' Reports observed and expected heterozygosity by population or by individual. 
 #' 
-#' Calculates the observed and expected heterozygisities by population from a genlight object
-#' and plots as an ordered barchart of observed heterozygosity. Also calculates the estimated variance
-#' for expected heterozygosity.
+#' Calculates the observed and expected heterozygisities for each population (method="pop") 
+#' or the observed heterozyosity for each individual (method="ind") in a genlight object.
 #' 
-#' Expected heterozygosity is calculated according to Nei, M. (1987) Molecular evolutionary genetics. New York: Columbia University Press, using the Pegas R package.
+#' Output for method="pop" is an ordered barchart of observed heterozygosity across 
+#' populations and a table of expected heterozygosity and estimated variance for 
+#' expected heterozygosity by population.
+#' 
+#' Expected heterozygosity is calculated according to Nei, M. (1987) Molecular evolutionary
+#' genetics. New York: Columbia University Press, using the Pegas R package.
+#' 
+#' Output for method="ind" is a histogram of heterozygosity calculated across individuals.
+#' The histogram is accompanied by a box and whisker plot presented either in standard 
+#' (boxplot="standard") or adjusted form (boxplot=adjusted). 
+#' 
+#' Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
+#' Box and Whisker Plots and Hubert & Vandervieren (2008, An Adjusted Boxplot for Skewed
+#' Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
+#' Box and Whisker Plots.
 #' 
 #' @param x -- a genlight object containing the SNP genotypes [Required]
-#' @param plot -- if TRUE, plots a barchart of observed heterozygosity [default FALSE]
+#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
+#' plots a boxplot adjusted for skewed distributions [default 'adjusted']
+#' @param range -- specifies the range for delimiting 
+#' outliers [default = 1.5 interquartile ranges]
 #' @param cex.labels -- sets the size of the population labels [default 0.7]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a dataframe containing population labels, heterozygosities and sample sizes
-#' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @export
+#' @author Bernd Gruber & Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @importFrom grDevices rainbow
 #' @importFrom graphics par
 #' @importFrom plyr join
 #' @importFrom pegas heterozygosity
+#' @importFrom robustbase adjbox
+#' @examples
+#' tmp <- gl.report.heterozygosity(testset.gl,verbose=3)
+#' tmp <- gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
 
 # Last amended 3-Feb-19
 
-gl.report.heterozygosity <- function(x, plot=FALSE, cex.labels=0.7,verbose=2) {
+gl.report.heterozygosity <- function(x, 
+                                     method="pop", 
+                                     boxplot="adjusted",
+                                     range=1.5,
+                                     cex.labels=0.7, 
+                                     verbose=2) {
   
 # TIDY UP FILE SPECS
 
@@ -41,22 +67,38 @@ gl.report.heterozygosity <- function(x, plot=FALSE, cex.labels=0.7,verbose=2) {
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
+  
+  if (!(method=="pop" | method == "ind")) {
+    cat("Warning: Method must either be by population or by individual, set to method='pop'\n")
+    method <- "pop"   
+  }
+  
+  if (!(boxplot=="standard" | method == "adjusted")) {
+    cat("Warning: Box-whisker plots must either standard or adjusted for skewness, set to               boxplot='adjusted'\n")
+    boxplot <- 'adjusted'   
+  }
 
   # Work around a bug in adegenet if genlight object is created by subsetting
     x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
 
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
+  # Set a population if none is specified (such as if the genlight object has been 
+  # generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      if (verbose >= 2){ cat("  Population assignments not detected, 
+                             individuals assigned to a single population labelled 'pop1'\n")}
       pop(x) <- array("pop1",dim = nLoc(x))
       pop(x) <- as.factor(pop(x))
     }
 
   # Check for monomorphic loci
     tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {
+      cat("  Warning: genlight object contains monomorphic loci\n")
+    }
 
-# DO THE JOB
+# DO THE JOB FOR POPULATIONS
+    
+  if (method=="pop"){
 
 # Split the genlight object into a list of populations
   sgl <- seppop(x)
@@ -68,7 +110,8 @@ gl.report.heterozygosity <- function(x, plot=FALSE, cex.labels=0.7,verbose=2) {
     Ho <- data.frame(lapply(sgl, function(x) mean(colMeans(as.matrix(x, na.rm=TRUE)==1), na.rm=TRUE) ))
     
   # Calculate sample sizes
-    sums <- data.frame(lapply(sgl, function(x) mean(colSums(as.matrix(x, na.rm=TRUE)==1), na.rm=TRUE) ))
+    sums <- data.frame(lapply(sgl, function(x) mean(colSums(as.matrix(x, na.rm=TRUE)==1),
+                                                    na.rm=TRUE) ))
     n <- t(sums/Ho)
     n <- cbind(row.names(n),n)
     
@@ -79,11 +122,10 @@ gl.report.heterozygosity <- function(x, plot=FALSE, cex.labels=0.7,verbose=2) {
     df <- plyr::join(df1,df2, by="pop")
     
   # Plot the results
-  if (plot){
-    par(mfrow=c(1,1),mai=c(2.5,1,0.5,0.2),pty="m")
+    op <- par(mfrow=c(1,1),mai=c(1.2,0.5,0.2,0),oma=c(2,2,2,0), pty="m")
     df.ordered <- df[order(df$Ho),]
-    barplot(df.ordered$Ho, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), main="Observed Heterozygosity")
-  }
+    barplot(df.ordered$Ho, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2,             cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
+            main="Observed Heterozygosity by Population")
   
 # EXPECTED HETEROZYGOSITY
     if (verbose >=2){cat("  Calculating Expected Heterozygosities by population\n")}
@@ -150,15 +192,54 @@ gl.report.heterozygosity <- function(x, plot=FALSE, cex.labels=0.7,verbose=2) {
     cat("  Average Observed Heterozygosity: ",round(mean(df$Ho),4),"\n\n")
   
     print(df)
-  }  
+  } 
   
+  }
+  
+  # DO THE JOB FOR INDIVIDUALS
+  
+  if (method=="ind"){
+    # Convert to matrix
+    m <- as.matrix(x)
+    
+    # For each individual determine counts of hets, homs and NAs
+    c.na <- array(NA, nInd(x))
+    c.hets <- array(NA, nInd(x))
+    c.hom0 <- array(NA, nInd(x))
+    c.hom2 <- array(NA, nInd(x))
+    for (i in 1:nInd(x)){
+      c.na[i] <- sum(is.na(m[i,]))/nInd(x)
+      c.hets[i] <- sum(m[i,]==1,na.rm=TRUE)/(nInd(x)-c.na[i])
+      #c.hom0[i] <- sum(m[i,]==0,na.rm=TRUE)/(nInd(x)-c.na[i])
+      #c.hom2[i] <- sum(m[i,]==2,na.rm=TRUE)/(nInd(x)-c.na[i])
+    }
+  # Prepare for plotting
+    # Save the prior settings for mfrow, oma, mai and pty, and reassign
+      op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+    # Set margins for first plot
+    par(mai=c(1,0.5,0.5,0.5))
+    # Plot Box-Whisker plot (see Dice and Leraas)
+    adjbox(c.hets,
+           horizontal = TRUE,
+           col='red',
+           range=range,
+           main = "Heterozygosity by Individual")
+    # Set margins for second plot
+    par(mai=c(0.5,0.5,0,0.5))  
+    # Plot Histogram
+      hist(c.hets, col='red', main=NULL)
+  }  
   
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
+
+  # Reset the par options    
+    par(op)
   
   # Return the result
   return(df) 
 }
+
