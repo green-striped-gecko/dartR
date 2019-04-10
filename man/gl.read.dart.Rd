@@ -23,7 +23,7 @@ gl.read.dart(filename, ind.metafile = NULL, covfilename = NULL,
 \item{probar}{show progress bar}
 }
 \value{
-a dart genlight object that contains individuals [if data were provided] and loci meta data [from a DArT report]. The dart genlight object can then be fed into a number of initial screening, export and export functions provided by the package. For some of the function it is necessary to have the metadata that was provided from DArT. Please check the vignette for more information. Additional information can also be found in the help documents for  \code{\link{read.dart}} and \code{\link{dart2genlight}}.
+a dart genlight object that contains individuals [if data were provided] and loci meta data [from a DArT report]. The dart genlight object can then be fed into a number of initial screening, export and export functions provided by the package. For some of the function it is necessary to have the metadata that was provided from DArT. Please check the vignette for more information. Additional information can also be found in the help documents for  \code{utils.read.dart}.
 }
 \description{
 This function is a wrapper function that allows you to convert you dart file into a genlight object in one step. In previous versions you had to use read.dart and then dart2genlight. In case you have individual metadata for each individual/sample you can specify as before in the dart2genlight command the file that combines the data.
@@ -31,7 +31,7 @@ This function is a wrapper function that allows you to convert you dart file int
 \examples{
 {
 dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
-covfilename <- system.file("extdata","testset_metadata.csv", package="dartR")
-gl <- gl.read.dart(dartfile, ind.metafile = covfilename, probar=TRUE)
+metadata <- system.file("extdata","testset_metadata.csv", package="dartR")
+gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=TRUE)
 }
 }

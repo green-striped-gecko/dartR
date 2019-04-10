@@ -2,7 +2,7 @@
 #'
 #' This function exports a genlight object into PLINK format and save it into a file
 #'
-#' @reference Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira MAR, Bender D, Maller J, Sklar P, de Bakker PIW, Daly MJ & Sham PC (2007).
+#' @references Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira MAR, Bender D, Maller J, Sklar P, de Bakker PIW, Daly MJ & Sham PC (2007).
 #' PLINK: a toolset for whole-genome association and population-based linkage analysis. American Journal of Human Genetics 81:551-575.
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]

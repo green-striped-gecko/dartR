@@ -65,7 +65,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
 # FUNCTION SPECIFIC ERROR CHECKING
     
   # Assign the new population list if as.pop is specified
-    
+    pop.hold <- pop(x)
     if (!is.null(as.pop)){
       pop.hold <- pop(x)
       pop(x) <- as.matrix(x@other$ind.metrics[as.pop])

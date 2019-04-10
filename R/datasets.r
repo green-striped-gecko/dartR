@@ -10,16 +10,17 @@
 
 #' A genlight object created via the read.dart functions
 #'
-#'This a test data set to test the validity of functions within dartR and is based on a DArT SNp data set of foxes across Australia. It contains 100 individuals and 1000 SNPs.
-#' @name foxes.gl
+#'This a test data set to test the validity of functions within dartR and is based on a DArT SNp data set of simulated bandicoots across Australia. It contains 96 individuals and 1000 SNPs.
+#' @name bandicoot.gl
 #' @format genlight object
 #' @docType data
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
-"foxes.gl"
+"bandicoot.gl"
 
 #' A genlight object created via the read.dart functions
 #'
+#' This is a test data set on turtles. 250 individuals on >30 populations.
 #' @name testset.gl
 #' @format genlight object
 #' @docType data
@@ -29,7 +30,7 @@
 
 #' Testfile in DArT format (as provided by DArT)
 #' 
-#' this test data set is provided to show a typical DArT file format. Can be used to create a genlight object using the read.dart function.
+#' This test data set is provided to show a typical DArT file format. Can be used to create a genlight object using the read.dart function.
 #' @name testset_SNPs_2Row
 #' @format csv
 #' @docType data

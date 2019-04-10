@@ -11,7 +11,7 @@
 #' @return A genlight object with k loci
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- utils.subsample.loci(testset.gl, k=200, method="avgPIC")
+#' #result <- dartR:::utils.subsample.loci(testset.gl, k=200, method="avgPIC")
 
 utils.subsample.loci <- function(x, k, method="random", verbose=2) {
 

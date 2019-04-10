@@ -2,7 +2,7 @@
 #'
 #' The output nexus file contains the snp data and relevant PAUP command lines suitable for BEAUti.
 #' 
-#' @reference: Bryant, D., Bouckaert, R., Felsenstein, J., Rosenberg, N.A. and RoyChoudhury, A. (2012). Inferring species trees directly from biallelic genetic markers: bypassing gene trees in a full coalescent analysis. Molecular Biology and Evolution 29:1917-1932.
+#' @references Bryant, D., Bouckaert, R., Felsenstein, J., Rosenberg, N.A. and RoyChoudhury, A. (2012). Inferring species trees directly from biallelic genetic markers: bypassing gene trees in a full coalescent analysis. Molecular Biology and Evolution 29:1917-1932.
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- file name of the output file (including extension)[default snapp.nex]

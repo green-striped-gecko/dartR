@@ -4,7 +4,7 @@
 \alias{gl.keep.ind}
 \title{Remove all but the specified individuals from a genelight \{adegenet\} object}
 \usage{
-gl.keep.ind(x, ind.list, recalc = FALSE, mono.rm = TRUE, v = 2)
+gl.keep.ind(x, ind.list, recalc = FALSE, mono.rm = TRUE, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
@@ -15,7 +15,7 @@ gl.keep.ind(x, ind.list, recalc = FALSE, mono.rm = TRUE, v = 2)
 
 \item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object with the reduced data
@@ -32,10 +32,10 @@ The script returns a genlight object with the individuals deleted and, optionall
    gl <- gl.keep.ind(testset.gl, ind.list=c("AA019073","AA004859"))
 }
 \seealso{
-\code{\link{gl.filter.monomorphs}}
+\code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
 
-\code{\link{gl.recalc.metrics}}
+\code{\link{gl.drop.ind}} to drop rather than keep specified individuals
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

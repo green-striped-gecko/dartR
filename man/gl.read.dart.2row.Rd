@@ -4,11 +4,11 @@
 \alias{gl.read.dart.2row}
 \title{Import SNP data from DArT and convert to  genlight \{agegenet\} format (gl)}
 \usage{
-gl.read.dart.2row(datafile, topskip, nmetavar, nas = "-",
-  ind.metafile = NULL, pbar = TRUE, v = 2)
+gl.read.dart.2row(filename, topskip, nmetavar, nas = "-",
+  ind.metafile = NULL, probar = TRUE, verbose = 2)
 }
 \arguments{
-\item{datafile}{-- name of csv file containing the DartSeq data in 2-row format (csv) [required]}
+\item{filename}{-- name of csv file containing the DartSeq data in 2-row format (csv) [required]}
 
 \item{topskip}{-- number of rows to skip before the header row (containing the specimen identities [required]}
 
@@ -18,9 +18,9 @@ gl.read.dart.2row(datafile, topskip, nmetavar, nas = "-",
 
 \item{ind.metafile}{-- name of csv file containing metadata assigned to each entity (individual) [default NULL]}
 
-\item{pbar}{-- display progress bar [FALSE]}
+\item{probar}{-- display progress bar [FALSE]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 An object of class ("genlight") containing the SNP data, and locus and individual metadata
@@ -47,12 +47,6 @@ and lon (longitude, optional). id, pop, lat, lon are the column headers in the c
 
 The SNP matrix, locus names (constructed from the AlleleID, SNP and SnpPosition to be unique), locus metadata, specimen names,
 specimen metadata are combined into a genlight object. Refer to the genlight documentation (Package adegenet) for further details.
-}
-\examples{
-\donttest{
-gl <- gl.read.dart.2row(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
-nmetavar=16, nas="-", ind.metafile="metadata.csv" )
-}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

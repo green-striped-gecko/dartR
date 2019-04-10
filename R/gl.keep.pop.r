@@ -10,7 +10,7 @@
 #'
 #' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
 #' @param pop.list -- a list of populations to be kept [required]
-#' #' @param as.pop -- assign another metric to represent population [default NULL]
+#' @param as.pop -- assign another metric to represent population [default NULL]
 #' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
 #' @param mono.rm -- Remove monomorphic loci [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
@@ -59,7 +59,7 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
 # FUNCTION SPECIFIC ERROR CHECKING
     
   # Assign the new population list if as.pop is specified
-    
+    pop.hold <- pop(x)
     if (!is.null(as.pop)){
       pop.hold <- pop(x)
       pop(x) <- as.matrix(x@other$ind.metrics[as.pop])

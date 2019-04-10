@@ -60,13 +60,14 @@
 #' @importFrom MASS write.matrix
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' m <- gl.nhybrids(testset.gl, outfile="nhyb.txt", 
 #' p0=NULL, p1=NULL, 
 #' nhyb.directory="C:/workspace/R/NewHybsPC",
 #' BurnIn=100,
 #' sweeps=100,
 #' verbose=3)
+#' }
 
 gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     p0=NULL, p1=NULL, 
@@ -87,7 +88,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   # Work around a bug in adegenet if genlight object is created by subsetting
-  gl@other$loc.metrics <- gl@other$loc.metrics[1:nLoc(x),]
+  gl@other$loc.metrics <- gl@other$loc.metrics[1:nLoc(gl),]
   
   if (verbose < 0 | verbose > 5){
     cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")

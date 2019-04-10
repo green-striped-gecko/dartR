@@ -32,5 +32,5 @@ hom_2 <- 30
 p_value <- prob.hwe(hets, hom_1, hom_2)
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

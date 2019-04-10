@@ -2,16 +2,18 @@
 % Please edit documentation in R/gl2gds.r
 \name{gl2gds}
 \alias{gl2gds}
-\title{Convert a genlight object to nexus format PAUP SVDquartets}
+\title{Convert a genlight object to gds format}
 \usage{
-gl2gds(gl, outfile = "gl2gds.gds", outpath = tempdir())
+gl2gds(x, outfile = "gl2gds.gds", outpath = tempdir(), verbose = 2)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- file name of the output file (including extension).}
+\item{outfile}{-- file name of the output file (including extension) [default gl2gds.gds]}
 
-\item{outpath}{-- path where to save the output file (set to tempdir by default)}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
+
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \description{
 Package SNPRelate relies on a bit-level representation of a SNP dataset that competes with \{adegenet\} genlight

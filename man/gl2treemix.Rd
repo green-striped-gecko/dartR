@@ -5,26 +5,27 @@
 \title{Convert a genlight object to a treemix input file}
 \usage{
 gl2treemix(x, outfile = "treemix_input.gz", outpath = tempdir(),
-  v = 2)
+  verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- file name of the output file (including extension).}
+\item{outfile}{-- file name of the output file (including gz extension)[default treemix_input.gz]}
 
-\item{outpath}{-- path where to save the output file (set to tempdir by default)}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
+to direct output files to your working directory.}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \description{
-The output file contains the snp data in the format expected by treemix -- see the treemix manual. The file needs to be gzipped before it will be recognised
-by treemix. Plotting functions can be obtained using source("C:/workspace/R/dartR/R/plotting_funcs.R").
-}
-\details{
-Reference: Pickrell and Pritchard (2012). Inference of population splits and mixtures from genome-wide allele frequency data. PLoS Genetics https://doi.org/10.1371/journal.pgen.1002967
+The output file contains the snp data in the format expected by treemix -- see the treemix manual. The file will be gzipped before in order to be recognised
+by treemix. Plotting functions provided with treemix will need to be sourced from the treemix download page.
 }
 \examples{
-gl2treemix(testset.gl)
+gl2treemix(testset.gl, outpath=getwd())
+}
+\references{
+Pickrell and Pritchard (2012). Inference of population splits and mixtures from genome-wide allele frequency data. PLoS Genetics https://doi.org/10.1371/journal.pgen.1002967
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

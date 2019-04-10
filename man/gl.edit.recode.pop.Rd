@@ -4,11 +4,11 @@
 \alias{gl.edit.recode.pop}
 \title{Create or edit a population re-assignment table}
 \usage{
-gl.edit.recode.pop(gl, pop.recode = NULL, recalc = FALSE,
-  mono.rm = TRUE, v = 1)
+gl.edit.recode.pop(x, pop.recode = NULL, recalc = FALSE,
+  mono.rm = TRUE, verbose = 2)
 }
 \arguments{
-\item{gl}{Name of the genlight object for which populations are to be reassigned.[required]}
+\item{x}{Name of the genlight object for which populations are to be reassigned.[required]}
 
 \item{pop.recode}{Name of the file to output the new assignments [optional]}
 
@@ -16,7 +16,7 @@ gl.edit.recode.pop(gl, pop.recode = NULL, recalc = FALSE,
 
 \item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
 
-\item{v}{-- verbosity: 0, silent; 1, brief; 2, verbose [default 1]}
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 An object of class ("genlight") with the revised population assignments
@@ -47,7 +47,7 @@ recalculates statistics made redundant by the deletion of individuals from the d
 The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 }
 \examples{
-\donttest{
+\dontrun{
 gl <- gl.edit.recode.pop(testset.gl)
 }
 }

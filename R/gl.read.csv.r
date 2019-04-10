@@ -13,10 +13,9 @@
 #' @param ind.labels -- if TRUE, then the first column of the csv file is the individual/specimen/sample labels [default TRUE]
 #' @param loc.labels -- if TRUE, then the first row of the csv file is the locus labels [default TRUE]
 #' @param ind.metafile -- name of the csv file containing the metadata for individuals [optional]
-#' @param ind.metafile -- name of the csv file containing the metadata for individuals [optional]
+#' @param loc.metafile -- name of the csv file containing the metadata for loci [optional]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a genlight object with the SNP data and associated metadata included.
-#' @import adegenet
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 
@@ -58,8 +57,8 @@ gl.read.csv <- function(filename, ind.labels=TRUE, loc.labels=TRUE, ind.metafile
   if (ind.labels){
     colstart <- 2
   }
-  numrows <- dim(m)[1]
-  numcols <- dim(m)[2]
+  numrows <- dim(df0)[1]
+  numcols <- dim(df0)[2]
 
   df <- df0[rowstart:numrows,colstart:numcols]
     data <- as.matrix(df)

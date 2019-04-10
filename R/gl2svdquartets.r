@@ -7,12 +7,13 @@
 #' a single line per individual, resolving heterozygous SNPs by replacing them with standard
 #' ambiguity codes (method=2).
 #'
-#' @reference: Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent. Bioinformatics 30: 3317-3324
+#' @references Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent. Bioinformatics 30: 3317-3324
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- file name of the output file (including extension) [default svd.nex]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
-#' to direct output files to your working directory.#' @param method -- method = 1, nexus file with two lines per individual; method = 2, nexus
+#' to direct output files to your working directory.
+#' @param method -- method = 1, nexus file with two lines per individual; method = 2, nexus
 #' file with one line per individual, ambiguity codes [default 2]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL

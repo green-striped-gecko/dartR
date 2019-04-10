@@ -9,12 +9,12 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The modified genlight dataset
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#' @seealso \code{\link{utils.recalc.metrics}} for recalculating all metrics, \code{\link{utils.recalc.callrate}} for recalculating CallRate,
-#' \code{\link{utils.recalc.freqhomref}} for recalculating frequency of homozygous reference, \code{\link{utils.recalc.freqhomsnp}} for recalculating frequency of homozygous alternate,
-#' \code{\link{utils.recalc.freqhet}} for recalculating frequency of heterozygotes, \code{\link{gl.recalc.avgpic}} for recalculating AvgPIC,
-#' \code{\link{gl.recalc.rdepth}} for recalculating average read depth
+#' @seealso \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,
+#' \code{utils.recalc.freqhomref} for recalculating frequency of homozygous reference, \code{utils.recalc.freqhomsnp} for recalculating frequency of homozygous alternate,
+#' \code{utils.recalc.freqhet} for recalculating frequency of heterozygotes, \code{gl.recalc.avgpic} for recalculating AvgPIC,
+#' \code{gl.recalc.rdepth} for recalculating average read depth
 #' @examples
-#' f <- utils.recalc.maf(testset.gl)
+#' #f <- dartR:::utils.recalc.maf(testset.gl)
 
 
 utils.recalc.maf <- function(x, verbose=2) {

@@ -33,7 +33,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' gl <- gl.edit.recode.pop(testset.gl)
 #' }
 

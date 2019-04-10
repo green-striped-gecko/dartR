@@ -6,6 +6,7 @@
 #' @param maf.limit -- show histograms maf range <= maf.limit [default 0.5]
 #' @param ind.limit -- show histograms only for populations of size greater than ind.limit [default 5]
 #' @param loc.limit -- show histograms only for populations with more than loc.limit polymorphic loci [default 30]
+#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
 #' @return NULL
 #' @export
 #' @importFrom graphics layout hist
@@ -15,7 +16,7 @@
 
 # Last amended 3-Feb-19
 
-gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30) {
+gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose = 0) {
   
 # TIDY UP FILE SPECS
 
@@ -69,14 +70,14 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30) {
 # Recalculate the relevant loc.metrics
   
   cat("  Recalculating MAF\n")
-  x <- utils.recalc.maf(x,v=1)
+  x <- utils.recalc.maf(x,verbose=1)
 
 # Check for status -- any populations with loc > loc.limit; ind > ind.limit; and is nPop > 1
   
   count <- 0
   for (popn in popNames(x)) {
     genl <- x[pop(x)==popn]
-    genl <- gl.filter.monomorphs(genl,v=0)
+    genl <- gl.filter.monomorphs(genl,verbose=0)
     if (nInd(genl) >= ind.limit & nLoc(genl) >= loc.limit) {
       count <- count + 1
       popn.hold <- popn
@@ -87,18 +88,18 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30) {
     title.str <- "Minor Allele Frequency\nOverall"
   }
   if (count == 0) {
-    if (v >= 3) {cat("  No populations met minimum limits on no of individuals or loci, reporting for overall\n")}
+    if (verbose >= 1) {cat("  No populations met minimum limits on no of individuals or loci, reporting for overall\n")}
     title.str <- "Minor Allele Frequency\nOverall"
     flag <- 0
   }
   if (count == 1) {
-    if (v >= 3) {cat("  Only one population met minimum limits on no of individuals or loci\n")}
+    if (verbose >= 3) {cat("  Only one population met minimum limits on no of individuals or loci\n")}
     title.str <- paste("Minor Allele Frequency\n",popn.hold)
     flag <- 0
   }  
   if (nPop(x) == 1) {
     flag <- 0
-    if (v >= 3) {cat("  Only one population specified\n")}
+    if (verbose >= 1) {cat("  Only one population specified\n")}
     title.str <- paste("Minor Allele Frequency\n",pop(x)[1])
   }
     
@@ -122,9 +123,9 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30) {
   if (flag == 1){   
     for (popn in popNames(x)) {
       genl <- x[pop(x)==popn]
-      genl <- gl.filter.monomorphs(genl, v = 0)
+      genl <- gl.filter.monomorphs(genl, verbose= 0)
       if (nLoc(genl) >= loc.limit) {
-      genl <- utils.recalc.maf(genl,v=0)
+      genl <- utils.recalc.maf(genl,verbose=0)
       maf <- genl@other$loc.metrics$maf
       
       #cat(popn,"Pops: ",nPop(genl),"\n")

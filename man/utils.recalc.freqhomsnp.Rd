@@ -4,12 +4,12 @@
 \alias{utils.recalc.freqhomsnp}
 \title{A utility script to recalculate the the frequency of the homozygous alternate SNP by locus after some populations have been deleted}
 \usage{
-utils.recalc.freqhomsnp(x, v = 2)
+utils.recalc.freqhomsnp(x, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 The modified genlight object
@@ -21,7 +21,13 @@ This script recalculates the FreqHomSnp and places these recalculated values in 
 Note that the frequency of the homozygote alternate SNPS is calculated from the individuals that could be scored.
 }
 \examples{
-#result <- dartR:::utils.recalc.freqhomsnp(testset.gl)
+#result <- utils.recalc.freqhomsnp(testset.gl)
+}
+\seealso{
+\code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,
+\code{utils.recalc.freqhomref} for recalculating frequency of homozygous reference, \code{utils.recalc.avgpic} for recalculating AvgPIC,
+\code{utils.recalc.freqhet} for recalculating frequency of heterozygotes, \code{gl.recalc.maf} for recalculating minor allele frequency,
+\code{gl.recalc.rdepth} for recalculating average read depth
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

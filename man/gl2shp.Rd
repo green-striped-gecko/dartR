@@ -4,29 +4,30 @@
 \alias{gl2shp}
 \title{Convert genlight objects to ESRI shapefiles or kml files}
 \usage{
-gl2shp(gl, type = "shp",
+gl2shp(x, type = "shp",
   proj4 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
-  outfile = "gl", outpath = tempdir(), v = 1)
+  outfile = "gl", outpath = tempdir(), verbose = 2)
 }
 \arguments{
-\item{gl}{-- genlight containing lat longs  [required]}
+\item{x}{-- name of the genlight object containing the SNP data and location data, lat longs  [required]}
 
-\item{type}{-- type of output "kml" or "shp"}
+\item{type}{-- type of output "kml" or "shp" [default 'shp']}
 
-\item{proj4}{-- proj4string of data set. If not provided WGS84 is taken as default. (see spatialreference.org for other projections)}
+\item{proj4}{-- proj4string of data set (see spatialreference.org for projections) [default WGS84]}
 
-\item{outfile}{-- name (path) of the output shape file}
+\item{outfile}{-- name (path) of the output shape file [default 'gl']. shp extension is added automatically.}
 
-\item{outpath}{-- path of the output file. Default is to tempdir(). If to be saved in the current working directory change to "."}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
-\item{v}{-- verbosity: if v=0 no output, v=1 reports name and path of output file. default 1}
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \description{
-This function exports cordinates in a genlight object to a point shape file (including also individual meta data if available). Coordinates are provided under gl@other$latlong and assumed to be in WGS84 coordinates if no proj4 string is provided.
+This function exports cordinates in a genlight object to a point shape file (including also individual meta data if available).
+Coordinates are provided under x@other$latlong and assumed to be in WGS84 coordinates, if not proj4 string is provided.
 }
 \examples{
 gl2shp(testset.gl)
 }
 \author{
-Bernd Guber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Guber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

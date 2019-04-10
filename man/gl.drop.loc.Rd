@@ -4,14 +4,14 @@
 \alias{gl.drop.loc}
 \title{Remove specified loci from a genelight \{adegenet\} object}
 \usage{
-gl.drop.loc(x, loc.list, v = 2)
+gl.drop.loc(x, loc.list, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
-\item{loc.list}{-- vector of loci names to be droped.}
+\item{loc.list}{-- vector of loci names to be dropped.}
 
-\item{v}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object with the reduced data
@@ -21,8 +21,7 @@ This script deletes selected loci from the nominated dataset.
 }
 \examples{
    gl <- gl.drop.loc(testset.gl, loc.list=c("100049687|12-A/G","100050106|50-G/A"))
-
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

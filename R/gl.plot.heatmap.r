@@ -114,8 +114,8 @@ gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE
   if (legend) {
     par(mai=c(0.2,0,0.5,0.1),pty="m",xpd=F)
     plot.new()
-    bin <- (max(as.matrix(d))-min(as.matrix(d)))/ncolors
-    series <- seq(from=0, to=max(d), by=bin)
+    bin <- (max(as.matrix(D))-min(as.matrix(D)))/ncolors
+    series <- seq(from=0, to=max(D), by=bin)
     series=as.character(signif(series,2))
     series.offset <- series[2:length(series)]
     s <- array(NA,length(series)-1)

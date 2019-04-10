@@ -63,6 +63,7 @@ gl.recalc.metrics <- function(x, verbose=2){
   x <- utils.recalc.avgpic(x,verbose=verbose)
   x <- utils.recalc.callrate(x,verbose=verbose)
   x <- utils.recalc.maf(x,verbose=verbose)
+  x <- utils.recalc.rdepth(x,verbose=verbose)
 
   if (verbose >= 2) {
     cat("  Locus metrics recalculated\n")
