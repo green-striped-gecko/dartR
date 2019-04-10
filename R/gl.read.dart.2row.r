@@ -31,6 +31,11 @@
 #' @return An object of class ("genlight") containing the SNP data, and locus and individual metadata
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
+#' @examples
+#' \donttest{
+#' gl <- gl.read.dart.2row(filename="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
+#' nmetavar=16, nas="-", ind.metafile="metadata.csv" )
+#' }
 
 gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile=NULL, probar=TRUE, verbose=2) {
 
@@ -240,9 +245,9 @@ if (!is.null(ind.metafile)) {
     cat("  Calculating read depth for each locus\n")
   }
   if (is.null(gl@other$loc.metrics$rdepth)) {
-    gl@other$loc.metrics$rdepth <- array(NA,nLoc(gl))
-    for (i in 1:nLoc(gl)){
-      called.ind <- round(nInd(gl)*gl@other$loc.metrics$CallRate[i],0)
+    xgl@other$loc.metrics$rdepth <- array(NA,nLoc(x))
+    for (i in 1:nLoc(x)){
+      called.ind <- round(nInd(x)*gl@other$loc.metrics$CallRate[i],0)
       ref.count <- called.ind*gl@other$loc.metrics$OneRatioRef[i]
       alt.count <- called.ind*gl@other$loc.metrics$OneRatioSnp[i]
       sum.count.ref <- ref.count*gl@other$loc.metrics$AvgCountRef[i]
