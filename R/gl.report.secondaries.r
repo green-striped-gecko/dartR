@@ -8,7 +8,9 @@
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param plot -- if TRUE, will produce a frequency plot the number of SNPs per sequence tag [default = FALSE] 
-#' @param smearplot if TRUE, will produce a smearplot of individuals against loci [default FALSE]
+#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
+#' plots a boxplot adjusted for skewed distributions [default 'adjusted']
+#' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
 #' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
 #' @return A genlight object of loci with multiple SNP calls
 #' @importFrom adegenet glPlot
@@ -16,9 +18,13 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.secondaries(testset.gl)
+#' gl.report.secondaries(testset.gl, plot=TRUE)
 
-gl.report.secondaries <- function(x, plot=FALSE, smearplot=FALSE, verbose = 0) {
+gl.report.secondaries <- function(x, 
+                                  plot=FALSE, 
+                                  boxplot="adjusted",
+                                  range=1.5,
+                                  verbose = 0) {
 
 # TIDY UP FILE SPECS
 
@@ -33,7 +39,12 @@ gl.report.secondaries <- function(x, plot=FALSE, smearplot=FALSE, verbose = 0) {
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-
+    
+  if (!(boxplot=="standard" | boxplot=="adjusted")) {
+    cat("Warning: Box-whisker plots must either standard or adjusted for skewness, set to boxplot='adjusted'\n")
+    boxplot <- 'adjusted'   
+  }
+    
   # Work around a bug in adegenet if genlight object is created by subsetting
     x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
 
@@ -56,28 +67,42 @@ gl.report.secondaries <- function(x, plot=FALSE, smearplot=FALSE, verbose = 0) {
 
   nloc.with.secondaries <- table(duplicated(b))[2]
   if (!is.na(nloc.with.secondaries)){
-    par(mfrow = c(2, 1),pty="m") 
-    if (plot) {
-      barplot(table(as.numeric(table(b))),col="red", space=0, main="Secondaries")
-    }
-    if (smearplot){
-      glPlot(x)
-    }
+    # Prepare for plotting
+    # Save the prior settings for mfrow, oma, mai and pty, and reassign
+    op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+    # Set margins for first plot
+    par(mai=c(1,0.5,0.5,0.5))
+    # Plot Box-Whisker plot
+    adjbox(as.numeric(table(b)),
+           horizontal = TRUE,
+           col='red',
+           range=range,
+           main = "Frequency of SNPs per Sequence Tag")
+    # Set margins for second plot
+    par(mai=c(0.5,0.5,0,0.5))  
+    # Plot Histogram
+    barplot(table(as.numeric(table(b))),col="red", space=0)
   } else {
       if (plot) {cat("  Warning: No loci with secondaries, no plot produced\n") }
   }
   
 # Identify secondaries in the genlight object
-  cat("  Total number of SNP loci:",nLoc(x),"\n")
+  cat("  Total number of SNP loci scored:",nLoc(x),"\n")
   if (is.na(table(duplicated(b))[2])) {
     cat("   Number of secondaries: 0 \n")
   } else {
-    cat("   Number of secondaries:",table(duplicated(b))[2],"\n")
+    cat("   Number of sequence tags in total:",table(duplicated(b))[1],"\n")
+    cat("   Number of sequence tags with secondaries:",sum(table(as.numeric(table(b))))-table(as.numeric(table(b)))[1],"\n")
+    cat("   Number of secondary SNP loci removed:",table(duplicated(b))[2],"\n")
+    cat("   Number of SNP loci retained should secondaries be filtered:",table(duplicated(b))[1],"\n")
+    cat(" Tabular 1 to K secondaries (refer plot)\n",table(as.numeric(table(b))),"\n")
   }  
-  cat("   Number of loci if secondaries are removed:",table(duplicated(b))[1],"\n")
-  cat("   Returning a genlight object containing only those loci with secondaries (multiple entries per locus)\n\n")
+  cat("\nReturning a genlight object containing only those loci with secondaries (multiple entries per locus)\n\n")
 
 # FLAG SCRIPT END
+  
+  # Reset the par options    
+    par(op)
 
     cat("Completed:",funname,"\n")
 
