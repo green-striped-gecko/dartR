@@ -62,7 +62,7 @@ gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile
   }  
 # Error checks
   if(any(names(x) == "AlleleID")) {
-    if (verbose >= 2){cat("    includes key variable AllelID\n")}
+    if (verbose >= 2){cat("    includes key variable AlleleID\n")}
   } else {
       cat("Fatal Error: Dataset does not include key variable AlleleID!\n"); stop()
   }
@@ -240,9 +240,9 @@ if (!is.null(ind.metafile)) {
     cat("  Calculating read depth for each locus\n")
   }
   if (is.null(gl@other$loc.metrics$rdepth)) {
-    gl@other$loc.metrics$rdepth <- array(NA,nLoc(x))
-    for (i in 1:nLoc(x)){
-      called.ind <- round(nInd(x)*gl@other$loc.metrics$CallRate[i],0)
+    gl@other$loc.metrics$rdepth <- array(NA,nLoc(gl))
+    for (i in 1:nLoc(gl)){
+      called.ind <- round(nInd(gl)*gl@other$loc.metrics$CallRate[i],0)
       ref.count <- called.ind*gl@other$loc.metrics$OneRatioRef[i]
       alt.count <- called.ind*gl@other$loc.metrics$OneRatioSnp[i]
       sum.count.ref <- ref.count*gl@other$loc.metrics$AvgCountRef[i]
