@@ -22,8 +22,7 @@
 #' @param x -- a genlight object containing the SNP genotypes [Required]
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
-#' @param range -- specifies the range for delimiting 
-#' outliers [default = 1.5 interquartile ranges]
+#' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
 #' @param cex.labels -- sets the size of the population labels [default 0.7]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a dataframe containing population labels, heterozygosities and sample sizes
@@ -73,8 +72,8 @@ gl.report.heterozygosity <- function(x,
     method <- "pop"   
   }
   
-  if (!(boxplot=="standard" | method == "adjusted")) {
-    cat("Warning: Box-whisker plots must either standard or adjusted for skewness, set to               boxplot='adjusted'\n")
+  if (!(boxplot=="standard" | boxplot == "adjusted")) {
+    cat("Warning: Box-whisker plots must either standard or adjusted for skewness, set to boxplot='adjusted'\n")
     boxplot <- 'adjusted'   
   }
 
@@ -213,12 +212,13 @@ gl.report.heterozygosity <- function(x,
       #c.hom0[i] <- sum(m[i,]==0,na.rm=TRUE)/(nInd(x)-c.na[i])
       #c.hom2[i] <- sum(m[i,]==2,na.rm=TRUE)/(nInd(x)-c.na[i])
     }
-  # Prepare for plotting
+
+    # Prepare for plotting
     # Save the prior settings for mfrow, oma, mai and pty, and reassign
       op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
     # Set margins for first plot
     par(mai=c(1,0.5,0.5,0.5))
-    # Plot Box-Whisker plot (see Dice and Leraas)
+    # Plot Box-Whisker plot
     adjbox(c.hets,
            horizontal = TRUE,
            col='red',
