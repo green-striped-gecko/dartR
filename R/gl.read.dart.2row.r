@@ -240,13 +240,13 @@ if (!is.null(ind.metafile)) {
     cat("  Calculating read depth for each locus\n")
   }
   if (is.null(gl@other$loc.metrics$rdepth)) {
-    xgl@other$loc.metrics$rdepth <- array(NA,nLoc(x))
+    gl@other$loc.metrics$rdepth <- array(NA,nLoc(x))
     for (i in 1:nLoc(x)){
       called.ind <- round(nInd(x)*gl@other$loc.metrics$CallRate[i],0)
       ref.count <- called.ind*gl@other$loc.metrics$OneRatioRef[i]
       alt.count <- called.ind*gl@other$loc.metrics$OneRatioSnp[i]
       sum.count.ref <- ref.count*gl@other$loc.metrics$AvgCountRef[i]
-      sum.count.alt <- ref.count*gl@other$loc.metrics$AvgCountSnp[i]
+      sum.count.alt <- alt.count*gl@other$loc.metrics$AvgCountSnp[i]
       gl@other$loc.metrics$rdepth[i] <- round((sum.count.alt + sum.count.ref)/called.ind,1)
     }
   }
