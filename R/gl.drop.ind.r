@@ -9,7 +9,7 @@
 #' @param x -- name of the genlight object containing SNP genotypes [required]
 #' @param ind.list -- a list of individuals to be removed [required]
 #' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
-#' @param mono.rm -- Remove monomorphic loci [default TRUE]
+#' @param mono.rm -- Remove monomorphic loci [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export
@@ -19,9 +19,9 @@
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
 
-# Last amended 3-Feb-19
+# Last amended 11-Apr-19
 
-gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=TRUE, verbose=2){
+gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
 
 # TIDY UP FILE SPECS
 
