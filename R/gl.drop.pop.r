@@ -139,9 +139,9 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
 
 # FLAG SCRIPT END
     
-  if (verbose > 0) {
-    cat("Completed gl.drop.pop\n\n")
-  }
+    if (verbose > 0) {
+      cat("Completed:",funname,"\n")
+    }
     
   return <- x
   
