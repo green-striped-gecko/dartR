@@ -10,7 +10,8 @@
 #' @param recode.table -- name of the new recode.table to receive the new population reassignments 
 #' arising from the amalgamation of populations [default tmp.csv]
 #' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
-#' @param tpop -- max number of fixed differences used amalgamating populations [default 0]
+#' @param tpop -- threshold number of fixed differences for amalgamating populations [default 0]
+#' @param plot -- if TRUE, plot a PCoA with the new groupings [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A list containing the gl object x and the following square matricies
 #'         [[1]] $gl -- the new genlight object with populations collapsed;
@@ -20,6 +21,7 @@
 #'         [[5]] $nloc -- total number of loci used in each comparison;
 #'         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation];
 #'         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
+#' @importFrom methods show       
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -28,11 +30,45 @@
 #' gl <- gl.collapse(fd, recode.table="testset_recode.csv",tpop=1)
 #' }
 
-gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, verbose=2) {
+gl.collapse <- function(fd, 
+                        recode.table="tmp.csv", 
+                        tpop=0, 
+                        tloc=0, 
+                        plot=FALSE, 
+                        verbose=2) {
+  
+# TIDY UP FILE SPECS
+  
+  funname <- match.call()[[1]]
+  
+# FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  
+  if (tloc > 0.5 || tloc < 0 ) {
+    cat("Fatal Error: Parameter tloc should be positive in the range 0 to 0.5\n")
+    stop("Execution terminated\n")
+  } 
+  
+  if (tpop < 0 ) {
+    cat("Fatal Error: Parameter tpop should be a positive integer\n")
+    stop("Execution terminated\n")
+  }  
   
   if (verbose > 0) {
-    cat("Starting gl.collapse: Amalgamating populations with",tpop,"or less fixed differences\n")
+    cat("Starting",funname,"\n")
   }
+  if ( verbose >= 2){
+    if (tloc > 0) {cat("  Comparing populations for fixed differences with tolerance",tloc,"\n")}
+    if (tloc == 0) {cat("  Comparing populations for absolute fixed differences\n")}
+    if (tpop > 0) {cat("  Amalgamating populations with fixed differences <= ",tpop,"\n")}
+    if (tpop == 0) {cat("  Amalgamating populations with zero fixed differences\n")}
+  }
+
+# DO THE JOB
   
 # Store the number of populations in the matrix
   npops <- dim(fd$fd)[1]
@@ -59,24 +95,25 @@ gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, verbose=2) {
   zero.list <- unique(zero.list)
   
 # Amalgamate populations
-  if (length(zero.list) > 1) {
-  for (i in 1:(length(zero.list)-1)) {
-    for (j in 2:length(zero.list)) {
-      if (length(intersect(zero.list[[i]],zero.list[[j]])) > 0 ) {
-        zero.list[[i]] <- union(zero.list[[i]],zero.list[[j]])
-        zero.list[[j]] <- union(zero.list[[i]],zero.list[[j]])
+  if (length(zero.list) >= 2) {
+    for (i in 1:(length(zero.list)-1)) {
+      for (j in 2:length(zero.list)) {
+        if (length(intersect(zero.list[[i]],zero.list[[j]])) > 0 ) {
+          zero.list[[i]] <- union(zero.list[[i]],zero.list[[j]])
+          zero.list[[j]] <- union(zero.list[[i]],zero.list[[j]])
+        }
       }
     }
-  }
-  for (i in 1:length(zero.list)) {
-    zero.list <- unique(zero.list)
-  }
-
+    for (i in 1:length(zero.list)) {
+      zero.list <- unique(zero.list)
+    }
   }  
 
-
 # Print out the results of the aggregations 
-  if(verbose > 1) {cat("\n\nPOPULATION GROUPINGS\n")}
+  if(verbose >= 2) {
+    cat("\n\nInitial Populations\n",pops,"\n")
+    cat("\nNew population groups\n")
+  }
   
   for (i in 1:length(zero.list)) {
     # Create a group label
@@ -85,7 +122,7 @@ gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, verbose=2) {
       } else {
         replacement <- paste0(zero.list[[i]][1],"+")
       }
-      if(verbose > 1) {
+      if(verbose >= 2) {
         cat(paste0("Group:",replacement,"\n"))
         print(as.character(zero.list[[i]]))
         cat("\n")
@@ -102,38 +139,51 @@ gl.collapse <- function(fd, recode.table="tmp.csv", tpop=0, tloc=0, verbose=2) {
     write.table(df, file=recode.table, sep=",", row.names=FALSE, col.names=FALSE)
   
 # Recode the data file (genlight object)
-  x2 <- gl.recode.pop(fd$gl, pop.recode=recode.table, verbose=verbose)
-  fd2 <- gl.fixed.diff(x2,tloc=tloc,test=FALSE, verbose=verbose)
-  
-  # Return the matricies
-  if (verbose > 2) {
-    cat("Returning a list containing the following square matricies:\n",
-        "         [[1]] $gl -- input genlight object;\n",
-        "         [[2]] $fd -- raw fixed differences;\n",
-        "         [[3]] $pcfd -- percent fixed differences;\n",
-        "         [[4]] $nobs -- mean no. of individuals used in each comparison;\n",
-        "         [[5]] $nloc -- total number of loci used in each comparison;\n",
-        "         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation]\n",
-        "         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n")
-  }
-  
+    x2 <- gl.recode.pop(fd$gl, pop.recode=recode.table, verbose=verbose)
+    fd2 <- gl.fixed.diff(x2,tloc=tloc,test=FALSE, verbose=verbose)
+
   if(setequal(levels(pop(x2)),levels(pop(fd$gl)))) { 
-    if (verbose > 1) {cat(paste("\nPOPULATION GROUPINGS\n     No populations collapsed at fd <=", tpop,"\n"))}
-    if (verbose > 0) {
-      cat("Completed gl.collapse\n")
+    if (verbose >= 2) {
+      cat(paste("\nNo further amalgamation of populations at fd <=", tpop,"\n"))
+      cat("  Recursive analysis complete\n\n")
     }
     l <- list(gl=fd$gl,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)
-    return(l)
   } else {
-    if (verbose > 1) {
-      cat("\nPOPULATION GROUPINGS")
+    # Display the fd matrix
+    if (verbose >= 2) {
+      cat("\n\nRaw Fixed Difference Matrix\n")
+      print(fd2$fd)
+      cat("\n")
+      cat("Sample sizes")
       print(table(pop(x2)))
+      cat("\n")
     }
-    if (verbose > 0) {
-      cat("Completed gl.collapse\n\n")
+    
+    # Plot the results  
+    if (plot){
+      pcoa <- gl.pcoa(x2,verbose=verbose)
+      tmp <- gl.pcoa.plot(pcoa,x2)
+      show(tmp)
+    }  
+    
+    # Return the matricies
+    if (verbose > 2) {
+      cat("Returning a list containing the new genlight object and square matricies, as follows:\n",
+          "         [[1]] $gl -- input genlight object;\n",
+          "         [[2]] $fd -- raw fixed differences;\n",
+          "         [[3]] $pcfd -- percent fixed differences;\n",
+          "         [[4]] $nobs -- mean no. of individuals used in each comparison;\n",
+          "         [[5]] $nloc -- total number of loci used in each comparison;\n",
+          "         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation]\n",
+          "         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n")
     }
     l <- list(gl=x2,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)
-    return(l)
   }
-
+  # FLAG SCRIPT END
+  
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
+  
+  return(l)
 }
