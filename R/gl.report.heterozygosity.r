@@ -3,28 +3,42 @@
 #' Calculates the observed and expected heterozygosities for each population (method="pop") 
 #' or the observed heterozyosity for each individual (method="ind") in a genlight object.
 #' 
-#' Observed heterozygosity for populations is the observed proportion of heterozygotes
-#' averaged over individuals.
+#' Observed heterozygosity for a population takes the proportion of heterozygous
+#' loci for each individual then averages over the individuals in that population. 
+#' The calculations take into account missing values.
 #' 
+#' Expected heterozygosity for a population takes the expected proportion of
+#' heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each locus, then
+#' averages this across the loci for an average estimate for the population.
+#' The calculations of expected heterozygosity use the unbiassed estimates of Nei, M. (1987) 
+#' Molecular evolutionary genetics. New York: Columbia University Press.
+#'
 #' Output for method="pop" is an ordered barchart of observed heterozygosity across 
-#' populations and a table of expected heterozygosity and estimated variance for 
-#' expected heterozygosity by population.
+#' populations together with a table of observed and expected heterozygosity by population.
 #' 
-#' Expected heterozygosity for a population is calculated by calculating the expected
-#' proportion of heterozygotes, under Hardy-Weinberg equilibrium, for each locus, then
-#' averaging across the loci. The calculations are according to Nei, M. (1987) Molecular 
-#' evolutionary genetics. New York: Columbia University Press.
+#' Observed heterozygosity for individuals is calculated as the proportion of loci that
+#' are heterozygous for that individual.
 #' 
-#' Output for method="ind" is a histogram of heterozygosity calculated across individuals.
+#' Output for method="ind" is a histogram of heterozygosity across individuals.
 #' The histogram is accompanied by a box and whisker plot presented either in standard 
-#' (boxplot="standard") or adjusted form (boxplot=adjusted). 
+#' (boxplot="standard") or adjusted for skewness (boxplot=adjusted). 
 #' 
 #' Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
 #' Box and Whisker Plots and Hubert & Vandervieren (2008, An Adjusted Boxplot for Skewed
 #' Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
 #' Box and Whisker Plots.
 #' 
+#' Finally, the loci that are invariant across all individuals in the dataset (that is,
+#' across populations), is typically unknown. This can render estimates of heterozygosity
+#' analysis specific, and so it is not valid to compare such estimates across species
+#' or even across different analyses. This is a similar problem faced by microsatellites.
+#' If you have an estimate of the number of invariant sequence tags (loci) in your data,
+#' such as provided by gl.report.secondaries, you can specify it with the n.invariant
+#' parameter to standardize your estimates of heterozygosity.
+#' 
 #' @param x -- a genlight object containing the SNP genotypes [Required]
+#' @param method -- calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']
+#' @param n.invariant -- an estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
@@ -41,10 +55,11 @@
 #' tmp <- gl.report.heterozygosity(testset.gl,verbose=3)
 #' tmp <- gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
 
-# Last amended 1-May-19
+# Last amended 4-May-19
 
 gl.report.heterozygosity <- function(x, 
                                      method="pop", 
+                                     n.invariant=0,
                                      boxplot="adjusted",
                                      range=1.5,
                                      cex.labels=0.7, 
@@ -74,6 +89,11 @@ gl.report.heterozygosity <- function(x,
   if (!(method=="pop" | method == "ind")) {
     cat("Warning: Method must either be by population or by individual, set to method='pop'\n")
     method <- "pop"   
+  }
+  
+  if (n.invariant < 0){
+    cat("Warning: Number of invariant loci must be non-negative, set to zero\n")
+    n.invariant <- 0
   }
   
   if (!(boxplot=="standard" | boxplot == "adjusted")) {
@@ -106,34 +126,62 @@ gl.report.heterozygosity <- function(x,
 # Split the genlight object into a list of populations
   sgl <- seppop(x)
   
-# OBSERVED HETEROZYGOSITY  
-  # if (verbose >=2){cat("  Calculating Observed Heterozygosities by population\n")}
-  # 
-  # # Calculate heterozygosity for each population in the list
-  #   Ho <- data.frame(lapply(sgl, function(x) mean(colMeans(as.matrix(x, na.rm=TRUE)==1), na.rm=TRUE) ))
-  #   
-  # # Calculate sample sizes
-  #   sums <- data.frame(lapply(sgl, function(x) mean(colSums(as.matrix(x, na.rm=TRUE)==1),
-  #                                                   na.rm=TRUE) ))
-  #   n <- t(sums/Ho)
-  #   n <- cbind(row.names(n),n)
-  #   
-  # # Join the sample sizes with the heteozygosities
-  #   df1 <- data.frame(pop=names(Ho), Ho=as.numeric(Ho[1,]))
-  #   df2 <- data.frame(n)
-  #   names(df2)<- c("pop","nInd")
-  #   df <- plyr::join(df1,df2, by="pop")
-  #   
-  # # Plot the results
-  #   op <- par(mfrow=c(1,1),mai=c(1.2,0.5,0.2,0),oma=c(2,2,2,0), pty="m")
-  #   df.ordered <- df[order(df$Ho),]
-  #   barplot(df.ordered$Ho, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
-  #           main="Observed Heterozygosity by Population")
+# OBSERVED HETEROZYGOSITY
+    if (verbose >=2){cat("  Calculating Observed Heterozygosities, averaged across loci, for each population\n")}
+    
+    # Parse across populations
+  
+    Hobs <- array(NA,length(sgl))
+    Hobs.adj <- array(NA,length(sgl))
+    obs.ind <- array(NA,length(sgl))
+    obs.loc <- array(NA,length(sgl))
+    for (i in 1:length(sgl)){
+      gl <- sgl[[i]]
+      
+      # Parse across individuals
+      
+      Hobs.ind <- array(NA,nInd(gl))
+      loc.obs.ind <- array(NA,nInd(gl))
+      Hobs.ind.adj <- array(NA,nInd(gl))
+      for (j in 1:nInd(gl)){
+        
+        # Parse across loci
+      
+        het.flag <- array(NA,nLoc(gl))
+        for (k in 1:nLoc(gl)){
+        
+          # flag if the locus is heterozygous
+          if (!is.na(as.matrix(gl)[j,k])){
+            if (as.matrix(gl)[j,k] == 1){
+              het.flag[k] <- 1
+            } else {
+              het.flag[k] <- 0
+            } 
+          }  else {
+            het.flag[k] <- NA
+          }
+        }
+        
+      # Calculate the observed heterozygosity for each individual
+      loc.obs.ind[j] <- sum(!is.na(het.flag))
+      Hobs.ind[j] <- sum(het.flag, na.rm=TRUE)/loc.obs.ind[j]
+      Hobs.ind.adj[j] <- sum(het.flag, na.rm=TRUE)/(loc.obs.ind[j] + n.invariant)
+      
+      }
+      
+      # Average the observed heterozygosity across individuals
+      obs.ind[i] <- sum(!is.na(Hobs.ind))
+      obs.loc[i] <- round(mean(loc.obs.ind,na.rm=TRUE),1)
+      Hobs[i] <- sum(Hobs.ind, na.rm=TRUE)/obs.ind[i]
+      Hobs.adj[i] <- Hobs[i]*obs.loc[i]/(obs.loc[i] + n.invariant)
+      
+    }  
 
-# EXPECTED HETEROZYGOSITY
+    # EXPECTED HETEROZYGOSITY
     if (verbose >=2){cat("  Calculating Expected Heterozygosities, averaged across loci, for each population\n")}
     
     Hexp <- array(NA,length(sgl))
+    Hexp.adj <- array(NA,length(sgl))
     # For each population
     for (i in 1:length(sgl)){
       gl <- sgl[[i]]
@@ -166,51 +214,18 @@ gl.report.heterozygosity <- function(x,
         He[j] <- 1 - (p[j]*p[j] + q[j]*q[j])
       }
       Hexp[i] <- mean(as.numeric(He),na.rm=TRUE)
+      Hexp.adj[i] <- Hexp[i]*obs.loc[i]/(obs.loc[i] + n.invariant)
     }  
-      
-# OBSERVED HETEROZYGOSITY
-    if (verbose >=2){cat("  Calculating Observed Heterozygosities, averaged across individuals, for each population\n")}
-  
-  Hobs <- array(NA,length(sgl))
-  # For each population
-  for (i in 1:length(sgl)){
-    gl <- sgl[[i]]
     
-    p <- array(NA,nInd(gl))  
-    q <- array(NA,nInd(gl))
-    Ho <- array(NA,nInd(gl))
-
-    # For each individual
-    for (j in 1:nInd(gl)){
-      
-      # Calculate heterozygosity as the proportion of heterozygous loci
-      # First sum up the number of homozygous and heterozygous loci
-      tbl <- table(as.matrix(gl)[j,],useNA = "always")
-      if (is.na(tbl["0"])) {tbl["0"] <- 0}
-      if (is.na(tbl["1"])) {tbl["1"] <- 0}
-      if (is.na(tbl["2"])) {tbl["2"] <- 0}
-    
-      # Back-calculate the allele frequencies
-      p[j] <- (2*tbl["0"] + tbl["1"]) # Raw
-      q[j] <- (tbl["1"] + 2*tbl["2"])
-      
-      # Total alleles
-      n <- p[j] + q[j]
-      
-      # Compute proportions
-      p[j] <- p[j]/n # Proportions
-      q[j] <- q[j]/n
-    
-      # Calculate the observed heterozygosity = proportion of heterozygous loci
-      Ho[j] <- tbl["1"]/(n/2)
-    }
-    p <- as.numeric(p)
-    q <- as.numeric(q)
-    Hobs[i] <- mean(as.numeric(Ho),na.rm=TRUE)
-  }
-    
-  df <- data.frame(popNames(x),as.numeric(table(pop(x))),Hobs,Hexp)
-  names(df) <- c("pop","nInd","Ho","He")
+  df <- data.frame(popNames(x),
+                   as.numeric(table(pop(x))),
+                   obs.loc,
+                   round(Hobs,6),
+                   round(Hobs.adj,6),
+                   round(Hexp,6),
+                   round(Hexp.adj,6)
+                   )
+  names(df) <- c("pop","nInd","nLoc","Ho","Ho.adj","He","He.adj")
   
   op <- par(mfrow=c(1,1),mai=c(1.2,0.5,0.2,0),oma=c(2,2,2,0), pty="m")
   df.ordered <- df[order(df$Ho),]
@@ -222,7 +237,7 @@ gl.report.heterozygosity <- function(x,
   # if (plot){
   #   par(mai=c(1,1,1,1),pty="s")
   #   p <- ggplot(df, aes(x=Hobs, y=Hexp))
-  #   p <- p + geom_point(cex=2,col="red") 
+  #   p <- p + geom_point(cex=2,col="red")
   #   p <- p + geom_abline(intercept = 0, slope = 1)
   #   p <- p + xlab("Observed Heterozygosity") + ylab("Expected Heterozygosity")
   #   p <- p + theme(panel.background = element_rect(fill = "white"),
@@ -232,7 +247,7 @@ gl.report.heterozygosity <- function(x,
   #                axis.text=element_text(size=15)
   #   )
   #   plot(p)
-  # }  
+  # }
 
 # OUTPUT REPORT
   if (verbose >= 3){
@@ -241,13 +256,25 @@ gl.report.heterozygosity <- function(x,
     cat("No. of individuals =", nInd(x), "\n")
     cat("No. of populations =", nPop(x), "\n")
   
-    cat("  Miniumum Observed Heterozygosity: ",round(min(df$Ho,na.rm=TRUE),4),"\n")
-    cat("  Maximum Observed Heterozygosity: ",round(max(df$Ho,na.rm=TRUE),4),"\n")
-    cat("  Average Observed Heterozygosity: ",round(mean(df$Ho,na.rm=TRUE),4),"\n")
-    cat("  Average Expected Heterozygosity: ",round(mean(df$He,na.rm=TRUE),4),"\n\n")
+    cat("  Miniumum Observed Heterozygosity: ",round(min(df$Ho,na.rm=TRUE),6),"\n")
+    cat("  Maximum Observed Heterozygosity: ",round(max(df$Ho,na.rm=TRUE),6),"\n")
+    cat("  Average Observed Heterozygosity: ",round(mean(df$Ho,na.rm=TRUE),6),"\n\n")
+    
+    cat("  Miniumum Observed Heterozygosity: ",round(min(df$He,na.rm=TRUE),6),"\n")
+    cat("  Maximum Observed Heterozygosity: ",round(max(df$He,na.rm=TRUE),6),"\n")
+    cat("  Average Observed Heterozygosity: ",round(mean(df$He,na.rm=TRUE),6),"\n\n")
+    
+    if (n.invariant > 0){
+      cat("  Average correction factor for invariant loci =",mean(obs.loc/(obs.loc + n.invariant),rn.na=TRUE),"\n")
+    }
   
-    print(df)
-  } 
+    if (n.invariant > 0 ) {
+      print(df)
+    } else {
+      print(df[,c("pop","nInd","nLoc","Ho","He")])
+    }
+ 
+  }
   
   }
   
@@ -295,9 +322,9 @@ gl.report.heterozygosity <- function(x,
         cat("No. of loci =", nLoc(x), "\n")
         cat("No. of individuals =", nInd(x), "\n")
 
-        cat("  Miniumum Observed Heterozygosity: ",round(min(df$c.hets),4),"\n")
-        cat("  Maximum Observed Heterozygosity: ",round(max(df$c.hets),4),"\n")
-        cat("  Average Observed Heterozygosity: ",round(mean(df$c.hets),4),"\n\n")
+        cat("  Miniumum Observed Heterozygosity: ",round(min(df$c.hets),6),"\n")
+        cat("  Maximum Observed Heterozygosity: ",round(max(df$c.hets),6),"\n")
+        cat("  Average Observed Heterozygosity: ",round(mean(df$c.hets),6),"\n\n")
         
         #print(df)
       }   
