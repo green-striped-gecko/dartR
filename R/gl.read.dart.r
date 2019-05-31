@@ -39,7 +39,7 @@ gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-
         sum.count.alt <- alt.count*glout@other$loc.metrics$AvgCountSnp[i]
         glout@other$loc.metrics$rdepth[i] <- round((sum.count.alt + sum.count.ref)/called.ind,1)
       }
-    cat("All read in. Please check carefully theo output above\n")  
+    cat("All read in. Please check carefully the output above\n")  
       
     } 
       

@@ -96,6 +96,8 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, verbose=2) {
   df <- cbind(dff,dfm,Trimmed_Sequence)
   a <- strsplit(row.names(df), split="-")
   a <- do.call(rbind,a)
+  a <- strsplit(a[,1], split="\\|")
+  a <- do.call(rbind,a)
   a <- as.numeric(a[,2])
   
   df$Trimmed_Sequence <- as.character(df$Trimmed_Sequence)
@@ -111,8 +113,12 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, verbose=2) {
 # Check for hets in all males, homs in all females (XY); ditto for ZW
   sumf <- df$F0+df$F1+df$F2
   summ <- df$M0+df$M1+df$M2
-  zw <- df[df$F1/(sumf)>=(1-t.hom) & df$M1/(summ)<=(0+t.het),]
-  xy <- df[df$F1/(sumf)<=(0+t.het) & df$M1/(summ)>=(1-t.hom),]
+  # Pull loci that are 100% homozygous for females and 100% heterozygous for males
+  index <- ((df$F0/(sumf)>=(1-t.hom) | df$F2/(sumf)>=(1-t.hom)) & df$M1/(summ)>=(1-t.het))
+  zw <- df[index,]
+  # Pull loci that are 100% homozygous for males and 100% heterozygous for females
+  index <- ((df$M0/(summ)>=(1-t.hom) | df$M2/(summ)>=(1-t.hom)) & df$F1/(sumf)>=(1-t.het))
+  xy <- df[index,]
 
 if (nrow(zw) == 0){
   cat("  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
@@ -123,13 +129,13 @@ if (nrow(zw) == 0){
   cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   print(zw)
   cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-  cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+  cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, approx one half of that for the other\n")
 }
 if (nrow(xy) == 0){
   cat("  No sex linked markers consistent with male heterogamety (XX/XY)\n")
 } else {
   cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n")
-  cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,";\n"))
+  cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,"\n"))
   cat(paste("    for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
   cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   print(xy)
