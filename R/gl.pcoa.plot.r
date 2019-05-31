@@ -27,7 +27,9 @@
 #' @param yaxis Identify the y axis from those available in the ordination (yaxis <= nfactors)
 #' @return A plot of the ordination
 #' @export
-#' @import ggplot2 directlabels tidyr
+#' @import directlabels tidyr
+#' @rawNamespace import(ggplot2, except = empty)
+
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' library(plotly) #needed for lables="interactive"

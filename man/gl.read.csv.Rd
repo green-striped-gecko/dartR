@@ -4,19 +4,17 @@
 \alias{gl.read.csv}
 \title{Read SNP data from a csv file into a genlight object}
 \usage{
-gl.read.csv(filename, ind.labels = TRUE, loc.labels = TRUE,
-  ind.metafile = NULL, loc.metafile = NULL, verbose = 2)
+gl.read.csv(filename, transpose = FALSE, ind.metafile = NULL,
+  loc.metafile = NULL, verbose = 2)
 }
 \arguments{
 \item{filename}{-- name of the csv file containing the SNP genotypes [required]}
 
-\item{ind.labels}{-- if TRUE, then the first column of the csv file is the individual/specimen/sample labels [default TRUE]}
+\item{transpose}{-- if TRUE, rows are loci and columns are individuals [default FALSE]}
 
-\item{loc.labels}{-- if TRUE, then the first row of the csv file is the locus labels [default TRUE]}
+\item{ind.metafile}{-- name of the csv file containing the metrics for individuals [optional]}
 
-\item{ind.metafile}{-- name of the csv file containing the metadata for individuals [optional]}
-
-\item{loc.metafile}{-- name of the csv file containing the metadata for loci [optional]}
+\item{loc.metafile}{-- name of the csv file containing the metrics for loci [optional]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
@@ -24,15 +22,28 @@ gl.read.csv(filename, ind.labels = TRUE, loc.labels = TRUE,
 a genlight object with the SNP data and associated metadata included.
 }
 \description{
-This script takes SNP genotypes from a csv file, combines them with individual and locus metadata and creates a genlight object.
+This script takes SNP genotypes from a csv file, combines them with individual and 
+locus metrics and creates a genlight object.
 }
 \details{
-The SNP data need to be in one of two forms. SNPs can be coded 0 for homozygous reference, 2 for homozygous alternate, and 1 for heterozygous with NA for missing values; or
-it can be coded A/A, A/C, C/T, G/A etc, with -/- as missing. Other formats will thow an error.
+The SNP data need to be in one of two forms. SNPs can be coded 0 for homozygous reference, 
+2 for homozygous alternate, and 1 for heterozygous with NA for missing values; or
+the SNP data can be coded A/A, A/C, C/T, G/A etc, with -/- as missing. Other formats will 
+throw an error.
 
-The individual metadata needs to be in a csv file, with headings, with a mandatory id column corresponding exactly to the identities provided with the SNP data. The locus metadata needs
-to be in a csv file with headings. Note that the locus metadata will be complemented by calculable statistics corresponding to those that would be provided by Diversity Arrays
-Technology (e.g. CallRate)
+The SNP data need to be individuals as rows,labelled, and loci as columns, also labelled. 
+If the orientation is individuals as columns and loci by rows, then set transpose=TRUE.
+
+The individual metrics need to be in a csv file, with headings, with a mandatory 
+id column corresponding exactly to the individual identity labels provided with the SNP data
+and in the same order.
+
+The locus metadata needs to be in a csv file with headings, with a mandatory column
+headed AlleleID corresponding exactly to the locus identity labels provided with
+the SNP data and in the same order.
+
+Note that the locus metadata will be complemented by calculable statistics corresponding 
+to those that would be provided by Diversity Arrays Technology (e.g. CallRate)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

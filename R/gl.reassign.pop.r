@@ -78,7 +78,7 @@ gl.reassign.pop <- function (x, as.pop, verbose = 2) {
       cat(paste("    No. of loci:", nLoc(x), "\n"))
       cat(paste("    No. of individuals:", nInd(x), "\n"))
       cat(paste("    No. of populations: ", length(levels(factor(pop(x)))), "\n"))
-      cat(paste("    No. of populations: ", length(levels(factor(pop.hold))), "\n"))
+      #cat(paste("    No. of populations: ", length(levels(factor(pop.hold))), "\n"))
   }
 
   if (verbose > 0) {

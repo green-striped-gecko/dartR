@@ -11,7 +11,6 @@
 #' @param plot if TRUE, will produce a histogram of call rate [default FALSE]
 #' @param smearplot if TRUE, will produce a smearplot of individuals against loci [default FALSE]
 #' @return -- Tabulation of REad Depth against Threshold
-#' @importFrom adegenet glPlot
 #' @importFrom graphics hist
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

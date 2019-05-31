@@ -5,7 +5,7 @@
 \title{Collapse a distance matrix by amalgamating populations}
 \usage{
 gl.collapse(fd, recode.table = "tmp.csv", tpop = 0, tloc = 0,
-  verbose = 2)
+  plot = FALSE, verbose = 2)
 }
 \arguments{
 \item{fd}{-- name of the list of matricies produced by gl.fixed.diff() [required]}
@@ -13,9 +13,11 @@ gl.collapse(fd, recode.table = "tmp.csv", tpop = 0, tloc = 0,
 \item{recode.table}{-- name of the new recode.table to receive the new population reassignments 
 arising from the amalgamation of populations [default tmp.csv]}
 
-\item{tpop}{-- max number of fixed differences used amalgamating populations [default 0]}
+\item{tpop}{-- threshold number of fixed differences for amalgamating populations [default 0]}
 
 \item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]}
+
+\item{plot}{-- if TRUE, plot a PCoA with the new groupings [default FALSE]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }

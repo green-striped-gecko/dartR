@@ -29,7 +29,8 @@
 #' @return A genlight object of loci with multiple SNP calls
 #' @importFrom adegenet glPlot
 #' @importFrom graphics barplot
-#' @importfrom robustbase adjbox
+#' @importFrom robustbase adjbox
+#' @importFrom stats dpois
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -106,6 +107,7 @@ gl.report.secondaries <- function(x,
     cat("Estimating parameters (lambda) of the Poisson expectation\n")
       # Calculate the mean for the truncated distribution
         freqs <- as.numeric(freqs)
+        tmp<- NA
         for (i in 1:length(freqs)){
           tmp[i] <- freqs[i]*(i-1)
         }
@@ -143,6 +145,9 @@ gl.report.secondaries <- function(x,
         par(mai=c(0.5,0.5,0.2,0.5))
         title <- paste0("Poisson Expectation (zero class ",round(dpois(x=0,lambda=k)*rn,0)," invariant loci)")
         barplot(reconstructed,col="red", space=0.5, main=title)
+        # Reset the par options    
+        par(op)
+        
   } else {
       if (plot) {cat("  Warning: No loci with secondaries, no plot produced\n") }
   }
@@ -163,8 +168,6 @@ gl.report.secondaries <- function(x,
 
 # FLAG SCRIPT END
   
-  # Reset the par options    
-    par(op)
 
     cat("Completed:",funname,"\n")
 

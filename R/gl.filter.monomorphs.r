@@ -8,7 +8,8 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @param pb -- display progress bar [FALSE]
 #' @return A genlight object with monomorphic loci removed
-#' @import plyr utils
+#' @import utils
+#' @importFrom plyr count
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples

@@ -9,7 +9,7 @@
 #' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
 #' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
 #' @return NULL
-#' @import plyr utils
+#' @import utils
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
