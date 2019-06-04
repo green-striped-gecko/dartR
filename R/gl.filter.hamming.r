@@ -127,7 +127,9 @@ gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=2) {
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-
+  #add to history
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()
   return(x)
   
 }

@@ -143,7 +143,9 @@ gl.edit.recode.ind <- function(x, ind.recode=NULL, recalc=TRUE, mono.rm=TRUE, ve
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  
+  #add to history
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()  
   return(x)
   
 }

@@ -94,7 +94,9 @@ gl.filter.heterozygosity <- function(x,
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  
+    #add to history
+    nh <- length(x.kept@other$history)
+    x.kept@other$history[[nh + 1]] <- match.call()
   # Return the result
   return(x.kept) 
 }

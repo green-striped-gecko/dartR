@@ -24,28 +24,29 @@ gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-
   }
   dout <-utils.read.dart(filename = filename, nas=nas, topskip=topskip, lastmetric = lastmetric)
   glout <- utils.dart2genlight(dout, ind.metafile = ind.metafile, probar = probar)
-
-    # Calculate Read Depth
-    
-    if (is.null(glout@other$loc.metrics$rdepth)) {
-      
-      cat("Read depth calculated and added to @loc.metrics slot.\n")
-      glout@other$loc.metrics$rdepth <- array(NA,nLoc(glout))
-      for (i in 1:nLoc(glout)){
-        called.ind <- round(nInd(glout)*glout@other$loc.metrics$CallRate[i],0)
-        ref.count <- called.ind*glout@other$loc.metrics$OneRatioRef[i]
-        alt.count <- called.ind*glout@other$loc.metrics$OneRatioSnp[i]
-        sum.count.ref <- ref.count*glout@other$loc.metrics$AvgCountRef[i]
-        sum.count.alt <- alt.count*glout@other$loc.metrics$AvgCountSnp[i]
-        glout@other$loc.metrics$rdepth[i] <- round((sum.count.alt + sum.count.ref)/called.ind,1)
-      }
-    cat("All read in. Please check carefully the output above\n")  
-      
-    } 
-      
-      
-      return(glout)
-}
-    
   
- 
+  # Calculate Read Depth
+  
+  if (is.null(glout@other$loc.metrics$rdepth)) {
+    
+    cat("Read depth calculated and added to @loc.metrics slot.\n")
+    glout@other$loc.metrics$rdepth <- array(NA,nLoc(glout))
+    for (i in 1:nLoc(glout)){
+      called.ind <- round(nInd(glout)*glout@other$loc.metrics$CallRate[i],0)
+      ref.count <- called.ind*glout@other$loc.metrics$OneRatioRef[i]
+      alt.count <- called.ind*glout@other$loc.metrics$OneRatioSnp[i]
+      sum.count.ref <- ref.count*glout@other$loc.metrics$AvgCountRef[i]
+      sum.count.alt <- alt.count*glout@other$loc.metrics$AvgCountSnp[i]
+      glout@other$loc.metrics$rdepth[i] <- round((sum.count.alt + sum.count.ref)/called.ind,1)
+    }
+    cat("All read in. Please check carefully the output above\n")  
+    
+  } 
+  
+  if (is.null(glout@other$history)) {
+    glout@other$history <- list(match.call())
+  }
+  return(glout)
+}
+
+

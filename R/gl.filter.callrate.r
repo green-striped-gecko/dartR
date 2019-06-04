@@ -249,5 +249,9 @@
     cat("Completed:",funname,"\n")
   }
 
-    return(x2)
+   #add to history
+   nh <- length(x2@other$history)
+   x2@other$history[[nh + 1]] <- match.call()
+   
+   return(x2)
  }

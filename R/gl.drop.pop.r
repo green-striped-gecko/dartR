@@ -137,13 +137,16 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
       if (verbose >= 3) {cat("  Resetting population assignments to initial state\n")}
     }
 
-# FLAG SCRIPT END
+    # FLAG SCRIPT END
     
     if (verbose > 0) {
-      cat("Completed:",funname,"\n")
+      cat("Completed:", funname, "\n")
     }
+    #add to history
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call()
     
-  return <- x
-  
+    return(x)
+    
 }
 

@@ -89,8 +89,9 @@ gl.drop.loc <- function(x, loc.list, verbose=2){
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-    
-  return <- x
-  
+    #add to history
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call()  
+  return(x)
 }
 
