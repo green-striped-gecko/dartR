@@ -75,7 +75,7 @@ gl.collapse.pval <- function(fd,
   # Print out the results of the prior aggregation, and the pvalue matrix 
   if(verbose >= 2) {
     
-      cat("\n\nInitial Populations\n",pops,"\n")
+      cat("\n\nInitial Populations\n",variable.names(fd$pval),"\n")
     
       cat("\nRaw fixed differences for the collapsed matrix\n")
       print(fd$fd)
@@ -197,9 +197,8 @@ gl.collapse.pval <- function(fd,
         cat("  Warning: Some resulting pairwise differences between populations are non-signicant\n")
         cat("  Consider running gl.collapse.pval again.\n\n")
       }
-      
-      l <- list(gl=x2,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)
     }
+    l <- list(gl=x2,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)
   }
     
     # Plot the results  
