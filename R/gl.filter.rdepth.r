@@ -84,7 +84,9 @@ gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=2) {
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  
+    #add to history
+    nh <- length(x2@other$history)
+    x2@other$history[[nh + 1]] <- match.call()  
   return(x2)
   
 }

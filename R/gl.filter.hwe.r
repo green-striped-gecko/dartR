@@ -124,6 +124,8 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-
+  #add to history
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()
   return(x) 
 }

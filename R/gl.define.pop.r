@@ -1,4 +1,4 @@
-#' Define a new population in a genelight \{adegenet\} object on the basis of specified individuals 
+#' Define a new population in a genlight \{adegenet\} object on the basis of specified individuals 
 #'
 #' The script reassigns existing individuals to a new population and removes their existing population assignment
 #' 
@@ -92,9 +92,12 @@ gl.define.pop <- function(x, ind.list, new, verbose=2){
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat("Completed:", funname, "\n")
   }
-    
-    return <- x
+  #add to history
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()
+  
+  return(x)
 }
 

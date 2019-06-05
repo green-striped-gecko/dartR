@@ -138,7 +138,9 @@ gl.edit.recode.pop <- function(x, pop.recode=NULL, recalc=FALSE, mono.rm=TRUE, v
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  
+  #add to history
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()  
   return(x)
   
 }

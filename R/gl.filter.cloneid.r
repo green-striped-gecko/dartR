@@ -36,7 +36,9 @@ ind <- as.numeric(ind)
 glf <- gl[, ind]
 glf@other$loc.metrics <- gl@other$loc.metrics[ind,]
 
-
+#add to history
+nh <- length(glf@other$history)
+glf@other$history[[nh + 1]] <- match.call()
 return(glf)
 }
 
