@@ -4,12 +4,12 @@
 \alias{gl.amova}
 \title{Performs and AMOVA using genlight data.}
 \usage{
-gl.amova(x, nperm = 100)
+gl.amova(x, permutations = 100)
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes, with population information [required]}
 
-\item{nperm}{-- number of permuations to perform for hypothesis testing [default 100]. Please note should be set to 1000 for analysis.]}
+\item{permutations}{-- number of permuations to perform for hypothesis testing [default 100]. Please note should be set to 1000 for analysis.]}
 }
 \value{
 An object of class "amova" which is a list with a table of sums of square deviations (SSD), mean square deviations (MSD), and the number of degrees of freedom, and a vector of variance components.
