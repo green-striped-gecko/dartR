@@ -40,9 +40,6 @@ gl.filter.monomorphs <- function (x, verbose=2, pb=FALSE) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
-  if (nLoc(x)!=nrow(x@other$loc.metrics)) {
-    stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")
-  }
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
