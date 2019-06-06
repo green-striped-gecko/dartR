@@ -836,8 +836,12 @@ There are a very many measures of genetic distance, but they collapse in number 
 To calculate Euclidean distances (only for the first seven individuals and the first 100 loci, due to runtime reasons):
 
 ```{r}
-gl.dist.pop(gl[1:7,1:100], method="euclidean")
-gl.dist.pop(gl[1:7, 1:100], method="manhattan")
+gg <- gl[1:7,1:100]
+#need to subset loc.metrics as well!!!
+gg@other$loc.metrics <- gg@other$loc.metrics[1:100,]
+
+gl.dist.pop(gg, method="euclidean")
+gl.dist.pop(gg, method="manhattan")
 ```
 
 Distances available for computation include:
