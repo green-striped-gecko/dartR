@@ -42,8 +42,10 @@ gl.recalc.metrics <- function(x, verbose=2){
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-
-  if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the @other$loc.metrics table does not match the number of loci in your genlight object!! Most likely you subset your dataset using the '[ , ]' function of adegenet. This function does not subset the number of loci [you need to subset the loci metrics by 'hand' if you are using this approach].")  }
+  #if empty simple fill in blanks to allow recalculation
+  if (is.null(x@other$loc.metrics)) x@other$loc.metrics <- data.frame(nr=1:nLoc(x))
+  
+  if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the @other$loc.metrics table does not match the number of loci in your genlight object!! Most likely you subset your dataset using the '[ , ]' function of adegenet. This function does not subset the number of loci [you need to subset the loci metrics by 'hand' if you are using this approach]. Or you can set to NULL to recalculate everything!")  }
   
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {

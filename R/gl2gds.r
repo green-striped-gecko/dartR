@@ -49,7 +49,7 @@ gl2gds <- function(x, outfile="gl2gds.gds", outpath=tempdir(), verbose=2) {
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- array("pop1",dim = nInd(x))
       pop(x) <- as.factor(pop(x))
     }
 
@@ -73,7 +73,7 @@ gl2gds <- function(x, outfile="gl2gds.gds", outpath=tempdir(), verbose=2) {
                          genmat = as.matrix(x),
                          sample.id = indNames(x),
                          snp.id = locNames(x),
-                         snp.rs.id = x@other$loc.metrics$CloneID,
+                         snp.rs.id = x@other$loc.metrics$AlleleID,
                          snp.chromosome = x@chromosome,
                          snp.position = snp.pos,
                          snp.allele = x@loc.all,
