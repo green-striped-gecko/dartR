@@ -51,9 +51,9 @@ gl.recalc.metrics <- function(x, verbose=2){
       pop(x) <- factor(rep("pop1", nInd(x)))
     }
 
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+  # Check for monomorphic loci [done in utils.recalc.avgpic]
+  #  tmp <- gl.filter.monomorphs(x, verbose=0)
+  #  if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
 
 # DO THE JOB
 

@@ -59,7 +59,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
   }
   
   if (loc.limit <= 1) {
-    cat("Warning: ind.limit must be an integer > 1 and less than the the total number of loci, set to 2\n")
+    cat("Warning: loc.limit must be an integer > 1 and less than the the total number of loci, set to 2\n")
     loc.limit <- 2
   }
 
