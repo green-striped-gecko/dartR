@@ -44,7 +44,7 @@ utils.recalc.avgpic <- function(x, verbose=2) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   # Work around a bug in adegenet if genlight object is created by subsetting
-    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the @other$loc.metrics table does not match the number of loci in your genlight object!! Most likely you subset your dataset using the '[ , ]' function of adegenet. This function does not subset the number of loci [you need to subset the loci metrics by hand if you are using this approach].")  }
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
@@ -93,21 +93,19 @@ utils.recalc.avgpic <- function(x, verbose=2) {
      t <- as.matrix(x)
        if (verbose >= 2){cat("  Recalculating OneRatioRef, OneRatioSnp, PICRef, PICSnp, AvgPIC\n")}
      
-     for (i in 1:nLoc(x)) {
-       c0 <- length(t[t[,i]==0 & !is.na(t[,i]),i])
-       c1 <- length(t[t[,i]==1 & !is.na(t[,i]),i])
-       c2 <- length(t[t[,i]==2 & !is.na(t[,i]),i])
-       c <- (c0+c1+c2)
-       x@other$loc.metrics$OneRatioRef[i] <- (c0+c1)/c
-       x@other$loc.metrics$OneRatioSnp[i] <- (c1+c2)/c
-       OneRatioRef <- x@other$loc.metrics$OneRatioRef[i]
-       OneRatioSnp <- x@other$loc.metrics$OneRatioSnp[i]
-       ZeroRatioRef <- 1 - OneRatioRef
-       ZeroRatioSnp <- 1 - OneRatioSnp
-       x@other$loc.metrics$PICRef[i] <- 1 - ((OneRatioRef*OneRatioRef) + (ZeroRatioRef*ZeroRatioRef))
-       x@other$loc.metrics$PICSnp[i] <- 1 - ((OneRatioSnp*OneRatioSnp) + (ZeroRatioSnp*ZeroRatioSnp))
-       x@other$loc.metrics$AvgPIC[i] <- (x@other$loc.metrics$PICRef[i] + x@other$loc.metrics$PICSnp[i])/2
-     }
+     c0 <- colSums(t==0, na.rm=T)
+     c1 <- colSums(t==1, na.rm=T)
+     c2 <- colSums(t==2, na.rm=T)
+     c <- (c0+c1+c2)
+     x@other$loc.metrics$OneRatioRef <- (c0+c1)/c
+     x@other$loc.metrics$OneRatioSnp <- (c1+c2)/c
+     OneRatioRef <- x@other$loc.metrics$OneRatioRef
+     OneRatioSnp <- x@other$loc.metrics$OneRatioSnp
+     ZeroRatioRef <- 1 - OneRatioRef
+     ZeroRatioSnp <- 1 - OneRatioSnp
+     x@other$loc.metrics$PICRef <- 1 - ((OneRatioRef*OneRatioRef) + (ZeroRatioRef*ZeroRatioRef))
+     x@other$loc.metrics$PICSnp <- 1 - ((OneRatioSnp*OneRatioSnp) + (ZeroRatioSnp*ZeroRatioSnp))
+     x@other$loc.metrics$AvgPIC <- (x@other$loc.metrics$PICRef + x@other$loc.metrics$PICSnp)/2
 
 # FLAG SCRIPT END
 
