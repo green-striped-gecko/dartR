@@ -45,7 +45,7 @@ gl.reassign.pop <- function (x, as.pop, verbose = 2) {
     stop("Execution terminated\n")
   }
   
-  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x), ]
+
   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 
       0) {
     if (verbose >= 2) {

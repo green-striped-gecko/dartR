@@ -54,8 +54,6 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=2)
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){cat("  Population assignments not detected, assigning all individuals to one population, label 'pop1'\n")}

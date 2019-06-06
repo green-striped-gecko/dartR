@@ -73,7 +73,7 @@ gl2gds <- function(x, outfile="gl2gds.gds", outpath=tempdir(), verbose=2) {
                          genmat = as.matrix(x),
                          sample.id = indNames(x),
                          snp.id = locNames(x),
-                         snp.rs.id = x@other$loc.metrics$CloneID,
+                         snp.rs.id = x@other$loc.metrics$AlleleID,
                          snp.chromosome = x@chromosome,
                          snp.position = snp.pos,
                          snp.allele = x@loc.all,
