@@ -9,7 +9,7 @@ gl.play.history(x, history = NULL, verbose = 0)
 \arguments{
 \item{x}{-- a genlight object [with a history slot [optional]]}
 
-\item{history}{-- [optional]. If no history is provided the complete history of x is used (recreating the identical object x). If history is a vector it indicates which which part of the history of x is used [\code{c(1,3,4)} uses the first, third and forth entry from x\@other$history]. Or a simple link to a history slot of another genlight object (e.g. x2\@other$history[c(1,4,5)]).}
+\item{history}{-- [optional]. If no history is provided the complete history of x is used (recreating the identical object x). If history is a vector it indicates which which part of the history of x is used [\code{c(1,3,4)} uses the first, third and forth entry from \code{x@other$history}]. Or a simple link to a history slot of another genlight object (e.g. code{x2@other$history[c(1,4,5)]}).}
 
 \item{verbose}{[default 0]. If set to one then history commands are printed, which may facilitate reading the output.}
 }
