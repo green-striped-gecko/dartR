@@ -41,7 +41,7 @@ gl.filter.monomorphs <- function (x, verbose=2, pb=FALSE) {
   }
 
   if (nLoc(x)!=nrow(x@other$loc.metrics)) {
-    stop("The number of rows in the @other$loc.metrics table does not match the number of loci in your genlight object!! Most likely you subset your dataset using the '[ , ]' function of adegenet. This function does not subset the number of loci [you need to subset the loci metrics by hand if you are using this approach].")
+    stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")
   }
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
