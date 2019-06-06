@@ -29,7 +29,9 @@ a single line per individual, resolving heterozygous SNPs by replacing them with
 ambiguity codes (method=2).
 }
 \examples{
-gl2svdquartets(testset.gl[1:20,1:100])
+gg <- testset.gl[1:20,1:100]
+gg@other$loc.metrics <- gg@other$loc.metrics[1:100,]
+gl2svdquartets(gg)
 }
 \references{
 Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent. Bioinformatics 30: 3317-3324
