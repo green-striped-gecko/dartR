@@ -72,19 +72,13 @@ utils.recalc.maf <- function(x, verbose=2) {
   
   if (verbose >= 2) {cat("  Recalculating Minor Allele Frequency (MAF)\n")}
 
-  homref <- x@other$loc.metrics$FreqHomRef
-  homalt <- x@other$loc.metrics$FreqHomSnp
-  het <- x@other$loc.metrics$FreqHets
-  
-  for (i in 1:nLoc(x)){
-    x@other$loc.metrics$maf[i] <- min((homref[i]*2 + het[i]), (homalt[i]*2 + het[i]))/2
-  }
+  alf <- gl.alf(x)[,2]
+  x@other$loc.metrics$maf <- ifelse(alf>0.5,1-alf, alf)
   
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  
   return(x)
 }  

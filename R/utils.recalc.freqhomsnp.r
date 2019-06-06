@@ -63,7 +63,7 @@ utils.recalc.freqhomsnp <- function(x, verbose=2) {
 
      t <- as.matrix(x)
      if (verbose >= 2) {cat("  Recalculating locus metric freqHomSnp\n")}
-     x@other$loc.metrics$FreqHomRef <- colMeans(t==2, na.rm = T)
+     x@other$loc.metrics$FreqHomSnp <- colMeans(t==2, na.rm = T)
      
 # FLAG SCRIPT END
 
