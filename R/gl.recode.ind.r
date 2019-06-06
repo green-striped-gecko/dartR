@@ -59,7 +59,7 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=2)
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){cat("  Population assignments not detected, assigning all individuals to one population, label 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- array("pop1",dim = nInd(x))
       pop(x) <- as.factor(pop(x))
     }
    # Check for monomorphic loci
