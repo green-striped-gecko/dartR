@@ -14,7 +14,7 @@ gl.filter.cloneid <- function(gl)
   
   # Work around a bug in adegenet if genlight object is created by subsetting
 
-  if (nLoc(gl)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
+  if (nLoc(gl)!=nrow(gl@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
 
   
   
