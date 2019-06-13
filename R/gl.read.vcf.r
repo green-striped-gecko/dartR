@@ -3,7 +3,7 @@
 #' @param vcffile -- a vcf file (works only for diploid data)
 #' @param verbose set to 2
 #' @return A genlight object, with most slots filled.
-#' @importFrom vcfR read.vcfR vcfR2genind
+#' @importFrom vcfR read.vcfR vcfR2genlight
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
