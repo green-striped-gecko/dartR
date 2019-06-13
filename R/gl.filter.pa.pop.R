@@ -9,7 +9,7 @@
 #' @export
 #' @author Bernd Gruber & Ella Kelly (University of Melbourne) (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' f <- gl.filter.pa.pop(testset.gl, pop1=)
+#' gl2 <- gl.filter.pa.pop(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2])
 
 
 

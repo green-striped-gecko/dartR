@@ -22,7 +22,7 @@ The reduced genlight dataset, containing now only fixed and private alleles
 This script is meant to be used prior to \code{gl.nhybrids} to maximise the information content of the snps used to identify hybrids (currently newhybrids does allow only 200 SNPs). The idea is to use first all loci that have fixed alleles between the potential source populations and then "fill up" to 200 loci using loci that have private alleles between those. The functions filters for those loci (if invers is set to TRUE, the opposite is returned (all loci that are not fixed and have no private alleles - not sure why yet, but maybe useful.)
 }
 \examples{
-f <- gl.filter.pa.pop(testset.gl, pop1=)
+gl2 <- gl.filter.pa.pop(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2])
 }
 \author{
 Bernd Gruber & Ella Kelly (University of Melbourne) (Post to \url{https://groups.google.com/d/forum/dartr})
