@@ -1,0 +1,15 @@
+citHeader("To cite dartR in publications use:")
+
+citEntry(
+  entry = "Article",
+  author = "Bernd Gruber, Peter J Unmack, Oliver F Berry, Arthur Georges",
+  doi = "10.1111/1755-0998.12745",
+  journal = "Molecular Ecology Resources",
+  keywords = "bioinformatics,next-generation-sequencing, phylogenomics,SNPs, population genomics, R pacakge, RADSeq",
+  pages = "691--699",
+  title = " dartr: An r package to facilitate analysis of SNP data generated from reduced representation genome sequencing",
+  
+  volume = "18",
+  year = "2018",
+  textVersion = "Gruber, B, Unmack, PJ, Berry, OF, Georges, A. dartr: An r package to facilitate analysis of SNP data generated from reduced representation genome sequencing. Mol Ecol Resour. 2018; 18: 691-699. https://doi.org/10.1111/1755-0998.12745"
+)
