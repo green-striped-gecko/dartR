@@ -1,11 +1,12 @@
-#' Filter loci in a genlight \code{adegenet} object based on call rate and population level. 
+#' Filter loci in a genlight adegenet object based on call rate and population level. 
 #'
-#' This funciton is a convenience function that filters callrate for the set threshold for each population and then returns a genlight object where each loci of every population passes the threshold of the call rate filter. For more details on call rates see \code{gl.filter.callrate}.
+#' This funciton is a convenience function that filters callrate for the set threshold for each population and then returns a genlight object where each loci of every population passes the threshold of the call rate filter. For more details on call rates see gl.filter.callrate.
+#' @param  x - genlight object to be filtered
+#' @param threshold threshold on call rate for loci for each population (see gl.filter.callrate for details.)
 #' @return The filtered genlight or genind object
-#' @examples 
-#' #Filter every loci in every population by callrate 0.9
+#' @export
+#' @examples
 #' gg <- gl.filter.callrate.loc.pop(testset.gl, 0.9)
-
 
 gl.filter.callrate.loc.pop <- function(x, threshold){
   
