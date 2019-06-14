@@ -64,7 +64,8 @@ Imports:
     HardyWeinberg,
     raster, 
     robustbase,
-    gridExtra
+    gridExtra,
+    vcfR
 Suggests:
     knitr,
     rmarkdown,

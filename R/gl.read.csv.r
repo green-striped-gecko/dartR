@@ -183,10 +183,10 @@ gl.read.csv <- function(filename,
   gl <- as.genlight(data)
   locNames(gl) <- loci
   indNames(gl) <- individuals
-  pop(gl) <- array('A',nInd(gl))
+  #pop(gl) <- array('A',nInd(gl))
   
   gl@other$loc.metrics <- data.frame(CloneID = locNames(gl), AlleleID = locNames(gl))
-  gl@other$ind.metrics <- data.frame(id <- indNames(gl), pop = array("A",nInd(gl)))
+  #gl@other$ind.metrics <- data.frame(id <- indNames(gl), pop = array("A",nInd(gl)))
   
   # NOW THE LOCUS METADATA
   
@@ -224,22 +224,26 @@ gl.read.csv <- function(filename,
     }
     if (!("pop" %in% names(ind.metrics))) {
       cat("  Warning: pop column absent from the individual metadata file, setting to 'A'\n")
-    }
+    
     gl@other$ind.metrics <- ind.metrics
+    gl@other$ind.metrics$id <- individuals   
     gl@other$ind.metrics$pop <- array('A',nInd(gl))
+    pop(gl) <- gl@other$ind.metrics$pop
   } else {
+    gl@other$ind.metrics <- ind.metrics
     gl@other$ind.metrics$id <- individuals
-    gl@other$ind.metrics$pop <- array('A',nInd(gl))
+    gl@other$ind.metrics$pop <- ind.metrics$pop
+    pop(gl)<- gl@other$ind.metrics$pop
   }
   if (verbose >= 2){cat(paste(" Added ",names(gl@other$ind.metrics),
                               " to the other$ind.metrics slot.\n"))}
- 
+  }
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-      
+  
   return(gl)
       
 }
