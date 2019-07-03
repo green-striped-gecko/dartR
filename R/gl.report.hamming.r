@@ -38,7 +38,7 @@
 #' @examples
 #' gl.report.hamming(testset.gl)
 
-gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=TRUE, verbose = 0) {
+gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=FALSE, verbose = 0) {
   
 # TIDY UP FILE SPECS
 

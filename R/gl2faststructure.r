@@ -13,7 +13,7 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @importFrom utils getTxtProgressBar setTxtProgressBar txtProgressBar 
 
-gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=TRUE, verbose=2){
+gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=FALSE, verbose=2){
 
 # TIDY UP FILE SPECS
 

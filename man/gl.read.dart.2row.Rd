@@ -5,7 +5,7 @@
 \title{Import SNP data from DArT and convert to  genlight \{agegenet\} format (gl)}
 \usage{
 gl.read.dart.2row(filename, topskip, nmetavar, nas = "-",
-  ind.metafile = NULL, probar = TRUE, verbose = 2)
+  ind.metafile = NULL, probar = FALSE, verbose = 2)
 }
 \arguments{
 \item{filename}{-- name of csv file containing the DartSeq data in 2-row format (csv) [required]}

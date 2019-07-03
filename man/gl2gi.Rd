@@ -4,7 +4,7 @@
 \alias{gl2gi}
 \title{Converts a genlight object to genind object}
 \usage{
-gl2gi(gl, probar = TRUE, verbose = 2)
+gl2gi(gl, probar = FALSE, verbose = 2)
 }
 \arguments{
 \item{gl}{-- a genlight object}
