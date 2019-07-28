@@ -54,13 +54,11 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
-  # Work around a bug in adegenet if genlight object is created by subsetting
-    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
-      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- array("pop1",dim = nInd(x))
       pop(x) <- as.factor(pop(x))
     }
 
@@ -102,7 +100,6 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
     
   } else if(nPop(x[pop(x) %in% subset])){
       gl <- x[pop(x) %in% subset]
-      gl@other$loc.metrics <- gl@other$loc.metrics[1:nLoc(gl),] #adegenet bug
       gl <- gl.filter.monomorphs(gl,verbose=0)
       if (nPop(gl) == 1){
         cat("  Calculating HWE for population",popNames(gl),"\n")

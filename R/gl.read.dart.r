@@ -17,7 +17,8 @@
 #' gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=TRUE)
 #' }
 
-gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-", topskip=NULL,  lastmetric ="RepAvg", probar=TRUE)
+
+gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-", topskip=NULL,  lastmetric ="RepAvg", probar=FALSE)
 {
   if (is.null(ind.metafile)) {
     ind.metafile <- covfilename
@@ -48,5 +49,6 @@ gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-
   }
   return(glout)
 }
+
 
 

@@ -48,8 +48,6 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
-  # Work around a bug in adegenet if genlight object is created by subsetting
-    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
 
   # Test if population is specified
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {

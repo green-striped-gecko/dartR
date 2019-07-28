@@ -5,7 +5,7 @@
 \title{Import DarT data into R and conver it to a genlight object}
 \usage{
 gl.read.dart(filename, ind.metafile = NULL, covfilename = NULL,
-  nas = "-", topskip = NULL, lastmetric = "RepAvg", probar = TRUE)
+  nas = "-", topskip = NULL, lastmetric = "RepAvg", probar = FALSE)
 }
 \arguments{
 \item{filename}{path to file (csv file only currently)}

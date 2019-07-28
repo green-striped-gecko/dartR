@@ -55,9 +55,6 @@ gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  sh
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
-  # Work around a bug in adegenet if genlight object is created by subsetting
-    gl@other$loc.metrics <- gl@other$loc.metrics[1:nLoc(gl),]
-
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(gl)) | is.na(length(pop(gl))) | length(pop(gl)) <= 0) {
       if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}

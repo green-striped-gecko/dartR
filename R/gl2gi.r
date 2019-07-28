@@ -8,7 +8,7 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @details this function uses a faster version of df2genind (from the adgegenet package)
 
-gl2gi <- function(gl, probar=TRUE, verbose=2) {
+gl2gi <- function(gl, probar=FALSE, verbose=2) {
 
 if (verbose==1) {
   cat("Start conversion....\n")

@@ -32,7 +32,7 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 
-gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile=NULL, probar=TRUE, verbose=2) {
+gl.read.dart.2row <- function(filename, topskip, nmetavar, nas="-", ind.metafile=NULL, probar=FALSE, verbose=2) {
 
 # ERROR CHECKING
   

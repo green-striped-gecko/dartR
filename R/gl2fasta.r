@@ -49,7 +49,7 @@
 #' gl2fasta(gl, method=1, outfile="test.fasta")
 
 
-gl2fasta <- function(gl, method=1, outfile="output.fasta", outpath=tempdir(), probar=TRUE) {
+gl2fasta <- function(gl, method=1, outfile="output.fasta", outpath=tempdir(), probar=FALSE) {
   outfile <- file.path(outpath, outfile)
   
   if(class(gl) != "genlight") {

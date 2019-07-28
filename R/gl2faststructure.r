@@ -13,7 +13,7 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @importFrom utils getTxtProgressBar setTxtProgressBar txtProgressBar 
 
-gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=TRUE, verbose=2){
+gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=FALSE, verbose=2){
 
 # TIDY UP FILE SPECS
 
@@ -37,13 +37,11 @@ gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=TRUE
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
-  # Work around a bug in adegenet if genlight object is created by subsetting
-    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- array("pop1",dim = nInd(x))
       pop(x) <- as.factor(pop(x))
     }
 

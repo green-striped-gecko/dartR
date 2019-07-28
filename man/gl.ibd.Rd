@@ -30,6 +30,7 @@ You can provide also your own genetic and Euclidean distance matrix. The functio
 \examples{
 \donttest{
 ibd <- gl.ibd(bandicoot.gl)
+ibd <- gl.ibd(bandicoot.gl,plot = FALSE)
 }
 }
 \references{

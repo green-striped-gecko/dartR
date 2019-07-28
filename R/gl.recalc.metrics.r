@@ -42,20 +42,20 @@ gl.recalc.metrics <- function(x, verbose=2){
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-
-  # Work around a bug in adegenet if genlight object is created by subsetting
-    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
-
+  #if empty simple fill in blanks to allow recalculation
+  if (is.null(x@other$loc.metrics)) x@other$loc.metrics <- data.frame(nr=1:nLoc(x))
+  
+  if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the @other$loc.metrics table does not match the number of loci in your genlight object!! Most likely you subset your dataset using the '[ , ]' function of adegenet. This function does not subset the number of loci [you need to subset the loci metrics by 'hand' if you are using this approach]. Or you can set to NULL to recalculate everything!")  }
+  
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nLoc(x))
-      pop(x) <- as.factor(pop(x))
+      pop(x) <- factor(rep("pop1", nInd(x)))
     }
 
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+  # Check for monomorphic loci [done in utils.recalc.avgpic]
+  #  tmp <- gl.filter.monomorphs(x, verbose=0)
+  #  if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
 
 # DO THE JOB
 

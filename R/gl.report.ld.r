@@ -20,7 +20,7 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
-gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=TRUE)
+gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE)
 {
   # convert genlight to genind 
   if (class(gi)=="genlight") gi <- gl2gi(gi)

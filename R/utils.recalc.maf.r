@@ -40,11 +40,11 @@ utils.recalc.maf <- function(x, verbose=2) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   # Work around a bug in adegenet if genlight object is created by subsetting
-    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- array("pop1",dim = nInd(x))
       pop(x) <- as.factor(pop(x))
     }
   # Check for monomorphic loci
@@ -72,19 +72,13 @@ utils.recalc.maf <- function(x, verbose=2) {
   
   if (verbose >= 2) {cat("  Recalculating Minor Allele Frequency (MAF)\n")}
 
-  homref <- x@other$loc.metrics$FreqHomRef
-  homalt <- x@other$loc.metrics$FreqHomSnp
-  het <- x@other$loc.metrics$FreqHets
-  
-  for (i in 1:nLoc(x)){
-    x@other$loc.metrics$maf[i] <- min((homref[i]*2 + het[i]), (homalt[i]*2 + het[i]))/2
-  }
+  alf <- gl.alf(x)[,2]
+  x@other$loc.metrics$maf <- ifelse(alf>0.5,1-alf, alf)
   
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  
   return(x)
 }  
