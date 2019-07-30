@@ -11,20 +11,24 @@
 #' Any pair of axes can be specified from the ordination, provided they are within the range of the nfactors value provided to gl.pcoa(). Axes can be scaled to
 #' represent the proportion of variation explained. In any case, the proportion of variation explained by each axis is provided in the axis label.
 #'
-#'Points displayed in the ordination can be identified if the option labels="interactive" is chosen, in which case the resultant plot is
-#'ggplotly() friendly. Running ggplotyly() with no parameters will replot the data and allow identification of points by moving the mouse
-#'over them. Refer to the plotly package for further information. Do not forget to load the library via library(plotly).
+#' Points displayed in the ordination can be identified if the option labels="interactive" is chosen, in which case the resultant plot is
+#' ggplotly() friendly. Running ggplotyly() with no parameters will replot the data and allow identification of points by moving the mouse
+#' over them. Refer to the plotly package for further information. Do not forget to load the library via library(plotly).
+#'
+#' If plot.out=TRUE, returns an object of class ggplot so that layers can subsequently be added; if plot.out=FALSE, returns a dataframe
+#' with the individual labels, population labels and PCOA scores for subsequent plotting by the user with ggplot or other plotting software. 
 #'
 #' @param glPca Name of the glPca object containing the factor scores and eigenvalues [required]
 #' @param data Name of the genlight object containing the SNP genotypes by specimen and population [required]
 #' @param scale Flag indicating whether or not to scale the x and y axes in proportion to \% variation explained [default FALSE]
 #' @param ellipse Flag to indicate whether or not to display ellipses to encapsulate points for each population [default FALSE]
 #' @param p Value of the percentile for the ellipse to encapsulate points for each population [default 0.95]
-#' @param labels -- Flag to specify the labels are to be added to the plot. ["none"|"ind"|"pop"|"interactive"|"legend", default = "pop"]
+#' @param labels Flag to specify the labels are to be added to the plot. ["none"|"ind"|"pop"|"interactive"|"legend", default = "pop"]
 #' @param hadjust Horizontal adjustment of label position [default 1.5]
 #' @param vadjust Vertical adjustment of label position [default 1]
 #' @param xaxis Identify the x axis from those available in the ordination (xaxis <= nfactors)
 #' @param yaxis Identify the y axis from those available in the ordination (yaxis <= nfactors)
+#' @param plot.out If TRUE, returns a plot object compatable with ggplot, otherwise returns a dataframe [default TRUE]
 #' @return A plot of the ordination
 #' @export
 #' @import directlabels tidyr
@@ -39,9 +43,12 @@
 #' pcoa<-gl.pcoa(gl,nfactors=5)
 #' gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1)
 #' gl.pcoa.plot(pcoa, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5, vadjust=1, xaxis=1, yaxis=3)
+#' 
+#' df <- gl.pcoa.plot(pcoa, gl, plot.out=FALSE)
+#' df
 
 gl.pcoa.plot <- function(glPca, data, scale=FALSE, ellipse=FALSE, p=0.95, labels="pop", hadjust=1.5, 
-                         vadjust=1, xaxis=1, yaxis=2) {
+                         vadjust=1, xaxis=1, yaxis=2, plot.out=TRUE) {
 
   if(class(glPca)!="glPca" | class(data)!="genlight") {
     cat("Fatal Error: glPca and genlight objects required for glPca and data parameters respectively!\n"); stop()
@@ -212,14 +219,15 @@ gl.pcoa.plot <- function(glPca, data, scale=FALSE, ellipse=FALSE, p=0.95, labels
       # Add ellipses if requested
       if(ellipse==TRUE) {p <- p + stat_ellipse(aes(colour=pop), type="norm", level=0.95)}
     }
+    
+  p
+    
+  if(plot.out) {
+    return(p)
+  } else {
+    df <- data.frame(id=indNames(data), pop=popNames(data), glPca$scores)
+    row.names(df) <- NULL
+    return(df)
+  }
 
-  # If interactive labels
-    
-    #if (labels=="interactive" | labels=="ggplotly") {
-    #  ggplotly(p)
-    #} else {
-      p
-    #}
-    
-  return (p)
 }
