@@ -119,7 +119,7 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, ve
 # progressively add the bases
   if (verbose >= 2) {cat(paste("    Applying ambiguity codes (if method=2) and reconstructing sequences\n"))}
   for (ind in 1:nInd(x)) {
-    for (loc in 2:nLoc(x)){
+    for (loc in 1:nLoc(x)){
     if (is.na(m[ind,loc])) {
       refseq[ind] <- paste0(refseq[ind],"?")
       altseq[ind] <- paste0(altseq[ind],"?")
@@ -159,7 +159,11 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, ve
   sink(outfilespec)
   cat("#nexus\n")
   cat("BEGIN DATA;\n")
-  cat(paste0("     dimensions ntax = ",2*nInd(x)," nchar = ",nLoc(x)," ;\n"))
+  if (method == 1) {
+     cat(paste0("     dimensions ntax = ",2*nInd(x)," nchar = ",nLoc(x)," ;\n"))
+  } else {
+     cat(paste0("     dimensions ntax = ",nInd(x)," nchar = ",nLoc(x)," ;\n"))
+  }  
   cat("     format datatype = dna gap = - ;\n\n")
   cat("matrix\n")
   if (method == 1) {
