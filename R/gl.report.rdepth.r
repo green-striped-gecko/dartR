@@ -9,7 +9,9 @@
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param plot if TRUE, will produce a histogram of call rate [default FALSE]
-#' @param smearplot if TRUE, will produce a smearplot of individuals against loci [default FALSE]
+#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
+#' plots a boxplot adjusted for skewed distributions [default 'adjusted']
+#' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
 #' @return -- Tabulation of REad Depth against Threshold
 #' @importFrom graphics hist
 #' @export
@@ -19,7 +21,7 @@
 
 # Last amended 3-Feb-19
 
-gl.report.rdepth <- function(x, plot=FALSE, smearplot=FALSE) {
+gl.report.rdepth <- function(x, plot=FALSE, boxplot="adjusted", range=1.5) {
 
 # TIDY UP FILE SPECS
 
@@ -83,7 +85,7 @@ gl.report.rdepth <- function(x, plot=FALSE, smearplot=FALSE) {
   rownames(df) <- NULL
   #print(df)
   
-  # Plot a histogram of Call Rate
+  # Plot a histogram of read depth
   par(mfrow = c(2, 1),pty="m")
   
   if (plot) {
@@ -95,14 +97,58 @@ gl.report.rdepth <- function(x, plot=FALSE, smearplot=FALSE) {
          xlim=c(lower,upper),
          breaks=100)
   }  
-
-  if (smearplot){
-    glPlot(x)
-  }
+  
+  # Prepare for plotting
+  # Save the prior settings for mfrow, oma, mai and pty, and reassign
+  op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+  # Set margins for first plot
+  par(mai=c(1,0.5,0.5,0.5))
+  # Plot Box-Whisker plot
+  if (boxplot == "standard"){
+    whisker <- boxplot(rdepth, horizontal=TRUE, col='red', range=range, main = "Read Depth")
+    if (length(whisker$out)==0){
+      cat("  Standard boxplot, no adjustment for skewness\n")
+    } else {
+      outliers <- data.frame(Locus=as.character(x$loc.names[rdepth %in% whisker$out]),
+                             ReadDepth=whisker$out
+      )
+      cat("  Standard boxplot, no adjustment for skewness\n")
+    }
+    
+  } else {
+    whisker <- robustbase::adjbox(rdepth,
+                                  horizontal = TRUE,
+                                  col='red',
+                                  range=range,
+                                  main = "Read Depth")
+    if (length(whisker$out)==0){
+      cat("  Boxplot adjusted to account for skewness\n")
+    } else {
+      outliers <- data.frame(Locus=as.character(x$loc.names[rdepth %in% whisker$out]),
+                             ReadDepth=whisker$out
+      )
+      cat("  Boxplot adjusted to account for skewness\n")
+    }
+  }  
+  # Set margins for second plot
+  par(mai=c(0.5,0.5,0,0.5))  
+  # Plot Histogram
+  hist(rdepth, col='red',breaks=100, main=NULL)
+  
+ # Output the outlier loci 
+  if (length(whisker$out)==0){
+    cat("  No outliers detected\n")
+  } else {  
+    cat("  Outliers detected -- \n")
+    print(outliers)
+  }  
   
 # FLAG SCRIPT END
 
     cat("Completed:",funname,"\n")
+    
+# Reset the par options    
+    par(op)
 
   return(NULL)
 
