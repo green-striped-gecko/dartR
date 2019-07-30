@@ -10,7 +10,7 @@
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param plot -- if TRUE, histograms of base composition are produced [default TRUE]
-#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 1]
 #' @return Matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
 #' @export
 #' @import stringr
@@ -19,15 +19,22 @@
 #' lst <- gl.report.bases(testset.gl)
 #' lst
 
-gl.report.bases <- function(x, plot=TRUE, verbose = 0) {
+gl.report.bases <- function(x, plot=TRUE, verbose = 1) {
 
 # TIDY UP FILE SPECS
 
   funname <- match.call()[[1]]
 
-# FLAG SCRIPT START
-
+  # FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  
+  if (verbose > 0) {
     cat("Starting",funname,"\n")
+  }
 
 # STANDARD ERROR CHECKING
   
@@ -54,15 +61,20 @@ gl.report.bases <- function(x, plot=TRUE, verbose = 0) {
 # DO THE JOB
   
 # Count up the number of bases, and the number of each of ATGC, and other
+  if (verbose >= 2){
+    cat("  Counting the bases\n")
+  }
   A <- sum(str_count(x@other$loc.metrics$TrimmedSequence, "A"))
   G <- sum(str_count(x@other$loc.metrics$TrimmedSequence, "G"))
   C <- sum(str_count(x@other$loc.metrics$TrimmedSequence, "C"))
   T <- sum(str_count(x@other$loc.metrics$TrimmedSequence, "T"))
   total <- sum(str_length(x@other$loc.metrics$TrimmedSequence))
   total.ATGC <- sum(A,G,C,T)
+  if (verbose >= 2){
   if (total != total.ATGC) {
     cat("  Warning: Codes other than A, T, G and C present\n")
   }
+  }  
   other <- total - total.ATGC
   other <- other*100/total
   A <- A*100/total
@@ -78,7 +90,10 @@ gl.report.bases <- function(x, plot=TRUE, verbose = 0) {
 # Extract the SNPs  
   matrix <- str_split_fixed(x@other$loc.metrics$SNP,":",2)
   state.change <- matrix[,2]
-  
+
+  if (verbose >= 2){
+    cat("  Counting Transitions and Transversions\n")
+  }  
 # Sum the transitions and transversions  
   tv <- sum(str_count(state.change, "A>C")) +
     sum(str_count(state.change, "C>A")) +
@@ -94,9 +109,11 @@ gl.report.bases <- function(x, plot=TRUE, verbose = 0) {
     sum(str_count(state.change, "C>T")) +
     sum(str_count(state.change, "T>C"))
   
+  if (verbose >= 2){
   if (ts+tv != length(x@other$loc.metrics$TrimmedSequence)) {
     cat("  Warning: Sum of transitions plus transversions does not equal number of loci.\n")
   }
+  }  
   ts <- ts*100/length(x@other$loc.metrics$TrimmedSequence)
   tv <- tv*100/length(x@other$loc.metrics$TrimmedSequence)
   ratio <- ts/tv
@@ -123,6 +140,9 @@ gl.report.bases <- function(x, plot=TRUE, verbose = 0) {
   }  
   
 # Create return matrix
+  if (verbose >= 2){
+    cat("  Creating an output matrix to return\n")
+  }
   col1 <- c("A","G","T","C","tv","ts")
   col2 <- c(round(A,2),round(G,2),round(T,2),round(C,2),round(tv,2),round(ts,2))
   matrix <- cbind(col1, col2)
