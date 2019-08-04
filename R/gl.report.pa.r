@@ -1,189 +1,105 @@
-#' Report number of private alleles possessed by an individual of unknown provenance
+#' Report private alleles (and fixed allelic differences) per pair of populations
 #'
-#' This script calculates the number of private alleles possessed by a focal individual of unknown
-#' provenance when compared to a series of target populations.
+#' This function reports separates the genlight object by populations and reports fixed allelic differences, private alleles 
+#' and the mean absolute allele frequency differences between pairs of populations. 
+#'
+#' @param x -- name of the genlight object containing the SNP data broken down by population [default gl]
+#' @param nmin -- minimum sample size for a population to be included in the analysis [default 10]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
+#' @return A dataframe giving population names, sample sizes, number of fixed allelic differences, number of private alleles held by population 1,
+#' number of private alleles held by population 2, total private alleles, and mean allelic difference between the two populations.
+#' @details 
+#' A fixed difference at a locus occurs when the two focal populations share no alleles. This is a symmetric measure. A private allele is an allele
+#' that is found in one population but not in the other. The distance defined by a count of private alleles between two populations is not symmetric.
 #' 
-#' A private allele is an allele possessed by the focal individual, but absent from the target population. It differs from a fixed allelic difference in that the focal individual
-#' may be heterozygous, in which case can share one but not both of its alleles with the target population.
+#' The table below shows a cross tablulation of possible cases of allele frequencies between two populations 
+#' (0=homozygote for Allele 1,x= both Alleles are present, 1=homozygote for Allele 2)
+#' 
+#' p: cases where there is a private allele in pop1 compared to pop2 (but not vice versa)
+#' 
+#' f: cases where there is a fixed allelic difference between pop1 and pop2.
 #'
-#' @param x -- name of the input genlight object [required]
-#' @param id -- identity label of the focal individual whose provenance is unknown [required]
-#' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
-#' @param threshold -- retain those populations for which the focal individual has private alleles less or equal in number than the threshold [default 0]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return A genlight object containing the focal individual (assigned to population "unknown") and 
-#' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
+#'\tabular{ccccc}{ 
+#' \tab\tab \tab \emph{pop1}\tab\cr
+#' \tab\tab \strong{0} \tab   \strong{x}  \tab  \strong{1}\cr
+#' \tab     \strong{0}\tab -  \tab  p \tab  p,f\cr
+#'  \emph{pop2} \tab \strong{x}\tab -  \tab- \tab -\cr
+#' \tab \strong{1} \tab p,f\tab p \tab   -\cr
+#' }
 #' @export
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#' x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, threshold=1, verbose=2)
+#' gl.report.pa(testset.gl,nmin=11)
+#' 
 
-# Last amended 3-Feb-19
-
-gl.report.pa <- function (x, id, nmin=10, threshold=0, verbose=2) {
+gl.report.pa <- function(x=gl, nmin=10, verbose=3){
   
-# TIDY UP FILE SPECS
-
+  
+  # TIDY UP FILE SPECS
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
+  
   if (verbose > 0) {
     cat("Starting",funname,"\n")
   }
-
-# STANDARD ERROR CHECKING
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: at least one genlight object is required!\n"); stop("Execution terminated\n")
   }
-
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
-
-# FUNCTION SPECIFIC ERROR CHECKING
-
-  test <- id%in%indNames(x)
-  if (!all(test,na.rm=FALSE)) {
-    cat("Fatal Error: nominated focal individual (of unknown provenance) is not present in the dataset!\n"); stop("Execution terminated\n")
+  
+  # SCRIPT SPECIFIC ERROR CHECKING
+  
+  # DO THE JOB  
+  
+    gl <- x
+  
+   if (length(unique(pop(gl)))>1) {
+     keep1 <- levels(pop(gl))[table(pop(gl)) >= nmin]
+     if (verbose >=2) {cat("  Retaining",length(keep1),"populations with sample size greater than or equal to",nmin,":",keep1,"\n")}
+     #toss1 <- levels(pop(gl))[table(pop(gl)) < nmin]
+     #if (verbose >=2) {cat("  Discarding",length(toss1),"populations with sample size less than",nmin,":",toss1,"\n\n")}
+     
+     gl.keep <- gl.keep.pop(gl,pop.list=keep1,verbose=0)
+     pops <- seppop(gl.keep)
+   } else {
+       stop("  Fatal Error: Only one population provided. Check pop(gl)\n ")
+   }
+  pc <- t(combn(length(pops),2))
+  pall <- data.frame(p1=pc[,1], p2=pc[,2], pop1=names(pops)[pc[,1]], pop2=names(pops)[pc[,2]], N1=NA, N2=NA,fixed=NA, priv1=NA, priv2=NA, totalpriv=NA, mdf=NA)
+  
+  for (i in 1:nrow(pc)) {
+    i1 =pall[i,1]
+    i2 =pall[i,2]
+    
+    p1 <- as.matrix(pops[[i1]])
+    p2 <- as.matrix(pops[[i2]])
+    p1alf <- colMeans(p1, na.rm = T)/2
+    p2alf <- colMeans(p2, na.rm = T)/2
+    
+    pall[i,5:6] <- c(nrow(p1), nrow(p2))
+    pall[i,7] = sum(abs(p1alf-p2alf)==1, na.rm=T)
+    
+    pall[i,8] =  sum(p2alf==0 & p1alf!=0, na.rm=T) + sum(p2alf==1 & p1alf!=1, na.rm = T) 
+    pall[i,9] =  sum(p1alf==0 & p2alf!=0, na.rm=T) + sum(p1alf==1 & p2alf!=1, na.rm = T)  
+    pall[i,10] = pall[i,8]+pall[i,9]
+    pall[i,11] = round(mean(abs(p1alf-p2alf), na.rm=T),3)
   }
-  if (nmin <=0){
-    cat("    Warning: the minimum size of the target population must be greater than zero, set to 10\n")
-    nmin <- 10
-  }
-  if (threshold < 0){
-    cat("    Warning: the threshold for private alleles must be non-negative, set to 0\n")
-    threshold <- 0
-  }
-
-# DO THE JOB
-
-# Set a recommended minimum population size
-  hard.min <- 10
-
-# Assign the unknown individual to population 'unknown'
-  vec <- as.vector(pop(x))
-  vec[indNames(x)==id] <- "unknown"
-  pop(x) <- as.factor(vec)
   
-# Split the genlight object into one containing the unknown and one containing the remainding populations  
-  unknowns <- x[pop(x)=="unknown",]
-  knowns <- x[pop(x)!="unknown",]
+  # FLAG SCRIPT END
   
-# Remove all known populations with less than nmin individuals
-  pop.keep <- levels(pop(knowns))[table(pop(knowns)) >= nmin]
-  if (verbose >=2) {cat("  Retaining",length(pop.keep),"populations with sample size greater than or equal to",nmin,":",pop.keep,"\n\n")}
-  pop.toss <- levels(pop(knowns))[table(pop(knowns)) < nmin]
-  if (verbose >=2) {cat("  Discarding",length(pop.toss),"populations with sample size less than",nmin,":",pop.toss,"\n\n")}
-
-  knowns <- knowns[pop(knowns) %in% pop.keep]
-
-# Warn of populations retained with sizes less than the hard wired miniumum    
-  pop.warn <- levels(pop(knowns))[table(pop(knowns)) < hard.min]
-  if (length(pop.warn >= 1)) {
-    if (verbose >=1) {cat("  Warning: Some retained populations have sample sizes less than",hard.min,":",pop.warn,"\n")}
-    if (verbose >=1) {cat("    Substantial risk of private alleles arising as sampling error\n\n")}
-  }  
-
-# Report number of focal individuals (1) and number of target populations  
-  n <- length(pop(unknowns))
-  N <- length(levels(pop(knowns)))
-  if (n != 1) {
-    if (verbose >=0) {
-      cat("  Fatal Error: Number of unknown focal individuals > 1; population label 'unknown' already in use\n"); stop("Terminating execution")
-    }  
-  }
-  if (verbose >=2) {cat("  Assigning",n,"unknown individual(s) to",N,"target populations\n")}
-  
-
-# CALCULATE NUMBER OF LOCI WITH PRIVATE ALLELES
-  
-  # For each unknown individual
-    for (i in 1:n) {
-    # Grab the genotype of the unknown individual i
-      unknown.ind <- as.matrix(unknowns[i])
-    # Compare with each population
-      count <- rep(0, N)
-      count.NA <- rep(0, N)
-      
-      for (j in 1:N) {
-        # Grab the genotypes for the known population j    
-          known.pop <- as.matrix(knowns[pop(knowns)==levels(pop(knowns))[j]])
-          
-        # For each locus, count the number of non-private alleles  
-          for (k in 1:nLoc(x)) {
-            # Check to see if the unknown genotype is missing at locus k
-              if (is.na(unknown.ind[k])) {
-                count.NA[j] <- count.NA[j] + 1
-              } else {  
-                # Count the number of private alleles for each of unknown genotype 0,1,2
-                  # Where the unknown focal individual is homozygous reference allele [aa]
-                  if (unknown.ind[k]==0) {
-                    # If all individuals in the target population are bb [not aa or ab] then focal individual has private allele [a]
-                    if ( all(known.pop[,k]==2, na.rm=TRUE) )  { count[j] <- count[j] + 1}
-                  }
-                  # Where the unknown focal individual is homozygous for the alternate allele [bb]
-                  if (unknown.ind[k]==2) {
-                    # If all individuals in the target population are aa [not bb or ab] then focal individual has private allele [b]
-                    if ( all(known.pop[,k]==0, na.rm=TRUE) ) { count[j] <- count[j] + 1}
-                  }
-                  # Where the unknown focal individual is heterozgous [ab]
-                  if (unknown.ind[k]==1) {
-                    # If all individuals in the target population are aa, then [b] is private or if bb, then [a] is private
-                    if ( (all(known.pop[,k]==0, na.rm=TRUE) ) || (all(known.pop[,k]==2, na.rm=TRUE) ) ) { count[j] <- count[j] + 1}
-                  }
-              }
-          }
-      }
-
-      # Print out results 
-
-      if (verbose >=3) {
-        cat("  Unknown individual:",id,"\n")
-        cat("  Total number of SNP loci: ",nLoc(x),"\n\n")
-        cat("  Table showing number of loci with private alleles\n")
-        for (m in levels(as.factor(count))) {
-          cat("   ",m,levels(pop(knowns))[count==m],"\n")
-        } 
-        cat("\n")
-      }
-  }    
-      # Save the data in a new gl object
-
-        index <- ((pop(x) %in% levels(pop(knowns))[count<=threshold]) | (as.character(pop(x)) == "unknown"))
-        gl <- x[index,]
-        gl <- gl.filter.monomorphs(gl, verbose=0)
-        if (verbose >= 2) {
-          if (threshold == 0) {
-            cat("  Data retained for the unknown individual and remaining candidate source populations (zero loci with private alleles)\n")
-            cat("  ",levels(pop(gl)),"\n\n")
-          } else {
-            cat("  Data retained for the unknown individual and remaining candidate source populations (",threshold,"or less loci with private alleles)\n")
-            cat("  ",levels(pop(gl)),"\n\n")
-          }
-        }
-  
-# FLAG SCRIPT END
-
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat("Completed:",funname,"\n\n")
   }
-  
-  return(gl)
-  
+
+  # Return the result  
+  return(pall)
 }

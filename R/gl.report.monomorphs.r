@@ -7,7 +7,7 @@
 #'
 #' @param x -- name of the input genlight object [required]
 #' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
-#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
 #' @return NULL
 #' @import utils
 #' @export
@@ -15,9 +15,9 @@
 #' @examples
 #' gl2 <- gl.report.monomorphs(testset.gl)
 
-# Last amended 3-Feb-19
+# Last amended 3-Aug-19
 
-gl.report.monomorphs <- function (x, probar=FALSE, verbose=0) {
+gl.report.monomorphs <- function (x, probar=FALSE, verbose=3) {
   
 # TIDY UP FILE SPECS
 
@@ -44,7 +44,7 @@ gl.report.monomorphs <- function (x, probar=FALSE, verbose=0) {
 
 # DO THE JOB
 
-  cat("Identifying monomorphic loci\n")
+  if (verbose >= 2){cat("  Identifying monomorphic loci\n")}
 # Create vectors to hold test results
   # homozygote reference
   a <- vector(mode="logical", length=nLoc(x))
@@ -56,6 +56,7 @@ gl.report.monomorphs <- function (x, probar=FALSE, verbose=0) {
   c <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {c[i] <- FALSE}
   # NA
+  if (verbose >= 2){cat("  Identifying loci scored NA over all individuals\n")}
   d <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {d[i] <- FALSE}
   
@@ -64,6 +65,7 @@ gl.report.monomorphs <- function (x, probar=FALSE, verbose=0) {
     pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
     getTxtProgressBar(pb)
   }
+  
 # Identify polymorphic, monomorphic and 'all na' loci
   # Set a,b,c <- TRUE if monomorphic, d <- TRUE if all NAs
   xmat <-as.matrix(x)
@@ -86,8 +88,10 @@ gl.report.monomorphs <- function (x, probar=FALSE, verbose=0) {
   monom <- sum(a,na.rm=TRUE) + sum(b,na.rm=TRUE)
   allna <- sum(d,na.rm=TRUE)
   polym <- nLoc(x) - (monom + allna)
-  cat("\nBreakdown of", nLoc(x), "loci\n")
-  cat("  Monomorphic loci:", monom,"\n  Polymorphic loci:", polym, "\n  Loci with no scores (all NA):" , allna ,"\n")
+  if (verbose>=3){
+    cat("  Breakdown of", nLoc(x), "loci\n")
+    cat("    Monomorphic loci:", monom,"\n    Polymorphic loci:", polym, "\n    Loci with no scores (all NA):" , allna ,"\n")
+  }  
 
 # FLAG SCRIPT END
 
