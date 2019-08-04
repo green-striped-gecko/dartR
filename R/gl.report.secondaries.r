@@ -21,11 +21,10 @@
 #' provided to gl.report.heterozygosity via the parameter n.invariants.
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param plot -- if TRUE, will produce a frequency plot the number of SNPs per sequence tag [default = FALSE] 
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
-#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object of loci with multiple SNP calls
 #' @importFrom adegenet glPlot
 #' @importFrom graphics barplot
@@ -34,13 +33,12 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.secondaries(testset.gl, plot=TRUE)
+#' gl.report.secondaries(bandicoot.gl)
 
 gl.report.secondaries <- function(x, 
-                                  plot=FALSE, 
                                   boxplot="adjusted",
                                   range=1.5,
-                                  verbose = 0) {
+                                  verbose = 2) {
 
 # TIDY UP FILE SPECS
 
@@ -48,7 +46,9 @@ gl.report.secondaries <- function(x,
 
 # FLAG SCRIPT START
 
+  if (verbose > 0) {
     cat("Starting",funname,"\n")
+  }
 
 # STANDARD ERROR CHECKING
   
@@ -76,11 +76,12 @@ gl.report.secondaries <- function(x,
 # Extract the clone ID number
   a <- strsplit(as.character(x@other$loc.metrics$AlleleID),"\\|")
   b <- unlist(a)[ c(TRUE,FALSE,FALSE) ]
-  cat("Counting ....\n")
+  if (verbose >= 2) {
+    cat("Counting ....\n")
+  }
   x.secondaries <- x[,duplicated(b)]
      # Work around a bug in adegenet if genlight object is created by subsetting
      x.secondaries@other$loc.metrics <- x.secondaries@other$loc.metrics[1:nLoc(x),]
-  # df <- data.frame(CloneID=unique(b[duplicated(b)]), freq=as.numeric(table(b)[table(b)>1]))  
 
   nloc.with.secondaries <- table(duplicated(b))[2]
   if (!is.na(nloc.with.secondaries)){
@@ -90,7 +91,7 @@ gl.report.secondaries <- function(x,
     # Set margins for first plot
     par(mai=c(0.6,0.5,0.5,0.5))
     # Plot Box-Whisker plot
-    adjbox(c(0,as.numeric(table(b))),
+    robustbase::adjbox(c(0,as.numeric(table(b))),
            horizontal = TRUE,
            col='red',
            range=range,
@@ -104,7 +105,9 @@ gl.report.secondaries <- function(x,
     barplot(f,col="red", space=0.5, main="Observed Frequency of SNPs per Sequence Tag")
     
     # Plot Histogram with estimate of the zero class
-    cat("Estimating parameters (lambda) of the Poisson expectation\n")
+    if (verbose >= 2){
+      cat("Estimating parameters (lambda) of the Poisson expectation\n")
+    }
       # Calculate the mean for the truncated distribution
         freqs <- as.numeric(freqs)
         tmp<- NA
@@ -119,58 +122,69 @@ gl.report.secondaries <- function(x,
       # Use the mean of the truncated distribution to compute lambda for the untruncated distribution
         k <- seed
         for (i in 1:100){
-          print(k)
+          if (verbose >= 2){print(k)}
           k.new <- tmean*(1-exp(-k))
           if (abs(k.new - k) <= delta){
-            cat("Converged on Lambda of",k.new,"\n")
+            if (verbose >= 2){cat("Converged on Lambda of",k.new,"\n")}
             break
           }
           if (i == 100){
-            cat("Failed to converge")
+            cat("Failed to converge: No reliable estimate of invariant loci\n")
+            fail <- TRUE
             break
           }
           k <- k.new
         }
         
       # Size of the truncated distribution
-        n <- sum(freqs)  # Size of the truncated set 
-        tp <- 1 - dpois( x=0, lambda=k ) # Fraction that is the truncated set
-        rn <- round(n/tp,0) # Estimate of the whole set
-        cat("Estimated size of the zero class",round(dpois(x=0,lambda=k)*rn,0),"\n")
-      # Table for the reconstructed set  
-        reconstructed <- dpois( x=0:(length(freqs)-1), lambda=k )*rn
-        reconstructed <- as.table(reconstructed)
-        names(reconstructed)<- seq(1:(length(reconstructed)))-1
-        # Set margins for third plot
-        par(mai=c(0.5,0.5,0.2,0.5))
-        title <- paste0("Poisson Expectation (zero class ",round(dpois(x=0,lambda=k)*rn,0)," invariant loci)")
-        barplot(reconstructed,col="red", space=0.5, main=title)
-        # Reset the par options    
-        par(op)
-        
+        if (!fail) {
+          n <- sum(freqs)  # Size of the truncated set 
+          tp <- 1 - dpois( x=0, lambda=k ) # Fraction that is the truncated set
+          rn <- round(n/tp,0) # Estimate of the whole set
+          cat("Estimated size of the zero class",round(dpois(x=0,lambda=k)*rn,0),"\n")
+          # Table for the reconstructed set  
+            reconstructed <- dpois( x=0:(length(freqs)-1), lambda=k )*rn
+            reconstructed <- as.table(reconstructed)
+            names(reconstructed)<- seq(1:(length(reconstructed)))-1
+          # Set margins for third plot
+            par(mai=c(0.5,0.5,0.2,0.5))
+            title <- paste0("Poisson Expectation (zero class ",round(dpois(x=0,lambda=k)*rn,0)," invariant loci)")
+            barplot(reconstructed,col="red", space=0.5, main=title)
+        }
   } else {
-      if (plot) {cat("  Warning: No loci with secondaries, no plot produced\n") }
+      cat("  Warning: No loci with secondaries, no plot produced\n")
   }
   
 # Identify secondaries in the genlight object
   cat("  Total number of SNP loci scored:",nLoc(x),"\n")
   if (is.na(table(duplicated(b))[2])) {
-    cat("   Number of secondaries: 0 \n")
+    cat("    Number of secondaries: 0 \n")
   } else {
-    cat("   Number of sequence tags in total:",table(duplicated(b))[1],"\n")
-    cat("   Estimated number of invariant sequence tags:", round(dpois(x=0,lambda=k)*rn,0),"\n")
-    cat("   Number of sequence tags with secondaries:",sum(table(as.numeric(table(b))))-table(as.numeric(table(b)))[1],"\n")
-    cat("   Number of secondary SNP loci that would be removed on filtering:",table(duplicated(b))[2],"\n")
-    cat("   Number of SNP loci that would be retained on filtering:",table(duplicated(b))[1],"\n")
-    cat(" Tabular 1 to K secondaries (refer plot)\n",table(as.numeric(table(b))),"\n")
+    if (verbose >= 3){
+      cat("   Number of sequence tags in total:",table(duplicated(b))[1],"\n")
+      if (fail){
+        cat("    Number of invariant sequence tags cannot be estimated\n")
+      } else {
+        cat("   Estimated number of invariant sequence tags:", round(dpois(x=0,lambda=k)*rn,0),"\n")
+      }  
+      cat("    Number of sequence tags with secondaries:",sum(table(as.numeric(table(b))))-table(as.numeric(table(b)))[1],"\n")
+      cat("    Number of secondary SNP loci that would be removed on filtering:",table(duplicated(b))[2],"\n")
+      cat("    Number of SNP loci that would be retained on filtering:",table(duplicated(b))[1],"\n")
+      cat(" Tabular 1 to K secondaries (refer plot)\n",table(as.numeric(table(b))),"\n")
+    }  
   }  
   cat("\nReturning a genlight object containing only those loci with secondaries (multiple entries per locus)\n\n")
 
-# FLAG SCRIPT END
+  # FLAG SCRIPT END
   
-
+  if (verbose > 0) {
     cat("Completed:",funname,"\n")
-
+  }
+  
+  # Reset the par options    
+  par(op)
+  
+  # Return the result
     return(x.secondaries)
   
 }  

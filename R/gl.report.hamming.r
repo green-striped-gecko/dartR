@@ -133,7 +133,13 @@ gl.report.hamming <- function(x,
   par(mai=c(1,0.5,0.5,0.5))
   # Plot Box-Whisker plot
   if (boxplot == "standard"){
-    whisker <- boxplot(d, horizontal=TRUE, col='red', range=range, main = "Hamming Distance")
+    whisker <- boxplot(d, 
+                       horizontal=TRUE, 
+                       col='red', 
+                       range=range,
+                       ylim=c(0,1),
+                       main = "Hamming Distance")
+    abline(v=tld,col="red")
    } else {
     whisker <- robustbase::adjbox(x=as.numeric(d),
                                   horizontal = TRUE,
