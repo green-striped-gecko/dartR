@@ -8,11 +8,10 @@
 #' two trimmed sequences starting from immediately after the common recognition
 #' sequence and terminating at the last base of the shorter sequence. 
 #' 
-#' Hamming distance can be computed 
-#' by exploiting the fact that the dot product of two binary vectors x and (1-y)
-#' counts the corresponding elements that are different between x and y.
-#' This approach can also be used for vectors that contain more than two possible 
-#' values at each position (e.g. A, C, T or G).
+#' Hamming distance can be computed by exploiting the fact that the dot product 
+#' of two binary vectors x and (1-y) counts the corresponding elements that are 
+#' different between x and y. This approach can also be used for vectors that 
+#' contain more than two possible values at each position (e.g. A, C, T or G).
 #'
 #' If a pair of DNA sequences are of differing length, the longer is truncated.
 #'
@@ -20,25 +19,37 @@
 #' \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 #' as implimented in utils.hamming.r
 #' 
-#' A histogram and or a smearplot can be requested. Note that the smearplot is computationally intensive, and will take time to 
-#' execute on large datasets.
+#' A histogram and whiskerplot can be requested. Both display a user specified value
+#' for the minumum acceptable Hamming distance.
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 5]
-#' @param plot specify if a histogram of Hamming distance is to be produced [default FALSE] 
-#' @param smearplot if TRUE, will produce a smearplot of individuals against loci [default FALSE]
+#' @param boxplot -- if 'standard', plots a standard box and whisker plot; 
+#' if 'adjusted', plots a boxplot adjusted for skewed distributions [default 'adjusted']
+#' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
+#' @param threshold displays a minimum acceptable base pair difference on the whisker plot [default 3 bp]
+#' @param taglength -- typical length of the sequence tags [default 69]
 #' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default = TRUE]
 #' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
 #' @return Tabulation of loc that will be lost on filtering, against values of the threshold
 #' @importFrom adegenet glPlot
 #' @importFrom graphics hist
 #' @importFrom stats sd
+#' @importFrom robustbase adjbox
+#' @importFrom graphics par
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.report.hamming(testset.gl)
 
-gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=FALSE, verbose = 0) {
+gl.report.hamming <- function(x, 
+                              rs=5, 
+                              boxplot="adjusted",
+                              range=1.5,
+                              threshold=3,
+                              taglength=69,
+                              probar=FALSE, 
+                              verbose = 3) {
   
 # TIDY UP FILE SPECS
 
@@ -74,33 +85,32 @@ gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=FALSE
     cat("Fatal Error: Data must include Trimmed Sequences\n"); stop()
   }
 
-  if (rs < 0 | rs > 69){
+  if (rs < 0 | rs > taglength){
     cat("Fatal Error: Length of restriction enzyme recognition sequence must be greater than zero, and less that the maximum length of a sequence tag; usually it is less than 9\n"); stop()
+  }
+    
+  if (nLoc(x) == 1){
+    cat("Fatal Error: Data must include more than one locus\n"); stop()
   }
 
 # DO THE JOB
 
   s <- as.character(x@other$loc.metrics$TrimmedSequence)
-
-  if (nLoc(x)==1) {
-    cat("Only one locus. No Hamming distances calculated.\n")
-  } else {
-    cat("Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n")
-    cat("Calculating pairwise Hamming distances between trimmed reference sequence tags\n")
-  count=0
-  nL <- nLoc(x)
-  
-  # Calculate the number of iterations in loops below to set dimensions of d
-  # niter = sum i=1 to nL-1 of (nL - i)
-  # niter = sum i=1 to nL-1 of (nL) - sum i=1 to nL-1 of (i)
-  # niter = nL(nL-1) - (nL-1)nL/2 [triangle number]
-  # niter = nL(nL-1)/2 which seem intuitive
-  d <- rep(NA,(((nL-1)*nL)/2))
-  
+  tld <- threshold/(taglength-rs)
   if( probar ) {
     pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
     getTxtProgressBar(pb)
   }
+
+  if (verbose >= 2){
+    cat("  Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n")
+    cat("  Calculating pairwise Hamming distances between trimmed Reference sequence tags\n")
+  }
+  
+  count=0
+  nL <- nLoc(x)
+  d <- rep(NA,(((nL-1)*nL)/2))
+  
   for (i in 1:(nL-1)){
     for (j in ((i+1):nL)){
       count <- count + 1
@@ -108,32 +118,53 @@ gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=FALSE
     }
     if (probar) {setTxtProgressBar(pb, i/(nL-1))}
   }
-  }
 
-  # Plot a histogram of Hamming distance
-  par(mfrow = c(2, 1),pty="m")
-  
-  if (plot) {
-    hist(d, 
-         main="Hamming distance between Loci taken pairwise", 
-         xlab="Hamming distance", 
-         border="blue", 
-         col="red",
-         xlim=c(0,1),
-         breaks=100)
+  # Prepare for plotting
+  if (verbose >= 2) {
+    if (boxplot == "adjusted"){
+      cat("  Plotting box and whisker plot (adjusted for skewness) and histogram of Hamming distance, showing a threshold of",threshold,"bp [HD",round(tld,2),"]\n")
+    } else {
+      cat("  Plotting box and whisker plot (standard) and histogram of Hamming distance, showing a threshold of",threshold,"bp [HD",round(tld,2),"]\n")
+    }  
+  }
+  # Save the prior settings for mfrow, oma, mai and pty, and reassign
+  op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+  # Set margins for first plot
+  par(mai=c(1,0.5,0.5,0.5))
+  # Plot Box-Whisker plot
+  if (boxplot == "standard"){
+    whisker <- boxplot(d, horizontal=TRUE, col='red', range=range, main = "Hamming Distance")
+   } else {
+    whisker <- robustbase::adjbox(x=as.numeric(d),
+                                  horizontal = TRUE,
+                                  col='red',
+                                  range=range,
+                                  ylim=c(0,1),
+                                  main = "Hamming Distance")
+    abline(v=tld,col="red")
   }  
-  if(smearplot){
-    glPlot(x)
-  } 
+  # Set margins for second plot
+  par(mai=c(0.5,0.5,0,0.5))  
+  # Plot Histogram
+  hst <- hist(d,
+       main="",
+       xlab="",
+       border="blue", 
+       col="red",
+       xlim=c(0,1),
+       breaks=100)
+  abline(v=tld,col="red")
+  text(tld,max(hst$counts),pos=4,offset=1,paste(threshold,"bp"))
   
-   xlimit <- min(d)
-   
-   cat("No. of loci =", nLoc(x), "\n")
-   cat("No. of individuals =", nInd(x), "\n")
-   cat("  Miniumum Hamming distance: ",round(min(d),2),"\n")
-   cat("  Maximum Hamming distance: ",round(max(d),2),"\n")
-   #cat("  Mean Hamming distance: ",round(mean(d),3),"\n\n")
-   cat(paste0("  Mean Hamming Distance ",mean(d),"+/-",sd(d)," SD\n\n"))
+  if (verbose >= 3) {
+   cat("  No. of loci =", nLoc(x), "\n")
+   cat("  No. of individuals =", nInd(x), "\n")
+   cat("    Miniumum Hamming distance: ",round(min(d),2),"\n")
+   cat("    Maximum Hamming distance: ",round(max(d),2),"\n")
+   cat(paste0("    Mean Hamming Distance ",round(mean(d),2),"+/-",round(sd(d),3)," SD\n\n"))
+   n.outliers <- sum(d[d<=(threshold/(taglength-rs))])
+   cat("  No. of pairs with Hamming Distance less than or equal to",threshold,"base pairs:",n.outliers,"\n")
+  } 
 
    # Determine the loss of loci for a given filter cut-off
    retained <- array(NA,21)
@@ -154,12 +185,20 @@ gl.report.hamming <- function(x, rs=5, plot=FALSE, smearplot=FALSE, probar=FALSE
    colnames(df) <- c("Threshold", "Retained", "Percent", "Filtered", "Percent")
    df <- df[order(-df$Threshold),]
    rownames(df) <- NULL
-   cat("Note: The data below are calculated from pairwise distances between",nL,"loci, for which there are",((((nL-1)*nL)/2)), "distances\n")
-   print(df)
+   if (verbose >= 3){
+     cat("Note: The data below are for pairwise distances between",nL,"loci, for which there are",((((nL-1)*nL)/2)), "distances\n")
+     print(df)
+   }   
    
-# FLAG SCRIPT END
-
-    cat("Completed:",funname,"\n")
-
+   # FLAG SCRIPT END
+   
+   if (verbose >= 1) {
+     cat("Completed:",funname,"\n")
+   }
+   
+   # Reset the par options    
+   par(op)
+   
+   # Return the result
    return(df)
 }

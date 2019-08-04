@@ -24,7 +24,7 @@
 #' (boxplot="standard") or adjusted for skewness (boxplot=adjusted). 
 #' 
 #' Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
-#' Box and Whisker Plots and Hubert & Vandervieren (2008, An Adjusted Boxplot for Skewed
+#' Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed
 #' Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
 #' Box and Whisker Plots.
 #' 
