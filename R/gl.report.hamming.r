@@ -191,10 +191,10 @@ gl.report.hamming <- function(x,
    colnames(df) <- c("Threshold", "Retained", "Percent", "Filtered", "Percent")
    df <- df[order(-df$Threshold),]
    rownames(df) <- NULL
-   if (verbose >= 3){
-     cat("Note: The data below are for pairwise distances between",nL,"loci, for which there are",((((nL-1)*nL)/2)), "distances\n")
-     print(df)
-   }   
+#   if (verbose >= 3){
+#     cat("Note: The data below are for pairwise distances between",nL,"loci, for which there are",((((nL-1)*nL)/2)), "distances\n")
+#     print(df)
+#   }   
    
    # FLAG SCRIPT END
    

@@ -12,11 +12,7 @@
 #' Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
 #' Box and Whisker Plots.
 #' 
-#' A histogram can be requested. Note that the smearplot is computationally intensive, and will take time to 
-#' execute for large datasets.
-#'
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param plot if TRUE, will produce a histogram of call rate [default TRUE]
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
@@ -30,7 +26,7 @@
 
 # Last amended 3-Feb-19
 
-gl.report.rdepth <- function(x, plot=TRUE, boxplot="adjusted", range=1.5, verbose=2) {
+gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
 
 # TIDY UP FILE SPECS
 
@@ -46,10 +42,6 @@ gl.report.rdepth <- function(x, plot=TRUE, boxplot="adjusted", range=1.5, verbos
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
     
-  if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-  }
-
   # Work around a bug in adegenet if genlight object is created by subsetting
       if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
 
@@ -96,16 +88,6 @@ gl.report.rdepth <- function(x, plot=TRUE, boxplot="adjusted", range=1.5, verbos
   
   # Plot a histogram of read depth
   par(mfrow = c(2, 1),pty="m")
-  
-  # if (plot) {
-  #   hist(rdepth, 
-  #        main="Read Depth Profile", 
-  #        xlab="Read Depth", 
-  #        border="blue", 
-  #        col="red",
-  #        xlim=c(lower,upper),
-  #        breaks=100)
-  # }  
   
   # Prepare for plotting
   # Save the prior settings for mfrow, oma, mai and pty, and reassign

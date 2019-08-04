@@ -11,6 +11,9 @@
 #' @return     Returns a genlight object retaining loci with a Read Depth in the range specified by the lower and upper threshold.
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @examples
+#' gl.report.rdepth(testset.gl)
+#' result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
 
 # Last amended 3-Feb-19
 
@@ -42,12 +45,12 @@ gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=2) {
   }
 
   # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
+    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
+      pop(x) <- array("pop1",dim = nLoc(x))
       pop(x) <- as.factor(pop(x))
     }
 
@@ -84,9 +87,11 @@ gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=2) {
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-    #add to history
+    
+  #add to history
     nh <- length(x2@other$history)
-    x2@other$history[[nh + 1]] <- match.call()  
+    x2@other$history[[nh + 1]] <- match.call()
+  
   return(x2)
   
 }

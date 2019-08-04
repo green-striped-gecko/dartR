@@ -77,9 +77,9 @@ gl.report.repavg <- function(x,verbose=3) {
     colnames(df) <- c("Threshold", "Retained", "Percent", "Filtered", "Percent")
   df <- df[order(-df$Threshold),]
   rownames(df) <- NULL
-  if (verbose >= 3){
-    print(df)
-  }
+#  if (verbose >= 3){
+#    print(df)
+#  }
   
   # Plot a histogram of RepAvg
   # Save the prior settings for mfrow, oma, mai and pty, and reassign
