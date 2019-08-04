@@ -66,11 +66,11 @@ gl.percent.freq<- function(x, verbose=2) {
   f <- f*100
 
 # Convert the matricies to long format pop, locus, value
-  nobs <- melt(nobs, na.rm=FALSE)
-  nmissing <- melt(nmissing, na.rm=FALSE)
-  n <- melt(n, na.rm=FALSE)
-  f <- melt(f, na.rm=FALSE)
-  sum <- melt(sum, na.rm=FALSE)
+  nobs <- reshape2::melt(nobs, na.rm=FALSE)
+  nmissing <- reshape2::melt(nmissing, na.rm=FALSE)
+  n <- reshape2::melt(n, na.rm=FALSE)
+  f <- reshape2::melt(f, na.rm=FALSE)
+  sum <- reshape2::melt(sum, na.rm=FALSE)
   
   if(nPop(x) == 1) {
     m <- cbind(levels(pop(x)),rownames(sum),sum,nobs,nmissing,f,n)

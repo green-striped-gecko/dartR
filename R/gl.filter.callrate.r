@@ -41,10 +41,6 @@
     verbose <- 2
   }
 
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
-  }
-
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
@@ -78,12 +74,14 @@
    }
 
 # DO THE JOB
-
-   if (verbose >= 3) {cat("Note: Missing values most commonly arise from restriction site mutation\n")}
+    
+  if (verbose >=1) {
+    cat("Starting",funname,"\n")
+  }
 
 # RECALCULATE THE CALL RATE, BRING IT UP TO DATE IN CASE gl.recalc.metrics HAS NOT BEEN RUN
    
-   x <- utils.recalc.callrate(x, verbose=verbose)
+   x <- utils.recalc.callrate(x, verbose=1)
    
 # FOR METHOD BASED ON LOCUS    
 
@@ -220,7 +218,7 @@
 
 # REPORT A SUMMARY
    if (verbose > 2) {
-     cat("\n  Summary of filtered dataset\n")
+     cat("  Summary of filtered dataset\n")
      cat(paste("    Call Rate >",threshold,"\n"))
      cat(paste("    No. of loci:",nLoc(x2),"\n"))
      cat(paste("    No. of individuals:", nInd(x2),"\n"))
@@ -245,13 +243,13 @@
    
 # FLAG SCRIPT END
 
+  #add to history
+   nh <- length(x2@other$history)
+   x2@other$history[[nh + 1]] <- match.call()
+   
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
 
-   #add to history
-   nh <- length(x2@other$history)
-   x2@other$history[[nh + 1]] <- match.call()
-   
    return(x2)
  }

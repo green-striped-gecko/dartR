@@ -19,6 +19,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return -- dataframe with loci that are outliers
 #' @importFrom graphics hist
+#' @importFrom robustbase adjbox
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -34,7 +35,9 @@ gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
 
 # FLAG SCRIPT START
 
+  if (verbose >= 1) {
     cat("Starting",funname,"\n")
+  }
 
 # STANDARD ERROR CHECKING
   
@@ -136,12 +139,12 @@ gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
     }  
   }  
   
-# FLAG SCRIPT END
-
-    cat("Completed:",funname,"\n")
-    
-# Reset the par options    
-    par(op)
+  # FLAG SCRIPT END
+  
+  if(verbose>=1){cat("Completed:",funname,"\n")}
+  
+  # Reset the par options    
+  par(op)
 
   return(outliers)
 

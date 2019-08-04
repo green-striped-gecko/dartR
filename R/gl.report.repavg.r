@@ -9,6 +9,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
 #' @return -- Tabulation of repAvg against prospective Thresholds
 #' @importFrom graphics hist
+#' @importFrom robustbase adjbox
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
