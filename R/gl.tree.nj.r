@@ -16,7 +16,7 @@
 #' @examples
 #' gl.tree.nj(testset.gl,type="fan")
 
-# Last amended 3-Feb-19
+# Last amended 3-Aug-19
 
 gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, verbose=2) {
 
@@ -65,27 +65,32 @@ gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, verbos
     row.names(d) <- substr(row.names(d),1,10)
     
   # Plot the distances as an nj tree  
-    tree <- nj(d)
+    tree <- ape::nj(d)
     if (!is.null(outgroup)) {
       # Function plot.phylo{ape} has the labels all of the same length
-      outgroup <- str_pad(outgroup, nchar(tree$tip.label[1]), side = c("right"), pad = " ")
+      outgroup <- stringr::str_pad(outgroup, nchar(tree$tip.label[1]), side = c("right"), pad = " ")
       # Truncate to 10 characters
       outgroup <- substr(outgroup,1,10)
       # Root the tree
-      rtree <- root(tree, outgroup)
+      rtree <- ape::root(tree, outgroup)
       # Plot the tree
-      plot.phylo(rtree, type=type, cex=labelsize)
+      # Save the prior settings for mfrow, oma, mai and pty, and reassign
+      op <- par(mfrow = c(1, 1), oma=c(1,1,1,1), mai=c(0,0,0,0),pty="m")
+      ape::plot.phylo(rtree, type=type, cex=labelsize)
       return(rtree)
     } else {
       # Just plot the tree unrooted
-      plot.phylo(tree, type=type, cex=labelsize)
+      ape::plot.phylo(tree, type=type, cex=labelsize)
       return(tree)
     }
 
-# FLAG SCRIPT END
-
-  if (verbose > 0) {
-    cat("Completed:",funname,"\n")
-  }
+    # FLAG SCRIPT END
     
+    if (verbose > 0) {
+      cat("Completed:",funname,"\n")
+    }
+    
+    # Reset the par options    
+    par(op)
+
 }
