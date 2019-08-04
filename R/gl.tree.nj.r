@@ -7,6 +7,7 @@
 #' @param outgroup -- Vector containing the population names that are the outgroups [Default NULL]
 #' @param type -- Type of dendrogram phylogram|cladogram|fan|unrooted [Default Phylogram]
 #' @param labelsize -- Size of the labels as a proportion of the graphics default [Default 0.7]
+#' @param treefile -- Name of the file for the tree topology using Newick format [Default NULL].
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A tree file of class phylo
 #' @importFrom stringr str_pad
@@ -18,7 +19,7 @@
 
 # Last amended 3-Aug-19
 
-gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, verbose=2) {
+gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, treefile=NULL, verbose=2) {
 
 # TIDY UP FILE SPECS
 
@@ -72,17 +73,22 @@ gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, verbos
       # Truncate to 10 characters
       outgroup <- substr(outgroup,1,10)
       # Root the tree
-      rtree <- ape::root(tree, outgroup)
+      tree <- ape::root(tree, outgroup)
       # Plot the tree
       # Save the prior settings for mfrow, oma, mai and pty, and reassign
       op <- par(mfrow = c(1, 1), oma=c(1,1,1,1), mai=c(0,0,0,0),pty="m")
       ape::plot.phylo(rtree, type=type, cex=labelsize)
-      return(rtree)
     } else {
       # Just plot the tree unrooted
+      op <- par(mfrow = c(1, 1), oma=c(1,1,1,1), mai=c(0,0,0,0),pty="m")
       ape::plot.phylo(tree, type=type, cex=labelsize)
-      return(tree)
     }
+    
+  # Output the tree file
+    if(!is.null(treefile)){
+      if(verbose>=2){cat("  Writing the tree topology to",treefile,"\n")}
+      write.tree(tree,file=treefile)
+    }  
 
     # FLAG SCRIPT END
     
@@ -92,5 +98,7 @@ gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, verbos
     
     # Reset the par options    
     par(op)
+    
+    return(tree)
 
 }
