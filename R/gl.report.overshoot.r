@@ -7,17 +7,17 @@
 #' the sequence tag.
 #' 
 #' @param x -- name of the genlight object [required]
-#' @param verbose -- not required. Included to trap accidental use [default 2]
-#' @return An vector containing the affected loci, or NULL
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @return A new genlight object with the recalcitrant loci deleted
 #' @importFrom 
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' x <- testset.gl
-#' x@other$loc.metrics$SnpPosition[10] <- 100
-#' x@other$loc.metrics$SnpPosition[20] <- 100
-#' x@other$loc.metrics$SnpPosition[30] <- 100
-#' deloc <- gl.report.overshoot(x)
+#' gl <- testset.gl
+#' gl@other$loc.metrics$SnpPosition[10] <- 100
+#' gl@other$loc.metrics$SnpPosition[20] <- 100
+#' gl@other$loc.metrics$SnpPosition[30] <- 100
+#' gl <- gl.report.overshoot(gl)
 
 # Last amended 17-Sep-19
 
@@ -51,8 +51,8 @@ gl.report.overshoot <- function(x, verbose=2) {
   if(length(x@other$loc.metrics$TrimmedSequence) != nLoc(x)) {
     stop("Fatal Error: Data must include Trimmed Sequences for each loci in a column called 'TrimmedSequence' in the @other$loc.metrics slot.\n")
   }
-  if(length(x@position) != nLoc(x)) {
-    stop("Fatal Error: Data must include position information for each loci in the @position slot.\n")
+  if(length(x@other$loc.metrics$SnpPosition) != nLoc(x)) {
+    stop("Fatal Error: Data must include position information for each loci.\n")
   }
   
 # DO THE JOB
@@ -66,9 +66,9 @@ gl.report.overshoot <- function(x, verbose=2) {
   # Pull those loci for which the SNP position is greater than the tag length
   xx <- x[,snpos > nchar(trimmed)]
   # Report the number of such loci
-  cat("  No. of loci with SNP falling outside the trimmed sequence:",nLoc(xx),"\n")
-  if(nLoc(xx) > 0){cat("\n",paste(locNames(xx),"\n"))}
- 
+    cat("  No. of loci with SNP falling outside the trimmed sequence:",nLoc(xx),"\n")
+    if(nLoc(xx) > 0){cat("\n",paste(locNames(xx),"\n"))}
+
 # FLAG SCRIPT END
 
   if (verbose > 0) {
