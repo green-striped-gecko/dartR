@@ -31,7 +31,7 @@ nLoc(x1)
 x2 <- testset.gl[,101:150]
 x2@other$loc.metrics <-  testset.gl@other$loc.metrics[101:150,]
 nLoc(x2)
-gl <- gl.join(gl1, gl2, verbose=2)
+gl <- gl.join(x1, x2, verbose=2)
 nLoc(gl)
 }
 \author{

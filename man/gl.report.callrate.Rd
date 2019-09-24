@@ -38,7 +38,6 @@ Box and Whisker Plots.
 }
 \examples{
 gl.report.callrate(testset.gl)
-gl.report.rdepth(testset.gl,method="ind")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

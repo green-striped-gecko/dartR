@@ -33,9 +33,6 @@ Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for 
 Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
 Box and Whisker Plots.
 }
-\examples{
-gl.report.rdepth(testset.gl)
-}
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

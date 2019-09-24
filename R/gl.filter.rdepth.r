@@ -11,9 +11,9 @@
 #' @return     Returns a genlight object retaining loci with a Read Depth in the range specified by the lower and upper threshold.
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#' @examples
-#' gl.report.rdepth(testset.gl)
-#' result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
+#' #@examples
+#' #gl.report.rdepth(testset.gl)
+#' #result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
 
 # Last amended 3-Feb-19
 

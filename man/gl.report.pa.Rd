@@ -2,48 +2,37 @@
 % Please edit documentation in R/gl.report.pa.r
 \name{gl.report.pa}
 \alias{gl.report.pa}
-\title{Report private alleles (and fixed allelic differences) per pair of populations}
+\title{Report number of private alleles possessed by an individual of unknown provenance}
 \usage{
-gl.report.pa(x = gl, nmin = 10, verbose = 3)
+gl.report.pa(x, id, nmin = 10, threshold = 0, verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data broken down by population [default gl]}
+\item{x}{-- name of the input genlight object [required]}
 
-\item{nmin}{-- minimum sample size for a population to be included in the analysis [default 10]}
+\item{id}{-- identity label of the focal individual whose provenance is unknown [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]}
+\item{nmin}{-- minimum sample size for a target population to be included in the analysis [default 10]}
+
+\item{threshold}{-- retain those populations for which the focal individual has private alleles less or equal in number than the threshold [default 0]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-A dataframe giving population names, sample sizes, number of fixed allelic differences, number of private alleles held by population 1,
-number of private alleles held by population 2, total private alleles, and mean allelic difference between the two populations.
+A genlight object containing the focal individual (assigned to population "unknown") and 
+populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 }
 \description{
-This function reports separates the genlight object by populations and reports fixed allelic differences, private alleles 
-and the mean absolute allele frequency differences between pairs of populations.
+This script calculates the number of private alleles possessed by a focal individual of unknown
+provenance when compared to a series of target populations.
 }
 \details{
-A fixed difference at a locus occurs when the two focal populations share no alleles. This is a symmetric measure. A private allele is an allele
-that is found in one population but not in the other. The distance defined by a count of private alleles between two populations is not symmetric.
-
-The table below shows a cross tablulation of possible cases of allele frequencies between two populations 
-(0=homozygote for Allele 1,x= both Alleles are present, 1=homozygote for Allele 2)
-
-p: cases where there is a private allele in pop1 compared to pop2 (but not vice versa)
-
-f: cases where there is a fixed allelic difference between pop1 and pop2.
-
-\tabular{ccccc}{ 
-\tab\tab \tab \emph{pop1}\tab\cr
-\tab\tab \strong{0} \tab   \strong{x}  \tab  \strong{1}\cr
-\tab     \strong{0}\tab -  \tab  p \tab  p,f\cr
- \emph{pop2} \tab \strong{x}\tab -  \tab- \tab -\cr
-\tab \strong{1} \tab p,f\tab p \tab   -\cr
-}
+A private allele is an allele possessed by the focal individual, but absent from the target population. It differs from a fixed allelic difference in that the focal individual
+may be heterozygous, in which case can share one but not both of its alleles with the target population.
 }
 \examples{
-gl.report.pa(testset.gl,nmin=11)
-
+# Test run with a focal individual from the Macleay River (EmmacMaclGeor)
+x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, threshold=1, verbose=2)
 }
 \author{
-Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

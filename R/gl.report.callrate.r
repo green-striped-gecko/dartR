@@ -25,7 +25,6 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.report.callrate(testset.gl)
-#' gl.report.rdepth(testset.gl,method="ind")
 
 
 gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, verbose=3) {

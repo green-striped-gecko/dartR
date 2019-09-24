@@ -163,7 +163,7 @@ gl.dist.pop <- function(x, method="euclidean", binary=FALSE, diag=FALSE, upper=F
     dd <- as.dist(dd) 
     
   # Revert to original order  
-    ord <- rank(indNames(x))
+    ord <- rank(popNames(x))
     mat <- as.matrix(dd)[ord, ord]
     dd <- as.dist(mat)
     

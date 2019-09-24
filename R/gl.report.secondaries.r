@@ -72,7 +72,7 @@ gl.report.secondaries <- function(x,
     }
 
 # DO THE JOB
-
+  op <- par(mfrow = c(3, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
 # Extract the clone ID number
   a <- strsplit(as.character(x@other$loc.metrics$AlleleID),"\\|")
   b <- unlist(a)[ c(TRUE,FALSE,FALSE) ]
@@ -87,7 +87,7 @@ gl.report.secondaries <- function(x,
   if (!is.na(nloc.with.secondaries)){
     # Prepare for plotting
     # Save the prior settings for mfrow, oma, mai and pty, and reassign
-    op <- par(mfrow = c(3, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+    par(mfrow = c(3, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
     # Set margins for first plot
     par(mai=c(0.6,0.5,0.5,0.5))
     # Plot Box-Whisker plot

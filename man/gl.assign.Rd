@@ -61,7 +61,8 @@ Each of these approaches provides evidence, none are 100% definitive. They need 
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.05, threshold=1)
+x <- gl.assign(testset.gl, id="UC_00146", nmin=10, 
+alpha=0.05, threshold=1)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

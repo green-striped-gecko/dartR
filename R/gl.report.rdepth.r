@@ -22,8 +22,6 @@
 #' @importFrom robustbase adjbox
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#' @examples
-#' gl.report.rdepth(testset.gl)
 
 # Last amended 3-Feb-19
 

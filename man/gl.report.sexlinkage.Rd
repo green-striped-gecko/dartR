@@ -35,7 +35,7 @@ Sex of the individuals for which sex is known with certainty is to be held in th
 as M for male, F for female, NA otherwise. The script abbreviates the entries here to the first character. So coding of "Female" and "Male" works as well. Character are also converted to upper cases.
 }
 \examples{
-result <- gl.report.sexlinkage(testset.gl)
+#result <- gl.report.sexlinkage(testset.gl)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

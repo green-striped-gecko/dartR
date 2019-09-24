@@ -20,7 +20,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.report.sexlinkage(testset.gl)
+#' #result <- gl.report.sexlinkage(testset.gl)
 
 # Last amended 3-Feb-19
 
