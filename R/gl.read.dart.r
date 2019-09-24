@@ -47,6 +47,14 @@ gl.read.dart <- function(filename, ind.metafile=NULL, covfilename=NULL, nas = "-
   if (is.null(glout@other$history)) {
     glout@other$history <- list(match.call())
   }
+  
+  #add recalc flags (TRUE=up-to-date, FALSE=no longer valid)
+  #all potential headers that can be relculated
+  recalc.flags <-  c( "AvgPIC", "OneRatioRef","OneRatioSnp", "PICRef", "PICSnp", "CallRate",  "maf", "FreqHets" ,"FreqHomRef" , "FreqHomSnp" )
+  glout@other$loc.metrics.flags <-  data.frame(matrix(TRUE, nrow=1, ncol=length(recalc.flags)))
+  names(glout@other$loc.metrics.flags) <- recalc.flags
+  
+  
   return(glout)
 }
 

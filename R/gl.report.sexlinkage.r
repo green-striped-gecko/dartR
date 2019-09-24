@@ -63,7 +63,7 @@ gl.report.sexlinkage <- function(x, as.sex="sex", t.het=0, t.hom=0, verbose=2) {
 
 # SCRIPT SPECIFIC ERROR CHECKS
     
-    If(!(as.sex %in% names(x@other$ind.metrics))) {
+    if (!(as.sex %in% names(x@other$ind.metrics))) {
       cat("  Fatal Error: 'sex' or the individual metric specified as the sex variable does not exist\n")
       stop()
     }

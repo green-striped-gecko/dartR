@@ -111,7 +111,7 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, verbo
 
 # Identify populations that can be eliminated on the basis of private alleles
 # Retain the remainder for analysis
-  x2 <- gl.report.pa(x, id=id, nmin=nmin, threshold=threshold, verbose=verbose)
+  x2 <- gl.report.pa(x, nmin=nmin, verbose=verbose)
 
 # Check that there is more than one population to assign (excluding 'unknown')
   if (nPop(x2)==1) {

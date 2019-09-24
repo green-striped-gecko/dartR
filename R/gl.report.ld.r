@@ -31,7 +31,7 @@ gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkna
   cat(paste("Using", ncores,"cores in", nchunks," chunks.\n"))
   cat("Depending on the number of loci this may take a while...\n")
   cat("nchunks specifies the number of steps in the progress bar and the number of intermediate saves, but slows the computation a bit. nchunks = 1 is fastest.\n")
-  cat(paste("Seperate all",length(indNames(gi)),"loci...\n"))
+  cat(paste("Seperate all",length(locNames(gi)),"loci...\n"))
   flush.console()
   
   #convert into list of 

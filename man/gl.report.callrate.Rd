@@ -4,17 +4,20 @@
 \alias{gl.report.callrate}
 \title{Report summary of Call Rate for loci or individuals}
 \usage{
-gl.report.callrate(x, method = "loc", plot = FALSE,
-  smearplot = FALSE)
+gl.report.callrate(x, method = "loc", boxplot = "adjusted",
+  range = 1.5, verbose = 3)
 }
 \arguments{
 \item{x}{-- name of the genlight or genind object containing the SNP data [required]}
 
 \item{method}{specify the type of report by locus (method="loc") or individual (method="ind") [default method="loc"]}
 
-\item{plot}{specify if a histogram of call rate is to be produced [default FALSE]}
+\item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
+plots a boxplot adjusted for skewed distributions [default 'adjusted']}
 
-\item{smearplot}{if TRUE, will produce a smearplot of individuals against loci [default FALSE]}
+\item{range}{-- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 Tabulation of CallRate against Threshold
@@ -25,11 +28,17 @@ at one or both of the the restriction enzyme recognition sites. This script repo
 of several percentiles. The script gl.filter.callrate() will filter out the loci with call rates below a specified threshold.
 }
 \details{
-A histogram and or a smearplot can be requested. Note that the smearplot is computationally intensive, and will take time to 
-execute on large datasets.
+The minimum, maximum and mean call rate are provided. Output also is a histogram of read depth, accompanied by a box and 
+whisker plot presented either in standard (boxplot="standard") or adjusted for skewness (boxplot=adjusted).
+
+Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
+Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed
+Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
+Box and Whisker Plots.
 }
 \examples{
 gl.report.callrate(testset.gl)
+gl.report.rdepth(testset.gl,method="ind")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

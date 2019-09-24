@@ -4,20 +4,18 @@
 \alias{gl.report.secondaries}
 \title{Report loci containing secondary SNPs in a genlight \{adegenet\} object}
 \usage{
-gl.report.secondaries(x, plot = FALSE, boxplot = "adjusted",
-  range = 1.5, verbose = 0)
+gl.report.secondaries(x, boxplot = "adjusted", range = 1.5,
+  verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
-
-\item{plot}{-- if TRUE, will produce a frequency plot the number of SNPs per sequence tag [default = FALSE]}
 
 \item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 plots a boxplot adjusted for skewed distributions [default 'adjusted']}
 
 \item{range}{-- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
 
-\item{verbose}{level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object of loci with multiple SNP calls
@@ -45,7 +43,7 @@ those under Poisson expectation in the associated graphs. It can then be optiona
 provided to gl.report.heterozygosity via the parameter n.invariants.
 }
 \examples{
-gl.report.secondaries(testset.gl, plot=TRUE)
+gl.report.secondaries(bandicoot.gl)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

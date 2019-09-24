@@ -4,14 +4,14 @@
 \alias{gl.report.bases}
 \title{Summary of base pair frequencies}
 \usage{
-gl.report.bases(x, plot = TRUE, verbose = 0)
+gl.report.bases(x, plot = TRUE, verbose = 1)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{plot}{-- if TRUE, histograms of base composition are produced [default TRUE]}
 
-\item{verbose}{level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 1]}
 }
 \value{
 Matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.

@@ -4,14 +4,14 @@
 \alias{gl.report.monomorphs}
 \title{Report monomorphic loci, including those with all NAs}
 \usage{
-gl.report.monomorphs(x, probar = FALSE, verbose = 0)
+gl.report.monomorphs(x, probar = FALSE, verbose = 3)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
 
 \item{probar}{-- if TRUE, a progress bar will be displayed for long loops [default = TRUE]}
 
-\item{verbose}{level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]}
 }
 \description{
 This script reports the number of monomorphic loci from a genlight \{adegenet\} object

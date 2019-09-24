@@ -183,10 +183,10 @@ gl.read.csv <- function(filename,
   gl <- as.genlight(data)
   locNames(gl) <- loci
   indNames(gl) <- individuals
-  #pop(gl) <- array('A',nInd(gl))
+  pop(gl) <- array('A',nInd(gl))
   
   gl@other$loc.metrics <- data.frame(CloneID = locNames(gl), AlleleID = locNames(gl))
-  #gl@other$ind.metrics <- data.frame(id <- indNames(gl), pop = array("A",nInd(gl)))
+  gl@other$ind.metrics <- data.frame(id <- indNames(gl), pop = array("A",nInd(gl)))
   
   # NOW THE LOCUS METADATA
   
