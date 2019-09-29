@@ -155,9 +155,9 @@ gl.report.heterozygosity <- function(x,
   # For each population
   for (i in 1:length(sgl)){
     gl <- sgl[[i]]
-    gl <- utils.recalc.freqhomref(gl,v=0)
-    gl <- utils.recalc.freqhomsnp(gl,v=0)
-    gl <- utils.recalc.freqhets(gl,v=0)
+    gl <- dartR:::utils.recalc.freqhomref(gl,v=0)
+    gl <- dartR:::utils.recalc.freqhomsnp(gl,v=0)
+    gl <- dartR:::utils.recalc.freqhets(gl,v=0)
     p <- gl@other$loc.metrics$FreqHomRef
     q <- gl@other$loc.metrics$FreqHomSnp
     hets <- gl@other$loc.metrics$FreqHets
