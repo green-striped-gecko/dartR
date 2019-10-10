@@ -1,4 +1,4 @@
-#' Reports observed and expected heterozygosity by population or by individual. 
+#' Reports observed and expected heterozygosity by population or by individual from SNP data. 
 #' 
 #' Calculates the observed and expected heterozygosities for each population (method="pop") 
 #' or the observed heterozyosity for each individual (method="ind") in a genlight object.
@@ -55,8 +55,6 @@
 #' tmp <- gl.report.heterozygosity(testset.gl,verbose=3)
 #' tmp <- gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
 
-# Last amended 28-Jun-19
-
 gl.report.heterozygosity <- function(x, 
                                      method="pop", 
                                      n.invariant=0,
@@ -65,27 +63,37 @@ gl.report.heterozygosity <- function(x,
                                      cex.labels=0.7, 
                                      verbose=2) {
   
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
-  }
-
-# STANDARD ERROR CHECKING
+  
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!")
   }
   
+  if (all(x@ploidy == 1)){
+    stop("Presence/Absence (SilicoDArT) data detected. Cannot calculate heterozygosity. Please provide a SNP dataset!")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
+  }
+
+  # SCRIPT SPECIFIC ERROR CHECKING
+
   if (!(method=="pop" | method == "ind")) {
     cat("Warning: Method must either be by population or by individual, set to method='pop'\n")
     method <- "pop"   
@@ -101,28 +109,27 @@ gl.report.heterozygosity <- function(x,
     boxplot <- 'adjusted'   
   }
 
-
-  # Set a population if none is specified (such as if the genlight object has been 
-  # generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, 
-                             individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
   # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {
-      cat("  Warning: genlight object contains monomorphic loci\n")
-    }
+  
+  if (!x@other$loc.metrics$loc.metrics.flags$monomorphs) {
+    cat("  Warning: genlight object contains monomorphic loci which will be factored into heterozygosity estimates\n")
+  }
 
 # DO THE JOB FOR POPULATIONS
     
   if (method=="pop"){
-
-# Split the genlight object into a list of populations
-  sgl <- seppop(x)
+  
+  # Set a population if none is specified (such as if the genlight object has been 
+    # generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  No population assignments detected, 
+                             individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nInd(x))
+      pop(x) <- as.factor(pop(x))
+      }
+    
+  # Split the genlight object into a list of populations
+    sgl <- seppop(x)
   
 # OBSERVED HETEROZYGOSITY
   if (verbose >=2){cat("  Calculating Observed Heterozygosities, averaged across loci, for each population\n")}

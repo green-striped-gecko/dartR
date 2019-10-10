@@ -1,13 +1,12 @@
 #' Report monomorphic loci, including those with all NAs
 #'
-#' This script reports the number of monomorphic loci from a genlight \{adegenet\} object
+#' This script reports the number of monomorphic loci from a SNP or tag presence/absence dataset
 #'
 #' A DArT dataset will not have monomorphic loci, but they can arise when populations or individuals are deleted.
-#' Retaining monomorphic loci may unnecessarily increases the size of the dataset.
+#' Retaining monomorphic loci may unnecessarily increases the size of the dataset and will affect some calculations.
 #'
 #' @param x -- name of the input genlight object [required]
-#' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @import utils
 #' @export
@@ -15,36 +14,40 @@
 #' @examples
 #' gl2 <- gl.report.monomorphs(testset.gl)
 
-# Last amended 3-Aug-19
-
-gl.report.monomorphs <- function (x, probar=FALSE, verbose=3) {
+gl.report.monomorphs <- function (x, probar=FALSE, verbose=2) {
   
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+  # FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
   }
-
-# STANDARD ERROR CHECKING
+  
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 1){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
+  
+  if (all(x@ploidy == 1)){
+    cat("  Processing Presence/Absence (SilicoDArT) data\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
+  }
+  
 # DO THE JOB
 
-  if (verbose >= 2){cat("  Identifying monomorphic loci\n")}
+  #if (verbose >= 2){cat("  Identifying monomorphic loci\n")}
 # Create vectors to hold test results
   # homozygote reference
   a <- vector(mode="logical", length=nLoc(x))
@@ -56,15 +59,9 @@ gl.report.monomorphs <- function (x, probar=FALSE, verbose=3) {
   c <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {c[i] <- FALSE}
   # NA
-  if (verbose >= 2){cat("  Identifying loci scored NA over all individuals\n")}
+  #if (verbose >= 2){cat("  Identifying loci scored NA over all individuals\n")}
   d <- vector(mode="logical", length=nLoc(x))
   for (i in 1:nLoc(x)) {d[i] <- FALSE}
-  
-# Set up the progress counter
-  if(probar) {
-    pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
-    getTxtProgressBar(pb)
-  }
   
 # Identify polymorphic, monomorphic and 'all na' loci
   # Set a,b,c <- TRUE if monomorphic, d <- TRUE if all NAs
@@ -82,16 +79,17 @@ gl.report.monomorphs <- function (x, probar=FALSE, verbose=3) {
       c[i] <- all(xmat[,i]==1,na.rm=TRUE)
     }
     ##cat(xmat[,i],a[i],b[i],c[i],d[i],"\n")
-    if (probar) {setTxtProgressBar(pb, i/nLoc(x))}
   }
   # Calculate the number of monomorphic loci with values
   monom <- sum(a,na.rm=TRUE) + sum(b,na.rm=TRUE)
   allna <- sum(d,na.rm=TRUE)
   polym <- nLoc(x) - (monom + allna)
-  if (verbose>=3){
     cat("  Breakdown of", nLoc(x), "loci\n")
-    cat("    Monomorphic loci:", monom,"\n    Polymorphic loci:", polym, "\n    Loci with no scores (all NA):" , allna ,"\n")
-  }  
+    if(all(x@ploidy)==2){
+      cat("    Monomorphic loci:", monom,"\n    Polymorphic loci:", polym, "\n    Loci with no scores (all NA):" , allna ,"\n")
+    } else {
+      cat("    Loci scored all present or all absent:", monom,"\n    Loci with some individals scored present, some absent:", polym, "\n    Loci with no scores (all NA):" , allna ,"\n")
+    }
 
 # FLAG SCRIPT END
 

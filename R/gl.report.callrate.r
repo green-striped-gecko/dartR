@@ -4,6 +4,9 @@
 #' at one or both of the the restriction enzyme recognition sites. This script reports the number of missing values for each
 #' of several percentiles. The script gl.filter.callrate() will filter out the loci with call rates below a specified threshold.
 #' 
+#' Presence/Absence datasets (SilicoDArT) have missing values where it is not possible to determine reliably if there the
+#' sequence tag can be called at a particular locus.
+#' 
 #' The minimum, maximum and mean call rate are provided. Output also is a histogram of read depth, accompanied by a box and 
 #' whisker plot presented either in standard (boxplot="standard") or adjusted for skewness (boxplot=adjusted). 
 #' 
@@ -12,7 +15,7 @@
 #' Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
 #' Box and Whisker Plots.
 #' 
-#' @param x -- name of the genlight or genind object containing the SNP data [required]
+#' @param x -- name of the genlightobject containing the SNP or presence/absence (SilicoDArT) data [required]
 #' @param method specify the type of report by locus (method="loc") or individual (method="ind") [default method="loc"]
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
@@ -27,41 +30,50 @@
 #' gl.report.callrate(testset.gl)
 
 
-gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, verbose=3) {
+gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, verbose=2) {
   
 # TIDY UP FILE SPECS
 
+  build ='Jacob'
   funname <- match.call()[[1]]
+  # Note: This function will update Callrate if the flag is FALSE
 
 # FLAG SCRIPT START
-
-  if (verbose >= 1) {cat("Starting",funname,"\n")}
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  
+    cat("Starting",funname,"[ Build =",build,"]\n")
 
 # STANDARD ERROR CHECKING
-  
+
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
+  
+    if (all(x@ploidy == 1)){
+      cat("  Processing Presence/Absence (SilicoDArT) data\n")
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+    } else {
+      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
     }
 
   # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if (nLoc(tmp) < nLoc(x)) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+  if (!x@other$loc.metrics$loc.metrics.flags$monomorphs) {
+      cat("  Warning: genlight object contains monomorphic loci which will be factored into Callrate calculations\n")
+  }
 
 # DO THE JOB
 
-# RECALCULATE THE CALL RATE, BRING IT UP TO DATE IN CASE gl.recalc.metrics HAS NOT BEEN RUN
+# RECALCULATE THE CALL RATE, IF NOT PREVIOUSLY DONE
   
-    x <- utils.recalc.callrate(x, verbose=1)
+  if (!x@other$loc.metrics$loc.metrics.flags$monomorphs){
+      x <- utils.recalc.callrate(x, verbose=1)
+  }  
 
 # FOR METHOD BASED ON LOCUS    
   
@@ -75,15 +87,20 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
     # Set margins for first plot
     par(mai=c(1,0.5,0.5,0.5))
     # Plot Box-Whisker plot
+    if (all(x@ploidy==2)){
+      title <- paste0("SNP data (DArTSeq)\nCall Rate by Locus")
+    } else {
+      title <- paste0("Fragment P/A data (SilicoDArT)\nCall Rate by Locus")
+    }  
     if (boxplot == "standard"){
-      boxplot(callrate, horizontal=TRUE, col='red', range=range, main = "Call Rate by Locus")
+      boxplot(callrate, horizontal=TRUE, col='red', range=range, main = title)
       cat("  Standard boxplot, no adjustment for skewness\n")
     } else {
       robustbase::adjbox(callrate,
                         horizontal = TRUE,
                         col='red',
                         range=range,
-                        main = "Call Rate by Locus")
+                        main = title)
       cat("  Boxplot adjusted to account for skewness\n")
     }  
     # Set margins for second plot
@@ -139,13 +156,18 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
     # Set margins for first plot
     par(mai=c(1,0.5,0.5,0.5))
     # Plot Box-Whisker plot
+    if (all(x@ploidy==2)){
+      title <- paste0("SNP data (DArTSeq)\nCall Rate by Individual")
+    } else {
+      title <- paste0("Fragment P/A data (SilicoDArT)\nCall Rate by Individual")
+    }  
     if (boxplot == "standard"){
       boxplot(ind.call.rate, 
               horizontal=TRUE, 
               col='red', 
               range=range, 
               ylim=c(min(ind.call.rate),1),
-              main = "Call Rate by Individual")
+              main = title)
       cat("  Standard boxplot, no adjustment for skewness\n")
     } else {
       robustbase::adjbox(ind.call.rate,
@@ -153,7 +175,7 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
                          col='red',
                          range=range,
                          ylim=c(min(ind.call.rate),1),
-                         main = "Call Rate by Individual")
+                         main = title)
       cat("  Boxplot adjusted to account for skewness\n")
     }  
     # Set margins for second plot
@@ -197,7 +219,7 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
     
   # FLAG SCRIPT END
     
-    if(verbose>=1){cat("Completed:",funname,"\n")}
+    cat("Completed:",funname,"\n")
     
   # Reset the par options    
     par(op)

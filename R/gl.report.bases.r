@@ -8,9 +8,12 @@
 #' and transversions assume that there is no directionality, that is C>T is the same as T>C, because
 #' the reference state is arbitrary.
 #' 
-#' @param x -- name of the genlight object containing the SNP data [required]
+#' For presence/absence data (SilicoDArT), it is not possible to count transitions and tranversions or tv/ts ratio
+#' because the SNP data is not available, only a single sequence tag.
+#' 
+#' @param x -- name of the genlight object containing the SNP or presence/absence data [required]
 #' @param plot -- if TRUE, histograms of base composition are produced [default TRUE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 1]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return Matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
 #' @export
 #' @import stringr
@@ -19,37 +22,35 @@
 #' lst <- gl.report.bases(testset.gl)
 #' lst
 
-gl.report.bases <- function(x, plot=TRUE, verbose = 1) {
+gl.report.bases <- function(x, plot=TRUE, verbose = 2) {
 
 # TIDY UP FILE SPECS
 
+  build <- "Jacob"
   funname <- match.call()[[1]]
-
+  # Note does not draw upon or modify the loc.metrics.flags
+  
   # FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 3\n")
+    verbose <- 3
   }
   
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
-  }
+  cat("Starting",funname,"[ Build =",build,"]\n")
 
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 1){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
+  
+    if (all(x@ploidy == 1)){
+      cat("  Processing Presence/Absence (SilicoDArT) data\n")
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+    } else {
+      cat ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"); stop("Terminating Execution!")
     }
 
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -126,17 +127,30 @@ gl.report.bases <- function(x, plot=TRUE, verbose = 1) {
   cat(paste("    G:",round(G,2)),"\n")
   cat(paste("    T:",round(T,2)),"\n")
   cat(paste("    C:",round(C,2)),"\n\n")
-  cat(paste("  Transitions  :",round(ts,2),"\n"))
-  cat(paste("  Transversions:",round(tv,2),"\n"))
-  cat(paste("  tv/ts ratio:", round(ratio,4),"\n\n"))
+  if (all(ploidy(x)==1)) {
+    cat("  Presence Absence data (SilicoDArT), transition/transversions cannot be calculated\n")
+    tv <- NA
+    ts <- NA
+  } else {
+    cat(paste("  Transitions  :",round(ts,2),"\n"))
+    cat(paste("  Transversions:",round(tv,2),"\n"))
+    cat(paste("  tv/ts ratio:", round(ratio,4),"\n\n"))
+  }
   
   if (plot) {
     par(mfrow = c(2, 1),pty="s")
     df <- cbind(A,C,T,G)
-    barplot(df, main="Base Frequencies", col=rainbow(1), width=c(.1,.1,.1,.1))
-    df <- cbind(ts,tv)
-    title <- paste("Transitions and Transversion Rates\n (ts/tv ratio =",round(ratio,2),")")
-    barplot(df, main=title, col=rainbow(1))
+    if (all(x@ploidy==2)){
+      title <- paste0("SNP data (DArTSeq)\nBase Frequencies")
+    } else {
+      title <- paste0("Fragment P/A data (SilicoDArT)\nBase Frequencies")
+    }  
+    barplot(df, main=title, col=rainbow(1), width=c(.1,.1,.1,.1))
+    if (all(x@ploidy!=1)){
+      df <- cbind(ts,tv)
+      title <- paste("Transitions and Transversion Rates\n (ts/tv ratio =",round(ratio,2),")")
+      barplot(df, main=title, col=rainbow(1))
+    }
   }  
   
 # Create return matrix

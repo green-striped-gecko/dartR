@@ -18,31 +18,36 @@
 #' gl@other$loc.metrics$SnpPosition[30] <- 100
 #' gl <- gl.report.overshoot(gl)
 
-# Last amended 17-Sep-19
-
 gl.report.overshoot <- function(x, verbose=2) {
 
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
-  }
-
-# STANDARD ERROR CHECKING
   
-  if(class(x)=="genlight"){
-    if(verbose >= 2){cat("  Genlight object detected\n")}
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+  # STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+  if (all(x@ploidy == 1)){
+    cat("  Detected Presence/Absence (SilicoDArT) data\n")
+    stop("Cannot identify overshoot arising from SNPS deleted with adaptors for fragment presence/absence data. Please provide a SNP dataset.\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
   } else {
-    cat("  Fatal Error: genlight object or distance matrix required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
   }
   
 # SCRIPT SPECIFIC ERROR CHECKING

@@ -1,4 +1,4 @@
-#' Report minor allele frequency (MAF) for each locus in a genlight {adegenet} object
+#' Report minor allele frequency (MAF) for each locus in a SNP dataset
 #'
 #' This script provides summary histograms of MAF for each population in the dataset as a basis for decisions on filtering.
 #' 
@@ -14,37 +14,37 @@
 #' @examples
 #' f <- gl.report.maf(testset.gl)
 
-# Last amended 3-Feb-19
-
 gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose = 0) {
   
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
-    cat("Starting",funname,"\n")
-
-# STANDARD ERROR CHECKING
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+  # FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x))) {cat("  Warning: genlight object contains monomorphic loci\n")}
+  
+  if (all(x@ploidy == 1)){
+    cat("  Detected Presence/Absence (SilicoDArT) data\n")
+    stop("Cannot calculate minor allele frequences for fragment presence/absence data. Please provide a SNP dataset.\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
+  }
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -169,6 +169,10 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
   } else {
         cat("Completed: gl.report.maf once plots are displayed\n  Refer to histograms\n\n")
   }
+  
+  # FLAG SCRIPT END
+  
+  cat("Completed:",funname,"\n")
   
   return(NULL)
 }  

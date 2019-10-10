@@ -20,8 +20,41 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
-gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE)
-{
+gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE){
+  
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
+  funname <- match.call()[[1]]
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+  # FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+  # STANDARD ERROR CHECKING
+  
+  x <- gi
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+  if (all(x@ploidy == 1)){
+    cat("  Detected Presence/Absence (SilicoDArT) data\n")
+    stop("Cannot calculate linkage disequilibrium from fragment presence/absence data. Please provide a SNP dataset.\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
+  }
+  
+  # No Jacob build changes from this point.
+  
   # convert genlight to genind 
   if (class(gi)=="genlight") gi <- gl2gi(gi)
   #library(doParallel)
