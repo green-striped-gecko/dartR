@@ -1,19 +1,19 @@
-#' Remove specified loci from a genelight \{adegenet\} object
+#' Remove all but the specified loci from a genelight \{adegenet\} object
 #'
-#' The script returns a genlight object with specified loci deleted.
+#' The script returns a genlight object with the all but the specified loci deleted.
 #'
 #' @param x -- name of the genlight object containing SNP genotypes or presence/absence data [required]
-#' @param loc.list -- a list of loci to be deleted [required, if loc.range not specified]
-#' @param first -- first of a range of loci to be deleted [required, if loc.list not specified]
-#' @param last -- last of a range of loci to be deleted [if not specified, last locus in the dataset]
+#' @param loc.list -- a list of loci to be kept [required, if loc.range not specified]
+#' @param first -- first of a range of loci to be kept [required, if loc.list not specified]
+#' @param last -- last of a range of loci to be kept [if not specified, last locus in the dataset]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100051474|20-G/A", "100051484|62-A/G"))
+#'    gl <- gl.keep.loc(testset.gl, loc.list=c("100051468|42-A/T", "100051474|20-G/A", "100051484|62-A/G"))
 
-gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
+gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
 
 # TIDY UP FILE SPECS
   
@@ -29,7 +29,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     verbose <- 2
   }
 
-    cat("Starting",funname,"[ Build=",build,"]\n")
+  cat("Starting",funname,"[ Build =",build,"]\n")
 
 # STANDARD ERROR CHECKING
   
@@ -95,7 +95,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
 # DO THE JOB
 
   if (verbose >= 2) {
-    cat("    Deleteing the specified loci\n")
+    cat("    Deleteing all but the specified loci\n")
   }
 
   # Remove duplicated loci if specified
@@ -104,15 +104,15 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     list.from.range <- locNames(x)[first:last]
     loc.list <- unique(c(loc.list,list.from.range))
   } else if (!is.null(first)) {
-    loc.list <- locNames(x)[first:last]
+      loc.list <- locNames(x)[first:last]
   }
   if (length(loc.list) == 0) {
-    cat("  Fatal Error: no loci listed to delete!\n"); stop("Execution terminated\n")
+    cat("  Fatal Error: no loci listed to keep!\n"); stop("Execution terminated\n")
   }
   
   # Remove loci flagged for deletion
-    x2 <- x[,!x$loc.names%in%loc.list]
-    x2@other$loc.metrics <- x@other$loc.metrics[!x$loc.names%in%loc.list,]
+    x2 <- x[,x$loc.names%in%loc.list]
+    x2@other$loc.metrics <- x@other$loc.metrics[x$loc.names%in%loc.list,]
 
 # REPORT A SUMMARY
     
@@ -126,7 +126,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
   }
     
 # FLAG SCRIPT END
-    
+
     cat("Completed:",funname,"\n")
 
   # Add to history
