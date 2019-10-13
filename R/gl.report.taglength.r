@@ -23,39 +23,52 @@
 #' @examples
 #' gl.report.taglength(testset.gl)
 
-# Last amended 3-Aug-19
-
 gl.report.taglength <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
 
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
-    cat("Starting",funname,"\n")
-
-# STANDARD ERROR CHECKING
+  # Note: This function will not draw upon or update locus metrics flags
+  
+  # FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-    
-  if(is.null(x@other$loc.metrics$TrimmedSequence)) {
-    cat("  Fatal Error: locus metrics do not include trimmed sequences!\n"); stop("Execution terminated\n")
+  
+  if (all(x@ploidy == 1)){
+    cat("  Processing Presence/Absence (SilicoDArT) data\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
   }
-    
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-# DO THE JOB
+  
+  # FUNCTION SPECIFIC ERROR CHECKING
+  
+  if(length(x@other$loc.metrics$TrimmedSequence) != nLoc(x)) {
+    stop("Fatal Error: Data must include Trimmed Sequences for each loci in a column called 'TrimmedSequence' in the @other$loc.metrics slot.\n")
+  }
+  if (boxplot != "standard" & boxplot != "adjusted") {
+    cat("    Warning: method must be either \"standard\" or \"adjusted\", set to \"adjusted\" \n")
+    boxplot <- "adjusted"
+  }
+  if (range < 0){
+    cat("  Warning: Parameter 'range' must be a positive integer, set to 1.5 interquarile ranges\n")
+    range <- 1.5
+  }
+  
+  # DO THE JOB
 
   tags <- x@other$loc.metrics$TrimmedSequence
   nchar.tags <- nchar(as.character(tags))
@@ -99,7 +112,7 @@ gl.report.taglength <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
     if (length(whisker$out)==0){
       cat("    Standard boxplot, no adjustment for skewness\n")
     } else {
-      outliers <- data.frame(Locus=as.character(x$loc.names[rdepth %in% whisker$out]),
+      outliers <- data.frame(Locus=as.character(x$loc.names[nchar.tags %in% whisker$out]),
                              TagLen=whisker$out
       )
       cat("    Standard boxplot, no adjustment for skewness\n")
@@ -114,7 +127,7 @@ gl.report.taglength <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
     if (length(whisker$out)==0){
       cat("    Boxplot adjusted to account for skewness\n")
     } else {
-      outliers <- data.frame(Locus=as.character(x$loc.names[rdepth %in% whisker$out]),
+      outliers <- data.frame(Locus=as.character(x$loc.names[nchar.tags %in% whisker$out]),
                              TagLen=whisker$out
       )
       cat("    Boxplot adjusted to account for skewness\n")
