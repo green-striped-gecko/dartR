@@ -62,7 +62,7 @@ gl.report.secondaries <- function(x,
   }
   
   if (all(x@ploidy == 1)){
-    cat("  Processing Presence/Absence (SilicoDArT) data\n")
+    cat("  Detected Presence/Absence (SilicoDArT) data. This filter is not yet available for Presence/Absence data. Sorry.\n"); stop()
   } else if (all(x@ploidy == 2)){
     cat("  Processing a SNP dataset\n")
   } else {
@@ -78,7 +78,6 @@ gl.report.secondaries <- function(x,
     
 # DO THE JOB
 
-if (all(x@ploidy)==2){
   # Extract the clone ID number
   a <- strsplit(as.character(x@other$loc.metrics$AlleleID),"\\|")
   b <- unlist(a)[ c(TRUE,FALSE,FALSE) ]
@@ -178,13 +177,6 @@ if (all(x@ploidy)==2){
       cat(" Tabular 1 to K secondaries (refer plot)\n",table(as.numeric(table(b))),"\n")
   }  
   cat("\nReturning a genlight object containing only those loci with secondaries (multiple entries per locus)\n\n")
-  
-}
-
-if (all(x@ploidy)==1){
-  cat("  gl.report.secondaries not implemented for SilicoDArTdatasets. Sorry.\n")
-  return(NULL)
-}  
 
   # FLAG SCRIPT END
   
@@ -193,7 +185,7 @@ if (all(x@ploidy)==1){
   }
   
   # Reset the par options    
-  par(op)
+  if (!is.na(nloc.with.secondaries)){par(op)}
   
   # Return the result
     return(x.secondaries)
