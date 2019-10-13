@@ -20,6 +20,7 @@ gl.filter.repavg <- function(x, threshold=0.99, verbose=2) {
 # TIDY UP FILE SPECS
 
   funname <- match.call()[[1]]
+  cat("Warning: Depreciated. Use gl.filter.repeatability\n")
 
 # FLAG SCRIPT START
 
