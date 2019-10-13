@@ -63,8 +63,8 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=2)
   } 
   xlimit <- min(repeatability)
   
-    cat("No. of loci =", nLoc(x), "\n")
-    cat("No. of individuals =", nInd(x), "\n")
+    cat("  No. of loci =", nLoc(x), "\n")
+    cat("  No. of individuals =", nInd(x), "\n")
     cat("  Miniumum repeatability: ",round(min(repeatability),2),"\n")
     cat("  Maximum repeatability: ",round(max(repeatability),2),"\n")
     cat("  Mean repeatability: ",round(mean(repeatability),3),"\n\n")
@@ -108,7 +108,7 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=2)
             range=range, 
             ylim=c(min(repeatability),1),
             main = title)
-    cat("  Standard boxplot, no adjustment for skewness\n")
+    cat("Standard boxplot, no adjustment for skewness\n\n")
   } else {
     robustbase::adjbox(repeatability,
                        horizontal = TRUE,
@@ -116,7 +116,7 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=2)
                        range=range,
                        ylim=c(min(repeatability),1),
                        main = title)
-    cat("  Boxplot adjusted to account for skewness\n")
+    cat("Boxplot adjusted to account for skewness\n\n")
   }  
   # Set margins for second plot
   par(mai=c(0.5,0.5,0,0.5))
@@ -140,5 +140,3 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=2)
   return(df)
 
 }
-
-
