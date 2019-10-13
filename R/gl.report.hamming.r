@@ -69,7 +69,7 @@ gl.report.hamming <- function(x,
   # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
   
   if (all(x@ploidy == 1)){
@@ -77,7 +77,7 @@ gl.report.hamming <- function(x,
   } else if (all(x@ploidy == 2)){
     cat("  Processing a SNP dataset\n")
   } else {
-    cat ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"); stop("Terminating Execution!")
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
   }
   
 # FUNCTION SPECIFIC ERROR CHECKING
