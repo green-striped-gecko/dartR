@@ -45,16 +45,10 @@ gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
   
   cat("Starting",funname,"[ Build =",build,"]\n")
 
-# FLAG SCRIPT START
-
-  if (verbose >= 1) {
-    cat("Starting",funname,"\n")
-  }
-
-# STANDARD ERROR CHECKING
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
   
   if (all(x@ploidy == 1)){
@@ -62,16 +56,9 @@ gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
   } else if (all(x@ploidy == 2)){
     cat("  Processing a SNP dataset\n")
   } else {
-    cat ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"); stop("Terminating Execution!")
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
   }
   
-  # # Check for monomorphic loci
-  # 
-  # if (!x@other$loc.metrics$loc.metrics.flags$monomorphs) {
-  #   cat("  Warning: genlight object contains monomorphic loci which will be factored into Read Depth statistics\n")
-  # }
-  # 
-
 # DO THE JOB
 
   if (all(x@ploidy == 1)){
@@ -128,6 +115,7 @@ gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
     whisker <- boxplot(rdepth, horizontal=TRUE, col='red', range=range, main = title)
     if (length(whisker$out)==0){
       cat("  Standard boxplot, no adjustment for skewness\n")
+      outliers <- NULL
     } else {
       outliers <- data.frame(Locus=as.character(x$loc.names[rdepth %in% whisker$out]),
                              ReadDepth=whisker$out
@@ -143,6 +131,7 @@ gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
                                   main = title)
     if (length(whisker$out)==0){
       cat("  Boxplot adjusted to account for skewness\n")
+      outliers <- NULL
     } else {
       outliers <- data.frame(Locus=as.character(x$loc.names[rdepth %in% whisker$out]),
                              ReadDepth=whisker$out
