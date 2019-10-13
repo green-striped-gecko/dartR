@@ -4,7 +4,7 @@
 #' at one or both of the the restriction enzyme recognition sites. This script reports the number of missing values for each
 #' of several percentiles. The script gl.filter.callrate() will filter out the loci with call rates below a specified threshold.
 #' 
-#' Presence/Absence datasets (SilicoDArT) have missing values where it is not possible to determine reliably if there the
+#' Tag Presence/Absence datasets (SilicoDArT) have missing values where it is not possible to determine reliably if there the
 #' sequence tag can be called at a particular locus.
 #' 
 #' The minimum, maximum and mean call rate are provided. Output also is a histogram of read depth, accompanied by a box and 
@@ -63,7 +63,7 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
 
   # Check for monomorphic loci
 
-  if (!x@other$loc.metrics$loc.metrics.flags$monomorphs) {
+  if (!x@other$loc.metrics.flags$monomorphs) {
       cat("  Warning: genlight object contains monomorphic loci which will be factored into Callrate calculations\n")
   }
 
@@ -71,11 +71,11 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
 
 # RECALCULATE THE CALL RATE, IF NOT PREVIOUSLY DONE
   
-  if (!x@other$loc.metrics$loc.metrics.flags$monomorphs){
+  if (!x@other$loc.metrics.flags$monomorphs){
       x <- utils.recalc.callrate(x, verbose=1)
   }  
 
-# FOR METHOD BASED ON LOCUS    
+########### FOR METHOD BASED ON LOCUS    
   
   if(method == "loc") {
     
@@ -143,7 +143,7 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
     rownames(df) <- NULL
   }
   
-# FOR METHOD BASED ON INDIVIDUAL   
+########### FOR METHOD BASED ON INDIVIDUAL   
     
   if(method == "ind") {
     
