@@ -46,18 +46,16 @@ utils.recalc.avgpic <- function(x, verbose=2) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   
-  if (verbose >= 2){
-    if (all(x@ploidy == 1)){
-      cat("  Processing  Presence/Absence (SilicoDArT) data, locus metric PIC\n")
+  if (all(x@ploidy == 1)){
+      if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data, locus metric PIC\n")}
       data.type <- "SilicoDArT"
     } else if (all(x@ploidy == 2)){
-      cat("  Processing a SNP dataset, locus metric AvgPIC\n")
+      if (verbose >= 2){cat("  Processing a SNP dataset, locus metric AvgPIC\n")}
       data.type <- "SNP"
     } else {
       stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-    }
   }
-  
+
   # Check monomorphs have been removed up to date
   if (x@other$loc.metrics.flags$monomorphs == FALSE){
     if (verbose >= 2){

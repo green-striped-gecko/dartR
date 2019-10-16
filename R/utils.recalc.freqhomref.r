@@ -42,14 +42,14 @@ utils.recalc.freqhomref <- function(x, verbose=2) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   
-  if (verbose >= 2){
-    if (all(x@ploidy == 1)){
-      stop("  Detected Presence/Absence (SilicoDArT) data ",funname," applies only to SNP data!\n")
-    } else if (all(x@ploidy == 2)){
-      cat("  Processing a SNP dataset\n")
-    } else {
-      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-    }
+  if (all(x@ploidy == 1)){
+    stop("  Processing  Presence/Absence (SilicoDArT) data\n")
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
   
   # Check monomorphs have been removed up to date

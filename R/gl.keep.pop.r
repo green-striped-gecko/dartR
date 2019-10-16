@@ -47,16 +47,14 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     stop("Fatal Error: genlight object required!\n")
   }
   
-  if (verbose >= 1){
-    if (all(x@ploidy == 1)){
-      cat("  Processing Presence/Absence (SilicoDArT) data\n")
-      data.type <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
-      cat("  Processing a SNP dataset\n")
-      data.type <- "SNP"
-    } else {
-      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-    }
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
   
 # FUNCTION SPECIFIC ERROR CHECKING

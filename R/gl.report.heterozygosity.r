@@ -85,12 +85,15 @@ gl.report.heterozygosity <- function(x,
   }
   
   if (all(x@ploidy == 1)){
-    stop("Presence/Absence (SilicoDArT) data detected. Cannot calculate heterozygosity. Please provide a SNP dataset!")
+    stop("  Processing  Presence/Absence (SilicoDArT) data\n")
+    data.type <- "SilicoDArT"
   } else if (all(x@ploidy == 2)){
-    cat("  Processing a SNP dataset\n")
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
   } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
+  
 
   # SCRIPT SPECIFIC ERROR CHECKING
 
@@ -162,9 +165,9 @@ gl.report.heterozygosity <- function(x,
   # For each population
   for (i in 1:length(sgl)){
     gl <- sgl[[i]]
-    gl <- dartR:::utils.recalc.freqhomref(gl,v=0)
-    gl <- dartR:::utils.recalc.freqhomsnp(gl,v=0)
-    gl <- dartR:::utils.recalc.freqhets(gl,v=0)
+    gl <- dartR:::utils.recalc.freqhomref(gl,verbose=0)
+    gl <- dartR:::utils.recalc.freqhomsnp(gl,verbose=0)
+    gl <- dartR:::utils.recalc.freqhets(gl,verbose=0)
     p <- gl@other$loc.metrics$FreqHomRef
     q <- gl@other$loc.metrics$FreqHomSnp
     hets <- gl@other$loc.metrics$FreqHets
