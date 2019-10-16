@@ -29,7 +29,9 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     verbose <- 2
   }
 
+  if (verbose >= 1){
     cat("Starting",funname,"[ Build=",build,"]\n")
+  }
 
 # STANDARD ERROR CHECKING
   
@@ -37,6 +39,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   
+  if (verbose >= 1){
     if (all(x@ploidy == 1)){
       cat("  Processing Presence/Absence (SilicoDArT) data\n")
     } else if (all(x@ploidy == 2)){
@@ -44,7 +47,8 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     } else {
       cat ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"); stop("Terminating Execution!")
     }
-
+  }
+  
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if (!is.null(loc.list) && !is.null(first)){
@@ -99,7 +103,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
   }
 
   # Remove duplicated loci if specified
-    
+
   if (!is.null(first) && !is.null(loc.list)){
     list.from.range <- locNames(x)[first:last]
     loc.list <- unique(c(loc.list,list.from.range))
@@ -127,12 +131,15 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     
 # FLAG SCRIPT END
     
-    cat("Completed:",funname,"\n")
-
   # Add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()  
+    nh <- length(x2@other$history)
+    x2@other$history[[nh + 1]] <- match.call()
     
-    return(x2)
+  if (verbose >= 1){  
+     cat("Completed:",funname,"\n")
+  }
+    
+  return(x2)
+    
 }
 

@@ -23,37 +23,42 @@
 #' @seealso \code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
 #' @seealso \code{\link{gl.drop.pop}} to drop rather than keep specified populations
 
-# Last amended 3-Feb-19
-
 gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, verbose=2){
 
 # TIDY UP FILE SPECS
-
+  
   funname <- match.call()[[1]]
-
+  build <- "Jacob"
+  
 # FLAG SCRIPT START
-
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
-
+  
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-
-  # Test if population is specified
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      cat("  Fatal Error: Population labels not detected\n"); stop("Excecution terminated")
+  
+  if (verbose >= 1){
+    if (all(x@ploidy == 1)){
+      cat("  Processing Presence/Absence (SilicoDArT) data\n")
+      data.type <- "SilicoDArT"
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+      data.type <- "SNP"
+    } else {
+      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
-
+  }
+  
 # FUNCTION SPECIFIC ERROR CHECKING
     
   # Assign the new population list if as.pop is specified
@@ -86,10 +91,16 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     x2 <- x[x$pop%in%pop.list]
     pop.hold <- pop.hold[x$pop%in%pop.list]
     x <- x2
+  # Reset the flags
+    x <- utils.reset.flags(x, verbose=verbose)
   # Remove monomorphic loci
-    if (mono.rm) {x <- gl.filter.monomorphs(x,verbose=verbose)}
+    if (mono.rm) {
+      x <- gl.filter.monomorphs(x,verbose=verbose)
+    }
   # Recalculate statistics
-    if (recalc) {gl.recalc.metrics(x,verbose=verbose)}
+    if (recalc) {
+      x <- gl.recalc.metrics(x,verbose=verbose)
+    }
 
     # REPORT A SUMMARY
     
@@ -130,13 +141,15 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     
     
 # FLAG SCRIPT END
+    
+  #add to history
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call()
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-    #add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()    
+    
   return(x)
     
 }

@@ -19,38 +19,42 @@
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
 
-# Last amended 11-Apr-19
-
 gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
 
 # TIDY UP FILE SPECS
-
+  
   funname <- match.call()[[1]]
-
+  build <- "Jacob"
+  
 # FLAG SCRIPT START
-
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
-
+  
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
+  
+  if (verbose >= 1){
+    if (all(x@ploidy == 1)){
+      cat("  Processing Presence/Absence (SilicoDArT) data\n")
+      data.type <- "SilicoDArT"
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+      data.type <- "SNP"
+    } else {
+      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
-
+  }
+  
 # FUNCTION SPECIFIC ERROR CHECKING
 
   for (case in ind.list){
@@ -60,7 +64,7 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
     }
   }
   if (length(ind.list) == 0) {
-    cat("Fatal Error: no individuals to drop!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: no individuals to drop!\n")
   }
 
 # DO THE JOB
@@ -68,7 +72,6 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
 # REMOVE INDIVIDUALS
   
   if (verbose >= 2) {
-    cat("Processing",class(x),"object\n")
     cat("  Deleting individuals", ind.list, "\n")
   }
 
@@ -76,10 +79,18 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
   
   # Remove rows flagged for deletion
     x <- x[!x$ind.names%in%ind.list]
+    
+  # Reset the flags
+    x <- utils.reset.flags(x, verbose=verbose)
+    
   # Remove monomorphic loci
-    if (mono.rm) {x <- gl.filter.monomorphs(x,verbose=verbose)}
+    if (mono.rm) {
+      x <- gl.filter.monomorphs(x,verbose=verbose)
+    }
   # Recalculate statistics
-    if (recalc) {gl.recalc.metrics(x,verbose=verbose)}
+    if (recalc) {
+      x <- gl.recalc.metrics(x,verbose=verbose)
+    }
 
 # REPORT A SUMMARY
     
@@ -103,14 +114,60 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
   }
     
 # FLAG SCRIPT END
+    
+  #add to history
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call()  
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-    #add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()  
+    
   return(x)
   
 }
+
+# # Test script
+# 
+# gl <- testset.gl
+# tmp <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"))
+# nInd(gl)
+# nInd(tmp)
+# gl@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gl <- testset.gl
+# tmp <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"),mono.rm=TRUE)
+# nInd(gl)
+# nInd(tmp)
+# gl@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gl <- testset.gl
+# tmp <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"),recalc=TRUE)
+# nInd(gl)
+# nInd(tmp)
+# gl@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gs <- testset.gs
+# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+# nPop(gs)
+# nPop(tmp)
+# gs@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gl <- testset.gl
+# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = TRUE)
+# nPop(gs)
+# nPop(tmp)
+# gs@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gl <- testset.gl
+# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = FALSE, recalc = TRUE)
+# nPop(gs)
+# nPop(tmp)
+# gs@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
 

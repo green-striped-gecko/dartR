@@ -1,6 +1,6 @@
 #' Remove specified populations from a genelight \{adegenet\} object
 #'
-#' Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart(). 
+#' Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart() or gs.read.dart(). 
 #'
 #' The script, having deleted populations, optionally identifies resultant monomorphic loci or loci
 #' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
@@ -8,7 +8,7 @@
 #' 
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes [required]
+#' @param x -- name of the genlight object containing SNP genotypes or Tag P/A data (SilicoDArT) [required]
 #' @param pop.list -- a list of populations to be removed [required]
 #' @param as.pop -- assign another metric to represent population [default NULL]
 #' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
@@ -30,6 +30,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
 # TIDY UP FILE SPECS
 
   funname <- match.call()[[1]]
+  build <- "Jacob"
 
 # FLAG SCRIPT START
 
@@ -38,30 +39,38 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     verbose <- 2
   }
 
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
 
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
+  
+  if (verbose >= 1){
+    if (all(x@ploidy == 1)){
+      cat("  Processing Presence/Absence (SilicoDArT) data\n")
+      data.type <- "SilicoDArT"
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+      data.type <- "SNP"
+    } else {
+      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+    }
+  }
+  
+# FUNCTION SPECIFIC ERROR CHECKING
+    
+    # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      if (verbose >= 2){ 
+        cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
+      }
       pop(x) <- array("pop1",dim = nInd(x))
       pop(x) <- as.factor(pop(x))
     }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
-
-# FUNCTION SPECIFIC ERROR CHECKING
     
   # Assign the new population list if as.pop is specified
     pop.hold <- pop(x)
@@ -71,7 +80,9 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
       if (verbose >= 3) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
     }
     
-  if (verbose >= 2) {cat("  Checking for presence of nominated populations\n")}
+  if (verbose >= 2) {
+    cat("  Checking for presence of nominated populations\n")
+  }
   for (case in pop.list){
     if (!(case%in%popNames(x))){
       cat("  Warning: Listed population",case,"not present in the dataset -- ignored\n")
@@ -79,8 +90,9 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     }
   }
   if (length(pop.list) == 0) {
-    cat("  Fatal Error: no populations listed to drop!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: no populations listed to drop!\n")
   }
+    
 # DO THE JOB
 
 # REMOVE POPULATIONS
@@ -95,10 +107,18 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     x2 <- x[!x$pop%in%pop.list]
     pop.hold <- pop.hold[!x$pop%in%pop.list]
     x <- x2
+    
+  # Reset the flags
+    x <- utils.reset.flags(x, verbose=verbose)
+    
   # Remove monomorphic loci
-    if (mono.rm) {x <- gl.filter.monomorphs(x,verbose=verbose)}
+    if (mono.rm) {
+      x <- gl.filter.monomorphs(x,verbose=verbose)
+    }
   # Recalculate statistics
-    if (recalc) {gl.recalc.metrics(x,verbose=verbose)}
+    if (recalc) {
+      x <- gl.recalc.metrics(x,verbose=verbose)
+    }
 
   # REPORT A SUMMARY
     
@@ -138,14 +158,58 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
 
     # FLAG SCRIPT END
     
+    #add to history
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call() 
+    
     if (verbose > 0) {
       cat("Completed:", funname, "\n")
     }
-    #add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()
     
     return(x)
     
 }
+
+# # Test script
+# gl <- testset.gl
+# tmp <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+# nPop(gl)
+# nPop(tmp)
+# gl@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gl <- testset.gl
+# tmp <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = TRUE)
+# nPop(gl)
+# nPop(tmp)
+# gl@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gl <- testset.gl
+# tmp <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = FALSE, recalc = TRUE)
+# nPop(gl)
+# nPop(tmp)
+# gl@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gs <- testset.gs
+# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+# nPop(gs)
+# nPop(tmp)
+# gs@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gl <- testset.gl
+# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = TRUE)
+# nPop(gs)
+# nPop(tmp)
+# gs@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
+# 
+# gl <- testset.gl
+# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = FALSE, recalc = TRUE)
+# nPop(gs)
+# nPop(tmp)
+# gs@other$loc.metrics.flags
+# tmp@other$loc.metrics.flags
 
