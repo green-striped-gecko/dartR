@@ -28,41 +28,50 @@
 #' }
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' 
-#'
 
 gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=2){
 
 # TIDY UP FILE SPECS
-
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  build <- "Jacob"
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
-
+  
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-
+  
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
+  
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-    cat("  Fatal Error: Population names not detected\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: Population names not detected\n")
   }
 
   recode.table <- read.csv(pop.recode, stringsAsFactors=FALSE, header=FALSE)
   if(length(unique(pop(x))) != length(unique(recode.table[,1]))) {
-    cat("Fatal Error: Population names in data file are not the same as in the recode table\n"); stop("Execution terminated\n")
+    stop("Fatal Error: Population names in data file are not the same as in the recode table\n")
   }
 
 # DO THE JOB
@@ -70,6 +79,11 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=2){
   if (verbose >= 2) {
     cat("  Reassigning entities to populations as per ", pop.recode, "\n")
   }
+  
+# Store variables
+  hold.nLoc <- nLoc(x)
+  hold.nInd <- nInd(x)
+  hold.nPop <- nPop(x)
 
 # Apply the recode to the populations
   pop.list <- as.character(pop(x));
@@ -82,38 +96,56 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=2){
   pop(x) <- pop.list
 
 # Remove rows flagged for deletion
-  x2 <- x[!x$pop=="delete" & !x$pop=="Delete"]
   
-  if (length(pop(x2))!=length(pop(x))) {
-     if (verbose >= 2) {
-       cat("  Removing entities flagged for deletion in ", pop.recode, "\n")
-     }  
-     # Remove monomorphic loci
-       if (mono.rm) {x2 <- gl.filter.monomorphs(x2,verbose=verbose)}
-       if (recalc) {gl.recalc.metrics(x2,verbose=verbose)}
- }
+  if ("delete" %in% indNames(x) | "Delete" %in% indNames(x)) {
+    if (verbose >= 2){cat("Deleting populations flagged for deletion (flagged 'Delete' or 'delete')\n")}
+    x <- gl.drop.pop(x,pop.list=c("Delete","delete"),verbose=0)
+  }
+  
+  # Recalculate statistics
+    if (recalc) {
+      x <- gl.recalc.metrics(x,verbose=0)
+    } 
+    
+  #  Remove monomorphic loci
+    if (mono.rm) {
+      x <- gl.filter.monomorphs(x,verbose=0)
+    }
 
   # REPORT A SUMMARY
-  if (verbose >= 3) {
-    cat("  Summary of recoded dataset\n")
-    cat(paste("    No. of loci:",nLoc(x2),"\n"))
-    cat(paste("    No. of individuals:", nInd(x2),"\n"))
-    cat(paste("    No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
-  }
-  if (verbose >= 2) {
-    if (!recalc) {cat("  Note: Locus metrics not recalculated\n")}
-    if (!mono.rm) {cat("  Note: Resultant monomorphic loci not deleted\n")}
+  
+  if (verbose>=2) {
+    cat("\n  Summary of recoded dataset\n")
+    cat(paste("  Original No. of loci:",hold.nLoc,"\n"))
+    cat(paste("    New No. of loci:",nLoc(x),"\n"))
+    cat(paste("  Original No. of individuals:", hold.nInd,"\n"))
+    cat(paste("    New No. of individuals:", nInd(x),"\n"))
+    cat(paste("  Original No. of populations:", hold.nPop,"\n"))
+    cat(paste("    New No. of populations:", nPop(x),"\n\n"))
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("Note: Resultant monomorphic loci not deleted\n")}
   }
 
 # FLAG SCRIPT END
 
+  #add to history
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call()  
+  
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  #add to history
-  nh <- length(x2@other$history)
-  x2@other$history[[nh + 1]] <- match.call()  
 
-    return(x2)
+    return(x)
 }
 
+# # Test script
+#   mfile <- system.file("extdata", "testset_pop_recode.csv", package="dartR")
+#   nPop(testset.gl)
+#   gl <- gl.recode.pop(gl, pop.recode=mfile, verbose=3)
+#   nPop(gl)
+#   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=1)
+#   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=2)
+#   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=3)
+# 
+# gl <- gl.recode.ind(gs, ind.recode=mfile, verbose=3)

@@ -16,41 +16,50 @@
 #' values missing. Clean this up with gl.filter.monomorphic().
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param outfile -- file name of the output file (including extension) [default default_recode_ind.csv]
+#' @param out.recode.file -- file name of the output file (including extension) [default default_recode_ind.csv]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A vector containing the new individual names
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.make.recode.ind(testset.gl, outfile="Emmac_recode_ind.csv")
+#' result <- gl.make.recode.ind(testset.gl, out.recode.file="Emmac_recode_ind.csv")
 
-# Last amended 3-Feb-19
+ gl.make.recode.ind <- function(x, out.recode.file="default_recode_ind.csv", outpath=tempdir(), verbose=2) {
 
- gl.make.recode.ind <- function(x, outfile="default_recode_ind.csv", outpath=tempdir(), verbose=2) {
-
-# TIDY UP FILE SPECS
-
-  outfilespec <- file.path(outpath, outfile)
-  funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
-  }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
-  }
-
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-  }
-
+   # TIDY UP FILE SPECS
+   
+   funname <- match.call()[[1]]
+   build <- "Jacob"
+   outfilespec <- file.path(outpath, out.recode.file)
+   
+   # FLAG SCRIPT START
+   
+   if (verbose < 0 | verbose > 5){
+     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+     verbose <- 2
+   }
+   
+   if (verbose >= 1){
+     cat("Starting",funname,"[ Build =",build,"]\n")
+   }
+   
+   # STANDARD ERROR CHECKING
+   
+   if(class(x)!="genlight") {
+     stop("Fatal Error: genlight object required!\n")
+   }
+   
+   if (all(x@ploidy == 1)){
+     if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+     data.type <- "SilicoDArT"
+   } else if (all(x@ploidy == 2)){
+     if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+     data.type <- "SNP"
+   } else {
+     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+   }
+   
 # DO THE JOB
 
  if (verbose >= 2) {cat("  Creating draft lookup table\n")}
@@ -65,6 +74,10 @@
   }
    
  
- return(indNames(x))
+ return(NULL)
  
  }
+ 
+ # # Test scripts
+ # gl.make.recode.ind(gl,out.recode.file="test.csv",outpath=getwd(),verbose=3)
+ # gl.make.recode.ind(gs,out.recode.file="test.csv",outpath=getwd(),verbose=3)
