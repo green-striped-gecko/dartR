@@ -43,15 +43,16 @@ gl.filter.monomorphs <- function (x, verbose=2) {
     stop("Fatal Error: genlight object required!")
   }
   
-  if (verbose >= 1){
-    if (all(x@ploidy == 1)){
-      cat("  Processing Presence/Absence (SilicoDArT) data\n")
-    } else if (all(x@ploidy == 2)){
-      cat("  Processing a SNP dataset\n")
-    } else {
-      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
-    }
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
+  
 # DO THE JOB
   
   # mml <- !( colMeans(as.matrix(x), na.rm=TRUE)%%2 == 0) ; Code for readability
@@ -63,12 +64,15 @@ gl.filter.monomorphs <- function (x, verbose=2) {
   if (verbose >= 2){
     cat("Identifying monomorphic loci\n")
   }  
+  
   # Tag presence/absence data
-  if (all(x@ploidy==1)){
+  if (data.type=="SilicoDArT"){
+    matrix <- as.matrix(x)
+    l.names <- locNames(x)
     for (i in 1:nLoc(x)){
-      row <- as.matrix(x)[,i] # Row for each locus
+      row <- matrix[,i] # Row for each locus
       if (all(row == 0, na.rm=TRUE) | all(row == 1, na.rm=TRUE) | all(is.na(row))){
-        loc.list[i] <- locNames(x)[i]
+        loc.list[i] <- l.names[i]
         if (all(is.na(row))){
           na.counter = na.counter + 1
         }
@@ -77,11 +81,13 @@ gl.filter.monomorphs <- function (x, verbose=2) {
   } 
   
   # SNP data
-  if (all(x@ploidy==2)){
+  if (data.type=="SNP"){
+    matrix <- as.matrix(x)
+    l.names <- locNames(x)
     for (i in 1:nLoc(x)){
-      row <- as.matrix(x)[,i] # Row for each locus
+      row <- matrix[,i] # Row for each locus
       if (all(row == 0, na.rm=TRUE) | all(row == 2, na.rm=TRUE) | all(is.na(row))){
-        loc.list[i] <- locNames(x)[i]
+        loc.list[i] <- l.names[i]
         if (all(is.na(row))){
           na.counter = na.counter + 1
         }

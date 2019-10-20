@@ -19,54 +19,47 @@
 #' @examples
 #'    gl <- gl.reassign.pop(testset.gl, as.pop='sex')
 
-# Last amended 2-Apr-19
-
 gl.reassign.pop <- function (x, as.pop, verbose = 2) {
   
   # TIDY UP FILE SPECS
   
   funname <- match.call()[[1]]
+  build <- "Jacob"
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
-  if (verbose < 0 | verbose > 5) {
+  if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
   
-  if (verbose > 0) {
-    cat("Starting", funname, "\n")
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
-  if (class(x) != "genlight") {
-    cat("  Fatal Error: genlight object required!\n")
-    stop("Execution terminated\n")
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
   }
   
-
-  if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 
-      0) {
-    if (verbose >= 2) {
-      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
-    }
-    pop(x) <- array("pop1", dim = nLoc(x))
-    pop(x) <- as.factor(pop(x))
-  }
-  tmp <- gl.filter.monomorphs(x, verbose = 0)
-  if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {
-    cat("  Warning: genlight object contains monomorphic loci\n")
-  }
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }  
   
-  # SCRIPT SPECIFIC ERROR CHECKING
+# SCRIPT SPECIFIC ERROR CHECKING
   
   if (!(as.pop %in% names(x@other$ind.metrics))) {
-    cat("  Fatal Error: Specified individual metric", as.pop, "not present in the dataset\n")
-    stop()
+    stop("  Fatal Error: Specified individual metric", as.pop, "not present in the dataset\n")
   }
   
-  # DO THE JOB
+# DO THE JOB
   
   pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
   if (verbose >= 3) {
@@ -77,12 +70,17 @@ gl.reassign.pop <- function (x, as.pop, verbose = 2) {
       cat("  Summary of recoded dataset\n")
       cat(paste("    No. of loci:", nLoc(x), "\n"))
       cat(paste("    No. of individuals:", nInd(x), "\n"))
-      cat(paste("    No. of populations: ", length(levels(factor(pop(x)))), "\n"))
-      #cat(paste("    No. of populations: ", length(levels(factor(pop.hold))), "\n"))
+      cat(paste("    No. of populations: ", nPop(x), "\n"))
   }
 
+# FLAG SCRIPT END
+  
+  #add to history
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call() 
+  
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat("Completed:", funname, "\n")
   }
   
   return <- x
