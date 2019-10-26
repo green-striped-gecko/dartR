@@ -22,6 +22,10 @@
 #'  
 #' @param x -- name of the genlight containing the SNP genotypes [required]
 #' @param method -- Specify distance measure [SNP: Euclidean; P/A: Simple]
+#' #' @param plot -- if TRUE, display a histogram of the genetic distances, and a whisker plot [TRUE]
+#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
+#' plots a boxplot adjusted for skewed distributions ['standard']
+#' @param range -- specifies the range for delimiting outliers [1.5 interquartile ranges]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [2]
 #' @return An object of class 'dist' giving distances between individuals
 #' @importFrom ape dist.gene

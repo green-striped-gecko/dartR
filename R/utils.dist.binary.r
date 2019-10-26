@@ -73,7 +73,7 @@ utils.dist.binary <- function(x, method="simple", verbose=2) {
   #dd[1:10,1:10]
   nI <- nInd(x)
 
-  if(verbose >= 2)cat("  Calculating the distance matrix\n")  
+  if(verbose >= 2)cat("  Calculating the distance matrix --",method,"\n")  
   for (i in (1:(nI-1))) {
   for (j in ((i+1):nI)){
     row1 <- mat[i,]
