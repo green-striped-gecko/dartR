@@ -99,10 +99,13 @@ gl.filter.monomorphs <- function (x, verbose=2) {
   loc.list <- loc.list[!is.na(loc.list)]
   
   # remove monomorphic loc and loci with all NAs
-  if (verbose >= 2){
-    cat("Removing monomorphic loci\n")
-  } 
-  x <- gl.drop.loc(x,loc.list=loc.list,verbose=0)
+  
+  if(length(loc.list > 0)){
+    if (verbose >= 2){    cat("  Removing monomorphic loci\n")} 
+    x <- gl.drop.loc(x,loc.list=loc.list,verbose=0)
+  } else {
+    if (verbose >= 2){cat("  No monomorphic loci to remove\n")}
+  }
   
   # Report results
   if (verbose >= 3) {

@@ -7,8 +7,8 @@
 #' Tollerance in the definition of a fixed difference is provided by the t parameter. For example, t=0.05 means
 #' that SNP allele frequencies of 95,5 and 5,95 percent will be reported as fixed (TRUE).
 #'
-#' @param s1 -- percentage SNP allele frequency for the first population [required]
-#' @param s2 -- percentage SNP allele frequency for the second population [required]
+#' @param s1 -- percentage SNP allele or sequence tag frequency for the first population [required]
+#' @param s2 -- percentage SNP allele or sequence tag frequency for the second population [required]
 #' @param tloc -- threshold value for tolerance in when a difference is regarded as fixed [default 0]
 #' @return TRUE (fixed difference) or FALSE (alleles shared) or NA (one or both s1 or s2 missing)
 #' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})

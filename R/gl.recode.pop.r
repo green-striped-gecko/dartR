@@ -114,7 +114,7 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=2){
 
   # REPORT A SUMMARY
   
-  if (verbose>=2) {
+  if (verbose>=3) {
     cat("\n  Summary of recoded dataset\n")
     cat(paste("  Original No. of loci:",hold.nLoc,"\n"))
     cat(paste("    New No. of loci:",nLoc(x),"\n"))
