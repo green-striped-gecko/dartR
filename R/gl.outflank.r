@@ -19,7 +19,7 @@
 #' @references Whitlock, M.C. and Lotterhos K.J. (2015) Reliable detection of loci responsible for local adaptation: inference of a neutral model through trimming the distribution of Fst. The American Naturalist 186: 24 - 36.
 #' 
 #' Github repository: Whitlock & Lotterhos: \url{https://github.com/whitlock/OutFLANK} (Check the readme.pdf within the repository for an explanation. Be aware you now can run OufFLANK from a genlight object)
-#' @seealso \code{\link{util.outflank}}, \code{\link{util.outflank.plotter}}, \code{\link{util.outflank.MakeDiploidFSTMat}} 
+#' @seealso \code{\link{utils.outflank}}, \code{\link{utils.outflank.plotter}}, \code{\link{utils.outflank.MakeDiploidFSTMat}}
 
 
 
@@ -32,10 +32,10 @@ if (class(gi)=="genlight") gi <- gl2gi(gi)
 # missing value is 9!!! tempted to rewrite their model to be able to use genlight directly....
   snpmat <- as.matrix(gi)#(matrix(NA, nrow=nind, ncol=nsnp)
   snpmat <- replace(snpmat, is.na(snpmat), 9) 
-  mdfm <- util.outflank.MakeDiploidFSTMat(SNPmat = snpmat, list(colnames(snpmat)), list(as.character(gi@pop)))
+  mdfm <- utils.outflank.MakeDiploidFSTMat(SNPmat = snpmat, list(colnames(snpmat)), list(as.character(gi@pop)))
   #run outflank
-  outf <- util.outflank(mdfm, LeftTrimFraction = LeftTrimFraction, RightTrimFraction=RightTrimFraction, Hmin = Hmin, NumberOfSamples = length(levels(gi@pop)), qthreshold = qthreshold)
-  if (plot) util.outflank.plotter(outf)
+  outf <- utils.outflank(mdfm, LeftTrimFraction = LeftTrimFraction, RightTrimFraction=RightTrimFraction, Hmin = Hmin, NumberOfSamples = length(levels(gi@pop)), qthreshold = qthreshold)
+  if (plot) utils.outflank.plotter(outf)
   index.outflank <- !(outf$results$OutlierFlag) ## 6650 inliers and 188 outliers 
   return(list(index=index.outflank, outflank=outf))
 }

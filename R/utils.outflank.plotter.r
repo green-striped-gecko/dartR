@@ -26,7 +26,7 @@
 #' @export
 
 
-util.outflank.plotter <- function(OFoutput,withOutliers = TRUE, NoCorr= TRUE, Hmin=0.1, binwidth=0.005, Zoom = FALSE,RightZoomFraction = 0.05,titletext=NULL){
+utils.outflank.plotter <- function(OFoutput,withOutliers = TRUE, NoCorr= TRUE, Hmin=0.1, binwidth=0.005, Zoom = FALSE,RightZoomFraction = 0.05,titletext=NULL){
   data=OFoutput$results[which(OFoutput$results$He>Hmin),]
   if(NoCorr) {
     flist=data$FSTNoCorr
