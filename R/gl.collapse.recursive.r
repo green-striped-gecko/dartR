@@ -119,10 +119,11 @@ gl.collapse.recursive <- function(x, prefix="collapse", outpath=tempdir(), tloc=
   
 # Construct a filename for the fd matrix
   d.name <- paste0(prefix,"_matrix_",count,".csv")
+  outfilespec <- file.path(outpath, d.name)
   
 # Output the fd matrix for the first iteration to file
-  if (verbose >= 2) {cat(paste("    Writing the initial fixed difference matrix to disk:",d.name,"\n"))}
-  write.csv(fd$fd, d.name)
+  if (verbose >= 2) {cat(paste("    Writing the initial fixed difference matrix to disk:",outfilespec,"\n"))}
+  write.csv(fd$fd, outfilespec)
 
 # Repeat until no change to the fixed difference matrix
   repeat {
@@ -138,7 +139,7 @@ gl.collapse.recursive <- function(x, prefix="collapse", outpath=tempdir(), tloc=
       recode.name <- paste0(prefix,"_recode_",count,".csv")
 
     # Collapse the matrix, write the new pop.recode table to file
-      fdcoll <- gl.collapse(fd, recode.table=recode.name, outpath=outpath, tpop=tpop, tloc=tloc, verbose=verbose)
+      fdcoll <- gl.collapse(fd, recode.table=recode.name, outpath=outpath, tpop=tpop, tloc=tloc, plot=FALSE, verbose=verbose)
       x <- fdcoll$gl
       
       if (nPop(x) == 1)  {
@@ -160,7 +161,7 @@ gl.collapse.recursive <- function(x, prefix="collapse", outpath=tempdir(), tloc=
       outfilespec <- file.path(outpath, d.name)
       
     # Output the collapsed fixed difference matrix for this iteration to file
-      if (verbose >= 2) {cat(paste("    Writing the collapsed fixed difference matrix to disk:",d.name,"\n"))}
+      if (verbose >= 2) {cat(paste("    Writing the collapsed fixed difference matrix to disk:",outfilespec,"\n"))}
       write.csv(fd$fd, outfilespec)
       
     # Hold the dimensions of the new fixed difference matrix

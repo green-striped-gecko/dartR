@@ -219,12 +219,12 @@ if (data.type == "SilicoDArT"){
     return(dd)
 }
 
-# # Test script
-#D <- gl.dist.ind(testset.gl,method='relatedness',verbose=3)
-D <- gl.dist.ind(testset.gs,verbose=3)
-D <- gl.dist.ind(testset.gs,method='Simple',verbose=3)
-D <- gl.dist.ind(testset.gs,method='Jaccard',verbose=3)
-D <- gl.dist.ind(testset.gs,method='Sorenson',verbose=3)
-D <- gl.dist.ind(testset.gs,method='Phi',verbose=3)
-
-D <- gl.dist.ind(testset.gs,method='Simple',verbose=3)
+# # # Test script
+# #D <- gl.dist.ind(testset.gl,method='relatedness',verbose=3)
+# D <- gl.dist.ind(testset.gs,verbose=3)
+# D <- gl.dist.ind(testset.gs,method='Simple',verbose=3)
+# D <- gl.dist.ind(testset.gs,method='Jaccard',verbose=3)
+# D <- gl.dist.ind(testset.gs,method='Sorenson',verbose=3)
+# D <- gl.dist.ind(testset.gs,method='Phi',verbose=3)
+# 
+# D <- gl.dist.ind(testset.gs,method='Simple',verbose=3)

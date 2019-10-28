@@ -12,7 +12,7 @@
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 #' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]
 #' @param tpop -- threshold number of fixed differences for amalgamating populations [0]
-#' @param plot -- if TRUE, plot a PCoA with the new groupings [FALSE]
+#' @param plot -- if TRUE, plot a PCoA with the new groupings [TRUE]
 #' @param pb -- if TRUE, show a progress bar on time consuming loops [FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [2]
 #' @return A list containing the gl object x and the following square matricies
@@ -37,7 +37,10 @@ gl.collapse <- function(fd,
                         outpath=tempdir(),
                         tpop=0, 
                         tloc=0, 
-                        plot=FALSE,
+                        test=FALSE,
+                        delta = 0.02,
+                        reps = 1000,
+                        plot=TRUE,
                         pb=FALSE,
                         verbose=2) {
   
@@ -59,18 +62,13 @@ gl.collapse <- function(fd,
   
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  if (!("fd" %in% names(fd)) ||
+      !("pcfd" %in% names(fd)) ||
+      !("nobs" %in% names(fd)) ||
+      !("nloc" %in% names(fd)) ||
+      !("pval" %in% names(fd)) ||
+      !("expobs" %in% names(fd))) {
+    stop("Fatal Error: fd must be a list produced by gl.collapse\n")
   }
   
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -162,14 +160,20 @@ gl.collapse <- function(fd,
     write.table(df, file=outfilespec, sep=",", row.names=FALSE, col.names=FALSE)
   
 # Recode the data file (genlight object)
-    x2 <- gl.recode.pop(fd$gl, pop.recode=recode.table, verbose=0)
-    fd2 <- gl.fixed.diff(x2,tloc=tloc,test=FALSE,pb=pb,verbose=0)
+    x2 <- gl.recode.pop(fd$gl, pop.recode=outfilespec, verbose=0)
+    fd2 <- gl.fixed.diff(x2,tloc=tloc,test=test,delta=delta,reps=reps,pb=pb,verbose=2)
 
-  if(setequal(levels(pop(x2)),levels(pop(fd$gl)))) { 
+  if(setequal(nPop(x2),nPop(fd$gl))) { 
     if (verbose >= 2) {
       cat(paste("\nNo further amalgamation of populations at fd <=", tpop,"\n"))
       cat("  Recursive analysis complete\n\n")
     }
+    # Plot the results  
+    if (plot){
+      pcoa <- gl.pcoa(x2,verbose=verbose)
+      tmp <- gl.pcoa.plot(pcoa,x2)
+      show(tmp)
+    }  
     l <- list(gl=fd$gl,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)
   } else {
     # Display the fd matrix
@@ -190,7 +194,10 @@ gl.collapse <- function(fd,
       show(tmp)
     }  
     
-    # Return the matricies
+    l <- list(gl=x2,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)
+  }
+
+  # Explanatory bumpf
     if (verbose >= 4) {
       if(pb){cat("\n")}
       cat("Returning a list containing the new genlight object and square matricies, as follows:\n",
@@ -202,9 +209,7 @@ gl.collapse <- function(fd,
           "         [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation]\n",
           "         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n")
     }
-    l <- list(gl=x2,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expobs=fd2$expobs,pval=fd2$pval)
-  }
-
+    
 # FLAG SCRIPT END
   
   if (verbose > 0) {

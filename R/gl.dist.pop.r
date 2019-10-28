@@ -31,12 +31,12 @@
 
 gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", range=1.5, binary=FALSE, p=NULL, verbose=2) {
 
-  # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
   
   funname <- match.call()[[1]]
   build <- "Jacob"
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -47,7 +47,7 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
     cat("Starting",funname,"[ Build =",build,"]\n")
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
@@ -73,7 +73,7 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
   distmethod <- c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski", "Chebyshev")
 
   if (!(method%in%veganmethod || method%in%distmethod || method=="pcfixed")){
-    stop("Fatal Error: Specified distance method is not among those available\n  Specify one of",veganmethod, distmethod,"\n")
+    stop("Fatal Error: Specified distance method is not among those available\n  Specify one of",veganmethod, distmethod,"or 'pcfixed'\n")
   }
   hard.min.p <- 0.25
 
@@ -231,6 +231,3 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
     
     return(dd)
 }
-
-# # Test script
-D <- gl.dist.pop(testset.gl,boxplot='standard',verbose=3)
