@@ -47,7 +47,7 @@
 
 
 
-gs.read.silicodart <- function(filename, ind.metafile=NULL,  nas="-",  topskip=NULL, lastmetric="Reproducibility") {
+gl.read.silicodart <- function(filename, ind.metafile=NULL,  nas="-",  topskip=NULL, lastmetric="Reproducibility") {
 
   cat("Reading data from file:", filename,"\n")
   cat("  This may take some time, please wait!\n")
