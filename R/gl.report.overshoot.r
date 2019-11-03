@@ -7,18 +7,16 @@
 #' the sequence tag.
 #' 
 #' @param x -- name of the genlight object [required]
+#' @param silent -- if TRUE, returns NULL; otherwise returns an object [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return A new genlight object with the recalcitrant loci deleted
+#' @return if silent==TRUE, returns NULL; otherwise returns names of the recalcitrant loci
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl <- testset.gl
-#' gl@other$loc.metrics$SnpPosition[10] <- 100
-#' gl@other$loc.metrics$SnpPosition[20] <- 100
-#' gl@other$loc.metrics$SnpPosition[30] <- 100
-#' gl <- gl.report.overshoot(gl)
+#' gl.report.overshoot(gl)
 
-gl.report.overshoot <- function(x, verbose=2) {
+gl.report.overshoot <- function(x, silent=TRUE, verbose=2) {
 
   # TIDY UP FILE SPECS
   
@@ -75,10 +73,15 @@ gl.report.overshoot <- function(x, verbose=2) {
 
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
-    cat("\nCompleted:",funname,"\n")
-  }
+    if (verbose > 0) {
+      cat("Completed:",funname,"\n")
+    }
     
-    return(locNames(xx))
+    if(silent==TRUE){
+      return(NULL)
+    } else{
+      return(locNames(xx))
+    } 
+    
 }
 

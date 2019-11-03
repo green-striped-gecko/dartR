@@ -24,8 +24,9 @@
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
+#' @param silent -- if TRUE, returns NULL; otherwise returns an object [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return A genlight object of loci with multiple SNP calls
+#' @return If silent==FALSE, returns a genlight object of loci with multiple SNP calls; otherwise returns NULL
 #' @importFrom adegenet glPlot
 #' @importFrom graphics barplot
 #' @importFrom robustbase adjbox
@@ -38,15 +39,16 @@
 gl.report.secondaries <- function(x, 
                                   boxplot="adjusted",
                                   range=1.5,
+                                  silent=TRUE,
                                   verbose = 2) {
 
-  # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
   
   build ='Jacob'
   funname <- match.call()[[1]]
   # Note does not draw upon or modify the loc.metrics.flags
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -55,14 +57,14 @@ gl.report.secondaries <- function(x,
   
   cat("Starting",funname,"[ Build =",build,"]\n")
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!")
   }
   
   if (all(x@ploidy == 1)){
-    cat("  Detected Presence/Absence (SilicoDArT) data. This filter is not yet available for Presence/Absence data. Sorry.\n"); stop()
+    stop("  Detected Presence/Absence (SilicoDArT) data. This filter is not available for Presence/Absence data.\n")
   } else if (all(x@ploidy == 2)){
     cat("  Processing a SNP dataset\n")
   } else {
@@ -131,6 +133,7 @@ gl.report.secondaries <- function(x,
           k.new <- tmean*(1-exp(-k))
           if (abs(k.new - k) <= delta){
             if (verbose >= 2){cat("Converged on Lambda of",k.new,"\n")}
+            fail <- FALSE
             break
           }
           if (i == 100){
@@ -176,18 +179,22 @@ gl.report.secondaries <- function(x,
       cat("    Number of SNP loci that would be retained on filtering:",table(duplicated(b))[1],"\n")
       cat(" Tabular 1 to K secondaries (refer plot)\n",table(as.numeric(table(b))),"\n")
   }  
-  cat("\nReturning a genlight object containing only those loci with secondaries (multiple entries per locus)\n\n")
 
-  # FLAG SCRIPT END
+  # Reset the par options    
+  if (!is.na(nloc.with.secondaries)){par(op)}
+  
+# FLAG SCRIPT END
   
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
   
-  # Reset the par options    
-  if (!is.na(nloc.with.secondaries)){par(op)}
-  
   # Return the result
+  if(silent==TRUE){
+    return(NULL)
+  } else {
+    cat("\nReturning a genlight object containing only those loci with secondaries (multiple entries per locus)\n\n")
     return(x.secondaries)
+  }  
   
 }  

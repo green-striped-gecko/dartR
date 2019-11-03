@@ -2,7 +2,7 @@
 #' 
 #' Calculates the probabilities of agreement with H-W equilibrium based on observed
 #' frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
-#' Uses the exact calculations contained in function prob.hwe() as developed by Wigginton et al. (2005).
+#' Uses the exact calculations contained in function utils.prob.hwe() as developed by Wigginton et al. (2005).
 #' 
 #' Tests are applied to each locus across all populations pooled (subset="all"), to each locus considered within each population treated separately
 #' (subset="each") or to each locus within selected populations pooled (subset=c("pop1","pop2")). Tests for HWE are
@@ -21,7 +21,9 @@
 #' @param method -- for determining the statistical signicance in the ternary plot: ChiSquare (with continuity correction) | Fisher [default "ChiSquare"]
 #' @param bonf -- if TRUE, Bonferroni correction will be applied to the level of significance [default TRUE]
 #' @param alpha -- level of significance for testing [default 0.05]
-#' @return a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
+#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
+#' @return if silent == TRUE, returns NULL; otherwise returns a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
 #' and alternate SNP homozygotes; probability of departure from H-W equilibrium,
 #' and per locus significance with and without Bonferroni Correction.
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -31,14 +33,12 @@
 #' @references Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
 #' @references Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The HardyWeinberg Package. Journal of Statistical Software 64:1-23.
 #' @examples
-#' list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), plot=TRUE, bonf=FALSE)
-#' list <- gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE)
-#' list <- gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE)
-#' list <- gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
+#' list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), plot=TRUE, bonf=FALSE, silent=FALSE)
+#' gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE, verbose=3)
+#' gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE, verbose=3)
+#' gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
 
-# Last amended 3-Feb-19
-
-gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alpha=0.05, bonf=TRUE) {
+gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alpha=0.05, bonf=TRUE, silent=TRUE, verbose=3) {
   
   # TIDY UP FILE SPECS
   
@@ -122,7 +122,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   #### Single or Pooled populations
   
   if(flag == 1){
-    result <- utils.hwe(gl, prob=alpha)
+    result <- utils.hwe(gl, prob=alpha,verbose=0)
     mat <- array(NA,3*dim(result)[1])
     dim(mat) <- c(dim(result)[1],3)
     mat[,1] <- as.numeric(as.character(result$Hom_1)) # for God knows why
@@ -161,11 +161,11 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
         next
       }
       if (count == 1) {
-        result <- utils.hwe(ii, prob=alpha)
+        result <- utils.hwe(ii, prob=alpha,verbose=0)
         Population <- rep(names(poplist)[count],nrow(result))
         result <- cbind(Population,result)
       } else {
-        r <- utils.hwe(ii, prob=alpha)
+        r <- utils.hwe(ii, prob=alpha,verbose=0)
         Population <- rep(names(poplist)[count],nrow(r))
         r <- cbind(Population,r)
         result <- rbind(result, r)
@@ -199,7 +199,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
         next
       }
       # Plot the tertiary plots
-      a <- utils.hwe(ii, prob=alpha)
+      a <- utils.hwe(ii, prob=alpha,verbose=0)
       mat <- array(NA,3*dim(a)[1])
       dim(mat) <- c(dim(a)[1],3)
       mat[,1] <- as.numeric(as.character(a$Hom_1)) # for God knows why
@@ -245,6 +245,10 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   
   cat("Completed:",funname,"\n")
   
-  return(result)
+  if(silent==TRUE){
+    return(NULL)
+  } else{
+    return(result)
+  } 
    
 }

@@ -14,15 +14,16 @@
 #' @param x -- name of the genlight object containing the SNP or presence/absence data [required]
 #' @param plot -- if TRUE, histograms of base composition are produced [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return Matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
+#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
+#' @return If silent==TRUE, returns NULL; otherwise a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
 #' @export
 #' @import stringr
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' lst <- gl.report.bases(testset.gl)
+#' lst <- gl.report.bases(testset.gl,silent=FALSE)
 #' lst
 
-gl.report.bases <- function(x, plot=TRUE, verbose = 2) {
+gl.report.bases <- function(x, plot=TRUE, silent=TRUE, verbose = 2) {
 
 # TIDY UP FILE SPECS
 
@@ -164,8 +165,14 @@ gl.report.bases <- function(x, plot=TRUE, verbose = 2) {
   
 # FLAG SCRIPT END
 
+  if (verbose > 0) {
     cat("Completed:",funname,"\n")
+  }
 
-  return(matrix)
+  if(silent==TRUE){
+    return(NULL)
+  } else{
+      return(matrix)
+  }  
   
 }

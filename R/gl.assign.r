@@ -33,7 +33,7 @@
 #' Each of these approaches provides evidence, none are 100% definitive. They need to be interpreted cautiously.
 #'
 #' @param x -- name of the input genlight object [required]
-#' @param id -- identity label of the focal individual whose provenance is unknown [required]
+#' @param unknown -- identity label of the focal individual whose provenance is unknown [required]
 #' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
 #' @param dim -- number of dimensions to retain in the dimension reduction [default k, number of populations]
 #' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.05]
@@ -45,49 +45,48 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#' x <- gl.assign(testset.gl, id="UC_00146", nmin=10, 
+#' x <- gl.assign(testset.gl, unknown="UC_00146", nmin=10, 
 #' alpha=0.05, threshold=1)
 
-gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, verbose=3) {
+gl.assign <- function (x, unknown, nmin=10, dim=NULL, alpha= 0.05, threshold=0, verbose=3) {
 
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  build <- "Jacob"
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
-
-# STANDARD ERROR CHECKING
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+  
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
   alpha <- 1-alpha
 
-  if (!(id %in% indNames(x))) {
+  if (!(unknown %in% indNames(x))) {
     cat("Fatal Error: Unknown must be listed among the individuals in the genlight object!\n"); stop()
   }
   if (alpha > 1 || alpha < 0) {
@@ -110,7 +109,7 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, verbo
 
 # Identify populations that can be eliminated on the basis of private alleles
 # Retain the remainder for analysis
-  x2 <- gl.report.pa.ind(x,id = id,  nmin=nmin, verbose=verbose)
+  x2 <- utils.pa.ind(x,unknown = unknown,  nmin=nmin, verbose=verbose)
 
 # Check that there is more than one population to assign (excluding 'unknown')
   if (nPop(x2)==1) {
@@ -163,7 +162,7 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, verbo
   unknown <- as.numeric(unknown[1:dim])
   
 
-  cat("\nLikelihood Index for assignment of unknown",id,"to listed populations\n\n") 
+  cat("\nLikelihood Index for assignment of unknown",unknown,"to listed populations\n\n") 
 # For each population
   p <- as.factor(clouds[,"pop"])
   for (i in 1:length(levels(p))) {

@@ -7,9 +7,10 @@
 #' Note that the number of paired alleles between to populations is not a symmetric dissimilarity measure.
 #'
 #' @param gl1 -- name of the genlight object containing the SNP data [required]
-#' @param gl2 -- if two seperate genlight objects are to be compared this can be provided here [NULL]
-#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return A data.frame will be returned. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequendy difference between loci (mdf).
+#' @param gl2 -- if two seperate genlight objects are to be compared this can be provided here [default NULL]
+#' @param silent -- if TRUE, returns NULL; otherwise returns an object [default TRUE]
+#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
+#' @return If silent=TRUE, returns NULL; otherwise returns a data.frame. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequendy difference between loci (mdf).
 #' @details 
 #' if no gl2 is provided, the function uses the pop(gl) hierachy to determine pairs of population, otherwise it runs a single comparison between gl1 and gl2. 
 #' Hint: in case you want to run comparison between individuals you can simply redefine your pop(gl) via indNames(gl) [Assuming individual names are unique]
@@ -33,13 +34,10 @@
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.pa.pop(testset.gl[1:20,])
+#' gl.report.pa(testset.gl[1:20,])
 #' 
-#' 
-#' 
-#private allellels per populations
 
-gl.report.pa.pop <- function(gl1, gl2=NULL, verbose=2){
+gl.report.pa <- function(gl1, gl2=NULL, silent=TRUE, verbose=3){
   
 # TIDY UP FILE SPECS
   
@@ -60,27 +58,27 @@ gl.report.pa.pop <- function(gl1, gl2=NULL, verbose=2){
   # STANDARD ERROR CHECKING
   
   if(class(gl1)!="genlight") {
-    stop("Fatal Error: genlight object required for gl1!\n")
+    stop("Fatal Error: genlight object required!\n")
+  }
+  if (all(gl1@ploidy == 1)){
+    stop("Cannot calculate minor allele frequences for Tag presence/absence data. Please provide a SNP dataset.\n")
+  } else if (all(gl1@ploidy == 2)){
+    if(verbose>=2){cat("  Processing a SNP dataset\n")}
   } else {
-    if (all(gl1@ploidy == 1)){
-      stop("Fatal Error: Private alleles can only be calculated for SNP data. Please provide a SNP dataset for gl1\n")}
-    } else if (all(gl1@ploidy == 2)){
-      if (verbose >= 2){cat(paste("  Processing a SNP dataset",gl1,"\n"))}
-    } else {
-      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-    }
-
+    stop("Fatal Error: Ploidy must be universally 1 (Tag P/A data) or 2 (SNP data)!\n")
+  }
+  
   if(!is.null(gl2)){
     if(class(gl2)!="genlight") {
       stop("Fatal Error: genlight object required for gl2!\n")
     }
-  } else {
     if (all(gl2@ploidy == 1)){
-      stop("Fatal Error: Private alleles can only be calculated for SNP data. Please provide a SNP dataset for gl2\n")}
-  } else if (all(gl2@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset",gl2,"\n")}
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+      stop("Fatal Error: Private alleles can only be calculated for SNP data. Please provide a SNP dataset for gl2\n")
+    } else if (all(gl2@ploidy == 2)){
+      if (verbose >= 2){cat("  Processing a SNP dataset",gl2,"\n")}
+    } else {
+      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+    }
   }
 
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -114,11 +112,20 @@ if (!is.null(gl2)) pops <- list(pop1=gl1, pop2=gl2) else
     pall[i,11] = round(mean(abs(p1alf-p2alf), na.rm=T),3)
   }
   
+  if(verbose >= 3){
+    print(pall)
+  }
+  
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("Completed:", funname, "\n")
+    cat("Completed:",funname,"\n")
   }
   
-  return(pall)
+  if(silent==TRUE){
+    return(NULL)
+  } else{
+    return(pall)
+  } 
+
 }

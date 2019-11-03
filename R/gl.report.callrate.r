@@ -20,8 +20,9 @@
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
+#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return Tabulation of CallRate against Threshold
+#' @return if silent==TRUE, returns NULL; otherwise returns a tabulation of CallRate against Threshold
 #' @importFrom graphics hist
 #' @importFrom robustbase adjbox
 #' @export
@@ -30,7 +31,7 @@
 #' gl.report.callrate(testset.gl)
 
 
-gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, verbose=2) {
+gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, silent=TRUE, verbose=2) {
   
 # TIDY UP FILE SPECS
 
@@ -216,14 +217,20 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
     df <- df[order(-df$Threshold),]
     rownames(df) <- NULL
   }
+
+    # Reset the par options    
+    par(op) 
     
-  # FLAG SCRIPT END
+ # FLAG SCRIPT END
     
-    cat("Completed:",funname,"\n")
+    if (verbose > 0) {
+      cat("Completed:",funname,"\n")
+    }
     
-  # Reset the par options    
-    par(op)
-    
-  return(df)
-  
+    if(silent==TRUE){
+      return(NULL)
+    } else{
+      return(df)
+    } 
+
 }

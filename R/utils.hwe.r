@@ -3,7 +3,7 @@
 #' 
 #' Calculates the probabilities of agreement with H-W equilibrium based on observed
 #' frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
-#' Uses the exact calculations contained in function prob.hwe() as developed by
+#' Uses the exact calculations contained in function utils.prob.hwe() as developed by
 #' Wigginton, JE, Cutler, DJ, and Abecasis, GR.
 #' 
 #' @param x -- a genlight object containting the SNP profiles for a population [Required]
@@ -76,7 +76,7 @@ utils.hwe <- function (x, prob=0.05, verbose=2) {
     hom.snp[i] <- length(which(m[,i]==2))
     het[i] <- length(which(m[,i]==1)) 
     # Significance
-    p.values[i] <- prob.hwe(het[i], hom.ref[i], hom.snp[i])
+    p.values[i] <- utils.prob.hwe(het[i], hom.ref[i], hom.snp[i])
     if (p.values[i] < 0) {
       sig2[i] <- NA
     } else if (p.values[i] > 0.05) {

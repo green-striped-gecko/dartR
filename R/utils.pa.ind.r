@@ -11,15 +11,14 @@
 #' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
 #' @param threshold -- retain those populations for which the focal individual has private alleles less or equal in number than the threshold [default 0]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return A genlight object containing the focal individual (assigned to population "unknown") and 
-#' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
-#' @export
+#' @return returns a genlight object containing the focal individual (assigned to population "unknown") and 
+#' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to 'thresold').
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#' x <- gl.report.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1, verbose=2)
+#' utils.pa.ind(testset.gl, unknown="UC_00146", nmin=10, threshold=1, verbose=2)
 
-gl.report.pa.ind <- function (x, unknown, nmin=10, threshold=0, verbose=2) {
+utils.pa.ind <- function (x, unknown, nmin=10, threshold=0, verbose=2) {
   
 # TIDY UP FILE SPECS
   
@@ -41,13 +40,15 @@ gl.report.pa.ind <- function (x, unknown, nmin=10, threshold=0, verbose=2) {
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
-  } else {
-    if (all(x@ploidy == 1)){
-      stop("Fatal Error: Private alleles can only be calculated for SNP data. Please provide a SNP dataset\n")}
+  }
+  
+  if (all(x@ploidy == 1)){
+    cat("  Detected Presence/Absence (SilicoDArT) data\n")
+    stop("Cannot calculate minor allele frequences for Tag presence/absence data. Please provide a SNP dataset.\n")
   } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat(paste("  Processing a SNP dataset\n"))}
+    cat("  Processing a SNP dataset\n")
   } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+    stop("Fatal Error: Ploidy must be universally 1 (Tag P/A data) or 2 (SNP data)!\n")
   }
   
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -177,7 +178,7 @@ gl.report.pa.ind <- function (x, unknown, nmin=10, threshold=0, verbose=2) {
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  
+        
   return(gl)
-  
+
 }

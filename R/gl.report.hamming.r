@@ -23,14 +23,15 @@
 #' for the minumum acceptable Hamming distance.
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 5]
+#' @param rs -- number of bases in the restriction enzyme recognition sequence [default 5]
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; 
 #' if 'adjusted', plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
 #' @param threshold minimum acceptable base pair difference for display on the whisker plot and histogram [default 3 bp]
 #' @param taglength -- typical length of the sequence tags [default 69]
-#' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default = TRUE]
-#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
+#' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default TRUE]
+#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return Tabulation of loc that will be lost on filtering, against values of the threshold
 #' @importFrom adegenet glPlot
 #' @importFrom graphics hist
@@ -49,7 +50,8 @@ gl.report.hamming <- function(x,
                               threshold=3,
                               taglength=69,
                               probar=FALSE, 
-                              verbose = 3) {
+                              silent=TRUE,
+                              verbose = 2) {
   
   # TIDY UP FILE SPECS
   
@@ -198,17 +200,21 @@ gl.report.hamming <- function(x,
 #   if (verbose >= 3){
 #     cat("Note: The data below are for pairwise distances between",nL,"loci, for which there are",((((nL-1)*nL)/2)), "distances\n")
 #     print(df)
-#   }   
+#   } 
    
-   # FLAG SCRIPT END
+   # Reset the par options    
+   par(op)   
    
+# FLAG SCRIPT END
+
    if (verbose >= 1) {
      cat("Completed:",funname,"\n")
    }
    
-   # Reset the par options    
-   par(op)
+   if(silent==TRUE){
+     return(NULL)
+   } else {
+     return(df)
+   } 
    
-   # Return the result
-   return(df)
 }

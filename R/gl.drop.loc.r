@@ -111,22 +111,22 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     loc.list <- locNames(x)[first:last]
   }
   if (length(loc.list) == 0) {
-    cat("  Fatal Error: no loci listed to delete!\n"); stop("Execution terminated\n")
-  }
-  
-  # Remove loci flagged for deletion
+    cat("  Fatal Error: no loci listed to delete!\n")
+  } else {
+    # Remove loci flagged for deletion
     x2 <- x[,!x$loc.names%in%loc.list]
     x2@other$loc.metrics <- x@other$loc.metrics[!x$loc.names%in%loc.list,]
+  }  
 
 # REPORT A SUMMARY
     
   if (verbose >= 3) {
-    cat("  Summary of recoded dataset\n")
+    cat("\n  Summary of recoded dataset\n")
     cat(paste("    Original No. of loci:",nLoc(hold),"\n"))
     cat(paste("    No. of loci deleted:",nLoc(hold)-nLoc(x2),"\n"))
     cat(paste("    No. of loci retained:",nLoc(x2),"\n"))
     cat(paste("    No. of individuals:", nInd(x2),"\n"))
-    cat(paste("    No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+    cat(paste("    No. of populations: ", length(levels(factor(pop(x2)))),"\n\n"))
   }
     
 # FLAG SCRIPT END

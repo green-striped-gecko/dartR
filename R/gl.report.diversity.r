@@ -3,12 +3,14 @@
 #' !!Just an intro placeholder!! This script takes a genlight object and calculates alpha and beta diversity for q=0:2. Formulas are taken from Sherwin et al. 2017. The paper describes nicely the relationship between the different q levels and how they relate to population genetic processes such as dispersal and selection. For all indices the entropies (H) and corrosponding effective numbers Hill numbers (D), which reflect the amount of entities that are needed to get the observed valuea are calculated. In a nutshell the alpha indices between the different q-values should be similar if there are no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index this links to a process causing it such as dispersal, selection or strong drift. For a detailed explanation of all the indices, we recommend to resort to the literature provided below.
 #'
 #' @param gl genlight object containing the SNP genotypes  [required]
-#' @param spectrumplot switch to provide a plot [TRUE]
-#' @param confiplot switch if confidence intervals (1 sd) should be drawn [default: FALSE]
-#' @param pbar report on progress. Silent if set to FALSE. [Default is TRUE]
+#' @param spectrumplot switch to provide a plot [default TRUE]
+#' @param confiplot switch if confidence intervals (1 sd) should be drawn [default FALSE]
+#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param pbar report on progress. Silent if set to FALSE. [default TRUE]
 #' @param table prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.
 #' 
-#' @return a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
+#' @return if silent==TRUE, returns NULL; otherwise returns a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
 #' @export
 #' @importFrom graphics arrows
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella 
@@ -17,14 +19,47 @@
 #' 
 #' Chao et al. 2014
 #' 
- 
 
 ### To be done:
 # adjust calculation of betas for population sizes (switch)
 # check that it works on SilicoDArT datasets
 
 
-gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRUE, table="DH") {
+gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRUE, table="DH", silent=TRUE, verbose=2) {
+  
+# TIDY UP FILE SPECS
+  
+  build ='Jacob'
+  funname <- match.call()[[1]]
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+# FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+# STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+  if (all(x@ploidy == 1)){
+    cat("  Detected Presence/Absence (SilicoDArT) data\n")
+    stop("Cannot calculate minor allele frequences for Tag presence/absence data. Please provide a SNP dataset.\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (Tag P/A data) or 2 (SNP data)!\n")
+  }
+  
+# FUNCTION SPECIFIC ERROR CHECKING
+  
+# DO THE JOB
 
 if  (is.null(pop(gl)))  pop(gl)<- factor(rep("all", nInd(gl)))
 
@@ -33,7 +68,7 @@ pops <- seppop(gl)
 
 if (pbar){
 pb <- txtProgressBar(0,8, style = 3, width = 20) 
-cat(" Counting missing loci...           ")     
+if(verbose >=2){cat(" Counting missing loci...           ")}
 }
 #number of missing loci
 
@@ -42,7 +77,7 @@ nlocpop <- lapply(pops, function(x) sum(!is.na(colMeans(as.matrix(x), na.rm = T)
 
 if (pbar){
 setTxtProgressBar(pb, 1)
-cat(" Calculating zero_H/D_alpha ...           ")
+  if(verbose >=2){cat(" Calculating zero_H/D_alpha ...           ")}
 ##0Halpha (average number of alleles, ignoring missing values and sd)
 }
 zero_H_alpha_es <- lapply(pops, function(x) {
@@ -56,7 +91,7 @@ zero_D_alpha_sd <- unlist(lapply(zero_H_alpha_es, function(x) x[[4]]))
 
 if (pbar){
 setTxtProgressBar(pb, 2)
-cat(" Calculating one_H/D_alpha ...          ")
+  if(verbose >=2){cat(" Calculating one_H/D_alpha ...          ")}
 }
 ### one_H_alpha
 one_H_alpha_es <- lapply(pops, function(x) {
@@ -75,7 +110,7 @@ one_D_alpha <- unlist(lapply(one_H_alpha_es, function(x) x[[3]]))
 one_D_alpha_sd <- unlist(lapply(one_H_alpha_es, function(x) x[[4]]))
 if (pbar){
 setTxtProgressBar(pb, 3)
-cat(" Calculating two_H/D_alpha ...           ")
+  if(verbose >=2){cat(" Calculating two_H/D_alpha ...           ")}
 }
 #two_H_alpha
 two_H_alpha_es <- lapply(pops, function(x) {
@@ -103,7 +138,7 @@ if (npops>1)
 {
 if(pbar){
   setTxtProgressBar(pb, 4)
-  cat(" Counting pairwise missing loci...")  
+  if(verbose >=2){cat(" Counting pairwise missing loci...")}
 }
 pairs <- t(combn(npops,2))
 ### pairwise missing loci 
@@ -121,7 +156,7 @@ colnames(mat_nloc_pops) <- rownames(mat_nloc_pops) <- names(pops)
 
 if (pbar){
 setTxtProgressBar(pb, 5)
-cat(" Calculating zero_H/D_beta ...         ")
+  if(verbose >=2){cat(" Calculating zero_H/D_beta ...         ")}
 }
 #zero_H_beta
 zero_H_beta_es <- apply(pairs,1, function(x)  {
@@ -162,7 +197,7 @@ colnames(mat_zero_D_beta) <- rownames(mat_zero_D_beta) <- names(pops)
 
 if (pbar){
   setTxtProgressBar(pb, 6)
-  cat(" Calculating one_H/D_beta ...    ")
+  if(verbose >=2){cat(" Calculating one_H/D_beta ...    ")}
 }
 
 #one_H_beta
@@ -254,7 +289,15 @@ if (spectrumplot)
 
 fs <- cbind(zero_D_alpha, one_D_alpha, two_D_alpha) 
 cx <- max(1-(max(-12+nrow(fs),0)*0.025),0.5)
-bb<-  barplot(fs, beside = T, names.arg = rep(rownames(fs),3), ylim=c(1,2.15), main="q-profile", col=rainbow(npops), las=2, xpd=FALSE, cex.names=cx)
+bb<-  barplot(fs, 
+              beside = T, 
+              names.arg = rep(rownames(fs),3), 
+              ylim=c(1,2.15), 
+              main="q-profile", 
+              col=rainbow(npops), 
+              las=2, 
+              xpd=FALSE, 
+              cex.names=cx)
  text(colMeans(bb), rep(2.1,3), labels = c("q=0", "q=1", "q=2")) 
 
  sds <- cbind(zero_D_alpha_sd, one_D_alpha_sd, two_D_alpha_sd)
@@ -281,7 +324,7 @@ cat("\n\npairwise non-missing loci")
 print(knitr::kable(mat_nloc_pops, digits = 3))
 
 cat("\n\n0_H_beta")
-print(knitr::kable(mat_zero_H_beta, digits = 3), )
+print(knitr::kable(mat_zero_H_beta, digits = 3))
 cat("\n\n1_H_beta")
 print(knitr::kable(mat_one_H_beta, digits = 3))
 cat("\n\n2_H_beta")
@@ -345,8 +388,19 @@ if (npops>1) out <-
          one_D_alpha_sd = one_D_alpha_sd,
          two_D_alpha    = two_D_alpha,
          two_D_alpha_sd = two_D_alpha_sd)
-         
-return(out)
+
+# FLAG SCRIPT END
+
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
+
+  if(silent==TRUE){
+    return(NULL)
+  } else{
+    return(out)
+  } 
+
 }
 
 

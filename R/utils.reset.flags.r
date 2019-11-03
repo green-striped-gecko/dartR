@@ -56,10 +56,13 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
   
   # DO THE JOB
   
-  if (all(x@ploidy == 2)){
+if (data.type=="SNP"){
     if(verbose >= 2){
-      cat("  Resetting flags for AvgPIC, OneRatioRef, OneRatioSnp, PICRef, PICSnp, CallRate, maf, FreqHets, FreqHomRef, FreqHomSnp, monomorphs\n")
+      cat("  Resetting flags for AvgPIC, OneRatioRef, OneRatioSnp, PICRef, PICSnp, CallRate, maf, FreqHets, FreqHomRef, FreqHomSnp, monomorphs, OneRatio, PIC to",set,"\n")
+      cat("  Resetting SilicoDArT flags for OneRatio, PIC to FALSE\n")
     }
+    
+  #AvgPIC
     if (is.null(x@other$loc.metrics$AvgPIC)) {
       x@other$loc.metrics$AvgPIC <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -68,6 +71,7 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
     }
     x@other$loc.metrics.flags$AvgPIC <- set
     
+  #OneRatioRef  
     if (is.null(x@other$loc.metrics$OneRatioRef)) {
       x@other$loc.metrics$OneRatioRef <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -75,7 +79,8 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
       }
     }
     x@other$loc.metrics.flags$OneRatioRef <- set
-    
+
+  #OneRatioSnp        
     if (is.null(x@other$loc.metrics$OneRatioSnp)) {
       x@other$loc.metrics$OneRatioSnp <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -83,7 +88,8 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
       }
     }
     x@other$loc.metrics.flags$OneRatioSnp <- set
-    
+
+  #PICRef    
     if (is.null(x@other$loc.metrics$PICRef)) {
       x@other$loc.metrics$PICRef <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -92,6 +98,7 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
     }
     x@other$loc.metrics.flags$PICRef <- set
     
+  #PICSnp
     if (is.null(x@other$loc.metrics$PICSnp)) {
       x@other$loc.metrics$PICSnp <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -99,7 +106,8 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
       }
     }
     x@other$loc.metrics.flags$PICSnp <- set
-    
+
+  #CallRate
     if (is.null(x@other$loc.metrics$CallRate)) {
       x@other$loc.metrics$CallRate <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -108,6 +116,7 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
     }
     x@other$loc.metrics.flags$CallRate <- set
     
+  #FreqHomRef
     if (is.null(x@other$loc.metrics$FreqHomRef)) {
       x@other$loc.metrics$FreqHomRef <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -116,6 +125,7 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
     }
     x@other$loc.metrics.flags$FreqHomRef <- set
     
+  #FreqHomSnp
     if (is.null(x@other$loc.metrics$FreqHomSnp)) {
       x@other$loc.metrics$FreqHomSnp <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -124,6 +134,7 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
     }
     x@other$loc.metrics.flags$FreqHomSnp <- set
     
+  #FreqHets
     if (is.null(x@other$loc.metrics$FreqHets)) {
       x@other$loc.metrics$FreqHets <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -131,33 +142,96 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
       }
     }
     x@other$loc.metrics.flags$FreqHets <- set
-      
-    x@other$loc.metrics.flags$monomorphs <- set
-    x@other$loc.metrics.flags$maf <- set
-
-  }
-  
-  if (all(x@ploidy == 1)){
-    if(verbose >= 2){
-      cat("  Resetting flags for CallRate, PIC, OneRatio, monomorphs\n")
-    }
     
+  #monomorphs
+    if (is.null(x@other$loc.metrics$monomorphs)) {
+      x@other$loc.metrics$monomorphs <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric monomorphs does not exist, creating slot @other$loc.metrics$monomorphs\n")
+      }
+    }
+    x@other$loc.metrics.flags$monomorphs <- set
+    
+    #maf
+    if (is.null(x@other$loc.metrics$maf)) {
+      x@other$loc.metrics$maf <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric maf does not exist, creating slot @other$loc.metrics$maf\n")
+      }
+    }
+    x@other$loc.metrics.flags$maf <- set
+    
+  #OneRatio
+    if (is.null(x@other$loc.metrics$OneRatio)) {
+      x@other$loc.metrics$OneRatio <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric OneRatio does not exist, creating slot @other$loc.metrics$OneRatio\n")
+      }
+    }
+    x@other$loc.metrics.flags$OneRatio <- FALSE
+      
+  #PIC
     if (is.null(x@other$loc.metrics$PIC)) {
       x@other$loc.metrics$PIC <- array(NA,nLoc(x))
       if (verbose >= 3){
         cat("  Locus metric PIC does not exist, creating slot @other$loc.metrics$PIC\n")
       }
     }
-    x@other$loc.metrics.flags$PIC <- set
+    x@other$loc.metrics.flags$PIC <- FALSE
+}
+  
+if (data.type=="SilicoDArT"){
+    if(verbose >= 2){
+      cat("  Resetting flags for CallRate, PIC, OneRatio, monomorphs to",set,"\n")
+      cat("  Setting SNP flags for AvgPIC, OneRatioRef, OneRatioSnp, PICRef, PICSnp, maf, FreqHets, FreqHomRef, FreqHomSnp to FALSE\n")
+    }
     
-    if (is.null(x@other$loc.metrics$OneRatio)) {
-      x@other$loc.metrics$OneRatio <- array(NA,nLoc(x))
+    #AvgPIC
+    if (is.null(x@other$loc.metrics$AvgPIC)) {
+      x@other$loc.metrics$AvgPIC <- array(NA,nLoc(x))
       if (verbose >= 3){
-        cat("  Locus metric OneRatio does not exist, creating slot @other$loc.metrics$OneRatioRef\n")
+        cat("  Locus metric AvgPIC does not exist, creating slot @other$loc.metrics$AvgPIC\n")
       }
     }
-    x@other$loc.metrics.flags$OneRatio <- set
+    x@other$loc.metrics.flags$AvgPIC <- FALSE
     
+    #OneRatioRef  
+    if (is.null(x@other$loc.metrics$OneRatioRef)) {
+      x@other$loc.metrics$OneRatioRef <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric OneRatioRef does not exist, creating slot @other$loc.metrics$OneRatioRef\n")
+      }
+    }
+    x@other$loc.metrics.flags$OneRatioRef <- FALSE
+    
+    #OneRatioSnp        
+    if (is.null(x@other$loc.metrics$OneRatioSnp)) {
+      x@other$loc.metrics$OneRatioSnp <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric OneRatioSnp does not exist, creating slot @other$loc.metrics$OneRatioSnp\n")
+      }
+    }
+    x@other$loc.metrics.flags$OneRatioSnp <- FALSE
+    
+    #PICRef    
+    if (is.null(x@other$loc.metrics$PICRef)) {
+      x@other$loc.metrics$PICRef <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric PICRef does not exist, creating slot @other$loc.metrics$PICRef\n")
+      }
+    }
+    x@other$loc.metrics.flags$PICRef <- FALSE
+    
+    #PICSnp
+    if (is.null(x@other$loc.metrics$PICSnp)) {
+      x@other$loc.metrics$PICSnp <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric PICSnp does not exist, creating slot @other$loc.metrics$PICSnp\n")
+      }
+    }
+    x@other$loc.metrics.flags$PICSnp <- FALSE
+    
+    #CallRate
     if (is.null(x@other$loc.metrics$CallRate)) {
       x@other$loc.metrics$CallRate <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -166,18 +240,70 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
     }
     x@other$loc.metrics.flags$CallRate <- set
     
-    if (is.null(x@other$loc.metrics$Qpmr)) {
-      x@other$loc.metrics$Qpmr <- array(NA,nLoc(x))
+    #FreqHomRef
+    if (is.null(x@other$loc.metrics$FreqHomRef)) {
+      x@other$loc.metrics$FreqHomRef <- array(NA,nLoc(x))
       if (verbose >= 3){
-        cat("  Locus metric Qpmr does not exist, creating slot @other$loc.metrics$Qpmr\n")
+        cat("  Locus metric FreqHomRef does not exist, creating slot @other$loc.metrics$FreqHomRef\n")
       }
     }
-    x@other$loc.metrics.flags$Qpmr <- set
+    x@other$loc.metrics.flags$FreqHomRef <- FALSE
     
+    #FreqHomSnp
+    if (is.null(x@other$loc.metrics$FreqHomSnp)) {
+      x@other$loc.metrics$FreqHomSnp <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric FreqHomSnp does not exist, creating slot @other$loc.metrics$FreqHomSnp\n")
+      }
+    }
+    x@other$loc.metrics.flags$FreqHomSnp <- FALSE
+    
+    #FreqHets
+    if (is.null(x@other$loc.metrics$FreqHets)) {
+      x@other$loc.metrics$FreqHets <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric FreqHets does not exist, creating slot @other$loc.metrics$FreqHets\n")
+      }
+    }
+    x@other$loc.metrics.flags$FreqHets <- FALSE
+    
+    #monomorphs
+    if (is.null(x@other$loc.metrics$monomorphs)) {
+      x@other$loc.metrics$monomorphs <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric monomorphs does not exist, creating slot @other$loc.metrics$monomorphs\n")
+      }
+    }
     x@other$loc.metrics.flags$monomorphs <- set
+    
+    #maf
+    if (is.null(x@other$loc.metrics$maf)) {
+      x@other$loc.metrics$maf <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric maf does not exist, creating slot @other$loc.metrics$maf\n")
+      }
+    }
+    x@other$loc.metrics.flags$maf <- FALSE
+    
+    #OneRatio
+    if (is.null(x@other$loc.metrics$OneRatio)) {
+      x@other$loc.metrics$OneRatio <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric OneRatio does not exist, creating slot @other$loc.metrics$OneRatio\n")
+      }
+    }
+    x@other$loc.metrics.flags$OneRatio <- set
+    
+    #PIC
+    if (is.null(x@other$loc.metrics$PIC)) {
+      x@other$loc.metrics$PIC <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric PIC does not exist, creating slot @other$loc.metrics$PIC\n")
+      }
+    }
+    x@other$loc.metrics.flags$PIC <- set
+}
 
-  }
-  
   # FLAG SCRIPT END
   
   #add to history

@@ -6,23 +6,25 @@
 #' @param maf.limit -- show histograms maf range <= maf.limit [default 0.5]
 #' @param ind.limit -- show histograms only for populations of size greater than ind.limit [default 5]
 #' @param loc.limit -- show histograms only for populations with more than loc.limit polymorphic loci [default 30]
-#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
+#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @export
 #' @importFrom graphics layout hist
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' f <- gl.report.maf(testset.gl)
+#' gl.report.maf(testset.gl,silent=FALSE)
+#'
 
-gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose = 0) {
+gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, silent=TRUE, verbose = 2) {
   
-  # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
   
   build ='Jacob'
   funname <- match.call()[[1]]
   # Note does not draw upon or modify the loc.metrics.flags
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -31,7 +33,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
   
   cat("Starting",funname,"[ Build =",build,"]\n")
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
@@ -39,15 +41,15 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
   
   if (all(x@ploidy == 1)){
     cat("  Detected Presence/Absence (SilicoDArT) data\n")
-    stop("Cannot calculate minor allele frequences for fragment presence/absence data. Please provide a SNP dataset.\n")
+    stop("Cannot calculate minor allele frequences for Tag presence/absence data. Please provide a SNP dataset.\n")
   } else if (all(x@ploidy == 2)){
     cat("  Processing a SNP dataset\n")
   } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
+    stop("Fatal Error: Ploidy must be universally 1 (Tag P/A data) or 2 (SNP data)!\n")
   }
 
 # FUNCTION SPECIFIC ERROR CHECKING
-
+  
   if (maf.limit > 0.5 | maf.limit <= 0) {
     cat("Warning: maf.limit must be in the range (0,0.5], set to 0.5\n")
     maf.limit <- 0.5
@@ -69,8 +71,10 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
   
 # Recalculate the relevant loc.metrics
   
-  cat("  Recalculating MAF\n")
-  x <- utils.recalc.maf(x,verbose=1)
+  if(x@other$loc.metrics.flags$maf==FALSE){
+    cat("  Recalculating MAF\n")
+    x <- utils.recalc.maf(x,verbose=1)
+  }  
 
 # Check for status -- any populations with loc > loc.limit; ind > ind.limit; and is nPop > 1
   
@@ -112,10 +116,11 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
       layout(matrix(c(1,1,1,2,3,4,5,6,7), 3, 3, byrow = TRUE))
     }
     hist(maf, 
-         breaks=seq(0,0.5,0.05), 
-         col=rainbow(10), 
+         #breaks=seq(0,0.5,0.05), 
+         col='red', 
          main=title.str, 
-         xlab="Minor Allele Frequency")
+         xlab="Minor Allele Frequency",
+         breaks=100)
   
  cat("  Calculating MAF by population\n")
   
@@ -128,10 +133,6 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
       genl <- utils.recalc.maf(genl,verbose=0)
       maf <- genl@other$loc.metrics$maf
       
-      #cat(popn,"Pops: ",nPop(genl),"\n")
-      #cat(popn,"Inds: ",nInd(genl),"\n")
-      #cat(popn,"Locs******: ",nLoc(genl),"\n")
-    
       if (plot.count <= 6) {
         maf <- maf[maf<maf.limit]
         hist(maf, 
@@ -170,9 +171,16 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
         cat("Completed: gl.report.maf once plots are displayed\n  Refer to histograms\n\n")
   }
   
-  # FLAG SCRIPT END
+# FLAG SCRIPT END
   
-  cat("Completed:",funname,"\n")
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
   
-  return(NULL)
+  if(silent==TRUE){
+    return(NULL)
+  } else{
+    return(NULL)
+  } 
+
 }  
