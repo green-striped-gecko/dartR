@@ -105,7 +105,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     x <- x2
     
   # Reset the flags
-    x <- utils.reset.flags(x, verbose=verbose)
+    x <- utils.reset.flags(x, verbose=0)
     
   # Remove monomorphic loci
     if (mono.rm) {
@@ -152,60 +152,15 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
       if (verbose >= 3) {cat("  Resetting population assignments to initial state\n")}
     }
 
+# ADD TO HISTORY
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call() 
+    
 # FLAG SCRIPT END
-    
-    #add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call() 
-    
+
     if (verbose > 0) {
       cat("Completed:", funname, "\n")
     }
     
     return(x)
-    
 }
-
-# # Test script
-# gl <- testset.gl
-# tmp <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-# nPop(gl)
-# nPop(tmp)
-# gl@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gl <- testset.gl
-# tmp <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = TRUE)
-# nPop(gl)
-# nPop(tmp)
-# gl@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gl <- testset.gl
-# tmp <- gl.drop.pop(gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = FALSE, recalc = TRUE)
-# nPop(gl)
-# nPop(tmp)
-# gl@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gs <- testset.gs
-# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-# nPop(gs)
-# nPop(tmp)
-# gs@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gl <- testset.gl
-# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = TRUE)
-# nPop(gs)
-# nPop(tmp)
-# gs@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gl <- testset.gl
-# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = FALSE, recalc = TRUE)
-# nPop(gs)
-# nPop(tmp)
-# gs@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-

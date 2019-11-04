@@ -90,7 +90,7 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     pop.hold <- pop.hold[x$pop%in%pop.list]
     x <- x2
   # Reset the flags
-    x <- utils.reset.flags(x, verbose=verbose)
+    x <- utils.reset.flags(x, verbose=0)
   # Remove monomorphic loci
     if (mono.rm) {
       x <- gl.filter.monomorphs(x,verbose=verbose)
@@ -137,18 +137,15 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
       if (verbose >= 3) {cat("  Resetting population assignments to initial state\n")}
     }
     
+# ADD TO HISTORY
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call() 
     
 # FLAG SCRIPT END
     
-  #add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()
-
-  if (verbose > 0) {
-    cat("Completed:",funname,"\n")
-  }
+    if (verbose > 0) {
+      cat("Completed: gl.keep.ind\n")
+    }
     
-  return(x)
-    
+    return(x)
 }
-

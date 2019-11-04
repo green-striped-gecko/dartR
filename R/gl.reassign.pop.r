@@ -17,11 +17,11 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.reassign.pop(testset.gl, as.pop='sex')
+#'    gl <- gl.reassign.pop(testset.gl, as.pop='sex',verbose=3)
 
 gl.reassign.pop <- function (x, as.pop, verbose = 2) {
   
-  # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
   
   funname <- match.call()[[1]]
   build <- "Jacob"
@@ -73,15 +73,15 @@ gl.reassign.pop <- function (x, as.pop, verbose = 2) {
       cat(paste("    No. of populations: ", nPop(x), "\n"))
   }
 
-# FLAG SCRIPT END
-  
-  #add to history
+# ADD TO HISTORY
   nh <- length(x@other$history)
   x@other$history[[nh + 1]] <- match.call() 
+  
+# FLAG SCRIPT END
   
   if (verbose > 0) {
     cat("Completed:", funname, "\n")
   }
   
-  return <- x
+  return(x)
 }

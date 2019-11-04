@@ -77,7 +77,7 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
   # Remove rows flagged for deletion
     x <- x[x$ind.names%in%ind.list]
   # Reset the flags
-    x <- utils.reset.flags(x, verbose=verbose)
+    x <- utils.reset.flags(x, verbose=0)
   # Remove monomorphic loci
     if (mono.rm) {
       x <- gl.filter.monomorphs(x,verbose=verbose)
@@ -109,12 +109,12 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
     }
   }
     
-# FLAG SCRIPT END
-    
-  #add to history
+# ADD TO HISTORY
     nh <- length(x@other$history)
     x@other$history[[nh + 1]] <- match.call() 
     
+# FLAG SCRIPT END
+
     if (verbose > 0) {
       cat("Completed: gl.keep.ind\n")
     }

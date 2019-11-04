@@ -11,7 +11,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.keep.loc(testset.gl, loc.list=c("100051468|42-A/T", "100051474|20-G/A", "100051484|62-A/G"))
+#'    gl <- gl.keep.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G", "100049839-39-G/T"))
 
 gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
 
@@ -34,7 +34,7 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: genlight object required!\n")
   }
   
     if (all(x@ploidy == 1)){
@@ -42,7 +42,7 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     } else if (all(x@ploidy == 2)){
       cat("  Processing a SNP dataset\n")
     } else {
-      cat ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"); stop("Terminating Execution!")
+      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
 
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -63,7 +63,7 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
       cat("  Range of loci to keep has been specified\n")
     } 
   } else {
-      cat("  Fatal Error: Need to specify either a range of loci to keep, or specific loci to keep\n"); stop("Execution terminated\n")
+      cat("  Warning: Need to specify either a range of loci to keep, or specific loci to keep\n")
   }
   
   if (flag=='both' || flag=='list'){
@@ -107,12 +107,13 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
       loc.list <- locNames(x)[first:last]
   }
   if (length(loc.list) == 0) {
-    cat("  Fatal Error: no loci listed to keep!\n"); stop("Execution terminated\n")
-  }
-  
-  # Remove loci flagged for deletion
+    cat("  Warning: no loci listed to keep! Genlight object returned unchanged\n")
+    x2 <- x
+  } else {
+    # Remove loci flagged for deletion
     x2 <- x[,x$loc.names%in%loc.list]
     x2@other$loc.metrics <- x@other$loc.metrics[x$loc.names%in%loc.list,]
+  }  
 
 # REPORT A SUMMARY
     
@@ -125,14 +126,15 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     cat(paste("    No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
   }
     
-# FLAG SCRIPT END
-
-    cat("Completed:",funname,"\n")
-
-  # Add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()  
+# ADD TO HISTORY
+    nh <- length(x2@other$history)
+    x2@other$history[[nh + 1]] <- match.call() 
     
-    return(x2)
-}
-
+# FLAG SCRIPT END
+    
+    if (verbose > 0) {
+      cat("Completed: gl.keep.ind\n")
+    }
+    
+    return(x)
+}    

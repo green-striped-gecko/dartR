@@ -79,7 +79,7 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
     x <- x[!x$ind.names%in%ind.list]
     
   # Reset the flags
-    x <- utils.reset.flags(x, verbose=verbose)
+    x <- utils.reset.flags(x, verbose=0)
     
   # Remove monomorphic loci
     if (mono.rm) {
@@ -110,12 +110,12 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
       cat("Note: Resultant monomorphic loci deleted\n")
     }
   }
+
+# ADD TO HISTORY 
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call()
     
 # FLAG SCRIPT END
-    
-  #add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()  
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
@@ -124,48 +124,3 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
   return(x)
   
 }
-
-# # Test script
-# 
-# gl <- testset.gl
-# tmp <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"))
-# nInd(gl)
-# nInd(tmp)
-# gl@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gl <- testset.gl
-# tmp <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"),mono.rm=TRUE)
-# nInd(gl)
-# nInd(tmp)
-# gl@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gl <- testset.gl
-# tmp <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"),recalc=TRUE)
-# nInd(gl)
-# nInd(tmp)
-# gl@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gs <- testset.gs
-# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-# nPop(gs)
-# nPop(tmp)
-# gs@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gl <- testset.gl
-# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = TRUE)
-# nPop(gs)
-# nPop(tmp)
-# gs@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# gl <- testset.gl
-# tmp <- gl.drop.pop(gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm = FALSE, recalc = TRUE)
-# nPop(gs)
-# nPop(tmp)
-# gs@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-
