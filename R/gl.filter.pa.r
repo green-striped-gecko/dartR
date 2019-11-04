@@ -15,9 +15,9 @@
 #' @export
 #' @author Bernd Gruber & Ella Kelly (University of Melbourne) (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl2 <- gl.filter.pa.pop(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2])
+#' result <- gl.filter.pa.pop(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2],verbose=3)
 
-gl.filter.pa.pop<-function(x, pop1, pop2, invers=FALSE, verbose=2){
+gl.filter.pa<-function(x, pop1, pop2, invers=FALSE, verbose=2){
   
 # TIDY UP FILE SPECS
   
@@ -39,9 +39,10 @@ gl.filter.pa.pop<-function(x, pop1, pop2, invers=FALSE, verbose=2){
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
-  } else {
-    if (all(x@ploidy == 1)){
-      stop("Fatal Error: Private alleles can only be calculated for SNP data. Please provide a SNP dataset\n")}
+  } 
+  
+  if (all(x@ploidy == 1)){
+    stop("Fatal Error: Private alleles can only be calculated for SNP data. Please provide a SNP dataset\n")
   } else if (all(x@ploidy == 2)){
     if (verbose >= 2){cat(paste("  Processing a SNP dataset\n"))}
   } else {
@@ -50,8 +51,7 @@ gl.filter.pa.pop<-function(x, pop1, pop2, invers=FALSE, verbose=2){
 
 # FUNCTION SPECIFIC ERROR CHECKING
   
-
-  # DO THE JOB
+# DO THE JOB
   
   pops <- seppop(x)
   p1 <- as.matrix(pops[[pop1]])
@@ -66,9 +66,12 @@ gl.filter.pa.pop<-function(x, pop1, pop2, invers=FALSE, verbose=2){
   x <- x[, index]
   x@other$loc.metrics <- x@other$loc.metrics[index, ]
   
-# FLAG SCRIPT END
+# ADD TO HISTORY
   nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call()  
+  x@other$history[[nh + 1]] <- match.call() 
+  
+# FLAG SCRIPT END
+ 
   if (verbose > 0) {
     cat("Completed:", funname, "\n")
   }

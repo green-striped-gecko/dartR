@@ -14,11 +14,9 @@
 #' @return     Returns a genlight object retaining loci with a Read Depth in the range specified by the lower and upper threshold.
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#' #@examples
-#' #gl.report.rdepth(testset.gl)
-#' #result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
-
-# Last amended 3-Feb-19
+#' @examples
+#' gl.report.rdepth(testset.gl)
+#' result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
 
 gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=2) {
 
@@ -60,7 +58,7 @@ gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=2) {
 # DO THE JOB
   
   n0 <- nLoc(x)
-  if (verbose > 2) {cat("Initial no. of loci =", n0, "\n")}
+  #if (verbose > 2) {cat("Initial no. of loci =", n0, "\n")}
   
   if (all(x@ploidy == 1)){
     rdepth <- x@other$loc.metrics$AvgReadDepth
@@ -69,7 +67,8 @@ gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=2) {
   } 
 
   # Remove SNP loci with rdepth < threshold
-  if (verbose >= 2){cat("  Removing loci with rdepth <",lower,"and >",upper,"\n")}
+  
+  if (verbose >= 2){cat("  Removing loci with rdepth <=",lower,"and >=",upper,"\n")}
   
   if (all(x@ploidy == 1)){
     index <- (x@other$loc.metrics["AvgReadDepth"]>=lower & x@other$loc.metrics["AvgReadDepth"]<= upper)
@@ -79,27 +78,29 @@ gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=2) {
   x2 <- x[, index]
   # Remove the corresponding records from the loci metadata
   x2@other$loc.metrics <- x@other$loc.metrics[index,]
-  if (verbose > 2) {cat ("  No. of loci deleted =", (n0-nLoc(x2)),"\n")}
+  #if (verbose > 2) {cat ("  No. of loci deleted =", (n0-nLoc(x2)),"\n")}
     
   # REPORT A SUMMARY
   if (verbose > 2) {
-    cat("Summary of filtered dataset\n")
-    cat(paste("  read depth >=",lower,"and read depth <=",upper,"\n"))
-    cat(paste("  No. of loci:",nLoc(x2),"\n"))
+    cat("\n  Summary of filtered dataset\n")
+    cat("  Initial no. of loci =", n0, "\n")
+    #cat(paste("  read depth >=",lower,"and read depth <=",upper,"\n"))
+    cat ("  No. of loci deleted =", (n0-nLoc(x2)),"\n")
+    cat(paste("  No. of loci retained:",nLoc(x2),"\n"))
     cat(paste("  No. of individuals:", nInd(x2),"\n"))
-    cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+    cat(paste("  No. of populations: ", length(levels(factor(pop(x2)))),"\n\n"))
   }  
   
+# ADD TO HISTORY
+    nh <- length(x2@other$history)
+    x2@other$history[[nh + 1]] <- match.call()  
+    
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-    
-  #add to history
-    nh <- length(x2@other$history)
-    x2@other$history[[nh + 1]] <- match.call()
-  
+
   return(x2)
   
 }

@@ -13,59 +13,61 @@
 #' @importFrom plyr join
 #' @importFrom pegas heterozygosity
 #' @examples
-#' tmp <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
-#' gl.report.heterozygosity(tmp,method="ind")
-
-# Last amended 28-Feb-19
+#' result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
+#' gl.report.heterozygosity(result,method="ind")
 
 gl.filter.heterozygosity <- function(x, t.upper=0.7, t.lower=0, verbose=2) {
   
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build <- "Jacob"
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  hold <- x
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build=",build,"]\n")
   }
-
-# STANDARD ERROR CHECKING
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: genlight object required!\n")
   }
   
+  if (all(x@ploidy == 1)){
+    stop("  Processing  Presence/Absence (SilicoDArT) data, heterozygosity can only be calculated for SNP data\n")
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
+  
+# SCRIPT SPECIFIC ERROR CHECKING
+  
   if (t.upper < 0 | t.upper > 1){
-    cat("  Warning: Parameter 't.upper' must lie between 0 and 1, set to the default of 0.7\n")
-    t.upper <- 0.7
+    stop("Fatal Error:Parameter 't.upper' must lie between 0 and 1\n")
   }
   
   if (t.lower < 0 | t.lower > 1){
-    cat("  Warning: Parameter 't.lower' must lie between 0 and 1, set to the default of 0.005\n")
-    t.upper <- 0.005
+    stop("Fatal Error:Parameter 't.upper' must lie between 0 and 1\n")
+  }
+  
+  # Check for monomorphic loci
+  
+  if (!x@other$loc.metrics.flags$monomorphs) {
+    cat("  Warning: genlight object contains monomorphic loci which will be factored into heterozygosity estimates\n")
   }
 
-  # Set a population if none is specified (such as if the genlight object has been 
-  # generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, 
-                             individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {
-      cat("  Warning: genlight object contains monomorphic loci\n")
-    }
-    
   # DO THE JOB
 
     # Convert to matrix
@@ -84,7 +86,9 @@ gl.filter.heterozygosity <- function(x, t.upper=0.7, t.lower=0, verbose=2) {
     }
     
     if (verbose >=2 ) {
-      cat("\nRetaining individuals with heterozygosity in the range",t.lower,"to",t.upper,"\n")
+      cat(paste("\n  Minimum individual heterozygosity",round(min(c.hets),4),"\n"))
+      cat(paste("  Maximum individual heterozygosity",round(max(c.hets),4),"\n"))
+      cat("  Retaining individuals with heterozygosity in the range",t.lower,"to",t.upper,"\n")
     }
     x.kept <- x[c.hets >= t.lower & c.hets <= t.upper,]
     if (any(c.hets > t.upper)) {
@@ -96,15 +100,15 @@ gl.filter.heterozygosity <- function(x, t.upper=0.7, t.lower=0, verbose=2) {
 
 # REPORT THE RESULTS
     if(verbose >= 3){
-      cat("Initial number of individuals:",nInd(x),"\n\n")
+      cat("  Initial number of individuals:",nInd(x),"\n")
 
       if (any(c.hets > t.upper)) {
-        cat("  Number of outlier individuals:",nInd(x.discarded.upper),"with heterozygosity >",t.upper, "\n")
+        cat("  Number of outlier individuals (heterozygosity  >",t.upper,"):",nInd(x.discarded.upper),"\n")
         cat("    Deleted: ")
         cat(paste0(indNames(x.discarded.upper),"[",as.character(pop(x.discarded.upper)),"],"))
-        cat("\n\n")
+        cat("\n")
       } else {
-        if (!(t.upper == 1)) {cat("  No outlying individuals with heterozygosity >",t.upper, "\n")}
+        if (!(t.upper == 1)) {cat("  Zero outlier individuals with heterozygosity >",t.upper, "\n")}
       }
 
       if (any(c.hets < t.lower)) {
@@ -119,17 +123,17 @@ gl.filter.heterozygosity <- function(x, t.upper=0.7, t.lower=0, verbose=2) {
       cat("  Number of individuals retained:",nInd(x.kept),"\n\n")
     }
     
+# ADD ACTION TO HISTORY
+
+    nh <- length(x.kept@other$history)
+    x.kept@other$history[[nh + 1]] <- match.call()
+    
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("\nCompleted:",funname,"\n")
+      cat("\nCompleted:",funname,"\n")
   }
-    
-  #add to history
-    nh <- length(x.kept@other$history)
-    x.kept@other$history[[nh + 1]] <- match.call()
 
-  # Return the result
   return(x.kept) 
 }
 

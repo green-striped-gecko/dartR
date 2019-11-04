@@ -29,7 +29,8 @@
 #' @export
 #' @author Arthur Georges and Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.filter.callrate(testset.gl, plot=TRUE, method="ind", threshold=0.8, verbose=3)
+#' result <- gl.filter.callrate(testset.gl, method="LOC", threshold=0.95, verbose=3)
+#' result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8, verbose=3)
 
  gl.filter.callrate <- function(x, method="loc", threshold=0.95, mono.rm=FALSE, recalc=FALSE, recursive=FALSE, plot=TRUE, bins=25, verbose=2) {
    
@@ -376,16 +377,17 @@
        }   
      }
    }
-   
-# FLAG SCRIPT END
-  
+
   # Recalculate Call Rate to be safe
       x <- utils.recalc.callrate(x,verbose=0)
-
-  #add to history
+      
+# ADD TO HISTORY
+      
    nh <- length(x2@other$history)
-   x2@other$history[[nh + 1]] <- match.call()
+   x2@other$history[[nh + 1]] <- match.call()      
    
+# FLAG SCRIPT END
+
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }

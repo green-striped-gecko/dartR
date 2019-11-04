@@ -17,20 +17,18 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.report.secondaries(testset.gl)
-#' result2 <- gl.filter.secondaries(testset.gl)
-
-# Last amended 3-Feb-19
+#' gl.report.secondaries(testset.gl)
+#' result <- gl.filter.secondaries(testset.gl)
 
 gl.filter.secondaries <- function(x, method="random", verbose=2) {
 
-  # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
   
   build ='Jacob'
   funname <- match.call()[[1]]
   # Note does not draw upon or modify the loc.metrics.flags
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -39,14 +37,14 @@ gl.filter.secondaries <- function(x, method="random", verbose=2) {
   
   cat("Starting",funname,"[ Build =",build,"]\n")
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!")
   }
   
   if (all(x@ploidy == 1)){
-    cat("  Detected Presence/Absence (SilicoDArT) data. This filter is not yet available for Presence/Absence data. Sorry.\n"); stop()
+    stop("  Detected Presence/Absence (SilicoDArT) data. This filter is not yet available for Presence/Absence data. Sorry.\n")
   } else if (all(x@ploidy == 2)){
     cat("  Processing a SNP dataset\n")
   } else {
@@ -94,15 +92,15 @@ gl.filter.secondaries <- function(x, method="random", verbose=2) {
     cat("    Number of loci after secondaries removed:",table(duplicated(b))[1],"\n")
   }
   
+# ADD TO HISTORY
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()    
+  
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  
-  #add to history
-  nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call()  
-  
+
   return(x)
 }  

@@ -6,45 +6,50 @@
 #' The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
 #' the sequence tag.
 #' 
+#' Not fatal, but should apply this filter before gl.filter.secondaries, for obvious reasons.
+#' 
 #' @param x -- name of the genlight object [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A new genlight object with the recalcitrant loci deleted
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl <- testset.gl
-#' nLoc(gl)
-#' gl@other$loc.metrics$SnpPosition[10] <- 100
-#' gl@other$loc.metrics$SnpPosition[20] <- 100
-#' gl@other$loc.metrics$SnpPosition[30] <- 100
-#' gl <- gl.filter.overshoot(gl)
-#' nLoc(gl)
-
-# Last amended 17-Sep-19
+#' result <- gl.filter.overshoot(testset.gl, verbose=3)
 
 gl.filter.overshoot <- function(x, verbose=2) {
 
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  # Note does draw upon the monomorphs flag and will reset it to TRUE on completion
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)=="genlight"){
-    if(verbose >= 2){cat("  Genlight object detected\n")}
+  # STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!")
+  }
+  
+  if (all(x@ploidy == 1)){
+    stop("  Detected Presence/Absence (SilicoDArT) data. Please supply a SNP dataset\n")
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
   } else {
-    cat("  Fatal Error: genlight object or distance matrix required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
   
 # SCRIPT SPECIFIC ERROR CHECKING
@@ -72,10 +77,14 @@ gl.filter.overshoot <- function(x, verbose=2) {
     if(nLoc(xx) > 0){cat("\n",paste(locNames(xx),"\n"))}
   }
   if (verbose >= 2){
-    cat("  Deleting loci with SNP falling outside the trimmed sequence\n")
+    cat("  Deleting loci with SNPs falling outside the trimmed sequence\n")
   }
   xx <- x[,snpos <= nchar(trimmed)]
  
+# ADD TO HISTORY
+  nh <- length(xx@other$history)
+  xx@other$history[[nh + 1]] <- match.call()
+  
 # FLAG SCRIPT END
 
   if (verbose > 0) {

@@ -16,17 +16,17 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl <- gl.filter.monomorphs(testset.gl, verbose=3)
+#' result <- gl.filter.monomorphs(testset.gl, verbose=3)
 
 gl.filter.monomorphs <- function (x, verbose=2) {
 
-  # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
   
   build ='Jacob'
   funname <- match.call()[[1]]
   # Note does draw upon the monomorphs flag and will reset it to TRUE on completion
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -37,7 +37,7 @@ gl.filter.monomorphs <- function (x, verbose=2) {
     cat("Starting",funname,"[ Build =",build,"]\n")
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!")
@@ -117,16 +117,17 @@ gl.filter.monomorphs <- function (x, verbose=2) {
     cat("  No. of individuals:",nInd(x),"\n")
     cat("  No. of populations:",nPop(x),"\n")
   }
+  
+# RESET THE FLAG
+  
+  x@other$loc.metrics.flags$monomorphs <- TRUE
 
-# FLAG SCRIPT END
-
-  # Add to history
+# ADD TO HISTORY
   nh <- length(x@other$history)
   x@other$history[[nh + 1]] <- match.call()
   
-  # Reset the flag
-  x@other$loc.metrics.flags$monomorphs <- TRUE
-  
+# FLAG SCRIPT END
+
   if (verbose >= 1){
     cat("Completed:",funname,"\n")
   }  

@@ -13,19 +13,19 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.repavg(testset.gl)
-#' result <- gl.filter.repavg(testset.gl, threshold=0.95, verbose=3)
+#' gl.report.repeatability(testset.gl)
+#' result <- gl.filter.repeatability(testset.gl, threshold=0.99, verbose=3)
 
 gl.filter.repeatability <- function(x, threshold=0.99, verbose=2) {
 
-  # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
   
   build <- "Jacob"
   funname <- match.call()[[1]]
   hold <- x
   # Note does not draw upon or modify the loc.metrics.flags as RepAvg and Reproducibility cannot be recalculated.
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -36,7 +36,7 @@ gl.filter.repeatability <- function(x, threshold=0.99, verbose=2) {
     cat("Starting",funname,"[ Build =",build,"]\n")
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
@@ -102,33 +102,39 @@ gl.filter.repeatability <- function(x, threshold=0.99, verbose=2) {
   # Remove NAs from list of loci to be discarded
   loc.list <- loc.list[!is.na(loc.list)]
   
-  # remove the loci with repeatability below the threshold
-  if (verbose >= 2){
-    cat("  Removing loci with repeatability less than",threshold,"\n")
-  } 
-  x <- gl.drop.loc(x,loc.list=loc.list,verbose=0)  
+  if(length(loc.list) > 0){
+    # remove the loci with repeatability below the threshold
+    if (verbose >= 2){
+      cat("  Removing loci with repeatability less than",threshold,"\n")
+    } 
+    x <- gl.drop.loc(x,loc.list=loc.list,verbose=0)
+  } else {
+    if (verbose >= 2){
+      cat("  No loci with repeatability less than",threshold,"\n")
+    } 
+  }  
   
   # REPORT A SUMMARY
   if (verbose >= 3) {
-    cat("  Summary of filtered dataset\n")
-    cat(paste("Retaining loci with repeatability >=",threshold,"\n"))
+    cat("\n  Summary of filtered dataset\n")
+    cat(paste("  Retaining loci with repeatability >=",threshold,"\n"))
     cat(paste("  Original no. of loci:",nLoc(hold),"\n"))
     cat(paste("  No. of loci discarded:",nLoc(hold)-nLoc(x),"\n"))
     cat(paste("  No. of loci retained:",nLoc(x),"\n"))
     cat(paste("  No. of individuals:", nInd(x),"\n"))
-    cat(paste("  No. of populations: ", nPop(x),"\n"))
+    cat(paste("  No. of populations: ", nPop(x),"\n\n"))
   }  
+  
+# ADD TO HISTORY
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()   
   
 # FLAG SCRIPT END
 
   if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
-  
-  #add to history
-  nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call() 
-  
+
   return(x)
   
 }

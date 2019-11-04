@@ -21,9 +21,7 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @examples
-#' list <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE)
-
-# Last amended 3-Feb-19
+#' result <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE, verbose=3)
 
 gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
   
@@ -117,13 +115,15 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
     cat("  Loci retained:",nLoc(x),"\n")
   }
   
+# ADD TO HISTORY
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()
+  
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  #add to history
-  nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call()
+
   return(x) 
 }

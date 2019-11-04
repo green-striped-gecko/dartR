@@ -32,7 +32,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl <- gl.filter.hamming(testset.gl, threshold=0.25)
+#' result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
 
 gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=2) {
   
@@ -72,6 +72,10 @@ gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=2) {
   if(length(x@other$loc.metrics$TrimmedSequence) == 0) {
     stop("Fatal Error: Data must include Trimmed Sequences\n")
   }
+  if(threshold < 0 || threshold > 1){
+    cat("  Warning: Parameter 'threshold' must be an integer between 0 and 1, set to 0.2\n")
+    threshold = 0.2
+  }
 
 # DO THE JOB
   
@@ -81,7 +85,7 @@ gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=2) {
   }
   
   x@other$loc.metrics$TrimmedSequence <- as.character(x@other$loc.metrics$TrimmedSequence)
-  
+
   count=0
   nL <- nLoc(x)
   index <- rep(TRUE,(nL-1))
@@ -89,7 +93,10 @@ gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=2) {
     pbar <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
     getTxtProgressBar(pbar)
   }
-  if (verbose > 1) {cat("  Calculating Hamming distances between sequence tags\n")}
+  if (verbose >= 2) {
+    cat("  Calculating Hamming distances between sequence tags\n")
+    cat("  Filtering loci with Hamming Distance is less than",threshold,"\n")
+  }
   for (i in 1:(nL-1)){
     s1 <- x@other$loc.metrics$TrimmedSequence[i]
     for (j in ((i+1):nL)){
@@ -102,10 +109,6 @@ gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=2) {
       }
     }
     if (pb)  setTxtProgressBar(pbar, i/(nL-1))
-  }
-
-  if (verbose >= 2){
-    cat("  Filtering loci with Hamming Distance is less than",threshold,"\n")
   }
   
   x <- x[,(index)]
@@ -124,14 +127,16 @@ gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=2) {
     cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n\n"))
   }
   
+# ADD TO HISTORY
+  
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()      
+  
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  #add to history
-  nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call()
   
   return(x)
   
