@@ -23,17 +23,17 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.make.recode.ind(testset.gl, out.recode.file="Emmac_recode_ind.csv")
+#' result <- gl.make.recode.ind(testset.gl, out.recode.outpath=getwd(),file="Emmac_recode_ind.csv")
 
  gl.make.recode.ind <- function(x, out.recode.file="default_recode_ind.csv", outpath=tempdir(), verbose=2) {
 
-   # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
    
    funname <- match.call()[[1]]
    build <- "Jacob"
    outfilespec <- file.path(outpath, out.recode.file)
    
-   # FLAG SCRIPT START
+# FLAG SCRIPT START
    
    if (verbose < 0 | verbose > 5){
      cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -44,7 +44,7 @@
      cat("Starting",funname,"[ Build =",build,"]\n")
    }
    
-   # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
    
    if(class(x)!="genlight") {
      stop("Fatal Error: genlight object required!\n")
@@ -73,11 +73,6 @@
     cat("Completed:",funname,"\n")
   }
    
- 
  return(NULL)
  
  }
- 
- # # Test scripts
- # gl.make.recode.ind(gl,out.recode.file="test.csv",outpath=getwd(),verbose=3)
- # gl.make.recode.ind(gs,out.recode.file="test.csv",outpath=getwd(),verbose=3)

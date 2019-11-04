@@ -23,9 +23,9 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \dontrun{
-#'    gl <- gl.recode.pop(gl, pop.recode="pop_recode_table_0.csv")
-#' }
+#'   mfile <- system.file("extdata", "testset_pop_recode.csv", package="dartR")
+#'   nPop(testset.gl)
+#'   gl <- gl.recode.pop(gl, pop.recode=mfile, verbose=3)
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' 
 
@@ -138,14 +138,3 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=2){
 
     return(x)
 }
-
-# # Test script
-#   mfile <- system.file("extdata", "testset_pop_recode.csv", package="dartR")
-#   nPop(testset.gl)
-#   gl <- gl.recode.pop(gl, pop.recode=mfile, verbose=3)
-#   nPop(gl)
-#   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=1)
-#   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=2)
-#   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=3)
-# 
-# gl <- gl.recode.ind(gs, ind.recode=mfile, verbose=3)

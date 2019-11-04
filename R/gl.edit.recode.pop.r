@@ -26,7 +26,7 @@
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #' 
 #' @param x Name of the genlight object for which populations are to be reassigned.[required]
-#' @param out.recode.file Name of the file to output the new individual labels [optional]
+#' @param out.recode.file Name of the file to output the new individual labels [null]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN].
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]
 #' @param mono.rm -- Remove monomorphic loci [default TRUE]
@@ -42,7 +42,7 @@
 
 gl.edit.recode.pop <- function(x, pop.recode=NULL, out.recode.file=NULL, outpath=tempdir(), recalc=FALSE, mono.rm=FALSE, verbose=2) {
 
-  # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
   
   funname <- match.call()[[1]]
   build <- "Jacob"
@@ -50,7 +50,7 @@ gl.edit.recode.pop <- function(x, pop.recode=NULL, out.recode.file=NULL, outpath
     outfilespec <- file.path(outpath, out.recode.file)
   }
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -61,7 +61,7 @@ gl.edit.recode.pop <- function(x, pop.recode=NULL, out.recode.file=NULL, outpath
     cat("Starting",funname,"[ Build =",build,"]\n")
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
@@ -77,7 +77,7 @@ gl.edit.recode.pop <- function(x, pop.recode=NULL, out.recode.file=NULL, outpath
     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
   
-  # FUNCTION SPECIFIC ERROR CHECKING
+# FUNCTION SPECIFIC ERROR CHECKING
   
   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
     stop("  Fatal Error: Population names not detected\n")
@@ -150,23 +150,17 @@ gl.edit.recode.pop <- function(x, pop.recode=NULL, out.recode.file=NULL, outpath
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("Note: Resultant monomorphic loci not deleted\n")}
   }
-  
+ 
+# ADD TO HISTORY
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call() 
 
 # FLAG SCRIPT END
-  
-  if (verbose >= 2) {cat("\n  Success: Populaton assignments recoded\n\n")}  
   
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  #add to history
-  nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call()  
+
   return(x)
   
 }
-
-# # Test script
-# gl <- gl.edit.recode.pop(testset.gl,verbose=2)
-# gl <- gl.edit.recode.ind(gs, out.recode.file="ind.recode.table.csv",verbose=2)
-

@@ -19,9 +19,8 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
-#' result <- gl.make.recode.pop(testset.gl, out.recode.file="Emmac_recode_pop.csv")
-#' }
+#' result <- gl.make.recode.pop(gl,out.recode.file="test.csv",outpath=getwd(),verbose=2)
+#'
 
  gl.make.recode.pop <- function(x, out.recode.file="recode_pop_table.csv", outpath=tempdir(), verbose=2) {
 

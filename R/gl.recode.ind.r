@@ -25,9 +25,8 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \dontrun{
-#'    gl <- gl.recode.ind(testset.gl, ind.recode="testset_ind_recode.csv")
-#' }
+#'   file <- system.file("extdata","testset_pop_recode.csv", package="dartR")
+#'   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=0)
 #' @seealso \code{\link{gl.filter.monomorphs}} for filtering monomorphs, \code{\link{gl.recalc.metrics}} for recalculating locus metrics,
 #' \code{\link{gl.recode.pop}} for recoding populations
 
@@ -131,12 +130,11 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=2)
     if (!mono.rm) {cat("Note: Resultant monomorphic loci not deleted\n")}
   }
   
-
-# FLAG SCRIPT END
-
-  #add to history
+# ADD TO HISTORY
     nh <- length(x@other$history)
     x@other$history[[nh + 1]] <- match.call()  
+
+# FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
@@ -145,15 +143,3 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=2)
   return(x)
     
 }
-
-
-# # Test script
-#   file <- system.file("extdata","testset_ind_recode.csv", package="dartR")
-#   nInd(testset.gl)
-#   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=0)
-#   nInd(gl)
-#   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=1)
-#   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=2)
-#   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=3)
-# 
-# gl <- gl.recode.ind(gs, ind.recode=file, verbose=3)

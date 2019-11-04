@@ -145,14 +145,13 @@ gl.edit.recode.ind <- function(x, out.recode.file=NULL, outpath=tempdir(), recal
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
     if (!mono.rm) {cat("Note: Resultant monomorphic loci not deleted\n")}
   }
+ 
+# ADD TO HISTORY 
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call() 
   
 # FLAG SCRIPT END
-  
-  #add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()  
 
-  if (verbose >= 2) {cat("\n  Success: Individual labels recoded\n\n")}  
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
@@ -160,8 +159,3 @@ gl.edit.recode.ind <- function(x, out.recode.file=NULL, outpath=tempdir(), recal
 return(x)
   
 }
-
-# # Test script
-# gl <- gl.edit.recode.ind(testset.gl,verbose=2)
-# gl <- gl.edit.recode.ind(gs, out.recode.file="ind.recode.table.csv",verbose=2)
-
