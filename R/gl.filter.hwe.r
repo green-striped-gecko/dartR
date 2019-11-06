@@ -110,8 +110,9 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
       cat("  Deleted",length(failed.loci),"loci with significant departure from HWE at alpha =",alpha,"applied locus by locus\n")
     }  
   } 
-  
-  x <- x[,!locNames(x) %in% failed.loci]
+  index <- !locNames(x) %in% failed.loci
+  x <- x[,index]
+  x@other$loc.metrics <- x@other$loc.metrics[index,]
   
   if (verbose >= 2){
     cat("  Loci retained:",nLoc(x),"\n")
