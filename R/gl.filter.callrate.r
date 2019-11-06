@@ -52,7 +52,7 @@
     cat("Starting",funname,"[ Build =",build,"]\n")
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
