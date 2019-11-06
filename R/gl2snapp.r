@@ -16,12 +16,12 @@
 
 gl2snapp <- function(x, outfile="snapp.nex", outpath=tempdir(), verbose=2) {
   
-  # TIDY UP FILE SPECS
+# TIDY UP FILE SPECS
   
   outfilespec <- file.path(outpath, outfile)
   funname <- match.call()[[1]]
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -32,23 +32,21 @@ gl2snapp <- function(x, outfile="snapp.nex", outpath=tempdir(), verbose=2) {
     cat("Starting",funname,"\n")
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-  }
-
-  
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-  if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-    if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-    pop(x) <- array("pop1",dim = nInd(x))
-    pop(x) <- as.factor(pop(x))
+    stop("  Fatal Error: genlight object required!\n")
   }
   
-  # Check for monomorphic loci
-  tmp <- gl.filter.monomorphs(x, verbose=0)
-  if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+  if (verbose >= 2){
+    if (all(x@ploidy == 1)){
+      stop("Fatal Error: Detected Presence/Absence (SilicoDArT) data. Please provide a SNP dataset\n")
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+    } else {
+      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+    }
+  }
   
   # DO THE JOB
   

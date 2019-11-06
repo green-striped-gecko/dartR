@@ -22,37 +22,37 @@
 gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
 
 # TIDY UP FILE SPECS
-
+  
   funname <- match.call()[[1]]
-
+  build <- "Jacob"
+  
 # FLAG SCRIPT START
-
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
-
+  
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
-
+  
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
+  
 # FUNCTION SPECIFIC ERROR CHECKING
 
   for (case in ind.list){
@@ -65,12 +65,6 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
     cat("  Fatal Error: no individuals listed to keep!\n"); stop("Execution terminated\n")
   }
 
-# FLAG SCRIPT START
-  
-  if (verbose >= 1) {
-    cat("Starting gl.keep.ind: Deleting all but selected individuals\n")
-  }
-  
 # DO THE JOB
 
   if (verbose >= 2) {
@@ -82,8 +76,12 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
   
   # Remove rows flagged for deletion
     x <- x[x$ind.names%in%ind.list]
+  # Reset the flags
+    x <- utils.reset.flags(x, verbose=0)
   # Remove monomorphic loci
-    if (mono.rm) {x <- gl.filter.monomorphs(x,verbose=verbose)}
+    if (mono.rm) {
+      x <- gl.filter.monomorphs(x,verbose=verbose)
+    }
   # Recalculate statistics
     if (recalc) {
       x <- gl.recalc.metrics(x,verbose=verbose)
@@ -111,14 +109,16 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=2){
     }
   }
     
-# FLAG SCRIPT END
+# ADD TO HISTORY
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call() 
     
+# FLAG SCRIPT END
+
     if (verbose > 0) {
       cat("Completed: gl.keep.ind\n")
     }
-    #add to history
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()  
+  
     return(x)
 }
 

@@ -15,9 +15,8 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' f <- gl.filter.maf(testset.gl, threshold=0.05)
-
-# Last amended 3-Feb-19
+#' result <- gl.filter.monomorphs(testset.gl)
+#' result <- gl.filter.maf(result, threshold=0.05, verbose=3)
 
 gl.filter.maf <- function(x, threshold=0.01, verbose=2) {
   
@@ -81,14 +80,16 @@ gl.filter.maf <- function(x, threshold=0.01, verbose=2) {
     cat("      Number of loci deleted:", nLoc(x) - nLoc(x2), "\n")
     cat("    Final number of loci:", nLoc(x2), "\n")
   }
+
+# ADD TO HISTORY  
+  nh <- length(x2@other$history)
+  x2@other$history[[nh + 1]] <- match.call()
   
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  #add to history
-  nh <- length(x2@other$history)
-  x2@other$history[[nh + 1]] <- match.call()
+
   return(x2)
 }  

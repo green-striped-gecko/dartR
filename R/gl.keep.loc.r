@@ -1,19 +1,19 @@
-#' Remove specified loci from a genelight \{adegenet\} object
+#' Remove all but the specified loci from a genelight \{adegenet\} object
 #'
-#' The script returns a genlight object with specified loci deleted.
+#' The script returns a genlight object with the all but the specified loci deleted.
 #'
 #' @param x -- name of the genlight object containing SNP genotypes or presence/absence data [required]
-#' @param loc.list -- a list of loci to be deleted [required, if loc.range not specified]
-#' @param first -- first of a range of loci to be deleted [required, if loc.list not specified]
-#' @param last -- last of a range of loci to be deleted [if not specified, last locus in the dataset]
+#' @param loc.list -- a list of loci to be kept [required, if loc.range not specified]
+#' @param first -- first of a range of loci to be kept [required, if loc.list not specified]
+#' @param last -- last of a range of loci to be kept [if not specified, last locus in the dataset]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object with the reduced data
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G", "100049839-39-G/T"))
+#'    gl <- gl.keep.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G", "100049839-39-G/T"))
 
-gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
+gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
 
 # TIDY UP FILE SPECS
   
@@ -29,9 +29,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     verbose <- 2
   }
 
-  if (verbose >= 1){
-    cat("Starting",funname,"[ Build=",build,"]\n")
-  }
+  cat("Starting",funname,"[ Build =",build,"]\n")
 
 # STANDARD ERROR CHECKING
   
@@ -39,7 +37,6 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     stop("  Fatal Error: genlight object required!\n")
   }
   
-  if (verbose >= 1){
     if (all(x@ploidy == 1)){
       cat("  Processing Presence/Absence (SilicoDArT) data\n")
     } else if (all(x@ploidy == 2)){
@@ -47,8 +44,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
     } else {
       stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
-  }
-  
+
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if (!is.null(loc.list) && !is.null(first)){
@@ -67,7 +63,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
       cat("  Range of loci to keep has been specified\n")
     } 
   } else {
-      stop("  Fatal Error: Need to specify either a range of loci to keep, or specific loci to keep\n")
+      cat("  Warning: Need to specify either a range of loci to keep, or specific loci to keep\n")
   }
   
   if (flag=='both' || flag=='list'){
@@ -99,48 +95,46 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
 # DO THE JOB
 
   if (verbose >= 2) {
-    cat("    Deleteing the specified loci\n")
+    cat("    Deleteing all but the specified loci\n")
   }
 
   # Remove duplicated loci if specified
-
+    
   if (!is.null(first) && !is.null(loc.list)){
     list.from.range <- locNames(x)[first:last]
     loc.list <- unique(c(loc.list,list.from.range))
   } else if (!is.null(first)) {
-    loc.list <- locNames(x)[first:last]
+      loc.list <- locNames(x)[first:last]
   }
   if (length(loc.list) == 0) {
-    cat("  Warning: no loci listed to delete! Genlight object returned unchanged\n")
+    cat("  Warning: no loci listed to keep! Genlight object returned unchanged\n")
     x2 <- x
   } else {
     # Remove loci flagged for deletion
-    x2 <- x[,!x$loc.names%in%loc.list]
-    x2@other$loc.metrics <- x@other$loc.metrics[!x$loc.names%in%loc.list,]
+    x2 <- x[,x$loc.names%in%loc.list]
+    x2@other$loc.metrics <- x@other$loc.metrics[x$loc.names%in%loc.list,]
   }  
 
 # REPORT A SUMMARY
     
   if (verbose >= 3) {
-    cat("\n  Summary of recoded dataset\n")
+    cat("  Summary of recoded dataset\n")
     cat(paste("    Original No. of loci:",nLoc(hold),"\n"))
     cat(paste("    No. of loci deleted:",nLoc(hold)-nLoc(x2),"\n"))
     cat(paste("    No. of loci retained:",nLoc(x2),"\n"))
     cat(paste("    No. of individuals:", nInd(x2),"\n"))
-    cat(paste("    No. of populations: ", length(levels(factor(pop(x2)))),"\n\n"))
+    cat(paste("    No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
   }
-
-# ADD TO HISTORY    
+    
+# ADD TO HISTORY
     nh <- length(x2@other$history)
-    x2@other$history[[nh + 1]] <- match.call()
-  
+    x2@other$history[[nh + 1]] <- match.call() 
+    
 # FLAG SCRIPT END
-
-  if (verbose >= 1){  
-     cat("Completed:",funname,"\n")
-  }
     
-  return(x2)
+    if (verbose > 0) {
+      cat("Completed: gl.keep.ind\n")
+    }
     
-}
-
+    return(x)
+}    

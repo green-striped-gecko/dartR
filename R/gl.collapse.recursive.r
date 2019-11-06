@@ -22,6 +22,7 @@
 #' @param x -- name of the genlight object from which the distance matricies are to be calculated [required]
 #' @param prefix -- a string to be used as a prefix in generating the matricies of fixed differences (stored to disk) and the recode
 #' tables (also stored to disk) [default "collapse"]
+#' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 #' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]
 #' @param tpop -- max number of fixed differences allowed in amalgamating populations [default 0]
 #' @param test -- if TRUE, calculate p values for the observed fixed differences [default FALSE]
@@ -45,32 +46,70 @@
 #' fd <- gl.collapse.recursive(testset.gl, prefix="testset", test=TRUE, tloc=0, tpop=2, verbose=2)
 #' }
 
-gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRUE, alpha=0.05, delta=0.02, reps=1000, verbose=2) {
+gl.collapse.recursive <- function(x, prefix="collapse", outpath=tempdir(), tloc=0, tpop=1, test=FALSE, alpha=0.05, delta=0.02, reps=1000, verbose=2) {
   
-  if (verbose > 0) {
-    cat("Starting gl.collapse.recursive: Recursively amalgamating populations with",tpop,"or fewer fixed differences\n")
+# TIDY UP FILE SPECS
+  
+  funname <- match.call()[[1]]
+  build <- "Jacob"
+  
+# FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
   }
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
+  }
+  
+# STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
+  
+# SCRIPT SPECIFIC ERROR CHECKING
+  
   tpop <- as.integer(tpop)
   if (tpop < 0 || tpop > nPop(x)) {
-    cat("  Fatal Error: Parameter tpop must be between 0 and",nPop(x),"typically small (e.g. 3)\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: Parameter tpop must be between 0 and",nPop(x),"typically small (e.g. 3)\n")
   }
   if (delta < 0 || delta > 1){
-    cat("  Fatal Error: Parameter delta must be between 0 and 1, typically small (e.g. 0.05)\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: Parameter delta must be between 0 and 1, typically small (e.g. 0.05)\n")
   }
   reps <- as.integer(reps)
   if (reps < 0 ) {
-    cat("  Fatal Error: Parameter reps must be a positive integer\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: Parameter reps must be a positive integer\n")
   }
   if (tloc < 0 || tloc > 1){
-    cat("  Fatal Error: Parameter tloc must be between 0 and 1, typically small (e.g. 0.05)\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: Parameter tloc must be between 0 and 1, typically small (e.g. 0.05)\n")
   }
   verbose <- as.integer(verbose)
   if (verbose < 0 || verbose > 5){
-    cat("  Fatal Error: Parameter verbose must be between 0 and 5\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: Parameter verbose must be between 0 and 5\n")
+  }
+  
+# DO THE JOB
+  
+  if (verbose >= 2) {
+    cat("  Recursively amalgamating populations with",tpop,"or fewer fixed differences\n")
+    cat("  Calculating initial fixed difference matrix\n\n")
   }
   
 # Set the iteration counter
-  count <- 1
+  count <- 0
   
 # Create the initial distance matrix
   fd <- gl.fixed.diff(x, test=FALSE, tloc=tloc, verbose=verbose)
@@ -80,24 +119,31 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
   
 # Construct a filename for the fd matrix
   d.name <- paste0(prefix,"_matrix_",count,".csv")
+  outfilespec <- file.path(outpath, d.name)
   
 # Output the fd matrix for the first iteration to file
-  if (verbose >= 2) {cat(paste("    Writing the initial fixed difference matrix to disk:",d.name,"\n"))}
-  write.csv(fd$fd, d.name)
+  if (verbose >= 2) {cat(paste("    Writing the initial fixed difference matrix to disk:",outfilespec,"\n"))}
+  write.csv(fd$fd, outfilespec)
 
 # Repeat until no change to the fixed difference matrix
   repeat {
-    if( verbose > 1 ){cat(paste("\n  Iteration:", count,"\n"))}
+    count <- count + 1
+    if( verbose >= 1 ){
+      cat(paste("\n  Iteration:", count,"\n"))
+    }
+    if (verbose >= 2) {
+      cat("  Collapsing the last supplied fixed difference matrix\n\n")
+    }
     
     # Construct a filename for the pop.recode table
       recode.name <- paste0(prefix,"_recode_",count,".csv")
-      
+
     # Collapse the matrix, write the new pop.recode table to file
-      fdcoll <- gl.collapse(fd, recode.table=recode.name, tpop=tpop, tloc=tloc, verbose=verbose)
+      fdcoll <- gl.collapse(fd, recode.table=recode.name, outpath=outpath, tpop=tpop, tloc=tloc, plot=FALSE, verbose=verbose)
       x <- fdcoll$gl
       
       if (nPop(x) == 1)  {
-        cat("WArning: All populations amalgamated to one on iteration",count,"\n")
+        cat("Warning: All populations amalgamated to one on iteration",count,"\n")
         break
       }
       
@@ -106,17 +152,17 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
       
     # If it is not different in dimensions from previous, break
       if (dim(fd$fd)[1] == fd.hold) {
-        if(verbose > 1) {cat(paste("\n  No further amalgamation of populations on iteration",count,"\n"))}
+        if(verbose >= 2) {cat(paste("\n  No further amalgamation of populations on iteration",count,"\n"))}
         break
       }
       
     # Otherwise, construct a filename for the collapsed fd matrix
-      count <- count + 1
       d.name <- paste0(prefix,"_matrix_",count,".csv")
+      outfilespec <- file.path(outpath, d.name)
       
     # Output the collapsed fixed difference matrix for this iteration to file
-      if (verbose > 1) {cat(paste("    Writing the collapsed fixed difference matrix to disk:",d.name,"\n"))}
-      write.csv(fd$fd, d.name)
+      if (verbose >= 2) {cat(paste("    Writing the collapsed fixed difference matrix to disk:",outfilespec,"\n"))}
+      write.csv(fd$fd, outfilespec)
       
     # Hold the dimensions of the new fixed difference matrix
       fd.hold <- dim(fd$fd)[1]
@@ -130,7 +176,7 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
 
     }
   
-  if (verbose > 2) {
+  if (verbose >= 3) {
     if (tloc == 0 ){
       cat("    Using absolute fixed differences\n")
     } else {  
@@ -143,7 +189,7 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
   l <- list(gl=x,fd=fd$fd,pcfd=fd$pcfd,nobs=fd$nobs,nloc=fd$nloc,expobs=fd$expobs,pval=fd$pval)
 
     # Return the matricies
-  if (verbose > 1) {
+  if (verbose >= 4) {
     cat("Returning a list containing the following square matricies:\n",
         "         [[1]] $gl -- input genlight object;\n",
         "         [[2]] $fd -- raw fixed differences;\n",
@@ -154,8 +200,10 @@ gl.collapse.recursive <- function(x, prefix="collapse", tloc=0, tpop=1, test=TRU
         "         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n")
   }
   
+# FLAG SCRIPT END
+  
   if (verbose > 0) {
-    cat("Completed gl.collapse.recursive\n\n")
+    cat("\nCompleted:",funname,"\n")
   }
   
   return(l)

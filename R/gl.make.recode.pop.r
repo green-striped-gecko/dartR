@@ -12,52 +12,57 @@
 #' Apply the recoding using gl.recode.pop(). 
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param outfile -- file name of the output file (including extension) [default recode_pop_table.csv]
+#' @param out.recode.file -- file name of the output file (including extension) [default recode_pop_table.csv]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A vector containing the new population names
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
-#' result <- gl.make.recode.pop(testset.gl, outfile="Emmac_recode_pop.csv")
-#' }
+#' result <- gl.make.recode.pop(gl,out.recode.file="test.csv",outpath=getwd(),verbose=2)
+#'
 
-# Last amended 3-Feb-19
-
- gl.make.recode.pop <- function(x, outfile="recode_pop_table.csv", outpath=tempdir(), verbose=2) {
+ gl.make.recode.pop <- function(x, out.recode.file="recode_pop_table.csv", outpath=tempdir(), verbose=2) {
 
 # TIDY UP FILE SPECS
-
-  outfilespec <- file.path(outpath, outfile)
-  funname <- match.call()[[1]]
-
+   
+   funname <- match.call()[[1]]
+   build <- "Jacob"
+   outfilespec <- file.path(outpath, out.recode.file)
+   
 # FLAG SCRIPT START
-
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
-  }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
-  }
-
+   
+   if (verbose < 0 | verbose > 5){
+     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+     verbose <- 2
+   }
+   
+   if (verbose >= 1){
+     cat("Starting",funname,"[ Build =",build,"]\n")
+   }
+   
 # STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-  }
-
-
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
+   
+   if(class(x)!="genlight") {
+     stop("Fatal Error: genlight object required!\n")
+   }
+   
+   if (all(x@ploidy == 1)){
+     if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+     data.type <- "SilicoDArT"
+   } else if (all(x@ploidy == 2)){
+     if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+     data.type <- "SNP"
+   } else {
+     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+   }
+   
+# FUNCTION SPECIFIC ERROR CHECKING
+   
+   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+     stop("  Fatal Error: Population names not detected\n")
+   }
+   
 # DO THE JOB
 
  if (verbose >= 2) {cat("  Creating draft lookup table\n")}
@@ -71,6 +76,11 @@
     cat("Completed:",funname,"\n")
   }
  
- return(levels(pop(x)))
+ return(NULL)
  
  }
+ 
+ # # Test scripts
+ # gl.make.recode.pop(gl,out.recode.file="test.csv",outpath=getwd(),verbose=2)
+ # gl.make.recode.pop(gs,out.recode.file="test.csv",outpath=getwd(),verbose=3)
+

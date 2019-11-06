@@ -23,14 +23,15 @@
 #' for the minumum acceptable Hamming distance.
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 5]
+#' @param rs -- number of bases in the restriction enzyme recognition sequence [default 5]
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; 
 #' if 'adjusted', plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
-#' @param threshold displays a minimum acceptable base pair difference on the whisker plot [default 3 bp]
+#' @param threshold minimum acceptable base pair difference for display on the whisker plot and histogram [default 3 bp]
 #' @param taglength -- typical length of the sequence tags [default 69]
-#' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default = TRUE]
-#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
+#' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default TRUE]
+#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return Tabulation of loc that will be lost on filtering, against values of the threshold
 #' @importFrom adegenet glPlot
 #' @importFrom graphics hist
@@ -49,36 +50,38 @@ gl.report.hamming <- function(x,
                               threshold=3,
                               taglength=69,
                               probar=FALSE, 
-                              verbose = 3) {
+                              silent=TRUE,
+                              verbose = 2) {
   
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
-    cat("Starting",funname,"\n")
-
-# STANDARD ERROR CHECKING
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+  # FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 1){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 1) {cat("  Warning: genlight object contains monomorphic loci\n")}
-
+  
+  if (all(x@ploidy == 1)){
+    cat("  Processing Presence/Absence (SilicoDArT) data\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
+  }
+  
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if(length(x@other$loc.metrics$TrimmedSequence) == 0) {
@@ -120,6 +123,11 @@ gl.report.hamming <- function(x,
   }
 
   # Prepare for plotting
+  if (all(x@ploidy==2)){
+    title <- paste0("SNP data (DArTSeq)\nPairwise Hamming Distance between sequence tags")
+  } else {
+    title <- paste0("Fragment P/A data (SilicoDArT)\nPairwise Hamming Distance between sequence tags")
+  }  
   if (verbose >= 2) {
     if (boxplot == "adjusted"){
       cat("  Plotting box and whisker plot (adjusted for skewness) and histogram of Hamming distance, showing a threshold of",threshold,"bp [HD",round(tld,2),"]\n")
@@ -138,7 +146,7 @@ gl.report.hamming <- function(x,
                        col='red', 
                        range=range,
                        ylim=c(0,1),
-                       main = "Hamming Distance")
+                       main = title)
     abline(v=tld,col="red")
    } else {
     whisker <- robustbase::adjbox(x=as.numeric(d),
@@ -146,7 +154,7 @@ gl.report.hamming <- function(x,
                                   col='red',
                                   range=range,
                                   ylim=c(0,1),
-                                  main = "Hamming Distance")
+                                  main = title)
     abline(v=tld,col="red")
   }  
   # Set margins for second plot
@@ -162,7 +170,6 @@ gl.report.hamming <- function(x,
   abline(v=tld,col="red")
   text(tld,max(hst$counts),pos=4,offset=1,paste(threshold,"bp"))
   
-  if (verbose >= 3) {
    cat("  No. of loci =", nLoc(x), "\n")
    cat("  No. of individuals =", nInd(x), "\n")
    cat("    Miniumum Hamming distance: ",round(min(d),2),"\n")
@@ -170,7 +177,6 @@ gl.report.hamming <- function(x,
    cat(paste0("    Mean Hamming Distance ",round(mean(d),2),"+/-",round(sd(d),3)," SD\n\n"))
    n.outliers <- sum(d[d<=(threshold/(taglength-rs))])
    cat("  No. of pairs with Hamming Distance less than or equal to",threshold,"base pairs:",n.outliers,"\n")
-  } 
 
    # Determine the loss of loci for a given filter cut-off
    retained <- array(NA,21)
@@ -194,17 +200,21 @@ gl.report.hamming <- function(x,
 #   if (verbose >= 3){
 #     cat("Note: The data below are for pairwise distances between",nL,"loci, for which there are",((((nL-1)*nL)/2)), "distances\n")
 #     print(df)
-#   }   
+#   } 
    
-   # FLAG SCRIPT END
+   # Reset the par options    
+   par(op)   
    
+# FLAG SCRIPT END
+
    if (verbose >= 1) {
      cat("Completed:",funname,"\n")
    }
    
-   # Reset the par options    
-   par(op)
+   if(silent==TRUE){
+     return(NULL)
+   } else {
+     return(df)
+   } 
    
-   # Return the result
-   return(df)
 }

@@ -10,23 +10,40 @@
 
 gl2demerelate <- function(gl, verbose=2) {
 
-# ERROR CHECKING
+# TIDY UP FILE SPECS
   
-  if(class(gl)!="genlight") {
-    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-  }
-
+  funname <- match.call()[[1]]
+  
+# FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
-    cat("    Warning: Parameter verbose must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-# FLAG SCRIPT START
-
-  if (verbose >= 1) {
-    cat("Starting gl2demelerate: Outputing data to demelerate format\n")
+  
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
   }
   
+# STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("  Fatal Error: genlight object required!\n")
+  }
+  
+  
+  if (verbose >= 2){
+    if (all(x@ploidy == 1)){
+      stop("Fatal Error: Detected Presence/Absence (SilicoDArT) data. Please provide a SNP dataset\n")
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+    } else {
+      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+    }
+  }
+  
+# FUNCTION SPECIFIC ERROR CHECKING
+
 # DO THE JOB
   
 
@@ -71,10 +88,12 @@ gl2demerelate <- function(gl, verbose=2) {
   names(df)[2] <- "Population"
 #  df[,2] <- factor(df[,2])
 
-  if (verbose >= 1) {
-    cat("Completed: gl2demelerate\n")
+# FLAG SCRIPT END
+  
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
   }
-
+  
   return(df)
 }
 

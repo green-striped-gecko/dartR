@@ -22,55 +22,72 @@
 #' gl <- gl.join(x1, x2, verbose=2)
 #' nLoc(gl)
 
-# Last amended 17-Sep-19
-
 gl.join <- function(x1, x2, verbose=2) {
 
 # TIDY UP FILE SPECS
-
+  
   funname <- match.call()[[1]]
-
+  build <- "Jacob"
+  
 # FLAG SCRIPT START
-
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
-
+  
 # STANDARD ERROR CHECKING
   
-  if (class(x1)=="genlight"){
-    if(verbose >= 2){cat("  First genlight object detected\n")}
-    if (class(x2)=="genlight"){
-      if(verbose >= 2){cat("  Second genlight object detected\n")}
-    } else{
-      cat("  Fatal Error: two genlight objects required! Only one is supplied\n"); stop("Execution terminated\n")
-    }
-  } else {
-    cat("  Fatal Error: two genlight objects required!\n"); stop("Execution terminated\n")
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
   }
+  
+    if (all(x1@ploidy == 1)){
+      if(verbose==2){cat("  Processing Presence/Absence (SilicoDArT) data in genlight object 1\n")}
+      data.type1 <- "SilicoDArT"
+    } else if (all(x1@ploidy == 2)){
+      if(verbose==2){cat("  Processing SNP data in genlight object 1\n")}
+      data.type1 <- "SNP"
+    } else {
+      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data) in genlight object 1")
+    }
 
+    if (all(x2@ploidy == 1)){
+      if(verbose==2){cat("  Processing Presence/Absence (SilicoDArT) data in genlight object 2\n")}
+      data.type2 <- "SilicoDArT"
+    } else if (all(x2@ploidy == 2)){
+      if(verbose==2){cat("  Processing SNP data in genlight object 2\n")}
+      data.type2 <- "SNP"
+    } else {
+      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data) in genlight object 2")
+    }
+
+  if (data.type1 != data.type2){
+    stop("Fatal Error: Cannot join two genlight objects, one with SNP data, the other with Tag Presence/Absence data (SilicoDArT)")
+  }
+  
+  if (is.null(x1) | is.null(x2)){
+    stop("Fatal Error: Two genlight objects of the same type must be provided")
+  }
+  
 # SCRIPT SPECIFIC ERROR CHECKING
   
   # Check that names and ind.metadata are the same and in the same order
   if (!identical(indNames(x1),indNames(x2))){
-    cat("  Fatal Error: the two genlight objects do not have data for the same individuals in the same order\n")
-    stop("Execution terminated\n")
+    stop("Fatal Error: the two genlight objects do not have data for the same individuals in the same order\n")
   }
   if (!is.null(x1@other$ind.metrics)){
   if (!identical(x1@other$ind.metrics,x1@other$ind.metrics)){
-    cat("  Fatal Error: the two genlight objects do not have identical metadata for the same individuals\n")
-    stop("Execution terminated\n")
+    stop("  Fatal Error: the two genlight objects do not have identical metadata for the same individuals\n")
   }
   }
   if (!is.null(x1@other$latlon)){
   if (!identical(x1@other$latlon,x1@other$latlon)){
-    cat("  Fatal Error: the two genlight objects do not have latlong data for the same individuals\n")
-    stop("Execution terminated\n")
+    stop("  Fatal Error: the two genlight objects do not have latlong data for the same individuals\n")
   }
   }
   
@@ -106,6 +123,19 @@ gl.join <- function(x1, x2, verbose=2) {
   if (verbose >=3) {
     cat("    Number of individuals:",nInd(x1),"\n")
     cat("    Combined genlight object has",nLoc(x),"loci\n")
+  }
+  
+  # Recalculate metrics
+  
+  x@other$loc.metrics.flags$monomorphs <- FALSE
+  x <- gl.recalc.metrics(x,verbose=min(c(verbose,1)))
+  cat("  Locus metrics recalculated\n")
+  
+  # Check monomorphs
+  
+  tmp <- gl.filter.monomorphs(x, verbose = 0)
+  if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {
+    cat("  Warning: new genlight object contains monomorphic loci\n")
   }
 
 # FLAG SCRIPT END

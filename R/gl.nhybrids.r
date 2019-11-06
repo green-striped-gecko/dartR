@@ -184,7 +184,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       if ( verbose >= 3 ) {cat("  No. of fixed loci identified:",nloci,"\n")}
         if (nloci > loc.limit) {
           if (verbose>=3){cat("  Selecting",loc.limit,"loci showing fixed differences between parentals at random\n")}
-          gl.fixed.used <- utils.subsample.loci(gl, loc.limit, method="random",verbose=0)
+          gl.fixed.used <- gl.subsample.loci(gl, loc.limit, method="random",verbose=0)
           gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
           gl.fixed.all@other$loc.metrics <- gl@other$loc.metrics[(locNames(gl) %in% fixed.loci),]
           gl2nhyb <- gl.fixed.used
@@ -193,14 +193,14 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
             if(verbose>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected at random\n")}
             gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
             gl.fixed.used <- gl.fixed.all
-            tmp <- utils.subsample.loci(gl, 200-nloci, method="random",verbose=0)
+            tmp <- gl.subsample.loci(gl, 200-nloci, method="random",verbose=0)
             gl2nhyb <- cbind(gl.fixed.used,tmp)
             gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
           } else {
             if(verbose>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected based on AvgPic\n")}
             gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
             gl.fixed.used <- gl.fixed.all
-            tmp <- utils.subsample.loci(gl, loc.limit-nloci, method="AvgPic",verbose=0)
+            tmp <- gl.subsample.loci(gl, loc.limit-nloci, method="AvgPic",verbose=0)
             gl2nhyb <- cbind(gl.fixed.used,tmp)
             gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
           }
@@ -226,7 +226,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       
       if(method=="random" & verbose>=3) {cat("    Selecting",loc.limit,"random loci\n")}
       if (method=="avgpic" & verbose>=3) {cat("    Selecting",loc.limit,"loci with most information content (AvgPIC)\n")}
-      gl2nhyb <- utils.subsample.loci(gl, loc.limit, method=method, verbose=0)
+      gl2nhyb <- gl.subsample.loci(gl, loc.limit, method=method, verbose=0)
       gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
       flag <- "onepar"
     }
@@ -237,7 +237,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       
       if(method=="random" & verbose>=3) {cat("    Selecting",loc.limit,"random loci\n")}
       if (method=="avgpic" & verbose>=3) {cat("    Selecting",loc.limit,"loci with most information content (AvgPIC)\n")}
-      gl2nhyb <- utils.subsample.loci(gl, loc.limit, method=method, verbose=0)
+      gl2nhyb <- gl.subsample.loci(gl, loc.limit, method=method, verbose=0)
       gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
       flag <- "nopar"
     }

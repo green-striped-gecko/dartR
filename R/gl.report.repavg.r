@@ -28,6 +28,7 @@ gl.report.repavg <- function(x,verbose=3) {
     if (verbose >=1){
       cat("Starting",funname,"\n")
     }
+    cat("  NOTE: Depreciated, use gl.report.repeatability!!\n")
 
 # STANDARD ERROR CHECKING
   

@@ -29,11 +29,12 @@
 #' The script writes out the composite haplotypes for each individual as a fastA file. Requires
 #' 'TrimmedSequence' to be among the locus metrics (\code{@other$loc.metrics}) and information of the type of alleles (slot loc.all e.g. "G/A") and the position of the SNP in slot position of the ```genlight``` object (see testset.gl@position and testset.gl@loc.all for how to format these slots.)
 #'  
-#' @param gl -- name of the DArT genlight object [required]
+#' @param x -- name of the DArT genlight object [required]
 #' @param method -- 1 | 2 | 3 | 4. Type method=0 for a list of options  [method=1]
 #' @param outfile -- name of the output file (fasta format) [output.fasta]
 #' @param outpath -- path where to save the output file (set to tempdir by default)
 #' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A new gl object with all loci rendered homozygous
 #' @export
 #' @importFrom seqinr write.fasta
@@ -45,52 +46,99 @@
 #' @author Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl <- gl.filter.repavg(testset.gl,t=1)
+#' gl <- gl.filter.overshoot(gl,verbose=3)
 #' gl <- gl.filter.callrate(testset.gl,t=.98)
-#' gl2fasta(gl, method=1, outfile="test.fasta")
+#' gl <- gl.filter.monomorphs(gl)
+#' gl2fasta(gl, method=1, outfile="test.fasta",verbose=3)
 
 
-gl2fasta <- function(gl, method=1, outfile="output.fasta", outpath=tempdir(), probar=FALSE) {
-  outfile <- file.path(outpath, outfile)
+gl2fasta <- function(x, method=1, outfile="output.fasta", outpath=tempdir(), probar=FALSE, verbose=2) {
+
+# TIDY UP FILE SPECS
   
-  if(class(gl) != "genlight") {
-    stop("Fatal Error: Specify a genlight object\n")
+  build <- "Jacob"
+  funname <- match.call()[[1]]
+  hold <- x
+  outfile <- file.path(outpath, outfile)
+  # Note draws upon and modifies the loc.metrics.flags for Call Rate, and modifies the flags for all other metrics if method='ind'.
+  
+# FLAG SCRIPT START
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
   }
-  if(length(gl@other$loc.metrics$TrimmedSequence) != nLoc(gl)) {
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
+  }
+  
+# STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("  Fatal Error: genlight object required!\n")
+  }
+  
+  if (verbose >= 2){
+    if (all(x@ploidy == 1)){
+      stop("Fatal Error: Detected Presence/Absence (SilicoDArT) data. Please provide a SNP dataset with trimmed sequences\n")
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+    } else {
+      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+    }
+  }
+  
+  # Check monomorphs have been removed up to date
+  if (x@other$loc.metrics.flags$monomorphs == FALSE){
+    if (verbose >= 2){
+      cat("  Warning: Dataset contains monomorphic loci which will be included in the output fastA file\n")
+    }  
+  }
+  
+# FUNCTION SPECIFIC ERROR CHECKING
+  
+  if(length(x@other$loc.metrics$TrimmedSequence) != nLoc(x)) {
     stop("Fatal Error: Data must include Trimmed Sequences for each loci in a column called 'TrimmedSequence' in the @other$loc.metrics slot.\n")
   }
-  if(length(gl@position) != nLoc(gl)) {
-     stop("Fatal Error: Data must include position information for each loci in the @position slot.\n")
+  if(length(x@position) != nLoc(x)) {
+    stop("Fatal Error: Data must include position information for each loci in the @position slot.\n")
   }
-  if(length(gl@loc.all) != nLoc(gl)) {
+  if(length(x@loc.all) != nLoc(x)) {
     stop("Fatal Error: Data must include type of alleles in the @loc.all slot.\n")
   }
   
-  if(method==1){
+  if(method==1 && verbose >= 2){
     cat("Assigning ambiguity codes to heterozygote SNPs, concatenating trimmed sequence\n")
-  }else if (method==2) {
+  }else if (method==2 && verbose >= 2) {
     cat("Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating trimmed sequence\n")
-  }else if (method==3) {
+  }else if (method==3 && verbose >= 2) {
     cat("Assigning ambiguity codes to heterozygote SNPs, concatenating SNPs\n")
-  }else if (method==4) {
+  }else if (method==4 && verbose >= 2) {
     cat("Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating SNPs\n")
   }else{
-    cat("Fatal Error: Parameter method out of range.\n")
-    cat("Replace score for heterozygotic loci with"):
-    cat("  method=1 -- ambiguity codes, concatenate fragments) [default]\n")
-    cat("  method=2 -- random assignment to one of the two homogeneous states, concatenate fragments\n")
-    cat("  method=3 -- ambiguity codes, concatenate SNPs only\n")
-    cat("  method=4 -- random assignment to one of the two homogeneous states, concatenate SNPs only\n")
-    stop()
+    if(verbose >= 2){
+      cat("Method not properly specified\n")
+      cat("Replace score for heterozygotic loci with"):
+      cat("  method=1 -- ambiguity codes, concatenate fragments) [default]\n")
+      cat("  method=2 -- random assignment to one of the two homogeneous states, concatenate fragments\n")
+      cat("  method=3 -- ambiguity codes, concatenate SNPs only\n")
+      cat("  method=4 -- random assignment to one of the two homogeneous states, concatenate SNPs only\n")
+    }
+    stop("Fatal Error: Parameter method out of range.\n")
+    
   }
+  
+# DO THE JOB
 
 # METHOD = AMBIGUITY CODES
 
 if (method==1 || method==3) {
 
-  allnames <- locNames(gl)
-  snp = as.character(gl@loc.all)
-  trimmed <- as.character(gl@other$loc.metrics$TrimmedSequence)
-  snpmatrix <- as.matrix(gl)
+  allnames <- locNames(x)
+  snp = as.character(x@loc.all)
+  trimmed <- as.character(x@other$loc.metrics$TrimmedSequence)
+  snpmatrix <- as.matrix(x)
   
 # Create a lookup table for the ambiguity codes
 #     A  T  G  C
@@ -104,30 +152,28 @@ if (method==1 || method==3) {
   rownames(conversion) <- colnames(conversion)
 
 # Extract alleles 1 and 2
-  allelepos = gl@position
+  allelepos = x@position
   allele1 =gsub("(.)/(.)", "\\1", snp, perl=T)
   allele2 = gsub("(.)/(.)", "\\2", snp, perl=T)
 
   
-  lenTrim <- nchar(as.character(gl@other$loc.metrics$TrimmedSequence))
-  
-  index <- lenTrim>allelepos
-  if (sum(index)!=nLoc(gl)) 
-  {
-    cat(paste("Not all snp position are within the length of the trimmed sequences. Those loci will be deleted (",sum(!index),")."  ) )
+  if(verbose >= 2){
+      cat(paste("  Removing loci for which snp position is outside the length of the trimmed sequences\n" ) )
   }
+  x <- gl.filter.overshoot(x,verbose=0)
   
   sequences <- NA
 
 # Prepare the output fastA file
-  cat("Generating haplotypes ... This may take some time\n")
+  if(verbose >= 2){
+    cat("Generating haplotypes ... This may take some time\n")
+  }
 
   sink(outfile)
 
-  for (i in 1:nInd(gl)) {
+  for (i in 1:nInd(x)) {
     seq <- NA
-    for (j in 1:nLoc(gl)) {
-      if (index[j]) {
+    for (j in 1:nLoc(x)) {
       if (is.na(snpmatrix[i,j])) {
         code <- "N"
       } else {
@@ -139,21 +185,18 @@ if (method==1 || method==3) {
       snppos <- allelepos[j]
       if(method==1){
         if (code !="N") {
-          seq[j] <- paste0( substr(as.character(gl@other$loc.metrics$TrimmedSequence[j]),1,snppos),code,substr(gl@other$loc.metrics$TrimmedSequence[j],snppos+2, 500))
+          seq[j] <- paste0( substr(as.character(x@other$loc.metrics$TrimmedSequence[j]),1,snppos),code,substr(x@other$loc.metrics$TrimmedSequence[j],snppos+2, 500))
         } else {
-          seq[j] <- paste(rep("N", nchar(as.character(gl@other$loc.metrics$TrimmedSequence[j]))), collapse = "")
+          seq[j] <- paste(rep("N", nchar(as.character(x@other$loc.metrics$TrimmedSequence[j]))), collapse = "")
         }
       } else if(method==3){
           seq[j] <- code
       }
-      }#run only if index is true
     }
-    # seqall = paste(seq, collapse="")
-    # write.fasta(seqall, gl@other$ind.metrics$phylo.label[i], file.out=outfile, open="a")
     # Join all the trimmed sequence together into one long "composite" haplotype
       result <- paste(seq,sep="",collapse="")
     # Write the results to file in fastA format
-      cat(paste0(">", indNames(gl)[i],"_",pop(gl)[i], "\n"))
+      cat(paste0(">", indNames(x)[i],"_",pop(x)[i], "\n"))
       cat(result, " \n")
 
     # cat(paste("Individual:", i,"Took: ", round(proc.time()[3]-ptm),"seconds\n") )
@@ -168,7 +211,7 @@ if (method==1 || method==3) {
 if (method==2 || method==4) {
 
 # Randomly allocate heterozygotes (1) to homozygote state (0 or 2)
-  matrix <- as.matrix(gl)
+  matrix <- as.matrix(x)
   #cat("Randomly allocating heterozygotes (1) to homozygote state (0 or 2)\n")
   #pb <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
   #getTxtProgressBar(pb)
@@ -184,15 +227,13 @@ if (method==2 || method==4) {
   #  setTxtProgressBar(pb, i/r)
   }
   
-  lenTrim <- nchar(as.character(gl@other$loc.metrics$TrimmedSequence))
-  index <- lenTrim > gl@position
-  if (sum(index)!=nLoc(gl)) 
-  {
-    cat(paste("Not all SNP positions are within the length of the trimmed sequences. Those loci will be deleted (",sum(!index),")."  ) )
+  if(verbose >= 2){
+    cat(paste("  Removing loci for which snp position is outside the length of the trimmed sequences\n" ) )
   }
+  x <- gl.filter.overshoot(x,verbose=0)
   
 # Prepare the output fastA file
-  cat("Generating haplotypes ... This may take some time\n")
+  if(verbose >= 2){cat("Generating haplotypes ... This may take some time\n")}
 
   sink(outfile)
 
@@ -202,11 +243,10 @@ if (method==2 || method==4) {
   #getTxtProgressBar(pb)
   for (i in 1:r) {
     for (j in 1:c) {
-      if (index[j]) {
       # Reassign some variables
-        trimmed <- as.character(gl@other$loc.metrics$TrimmedSequence[j])
-        snp <- gl@loc.all[j]
-        snpos <- gl@position[j]
+        trimmed <- as.character(x@other$loc.metrics$TrimmedSequence[j])
+        snp <- x@loc.all[j]
+        snpos <- x@position[j]
       # Shift the index for snppos to start from 1 not zero
         snpos <- snpos +1
       
@@ -238,7 +278,6 @@ if (method==2 || method==4) {
           # Paste back to form the alternate fragment
             target <- paste0(start,snpbase,end)
           # Remove adaptors and save the trimmed alternate sequence
-            #seq[j] <- gl.utils.1(trimmed,target)
             seq[j] <- str_sub(target, start=1, end=nchar(trimmed))
           }else if(method==4){
             seq[j] <- snpbase
@@ -252,14 +291,13 @@ if (method==2 || method==4) {
             seq[j] <- str_pad(seq[j], nchar(trimmed), side = c("right"), pad = "N")
           }
         }
-      }  
     }
     #setTxtProgressBar(pb, i/r)
 
     # Join all the trimmed sequence together into one long "composite" haplotype
     result <- paste(seq,sep="",collapse="")
     # Write the results to file in fastA format
-    cat(paste0(">", indNames(gl)[i],"_",pop(gl)[i], "\n"))
+    cat(paste0(">", indNames(x)[i],"_",pop(x)[i], "\n"))
     cat(result, " \n")
   
   } # Select the next individual and repeat
@@ -267,6 +305,12 @@ if (method==2 || method==4) {
   # Close the output fastA file
     sink()
 
+  }
+  
+# FLAG SCRIPT END
+  
+  if (verbose >= 1) {
+    cat("Completed:",funname,"\n")
   }
 
 return(TRUE)

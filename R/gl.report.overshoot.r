@@ -7,42 +7,45 @@
 #' the sequence tag.
 #' 
 #' @param x -- name of the genlight object [required]
+#' @param silent -- if TRUE, returns NULL; otherwise returns an object [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return A new genlight object with the recalcitrant loci deleted
+#' @return if silent==TRUE, returns NULL; otherwise returns names of the recalcitrant loci
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl <- testset.gl
-#' gl@other$loc.metrics$SnpPosition[10] <- 100
-#' gl@other$loc.metrics$SnpPosition[20] <- 100
-#' gl@other$loc.metrics$SnpPosition[30] <- 100
-#' gl <- gl.report.overshoot(gl)
+#' gl.report.overshoot(gl)
 
-# Last amended 17-Sep-19
+gl.report.overshoot <- function(x, silent=TRUE, verbose=2) {
 
-gl.report.overshoot <- function(x, verbose=2) {
-
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
-  }
-
-# STANDARD ERROR CHECKING
   
-  if(class(x)=="genlight"){
-    if(verbose >= 2){cat("  Genlight object detected\n")}
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+  # STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+  if (all(x@ploidy == 1)){
+    cat("  Detected Presence/Absence (SilicoDArT) data\n")
+    stop("Cannot identify overshoot arising from SNPS deleted with adaptors for fragment presence/absence data. Please provide a SNP dataset.\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
   } else {
-    cat("  Fatal Error: genlight object or distance matrix required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
   }
   
 # SCRIPT SPECIFIC ERROR CHECKING
@@ -70,10 +73,15 @@ gl.report.overshoot <- function(x, verbose=2) {
 
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
-    cat("\nCompleted:",funname,"\n")
-  }
+    if (verbose > 0) {
+      cat("Completed:",funname,"\n")
+    }
     
-    return(locNames(xx))
+    if(silent==TRUE){
+      return(NULL)
+    } else{
+      return(locNames(xx))
+    } 
+    
 }
 

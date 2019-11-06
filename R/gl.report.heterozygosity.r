@@ -1,4 +1,4 @@
-#' Reports observed and expected heterozygosity by population or by individual. 
+#' Reports observed and expected heterozygosity by population or by individual from SNP data. 
 #' 
 #' Calculates the observed and expected heterozygosities for each population (method="pop") 
 #' or the observed heterozyosity for each individual (method="ind") in a genlight object.
@@ -43,8 +43,9 @@
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
 #' @param cex.labels -- sets the size of the population labels [default 0.7]
+#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return a dataframe containing population labels, heterozygosities and sample sizes
+#' @return If silent==FALSE, returns a dataframe containing population labels, heterozygosities and sample sizes; otherwise NULL
 #' @export
 #' @author Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @importFrom grDevices rainbow
@@ -52,40 +53,51 @@
 #' @importFrom plyr join
 #' @importFrom robustbase adjbox
 #' @examples
-#' tmp <- gl.report.heterozygosity(testset.gl,verbose=3)
-#' tmp <- gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
-
-# Last amended 28-Jun-19
+#' gl.report.heterozygosity(testset.gl,verbose=3)
+#' gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
 
 gl.report.heterozygosity <- function(x, 
                                      method="pop", 
                                      n.invariant=0,
                                      boxplot="adjusted",
                                      range=1.5,
-                                     cex.labels=0.7, 
+                                     cex.labels=0.7,
+                                     silent=TRUE,
                                      verbose=2) {
   
-# TIDY UP FILE SPECS
-
+  # TIDY UP FILE SPECS
+  
+  build ='Jacob'
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  # Note does not draw upon or modify the loc.metrics.flags
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
-  }
-
-# STANDARD ERROR CHECKING
+  
+  cat("Starting",funname,"[ Build =",build,"]\n")
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!")
   }
   
+  if (all(x@ploidy == 1)){
+    stop("  Processing  Presence/Absence (SilicoDArT) data, heterozygosity can only be calculated for SNP data\n")
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
+
+  # SCRIPT SPECIFIC ERROR CHECKING
+
   if (!(method=="pop" | method == "ind")) {
     cat("Warning: Method must either be by population or by individual, set to method='pop'\n")
     method <- "pop"   
@@ -101,28 +113,27 @@ gl.report.heterozygosity <- function(x,
     boxplot <- 'adjusted'   
   }
 
-
-  # Set a population if none is specified (such as if the genlight object has been 
-  # generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, 
-                             individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
   # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {
-      cat("  Warning: genlight object contains monomorphic loci\n")
-    }
+  
+  if (x@other$loc.metrics.flags$monomorphs==FALSE) {
+    cat("  Warning: genlight object contains monomorphic loci which will be factored into heterozygosity estimates\n")
+  }
 
 # DO THE JOB FOR POPULATIONS
     
   if (method=="pop"){
-
-# Split the genlight object into a list of populations
-  sgl <- seppop(x)
+    
+  # Set a population if none is specified (such as if the genlight object has been 
+    # generated manually)
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      if (verbose >= 2){ cat("  No population assignments detected, 
+                             individuals assigned to a single population labelled 'pop1'\n")}
+      pop(x) <- array("pop1",dim = nInd(x))
+      pop(x) <- as.factor(pop(x))
+      }
+    
+  # Split the genlight object into a list of populations
+    sgl <- seppop(x)
   
 # OBSERVED HETEROZYGOSITY
   if (verbose >=2){cat("  Calculating Observed Heterozygosities, averaged across loci, for each population\n")}
@@ -148,16 +159,16 @@ gl.report.heterozygosity <- function(x,
   df <- plyr::join(df1,df2, by="pop")  
 
 # EXPECTED HETEROZYGOSITY
-  if (verbose >=2){cat("  Calculating Expected Heterozygosities, averaged across loci, for each population\n")}
+  if (verbose >=2){cat("  Calculating Expected Heterozygosities\n")}
   
   Hexp <- array(NA,length(sgl))
   Hexp.adj <- array(NA,length(sgl))
   # For each population
   for (i in 1:length(sgl)){
     gl <- sgl[[i]]
-    gl <- utils.recalc.freqhomref(gl,v=0)
-    gl <- utils.recalc.freqhomsnp(gl,v=0)
-    gl <- utils.recalc.freqhets(gl,v=0)
+    gl <- dartR:::utils.recalc.freqhomref(gl,verbose=0)
+    gl <- dartR:::utils.recalc.freqhomsnp(gl,verbose=0)
+    gl <- dartR:::utils.recalc.freqhets(gl,verbose=0)
     p <- gl@other$loc.metrics$FreqHomRef
     q <- gl@other$loc.metrics$FreqHomSnp
     hets <- gl@other$loc.metrics$FreqHets
@@ -179,54 +190,63 @@ gl.report.heterozygosity <- function(x,
   names(df) <- c("pop","nInd","nLoc","Ho","Ho.adj","He","He.adj")
   
   op <- par(mfrow=c(2,1),mai=c(1.7,0.5,0.1,0),oma=c(2,2,2,0), pty="m")
-  df.ordered <- df[order(df$Ho),]
-  barplot(df.ordered$Ho, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
+  if(is.null(n.invariant)){
+    df.ordered <- df[order(df$Ho),]
+    barplot(df.ordered$Ho, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
           main="Observed Heterozygosity by Population")
-  df.ordered <- df[order(df$He),]
-  barplot(df.ordered$He, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
+    df.ordered <- df[order(df$He),]
+    barplot(df.ordered$He, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
           main="Expected Heterozygosity by Population")
+  } else {
+    df.ordered <- df[order(df$Ho.adj),]
+    barplot(df.ordered$Ho.adj, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
+          main="Observed Heterozygosity by Population")
+    df.ordered <- df[order(df$He.adj),]
+    barplot(df.ordered$He.adj, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
+          main="Expected Heterozygosity by Population")
+  }
   
 # OUTPUT REPORT
   if (verbose >= 3){
-    cat("Reporting Heterozygosity by Population\n")
-    cat("No. of loci =", nLoc(x), "\n")
-    cat("No. of individuals =", nInd(x), "\n")
-    cat("No. of populations =", nPop(x), "\n")
+    cat("  Reporting Heterozygosity by Population\n")
+    cat("\n  No. of loci =", nLoc(x), "\n")
+    cat("  No. of individuals =", nInd(x), "\n")
+    cat("  No. of populations =", nPop(x), "\n")
   
-    cat("  Miniumum Observed Heterozygosity: ",round(min(df$Ho,na.rm=TRUE),6))
+    cat("    Miniumum Observed Heterozygosity: ",round(min(df$Ho,na.rm=TRUE),6))
     if (n.invariant > 0) {
-      cat(" [Corrected:",round(min(df$Ho.adj,na.rm=TRUE),6),"]\n")
+      cat("   [Corrected:",round(min(df$Ho.adj,na.rm=TRUE),6),"]\n")
     } else {
       cat("\n")
     }  
-    cat("  Maximum Observed Heterozygosity: ",round(max(df$Ho,na.rm=TRUE),6))
+    cat("    Maximum Observed Heterozygosity: ",round(max(df$Ho,na.rm=TRUE),6))
     if (n.invariant > 0) {
-      cat(" [Corrected:",round(max(df$Ho.adj,na.rm=TRUE),6),"]\n")
+      cat("   [Corrected:",round(max(df$Ho.adj,na.rm=TRUE),6),"]\n")
     } else {
       cat("\n")
     }  
-    cat("  Average Observed Heterozygosity: ",round(mean(df$Ho,na.rm=TRUE),6))
+    cat("    Average Observed Heterozygosity: ",round(mean(df$Ho,na.rm=TRUE),6))
     if (n.invariant > 0) {
-      cat(" [Corrected:",round(mean(df$Ho.adj,na.rm=TRUE),6),"]\n\n")
+      cat("   [Corrected:",round(mean(df$Ho.adj,na.rm=TRUE),6),"]\n\n")
     } else {
       cat("\n\n")
     }  
     
-    cat("  Miniumum Expected Heterozygosity: ",round(min(df$He,na.rm=TRUE),6))
+    cat("    Miniumum Expected Heterozygosity: ",round(min(df$He,na.rm=TRUE),6))
     if (n.invariant > 0) {
-      cat(" [Corrected:",round(min(df$He.adj,na.rm=TRUE),6),"]\n")
+      cat("   [Corrected:",round(min(df$He.adj,na.rm=TRUE),6),"]\n")
     } else {
       cat("\n")
     }  
-    cat("  Maximum Expected Heterozygosity: ",round(max(df$He,na.rm=TRUE),6))
+    cat("    Maximum Expected Heterozygosity: ",round(max(df$He,na.rm=TRUE),6))
     if (n.invariant > 0) {
-      cat(" [Corrected:",round(max(df$He.adj,na.rm=TRUE),6),"]\n")
+      cat("   [Corrected:",round(max(df$He.adj,na.rm=TRUE),6),"]\n")
     } else {
       cat("\n")
     }  
-    cat("  Average Expected Heterozygosity: ",round(mean(df$He,na.rm=TRUE),6))
+    cat("    Average Expected Heterozygosity: ",round(mean(df$He,na.rm=TRUE),6))
     if (n.invariant > 0) {
-      cat(" [Corrected:",round(mean(df$He.adj,na.rm=TRUE),6),"]\n\n")
+      cat("   [Corrected:",round(mean(df$He.adj,na.rm=TRUE),6),"]\n\n")
     } else {
       cat("\n\n")
     }  
@@ -237,12 +257,14 @@ gl.report.heterozygosity <- function(x,
       cat("  Heterozygosity estimates not corrected for uncalled invariant loci\n")
     }
   
-    if (n.invariant > 0 ) {
-      print(df)
-    } else {
-      print(df[,c("pop","nInd","nLoc","Ho","He")])
+    if(verbose >= 3){
+      if (n.invariant > 0 ) {
+        print(df)
+      } else {
+        print(df[,c("pop","nInd","nLoc","Ho","He")])
+      } 
     }
- 
+    
   }
   
   }
@@ -250,6 +272,10 @@ gl.report.heterozygosity <- function(x,
   # DO THE JOB FOR INDIVIDUALS
   
   if (method=="ind"){
+    if(verbose >= 2){
+      cat("  Calculating observed heterozygosity for individuals\n")
+      cat("  Note: No adjustment for invariant loci (n.invariant set to 0)\n")
+    }
     # Convert to matrix
     m <- as.matrix(x)
     
@@ -304,7 +330,7 @@ gl.report.heterozygosity <- function(x,
     # Set margins for second plot
     par(mai=c(0.5,0.5,0,0.5))  
     # Plot Histogram
-      hist(c.hets, col='red', main=NULL)
+      hist(c.hets, col='red', main=NULL, breaks=100)
       
     # OUTPUT REPORT
       if (verbose >= 3){
@@ -324,6 +350,9 @@ gl.report.heterozygosity <- function(x,
         }  
       }   
   }  
+
+  # Reset the par options    
+    par(op)  
     
 # FLAG SCRIPT END
 
@@ -331,9 +360,10 @@ gl.report.heterozygosity <- function(x,
     cat("Completed:",funname,"\n")
   }
 
-  # Reset the par options    
-    par(op)
-  
-  # Return the result
-  return(df) 
+  if (silent==FALSE){
+    return(df) 
+  } else {
+    return(NULL)
+  }
+    
 }

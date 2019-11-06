@@ -46,7 +46,7 @@ WC_FST_Diploids_2Alleles<-function(Sample_Mat){
 #' @export
 #'  
 
-util.outflank.MakeDiploidFSTMat <- function(SNPmat,locusNames,popNames){
+utils.outflank.MakeDiploidFSTMat <- function(SNPmat,locusNames,popNames){
   # SNPmat is a matrix with individuals in rows and snps in columns
   # 0, 1, or 2 represent the number of copies of the focal allele, and 9 is for missing data
   # locusNames is a character vector of names of each SNP

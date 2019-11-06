@@ -11,13 +11,15 @@
 #'@export
 #'  
 #'@examples
-#'gl.grm(bandicoot.gl[1:5,1:10])  
+#'gl.grm(bandicoot.gl[1:5,1:10],plotheatmap=F)  
 
 
 gl.grm <- function(gl, plotheatmap=TRUE, return.imputed=FALSE, ...)
 {
-G <- A.mat(as.matrix(gl)-1,return.imputed = return.imputed, ...)
-if (plotheatmap & return.imputed==FALSE) heatmap(G) else heatmap(G$A)
+G <- A.mat(as.matrix(gl)-1,return.imputed = return.imputed)
+#if (plotheatmap & return.imputed==FALSE) heatmap(G) else heatmap(G$A) ####   BERND, G$A THROWS AND ERROR
+if (plotheatmap & return.imputed==FALSE) heatmap(G) else heatmap(G)
+
 
 # ff <- as.matrix(gl)
 # alf <- colMeans(ff, na.rm = T)/2

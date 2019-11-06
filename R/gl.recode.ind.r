@@ -25,56 +25,64 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \dontrun{
-#'    gl <- gl.recode.ind(testset.gl, ind.recode="testset_pop_recode.csv")
-#' }
+#'   file <- system.file("extdata","testset_pop_recode.csv", package="dartR")
+#'   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=0)
 #' @seealso \code{\link{gl.filter.monomorphs}} for filtering monomorphs, \code{\link{gl.recalc.metrics}} for recalculating locus metrics,
 #' \code{\link{gl.recode.pop}} for recoding populations
 
 gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=2){
 
 # TIDY UP FILE SPECS
-
-  #outfilespec <- file.path(outpath, outfile)
+  
   funname <- match.call()[[1]]
-
+  build <- "Jacob"
+  
 # FLAG SCRIPT START
-
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
-
+  
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){cat("  Population assignments not detected, assigning all individuals to one population, label 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-   # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
-
+  
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
+  
+# SCRIPT SPECIFIC ERROR CHECKING
+  
+  recode.table <- read.csv(ind.recode, stringsAsFactors=FALSE, header=FALSE);
+  if(length(unique(indNames(x))) != length(unique(recode.table[,1]))) {
+    stop("  Fatal Error: Individual names in data file are not the same as in the recode table\n")
+  }
+  
 # DO THE JOB
 
   if (verbose >= 2){
     cat("  Relabelling individuals (=specimens) as per ", ind.recode, "\n")
     cat("    Reading lookup table\n")
   }
-  recode.table <- read.csv(ind.recode, stringsAsFactors=FALSE, header=FALSE);
-# Error check
-  if(length(unique(indNames(x))) != length(unique(recode.table[,1]))) {
-    cat("  Fatal Error: Individual names in data file are not the same as in the recode table\n"); stop()
-  }
+  
+  # Store variables
+  hold.nLoc <- nLoc(x)
+  hold.nInd <- nInd(x)
+  hold.nPop <- nPop(x)
+
 # Apply the recode to the individuals
   if (verbose >= 2){
     cat("    Applying the recoding\n")
@@ -93,45 +101,45 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=2)
   if ("delete" %in% x$ind.names | "Delete" %in% x$ind.names) {
     # Remove rows flagged for deletion
       if (verbose >= 2){
-        cat("    Deleting individuals or samples flagged for deletion\n")
+        cat("    Deleting individuals/samples flagged for deletion\n")
       }
-      x2 <- x[!x$ind.names=="delete" & !x$ind.names=="Delete"]
-    #  Remove monomorphic loci
-      if (mono.rm) {x2 <- gl.filter.monomorphs(x2,verbose=verbose)}
-    # Recalculate statistics
-      if (recalc) {x2 <- gl.recalc.metrics(x2,verbose=verbose)}
-  } else {
-    x2 <- x
+      x <- gl.drop.ind(x,ind.list=c("Delete","delete"),verbose=0)
+  } 
+  
+  # Recalculate statistics
+  if (recalc) {
+    x <- gl.recalc.metrics(x,verbose=0)
+  } 
+  
+  #  Remove monomorphic loci
+  if (mono.rm) {
+    x <- gl.filter.monomorphs(x,verbose=0)
   }
-
+  
 # REPORT A SUMMARY
-  if (verbose >= 3) {
-    cat("  Summary of recoded dataset\n")
-    cat(paste("    No. of loci:",nLoc(x2),"\n"))
-    cat(paste("    No. of individuals:", nInd(x2),"\n"))
-    cat(paste("    No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+  
+  if (verbose>=2) {
+    cat("\n  Summary of recoded dataset\n")
+    cat(paste("  Original No. of loci:",hold.nLoc,"\n"))
+    cat(paste("    New No. of loci:",nLoc(x),"\n"))
+    cat(paste("  Original No. of individuals:", hold.nInd,"\n"))
+    cat(paste("    New No. of individuals:", nInd(x),"\n"))
+    cat(paste("  Original No. of populations:", hold.nPop,"\n"))
+    cat(paste("    New No. of populations:", nPop(x),"\n\n"))
+    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
+    if (!mono.rm) {cat("Note: Resultant monomorphic loci not deleted\n")}
   }
-  if (verbose >= 2) {
-    if (!recalc) {
-      cat("  Note: Locus metrics not recalculated\n")
-    } else {
-      cat("  Note: Locus metrics recalculated\n")
-    }
-    if (!mono.rm) {
-      cat("  Note: Resultant monomorphic loci not deleted\n")
-    } else{
-      cat("  Note: Resultant monomorphic loci deleted\n")
-    }
-  }
+  
+# ADD TO HISTORY
+    nh <- length(x@other$history)
+    x@other$history[[nh + 1]] <- match.call()  
 
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  #add to history
-  nh <- length(x2@other$history)
-  x2@other$history[[nh + 1]] <- match.call()  
-    return(x2)
+    
+  return(x)
+    
 }
-

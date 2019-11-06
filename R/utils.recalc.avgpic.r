@@ -22,91 +22,149 @@
 
 utils.recalc.avgpic <- function(x, verbose=2) {
 
-# TIDY UP FILE SPECS
-
-  #outfilespec <- file.path(outpath, outfile)
+  # TIDY UP FILE SPECS
+  
+  build <- "Jacob"
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  hold <- x
+  # Note draws upon and modifies the loc.metrics.flags for Call Rate.
+  
+  # FLAG SCRIPT START
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
-
-# STANDARD ERROR CHECKING
+  
+  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+  
+  if (all(x@ploidy == 1)){
+      if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data, locus metric PIC\n")}
+      data.type <- "SilicoDArT"
+    } else if (all(x@ploidy == 2)){
+      if (verbose >= 2){cat("  Processing a SNP dataset, locus metric AvgPIC\n")}
+      data.type <- "SNP"
+    } else {
+      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
 
-# FUNCTION SPECIFIC ERROR CHECKING
+  # Check monomorphs have been removed up to date
+  if (x@other$loc.metrics.flags$monomorphs == FALSE){
+    if (verbose >= 2){
+      cat("  Warning: Dataset contains monomorphic loci which will be included in the ",funname," calculations\n")
+    }  
+  }
 
-  if (is.null(x@other$loc.metrics$AvgPIC)) {
-    x@other$loc.metrics$AvgPIC <- array(NA,nLoc(x))
-    if (verbose >= 3){
-      cat("  Locus metric AvgPIC does not exist, creating slot @other$loc.metrics$AvgPIC\n")
-    }
+# FUNCTION SPECIFIC ERROR CHECKING 
+
+  if (data.type=="SNP"){
+     if (is.null(x@other$loc.metrics$AvgPIC)) {
+       x@other$loc.metrics$AvgPIC <- array(NA,nLoc(x))
+       if (verbose >= 3){
+         cat("  Locus metric AvgPIC does not exist, creating slot @other$loc.metrics$AvgPIC\n")
+       }
+     }
+     if (is.null(x@other$loc.metrics$OneRatioRef)) {
+       x@other$loc.metrics$OneRatioRef <- array(NA,nLoc(x))
+       if (verbose >= 3){
+         cat("  Locus metric OneRatioRef does not exist, creating slot @other$loc.metrics$OneRatioRef\n")
+       }
+     }
+     if (is.null(x@other$loc.metrics$OneRatioSnp)) {
+       x@other$loc.metrics$OneRatioSnp <- array(NA,nLoc(x))
+       if (verbose >= 3){
+         cat("  Locus metric OneRatioSnp does not exist, creating slot @other$loc.metrics$OneRatioSnp\n")
+       }
+     }
+     if (is.null(x@other$loc.metrics$PICRef)) {
+       x@other$loc.metrics$PICRef <- array(NA,nLoc(x))
+       if (verbose >= 3){
+         cat("  Locus metric PICRef does not exist, creating slot @other$loc.metrics$PICRef\n")
+       }
+     }
+     if (is.null(x@other$loc.metrics$PICSnp)) {
+       x@other$loc.metrics$PICSnp <- array(NA,nLoc(x))
+       if (verbose >= 3){
+         cat("  Locus metric PICSnp does not exist, creating slot @other$loc.metrics$PICSnp\n")
+       }
+     }
   }
-  if (is.null(x@other$loc.metrics$OneRatioRef)) {
-    x@other$loc.metrics$OneRatioRef <- array(NA,nLoc(x))
-    if (verbose >= 3){
-      cat("  Locus metric OneRatioRef does not exist, creating slot @other$loc.metrics$OneRatioRef\n")
+  
+  if (data.type=="SilicoDArT"){
+    if (is.null(x@other$loc.metrics$PIC)) {
+      x@other$loc.metrics$PIC <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric PIC does not exist, creating slot @other$loc.metrics$PIC\n")
+      }
     }
-  }
-  if (is.null(x@other$loc.metrics$OneRatioSnp)) {
-    x@other$loc.metrics$OneRatioSnp <- array(NA,nLoc(x))
-    if (verbose >= 3){
-      cat("  Locus metric OneRatioSnp does not exist, creating slot @other$loc.metrics$OneRatioSnp\n")
-    }
-  }
-  if (is.null(x@other$loc.metrics$PICRef)) {
-    x@other$loc.metrics$PICRef <- array(NA,nLoc(x))
-    if (verbose >= 3){
-      cat("  Locus metric PICRef does not exist, creating slot @other$loc.metrics$PICRef\n")
-    }
-  }
-  if (is.null(x@other$loc.metrics$PICSnp)) {
-    x@other$loc.metrics$PICSnp <- array(NA,nLoc(x))
-    if (verbose >= 3){
-      cat("  Locus metric PICSnp does not exist, creating slot @other$loc.metrics$PICSnp\n")
+    if (is.null(x@other$loc.metrics$OneRatio)) {
+      x@other$loc.metrics$OneRatio <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric OneRatio does not exist, creating slot @other$loc.metrics$OneRatio\n")
+      }
     }
   }
 
 # DO THE JOB
 
-     t <- as.matrix(x)
-       if (verbose >= 2){cat("  Recalculating OneRatioRef, OneRatioSnp, PICRef, PICSnp, AvgPIC\n")}
+  t <- as.matrix(x)
+     
+  if(data.type == "SNP"){
+    
+    if (verbose >= 2){
+      cat("  Recalculating OneRatioRef, OneRatioSnp, PICRef, PICSnp, AvgPIC\n")
+    }
      
      c0 <- colSums(t==0, na.rm=T)
      c1 <- colSums(t==1, na.rm=T)
      c2 <- colSums(t==2, na.rm=T)
      c <- (c0+c1+c2)
      x@other$loc.metrics$OneRatioRef <- (c0+c1)/c
+     x@other$loc.metrics.flags$OneRatioRef <- TRUE
+     
      x@other$loc.metrics$OneRatioSnp <- (c1+c2)/c
+     x@other$loc.metrics.flags$OneRatioSnp <- TRUE
+     
      OneRatioRef <- x@other$loc.metrics$OneRatioRef
      OneRatioSnp <- x@other$loc.metrics$OneRatioSnp
      ZeroRatioRef <- 1 - OneRatioRef
      ZeroRatioSnp <- 1 - OneRatioSnp
      x@other$loc.metrics$PICRef <- 1 - ((OneRatioRef*OneRatioRef) + (ZeroRatioRef*ZeroRatioRef))
+     x@other$loc.metrics.flags$PICRef <- TRUE
+     
      x@other$loc.metrics$PICSnp <- 1 - ((OneRatioSnp*OneRatioSnp) + (ZeroRatioSnp*ZeroRatioSnp))
+     x@other$loc.metrics.flags$PICSnp <- TRUE
+     
      x@other$loc.metrics$AvgPIC <- (x@other$loc.metrics$PICRef + x@other$loc.metrics$PICSnp)/2
+     x@other$loc.metrics.flags$AvgPIC <- TRUE
+     
+  } 
+  
+  if(data.type == "SilicoDArT"){
+    
+    if (verbose >= 2){
+      cat("  Recalculating OneRatio, PIC\n")
+    }
+    
+    OneRatio <- colMeans(t==1, na.rm=T)
+    x@other$loc.metrics$OneRatio <- OneRatio
+    x@other$loc.metrics.flags$OneRatio <- TRUE
+    
+    ZeroRatio <- 1 - OneRatio
 
+    x@other$loc.metrics$PIC <- 1 - ((OneRatio*OneRatio) + (ZeroRatio*ZeroRatio))
+    x@other$loc.metrics.flags$PIC <- TRUE
+    
+  } 
+  
 # FLAG SCRIPT END
 
   if (verbose > 0) {

@@ -11,7 +11,6 @@
 #' @param obs_hom1 -- count of homozygotes, reference state
 #' @param obs_hom2 -- count of homozygotes, alternate state
 #' @return Exact probability of agreement with HWE
-#' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' hets <- 20
@@ -19,7 +18,7 @@
 #' hom_2 <- 30
 #' p_value <- prob.hwe(hets, hom_1, hom_2)
 
-prob.hwe <- function(obs_hets, obs_hom1, obs_hom2) {
+utils.prob.hwe <- function(obs_hets, obs_hom1, obs_hom2) {
   
   if (obs_hom1 < 0 || obs_hom2 < 0 || obs_hets < 0 ) {
     return(-1.0)

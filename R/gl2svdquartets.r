@@ -6,15 +6,17 @@
 #' A second form, recommended by Dave Swofford, has
 #' a single line per individual, resolving heterozygous SNPs by replacing them with standard
 #' ambiguity codes (method=2).
+#' 
+#' If the data are tag presence/absence, then method=2 is assumed.
 #'
 #' @references Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent. Bioinformatics 30: 3317-3324
 #' 
-#' @param x -- name of the genlight object containing the SNP data [required]
+#' @param x -- name of the genlight object containing the SNP data or tag P/A data [required]
 #' @param outfile -- file name of the output file (including extension) [default svd.nex]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
 #' to direct output files to your working directory.
 #' @param method -- method = 1, nexus file with two lines per individual; method = 2, nexus
-#' file with one line per individual, ambiguity codes [default 2]
+#' file with one line per individual, ambiguity codes for SNP genotypes, 0 or 1 for presence/absence data [default 2]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @export
@@ -28,47 +30,55 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, ve
 
 # TIDY UP FILE SPECS
 
-  outfilespec <- file.path(outpath, outfile)
+  build <- "Jacob"
   funname <- match.call()[[1]]
+  outfilespec <- file.path(outpath, outfile)
 
 # FLAG SCRIPT START
-
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
-
+  
 # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
+  
+  if (all(x@ploidy == 1)){
+    cat("  Processing Presence/Absence (SilicoDArT) data\n")
+    method <- 2
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
+  }
+  
   # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+    
+    if (!x@other$loc.metrics.flags$monomorphs) {
+      cat("  Warning: genlight object may contain monomorphic loci\n")
+    }
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
    if (method < 0 | method > 2) {
-     cat("  Warning: method must be either 1 or 2, set to 2, one line per individual using ambiguity codes \n")
+     cat("  Warning: method must be either 1 or 2, set to 2, one line per individual using ambiguity codes for SNP data, 0 or 1 for tag P/A data \n")
      method <- 2
    }
 
 # DO THE JOB
 
-  if (verbose >= 2) {cat(paste("    Extacting SNP bases and creating records for each individual\n"))}
+######## SNP data
+  
+if (all(x@ploidy==2)){
+    if (verbose >= 2) {cat(paste("    Extacting SNP bases and creating records for each individual\n"))}
 
 # Extract the reference base and the alternate base for each locus
   #snp <- as.character(x@other$loc.metrics$SNP)
@@ -141,7 +151,21 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, ve
     }
     }
   }
+}  
   
+if(all(x@ploidy==1)){
+  # progressively add the scores (0 0r 1 or NA)
+  if (verbose >= 2) {cat(paste("  Constructing genotypes for each individual\n"))}
+  str <- array(NA,nInd(x))
+  for (ind in 1:nInd(x)) {
+    str[ind] <- paste(as.character(as.matrix(x)[ind,]),collapse='',sep='')
+    str[ind] <- gsub('NA','?',str[ind])
+    str[ind] <- paste(indNames(x)[ind],"   ",str[ind])
+  }
+  ambseq <- str
+  poplabels <- pop(x)
+} 
+
 # Create the taxpartition (popname : 25-60)
   if (verbose >= 2) {cat(paste("    Creating partition table\n"))}
   a <- array(data=NA,dim=length(poplabels))
@@ -214,4 +238,3 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, ve
   return(NULL)
 
 }
-
