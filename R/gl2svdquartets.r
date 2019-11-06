@@ -30,15 +30,11 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, ve
 
 # TIDY UP FILE SPECS
 
-  funname <- match.call()[[1]]
-
-  # TIDY UP FILE SPECS
-  
   build <- "Jacob"
   funname <- match.call()[[1]]
   outfilespec <- file.path(outpath, outfile)
 
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -242,9 +238,3 @@ if(all(x@ploidy==1)){
   return(NULL)
 
 }
-
-
-# x <- gs[1:20,1:100]
-# nLoc(gg)
-# gg@other$loc.metrics <- gg@other$loc.metrics[1:100,]
-# gl2svdquartets(gg, outpath=getwd(), verbose=3)
