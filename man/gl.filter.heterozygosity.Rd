@@ -23,8 +23,8 @@ Calculates the observed heterozyosity for each individual in a genlight object a
 Use gl.report.heterozygosity to determine the appropriate thresholds.
 }
 \examples{
-tmp <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
-gl.report.heterozygosity(tmp,method="ind")
+result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
+gl.report.heterozygosity(result,method="ind")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

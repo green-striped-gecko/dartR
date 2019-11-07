@@ -4,11 +4,17 @@
 \alias{gl.collapse.pval}
 \title{Collapse a fixed distance matrix by amalgamating populations for which pairwise fixed differences are not significant}
 \usage{
-gl.collapse.pval(fd, delta = 0.02, reps = 1000, alpha = 0.05,
-  plot = FALSE, verbose = 2)
+gl.collapse.pval(fd, recode.table = "tmp.csv", outpath = tempdir(),
+  delta = 0.02, reps = 1000, alpha = 0.05, plot = FALSE,
+  verbose = 2)
 }
 \arguments{
 \item{fd}{-- name of the list containing the collapsed gl object and associated distance matricies output by gl.collapse run with test=TRUE [required]}
+
+\item{recode.table}{-- name of the new recode.table to receive the new population reassignments 
+arising from the amalgamation of populations [tmp.csv]}
+
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
 \item{delta}{-- threshold for the level of difference between two populations that will be regarded as operationally fixed [Default 0.02]}
 
@@ -36,5 +42,5 @@ based on the pvalue associated with each comparison. The results are subsets of 
 diagnosability is demonstrated in the sample set, but non-significant.
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

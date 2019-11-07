@@ -4,13 +4,13 @@
 \alias{gl.assign}
 \title{Assign an individual of unknown provenance to population}
 \usage{
-gl.assign(x, id, nmin = 10, dim = NULL, alpha = 0.05,
+gl.assign(x, unknown, nmin = 10, dim = NULL, alpha = 0.05,
   threshold = 0, verbose = 3)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
 
-\item{id}{-- identity label of the focal individual whose provenance is unknown [required]}
+\item{unknown}{-- identity label of the focal individual whose provenance is unknown [required]}
 
 \item{nmin}{-- minimum sample size for a target population to be included in the analysis [default 10]}
 
@@ -61,7 +61,7 @@ Each of these approaches provides evidence, none are 100% definitive. They need 
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-x <- gl.assign(testset.gl, id="UC_00146", nmin=10, 
+x <- gl.assign(testset.gl, unknown="UC_00146", nmin=10, 
 alpha=0.05, threshold=1)
 }
 \author{

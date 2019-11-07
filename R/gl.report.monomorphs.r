@@ -12,7 +12,8 @@
 #' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
-#' @import adegenet plyr utils
+#' @rawNamespace import(adegenet, except = plot)
+#' @import plyr utils
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples

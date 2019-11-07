@@ -40,9 +40,8 @@ The script returns a genlight object with the new individual labels, the monomor
 and the optionally recalculated locus metadata.
 }
 \examples{
-\dontrun{
-   gl <- gl.recode.ind(testset.gl, ind.recode="testset_pop_recode.csv")
-}
+  file <- system.file("extdata","testset_pop_recode.csv", package="dartR")
+  gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=0)
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}} for filtering monomorphs, \code{\link{gl.recalc.metrics}} for recalculating locus metrics,

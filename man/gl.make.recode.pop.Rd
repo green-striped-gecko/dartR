@@ -4,13 +4,13 @@
 \alias{gl.make.recode.pop}
 \title{Create a proforma recode_pop_table file for reassigning population names}
 \usage{
-gl.make.recode.pop(x, outfile = "recode_pop_table.csv",
+gl.make.recode.pop(x, out.recode.file = "recode_pop_table.csv",
   outpath = tempdir(), verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- file name of the output file (including extension) [default recode_pop_table.csv]}
+\item{out.recode.file}{-- file name of the output file (including extension) [default recode_pop_table.csv]}
 
 \item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
@@ -33,9 +33,8 @@ column to reassign populations. Use keyword Delete to delete a population.
 Apply the recoding using gl.recode.pop().
 }
 \examples{
-\donttest{
-result <- gl.make.recode.pop(testset.gl, outfile="Emmac_recode_pop.csv")
-}
+result <- gl.make.recode.pop(gl,out.recode.file="test.csv",outpath=getwd(),verbose=2)
+
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

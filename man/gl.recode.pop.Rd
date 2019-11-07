@@ -38,9 +38,9 @@ with all values missing and deletes them (using gl.filter.monomorphs.r). The scr
 recalculates the locus metadata as appropriate.
 }
 \examples{
-\dontrun{
-   gl <- gl.recode.pop(gl, pop.recode="pop_recode_table_0.csv")
-}
+  mfile <- system.file("extdata", "testset_pop_recode.csv", package="dartR")
+  nPop(testset.gl)
+  gl <- gl.recode.pop(gl, pop.recode=mfile, verbose=3)
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}}

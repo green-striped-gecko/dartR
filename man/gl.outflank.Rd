@@ -42,5 +42,5 @@ Whitlock, M.C. and Lotterhos K.J. (2015) Reliable detection of loci responsible 
 Github repository: Whitlock & Lotterhos: \url{https://github.com/whitlock/OutFLANK} (Check the readme.pdf within the repository for an explanation. Be aware you now can run OufFLANK from a genlight object)
 }
 \seealso{
-\code{\link{util.outflank}}, \code{\link{util.outflank.plotter}}, \code{\link{util.outflank.MakeDiploidFSTMat}}
+\code{\link{utils.outflank}}, \code{\link{utils.outflank.plotter}}, \code{\link{utils.outflank.MakeDiploidFSTMat}}
 }

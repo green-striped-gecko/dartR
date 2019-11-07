@@ -24,7 +24,7 @@ This is a support script, to subsample a genlight \{adegenet\} object based on l
 to subsample, random and based on information content (avgPIC).
 }
 \examples{
-result <- gl.subsample.loci(testset.gl, n=200, method="avgPIC")
+result <- gl.subsample.loci(testset.gl, n=200, method="pic")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

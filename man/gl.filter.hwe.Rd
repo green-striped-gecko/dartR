@@ -36,7 +36,7 @@ Note that power to detect departures from HWE is affected by sample size and tha
 effective filtering may require substantial sample sizes (n > 20).
 }
 \examples{
-list <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE)
+result <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE, verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

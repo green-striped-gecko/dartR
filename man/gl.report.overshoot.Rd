@@ -4,15 +4,17 @@
 \alias{gl.report.overshoot}
 \title{Reports loci for which the SNP has been trimmed from the sequence tag along with the adaptor}
 \usage{
-gl.report.overshoot(x, verbose = 2)
+gl.report.overshoot(x, silent = TRUE, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object [required]}
 
+\item{silent}{-- if TRUE, returns NULL; otherwise returns an object [default TRUE]}
+
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-A new genlight object with the recalcitrant loci deleted
+if silent==TRUE, returns NULL; otherwise returns names of the recalcitrant loci
 }
 \description{
 This function checks the position of the SNP within the trimmed sequence tag and identifies those for which the SNP position is outside
@@ -24,10 +26,7 @@ the sequence tag.
 }
 \examples{
 gl <- testset.gl
-gl@other$loc.metrics$SnpPosition[10] <- 100
-gl@other$loc.metrics$SnpPosition[20] <- 100
-gl@other$loc.metrics$SnpPosition[30] <- 100
-gl <- gl.report.overshoot(gl)
+gl.report.overshoot(gl)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

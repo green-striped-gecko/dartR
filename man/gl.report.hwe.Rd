@@ -5,7 +5,7 @@
 \title{Reports departure from Hardy-Weinberg Equilibrium}
 \usage{
 gl.report.hwe(x, subset = "each", plot = FALSE, method = "ChiSquare",
-  alpha = 0.05, bonf = TRUE)
+  alpha = 0.05, bonf = TRUE, silent = TRUE, verbose = 3)
 }
 \arguments{
 \item{x}{-- a genlight object containing the SNP genotypes [Required]}
@@ -19,16 +19,20 @@ gl.report.hwe(x, subset = "each", plot = FALSE, method = "ChiSquare",
 \item{alpha}{-- level of significance for testing [default 0.05]}
 
 \item{bonf}{-- if TRUE, Bonferroni correction will be applied to the level of significance [default TRUE]}
+
+\item{silent}{-- if FALSE, function returns an object, otherwise NULL [default TRUE]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]}
 }
 \value{
-a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
+if silent == TRUE, returns NULL; otherwise returns a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
 and alternate SNP homozygotes; probability of departure from H-W equilibrium,
 and per locus significance with and without Bonferroni Correction.
 }
 \description{
 Calculates the probabilities of agreement with H-W equilibrium based on observed
 frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
-Uses the exact calculations contained in function prob.hwe() as developed by Wigginton et al. (2005).
+Uses the exact calculations contained in function utils.prob.hwe() as developed by Wigginton et al. (2005).
 }
 \details{
 Tests are applied to each locus across all populations pooled (subset="all"), to each locus considered within each population treated separately
@@ -43,10 +47,10 @@ Two methods are used to determine significance. ChiSquare (with correction) is t
 more expensive, but applies a Fisher Exact Test of departure from HWE.
 }
 \examples{
-list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), plot=TRUE, bonf=FALSE)
-list <- gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE)
-list <- gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE)
-list <- gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
+list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), plot=TRUE, bonf=FALSE, silent=FALSE)
+gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE, verbose=3)
+gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE, verbose=3)
+gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
 }
 \references{
 Wigginton, J.E., Cutler, D.J., & Abecasis, G.R. (2005). A Note on Exact Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics 76:887-893.

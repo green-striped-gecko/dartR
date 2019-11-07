@@ -4,13 +4,16 @@
 \alias{gl.edit.recode.pop}
 \title{Create or edit a population re-assignment table}
 \usage{
-gl.edit.recode.pop(x, pop.recode = NULL, recalc = FALSE,
-  mono.rm = TRUE, verbose = 2)
+gl.edit.recode.pop(x, pop.recode = NULL, out.recode.file = NULL,
+  outpath = tempdir(), recalc = FALSE, mono.rm = FALSE,
+  verbose = 2)
 }
 \arguments{
 \item{x}{Name of the genlight object for which populations are to be reassigned.[required]}
 
-\item{pop.recode}{Name of the file to output the new assignments [optional]}
+\item{out.recode.file}{Name of the file to output the new individual labels [null]}
+
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN].}
 
 \item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]}
 
@@ -43,6 +46,8 @@ parent genlight object.
 The script, having deleted populations, optionally identifies resultant monomorphic loci or loci
 with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
 recalculates statistics made redundant by the deletion of individuals from the dataset.
+
+Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 
 The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 }

@@ -5,7 +5,7 @@
 \title{Convert DarT to genlight}
 \usage{
 utils.dart2genlight(dart, ind.metafile = NULL, covfilename = NULL,
-  probar = TRUE)
+  probar = TRUE, verbose = 2)
 }
 \arguments{
 \item{dart}{a dart object created via read.dart}
@@ -15,6 +15,8 @@ utils.dart2genlight(dart, ind.metafile = NULL, covfilename = NULL,
 \item{covfilename}{depreciated, use parameter ind.metafile}
 
 \item{probar}{show progress bar}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 a genlight object is returned. Including all available slots are filled. loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)

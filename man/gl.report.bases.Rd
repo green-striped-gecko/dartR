@@ -4,17 +4,19 @@
 \alias{gl.report.bases}
 \title{Summary of base pair frequencies}
 \usage{
-gl.report.bases(x, plot = TRUE, verbose = 1)
+gl.report.bases(x, plot = TRUE, silent = TRUE, verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{-- name of the genlight object containing the SNP or presence/absence data [required]}
 
 \item{plot}{-- if TRUE, histograms of base composition are produced [default TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 1]}
+\item{silent}{-- if FALSE, function returns an object, otherwise NULL [default TRUE]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-Matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
+If silent==TRUE, returns NULL; otherwise a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
 }
 \description{
 This script calculates the frequencies of the four bases, and the frequency of transitions and
@@ -25,9 +27,12 @@ The script checks if trimmed sequences are included in the locus metadata, and i
 the numbers of A,T,G and C bases. Only the reference state at the SNP locus is counted. Counts of transitions
 and transversions assume that there is no directionality, that is C>T is the same as T>C, because
 the reference state is arbitrary.
+
+For presence/absence data (SilicoDArT), it is not possible to count transitions and tranversions or tv/ts ratio
+because the SNP data is not available, only a single sequence tag.
 }
 \examples{
-lst <- gl.report.bases(testset.gl)
+lst <- gl.report.bases(testset.gl,silent=FALSE)
 lst
 }
 \author{
