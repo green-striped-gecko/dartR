@@ -2,15 +2,17 @@
 % Please edit documentation in R/gl.pcoa.r
 \name{gl.pcoa}
 \alias{gl.pcoa}
-\title{PCoA ordination (glPca)}
+\title{Ordination applied to genotypes in a genlight object (PCA) or to a distance matrix (PCoA)}
 \usage{
-gl.pcoa(x, nfactors = 5, parallel = FALSE, n.cores = 16,
-  verbose = 2)
+gl.pcoa(x, nfactors = 5, correction = NULL, parallel = FALSE,
+  n.cores = 16, verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{-- name of the genlight object containing the SNP data or a distance matrix of type dist [required]}
 
-\item{nfactors}{Number of dimensions to retain in the output file [default 5]}
+\item{nfactors}{-- number of axes to retain in the output of factor scores.}
+
+\item{correction}{Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL]}
 
 \item{parallel}{TRUE if parallel processing is required (does fail under Windows) [default FALSE]}
 
@@ -19,16 +21,76 @@ gl.pcoa(x, nfactors = 5, parallel = FALSE, n.cores = 16,
 \item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-An object of class glPca containing the eigenvalues, factor scores and factor loadings
+An object of class pcoa containing the eigenvalues and factor scores
 }
 \description{
-This script takes the data on SNP genotypes for individuals and undertakes a Gower PCoa ordination using Euclidean distance and drawing upon
-data in the original genlight \{adegenet\} object (entity x attribute matrix).
-The script is essentially a wrapper for glPca() \{adegenet\} with default settings apart from setting parallel=FALSE and
-converting the eigenvalues to percentages.
+This function takes the genotypes for individuals and undertakes a Pearson Principal Component analysis (PCA) on SNP or Tag P/A (SilicoDArT) 
+data; it undertakes a Gower Principal Coordinate analysis (PCoA) if supplied with a distance matrix. Technically, any distance matrix can 
+be represented in an ordinated space using PCoA.
+}
+\details{
+The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\} with default settings apart from those specified as parameters in this 
+function.
+
+While, technically, any distance matrix can be represented in an ordinated space, the representation will not typically be exact.There are three 
+major sources of stress in a reduced-reprentation of distances or dissimilarities among entities using PCA or PCoA. By far the greatest
+source comes from the decision to select only the top two or three axes from the ordinated set of axes derived from the PCA or PCoA. The representation of
+the entities such a heavily reduced space will not faithfully represent the distances in the input distance matrix simply because of the loss of information
+in deeper informative dimensions. For this reason, it is not sensible to be too precious about managing the other two sources of stress in
+the visual representation.
+
+The measure of distance between entities in a PCA is the Pearson Correlation Coefficent, essentially a standardized Euclidean distance. This is both a 
+metric distance and a Euclidean distance. In PCoA, the second source of stress is the choice of distance measure or dissimilarity measure. While any 
+distance or dissimilarity matrix can be represented in an ordinated space, the distances between entities can befaithfully represented 
+in that space (that is, without stress) only if the distances are metric. Furthermore, for distances between entities to be faithfully 
+represented in a rigid Cartesian space, the distance measure needs to be Euclidean. If this is not the case, 
+the distances between the entities in the ordinated visualized space will not exactly represent the distances in the input matrix 
+(stress will be non-zero). This source of stress will be evident as negative eigenvalues in the deeper dimensions.
+
+A third source of stress arises from having a sparse dataset, one with missing values. This affects both PCA and PCoA. If the original data matrix 
+is not fully populated, that is, if there are missing values, then even a Euclidean distance matrix will not necessarily be 'positive definite'. 
+It follows that some of the eigenvalues may be negative, even though the distance metric is Euclidean. This issue is exacerbated when the number 
+of loci greatly exceeds the number of individuals, as is typically the case when working with SNP data. The impact of missing values can be minimized 
+by stringently filtering on Call Rate, albeit with loss of data. An alternative is given in a paper "Honey, I shrunk the sample covariance matrix" 
+and more recently by Ledoit and Wolf (2018), but their approach has not been implemented here.
+
+The good news is that, unless the sum of the negative eigenvalues, arising from a non-Euclidean distance measure or from missing values, approaches those 
+of the final PCA or PCoA axes to be displayed, the distortion is probably of no practical consequence and certainly not comparable to the stress arising from
+selecting only two or three final dimensions out of several informative dimensions for the visual representation.
+
+Two diagnostic plots are produced. The first is a Scree Plot, showing the percentage variation explained by each of the PCA or PCoA axes, for those axes that 
+explain more than the original variables (loci) on average. That is, only informative axes are displayed. The scree plot informs the number of dimensions
+to be retained in the visual summaries. As a rule of thumb, axes with more than 10% of variation explained should be included.
+
+The second graph shows the distribution of eigenvalues for the remaining uninformative (noise) axes, including those with negative eigenvalues. 
+Action is recommended (verbose >= 2) if the negative eigenvalues are dominant, their sum approaching in magnitude the eigenvalues for axes selected for 
+the final visual solution.
+
+Output is a glPca object conforming to adegenet::glPca but with only the following retained.
+ $call
+   The call that generated the PCA/PCoA
+ $eig
+   Eigenvalues	-- All eigenvalues (positive, null, negative).
+ $scores 
+   Scores (coefficients) for each individual
+ $loadings
+   Loadings of each SNP for each principal component
+
+PCA was developed by Pearson (1901) and Hotelling (1933), whilst the best modern reference is Jolliffe (2002). PCoA was developed by Gower (1966) while the
+best modern reference is Legendre & Legendre (1998).
 }
 \examples{
-pcoa <- gl.pcoa(testset.gl, nfactors=3)
+pca <- gl.pcoa(testset.gl)
+}
+\references{
+Cailliez, F. (1983) The analytical solution of the additive constant problem. Psychometrika, 48, 305–308.
+Gower, J. C. (1966) Some distance properties of latent root and vector methods used in multivariate analysis. Biometrika, 53, 325–338.
+Hotelling, H., 1933. Analysis of a complex of statistical variables into Principal Components. Journal of Educational Psychology 24:417-441, 498-520.
+Jolliffe, I. (2002) Principal Component Analysis. 2nd Edition, Springer, New York. 
+Ledoit, O. and Wolf, M. (2018). Analytical nonlinear shrinkage of large-dimensional covariance matrices. University of Zurich, Department of Economics, Working Paper No. 264, Revised version. Available at SSRN: https://ssrn.com/abstract=3047302 or http://dx.doi.org/10.2139/ssrn.3047302 
+Legendre, P. and Legendre, L. (1998). Numerical Ecology, Volume 24, 2nd Edition. Elsevier Science, NY.
+Lingoes, J. C. (1971) Some boundary conditions for a monotone analysis of symmetric matrices. Psychometrika, 36, 195–203.
+Pearson, K. (1901). On lines and planes of closest fit to systems of points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp. 559-572.
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

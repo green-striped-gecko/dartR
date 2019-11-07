@@ -44,7 +44,7 @@ gi2gl <- function(gi, parallel=TRUE, verbose=2){
     if (locna[i-1]==1)  ccc[i] <- ccc[i-1]+1 else ccc[i]<- ccc[i-1]+2
   }
   gl <-new("genlight", x@tab[,ccc], pop = pop(x), other=x@other, ploidy=2, loc.names=locNames(x), ind.names=indNames(x), parallel=parallel)
-  
+  if (is.null(gl@other$loc.metrics.flags$monomorphs)) gl@other$loc.metrics.flags$monomorphs <- FALSE
 # FLAG SCRIPT END
   
   if (verbose >= 1) {

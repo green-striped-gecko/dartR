@@ -2,24 +2,29 @@
 % Please edit documentation in R/gl.collapse.r
 \name{gl.collapse}
 \alias{gl.collapse}
-\title{Collapse a distance matrix by amalgamating populations}
+\title{Collapse a distance matrix by amalgamating populations with pairwise fixed difference count less that an threshold}
 \usage{
-gl.collapse(fd, recode.table = "tmp.csv", tpop = 0, tloc = 0,
-  plot = FALSE, verbose = 2)
+gl.collapse(fd, recode.table = "tmp.csv", outpath = tempdir(),
+  tpop = 0, tloc = 0, test = FALSE, delta = 0.02, reps = 1000,
+  plot = TRUE, pb = FALSE, verbose = 2)
 }
 \arguments{
 \item{fd}{-- name of the list of matricies produced by gl.fixed.diff() [required]}
 
 \item{recode.table}{-- name of the new recode.table to receive the new population reassignments 
-arising from the amalgamation of populations [default tmp.csv]}
+arising from the amalgamation of populations [tmp.csv]}
 
-\item{tpop}{-- threshold number of fixed differences for amalgamating populations [default 0]}
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
-\item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]}
+\item{tpop}{-- threshold number of fixed differences for amalgamating populations [0]}
 
-\item{plot}{-- if TRUE, plot a PCoA with the new groupings [default FALSE]}
+\item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{plot}{-- if TRUE, plot a PCoA with the new groupings [TRUE]}
+
+\item{pb}{-- if TRUE, show a progress bar on time consuming loops [FALSE]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [2]}
 }
 \value{
 A list containing the gl object x and the following square matricies

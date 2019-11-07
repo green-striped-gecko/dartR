@@ -33,7 +33,6 @@
 #' @return A plot of the ordination [plot.out=TRUE] or a dataframe [plot.out=FALSE]
 #' @export
 #' @import directlabels tidyr
-#' @importFrom plotly ggplotly
 #' @importFrom methods show
 #' @rawNamespace import(ggplot2, except = empty)
 

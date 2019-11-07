@@ -8,7 +8,7 @@ gl.drop.pop(x, pop.list, as.pop = NULL, recalc = FALSE,
   mono.rm = FALSE, verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes [required]}
+\item{x}{-- name of the genlight object containing SNP genotypes or Tag P/A data (SilicoDArT) [required]}
 
 \item{pop.list}{-- a list of populations to be removed [required]}
 
@@ -24,7 +24,7 @@ gl.drop.pop(x, pop.list, as.pop = NULL, recalc = FALSE,
 A genlight object with the reduced data
 }
 \description{
-Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart().
+Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart() or gs.read.dart().
 }
 \details{
 The script, having deleted populations, optionally identifies resultant monomorphic loci or loci

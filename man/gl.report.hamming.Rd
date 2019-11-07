@@ -5,25 +5,28 @@
 \title{Calculates the pairwise Hamming distance between DArT trimmed DNA sequences}
 \usage{
 gl.report.hamming(x, rs = 5, boxplot = "adjusted", range = 1.5,
-  threshold = 3, taglength = 69, probar = FALSE, verbose = 3)
+  threshold = 3, taglength = 69, probar = FALSE, silent = TRUE,
+  verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 5]}
+\item{rs}{-- number of bases in the restriction enzyme recognition sequence [default 5]}
 
 \item{boxplot}{-- if 'standard', plots a standard box and whisker plot; 
 if 'adjusted', plots a boxplot adjusted for skewed distributions [default 'adjusted']}
 
 \item{range}{-- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
 
-\item{threshold}{displays a minimum acceptable base pair difference on the whisker plot [default 3 bp]}
+\item{threshold}{minimum acceptable base pair difference for display on the whisker plot and histogram [default 3 bp]}
 
 \item{taglength}{-- typical length of the sequence tags [default 69]}
 
-\item{probar}{-- if TRUE, then a progress bar is desplayed on long loops [default = TRUE]}
+\item{probar}{-- if TRUE, then a progress bar is desplayed on long loops [default TRUE]}
 
-\item{verbose}{level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.}
+\item{silent}{-- if FALSE, function returns an object, otherwise NULL [default TRUE]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 Tabulation of loc that will be lost on filtering, against values of the threshold

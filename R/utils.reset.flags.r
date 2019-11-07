@@ -35,7 +35,7 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat(paste("Starting",funname,"[ Build =",build,"]\n"))
   }
   
 # STANDARD ERROR CHECKING

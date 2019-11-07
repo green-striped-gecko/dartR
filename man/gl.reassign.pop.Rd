@@ -29,7 +29,7 @@ The script returns a genlight object with the new population assignments Note th
 assigments are lost.
 }
 \examples{
-   gl <- gl.reassign.pop(testset.gl, as.pop='sex')
+   gl <- gl.reassign.pop(testset.gl, as.pop='sex',verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -2,13 +2,13 @@
 % Please edit documentation in R/gl.fixed.diff.r
 \name{gl.fixed.diff}
 \alias{gl.fixed.diff}
-\title{Generate a matrix of fixed differences from a genelight or genind object \{adegenet\}}
+\title{Generate a matrix of fixed differences}
 \usage{
 gl.fixed.diff(x, tloc = 0, test = FALSE, delta = 0.02, reps = 1000,
-  mono.rm = TRUE, plot = FALSE, pb = TRUE, verbose = 2)
+  mono.rm = TRUE, plot = FALSE, pb = TRUE, verbose = 3)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes [required]}
+\item{x}{-- name of the genlight object containing SNP genotypes or tag P/A data (SilicoDArT) [required]}
 
 \item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]}
 
@@ -24,28 +24,30 @@ gl.fixed.diff(x, tloc = 0, test = FALSE, delta = 0.02, reps = 1000,
 
 \item{pb}{-- if TRUE, show a progress bar on time consuming loops [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]}
 }
 \value{
 A list containing the gl object and square matricies, as follows
-        [[1]] $gl -- the input genlight object;,
-        [[2]] $fd -- raw fixed differences;,
-        [[3]] $pcfd -- percent fixed differences;,
-        [[4]] $nobs -- mean no. of individuals used in each comparison;,
-        [[5]] $nloc -- total number of loci used in each comparison;,
-        [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation],
+        [[1]] $gl -- the input genlight object;
+        [[2]] $fd -- raw fixed differences;
+        [[3]] $pcfd -- percent fixed differences;
+        [[4]] $nobs -- mean no. of individuals used in each comparison;
+        [[5]] $nloc -- total number of loci used in each comparison;
+        [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation];
         [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
 }
 \description{
-This script takes SNP data grouped into populations in a genlight object (DArTSeq)
+This script takes SNP data or sequence tag P/A data grouped into populations in a genlight object (DArTSeq)
 and generates a matrix of fixed differences between populations taken pairwise
 }
 \details{
-A fixed difference at a locus occurs when two populations share no alleles. The challenge with this approach
-is that when sample sizes are finite, fixed differences will occur through sampling error, compounded when
-many loci are examined. Simulations suggest that sample sizes of n1=5 and n2=5 is adequate to reduce the
-probability of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if comparison
-between two populations involves sample sizes less than 5, taking into account allele drop-out.
+A fixed difference at a locus occurs when two populations share no alleles or where all members of one population
+has a sequence tag scored, and all members of the other population has the sequence tag absent. 
+The challenge with this approach is that when sample sizes are finite, fixed differences will occur 
+through sampling error, compounded when many loci are examined. Simulations suggest that sample sizes 
+of n1=5 and n2=5 is adequate to reduce the probability of [experiment-wide] type 1 error to 
+negligible levels [ploidy=2]. A warning is issued if comparison between two populations involves sample 
+sizes less than 5, taking into account allele drop-out.
 
 An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
 level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.

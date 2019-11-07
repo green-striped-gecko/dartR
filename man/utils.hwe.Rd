@@ -5,12 +5,14 @@
 \title{Calculates departure from Hardy-Weinberg Equilibrium. Utility script not meant 
 for end users.}
 \usage{
-utils.hwe(x, prob = 0.05)
+utils.hwe(x, prob = 0.05, verbose = 2)
 }
 \arguments{
 \item{x}{-- a genlight object containting the SNP profiles for a population [Required]}
 
 \item{prob}{-- level of significance [Default 0.05]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 Locus, Hom_1, Het, Hom_2, N, Prob, Sig, BonSig)
@@ -18,7 +20,7 @@ Locus, Hom_1, Het, Hom_2, N, Prob, Sig, BonSig)
 \description{
 Calculates the probabilities of agreement with H-W equilibrium based on observed
 frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
-Uses the exact calculations contained in function prob.hwe() as developed by
+Uses the exact calculations contained in function utils.prob.hwe() as developed by
 Wigginton, JE, Cutler, DJ, and Abecasis, GR.
 }
 \author{
