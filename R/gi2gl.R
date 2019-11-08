@@ -8,23 +8,25 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @details Be aware due to ambiguity which one is the reference allele a combination of gi2gl(gl2gi(gl)) does not return an identical object (but in terms of analysis this conversions are equivalent)
 
-
 gi2gl <- function(gi, parallel=TRUE, verbose=2){
   
-# TIDY UP FILE SPECS
-  
-  build <- "Jacob"
+# TRAP COMMAND, SET VERSION
+
   funname <- match.call()[[1]]
-  x <- gi
-  # Note draws upon and modifies the loc.metrics.flags for Call Rate, and modifies the flags for all other metrics if method='ind'.
+  build <- "Jacob"
   
-# FLAG SCRIPT START
+# SET VERBOSITY
   
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
+  if (is.null(verbose)){
+    verbose <- x@other$verbose
   }
-  
+  if (verbose < 0 | verbose > 5){
+      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+      verbose <- x@other$verbose
+  }
+
+# FLAG SCRIPT START
+
   if (verbose >= 1){
     cat("Starting",funname,"[ Build =",build,"]\n")
   }

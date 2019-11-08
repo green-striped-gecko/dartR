@@ -16,28 +16,34 @@
 #' @param alpha -- level of significance (per locus) [Default 0.05]
 #' @param basis -- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]
 #' @param bon -- apply bonferroni correction to significance levels for filtering [default TRUE] 
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @return a genlight object with the loci departing significantly from HWE removed
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @examples
 #' result <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE, verbose=3)
 
-gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
+gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=NULL) {
   
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
 
   funname <- match.call()[[1]]
+  build <- "Jacob"
+
+# SET VERBOSITY
+  
+  if (is.null(verbose)){
+    verbose <- x@other$verbose
+  }
+  if (verbose < 0 | verbose > 5){
+      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+      verbose <- x@other$verbose
+  }
 
 # FLAG SCRIPT START
 
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
-  }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
 
 # STANDARD ERROR CHECKING

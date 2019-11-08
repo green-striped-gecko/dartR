@@ -2,15 +2,17 @@
 #'
 #' The locus metadata supplied by DArT has OneRatioRef, OneRatioSnp, PICRef, PICSnp, and AvgPIC included,
 #' but the allelec composition will change when some individuals are removed from the dataset and so the initial statistics will
-#' no longer apply. This script resets the locus metrics flags to FALSE to indicate that these statistics in the genlight object
-#' are no longer current.
+#' no longer apply. This applies also to some variable calculated by dartR (e.g. maf). This script resets the locus metrics
+#' flags to FALSE to indicate that these statistics in the genlight object are no longer current. The verbosity default is also set, and
+#' in the case of SilcoDArT, the flags PIC and OneRatio are also set.
 #' 
 #' If the locus metrics do not exist then they are added to the genlight object but not populated. If the locus metrics flags 
 #' do not exist, then they are added to the genlight object and set to FALSE (or TRUE).
 #'
 #' @param x -- name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]
 #' @param set -- set the flags to TRUE or FALSE [FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param set.verbosity -- set the default verbosity for all functions, where verbosity is not specified
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @return The modified genlight object
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @seealso \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,
@@ -20,20 +22,25 @@
 #' @examples
 #' #result <- utils.reset.flags(testset.gl)
 
-utils.reset.flags <- function(x, set=FALSE, verbose=2) {
+utils.reset.flags <- function(x, set=FALSE, set.verbosity=2, verbose=NULL) {
   
-# TIDY UP FILE SPECS
-  
-  build <- "Jacob"
+# TRAP COMMAND, SET VERSION
+
   funname <- match.call()[[1]]
+  build <- "Jacob"
   
-# FLAG SCRIPT START
+# SET VERBOSITY
   
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
+  if (is.null(verbose)){
+    verbose <- x@other$verbose
   }
-  
+  if (verbose < 0 | verbose > 5){
+      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+      verbose <- x@other$verbose
+  }
+
+# FLAG SCRIPT START
+
   if (verbose >= 1){
     cat("Starting",funname,"[ Build =",build,"]\n")
   }
@@ -53,10 +60,17 @@ utils.reset.flags <- function(x, set=FALSE, verbose=2) {
   } else {
     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
+
+# SCRIPT SPECIFIC ERROR TESTING
+
+  if (set.verbosity < 0 | set.verbosity > 5){
+    cat("  Warning: Parameter 'set.verbosity' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    set.verbosity <- 2
+  }
   
-  # DO THE JOB
+# DO THE JOB
   
-if (data.type=="SNP"){
+  if (data.type=="SNP"){
     if(verbose >= 2){
       cat("  Resetting flags for AvgPIC, OneRatioRef, OneRatioSnp, PICRef, PICSnp, CallRate, maf, FreqHets, FreqHomRef, FreqHomSnp, monomorphs, OneRatio, PIC to",set,"\n")
       cat("  Resetting SilicoDArT flags for OneRatio, PIC to FALSE\n")
@@ -178,9 +192,18 @@ if (data.type=="SNP"){
       }
     }
     x@other$loc.metrics.flags$PIC <- FALSE
-}
+    
+  #verbosity
+    if (is.null(x@other$loc.metrics$verbose)) {
+      x@other$loc.metrics$verbose <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric 'PIC'verbose' does not exist, creating slot @other$loc.metrics$verbose\n")
+      }
+    }
+    x@other$verbose <- set.verbosity
+  }
   
-if (data.type=="SilicoDArT"){
+  if (data.type=="SilicoDArT"){
     if(verbose >= 2){
       cat("  Resetting flags for CallRate, PIC, OneRatio, monomorphs to",set,"\n")
       cat("  Setting SNP flags for AvgPIC, OneRatioRef, OneRatioSnp, PICRef, PICSnp, maf, FreqHets, FreqHomRef, FreqHomSnp to FALSE\n")
@@ -302,39 +325,28 @@ if (data.type=="SilicoDArT"){
       }
     }
     x@other$loc.metrics.flags$PIC <- set
-}
+    
+    #verbosity
+    if (is.null(x@other$loc.metrics$verbose)) {
+      x@other$loc.metrics$verbose <- array(NA,nLoc(x))
+      if (verbose >= 3){
+        cat("  Locus metric 'PIC'verbose' does not exist, creating slot @other$loc.metrics$verbose\n")
+      }
+    }
+    x@other$verbose <- set.verbosity
+    
+  }
 
-  # FLAG SCRIPT END
-  
-  #add to history
+# ADD TO HISTORY
   nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call() 
+  x@other$history[[nh + 1]] <- match.call()  
   
-  if (verbose > 0) {
+# FLAG SCRIPT END
+
+  if (verbose >= 1) {
     cat("Completed:", funname, "\n")
   }
   
   return(x)
   
 }
-
-# # Test script
-# gl <- testset.gl
-# tmp <- utils.reset.flags(gl)
-# gl@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# tmp <- utils.reset.flags(gl,set=TRUE)
-# gl@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-# 
-# 
-# gs <- testset.gs
-# tmp <- utils.reset.flags(gs)
-# gs@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-#   
-# tmp <- utils.reset.flags(gs, set=TRUE)
-# gs@other$loc.metrics.flags
-# tmp@other$loc.metrics.flags
-  

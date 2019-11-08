@@ -10,27 +10,32 @@
 #' @param pop2 -- name of the second parental population (in quotes) [required]
 #' @param invers -- switch to filter for all loci that have no private alleles and are not fixed [FALSE]
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 
-#' 3, progress and results summary; 5, full report [default 2]
+#' 3, progress and results summary; 5, full report [default NULL]
 #' @return The reduced genlight dataset, containing now only fixed and private alleles
 #' @export
 #' @author Bernd Gruber & Ella Kelly (University of Melbourne) (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' result <- gl.filter.pa.pop(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2],verbose=3)
 
-gl.filter.pa<-function(x, pop1, pop2, invers=FALSE, verbose=2){
+gl.filter.pa<-function(x, pop1, pop2, invers=FALSE, verbose=NULL){
   
-# TIDY UP FILE SPECS
-  
+# TRAP COMMAND, SET VERSION
+
   funname <- match.call()[[1]]
   build <- "Jacob"
+
+# SET VERBOSITY
   
-# FLAG SCRIPT START
-  
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
+  if (is.null(verbose)){
+    verbose <- x@other$verbose
   }
-  
+  if (verbose < 0 | verbose > 5){
+      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+      verbose <- x@other$verbose
+  }
+
+# FLAG SCRIPT START
+
   if (verbose >= 1){
     cat("Starting",funname,"[ Build =",build,"]\n")
   }

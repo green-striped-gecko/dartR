@@ -29,7 +29,7 @@
 #' @param xaxis Identify the x axis from those available in the ordination (xaxis <= nfactors)
 #' @param yaxis Identify the y axis from those available in the ordination (yaxis <= nfactors)
 #' @param plot.out If TRUE, returns a plot object compatable with ggplot, otherwise returns a dataframe [default TRUE]
-#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @return A plot of the ordination [plot.out=TRUE] or a dataframe [plot.out=FALSE]
 #' @export
 #' @import directlabels tidyr
@@ -53,24 +53,29 @@
 #' df
 
 gl.pcoa.plot <- function(glPca, x, scale=FALSE, ellipse=FALSE, p=0.95, labels="pop", hadjust=1.5, 
-                         vadjust=1, xaxis=1, yaxis=2, plot.out=TRUE, verbose=2) {
+                         vadjust=1, xaxis=1, yaxis=2, plot.out=TRUE, verbose=NULL) {
 
-# TIDY UP FILE SPECS
-  
+# TRAP COMMAND, SET VERSION
+
   funname <- match.call()[[1]]
   build <- "Jacob"
+
+# SET VERBOSITY
   
-# FLAG SCRIPT START
-  
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
+  if (is.null(verbose)){
+    verbose <- x@other$verbose
   }
-  
+  if (verbose < 0 | verbose > 5){
+      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+      verbose <- x@other$verbose
+  }
+
+# FLAG SCRIPT START
+
   if (verbose >= 1){
     cat("Starting",funname,"[ Build =",build,"]\n")
   }
-  
+        
 # SCRIPT SPECIFIC ERROR CHECKING
   
   if(class(glPca)!="glPca") {

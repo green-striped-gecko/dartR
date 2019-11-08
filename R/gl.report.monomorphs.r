@@ -10,7 +10,7 @@
 #' 
 #' @param x -- name of the input genlight object [required]
 #' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @return NULL
 #' @import adegenet plyr utils
 #' @export
@@ -21,22 +21,28 @@
 #' # SilicoDArT data
 #' gl.report.monomorphs(testset.gs)
 
-gl.report.monomorphs <- function (x, silent=TRUE, verbose=3) {
+gl.report.monomorphs <- function (x, silent=TRUE, verbose=NULL) {
   
-  # TIDY UP FILE SPECS
-  
-  build ='Jacob'
+# TRAP COMMAND, SET VERSION
+
   funname <- match.call()[[1]]
-  # Note does draw upon the monomorphs flag and will reset it to TRUE on completion
+  build <- "Jacob"
+
+# SET VERBOSITY
   
-  # FLAG SCRIPT START
-  
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
+  if (is.null(verbose)){
+    verbose <- x@other$verbose
   }
-  
-  cat("Starting",funname,"[ Build =",build,"]\n")
+  if (verbose < 0 | verbose > 5){
+      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+      verbose <- x@other$verbose
+  }
+
+# FLAG SCRIPT START
+
+  if (verbose >= 1){
+    cat("Starting",funname,"[ Build =",build,"]\n")
+  }
   
   # STANDARD ERROR CHECKING
   
