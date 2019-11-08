@@ -21,15 +21,11 @@ the trimmed sequence tag. This can happen, rarely, when the sequence containing 
 \details{
 The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
 the sequence tag.
+
+Not fatal, but should apply this filter before gl.filter.secondaries, for obvious reasons.
 }
 \examples{
-gl <- testset.gl
-nLoc(gl)
-gl@other$loc.metrics$SnpPosition[10] <- 100
-gl@other$loc.metrics$SnpPosition[20] <- 100
-gl@other$loc.metrics$SnpPosition[30] <- 100
-gl <- gl.filter.overshoot(gl)
-nLoc(gl)
+result <- gl.filter.overshoot(testset.gl, verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

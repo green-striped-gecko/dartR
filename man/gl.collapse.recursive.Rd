@@ -4,15 +4,17 @@
 \alias{gl.collapse.recursive}
 \title{Recursively collapse a distance matrix by amalgamating populations}
 \usage{
-gl.collapse.recursive(x, prefix = "collapse", tloc = 0, tpop = 1,
-  test = TRUE, alpha = 0.05, delta = 0.02, reps = 1000,
-  verbose = 2)
+gl.collapse.recursive(x, prefix = "collapse", outpath = tempdir(),
+  tloc = 0, tpop = 1, test = FALSE, alpha = 0.05, delta = 0.02,
+  reps = 1000, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object from which the distance matricies are to be calculated [required]}
 
 \item{prefix}{-- a string to be used as a prefix in generating the matricies of fixed differences (stored to disk) and the recode
 tables (also stored to disk) [default "collapse"]}
+
+\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
 \item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]}
 

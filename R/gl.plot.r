@@ -64,7 +64,7 @@ gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TR
 # DO THE JOB
   
   if (!labels){
-    glPlot(x)
+    adegenet::glPlot(x)
   } else {
     X <- t(as.matrix(x))
     X <- X[, ncol(X):1]

@@ -15,7 +15,7 @@
 #' @export
 #' @author Bernd Gruber & Ella Kelly (University of Melbourne) (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.filter.pa.pop(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2],verbose=3)
+#' result <- gl.filter.pa(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2],verbose=3)
 
 gl.filter.pa<-function(x, pop1, pop2, invers=FALSE, verbose=NULL){
   

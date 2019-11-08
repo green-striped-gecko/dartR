@@ -42,7 +42,7 @@ utils.reset.flags <- function(x, set=FALSE, set.verbosity=2, verbose=NULL) {
 # FLAG SCRIPT START
 
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat(paste("Starting",funname,"[ Build =",build,"]\n"))
   }
   
 # STANDARD ERROR CHECKING

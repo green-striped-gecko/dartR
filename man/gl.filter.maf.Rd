@@ -27,7 +27,8 @@ to population structure. It is a means of removing overall rare alleles. To appl
 single populations, use sepPop and lapply.
 }
 \examples{
-f <- gl.filter.maf(testset.gl, threshold=0.05)
+result <- gl.filter.monomorphs(testset.gl)
+result <- gl.filter.maf(result, threshold=0.05, verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

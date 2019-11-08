@@ -57,7 +57,7 @@ If plot.out=TRUE, returns an object of class ggplot so that layers can subsequen
 with the individual labels, population labels and PCOA scores for subsequent plotting by the user with ggplot or other plotting software.
 }
 \examples{
-library(plotly) #needed for lables="interactive"
+#library(plotly) #needed for lables="interactive"
 gl <- testset.gl
 levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
 rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")

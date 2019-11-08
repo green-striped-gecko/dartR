@@ -2,36 +2,34 @@
 % Please edit documentation in R/gl.filter.pa.r
 \name{gl.filter.pa}
 \alias{gl.filter.pa}
-\title{Calculates the number of private alleles possessed by an individual of unknown provenance.}
+\title{Filter loci that contain private (and fixed alleles) between two populations.}
 \usage{
-gl.filter.pa(x, id, nmin = 10, threshold = 0, verbose = 2)
+gl.filter.pa(x, pop1, pop2, invers = FALSE, verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the input genlight object [required]}
+\item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{id}{-- identity label of the focal individual whose provenance is unknown [required]}
+\item{pop1}{-- name of the first parental population (in quotes) [required]}
 
-\item{nmin}{-- minimum sample size for a target population to be included in the analysis [default 10]}
+\item{pop2}{-- name of the second parental population (in quotes) [required]}
 
-\item{threshold}{-- retain those populations for which the focal individual has private alleles less or equal in number than the threshold [default 0]}
+\item{invers}{-- switch to filter for all loci that have no private alleles and are not fixed [FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-A genlight object containing the focal individual (assigned to population "unknown") and 
-populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t).
+The reduced genlight dataset, containing now only fixed and private alleles
 }
 \description{
-Calculates the number of private alleles possessed by an individual of unknown provenance in comparison with a set of populations, and
-returns those populations for which the calculated private alleles are less than a threshold.
-}
-\details{
-A private allele is an allele possessed by the focal individual, but absent from the target population.
+This script is meant to be used prior to \code{gl.nhybrids} to maximise the information content of the snps used to identify hybrids 
+(currently newhybrids does allow only 200 SNPs). The idea is to use first all loci that have fixed alleles between the potential source 
+populations and then "fill up" to 200 loci using loci that have private alleles between those. The functions filters for those loci (if 
+invers is set to TRUE, the opposite is returned (all loci that are not fixed and have no private alleles - not sure why yet, but maybe useful.)
 }
 \examples{
-# Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, threshold=1, verbose=2)
+result <- gl.filter.pa(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2],verbose=3)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber & Ella Kelly (University of Melbourne) (Post to \url{https://groups.google.com/d/forum/dartr})
 }

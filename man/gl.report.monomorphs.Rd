@@ -2,26 +2,32 @@
 % Please edit documentation in R/gl.report.monomorphs.r
 \name{gl.report.monomorphs}
 \alias{gl.report.monomorphs}
-\title{Report monomorphic loci, including those with all NAs}
+\title{Report monomorphic loci}
 \usage{
-gl.report.monomorphs(x, probar = FALSE, verbose = 3)
+gl.report.monomorphs(x, silent = TRUE, verbose = 3)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
 
-\item{probar}{-- if TRUE, a progress bar will be displayed for long loops [default = TRUE]}
+\item{silent}{-- if FALSE, function returns an object, otherwise NULL [default TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \description{
-This script reports the number of monomorphic loci from a genlight \{adegenet\} object
+This script reports the number of monomorphic locim and those with all NAsm from a genlight \{adegenet\} object
 }
 \details{
-A DArT dataset will not have monomorphic loci, but they can arise when populations or individuals are deleted.
-Retaining monomorphic loci may unnecessarily increases the size of the dataset.
+A DArT dataset will not have monomorphic loci, but they can arise, along with loci that are scored all NA, when populations or individuals are deleted.
+Retaining monomorphic loci unnecessarily increases the size of the dataset and will affect some calculations.
+
+Note that for SNP data, NAs likely represent null alleles; in tag presence/absence data, NAs represent missing values (presence/absence could not 
+be reliably scored)
 }
 \examples{
-gl2 <- gl.report.monomorphs(testset.gl)
+# SNP data
+gl.report.monomorphs(testset.gl)
+# SilicoDArT data
+gl.report.monomorphs(testset.gs)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
