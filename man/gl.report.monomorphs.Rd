@@ -4,14 +4,14 @@
 \alias{gl.report.monomorphs}
 \title{Report monomorphic loci}
 \usage{
-gl.report.monomorphs(x, silent = TRUE, verbose = 3)
+gl.report.monomorphs(x, silent = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
 
 \item{silent}{-- if FALSE, function returns an object, otherwise NULL [default TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]}
 }
 \description{
 This script reports the number of monomorphic locim and those with all NAsm from a genlight \{adegenet\} object

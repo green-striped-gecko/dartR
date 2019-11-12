@@ -6,7 +6,7 @@
 \usage{
 gl.plot(x, labels = FALSE, indlabels = indNames(x), col = NULL,
   legend = TRUE, posi = "bottomleft", bg = rgb(1, 1, 1, 0.5),
-  verbose = 2, ...)
+  verbose = NULL, ...)
 }
 \arguments{
 \item{x}{-- a genlight object [required]}
@@ -23,7 +23,7 @@ gl.plot(x, labels = FALSE, indlabels = indNames(x), col = NULL,
 
 \item{bg}{-- background color of the legend [default transparent white]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]}
 
 \item{...}{--- additional arguments passed to glPlot function.}
 }

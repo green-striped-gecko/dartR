@@ -4,7 +4,7 @@
 \alias{gl.filter.pa}
 \title{Filter loci that contain private (and fixed alleles) between two populations.}
 \usage{
-gl.filter.pa(x, pop1, pop2, invers = FALSE, verbose = 2)
+gl.filter.pa(x, pop1, pop2, invers = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -16,7 +16,7 @@ gl.filter.pa(x, pop1, pop2, invers = FALSE, verbose = 2)
 \item{invers}{-- switch to filter for all loci that have no private alleles and are not fixed [FALSE]}
 
 \item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2]}
+3, progress and results summary; 5, full report [default NULL]}
 }
 \value{
 The reduced genlight dataset, containing now only fixed and private alleles

@@ -6,7 +6,7 @@
 \usage{
 gl.pcoa.plot(glPca, x, scale = FALSE, ellipse = FALSE, p = 0.95,
   labels = "pop", hadjust = 1.5, vadjust = 1, xaxis = 1,
-  yaxis = 2, plot.out = TRUE, verbose = 2)
+  yaxis = 2, plot.out = TRUE, verbose = NULL)
 }
 \arguments{
 \item{glPca}{Name of the PCA or PCoA object containing the factor scores and eigenvalues [required]}
@@ -31,7 +31,7 @@ gl.pcoa.plot(glPca, x, scale = FALSE, ellipse = FALSE, p = 0.95,
 
 \item{plot.out}{If TRUE, returns a plot object compatable with ggplot, otherwise returns a dataframe [default TRUE]}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]}
 }
 \value{
 A plot of the ordination [plot.out=TRUE] or a dataframe [plot.out=FALSE]

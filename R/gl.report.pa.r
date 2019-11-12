@@ -37,7 +37,7 @@
 #' gl.report.pa(testset.gl[1:20,])
 #' 
 
-gl.report.pa <- function(gl1, gl2=NULL, silent=TRUE, verbose=3){
+gl.report.pa <- function(gl1, gl2=NULL, silent=FALSE, verbose=3){
   
 # TIDY UP FILE SPECS
   

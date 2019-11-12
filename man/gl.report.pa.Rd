@@ -4,7 +4,7 @@
 \alias{gl.report.pa}
 \title{Report private alleles (and fixed alleles) per pair of populations}
 \usage{
-gl.report.pa(gl1, gl2 = NULL, silent = TRUE, verbose = 3)
+gl.report.pa(gl1, gl2 = NULL, silent = FALSE, verbose = 3)
 }
 \arguments{
 \item{gl1}{-- name of the genlight object containing the SNP data [required]}
