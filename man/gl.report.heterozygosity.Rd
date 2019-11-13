@@ -6,7 +6,7 @@
 \usage{
 gl.report.heterozygosity(x, method = "pop", n.invariant = 0,
   boxplot = "adjusted", range = 1.5, cex.labels = 0.7,
-  silent = TRUE, verbose = 2)
+  silent = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- a genlight object containing the SNP genotypes [Required]}

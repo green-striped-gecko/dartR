@@ -16,7 +16,7 @@
 #' @examples
 #' gl2treemix(testset.gl, outpath=getwd())
 
-gl2treemix <- function(x, outfile="treemix_input.gz", outpath=tempdir(), verbose=2) {
+gl2treemix <- function(x, outfile="treemix_input.gz", outpath=tempdir(), verbose=NULL) {
   
 # TIDY UP FILE SPECS
 
@@ -24,6 +24,10 @@ gl2treemix <- function(x, outfile="treemix_input.gz", outpath=tempdir(), verbose
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")

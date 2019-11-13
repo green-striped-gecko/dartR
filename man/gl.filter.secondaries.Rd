@@ -4,7 +4,7 @@
 \alias{gl.filter.secondaries}
 \title{Filter loci that represent secondary SNPs in a genlight \{adegenet\} object}
 \usage{
-gl.filter.secondaries(x, method = "random", verbose = 2)
+gl.filter.secondaries(x, method = "random", verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

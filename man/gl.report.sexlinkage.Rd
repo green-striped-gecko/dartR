@@ -5,7 +5,7 @@
 \title{Identify loci that are sex linked in specimens in a genlight \{adegenet\} object}
 \usage{
 gl.report.sexlinkage(x, as.sex = "sex", t.het = 0, t.hom = 0,
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

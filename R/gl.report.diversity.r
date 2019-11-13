@@ -25,7 +25,7 @@
 # check that it works on SilicoDArT datasets
 
 
-gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRUE, table="DH", silent=TRUE, verbose=2) {
+gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRUE, table="DH", silent=TRUE, verbose=NULL) {
   
 # TIDY UP FILE SPECS
   
@@ -34,13 +34,17 @@ gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRU
   # Note does not draw upon or modify the loc.metrics.flags
   
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
   
-  cat("Starting",funname,"[ Build =",build,"]\n")
+  cat("Starting",funname,"\n")
   
 # STANDARD ERROR CHECKING
   

@@ -9,7 +9,7 @@ gl.nhybrids(gl, outfile = "nhyb.txt", outpath = tempdir(), p0 = NULL,
   pprob = 0.95, nhyb.directory = NULL, BurnIn = 10000,
   sweeps = 10000, GtypFile = "TwoGensGtypFreq.txt",
   AFPriorFile = NULL, PiPrior = "Jeffreys", ThetaPrior = "Jeffreys",
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing the SNP data [required]}

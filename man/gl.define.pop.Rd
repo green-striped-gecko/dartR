@@ -4,7 +4,7 @@
 \alias{gl.define.pop}
 \title{Define a new population in a genlight \{adegenet\} object on the basis of specified individuals}
 \usage{
-gl.define.pop(x, ind.list, new, verbose = 2)
+gl.define.pop(x, ind.list, new, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes [required]}

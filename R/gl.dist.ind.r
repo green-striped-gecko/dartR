@@ -37,7 +37,7 @@
 #' @examples
 #' gl.dist.pop(testset.gl, method="euclidean")
 
-gl.dist.ind <- function(x, method=NULL, plot=TRUE, boxplot="standard", range=1.5, verbose=2) {
+gl.dist.ind <- function(x, method=NULL, plot=TRUE, boxplot="standard", range=1.5, verbose=NULL) {
 
 # TIDY UP FILE SPECS
   
@@ -45,6 +45,10 @@ gl.dist.ind <- function(x, method=NULL, plot=TRUE, boxplot="standard", range=1.5
   build <- "Jacob"
   
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -52,7 +56,7 @@ gl.dist.ind <- function(x, method=NULL, plot=TRUE, boxplot="standard", range=1.5
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
   }
   
   # STANDARD ERROR CHECKING

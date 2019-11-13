@@ -18,7 +18,7 @@
 #'}
 
 
-gl2structure <- function(x, indNames=NULL, addcolumns=NULL, ploidy=2, exportMarkerNames=TRUE, outfile="gl.str", outpath=tempdir(), verbose=2){
+gl2structure <- function(x, indNames=NULL, addcolumns=NULL, ploidy=2, exportMarkerNames=TRUE, outfile="gl.str", outpath=tempdir(), verbose=NULL){
 
 # TIDY UP FILE SPECS
 
@@ -26,6 +26,10 @@ gl2structure <- function(x, indNames=NULL, addcolumns=NULL, ploidy=2, exportMark
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")

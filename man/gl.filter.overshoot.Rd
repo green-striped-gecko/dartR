@@ -4,7 +4,7 @@
 \alias{gl.filter.overshoot}
 \title{Filters loci for which the SNP has been trimmed from the sequence tag along with the adaptor}
 \usage{
-gl.filter.overshoot(x, verbose = 2)
+gl.filter.overshoot(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object [required]}

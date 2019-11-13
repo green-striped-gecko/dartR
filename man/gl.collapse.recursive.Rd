@@ -6,7 +6,7 @@
 \usage{
 gl.collapse.recursive(x, prefix = "collapse", outpath = tempdir(),
   tloc = 0, tpop = 1, test = FALSE, alpha = 0.05, delta = 0.02,
-  reps = 1000, verbose = 2)
+  reps = 1000, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object from which the distance matricies are to be calculated [required]}

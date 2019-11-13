@@ -5,7 +5,7 @@
 \title{Report summary of sequence tag length across loci in a genlight {adegenet} object}
 \usage{
 gl.report.taglength(x, boxplot = "adjusted", range = 1.5,
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

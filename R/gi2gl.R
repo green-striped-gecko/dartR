@@ -8,7 +8,7 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @details Be aware due to ambiguity which one is the reference allele a combination of gi2gl(gl2gi(gl)) does not return an identical object (but in terms of analysis this conversions are equivalent)
 
-gi2gl <- function(gi, parallel=TRUE, verbose=2){
+gi2gl <- function(gi, parallel=TRUE, verbose=NULL){
   
 # TRAP COMMAND, SET VERSION
 
@@ -16,36 +16,33 @@ gi2gl <- function(gi, parallel=TRUE, verbose=2){
   build <- "Jacob"
   
 # SET VERBOSITY
-  
-  if (is.null(verbose)){
-    verbose <- x@other$verbose
-  }
+   # set verbosity
+  if (is.null(verbose) & !is.null(gi@other$verbose)) verbose=gi@other$verbose
+  if (is.null(verbose)) verbose=2
   if (verbose < 0 | verbose > 5){
-      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
-      verbose <- x@other$verbose
+      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default [2] \n"))
+      verbose <- 2
   }
-
-# FLAG SCRIPT START
 
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
   }
   
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genind") {
+  if(class(gi)!="genind") {
     stop("  Fatal Error: genind object required!\n")
   }
   
 # DO THE JOB
   
-  locna <- x@loc.n.all
+  locna <- gi@loc.n.all
   ccc<-1
   for (i in 2:length(locna)) 
   {
     if (locna[i-1]==1)  ccc[i] <- ccc[i-1]+1 else ccc[i]<- ccc[i-1]+2
   }
-  gl <-new("genlight", x@tab[,ccc], pop = pop(x), other=x@other, ploidy=2, loc.names=locNames(x), ind.names=indNames(x), parallel=parallel)
+  gl <-new("genlight", gi@tab[,ccc], pop = pop(gi), other=gi@other, ploidy=2, loc.names=locNames(gi), ind.names=indNames(gi), parallel=parallel)
   if (is.null(gl@other$loc.metrics.flags$monomorphs)) gl@other$loc.metrics.flags$monomorphs <- FALSE
 # FLAG SCRIPT END
   

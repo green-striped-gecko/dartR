@@ -32,7 +32,8 @@
 #' @param verbose -- verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @return A plot of the ordination [plot.out=TRUE] or a dataframe [plot.out=FALSE]
 #' @export
-#' @import directlabels tidyr
+#' @importFrom directlabels geom_dl
+#' @import tidyr 
 #' @importFrom methods show
 #' @rawNamespace import(ggplot2, except = empty)
 
@@ -60,19 +61,23 @@ gl.pcoa.plot <- function(glPca, x, scale=FALSE, ellipse=FALSE, p=0.95, labels="p
   build <- "Jacob"
 
 # SET VERBOSITY
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
   
-  if (is.null(verbose)){
-    verbose <- x@other$verbose
-  }
+  
   if (verbose < 0 | verbose > 5){
-      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
-      verbose <- x@other$verbose
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
   }
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
   }
         
 # SCRIPT SPECIFIC ERROR CHECKING
@@ -147,7 +152,7 @@ gl.pcoa.plot <- function(glPca, x, scale=FALSE, ellipse=FALSE, p=0.95, labels="p
   # If individual labels
 
     if (labels == "ind") {
-      cat("  Plotting individuals\n")
+      if (verbose>0) cat("  Plotting individuals\n")
 
     # Plot
       p <- ggplot(df, aes(x=df$PCoAx, y=df$PCoAy, group=ind, colour=pop)) +
@@ -172,9 +177,9 @@ gl.pcoa.plot <- function(glPca, x, scale=FALSE, ellipse=FALSE, p=0.95, labels="p
 
     if (labels == "pop") {
       if (class(x)=="genlight"){
-        cat("  Plotting populations\n")
+        if (verbose>0) cat("  Plotting populations\n")
       } else {
-        cat("  Plotting entities from the Distance Matrix\n")
+        if (verbose>0) cat("  Plotting entities from the Distance Matrix\n")
       }  
 
       # Plot
@@ -227,7 +232,7 @@ gl.pcoa.plot <- function(glPca, x, scale=FALSE, ellipse=FALSE, p=0.95, labels="p
   # If labels = legend
 
     if (labels == "legend") {
-      cat("Plotting populations identified by a legend\n")
+      if (verbose>0) cat("Plotting populations identified by a legend\n")
 
       # Plot
       p <- ggplot(df, aes(x=df$PCoAx, y=df$PCoAy,colour=pop)) +
@@ -250,7 +255,7 @@ gl.pcoa.plot <- function(glPca, x, scale=FALSE, ellipse=FALSE, p=0.95, labels="p
     # If labels = none
     
     if (labels == "none" | labels==FALSE) {
-      cat("Plotting points with no labels\n")
+      if (verbose>0) cat("Plotting points with no labels\n")
 
       # Plot
       p <- ggplot(df, aes(x=df$PCoAx, y=df$PCoAy,colour=pop)) +
@@ -271,7 +276,7 @@ gl.pcoa.plot <- function(glPca, x, scale=FALSE, ellipse=FALSE, p=0.95, labels="p
       if(ellipse==TRUE) {p <- p + stat_ellipse(aes(colour=pop), type="norm", level=0.95)}
     }
     
-    cat("  Preparing plot .... please wait\n")
+    if (verbose>0) cat("  Preparing plot .... please wait\n")
     if(labels=="interactive"){
       pp <- ggplotly(p)
       show(pp)

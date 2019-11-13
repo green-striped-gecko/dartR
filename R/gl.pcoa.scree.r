@@ -30,7 +30,7 @@ gl.pcoa.scree <- function(x, top=TRUE, verbose=0) {
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
-
+  
     cat("Starting",funname,"\n")
 
 # DO THE JOB

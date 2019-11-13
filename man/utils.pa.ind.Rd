@@ -4,7 +4,7 @@
 \alias{utils.pa.ind}
 \title{Report number of private alleles possessed by an individual of unknown provenance}
 \usage{
-utils.pa.ind(x, unknown, nmin = 10, threshold = 0, verbose = 2)
+utils.pa.ind(x, unknown, nmin = 10, threshold = 0, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}

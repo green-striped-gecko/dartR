@@ -4,7 +4,7 @@
 \alias{utils.dist.binary}
 \title{Calculate a distance matrix for individuals defined in an \{adegenet\} genlight object using binary P/A data (SilicoDArT)}
 \usage{
-utils.dist.binary(x, method = "simple", verbose = 2)
+utils.dist.binary(x, method = "simple", verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}

@@ -4,7 +4,7 @@
 \alias{gl.set.verbosity}
 \title{Set the default verbosity level}
 \usage{
-gl.set.verbosity(x, set.verbosity = 2, verbose = 2)
+gl.set.verbosity(x, set.verbosity = 2, verbose = NULL)
 }
 \arguments{
 \item{x}{name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}

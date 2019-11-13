@@ -16,6 +16,7 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
+
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -23,7 +24,7 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat(paste("Starting",funname,"\n"))
   }
   
 # DO THE JOB
@@ -145,7 +146,7 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
 # FLAG SCRIPT END
   
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(paste("Completed:",funname,"\n"))
   }
   
   return(out)

@@ -13,7 +13,7 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @importFrom utils getTxtProgressBar setTxtProgressBar txtProgressBar 
 
-gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=FALSE, verbose=2){
+gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=FALSE, verbose=NULL){
 
 # TIDY UP FILE SPECS
 
@@ -21,6 +21,10 @@ gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=FALS
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")

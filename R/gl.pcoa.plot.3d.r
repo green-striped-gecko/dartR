@@ -31,7 +31,7 @@
 
 # Last amended 3-Feb-19
 
-gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  shape="sphere", radius=2, legend="topright", verbose=2) {
+gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  shape="sphere", radius=2, legend="topright", verbose=NULL) {
 
 # TIDY UP FILE SPECS
 
@@ -39,6 +39,10 @@ gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  sh
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")

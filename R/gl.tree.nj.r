@@ -19,13 +19,17 @@
 
 # Last amended 3-Aug-19
 
-gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, treefile=NULL, verbose=2) {
+gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, treefile=NULL, verbose=NULL) {
 
 # TIDY UP FILE SPECS
 
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")

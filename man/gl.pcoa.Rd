@@ -5,7 +5,7 @@
 \title{Ordination applied to genotypes in a genlight object (PCA) or to a distance matrix (PCoA)}
 \usage{
 gl.pcoa(x, nfactors = 5, correction = NULL, parallel = FALSE,
-  n.cores = 16, verbose = 2)
+  n.cores = 16, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data or a distance matrix of type dist [required]}

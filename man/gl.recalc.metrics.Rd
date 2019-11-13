@@ -4,7 +4,7 @@
 \alias{gl.recalc.metrics}
 \title{Recalculate locus metrics when individuals or populations are deleted from a genlight \{adegenet\} object}
 \usage{
-gl.recalc.metrics(x, verbose = 2)
+gl.recalc.metrics(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes [required]}

@@ -5,7 +5,7 @@
 \title{Calculate diversity indices for SNPs}
 \usage{
 gl.report.diversity(gl, spectrumplot = TRUE, confiplot = FALSE,
-  pbar = TRUE, table = "DH", silent = TRUE, verbose = 2)
+  pbar = TRUE, table = "DH", silent = TRUE, verbose = NULL)
 }
 \arguments{
 \item{gl}{genlight object containing the SNP genotypes  [required]}

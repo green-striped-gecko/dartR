@@ -4,7 +4,7 @@
 \alias{gl2demerelate}
 \title{Create a dataframe suitable for input to package \{Demerelate\} from a genlight \{adegenet\} object}
 \usage{
-gl2demerelate(gl, verbose = 2)
+gl2demerelate(gl, verbose = NULL)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing the SNP data [required]}

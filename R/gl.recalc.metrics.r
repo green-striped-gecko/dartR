@@ -20,7 +20,7 @@
 #'   gl <- gl.recalc.metrics(testset.gl, verbose=2)
 #' @seealso \code{\link{gl.filter.monomorphs}}
 
-gl.recalc.metrics <- function(x, verbose=2){
+gl.recalc.metrics <- function(x, verbose=NULL){
   
  # TIDY UP FILE SPECS
   
@@ -29,6 +29,10 @@ gl.recalc.metrics <- function(x, verbose=2){
   hold <- x@other$loc.metrics.flags$monomorphs
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")

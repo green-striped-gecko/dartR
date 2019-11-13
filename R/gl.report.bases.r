@@ -32,13 +32,17 @@ gl.report.bases <- function(x, plot=TRUE, silent=TRUE, verbose = 2) {
   # Note does not draw upon or modify the loc.metrics.flags
   
   # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 3\n")
     verbose <- 3
   }
   
-  cat("Starting",funname,"[ Build =",build,"]\n")
+  cat("Starting",funname,"\n")
 
 # STANDARD ERROR CHECKING
   

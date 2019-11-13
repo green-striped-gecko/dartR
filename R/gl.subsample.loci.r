@@ -14,7 +14,7 @@
 #' @examples
 #' result <- gl.subsample.loci(testset.gl, n=200, method="pic")
 
-gl.subsample.loci <- function(x, n, method="random", verbose=2) {
+gl.subsample.loci <- function(x, n, method="random", verbose=NULL) {
 
 # TIDY UP FILE SPECS
   
@@ -24,6 +24,10 @@ gl.subsample.loci <- function(x, n, method="random", verbose=2) {
   # Note does not draw upon or modifies the loc.metrics.flags.
   
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -31,7 +35,7 @@ gl.subsample.loci <- function(x, n, method="random", verbose=2) {
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
   }
   
 # STANDARD ERROR CHECKING

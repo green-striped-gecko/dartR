@@ -5,7 +5,7 @@
 \title{Remove all but the specified loci from a genelight \{adegenet\} object}
 \usage{
 gl.keep.loc(x, loc.list = NULL, first = NULL, last = NULL,
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or presence/absence data [required]}

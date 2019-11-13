@@ -6,7 +6,7 @@
 \usage{
 gl2structure(x, indNames = NULL, addcolumns = NULL, ploidy = 2,
   exportMarkerNames = TRUE, outfile = "gl.str", outpath = tempdir(),
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data and location data, lat longs [required]}

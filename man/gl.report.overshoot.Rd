@@ -4,7 +4,7 @@
 \alias{gl.report.overshoot}
 \title{Reports loci for which the SNP has been trimmed from the sequence tag along with the adaptor}
 \usage{
-gl.report.overshoot(x, silent = TRUE, verbose = 2)
+gl.report.overshoot(x, silent = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object [required]}

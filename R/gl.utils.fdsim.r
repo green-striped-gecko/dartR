@@ -18,7 +18,7 @@
 #' @importFrom stats pnorm rbinom
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 
-gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, verbose=2) {
+gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, verbose=NULL) {
   
   if (verbose > 0) {
     cat("Starting gl.utils.fdsim: Using simulation to estimate frequency of false positives\n")

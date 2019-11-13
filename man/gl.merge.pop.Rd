@@ -4,7 +4,7 @@
 \alias{gl.merge.pop}
 \title{Merge two or more populations in a genelight \{adegenet\} object into one population}
 \usage{
-gl.merge.pop(x, old = NULL, new = NULL, verbose = 2)
+gl.merge.pop(x, old = NULL, new = NULL, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes [required]}

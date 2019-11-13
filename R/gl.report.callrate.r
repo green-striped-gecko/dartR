@@ -31,7 +31,7 @@
 #' gl.report.callrate(testset.gl)
 
 
-gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, silent=TRUE, verbose=2) {
+gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, silent=TRUE, verbose=NULL) {
   
 # TIDY UP FILE SPECS
 
@@ -40,13 +40,17 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, s
   # Note: This function will update Callrate if the flag is FALSE
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
   
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
 
 # STANDARD ERROR CHECKING
 

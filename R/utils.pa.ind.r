@@ -18,7 +18,7 @@
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 #' utils.pa.ind(testset.gl, unknown="UC_00146", nmin=10, threshold=1, verbose=2)
 
-utils.pa.ind <- function (x, unknown, nmin=10, threshold=0, verbose=2) {
+utils.pa.ind <- function (x, unknown, nmin=10, threshold=0, verbose=NULL) {
   
 # TIDY UP FILE SPECS
   
@@ -26,6 +26,10 @@ utils.pa.ind <- function (x, unknown, nmin=10, threshold=0, verbose=2) {
   build <- "Jacob"
   
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -33,7 +37,7 @@ utils.pa.ind <- function (x, unknown, nmin=10, threshold=0, verbose=2) {
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
   }
   
 # STANDARD ERROR CHECKING

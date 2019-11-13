@@ -5,7 +5,7 @@
 \title{Remove specified populations from a genelight \{adegenet\} object}
 \usage{
 gl.drop.pop(x, pop.list, as.pop = NULL, recalc = FALSE,
-  mono.rm = FALSE, verbose = 2)
+  mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or Tag P/A data (SilicoDArT) [required]}

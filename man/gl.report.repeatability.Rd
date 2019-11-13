@@ -6,7 +6,7 @@
 for fragment presence/absence).}
 \usage{
 gl.report.repeatability(x, boxplot = "adjusted", range = 1.5,
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

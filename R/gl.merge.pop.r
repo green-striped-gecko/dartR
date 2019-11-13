@@ -19,7 +19,7 @@
 
 # Last amended 3-Feb-19
 
-gl.merge.pop <- function(x, old=NULL, new=NULL, verbose=2) {
+gl.merge.pop <- function(x, old=NULL, new=NULL, verbose=NULL) {
 
   if (verbose > 0) {
     if (length(old) == 1) {

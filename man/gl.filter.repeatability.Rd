@@ -4,7 +4,7 @@
 \alias{gl.filter.repeatability}
 \title{Filter loci in a genlight \{adegenet\} object based on average repeatability of alleles at a locus}
 \usage{
-gl.filter.repeatability(x, threshold = 0.99, verbose = 2)
+gl.filter.repeatability(x, threshold = 0.99, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

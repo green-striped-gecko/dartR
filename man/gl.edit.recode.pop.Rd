@@ -6,7 +6,7 @@
 \usage{
 gl.edit.recode.pop(x, pop.recode = NULL, out.recode.file = NULL,
   outpath = tempdir(), recalc = FALSE, mono.rm = FALSE,
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the genlight object for which populations are to be reassigned.[required]}

@@ -4,7 +4,7 @@
 \alias{utils.recalc.maf}
 \title{A utility script to recalculate the the minor allele frequency by locus, typically after some populations have been deleted}
 \usage{
-utils.recalc.maf(x, verbose = 2)
+utils.recalc.maf(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

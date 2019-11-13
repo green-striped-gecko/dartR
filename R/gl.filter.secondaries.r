@@ -20,7 +20,7 @@
 #' gl.report.secondaries(testset.gl)
 #' result <- gl.filter.secondaries(testset.gl)
 
-gl.filter.secondaries <- function(x, method="random", verbose=2) {
+gl.filter.secondaries <- function(x, method="random", verbose=NULL) {
 
 # TIDY UP FILE SPECS
   
@@ -29,13 +29,17 @@ gl.filter.secondaries <- function(x, method="random", verbose=2) {
   # Note does not draw upon or modify the loc.metrics.flags
   
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
   
-  cat("Starting",funname,"[ Build =",build,"]\n")
+  cat("Starting",funname,"\n")
   
 # STANDARD ERROR CHECKING
   

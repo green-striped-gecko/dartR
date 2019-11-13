@@ -8,9 +8,21 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @details this function uses a faster version of df2genind (from the adgegenet package)
 
-gl2gi <- function(gl, probar=FALSE, verbose=2) {
+gl2gi <- function(gl, probar=FALSE, verbose=NULL) {
 
-if (verbose==1) {
+
+  # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(gl@other$verbose)) verbose=gl@other$verbose
+  if (is.null(verbose)) verbose=2
+  
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  
+  if (verbose>0) {
   cat("Start conversion....\n")
   ptm <- proc.time()[3]
   cat("Please note conversion of bigger data sets will take some time!\n" )

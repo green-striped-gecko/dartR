@@ -4,7 +4,7 @@
 \alias{gl.filter.rdepth}
 \title{Filter loci based on counts of sequence tags scored at a locus (read depth)}
 \usage{
-gl.filter.rdepth(x, lower = 5, upper = 50, verbose = 2)
+gl.filter.rdepth(x, lower = 5, upper = 50, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP or tag presence/absence data [required]}

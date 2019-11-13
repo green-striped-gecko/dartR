@@ -5,7 +5,7 @@
 \title{Calculate a distance matrix for individuals defined in an \{adegenet\} genlight object}
 \usage{
 gl.dist.ind(x, method = NULL, plot = TRUE, boxplot = "standard",
-  range = 1.5, verbose = 2)
+  range = 1.5, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}

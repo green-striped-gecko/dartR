@@ -19,7 +19,7 @@
 
 # Last amended 3-Feb-19
 
-gl2gds <- function(x, outfile="gl2gds.gds", outpath=tempdir(), verbose=2) {
+gl2gds <- function(x, outfile="gl2gds.gds", outpath=tempdir(), verbose=NULL) {
 
 # TIDY UP FILE SPECS
 
@@ -27,6 +27,10 @@ gl2gds <- function(x, outfile="gl2gds.gds", outpath=tempdir(), verbose=2) {
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")

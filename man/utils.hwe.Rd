@@ -5,7 +5,7 @@
 \title{Calculates departure from Hardy-Weinberg Equilibrium. Utility script not meant 
 for end users.}
 \usage{
-utils.hwe(x, prob = 0.05, verbose = 2)
+utils.hwe(x, prob = 0.05, verbose = NULL)
 }
 \arguments{
 \item{x}{-- a genlight object containting the SNP profiles for a population [Required]}

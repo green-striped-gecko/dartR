@@ -14,7 +14,7 @@
 #' m <-  gl.percent.freq(testset.gl)
 #' m
 
-gl.percent.freq<- function(x, verbose=2) {
+gl.percent.freq<- function(x, verbose=NULL) {
 
 # TIDY UP FILE SPECS
   
@@ -22,6 +22,10 @@ gl.percent.freq<- function(x, verbose=2) {
   build <- "Jacob"
   
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -29,7 +33,7 @@ gl.percent.freq<- function(x, verbose=2) {
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
   }
   
 # STANDARD ERROR CHECKING

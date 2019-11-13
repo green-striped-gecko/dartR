@@ -4,7 +4,7 @@
 \alias{utils.recalc.freqhomref}
 \title{A utility script to recalculate the the frequency of the homozygous reference SNP by locus after some populations have been deleted}
 \usage{
-utils.recalc.freqhomref(x, verbose = 2)
+utils.recalc.freqhomref(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

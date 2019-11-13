@@ -24,6 +24,10 @@ gl.report.repavg <- function(x,verbose=3) {
   funname <- match.call()[[1]]
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
     if (verbose >=1){
       cat("Starting",funname,"\n")

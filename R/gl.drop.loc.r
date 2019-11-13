@@ -13,7 +13,7 @@
 #' @examples
 #'    gl <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G", "100049839-39-G/T"))
 
-gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
+gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 
 # TIDY UP FILE SPECS
   
@@ -23,6 +23,10 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=2){
   # Note does not draw upon or modify the loc.metrics.flags
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")

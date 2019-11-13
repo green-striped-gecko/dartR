@@ -4,7 +4,8 @@
 \alias{gl.filter.heterozygosity}
 \title{Filters individuals with average heterozygosity greater than a specified upper threshold or less than a specified lower threshold.}
 \usage{
-gl.filter.heterozygosity(x, t.upper = 0.7, t.lower = 0, verbose = 2)
+gl.filter.heterozygosity(x, t.upper = 0.7, t.lower = 0,
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- a genlight object containing the SNP genotypes [Required]}

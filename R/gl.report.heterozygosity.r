@@ -63,7 +63,7 @@ gl.report.heterozygosity <- function(x,
                                      range=1.5,
                                      cex.labels=0.7,
                                      silent=TRUE,
-                                     verbose=2) {
+                                     verbose=NULL) {
   
   # TIDY UP FILE SPECS
   
@@ -72,13 +72,17 @@ gl.report.heterozygosity <- function(x,
   # Note does not draw upon or modify the loc.metrics.flags
   
   # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
   
-  cat("Starting",funname,"[ Build =",build,"]\n")
+  if(verbose>0) cat("Starting",funname,"\n")
   
   # STANDARD ERROR CHECKING
   

@@ -6,7 +6,7 @@
 \usage{
 gl.dist.pop(x, method = "euclidean", plot = TRUE,
   boxplot = "standard", range = 1.5, binary = FALSE, p = NULL,
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}

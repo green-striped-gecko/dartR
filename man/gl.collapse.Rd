@@ -6,7 +6,7 @@
 \usage{
 gl.collapse(fd, recode.table = "tmp.csv", outpath = tempdir(),
   tpop = 0, tloc = 0, test = FALSE, delta = 0.02, reps = 1000,
-  plot = TRUE, pb = FALSE, verbose = 2)
+  plot = TRUE, pb = FALSE, verbose = NULL)
 }
 \arguments{
 \item{fd}{-- name of the list of matricies produced by gl.fixed.diff() [required]}

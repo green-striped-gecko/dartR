@@ -14,7 +14,7 @@
 #' result <- gl.filter.taglength(testset.gl,lower=60)
 #' gl.report.taglength(result)
 
-gl.filter.taglength <- function(x, lower=20, upper=69, verbose=2) {
+gl.filter.taglength <- function(x, lower=20, upper=69, verbose=NULL) {
 
 # TIDY UP FILE SPECS
   
@@ -23,13 +23,17 @@ gl.filter.taglength <- function(x, lower=20, upper=69, verbose=2) {
   # Note: This function will not draw upon or update locus metrics flags
   
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
   
-  cat("Starting",funname,"[ Build =",build,"]\n")
+  cat("Starting",funname,"\n")
   
 # STANDARD ERROR CHECKING
   

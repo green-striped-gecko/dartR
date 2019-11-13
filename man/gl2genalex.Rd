@@ -5,7 +5,7 @@
 \title{Convert a genlight object to format suitable for input to genalex}
 \usage{
 gl2genalex(x, outfile = "genalex.csv", outpath = tempdir(),
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

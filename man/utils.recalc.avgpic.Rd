@@ -5,7 +5,7 @@
 \title{A utility script to recalculate the OneRatioRef, OneRatioSnp, PICRef, PICSnp, and AvgPIC by locus after some
 populations have been deleted.}
 \usage{
-utils.recalc.avgpic(x, verbose = 2)
+utils.recalc.avgpic(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

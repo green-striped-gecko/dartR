@@ -16,7 +16,7 @@
 #' @examples
 #' #result <- utils.recalc.freqhomsnp(testset.gl)
 
-utils.recalc.freqhomsnp <- function(x, verbose=2) {
+utils.recalc.freqhomsnp <- function(x, verbose=NULL) {
 
 # TIDY UP FILE SPECS
   
@@ -26,6 +26,10 @@ utils.recalc.freqhomsnp <- function(x, verbose=2) {
   # Note draws upon and modifies the loc.metrics.flags for freqhomsnp.
   
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -33,7 +37,7 @@ utils.recalc.freqhomsnp <- function(x, verbose=2) {
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
   }
   
 # STANDARD ERROR CHECKING

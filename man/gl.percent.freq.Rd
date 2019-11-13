@@ -4,7 +4,7 @@
 \alias{gl.percent.freq}
 \title{Generate percentage allele frequencies by locus and population}
 \usage{
-gl.percent.freq(x, verbose = 2)
+gl.percent.freq(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP or Tag P/A (SilicoDArT) data [required]}

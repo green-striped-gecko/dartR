@@ -22,7 +22,7 @@
 #' @examples
 #' gl.report.repavg(testset.gl)
 
-gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=2) {
+gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=NULL) {
 
   # TIDY UP FILE SPECS
   
@@ -32,13 +32,17 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=2)
   # Note does not draw upon or modify the loc.metrics.flags as RepAvg and Reproducibility cannot be recalculated.
 
   # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
   
-  cat("Starting",funname,"[ Build =",build,"]\n")
+  cat("Starting",funname,"\n")
 
   # STANDARD ERROR CHECKING
   

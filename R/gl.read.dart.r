@@ -28,8 +28,7 @@ gl.read.dart <- function(filename, ind.metafile=NULL, recalc=FALSE, mono.rm=FALS
   build <- "Jacob"
   funname <- match.call()[[1]]
   # Creates the loc.metrics.flags.
-  
-# FLAG SCRIPT START
+ # FLAG SCRIPT START
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -37,7 +36,7 @@ gl.read.dart <- function(filename, ind.metafile=NULL, recalc=FALSE, mono.rm=FALS
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat(paste("Starting",funname,"\n"))
   }
   
 # DO THE JOB
@@ -134,7 +133,7 @@ gl.read.dart <- function(filename, ind.metafile=NULL, recalc=FALSE, mono.rm=FALS
 # FLAG SCRIPT END
     
     if (verbose > 0) {
-      cat("Completed:",funname,"\n")
+      cat(paste("Completed:",funname,"\n"))
     }
     
     

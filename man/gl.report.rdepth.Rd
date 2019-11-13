@@ -4,7 +4,8 @@
 \alias{gl.report.rdepth}
 \title{Report summary of Read Depth for each locus}
 \usage{
-gl.report.rdepth(x, boxplot = "adjusted", range = 1.5, verbose = 2)
+gl.report.rdepth(x, boxplot = "adjusted", range = 1.5,
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

@@ -4,7 +4,7 @@
 \alias{gl.filter.maf}
 \title{Filter loci on the basis of minor allele frequency (MAF) in a genlight {adegenet} object}
 \usage{
-gl.filter.maf(x, threshold = 0.01, verbose = 2)
+gl.filter.maf(x, threshold = 0.01, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

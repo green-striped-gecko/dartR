@@ -46,7 +46,7 @@
 #' fd <- gl.collapse.recursive(testset.gl, prefix="testset", test=TRUE, tloc=0, tpop=2, verbose=2)
 #' }
 
-gl.collapse.recursive <- function(x, prefix="collapse", outpath=tempdir(), tloc=0, tpop=1, test=FALSE, alpha=0.05, delta=0.02, reps=1000, verbose=2) {
+gl.collapse.recursive <- function(x, prefix="collapse", outpath=tempdir(), tloc=0, tpop=1, test=FALSE, alpha=0.05, delta=0.02, reps=1000, verbose=NULL) {
   
 # TIDY UP FILE SPECS
   
@@ -54,6 +54,10 @@ gl.collapse.recursive <- function(x, prefix="collapse", outpath=tempdir(), tloc=
   build <- "Jacob"
   
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -61,7 +65,7 @@ gl.collapse.recursive <- function(x, prefix="collapse", outpath=tempdir(), tloc=
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
   }
   
 # STANDARD ERROR CHECKING

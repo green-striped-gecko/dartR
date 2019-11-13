@@ -4,7 +4,7 @@
 \alias{utils.recalc.callrate}
 \title{A utility script to recalculate the callrate by locus after some populations have been deleted}
 \usage{
-utils.recalc.callrate(x, verbose = 2)
+utils.recalc.callrate(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

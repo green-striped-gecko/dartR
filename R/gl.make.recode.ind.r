@@ -25,7 +25,7 @@
 #' @examples
 #' result <- gl.make.recode.ind(testset.gl, out.recode.outpath=getwd(),file="Emmac_recode_ind.csv")
 
- gl.make.recode.ind <- function(x, out.recode.file="default_recode_ind.csv", outpath=tempdir(), verbose=2) {
+ gl.make.recode.ind <- function(x, out.recode.file="default_recode_ind.csv", outpath=tempdir(), verbose=NULL) {
 
 # TIDY UP FILE SPECS
    
@@ -34,6 +34,10 @@
    outfilespec <- file.path(outpath, out.recode.file)
    
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
    
    if (verbose < 0 | verbose > 5){
      cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -41,7 +45,7 @@
    }
    
    if (verbose >= 1){
-     cat("Starting",funname,"[ Build =",build,"]\n")
+     cat("Starting",funname,"\n")
    }
    
 # STANDARD ERROR CHECKING

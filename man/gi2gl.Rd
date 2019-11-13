@@ -4,7 +4,7 @@
 \alias{gi2gl}
 \title{Converts a genind object to genlight object}
 \usage{
-gi2gl(gi, parallel = TRUE, verbose = 2)
+gi2gl(gi, parallel = TRUE, verbose = NULL)
 }
 \arguments{
 \item{gi}{-- a genind object}

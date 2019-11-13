@@ -4,7 +4,7 @@
 \alias{gl2sa}
 \title{Convert genlight objects to the format used in the SNPassoc package}
 \usage{
-gl2sa(x, verbose = 2)
+gl2sa(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

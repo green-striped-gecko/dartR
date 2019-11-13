@@ -39,9 +39,13 @@ gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TR
   }
 
 # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
 
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    cat("Starting",funname,"\n")
   }
 
 # STANDARD ERROR CHECKING

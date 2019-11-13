@@ -6,7 +6,7 @@
 \usage{
 gl.collapse.pval(fd, recode.table = "tmp.csv", outpath = tempdir(),
   delta = 0.02, reps = 1000, alpha = 0.05, plot = FALSE,
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{fd}{-- name of the list containing the collapsed gl object and associated distance matricies output by gl.collapse run with test=TRUE [required]}

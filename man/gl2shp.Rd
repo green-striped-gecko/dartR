@@ -6,7 +6,7 @@
 \usage{
 gl2shp(x, type = "shp",
   proj4 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
-  outfile = "gl", outpath = tempdir(), verbose = 2)
+  outfile = "gl", outpath = tempdir(), verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data and location data, lat longs  [required]}

@@ -4,7 +4,7 @@
 \alias{gl.filter.monomorphs}
 \title{Remove monomorphic loci, including those with all NAs}
 \usage{
-gl.filter.monomorphs(x, verbose = 2)
+gl.filter.monomorphs(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}

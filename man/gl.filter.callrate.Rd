@@ -6,7 +6,7 @@
 \usage{
 gl.filter.callrate(x, method = "loc", threshold = 0.95,
   mono.rm = FALSE, recalc = FALSE, recursive = FALSE, plot = TRUE,
-  bins = 25, verbose = 2)
+  bins = 25, verbose = NULL)
 }
 \arguments{
 \item{x}{name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}

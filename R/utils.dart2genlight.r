@@ -18,6 +18,7 @@ utils.dart2genlight <- function(dart, ind.metafile=NULL, covfilename=NULL, proba
   funname <- match.call()[[1]]
   
 # FLAG SCRIPT START
+
   
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -25,7 +26,7 @@ utils.dart2genlight <- function(dart, ind.metafile=NULL, covfilename=NULL, proba
   }
   
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+   cat(paste("Starting",funname,"\n"))
   }
   
 # DO THE JOB
@@ -134,6 +135,20 @@ if (!is.null(ind.metafile)){
     #reorder
     if (length(ind.cov[,id.col]) !=length(names(sdata))){
       cat ("Ids for individual metadata does not match the number of ids in the SNP data file. Maybe this is fine if a subset matches.\n") 
+      nam.indmeta <- ind.cov[,id.col]
+      nam.dart <- names(sdata)
+      
+      nm.indmeta <- nam.indmeta[!nam.indmeta %in% nam.dart]
+      nm.inddart <- nam.dart[!nam.dart %in% nam.indmeta]
+      if (length(nm.indmeta)>0) {
+        cat("ind.metafile ids not matched were:\n")
+        print(nm.indmeta)
+      }
+      if (length(nm.inddart)>0) {
+        cat("dart file ids not matched were:\n")
+        print(nm.inddart)
+      }
+      
     } 
 
     ord <- match(names(sdata), ind.cov[,id.col])
@@ -201,7 +216,7 @@ if (!is.null(ind.metafile)){
 # FLAG SCRIPT END
 
 if (verbose >= 1) {
-  cat("Completed:",funname,"\n")
+  cat(paste("Completed:",funname,"\n"))
 }
 
 

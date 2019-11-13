@@ -5,7 +5,7 @@
 \title{Concatenates DArT trimmed sequences and outputs a fastA file.}
 \usage{
 gl2fasta(x, method = 1, outfile = "output.fasta",
-  outpath = tempdir(), probar = FALSE, verbose = 2)
+  outpath = tempdir(), probar = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the DArT genlight object [required]}

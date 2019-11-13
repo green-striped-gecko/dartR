@@ -4,7 +4,8 @@
 \alias{gl2gds}
 \title{Convert a genlight object to gds format}
 \usage{
-gl2gds(x, outfile = "gl2gds.gds", outpath = tempdir(), verbose = 2)
+gl2gds(x, outfile = "gl2gds.gds", outpath = tempdir(),
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

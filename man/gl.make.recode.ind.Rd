@@ -5,7 +5,7 @@
 \title{Create a proforma recode_ind file for reassigning individual (=specimen) names}
 \usage{
 gl.make.recode.ind(x, out.recode.file = "default_recode_ind.csv",
-  outpath = tempdir(), verbose = 2)
+  outpath = tempdir(), verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

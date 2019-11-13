@@ -5,7 +5,7 @@
 \title{Read SNP data from a csv file into a genlight object}
 \usage{
 gl.read.csv(filename, transpose = FALSE, ind.metafile = NULL,
-  loc.metafile = NULL, verbose = 2)
+  loc.metafile = NULL, verbose = NULL)
 }
 \arguments{
 \item{filename}{-- name of the csv file containing the SNP genotypes [required]}

@@ -82,7 +82,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     AFPriorFile = NULL,
                     PiPrior = "Jeffreys",
                     ThetaPrior = "Jeffreys",
-                    verbose=2) {
+                    verbose=NULL) {
 
   if(class(gl)!="genlight") {
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")

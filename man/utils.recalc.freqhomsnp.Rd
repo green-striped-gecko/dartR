@@ -4,7 +4,7 @@
 \alias{utils.recalc.freqhomsnp}
 \title{A utility script to recalculate the the frequency of the homozygous alternate SNP by locus after some populations have been deleted}
 \usage{
-utils.recalc.freqhomsnp(x, verbose = 2)
+utils.recalc.freqhomsnp(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

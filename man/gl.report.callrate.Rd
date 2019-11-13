@@ -5,7 +5,7 @@
 \title{Report summary of Call Rate for loci or individuals}
 \usage{
 gl.report.callrate(x, method = "loc", boxplot = "adjusted",
-  range = 1.5, silent = TRUE, verbose = 2)
+  range = 1.5, silent = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlightobject containing the SNP or presence/absence (SilicoDArT) data [required]}

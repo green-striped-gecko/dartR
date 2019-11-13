@@ -5,7 +5,7 @@
 \title{Report minor allele frequency (MAF) for each locus in a SNP dataset}
 \usage{
 gl.report.maf(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30,
-  silent = TRUE, verbose = 2)
+  silent = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

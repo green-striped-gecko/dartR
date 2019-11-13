@@ -4,7 +4,7 @@
 \alias{gl.join}
 \title{Combines two genlight objects}
 \usage{
-gl.join(x1, x2, verbose = 2)
+gl.join(x1, x2, verbose = NULL)
 }
 \arguments{
 \item{x1}{-- name of the first genlight object [required]}
