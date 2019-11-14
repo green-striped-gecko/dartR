@@ -6,7 +6,7 @@
 \usage{
 gl.plot.heatmap(D, ncolors = 5, labels = TRUE, labels.cex = 1,
   values = TRUE, values.cex = 1, legend = TRUE, rank = FALSE,
-  verbose = NULL)
+  verbose = 2)
 }
 \arguments{
 \item{D}{-- name of the distance matrix [required]}
@@ -32,9 +32,9 @@ The script plots a heat map to represent the distances in the distance or dissim
 }
 \examples{
    gl <- testset.gl[1:10,]
-   d <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
-   gl.plot.heatmap(d)
-   gl.plot.heatmap(d, ncolors=10, rank=TRUE, legend=TRUE)
+   D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
+   gl.plot.heatmap(D)
+   gl.plot.heatmap(D, ncolors=10, rank=TRUE, legend=TRUE)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -33,7 +33,7 @@ column to reassign populations. Use keyword Delete to delete a population.
 Apply the recoding using gl.recode.pop().
 }
 \examples{
-result <- gl.make.recode.pop(gl,out.recode.file="test.csv",outpath=getwd(),verbose=2)
+result <- gl.make.recode.pop(testset.gl,out.recode.file="test.csv",outpath=tempdir(),verbose=2)
 
 }
 \author{

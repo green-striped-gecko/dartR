@@ -70,14 +70,14 @@ gl.subsample.loci <- function(x, n, method="random", verbose=NULL) {
 # DO THE JOB
   
   if(method=="random") {
-    if (verbose>=3){cat("  Subsampling at random, approximately",n,"loci from",class(x),"object","\n")}
-    nblocks <- trunc((ncol(x)/n)+1)
-    blocks <- lapply(seploc(x, n.block=nblocks, random=TRUE, parallel=FALSE),as.matrix)
-    x.new <- blocks$block.1
+    if (verbose>=3){cat("  Subsampling at random",n,"loci from",class(x),"object","\n")}
+    randsel <- sample(1:nLoc(x), n, replace = F)
+    x.new <- x[, randsel]
+    x.new@other$loc.metrics <- x@other$loc.metrics[randsel,]
+    
     if (verbose>=3) {
       cat("     No. of loci retained =", ncol(x.new),"\n")
-      cat("     Note: SNP metadata discarded\n")
-    }
+      }
   } else if (method=="PIC" | method=="pic"){
     x.new <- x[, order(-pic)]
     x.new <- x.new[,1:n]

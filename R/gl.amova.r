@@ -8,6 +8,11 @@
 #' @importFrom StAMPP stamppNeisD stamppAmova
 #' @export
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @examples 
+#' #permuations should be higher, here set to 10 because of speed
+#' gl.amova(bandicoot.gl, permutations=10)
+#' 
+#' 
 gl.amova <- function(x, permutations=100)
 {
   dd <- stamppNeisD(x, FALSE)

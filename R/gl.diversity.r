@@ -10,6 +10,8 @@
 #' 
 #' @return a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
 #' @export
+#' @examples 
+#' gl.diversity(bandicoot.gl, spectrumplot = T)
 #' @importFrom graphics arrows
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella 
 #' @references 

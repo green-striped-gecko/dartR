@@ -21,6 +21,28 @@
 
 gl.merge.pop <- function(x, old=NULL, new=NULL, verbose=NULL) {
 
+  # TRAP COMMAND, SET VERSION
+  
+  funname <- match.call()[[1]]
+  build <- "Jacob"
+  
+  
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+  
+  
+  if (verbose < 0 | verbose > 5){
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    verbose <- 2
+  }
+  # FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    cat("Starting",funname,"\n")
+  } 
+  
+  
   if (verbose > 0) {
     if (length(old) == 1) {
       cat("Starting gl.merge.pop: Renaming a population\n")

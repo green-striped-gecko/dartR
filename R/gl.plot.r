@@ -29,13 +29,14 @@ gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TR
   build <- "Jacob"
   
 # SET VERBOSITY
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
   
-  if (is.null(verbose)){
-    verbose <- x@other$verbose
-  }
+
   if (verbose < 0 | verbose > 5){
-      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
-      verbose <- x@other$verbose
+      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default 2\n"))
+      verbose <- 2
   }
 
 # FLAG SCRIPT START

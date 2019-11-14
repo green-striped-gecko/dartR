@@ -40,7 +40,7 @@ gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  sh
 
 # FLAG SCRIPT START
   # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose) & !is.null(gl@other$verbose)) verbose=gl@other$verbose
   if (is.null(verbose)) verbose=2
  
 

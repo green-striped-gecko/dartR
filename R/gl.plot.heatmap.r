@@ -19,11 +19,11 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'    gl <- testset.gl[1:10,]
-#'    d <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
-#'    gl.plot.heatmap(d)
-#'    gl.plot.heatmap(d, ncolors=10, rank=TRUE, legend=TRUE)
+#'    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
+#'    gl.plot.heatmap(D)
+#'    gl.plot.heatmap(D, ncolors=10, rank=TRUE, legend=TRUE)
 
-gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE, values.cex=1, legend=TRUE, rank=FALSE, verbose=NULL){
+gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE, values.cex=1, legend=TRUE, rank=FALSE, verbose=2){
   
 # TIDY UP FILE SPECS
 
@@ -31,10 +31,7 @@ gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE
 
 # FLAG SCRIPT START
   # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
-
+  
   if (verbose < 0 | verbose > 5){
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2

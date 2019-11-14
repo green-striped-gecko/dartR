@@ -37,7 +37,7 @@ can potentially generate monomorphic loci or loci with all
 values missing. Clean this up with gl.filter.monomorphic().
 }
 \examples{
-result <- gl.make.recode.ind(testset.gl, out.recode.outpath=getwd(),file="Emmac_recode_ind.csv")
+result <- gl.make.recode.ind(testset.gl, out.recode.file ="Emmac_recode_ind.csv",outpath=tempdir())
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

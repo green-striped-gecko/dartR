@@ -242,6 +242,13 @@ gl.read.csv <- function(filename,
   if (verbose >= 2){cat(paste(" Added ",names(gl@other$ind.metrics),
                               " to the other$ind.metrics slot.\n"))}
   }
+  
+# MAKE COMPLIANT
+  
+  gl <- gl.check(gl, verbose=1)
+  gl <- gl.reset.flags(gl, set=FALSE, verbose=1)
+  gl <- gl.recalc.metrics(gl, verbose=1) 
+  
 # FLAG SCRIPT END
 
   if (verbose > 0) {

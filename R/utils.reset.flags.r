@@ -341,9 +341,7 @@ utils.reset.flags <- function(x, set=FALSE, set.verbosity=2, verbose=NULL) {
     
   }
 
-# ADD TO HISTORY
-  nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call()  
+# ADD TO HISTORY not in utils functions
   
 # FLAG SCRIPT END
 

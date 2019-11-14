@@ -31,7 +31,6 @@ gl.join <- function(x1, x2, verbose=NULL) {
   
 # FLAG SCRIPT START
   # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
   if (is.null(verbose)) verbose=2
  
   
@@ -46,11 +45,11 @@ gl.join <- function(x1, x2, verbose=NULL) {
   
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(class(x1)!="genlight" | class(x2)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
   }
   
-    if (all(x1@ploidy == 1)){
+    if (all(x1@ploidy == 1 )){
       if(verbose==2){cat("  Processing Presence/Absence (SilicoDArT) data in genlight object 1\n")}
       data.type1 <- "SilicoDArT"
     } else if (all(x1@ploidy == 2)){
@@ -133,7 +132,7 @@ gl.join <- function(x1, x2, verbose=NULL) {
   
   x@other$loc.metrics.flags$monomorphs <- FALSE
   x <- gl.recalc.metrics(x,verbose=min(c(verbose,1)))
-  cat("  Locus metrics recalculated\n")
+  if (verbose>=2) cat("  Locus metrics recalculated\n")
   
   # Check monomorphs
   
