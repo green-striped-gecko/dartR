@@ -23,20 +23,25 @@
 
 gl.read.dart <- function(filename, ind.metafile=NULL, recalc=FALSE, mono.rm=FALSE, nas = "-", topskip=NULL,  lastmetric ="RepAvg", covfilename=NULL, probar=FALSE, verbose=2){
   
-# TIDY UP FILE SPECS
-  
-  build <- "Jacob"
+# TRAP COMMAND, SET VERSION
+
   funname <- match.call()[[1]]
-  # Creates the loc.metrics.flags.
- # FLAG SCRIPT START
+  build <- "Jacob"
   
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
+# SET VERBOSITY
+  
+  if (is.null(verbose)){
+    verbose <- x@other$verbose
   }
-  
+  if (verbose < 0 | verbose > 5){
+      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+      verbose <- x@other$verbose
+  }
+
+# FLAG SCRIPT START
+
   if (verbose >= 1){
-    cat(paste("Starting",funname,"\n"))
+    cat("Starting",funname,"[ Build =",build,"]\n")
   }
   
 # DO THE JOB
@@ -57,6 +62,7 @@ gl.read.dart <- function(filename, ind.metafile=NULL, recalc=FALSE, mono.rm=FALS
                       "monomorphs", "OneRatio", "PIC" )
   glout@other$loc.metrics.flags <-  data.frame(matrix(TRUE, nrow=1, ncol=length(recalc.flags)))
   names(glout@other$loc.metrics.flags) <- recalc.flags
+  glout@other$verbose <- 2
   
   # Calculate locus metrics not provided by DArT
   
