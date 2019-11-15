@@ -25,28 +25,33 @@
 utils.reset.flags <- function(x, set=FALSE, set.verbosity=2, verbose=NULL) {
   
 # TRAP COMMAND, SET VERSION
-
+  
   funname <- match.call()[[1]]
   build <- "Jacob"
   
 # SET VERBOSITY
   
-  if (is.null(verbose)){
-    verbose <- x@other$verbose
-  }
-  if (verbose < 0 | verbose > 5){
-      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
       verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
   }
-
+  
 # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
-
+  
   if (verbose >= 1){
-    cat(paste("Starting",funname,"\n"))
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
 # STANDARD ERROR CHECKING
