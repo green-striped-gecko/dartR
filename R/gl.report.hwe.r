@@ -21,9 +21,8 @@
 #' @param method -- for determining the statistical signicance in the ternary plot: ChiSquare (with continuity correction) | Fisher [default "ChiSquare"]
 #' @param bonf -- if TRUE, Bonferroni correction will be applied to the level of significance [default TRUE]
 #' @param alpha -- level of significance for testing [default 0.05]
-#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
-#' @return if silent == TRUE, returns NULL; otherwise returns a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
+#' @return returns a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
 #' and alternate SNP homozygotes; probability of departure from H-W equilibrium,
 #' and per locus significance with and without Bonferroni Correction.
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -33,34 +32,44 @@
 #' @references Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
 #' @references Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The HardyWeinberg Package. Journal of Statistical Software 64:1-23.
 #' @examples
-#' list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), 
-#' plot=TRUE, bonf=FALSE, silent=FALSE)
+#' list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"),plot=TRUE,bonf=FALSE)
 #' gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE, verbose=3)
 #' gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE, verbose=3)
 #' gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
 
-gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alpha=0.05, bonf=TRUE, silent=TRUE, verbose=3) {
+gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alpha=0.05, bonf=TRUE, verbose=NULL) {
   
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  cat("Starting",funname,"\n")
+# FLAG SCRIPT START
   
-  # STANDARD ERROR CHECKING
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }  
+  
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
@@ -89,20 +98,20 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   if (subset[1] == "all") {
     gl <- gl.filter.monomorphs(x,verbose=0)
     if(nPop(gl) > 1) {
-      cat("  Pooling all populations for HWE calculations\n")
-      cat("  Warning: Significance of tests may indicate heterogeneity among populations\n\n")
+      if(verbose >= 2){cat("  Pooling all populations for HWE calculations\n")}
+      if(verbose >= 3){cat("  Warning: Significance of tests may indicate heterogeneity among populations\n\n")}
     } else {
-      cat("  Calculating HWE for population",popNames(gl))
+      if(verbose >= 2){cat("  Calculating HWE for population",popNames(gl))}
     }  
     flag <- 1
     
   } else if (subset[1] == "each") {
     if (nPop(x) == 1){
-      cat("  Calculating HWE for population",popNames(x))
+      if(verbose >= 2){cat("  Calculating HWE for population",popNames(x))}
       gl <- gl.filter.monomorphs(x,verbose=0)
       flag <- 1
     } else {
-      cat("  Analysing each population separately\n")
+      if(verbose >= 2){cat("  Analysing each population separately\n")}
       poplist <- seppop(x)
       flag <- 0
     }  
@@ -111,17 +120,16 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
       gl <- x[pop(x) %in% subset]
       gl <- gl.filter.monomorphs(gl,verbose=0)
       if (nPop(gl) == 1){
-        cat("  Calculating HWE for population",popNames(gl),"\n")
+        if(verbose >= 2){cat("  Calculating HWE for population",popNames(gl),"\n")}
         flag <- 1
       } else {
-        cat("  Pooling populations",subset,"for HWE calculations\n")
-        cat("  Warning: Significance of tests may indicate heterogeneity among populations\n\n")
+        if(verbose >= 2){cat("  Pooling populations",subset,"for HWE calculations\n")}
+        if(verbose >= 3){cat("  Warning: Significance of tests may indicate heterogeneity among populations\n\n")}
         flag <- 1
       } 
 
   } else {
-      cat("Fatal Error: subset parameter must be \"each\", \"all\", or a list of populations\n")
-      stop()
+      stop("Fatal Error: subset parameter must be \"each\", \"all\", or a list of populations\n")
     }
 
   #### Single or Pooled populations
@@ -160,7 +168,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
       count <- count + 1
       ii <- gl.filter.monomorphs(i,verbose =0)
       if (nLoc(ii) == 0){
-        cat("  Warning: No heteromorphic loci in population",popNames(i),"... skipped\n")
+        if(verbose >= 2){cat("  Warning: No heteromorphic loci in population",popNames(i),"... skipped\n")}
         count <- count - 1
         npops2plot <- npops2plot - 1
         next
@@ -182,19 +190,19 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
     if (npops2plot > 1){
       if (npops2plot == 2) {
         layout(matrix(c(1,2), 1, 2, byrow = TRUE),widths=c(0.5,0.5))
-        cat("  Plotting two ternary plots on the one page\n\n")
+        if(verbose >= 2){cat("  Plotting two ternary plots on the one page\n\n")}
       } else if (npops2plot == 3) {
         layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
-        cat("  Plotting three ternary plots on the one page\n\n")
+        if(verbose >= 2){cat("  Plotting three ternary plots on the one page\n\n")}
       } else if (npops2plot == 4) {
         layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
-        cat("  Plotting four ternary plots on the one page\n\n")
+        if(verbose >= 2){cat("  Plotting four ternary plots on the one page\n\n")}
       } else {
         layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
-        cat("  Plotting four ternary plots per page\n\n")
+        if(verbose >= 2){cat("  Plotting four ternary plots per page\n\n")}
       }
     } else {
-      cat("  Plotting one ternary plot\n")
+      if(verbose >= 2){cat("  Plotting one ternary plot\n")}
     }
  
     # Plot the tertiary plots
@@ -232,28 +240,26 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
   rprob <- as.numeric(as.character(result$Prob))
   result <- result[(rprob>0 & rprob<=alpha),]
   result <- result[order(result$Locus),]
-  cat("Reporting significant departures from Hardy-Weinberg Equilibrium\n")
+  cat("    Reporting significant departures from Hardy-Weinberg Equilibrium\n")
   if (nrow(result)==0){
-    cat("No significant departures\n")
+    cat("    No significant departures\n")
   } else {
-    cat("NB: Departures significant at the alpha level of",alpha,"are listed\n")
+    cat("    NB: Departures significant at the alpha level of",alpha,"are listed\n")
     if (alpha > 0.05) {
-      cat("ns --",alpha,"< p < 0.05; * -- 0.05 < p < 0.01; ** -- 0.01 < p < 0.001; etc\n")
+      cat("      ns --",alpha,"< p < 0.05; * -- 0.05 < p < 0.01; ** -- 0.01 < p < 0.001; etc\n")
     } else {
-      cat("ns -- p > 0.05; * -- 0.05 < p < 0.01; ** -- 0.01 < p < 0.001; etc\n")
+      cat("      ns -- p > 0.05; * -- 0.05 < p < 0.01; ** -- 0.01 < p < 0.001; etc\n")
     }
-      cat("Critical values for significance of Bonferroni Corrected significance vary with sample size\n\n")
+      cat("    Critical values for significance of Bonferroni Corrected significance vary with sample size\n\n")
     print(result, row.names=FALSE)
   }  
   
   # FLAG SCRIPT END
   
-  cat("Completed:",funname,"\n")
+  if(verbose >= 1){
+    cat("Completed:",funname,"\n")
+  }
   
-  if(silent==TRUE){
-    return(NULL)
-  } else{
-    return(result)
-  } 
-   
+  return(result)
+
 }

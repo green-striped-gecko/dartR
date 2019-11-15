@@ -25,31 +25,43 @@
 #' @importFrom robustbase adjbox
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-
-# Last amended 3-Feb-19
+#' @examples 
+#' # SNP data
+#' out <- gl.report.rdepth(testset.gl)
 
 gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=NULL) {
 
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  cat("Starting",funname,"\n")
-
-  # STANDARD ERROR CHECKING
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
@@ -62,13 +74,21 @@ gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=NULL) {
   } else {
     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
   }
-  
+
 # DO THE JOB
 
   if (all(x@ploidy == 1)){
-    rdepth <- x@other$loc.metrics$AvgReadDepth
+    if(!is.null(x@other$loc.metrics$AvgReadDepth)){
+      rdepth <- x@other$loc.metrics$AvgReadDepth
+    } else {
+      stop("Fatal Error: Read depth not included among the locus metrics")
+    }  
   } else if (all(x@ploidy == 2)){
-    rdepth <- x@other$loc.metrics$rdepth
+    if(!is.null(x@other$loc.metrics$rdepth)){
+      rdepth <- x@other$loc.metrics$rdepth
+    } else {
+      stop("Fatal Error: Read depth not included among the locus metrics")
+    }  
   } 
   lower <- round(min(rdepth)-1,0)
   upper <- round(max(rdepth)+1,0)
@@ -156,14 +176,16 @@ gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=NULL) {
       cat("  Outliers detected -- \n")
       print(outliers)
     }  
-  }  
+  }
   
-  # FLAG SCRIPT END
+# Reset the par options    
+  par(op)  
   
-  if(verbose>=1){cat("Completed:",funname,"\n")}
+# FLAG SCRIPT END
   
-  # Reset the par options    
-  par(op)
+  if(verbose >= 1){
+    cat("Completed:",funname,"\n")
+  }
 
   return(outliers)
 

@@ -20,38 +20,51 @@
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
-#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return if silent==TRUE, returns NULL; otherwise returns a tabulation of CallRate against Threshold
+#' @return returns a tabulation of CallRate against Threshold
 #' @importFrom graphics hist
 #' @importFrom robustbase adjbox
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.callrate(testset.gl)
+#' # SNP data
+#'   out <- gl.report.callrate(testset.gl)
+#' # Tag P/A data
+#'   out <- gl.report.callrate(testset.gs)
 
 
-gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, silent=TRUE, verbose=NULL) {
+gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, verbose=NULL) {
   
-# TIDY UP FILE SPECS
-
-  build ='Jacob'
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-  # Note: This function will update Callrate if the flag is FALSE
-
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-    cat("Starting",funname,"\n")
-
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
 # STANDARD ERROR CHECKING
 
   if(class(x)!="genlight") {
@@ -69,7 +82,7 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, s
   # Check for monomorphic loci
 
   if (!x@other$loc.metrics.flags$monomorphs) {
-      cat("  Warning: genlight object contains monomorphic loci which will be factored into Callrate calculations\n")
+    if(verbose >= 1){cat("  Warning: genlight object contains monomorphic loci which will be factored into Callrate calculations\n")}
   }
 
 # DO THE JOB
@@ -77,7 +90,7 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, s
 # RECALCULATE THE CALL RATE, IF NOT PREVIOUSLY DONE
   
   if (!x@other$loc.metrics.flags$monomorphs){
-      x <- utils.recalc.callrate(x, verbose=1)
+      x <- utils.recalc.callrate(x, verbose=0)
   }  
 
 ########### FOR METHOD BASED ON LOCUS    
@@ -99,14 +112,14 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, s
     }  
     if (boxplot == "standard"){
       boxplot(callrate, horizontal=TRUE, col='red', range=range, main = title)
-      cat("  Standard boxplot, no adjustment for skewness\n")
+      if(verbose >= 1){cat("  Standard boxplot, no adjustment for skewness\n")}
     } else {
       robustbase::adjbox(callrate,
                         horizontal = TRUE,
                         col='red',
                         range=range,
                         main = title)
-      cat("  Boxplot adjusted to account for skewness\n")
+      if(verbose >= 1){cat("  Boxplot adjusted to account for skewness\n")}
     }  
     # Set margins for second plot
     par(mai=c(0.5,0.5,0,0.5))
@@ -227,14 +240,10 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, s
     
  # FLAG SCRIPT END
     
-    if (verbose > 0) {
+    if (verbose >= 1) {
       cat("Completed:",funname,"\n")
     }
     
-    if(silent==TRUE){
-      return(NULL)
-    } else{
-      return(df)
-    } 
+    return(df)
 
 }

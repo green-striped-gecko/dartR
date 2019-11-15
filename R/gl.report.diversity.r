@@ -5,12 +5,10 @@
 #' @param gl genlight object containing the SNP genotypes  [required]
 #' @param spectrumplot switch to provide a plot [default TRUE]
 #' @param confiplot switch if confidence intervals (1 sd) should be drawn [default FALSE]
-#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @param pbar report on progress. Silent if set to FALSE. [default TRUE]
 #' @param table prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.
-#' 
-#' @return if silent==TRUE, returns NULL; otherwise returns a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
+#' @return returns a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
 #' @export
 #' @importFrom graphics arrows
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella 
@@ -25,26 +23,37 @@
 # check that it works on SilicoDArT datasets
 
 
-gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRUE, table="DH", silent=TRUE, verbose=NULL) {
+gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRUE, table="DH", verbose=NULL) {
   
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
   
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(gl@other$verbose)) verbose=gl@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  cat("Starting",funname,"\n")
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
   
 # STANDARD ERROR CHECKING
   
@@ -54,7 +63,7 @@ gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRU
   
   if (all(gl@ploidy == 1)){
     cat("  Detected Presence/Absence (SilicoDArT) data\n")
-    stop("Cannot calculate minor allele frequences for Tag presence/absence data. Please provide a SNP dataset.\n")
+    stop("Cannot calculate diversity indicies for Tag presence/absence data. Please provide a SNP dataset.\n")
   } else if (all(gl@ploidy == 2)){
     cat("  Processing a SNP dataset\n")
   } else {
@@ -395,15 +404,11 @@ if (npops>1) out <-
 
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
 
-  if(silent==TRUE){
-    return(NULL)
-  } else{
-    return(out)
-  } 
+  return(out)
 
 }
 

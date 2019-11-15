@@ -24,9 +24,8 @@
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
-#' @param silent -- if TRUE, returns NULL; otherwise returns an object [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return If silent==FALSE, returns a genlight object of loci with multiple SNP calls; otherwise returns NULL
+#' @return returns a genlight object of loci with multiple SNP calls
 #' @importFrom adegenet glPlot
 #' @importFrom graphics barplot
 #' @importFrom robustbase adjbox
@@ -34,32 +33,42 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.secondaries(bandicoot.gl)
+#' out <- gl.report.secondaries(bandicoot.gl)
 
 gl.report.secondaries <- function(x, 
                                   boxplot="adjusted",
                                   range=1.5,
-                                  silent=TRUE,
                                   verbose = 2) {
 
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
   
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  cat("Starting",funname,"\n")
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
   
 # STANDARD ERROR CHECKING
   
@@ -141,7 +150,7 @@ gl.report.secondaries <- function(x,
             break
           }
           if (i == 100){
-            cat("Failed to converge: No reliable estimate of invariant loci\n")
+            if(verbose >= 2){cat("Failed to converge: No reliable estimate of invariant loci\n")}
             fail <- TRUE
             break
           }
@@ -181,7 +190,7 @@ gl.report.secondaries <- function(x,
       cat("    Number of sequence tags with secondaries:",sum(table(as.numeric(table(b))))-table(as.numeric(table(b)))[1],"\n")
       cat("    Number of secondary SNP loci that would be removed on filtering:",table(duplicated(b))[2],"\n")
       cat("    Number of SNP loci that would be retained on filtering:",table(duplicated(b))[1],"\n")
-      cat(" Tabular 1 to K secondaries (refer plot)\n",table(as.numeric(table(b))),"\n")
+      if(verbose >= 3){cat(" Tabular 1 to K secondaries (refer plot)\n",table(as.numeric(table(b))),"\n")}
   }  
 
   # Reset the par options    
@@ -189,16 +198,11 @@ gl.report.secondaries <- function(x,
   
 # FLAG SCRIPT END
   
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
   
-  # Return the result
-  if(silent==TRUE){
-    return(NULL)
-  } else {
-    cat("\nReturning a genlight object containing only those loci with secondaries (multiple entries per locus)\n\n")
-    return(x.secondaries)
-  }  
-  
+  if(verbose >= 2){cat("\nReturning a genlight object containing only those loci with secondaries (multiple entries per locus)\n\n")}
+  return(x.secondaries)
+
 }  

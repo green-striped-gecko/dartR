@@ -10,10 +10,9 @@
 #' @param nchunks how many subchunks will be used (the less the faster, but if the routine crashes more bits are lost
 #' @param ncores how many cores should be used
 #' @param chunkname the name of the chunks for saving [default is NULL]
-#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @param probar if TRUE, a progress bar is displayed for long loops [default = TRUE]
-#' @return if silent=TRUE, returns NULL; otherwise returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed. The final output is a data frame that holds all statistics of pairwise LD between loci. (See ?LD in package genetics for details).
+#' @return returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed. The final output is a data frame that holds all statistics of pairwise LD between loci. (See ?LD in package genetics for details).
 #' @export
 #' @importFrom data.table rbindlist setnames
 #' @import parallel 
@@ -22,28 +21,39 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
-gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE, silent=FALSE, verbose=NULL){
+gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE, verbose=NULL){
   
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  cat("Starting",funname,"\n")
+# FLAG SCRIPT START
   
-  # STANDARD ERROR CHECKING
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
@@ -285,15 +295,11 @@ if (save)
 
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
 
-  if(silent==TRUE){
-    return(NULL)
-  } else{
-    return(LDres2)
-  } 
+  return(LDres2)
 
 }
 

@@ -13,36 +13,50 @@
 #' 
 #' @param x -- name of the genlight object containing the SNP or presence/absence data [required]
 #' @param plot -- if TRUE, histograms of base composition are produced [default TRUE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
-#' @return If silent==TRUE, returns NULL; otherwise a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @return returns a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
 #' @export
 #' @import stringr
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' lst <- gl.report.bases(testset.gl,silent=FALSE)
-#' lst
+#' # SNP data
+#'   out <- gl.report.bases(testset.gl)
+#'   out
+#' # Tag P/A data
+#'   out <- gl.report.bases(testset.gs)
+#'   out
 
-gl.report.bases <- function(x, plot=TRUE, silent=TRUE, verbose = 2) {
+gl.report.bases <- function(x, plot=TRUE, verbose = NULL) {
 
-# TIDY UP FILE SPECS
-
-  build <- "Jacob"
-  funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+# TRAP COMMAND, SET VERSION
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+  funname <- match.call()[[1]]
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 3\n")
-    verbose <- 3
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
   }
   
-  cat("Starting",funname,"\n")
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
 
 # STANDARD ERROR CHECKING
   
@@ -133,7 +147,9 @@ gl.report.bases <- function(x, plot=TRUE, silent=TRUE, verbose = 2) {
   cat(paste("    T:",round(T,2)),"\n")
   cat(paste("    C:",round(C,2)),"\n\n")
   if (all(ploidy(x)==1)) {
-    cat("  Presence Absence data (SilicoDArT), transition/transversions cannot be calculated\n")
+    if(verbose >= 2){
+      cat("  Presence Absence data (SilicoDArT), transition/transversions cannot be calculated\n")
+    }
     tv <- NA
     ts <- NA
   } else {
@@ -169,14 +185,10 @@ gl.report.bases <- function(x, plot=TRUE, silent=TRUE, verbose = 2) {
   
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
 
-  if(silent==TRUE){
-    return(NULL)
-  } else{
-      return(matrix)
-  }  
-  
+  return(matrix)
+
 }

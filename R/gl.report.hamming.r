@@ -30,7 +30,6 @@
 #' @param threshold minimum acceptable base pair difference for display on the whisker plot and histogram [default 3 bp]
 #' @param taglength -- typical length of the sequence tags [default 69]
 #' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default TRUE]
-#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return Tabulation of loc that will be lost on filtering, against values of the threshold
 #' @importFrom adegenet glPlot
@@ -41,7 +40,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.hamming(testset.gl)
+#' out <- gl.report.hamming(testset.gl)
 
 gl.report.hamming <- function(x, 
                               rs=5, 
@@ -50,29 +49,39 @@ gl.report.hamming <- function(x,
                               threshold=3,
                               taglength=69,
                               probar=FALSE, 
-                              silent=TRUE,
                               verbose = 2) {
   
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  cat("Starting",funname,"\n")
+# FLAG SCRIPT START
   
-  # STANDARD ERROR CHECKING
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
@@ -89,7 +98,7 @@ gl.report.hamming <- function(x,
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if(length(x@other$loc.metrics$TrimmedSequence) == 0) {
-    cat("Fatal Error: Data must include Trimmed Sequences\n"); stop()
+    stop("Fatal Error: Data must include Trimmed Sequences\n")
   }
 
   if (rs < 0 | rs > taglength){
@@ -97,7 +106,7 @@ gl.report.hamming <- function(x,
   }
     
   if (nLoc(x) == 1){
-    cat("Fatal Error: Data must include more than one locus\n"); stop()
+    stop("Fatal Error: Data must include more than one locus\n")
   }
 
 # DO THE JOB
@@ -215,10 +224,6 @@ gl.report.hamming <- function(x,
      cat("Completed:",funname,"\n")
    }
    
-   if(silent==TRUE){
-     return(NULL)
-   } else {
-     return(df)
-   } 
-   
+   return(df)
+
 }

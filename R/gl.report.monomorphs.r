@@ -9,7 +9,6 @@
 #' be reliably scored)
 #' 
 #' @param x -- name of the input genlight object [required]
-#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @return NULL
 #' @rawNamespace import(adegenet, except = plot)
@@ -18,36 +17,43 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # SNP data
-#' gl.report.monomorphs(testset.gl)
+#'   out <- gl.report.monomorphs(testset.gl)
 #' # SilicoDArT data
-#' #gl.report.monomorphs(testset.gs)
+#'   out <- gl.report.monomorphs(testset.gs)
 
-gl.report.monomorphs <- function (x, silent=TRUE, verbose=NULL) {
+gl.report.monomorphs <- function (x, verbose=NULL) {
   
 # TRAP COMMAND, SET VERSION
-
+  
   funname <- match.call()[[1]]
   build <- "Jacob"
-
+  
 # SET VERBOSITY
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
   
- 
-  if (verbose < 0 | verbose > 5){
-      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default 2\n"))
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
       verbose <- 2
-  }
-
-# FLAG SCRIPT START
-
-
-  if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
   }
   
-  # STANDARD ERROR CHECKING
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!")
@@ -120,15 +126,11 @@ gl.report.monomorphs <- function (x, silent=TRUE, verbose=NULL) {
 
 # FLAG SCRIPT END
 
-    if (verbose > 0) {
+    if (verbose >= 1) {
       cat("Completed:",funname,"\n")
     }
     
-    if(silent==TRUE){
-      return(NULL)
-    } else{
-      return(NULL)
-    } 
+    return(NULL)
 
 }
 

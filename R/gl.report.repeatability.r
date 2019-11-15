@@ -20,31 +20,44 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.repavg(testset.gl)
+#' # SNP data
+#'   out <- gl.report.repeatability(testset.gl)
+#' # Tag P/A data
+#'   out <- gl.report.repeatability(testset.gs)
 
 gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=NULL) {
 
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build <- "Jacob"
   funname <- match.call()[[1]]
-  hold <- x
-  # Note does not draw upon or modify the loc.metrics.flags as RepAvg and Reproducibility cannot be recalculated.
-
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  cat("Starting",funname,"\n")
-
-  # STANDARD ERROR CHECKING
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
@@ -59,6 +72,8 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=NU
     }
 
 # DO THE JOB
+  
+  hold <- x
 
   if (all(x@ploidy == 2)){
     repeatability <- x@other$loc.metrics$RepAvg
@@ -71,7 +86,7 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=NU
     cat("  No. of individuals =", nInd(x), "\n")
     cat("  Miniumum repeatability: ",round(min(repeatability),2),"\n")
     cat("  Maximum repeatability: ",round(max(repeatability),2),"\n")
-    cat("  Mean repeatability: ",round(mean(repeatability),3),"\n\n")
+    cat("  Mean repeatability: ",round(mean(repeatability),3),"\n")
 
   # Determine the loss of loci for a given filter cut-off
   retained <- array(NA,21)
@@ -112,7 +127,7 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=NU
             range=range, 
             ylim=c(min(repeatability),1),
             main = title)
-    cat("Standard boxplot, no adjustment for skewness\n\n")
+    if(verbose >= 2){cat("Standard boxplot, no adjustment for skewness\n\n")}
   } else {
     robustbase::adjbox(repeatability,
                        horizontal = TRUE,
@@ -120,8 +135,9 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=NU
                        range=range,
                        ylim=c(min(repeatability),1),
                        main = title)
-    cat("Boxplot adjusted to account for skewness\n\n")
+    if(verbose >= 2){cat("Boxplot adjusted to account for skewness\n\n")}
   }  
+  
   # Set margins for second plot
   par(mai=c(0.5,0.5,0,0.5))
   hist(repeatability, 
@@ -131,16 +147,15 @@ gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=NU
        xlim=c(min(repeatability),1),
        breaks=100)
 
-  # FLAG SCRIPT END
-  
-  if (verbose > 0) {
-    cat("Completed:",funname,"\n")
-  }
-  
   # Reset the par options    
   par(op)
   
-  # Return the result
+# FLAG SCRIPT END
+  
+  if (verbose >= 1) {
+    cat("Completed:",funname,"\n")
+  }
+  
   return(df)
 
 }

@@ -6,36 +6,46 @@
 #' @param maf.limit -- show histograms maf range <= maf.limit [default 0.5]
 #' @param ind.limit -- show histograms only for populations of size greater than ind.limit [default 5]
 #' @param loc.limit -- show histograms only for populations with more than loc.limit polymorphic loci [default 30]
-#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @export
 #' @importFrom graphics layout hist
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.maf(testset.gl,silent=FALSE)
+#' gl.report.maf(testset.gl)
 #'
 
-gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, silent=TRUE, verbose = NULL) {
+gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose = NULL) {
   
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
   
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  cat("Starting",funname,"\n")
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
   
 # STANDARD ERROR CHECKING
   
@@ -76,8 +86,8 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, silent=TR
 # Recalculate the relevant loc.metrics
   
   if(x@other$loc.metrics.flags$maf==FALSE){
-    cat("  Recalculating MAF\n")
-    x <- utils.recalc.maf(x,verbose=1)
+    if(verbose >= 2){cat("  Recalculating MAF\n")}
+    x <- utils.recalc.maf(x,verbose=0)
   }  
 
 # Check for status -- any populations with loc > loc.limit; ind > ind.limit; and is nPop > 1
@@ -113,7 +123,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, silent=TR
     
 # Calculate and plot overall MAF
   
-  cat("  Calculating MAF across populations\n")
+  if(verbose >= 2){cat("  Calculating MAF across populations\n")}
   
   maf <- x@other$loc.metrics$maf
   if (is.null(maf)) {
@@ -130,7 +140,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, silent=TR
          xlab="Minor Allele Frequency",
          breaks=100)
   
- cat("  Calculating MAF by population\n")
+    if(verbose >= 2){cat("  Calculating MAF by population\n")}
   
   plot.count <- 1
   if (flag == 1){   
@@ -173,22 +183,14 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, silent=TR
     }   
   }
   
-  if(plot.count > 6) {
-        cat("Completed: gl.report.maf once plots are displayed\n  Refer to histograms which extend over multiple screens\n\n")
-  } else {
-        cat("Completed: gl.report.maf once plots are displayed\n  Refer to histograms\n\n")
-  }
-  
 # FLAG SCRIPT END
   
-  if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+  if(plot.count > 6) {
+        if(verbose >= 1){cat("Completed:",funname,"(once plots are displayed). Refer to histograms which extend over multiple screens\n\n")}
+  } else {
+    if(verbose >= 1){cat("Completed:",funname,"(once plots are displayed). Refer to histograms\n\n")}
   }
-  
-  if(silent==TRUE){
-    return(NULL)
-  } else{
-    return(NULL)
-  } 
+
+  return(NULL)
 
 }  

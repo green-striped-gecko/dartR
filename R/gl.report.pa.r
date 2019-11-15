@@ -8,9 +8,8 @@
 #'
 #' @param gl1 -- name of the genlight object containing the SNP data [required]
 #' @param gl2 -- if two seperate genlight objects are to be compared this can be provided here [default NULL]
-#' @param silent -- if TRUE, returns NULL; otherwise returns an object [default TRUE]
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
-#' @return If silent=TRUE, returns NULL; otherwise returns a data.frame. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequendy difference between loci (mdf).
+#' @return returns a data.frame. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequendy difference between loci (mdf).
 #' @details 
 #' if no gl2 is provided, the function uses the pop(gl) hierachy to determine pairs of population, otherwise it runs a single comparison between gl1 and gl2. 
 #' Hint: in case you want to run comparison between individuals you can simply redefine your pop(gl) via indNames(gl) [Assuming individual names are unique]
@@ -34,32 +33,42 @@
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.pa(testset.gl[1:20,])
+#' out <- gl.report.pa(testset.gl[1:20,])
 #' 
 
-gl.report.pa <- function(gl1, gl2=NULL, silent=FALSE, verbose=3){
+gl.report.pa <- function(gl1, gl2=NULL, verbose=NULL){
   
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
   build <- "Jacob"
   
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(gl1@other$verbose)) verbose=gl1@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(gl1)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
@@ -120,16 +129,14 @@ if (!is.null(gl2)) pops <- list(pop1=gl1, pop2=gl2) else
     print(pall)
   }
   
+  if(verbose >= 2){cat("  Table of private alleles and fixed differences returned\n")}
+  
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
   
-  if(silent==TRUE){
-    return(NULL)
-  } else{
-    return(pall)
-  } 
+  return(pall)
 
 }

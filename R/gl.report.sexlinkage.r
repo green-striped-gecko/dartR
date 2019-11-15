@@ -21,29 +21,38 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' #result <- gl.report.sexlinkage(testset.gl)
-
-# Last amended 3-Feb-19
+#' out <- gl.report.sexlinkage(testset.gl)
 
 gl.report.sexlinkage <- function(x, as.sex="sex", t.het=0, t.hom=0, verbose=NULL) {
 
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
-
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
@@ -188,10 +197,10 @@ l <- list(zw,xy)
 
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
 
-return(l)
+  return(l)
 
 }

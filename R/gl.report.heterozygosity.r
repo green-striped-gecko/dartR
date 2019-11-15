@@ -43,9 +43,8 @@
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
 #' @param cex.labels -- sets the size of the population labels [default 0.7]
-#' @param silent -- if FALSE, function returns an object, otherwise NULL [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return If silent==FALSE, returns a dataframe containing population labels, heterozygosities and sample sizes; otherwise NULL
+#' @return returns a dataframe containing population labels, heterozygosities and sample sizes
 #' @export
 #' @author Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @importFrom grDevices rainbow
@@ -53,8 +52,8 @@
 #' @importFrom plyr join
 #' @importFrom robustbase adjbox
 #' @examples
-#' gl.report.heterozygosity(testset.gl,verbose=3)
-#' gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
+#' out <- gl.report.heterozygosity(testset.gl,verbose=3)
+#' out <- gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
 
 gl.report.heterozygosity <- function(x, 
                                      method="pop", 
@@ -62,29 +61,39 @@ gl.report.heterozygosity <- function(x,
                                      boxplot="adjusted",
                                      range=1.5,
                                      cex.labels=0.7,
-                                     silent=TRUE,
                                      verbose=NULL) {
   
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  if(verbose>0) cat("Starting",funname,"\n")
+# FLAG SCRIPT START
   
-  # STANDARD ERROR CHECKING
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!")
@@ -100,7 +109,7 @@ gl.report.heterozygosity <- function(x,
     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
 
-  # SCRIPT SPECIFIC ERROR CHECKING
+# SCRIPT SPECIFIC ERROR CHECKING
 
   if (!(method=="pop" | method == "ind")) {
     cat("Warning: Method must either be by population or by individual, set to method='pop'\n")
@@ -120,7 +129,9 @@ gl.report.heterozygosity <- function(x,
   # Check for monomorphic loci
   
   if (x@other$loc.metrics.flags$monomorphs==FALSE) {
-    cat("  Warning: genlight object contains monomorphic loci which will be factored into heterozygosity estimates\n")
+    if(verbose >= 1){
+      cat("  Warning: genlight object contains monomorphic loci which will be factored into heterozygosity estimates\n")
+    }
   }
 
 # DO THE JOB FOR POPULATIONS
@@ -308,12 +319,12 @@ gl.report.heterozygosity <- function(x,
     if (boxplot == "standard"){
       whisker <- boxplot(df$Ho, horizontal=TRUE, col='red', range=range, main = "Heterozygosity by Individual")
       if (length(whisker$out)==0){
-        cat("  Standard boxplot, no adjustment for skewness\n")
+        if(verbose >= 1){cat("  Standard boxplot, no adjustment for skewness\n")}
       } else {
         outliers <- data.frame(spacer="     ",ID=as.character(df$ind.name[df$Ho %in% whisker$out]),
                           Ho=whisker$out
         )
-        cat("  Standard boxplot, no adjustment for skewness\n")
+        if(verbose >= 1){cat("  Standard boxplot, no adjustment for skewness\n")}
       }
       
     } else {
@@ -323,12 +334,12 @@ gl.report.heterozygosity <- function(x,
            range=range,
            main = "Heterozygosity by Individual")
       if (length(whisker$out)==0){
-        cat("  Boxplot adjusted to account for skewness\n")
+        if(verbose >= 1){cat("  Boxplot adjusted to account for skewness\n")}
       } else {
         outliers <- data.frame(ID=as.character(df$ind.name[df$Ho %in% whisker$out]),
           Ho=whisker$out
           )
-        cat("  Boxplot adjusted to account for skewness\n")
+        if(verbose >= 1){cat("  Boxplot adjusted to account for skewness\n")}
       }
     }  
     # Set margins for second plot
@@ -364,10 +375,6 @@ gl.report.heterozygosity <- function(x,
     cat("Completed:",funname,"\n")
   }
 
-  if (silent==FALSE){
-    return(df) 
-  } else {
-    return(NULL)
-  }
-    
+  return(df) 
+
 }
