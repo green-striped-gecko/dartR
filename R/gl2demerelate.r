@@ -11,7 +11,7 @@
 gl2demerelate <- function(gl, verbose=NULL) {
 
 # TIDY UP FILE SPECS
-  
+  x <- gl
   funname <- match.call()[[1]]
   
 # FLAG SCRIPT START

@@ -11,6 +11,9 @@
 #' arising from the amalgamation of populations [tmp.csv]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 #' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]
+#' @param test -- should a test be performed, default is [FALSE]
+#' @param delta -- needs to be described
+#' @param reps -- number of repeats - needs to be described
 #' @param tpop -- threshold number of fixed differences for amalgamating populations [0]
 #' @param plot -- if TRUE, plot a PCoA with the new groupings [TRUE]
 #' @param pb -- if TRUE, show a progress bar on time consuming loops [FALSE]
@@ -51,7 +54,6 @@ gl.collapse <- function(fd,
   
 # FLAG SCRIPT START
   # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
   if (is.null(verbose)) verbose=2
  
   

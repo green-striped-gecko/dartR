@@ -27,7 +27,7 @@ be reliably scored)
 # SNP data
 gl.report.monomorphs(testset.gl)
 # SilicoDArT data
-gl.report.monomorphs(testset.gs)
+#gl.report.monomorphs(testset.gs)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -20,6 +20,12 @@ arising from the amalgamation of populations [tmp.csv]}
 
 \item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]}
 
+\item{test}{-- should a test be performed, default is [FALSE]}
+
+\item{delta}{-- needs to be described}
+
+\item{reps}{-- number of repeats - needs to be described}
+
 \item{plot}{-- if TRUE, plot a PCoA with the new groupings [TRUE]}
 
 \item{pb}{-- if TRUE, show a progress bar on time consuming loops [FALSE]}

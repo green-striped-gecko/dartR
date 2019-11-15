@@ -16,7 +16,7 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#' utils.pa.ind(testset.gl, unknown="UC_00146", nmin=10, threshold=1, verbose=2)
+#' #dartR:::utils.pa.ind(testset.gl, unknown="UC_00146", nmin=10, threshold=1, verbose=2)
 
 utils.pa.ind <- function (x, unknown, nmin=10, threshold=0, verbose=NULL) {
   

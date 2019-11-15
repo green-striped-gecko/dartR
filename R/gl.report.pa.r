@@ -46,7 +46,7 @@ gl.report.pa <- function(gl1, gl2=NULL, silent=FALSE, verbose=3){
   
 # FLAG SCRIPT START
   # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose) & !is.null(gl1@other$verbose)) verbose=gl1@other$verbose
   if (is.null(verbose)) verbose=2
  
   

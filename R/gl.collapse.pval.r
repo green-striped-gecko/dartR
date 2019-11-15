@@ -39,7 +39,6 @@ gl.collapse.pval <- function(fd,
   
   # FLAG SCRIPT START
   # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
   if (is.null(verbose)) verbose=2
  
   

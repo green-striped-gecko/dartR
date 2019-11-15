@@ -3,6 +3,7 @@
 #' This script performs an AMOVA based on the genetic distance matrix from stamppNeisD() [package StAMPP] using the amova() function from the package PEGAS for exploring within and between population variation. For detailed information use their help pages: ?pegas::amova, ?StAMPP::stamppAmova. Be aware due to a conflict of the amova functions from various packages I had to "hack" StAMPP::stamppAmova to avoid a namespace conflict.
 #' 
 #' @param x -- name of the genlight containing the SNP genotypes, with population information [required]
+#' @param dist -- distance matrix between individuals (if not provided NeisD from StAMPP::stamppNeisD is calculated)
 #' @param permutations -- number of permuations to perform for hypothesis testing [default 100]. Please note should be set to 1000 for analysis.]
 #' @return An object of class "amova" which is a list with a table of sums of square deviations (SSD), mean square deviations (MSD), and the number of degrees of freedom, and a vector of variance components.
 #' @importFrom StAMPP stamppNeisD
@@ -15,9 +16,9 @@
 #' gl.amova(bandicoot.gl, permutations=10)
 #' 
 #' 
-gl.amova <- function(x, permutations=100, method="pegas")
+gl.amova <- function(x, dist =NULL, permutations=100)
 {
-  dd <- StAMPP::stamppNeisD(x, FALSE)
+  if (is.null(dist)) dd <- StAMPP::stamppNeisD(x, FALSE) else dd <- dist
   
   if (class(x) == "genlight") {
     geno2 <- x

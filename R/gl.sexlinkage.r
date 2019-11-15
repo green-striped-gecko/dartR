@@ -19,7 +19,8 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.sexlinkage(testset.gl)
+#' cat("does not work yet")
+#' #result <- gl.sexlinkage(testset.gl)
 
 # Last amended 3-Feb-19
 

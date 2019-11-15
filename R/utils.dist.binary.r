@@ -19,7 +19,8 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.dist.ind(testset.gs, method="Jaccard")
+#' cat("to be added")
+#' #gl.dist.ind(testset.gs, method="Jaccard")
 
 utils.dist.binary <- function(x, method="simple", verbose=NULL) {
   

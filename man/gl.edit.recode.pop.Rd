@@ -11,6 +11,8 @@ gl.edit.recode.pop(x, pop.recode = NULL, out.recode.file = NULL,
 \arguments{
 \item{x}{Name of the genlight object for which populations are to be reassigned.[required]}
 
+\item{pop.recode}{path to recode file}
+
 \item{out.recode.file}{Name of the file to output the new individual labels [null]}
 
 \item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN].}

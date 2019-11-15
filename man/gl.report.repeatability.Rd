@@ -11,10 +11,12 @@ gl.report.repeatability(x, boxplot = "adjusted", range = 1.5,
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
-plots a boxplot adjusted for skewed distributions [default 'adjusted']
-#' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
+\item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
+plots a boxplot adjusted for skewed distributions [default 'adjusted']}
+
+\item{range}{-- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 -- Tabulation of repeatability against prospective Thresholds

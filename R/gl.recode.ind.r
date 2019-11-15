@@ -26,7 +26,7 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'   file <- system.file("extdata","testset_pop_recode.csv", package="dartR")
-#'   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=0)
+#'   #gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=0)
 #' @seealso \code{\link{gl.filter.monomorphs}} for filtering monomorphs, \code{\link{gl.recalc.metrics}} for recalculating locus metrics,
 #' \code{\link{gl.recode.pop}} for recoding populations
 

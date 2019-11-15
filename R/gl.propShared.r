@@ -1,6 +1,6 @@
 #' Calculate a similarity(distance) matrix for individuals on the proportion of shared alleles 
 #'
-#' This script calculates a individual based distance matrix. It uses an C++ implementation, so package Rcpp needs to be installed.
+#' This script calculates a individual based distance matrix. It uses an C++ implementation, so package Rcpp needs to be installed and it is therefore really fast.
 #' 
 #' @param x -- name of the genlight containing the SNP genotypes [required]
 #' @importFrom Rcpp cppFunction
@@ -13,6 +13,7 @@
 
 gl.propShared <- function(x) {
   xx <- as.matrix(x)
+  glpropSharedC<- function(){}  #to hack package checking...
   cppFunction('NumericMatrix glpropSharedC(NumericMatrix x) {
   int nrow = x.nrow();
   NumericMatrix out(nrow,nrow);

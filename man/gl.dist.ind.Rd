@@ -10,8 +10,9 @@ gl.dist.ind(x, method = NULL, plot = TRUE, boxplot = "standard",
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}
 
-\item{method}{-- Specify distance measure [SNP: Euclidean; P/A: Simple]
-#' @param plot -- if TRUE, display a histogram of the genetic distances, and a whisker plot [TRUE]}
+\item{method}{-- Specify distance measure [SNP: Euclidean; P/A: Simple]}
+
+\item{plot}{-- if TRUE, display a histogram of the genetic distances, and a whisker plot [TRUE]}
 
 \item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 plots a boxplot adjusted for skewed distributions ['standard']}

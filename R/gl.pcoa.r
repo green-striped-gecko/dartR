@@ -113,7 +113,7 @@ gl.pcoa <- function(x, nfactors=5, correction=NULL, parallel=FALSE, n.cores=16, 
       stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
   } else if(class(x)=='dist'){
-    if (verbose >= 2){cat("  Processing a Distance Matrix, D =",method,"\n")}
+    if (verbose >= 2){cat("  Processing a Distance Matrix, D \n")}
     data.type <- "dist"
   } else {
     stop("Fatal Error: Expecting either a genlight object (SNP or SilicoDArT) or a distance matrix\n")

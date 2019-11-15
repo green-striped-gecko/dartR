@@ -4,7 +4,7 @@
 #' Calculates pairwise population based Linkage Disequilibirum across all loci using the specifyied number of cores
 #' @description this function is implemented in a parallel fashion to speed up the process. There is also the ability to restart the function if crashed by specifying the chunkfile names or restarting the function exactly in the same way as in the first run. This is implemented as sometimes due to connectivity loss between cores the function my crash half way. Also remove loci with have only missing value before running the function.
 #' 
-#' @param gi a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)
+#' @param x a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)
 #' @param name character string for rdata file. If not given genind object name is used
 #' @param save switch if results are saved in a file
 #' @param nchunks how many subchunks will be used (the less the faster, but if the routine crashes more bits are lost
@@ -22,7 +22,7 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
-gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE, silent=TRUE, verbose=NULL){
+gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE, silent=FALSE, verbose=NULL){
   
   # TIDY UP FILE SPECS
   
@@ -45,7 +45,6 @@ gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkna
   
   # STANDARD ERROR CHECKING
   
-  x <- gi
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
   }
@@ -62,7 +61,7 @@ gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkna
   # No Jacob build changes from this point.
   
   # convert genlight to genind 
-  if (class(gi)=="genlight") gi <- gl2gi(gi)
+  if (class(x)=="genlight") gi <- gl2gi(x)
   #library(doParallel)
   #library(adegenet)
   #library(data.table)
@@ -293,7 +292,7 @@ if (save)
   if(silent==TRUE){
     return(NULL)
   } else{
-    return(LDres)
+    return(LDres2)
   } 
 
 }

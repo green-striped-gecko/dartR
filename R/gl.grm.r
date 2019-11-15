@@ -11,7 +11,7 @@
 #'@export
 #'  
 #'@examples
-#'gl.grm(bandicoot.gl[1:5,1:10],plotheatmap=F)  
+#'gl.grm(bandicoot.gl[1:5,1:10],plotheatmap=TRUE)  
 
 
 gl.grm <- function(gl, plotheatmap=TRUE, return.imputed=FALSE, ...)

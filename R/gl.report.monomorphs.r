@@ -20,7 +20,7 @@
 #' # SNP data
 #' gl.report.monomorphs(testset.gl)
 #' # SilicoDArT data
-#' gl.report.monomorphs(testset.gs)
+#' #gl.report.monomorphs(testset.gs)
 
 gl.report.monomorphs <- function (x, silent=TRUE, verbose=NULL) {
   

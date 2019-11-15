@@ -45,7 +45,6 @@ gl.read.csv <- function(filename,
 
 # FLAG SCRIPT START
   # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
   if (is.null(verbose)) verbose=2
  
 
@@ -246,7 +245,7 @@ gl.read.csv <- function(filename,
 # MAKE COMPLIANT
   
   gl <- gl.check(gl, verbose=1)
-  gl <- gl.reset.flags(gl, set=FALSE, verbose=1)
+  gl <- utils.reset.flags(gl, set=FALSE, verbose=1)
   gl <- gl.recalc.metrics(gl, verbose=1) 
   
 # FLAG SCRIPT END

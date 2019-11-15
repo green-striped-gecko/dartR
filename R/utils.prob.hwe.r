@@ -16,7 +16,7 @@
 #' hets <- 20
 #' hom_1 <- 5
 #' hom_2 <- 30
-#' p_value <- prob.hwe(hets, hom_1, hom_2)
+#' #p_value <- prob.hwe(hets, hom_1, hom_2)
 
 utils.prob.hwe <- function(obs_hets, obs_hom1, obs_hom2) {
   

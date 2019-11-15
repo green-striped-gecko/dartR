@@ -91,10 +91,10 @@ gl.read.dart <- function(filename, ind.metafile=NULL, recalc=FALSE, mono.rm=FALS
         cat("  Recalculating locus metrics provided by DArT (optionally specified)\n")
       }
       glout <- utils.recalc.avgpic(glout, verbose=0)
-      glout <- utils.recalc.CallRate(glout, verbose=0)
-      glout <- utils.recalc.FreqHets(glout, verbose=0)
-      glout <- utils.recalc.FreqHomRef(glout, verbose=0)
-      glout <- utils.recalc.FreqHomSnp(glout, verbose=0)
+      glout <- utils.recalc.callrate(glout, verbose=0)
+      glout <- utils.recalc.freqhets(glout, verbose=0)
+      glout <- utils.recalc.freqhomref(glout, verbose=0)
+      glout <- utils.recalc.freqhomsnp(glout, verbose=0)
     }
   
   # Remove monomorphs, which should not be present, but might have been introduced it the user deleted individuals from the input csv file

@@ -33,7 +33,8 @@
 #' @references Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
 #' @references Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The HardyWeinberg Package. Journal of Statistical Software 64:1-23.
 #' @examples
-#' list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), plot=TRUE, bonf=FALSE, silent=FALSE)
+#' list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), 
+#' plot=TRUE, bonf=FALSE, silent=FALSE)
 #' gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE, verbose=3)
 #' gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE, verbose=3)
 #' gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)

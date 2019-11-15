@@ -33,6 +33,7 @@
 #' @return A plot of the ordination [plot.out=TRUE] or a dataframe [plot.out=FALSE]
 #' @export
 #' @importFrom directlabels geom_dl
+#' @importFrom plotly ggplotly
 #' @import tidyr 
 #' @importFrom methods show
 #' @rawNamespace import(ggplot2, except = empty)
@@ -47,10 +48,9 @@
 #'  vadjust=1)
 #' gl.pcoa.plot(pca, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5,
 #'  vadjust=1, xaxis=1, yaxis=3)
-#' #library(plotly) #needed for interactive plots
-#' #gl.pcoa.plot(pca, gl, labels="interactive")  
+#' gl.pcoa.plot(pca, gl, labels="interactive")  
 #' 
-#' df <- gl.pcoa.plot(pcoa, gl, plot.out=FALSE)
+#' df <- gl.pcoa.plot(pca, gl, plot.out=FALSE)
 #' df
 
 gl.pcoa.plot <- function(glPca, x, scale=FALSE, ellipse=FALSE, p=0.95, labels="pop", hadjust=1.5, 
@@ -279,7 +279,7 @@ gl.pcoa.plot <- function(glPca, x, scale=FALSE, ellipse=FALSE, p=0.95, labels="p
     
     if (verbose>0) cat("  Preparing plot .... please wait\n")
     if(labels=="interactive"){
-      pp <- ggplotly(p)
+      pp <- plotly::ggplotly(p)
       show(pp)
     } else {
       show(p)

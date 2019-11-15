@@ -35,7 +35,7 @@ gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRU
   
 # FLAG SCRIPT START
   # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose) & !is.null(gl@other$verbose)) verbose=gl@other$verbose
   if (is.null(verbose)) verbose=2
  
   
@@ -48,14 +48,14 @@ gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRU
   
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(class(gl)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
   }
   
-  if (all(x@ploidy == 1)){
+  if (all(gl@ploidy == 1)){
     cat("  Detected Presence/Absence (SilicoDArT) data\n")
     stop("Cannot calculate minor allele frequences for Tag presence/absence data. Please provide a SNP dataset.\n")
-  } else if (all(x@ploidy == 2)){
+  } else if (all(gl@ploidy == 2)){
     cat("  Processing a SNP dataset\n")
   } else {
     stop("Fatal Error: Ploidy must be universally 1 (Tag P/A data) or 2 (SNP data)!\n")

@@ -11,7 +11,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G", "100049839-39-G/T"))
+#'    gl <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
 
 gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 
@@ -89,7 +89,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
       first <- 1
     }
     if (first > nLoc(x)){
-      cat("  Warning: Upper limit to range of loci cannot be greater than the number of loci, set to",nloc(x),"\n)")
+      cat("  Warning: Upper limit to range of loci cannot be greater than the number of loci, set to",nLoc(x),"\n)")
       last <- nLoc(x)
     }
     if (first > last){

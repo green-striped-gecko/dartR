@@ -23,7 +23,7 @@ Description: Functions are provided that facilitate the import and analysis of
 VignetteBuilder: knitr
 Encoding: UTF-8
 Depends:
-    R (>= 3.1.1),
+    R (>= 3.5),
     adegenet (>= 2.0.0)
 biocViews:
 Imports:
@@ -66,12 +66,13 @@ Imports:
     robustbase,
     gridExtra,
     vcfR, 
-    Rcpp
+    Rcpp, 
+    plotly, 
+    leaflet.minicharts
 Suggests:
     knitr,
     rmarkdown,
-    rgl,
-    plotly
+    rgl
 License: GPL-2
 LazyData: true
 RoxygenNote: 6.1.1

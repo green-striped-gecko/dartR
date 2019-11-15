@@ -25,7 +25,7 @@ A genlight object with the reduced data
 The script returns a genlight object with specified loci deleted.
 }
 \examples{
-   gl <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G", "100049839-39-G/T"))
+   gl <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

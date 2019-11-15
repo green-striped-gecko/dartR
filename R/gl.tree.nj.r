@@ -11,7 +11,7 @@
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A tree file of class phylo
 #' @importFrom stringr str_pad
-#' @importFrom ape nj root plot.phylo
+#' @importFrom ape nj root plot.phylo write.tree
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -81,7 +81,7 @@ gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, treefi
       # Plot the tree
       # Save the prior settings for mfrow, oma, mai and pty, and reassign
       op <- par(mfrow = c(1, 1), oma=c(1,1,1,1), mai=c(0,0,0,0),pty="m")
-      ape::plot.phylo(rtree, type=type, cex=labelsize)
+      ape::plot.phylo(tree, type=type, cex=labelsize)
     } else {
       # Just plot the tree unrooted
       op <- par(mfrow = c(1, 1), oma=c(1,1,1,1), mai=c(0,0,0,0),pty="m")

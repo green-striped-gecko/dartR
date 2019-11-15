@@ -10,7 +10,7 @@ gl.propShared(x)
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}
 }
 \description{
-This script calculates a individual based distance matrix. It uses an C++ implementation, so package Rcpp needs to be installed.
+This script calculates a individual based distance matrix. It uses an C++ implementation, so package Rcpp needs to be installed and it is therefore really fast.
 }
 \examples{
 res <- gl.propShared(testset.gl)

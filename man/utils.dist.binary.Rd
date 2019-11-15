@@ -30,7 +30,8 @@ The distance measure can be one of
  the other, or both restriction sites). Your call.
 }
 \examples{
-gl.dist.ind(testset.gs, method="Jaccard")
+cat("to be added")
+#gl.dist.ind(testset.gs, method="Jaccard")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

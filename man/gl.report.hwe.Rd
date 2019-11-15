@@ -47,7 +47,8 @@ Two methods are used to determine significance. ChiSquare (with correction) is t
 more expensive, but applies a Fisher Exact Test of departure from HWE.
 }
 \examples{
-list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), plot=TRUE, bonf=FALSE, silent=FALSE)
+list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"), 
+plot=TRUE, bonf=FALSE, silent=FALSE)
 gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE, verbose=3)
 gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE, verbose=3)
 gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)

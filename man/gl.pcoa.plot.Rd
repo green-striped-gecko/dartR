@@ -65,10 +65,9 @@ gl.pcoa.plot(pca, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5,
  vadjust=1)
 gl.pcoa.plot(pca, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5,
  vadjust=1, xaxis=1, yaxis=3)
-#library(plotly) #needed for interactive plots
-#gl.pcoa.plot(pca, gl, labels="interactive")  
+gl.pcoa.plot(pca, gl, labels="interactive")  
 
-df <- gl.pcoa.plot(pcoa, gl, plot.out=FALSE)
+df <- gl.pcoa.plot(pca, gl, plot.out=FALSE)
 df
 }
 \author{

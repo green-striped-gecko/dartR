@@ -26,6 +26,7 @@
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #' 
 #' @param x Name of the genlight object for which populations are to be reassigned.[required]
+#' @param pop.recode path to recode file
 #' @param out.recode.file Name of the file to output the new individual labels [null]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN].
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]

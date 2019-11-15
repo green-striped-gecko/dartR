@@ -4,10 +4,24 @@
 \alias{gl.map.interactive}
 \title{Creates an interactive map (based on latlong) from a genlight object}
 \usage{
-gl.map.interactive(x, provider = "Esri.NatGeoWorldMap")
+gl.map.interactive(x, matrix = NULL, standard = TRUE,
+  symmetric = TRUE, ind.circles = TRUE, pop.labels = TRUE,
+  pop.labels.cex = 12, provider = "Esri.NatGeoWorldMap")
 }
 \arguments{
 \item{x}{-- a genlight object [including coordinates within the latlong slot]}
+
+\item{matrix}{-- a distance matrix between populations or individuals. The matrix is visualised as lines between individuals/populations. If matrix is asymmetric two lines with arrows are plotted.}
+
+\item{standard}{-- if a matrix is provided line width will be standardised to be between 1 to 10, if set to true, otherwise taken as given.}
+
+\item{symmetric}{-- if a symmetric matrix is provided only one line is drawn based on the lower triangle of the matrix. If set to false arrows indicating the direction are used instead.}
+
+\item{ind.circles}{-- should individuals plotted as circles, default is TRUE}
+
+\item{pop.labels}{-- population labels at the center of the individuals of populations, default is TRUE}
+
+\item{pop.labels.cex}{-- size of population labels, default is 20.}
 
 \item{provider}{-- passed to leaflet}
 }
@@ -21,7 +35,7 @@ Creates an interactive map (based on latlong) from a genlight object
 A wrapper around the \pkg{leaflet} package. For possible background maps check as specified via the provider: \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
 }
 \examples{
-#gl.map(bandicoot.gl)
+gl.map.interactive(bandicoot.gl)
 }
 \author{
 Bernd Gruber (glbugs@aerg.canberra.edu.au)
