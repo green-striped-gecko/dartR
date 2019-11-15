@@ -8,7 +8,7 @@
 #'
 #' @param gl1 -- name of the genlight object containing the SNP data [required]
 #' @param gl2 -- if two seperate genlight objects are to be compared this can be provided here [default NULL]
-#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
+#' @param verbose -- verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return returns a data.frame. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequendy difference between loci (mdf).
 #' @details 
 #' if no gl2 is provided, the function uses the pop(gl) hierachy to determine pairs of population, otherwise it runs a single comparison between gl1 and gl2. 

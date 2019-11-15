@@ -24,7 +24,7 @@
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return returns a genlight object of loci with multiple SNP calls
 #' @importFrom adegenet glPlot
 #' @importFrom graphics barplot

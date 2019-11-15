@@ -21,7 +21,7 @@
 #' @param method -- for determining the statistical signicance in the ternary plot: ChiSquare (with continuity correction) | Fisher [default "ChiSquare"]
 #' @param bonf -- if TRUE, Bonferroni correction will be applied to the level of significance [default TRUE]
 #' @param alpha -- level of significance for testing [default 0.05]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return returns a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
 #' and alternate SNP homozygotes; probability of departure from H-W equilibrium,
 #' and per locus significance with and without Bonferroni Correction.

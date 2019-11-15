@@ -6,7 +6,7 @@
 #' @param maf.limit -- show histograms maf range <= maf.limit [default 0.5]
 #' @param ind.limit -- show histograms only for populations of size greater than ind.limit [default 5]
 #' @param loc.limit -- show histograms only for populations with more than loc.limit polymorphic loci [default 30]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return NULL
 #' @export
 #' @importFrom graphics layout hist

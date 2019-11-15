@@ -30,7 +30,7 @@
 #' @param threshold minimum acceptable base pair difference for display on the whisker plot and histogram [default 3 bp]
 #' @param taglength -- typical length of the sequence tags [default 69]
 #' @param probar -- if TRUE, then a progress bar is desplayed on long loops [default TRUE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return Tabulation of loc that will be lost on filtering, against values of the threshold
 #' @importFrom adegenet glPlot
 #' @importFrom graphics hist

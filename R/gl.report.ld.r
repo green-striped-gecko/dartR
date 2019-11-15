@@ -10,7 +10,7 @@
 #' @param nchunks how many subchunks will be used (the less the faster, but if the routine crashes more bits are lost
 #' @param ncores how many cores should be used
 #' @param chunkname the name of the chunks for saving [default is NULL]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @param probar if TRUE, a progress bar is displayed for long loops [default = TRUE]
 #' @return returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed. The final output is a data frame that holds all statistics of pairwise LD between loci. (See ?LD in package genetics for details).
 #' @export

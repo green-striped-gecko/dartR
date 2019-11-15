@@ -9,7 +9,7 @@
 #' be reliably scored)
 #' 
 #' @param x -- name of the input genlight object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return NULL
 #' @rawNamespace import(adegenet, except = plot)
 #' @import plyr utils

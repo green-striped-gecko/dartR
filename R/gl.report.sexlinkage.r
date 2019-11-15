@@ -15,7 +15,7 @@
 #' be regarded as consistent with a sex specific marker [default 0]
 #' @param t.hom -- tolerance, that is tf=0.05 means that 5% of the homogametic sex can be heterozygous and still
 #' be regarded as consistent with a sex specific marker [default 0]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return The list of sex specific loci
 #' @importFrom gridExtra grid.arrange
 #' @export

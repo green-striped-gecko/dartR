@@ -5,7 +5,7 @@
 #' @param gl genlight object containing the SNP genotypes  [required]
 #' @param spectrumplot switch to provide a plot [default TRUE]
 #' @param confiplot switch if confidence intervals (1 sd) should be drawn [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @param pbar report on progress. Silent if set to FALSE. [default TRUE]
 #' @param table prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.
 #' @return returns a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.

@@ -43,7 +43,7 @@
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
 #' @param cex.labels -- sets the size of the population labels [default 0.7]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return returns a dataframe containing population labels, heterozygosities and sample sizes
 #' @export
 #' @author Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
