@@ -11,7 +11,7 @@
 #' @param recalc force the recalculation of locus metrics, in case individuals have been manually deleted from the input csv file [FALSE]
 #' @param mono.rm force the removal of monomorphic loci (including all NAs), in case individuals have been manually deleted from the input csv file [FALSE]
 #' @param probar show progress bar
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, or as set by gl.set.verbose()]
 #' @return a dart genlight object that contains individual metrics [if data were provided] and locus metrics [from a DArT report]. The dart genlight object can then be fed into a number of initial screening, export and export functions provided by the package. For some of the function it is necessary to have the metadata that was provided from DArT. Please check the vignette for more information. Additional information can also be found in the help documents for  \code{utils.read.dart}. 
 #' @export
 #' @examples{
@@ -21,7 +21,16 @@
 #' }
 
 
-gl.read.dart <- function(filename, ind.metafile=NULL, recalc=FALSE, mono.rm=FALSE, nas = "-", topskip=NULL,  lastmetric ="RepAvg", covfilename=NULL, probar=FALSE, verbose=2){
+gl.read.dart <- function(filename, 
+                         ind.metafile=NULL, 
+                         recalc=FALSE, 
+                         mono.rm=FALSE, 
+                         nas = "-", 
+                         topskip=NULL,  
+                         lastmetric ="RepAvg", 
+                         covfilename=NULL, 
+                         probar=FALSE, 
+                         verbose=NULL){
   
 # TRAP COMMAND, SET VERSION
 
@@ -30,21 +39,36 @@ gl.read.dart <- function(filename, ind.metafile=NULL, recalc=FALSE, mono.rm=FALS
   
 # SET VERBOSITY
   
-  if (is.null(verbose)){
-    verbose <- x@other$verbose
-  }
-  if (verbose < 0 | verbose > 5){
-      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
       verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
+  }
+  
+  if(verbose == 0 & probar){
+    probar=FALSE
+    #cat("  Note: Progress bar set to FALSE for verbosity==0\n")
   }
 
-# FLAG SCRIPT START
-
+  # FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build =",build,"]\n")
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
 # DO THE JOB
+  
   # Deal with the redundant covfilename parameter
   if (is.null(ind.metafile)) {
     ind.metafile <- covfilename
@@ -138,10 +162,9 @@ gl.read.dart <- function(filename, ind.metafile=NULL, recalc=FALSE, mono.rm=FALS
     
 # FLAG SCRIPT END
     
-    if (verbose > 0) {
-      cat(paste("Completed:",funname,"\n"))
-    }
-    
+  if (verbose > 0) {
+    cat(paste("Completed:",funname,"\n"))
+  }
     
   return(glout)
 }
