@@ -4,7 +4,7 @@
 \alias{gl.amova}
 \title{Performs and AMOVA using genlight data.}
 \usage{
-gl.amova(x, permutations = 100)
+gl.amova(x, permutations = 100, method = "pegas")
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes, with population information [required]}
@@ -15,9 +15,10 @@ gl.amova(x, permutations = 100)
 An object of class "amova" which is a list with a table of sums of square deviations (SSD), mean square deviations (MSD), and the number of degrees of freedom, and a vector of variance components.
 }
 \description{
-This script performs an AMOVA based on the genetic distance matrix from stamppNeisD() [package StAMPP] using the amova() function from the package PEGAS for exploring within and between population variation. For detailed information use their help pages: ?pegas::amova, ?StAMPP::stamppAmova
+This script performs an AMOVA based on the genetic distance matrix from stamppNeisD() [package StAMPP] using the amova() function from the package PEGAS for exploring within and between population variation. For detailed information use their help pages: ?pegas::amova, ?StAMPP::stamppAmova. Be aware due to a conflict of the amova functions from various packages I had to "hack" StAMPP::stamppAmova to avoid a namespace conflict.
 }
 \examples{
+
 #permuations should be higher, here set to 10 because of speed
 gl.amova(bandicoot.gl, permutations=10)
 

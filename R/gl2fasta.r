@@ -45,7 +45,7 @@
 #' @import stringr
 #' @author Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl <- gl.filter.repavg(testset.gl,t=1)
+#' gl <- gl.filter.repeatability(testset.gl,t=1)
 #' gl <- gl.filter.overshoot(gl,verbose=3)
 #' gl <- gl.filter.callrate(testset.gl,t=.98)
 #' gl <- gl.filter.monomorphs(gl)

@@ -21,7 +21,7 @@ some individuals are removed from the dataset. This script recalculates the MAF 
 places these recalculated values in the appropriate place in the genlight object.
 }
 \examples{
-#f <- dartR:::utils.recalc.maf(testset.gl)
+#f <- dartR::utils.recalc.maf(testset.gl)
 }
 \seealso{
 \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,

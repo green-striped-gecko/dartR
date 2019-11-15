@@ -114,8 +114,12 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, silent=TR
 # Calculate and plot overall MAF
   
   cat("  Calculating MAF across populations\n")
+  
   maf <- x@other$loc.metrics$maf
-
+  if (is.null(maf)) {
+    x <- gl.recalc.metrics(x,verbose = 0)
+    maf <- x@other$loc.metrics$maf
+  }
     if (flag == 1){
       layout(matrix(c(1,1,1,2,3,4,5,6,7), 3, 3, byrow = TRUE))
     }

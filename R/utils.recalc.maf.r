@@ -14,7 +14,7 @@
 #' \code{utils.recalc.freqhet} for recalculating frequency of heterozygotes, \code{gl.recalc.avgpic} for recalculating AvgPIC,
 #' \code{gl.recalc.rdepth} for recalculating average read depth
 #' @examples
-#' #f <- dartR:::utils.recalc.maf(testset.gl)
+#' #f <- dartR::utils.recalc.maf(testset.gl)
 
 
 utils.recalc.maf <- function(x, verbose=NULL) {
