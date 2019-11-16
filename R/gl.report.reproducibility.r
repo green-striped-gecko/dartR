@@ -21,11 +21,11 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # SNP data
-#'   out <- gl.report.repeatability(testset.gl)
+#'   out <- gl.report.reproducibility(testset.gl)
 #' # Tag P/A data
-#'   out <- gl.report.repeatability(testset.gs)
+#'   out <- gl.report.reproducibility(testset.gs)
 
-gl.report.repeatability <- function(x, boxplot="adjusted", range=1.5, verbose=NULL) {
+gl.report.reproducibility <- function(x, boxplot="adjusted", range=1.5, verbose=NULL) {
 
 # TRAP COMMAND, SET VERSION
   

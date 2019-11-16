@@ -14,13 +14,13 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # SNP data
-#'   gl.report.repeatability(testset.gl)
-#'   result <- gl.filter.repeatability(testset.gl, threshold=0.99, verbose=3)
+#'   gl.report.reproducibility(testset.gl)
+#'   result <- gl.filter.reproducibility(testset.gl, threshold=0.99, verbose=3)
 #' # Tag P/A data
-#'   gl.report.repeatability(testset.gs)
-#'   result <- gl.filter.repeatability(testset.gs, threshold=0.99)
+#'   gl.report.reproducibility(testset.gs)
+#'   result <- gl.filter.reproducibility(testset.gs, threshold=0.99)
 
-gl.filter.repeatability <- function(x, threshold=0.99, verbose=NULL) {
+gl.filter.reproducibility <- function(x, threshold=0.99, verbose=NULL) {
 
 # TRAP COMMAND, SET VERSION
   
