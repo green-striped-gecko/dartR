@@ -38,39 +38,49 @@
 #' @param dim -- number of dimensions to retain in the dimension reduction [default k, number of populations]
 #' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.05]
 #' @param threshold -- populations to retain for consideration; those for which the focal individual has less than or equal to threshold loci with private alleles [default 0]
-#' @param verbose -- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default 3]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @importFrom stats dnorm qnorm
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#' x <- gl.assign(testset.gl, unknown="UC_00146", nmin=10, 
-#' alpha=0.05, threshold=1)
+#'   x <- gl.assign(testset.gl, unknown="UC_00146", nmin=10, 
+#'   alpha=0.05, threshold=1)
 
 gl.assign <- function (x, unknown, nmin=10, dim=NULL, alpha= 0.05, threshold=0, verbose=3) {
 
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
   build <- "Jacob"
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")

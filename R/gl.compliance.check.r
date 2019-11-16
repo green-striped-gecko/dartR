@@ -14,44 +14,50 @@
 #' and if it does not, will rectify it.
 #' 
 #' @param x -- name of the input genlight object [required]
-#' @param verbose -- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default NULL]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object that conforms to the expectations of dartR
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' x <- gl.check(testset.gl)
+#' x <- gl.compliance.check(testset.gl)
 
-gl.check <- function (x, verbose=NULL) {
+gl.compliance.check <- function (x, verbose=NULL) {
 
 # TRAP COMMAND, SET VERSION
-
+  
   funname <- match.call()[[1]]
   build <- "Jacob"
   
 # SET VERBOSITY
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
-
-  if (verbose < 0 | verbose > 5){
-      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default 2\n"))
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
       verbose <- 2
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
   }
-
+  
 # FLAG SCRIPT START
-
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
  # STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: genlight object required!\n")
   }
-  
  
     if (all(x@ploidy == 1)){
       if (verbose >= 2) cat("  Processing Presence/Absence (SilicoDArT) data\n")
@@ -62,7 +68,6 @@ gl.check <- function (x, verbose=NULL) {
     } else {
       stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
-  
 
 # DO THE JOB
   
@@ -71,45 +76,67 @@ gl.check <- function (x, verbose=NULL) {
   if (data.type == "SNP"){
     mat <- as.matrix(x)
     scores <- c(0,1,2,NA)
+    if (verbose >= 2){cat("  Checking coding of SNPs\n")}
     if (max(mat) %in% scores){
-      if (verbose>0) cat("  SNP data scored NA, 0, 1 or 2 confirmed\n")
+      if (verbose >= 1){cat("    SNP data scored NA, 0, 1 or 2 confirmed\n")}
     } else {
-      cat("  Error: SNP data must be scored NA, 0 or 1 or 2, revisit data input\n")
+      if (verbose >= 1){cat("    Error: SNP data must be scored NA, 0 or 1 or 2, revisit data input\n")}
     }
   } else {
     mat <- as.matrix(x)
     scores <- c(0,1,NA)
+    if (verbose >= 2){cat("  Checking coding of Tag P/A data\n")}
     if (max(mat) %in% scores){
-      cat("  Tag P/A data (SilicoDArT) scored 1, 0 (present or absent) confirmed\n")
+      if (verbose >= 1){cat("    Tag P/A data (SilicoDArT) scored 1, 0 (present or absent) confirmed\n")}
     } else {
-      cat("  Error: Tag P/A data (SilicoDArT) must be scored 0 for absent or 1 for present, revisit data input\n")
+      if (verbose >= 1){cat("    Error: Tag P/A data (SilicoDArT) must be scored 0 for absent or 1 for present, revisit data input\n")}
     }
   }
   
   # Check for the locus metrics flags, and create if they do not exist.
   
+  if (verbose >= 2){cat("  Checking locus metrics flags\n")}
   if(is.null(x@other$loc.metrics.flags)){
-    x <- utils.reset.flags(x,set=FALSE,verbose=verbose)
+    if (verbose >= 1){cat("    Creating locus metrics flags\n")}
+    x <- utils.reset.flags(x,set=FALSE,verbose=0)
+  } else {
+    if (verbose >= 1){cat("    Locus metrics flags confirmed\n")}
   }
   
-  # Check that the locus metrics exist, and if not, create the df and calculate them
+  # Check that the verbosity flag exists, and if not, create it
   
-  if(is.null(x@other$loc.metrics)){
-    x <- gl.recalc.metrics(x, verbose=verbose)
+  if (verbose >= 2){cat("  Checking verbosity flag\n")}
+  if(is.null(x@other$verbose)){
+    if (verbose >= 1){cat("    Creating verbosity flag\n")}
+    x <- utils.reset.verbosity(x,set.verbosity=2,verbose=0)
+  } else {
+    if (verbose >= 1){cat("    Verbosity flag confirmed\n")}
   }
+  
+  # Calculate locus metrics
+  
+  if (verbose >= 2){cat("  Recalculating locus metrics\n")}
+  x <- gl.recalc.metrics(x,verbose=verbose)
   
   # Check that the individual metricx exist, and if not, create the df
   
+  if (verbose >= 2){cat("  Checking for individual metrics\n")}
   if(is.null(x@other$loc.metrics)){
+    if (verbose >= 1){cat("    Creating a slot for individual metrics\n")}
     x@other$ind.metrics$id <- indNames(x)
+  } else {
+    if (verbose >= 1){cat("    Individual metrics confirmed\n")}
   }
   
   # Check that the population variable exists, and if it does not, create it with a single population 'A'
   
+  if (verbose >= 2){cat("  Checking for population assignments\n")}
   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-    cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
+    if (verbose >= 1){cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
     pop(x) <- array("pop1",dim = nInd(x))
     pop(x) <- as.factor(pop(x))
+  } else {
+    if (verbose >= 1){cat("  Population assignments confirmed\n")}
   }
   
   # ADD TO HISTORY
