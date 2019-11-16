@@ -12,7 +12,7 @@
 #' The script returns a genlight object with the recalculated locus metadata.
 #'
 #' @param x -- name of the genlight object containing SNP genotypes [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the recalculated locus metadata
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -22,25 +22,35 @@
 
 gl.recalc.metrics <- function(x, verbose=NULL){
   
- # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build <- "Jacob"
   funname <- match.call()[[1]]
-  hold <- x@other$loc.metrics.flags$monomorphs
-
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+  build <- "Jacob"
+  hold <- x@other$loc.metrics.flags$monomorphs  
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build=",build,"]\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
 # STANDARD ERROR CHECKING
@@ -81,12 +91,12 @@ gl.recalc.metrics <- function(x, verbose=NULL){
 #   x <- utils.reset.flags(x,set=TRUE,verbose=verbose)
 #   x@other$loc.metrics.flags$monomorphs <- hold
   
-# FLAG SCRIPT END
-  
-  #add to history
+# ADD TO HISTORY
   nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call()
+  x@other$history[[nh + 1]] <- match.call() 
   
+# FLAG SCRIPT END
+
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
