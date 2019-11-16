@@ -1,8 +1,8 @@
-#' Import presence/absence data from SilicoDArT and convert to  genind \{agegenet\} format
+#' Import presence/absence data from SilicoDArT to genlight \{agegenet\} format (ploidy=1)
 #'
 #' DaRT provide the data as a matrix of entities (individual animals) across the top and
 #' attributes (P/A of sequenced fragment) down the side in a format that is unique to DArT. This program
-#' reads the data in to adegenet format (genind) for consistency with
+#' reads the data in to adegenet format for consistency with
 #' other programming activity. The script may require modification as DArT modify their
 #' data formats from time to time.
 #'
@@ -24,11 +24,11 @@
 #' @param filename -- name of csv file containing the SilicoDArT data [required]
 #' @param ind.metafile -- name of csv file containing metadata assigned to each entity (individual) [default NULL]
 #' @param nas -- missing data character [default "-"]
-#' @param topskip -- number of rows to skip before the header row (containing the specimen identities) [required]
-#' @param lastmetric -- specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number. [default Reproducibility]
+#' @param topskip -- number of rows to skip before the header row (containing the specimen identities) [optional]
+#' @param lastmetric -- specifies the last non genetic column (Default is "Reproducibility"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number. [default Reproducibility]
 #' @return An object of class \code{genlight} with ploidy set to 1, containing the presence/absence data, and locus and individual metadata
 #' @export
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \dontrun{
 #' gs<- gl.read.silicodart(filename="SNP_DFwt15-1908_scores_2Row.csv", ind.metafile="metadata.csv" )
@@ -46,8 +46,11 @@
 #ind.metafile <- "d:/Bernd/Projects/PeterDartSilico/indis.csv"
 
 
-
-gl.read.silicodart <- function(filename, ind.metafile=NULL,  nas="-",  topskip=NULL, lastmetric="Reproducibility") {
+gl.read.silicodart <- function(filename, 
+                               ind.metafile=NULL,  
+                               nas="-",  
+                               topskip=NULL, 
+                               lastmetric="Reproducibility") {
 
   cat("Reading data from file:", filename,"\n")
   cat("  This may take some time, please wait!\n")
@@ -203,14 +206,13 @@ if (is.null(gout@other$history)) {
 }
 #add recalc flags (TRUE=up-to-date, FALSE=no longer valid)
 #all potential headers that can be relculated
-recalc.flags <-  c("CallRate",  "OneRatio", "PIC" ,"Qpmr")
+recalc.flags <-  c( "AvgPIC", "OneRatioRef","OneRatioSnp", "PICRef", "PICSnp", "CallRate",  "maf", "FreqHets" ,"FreqHomRef" , "FreqHomSnp", 
+                    "monomorphs", "OneRatio", "PIC")
 gout@other$loc.metrics.flags <-  data.frame(matrix(TRUE, nrow=1, ncol=length(recalc.flags)))
 names(gout@other$loc.metrics.flags) <- recalc.flags
 
-
-
 # Report
-  cat("Genlight object with ploidy=1 created. Use gs. functions  to analyse the data!")
+  cat("Genlight object with ploidy=1 created.")
 
   return(gout)
 
