@@ -26,7 +26,7 @@
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions ['standard']
 #' @param range -- specifies the range for delimiting outliers [1.5 interquartile ranges]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return An object of class 'dist' giving distances between individuals
 #' @importFrom ape dist.gene
 #' @importFrom poppr diss.dist
@@ -39,27 +39,37 @@
 
 gl.dist.ind <- function(x, method=NULL, plot=TRUE, boxplot="standard", range=1.5, verbose=NULL) {
 
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
   build <- "Jacob"
   
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")
