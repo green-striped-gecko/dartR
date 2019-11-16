@@ -7,7 +7,7 @@
 #' @param proj4 -- proj4string of data set (see spatialreference.org for projections) [default WGS84]
 #' @param outfile -- name (path) of the output shape file [default 'gl']. shp extension is added automatically.
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
-#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @export
 #' @importFrom rgdal writeOGR
 #' @importFrom sp SpatialPointsDataFrame coordinates<- CRS proj4string<-
@@ -18,24 +18,35 @@
 
 gl2shp <- function(x, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",  outfile="gl", outpath=tempdir(), verbose=NULL){
 
-# TIDY UP FILE SPECS
-
-  outfilespec <- file.path(outpath, outfile)
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
-
+  build <- "Jacob"
+  outfilespec <- file.path(outpath, outfile)
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
@@ -44,10 +55,6 @@ gl2shp <- function(x, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS8
     stop("  Fatal Error: genlight object required!\n")
   }
 
-  if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-  }
-  
   if (verbose >= 2){
     if (all(x@ploidy == 1)){
       stop("Fatal Error: Detected Presence/Absence (SilicoDArT) data. Please provide a SNP dataset\n")

@@ -2,7 +2,7 @@
 #' 
 #' @param gl -- a genlight object
 #' @param probar -- if TRUE, a progress bar will be displayed for long loops [default = TRUE]
-#' @param verbose -- level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genind object, with all slots filled.
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
