@@ -24,37 +24,50 @@
 #' @param mono.rm -- Remove monomorphic loci after analysis is complete [default FALSE]
 #' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]
 #' @param recursive -- Repeatedly filter individuals on call rate, each time removing monomorphic loci. Only applies if method="ind" and mono.rm=TRUE [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return The reduced genlight or genind object, plus a summary
 #' @export
 #' @author Arthur Georges and Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.filter.callrate(testset.gl, method="LOC", threshold=0.95, verbose=3)
-#' result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8, verbose=3)
+#' # SNP data
+#'   result <- gl.filter.callrate(testset.gl, method="loc", threshold=0.95, verbose=3)
+#'   result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8, verbose=3)
+#' # Tag P/A data
+#'   result <- gl.filter.callrate(testset.gs, method="loc", threshold=0.95, verbose=3)
+#'   result <- gl.filter.callrate(testset.gs, method="ind", threshold=0.8, verbose=3)
 
  gl.filter.callrate <- function(x, method="loc", threshold=0.95, mono.rm=FALSE, recalc=FALSE, recursive=FALSE, plot=TRUE, bins=25, verbose=NULL) {
+  
+# TRAP COMMAND, SET VERSION
    
-# TIDY UP FILE SPECS
-  
-  build <- "Jacob"
-  funname <- match.call()[[1]]
-  hold <- x
-  # Note draws upon and modifies the loc.metrics.flags for Call Rate, and modifies the flags for all other metrics if method='ind'.
-  
+   funname <- match.call()[[1]]
+   build <- "Jacob"
+   hold <- x
+   
+# SET VERBOSITY
+   
+   if (is.null(verbose)){ 
+     if(!is.null(x@other$verbose)){ 
+       verbose <- x@other$verbose
+     } else { 
+       verbose <- 2
+     }
+   } 
+   
+   if (verbose < 0 | verbose > 5){
+     cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+     verbose <- 2
+   }
+   
 # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
-  
-  if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    verbose <- 2
-  }
-  
-  if (verbose >= 1){
-    cat("Starting",funname,"\n")
-  }
+   
+   if (verbose >= 1){
+     if(verbose==5){
+       cat("Starting",funname,"[Build =",build,"\n")
+     } else {
+       cat("Starting",funname,"\n")
+     }
+   }
   
 # STANDARD ERROR CHECKING
   

@@ -188,7 +188,8 @@ gl.report.hamming <- function(x,
    cat("    Miniumum Hamming distance: ",round(min(d),2),"\n")
    cat("    Maximum Hamming distance: ",round(max(d),2),"\n")
    cat(paste0("    Mean Hamming Distance ",round(mean(d),2),"+/-",round(sd(d),3)," SD\n\n"))
-   n.outliers <- sum(d[d<=(threshold/(taglength-rs))])
+   #n.outliers <- sum(d[d<=(threshold/(taglength-rs))])
+   n.outliers <- sum(d<=(threshold/(taglength-rs)))
    cat("  No. of pairs with Hamming Distance less than or equal to",threshold,"base pairs:",n.outliers,"\n")
 
    # Determine the loss of loci for a given filter cut-off

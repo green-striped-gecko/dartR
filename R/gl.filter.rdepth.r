@@ -10,38 +10,50 @@
 #' @param x -- name of the genlight object containing the SNP or tag presence/absence data [required]
 #' @param lower -- lower threshold value below which loci will be removed [default 5]
 #' @param upper -- upper threshold value above which loci will be removed [default 50]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return     Returns a genlight object retaining loci with a Read Depth in the range specified by the lower and upper threshold.
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.rdepth(testset.gl)
-#' result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
+#' # SNP data
+#'   gl.report.rdepth(testset.gl)
+#'   result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
+#' # Tag P/A data
+#'   result <- gl.filter.rdepth(testset.gs, lower=8, upper=50)
 
 gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=NULL) {
 
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  if (verbose >= 1) {
-    cat("Starting",funname,"\n")
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("Fatal Error: genlight object required!\n")

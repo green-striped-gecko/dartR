@@ -8,36 +8,49 @@
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param threshold -- threshold value below which loci will be removed [default 0.99]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return Returns a genlight object retaining loci with repeatability (Repavg or Reproducibility) greater than the specified threshold.
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.repeatability(testset.gl)
-#' result <- gl.filter.repeatability(testset.gl, threshold=0.99, verbose=3)
+#' # SNP data
+#'   gl.report.repeatability(testset.gl)
+#'   result <- gl.filter.repeatability(testset.gl, threshold=0.99, verbose=3)
+#' # Tag P/A data
+#'   gl.report.repeatability(testset.gs)
+#'   result <- gl.filter.repeatability(testset.gs, threshold=0.99)
 
 gl.filter.repeatability <- function(x, threshold=0.99, verbose=NULL) {
 
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build <- "Jacob"
   funname <- match.call()[[1]]
+  build <- "Jacob"
   hold <- x
-  # Note does not draw upon or modify the loc.metrics.flags as RepAvg and Reproducibility cannot be recalculated.
   
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
 # STANDARD ERROR CHECKING

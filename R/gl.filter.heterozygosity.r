@@ -6,41 +6,49 @@
 #' @param x -- a genlight object containing the SNP genotypes [Required]
 #' @param t.upper -- filter individuals > the threshold [default 0.7]
 #' @param t.lower -- filter individuals < the threshold [default 0]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return the filtered genlight object
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @importFrom plyr join
 #' @importFrom pegas heterozygosity
 #' @examples
-#' result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
-#' gl.report.heterozygosity(result,method="ind")
+#'  result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
+#'  tmp <- gl.report.heterozygosity(result,method="ind")
 
 gl.filter.heterozygosity <- function(x, t.upper=0.7, t.lower=0, verbose=NULL) {
   
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build <- "Jacob"
   funname <- match.call()[[1]]
-  hold <- x
-  # Note does not draw upon or modify the loc.metrics.flags
+  build <- "Jacob"
+
+# SET VERBOSITY
   
-  # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"[ Build=",build,"]\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
-  # STANDARD ERROR CHECKING
+# STANDARD ERROR CHECKING
   
   if(class(x)!="genlight") {
     stop("  Fatal Error: genlight object required!\n")

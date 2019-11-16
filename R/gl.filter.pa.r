@@ -9,8 +9,7 @@
 #' @param pop1 -- name of the first parental population (in quotes) [required]
 #' @param pop2 -- name of the second parental population (in quotes) [required]
 #' @param invers -- switch to filter for all loci that have no private alleles and are not fixed [FALSE]
-#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 
-#' 3, progress and results summary; 5, full report [default NULL]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity] 
 #' @return The reduced genlight dataset, containing now only fixed and private alleles
 #' @export
 #' @author Bernd Gruber & Ella Kelly (University of Melbourne) (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -20,28 +19,33 @@
 gl.filter.pa<-function(x, pop1, pop2, invers=FALSE, verbose=NULL){
   
 # TRAP COMMAND, SET VERSION
-
+  
   funname <- match.call()[[1]]
   build <- "Jacob"
-
+  
 # SET VERBOSITY
   
-  if (is.null(verbose)){
-    verbose <- x@other$verbose
-  }
-  if (verbose < 0 | verbose > 5){
-      cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to default",x@other$verbose,"\n"))
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
       verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
   }
-
+  
 # FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
-
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
 # STANDARD ERROR CHECKING

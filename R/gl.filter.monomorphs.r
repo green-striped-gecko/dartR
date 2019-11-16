@@ -9,36 +9,48 @@
 #' be reliably scored)
 #' 
 #' @param x -- name of the input genlight object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return A genlight object with monomorphic ( and all NA) loci removed
 #' @import utils
 #' @importFrom plyr count
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.filter.monomorphs(testset.gl, verbose=3)
+#' # SNP data
+#'   result <- gl.filter.monomorphs(testset.gl, verbose=3)
+#' # Tag P/A data
+#'   result <- gl.filter.monomorphs(testset.gs, verbose=3)
 
 gl.filter.monomorphs <- function (x, verbose=NULL) {
 
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build ='Jacob'
   funname <- match.call()[[1]]
-  # Note does draw upon the monomorphs flag and will reset it to TRUE on completion
+  build <- "Jacob"
   
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
 # STANDARD ERROR CHECKING

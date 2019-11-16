@@ -19,8 +19,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' cat("to be added")
-#' #D <- gl.dist.ind(testset.gs, method="Jaccard")
+#' D <- utils.dist.binary(testset.gs, method="Jaccard")
 
 utils.dist.binary <- function(x, method="simple", verbose=NULL) {
   
@@ -123,9 +122,9 @@ utils.dist.binary <- function(x, method="simple", verbose=NULL) {
 
 # FLAG SCRIPT END
 
-if (verbose > 0) {
-  cat("Completed:",funname,"\n")
-}
+  if (verbose > 0) {
+    cat("Completed:",funname,"\n")
+  }
 
-return(dd)
+  return(dd)
 }

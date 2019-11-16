@@ -20,20 +20,30 @@ gl.set.verbosity <- function(x, set.verbosity=2, verbose=NULL) {
   
   funname <- match.call()[[1]]
   build <- "Jacob"
-  
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+
+# SET VERBOSITY
+
+  if (is.null(verbose)){
+    if(!is.null(x@other$verbose)){
+      verbose <- x@other$verbose
+    } else {
+      verbose <- 2
+    }
+  }
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
 # STANDARD ERROR CHECKING
@@ -52,6 +62,8 @@ gl.set.verbosity <- function(x, set.verbosity=2, verbose=NULL) {
     }
   }
   
+# DO THE JOB
+  
   if (verbose >= 2){
     cat(paste("  Setting default verbosity to",set.verbosity,"\n"))
   }
@@ -64,7 +76,7 @@ gl.set.verbosity <- function(x, set.verbosity=2, verbose=NULL) {
   
 # FLAG SCRIPT END
   
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
   

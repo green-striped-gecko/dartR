@@ -40,11 +40,7 @@ gl.read.dart <- function(filename,
 # SET VERBOSITY
   
   if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
       verbose <- 2
-    }
   } 
   
   if (verbose < 0 | verbose > 5){
