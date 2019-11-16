@@ -4,7 +4,7 @@
 #' and generate a table of allele frequencies for each population and locus
 #'
 #' @param x -- name of the genlight object containing the SNP or Tag P/A (SilicoDArT) data [required]
-#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A matrix with allele (SNP data) or presence/absence frequencies (Tag P/A data) broken down by population and locus
 #' @export
 #' @importFrom reshape2 melt
@@ -16,24 +16,34 @@
 
 gl.percent.freq<- function(x, verbose=NULL) {
 
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
   build <- "Jacob"
   
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
 # STANDARD ERROR CHECKING
