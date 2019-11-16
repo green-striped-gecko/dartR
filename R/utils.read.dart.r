@@ -34,7 +34,7 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[Build =",build,"\n")
+      cat("Starting",funname,"[ Build =",build,"]\n")
     } else {
       cat("Starting",funname,"\n")
     }

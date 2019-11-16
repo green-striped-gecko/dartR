@@ -55,7 +55,7 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[Build =",build,"\n")
+      cat("Starting",funname,"[ Build =",build,"]\n")
     } else {
       cat("Starting",funname,"\n")
     }

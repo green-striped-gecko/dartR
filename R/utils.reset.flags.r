@@ -22,7 +22,7 @@
 #' @examples
 #' #result <- utils.reset.flags(testset.gl)
 
-utils.reset.flags <- function(x, set=FALSE, set.verbosity=2, verbose=NULL) {
+utils.reset.flags <- function(x, set=FALSE, value=2, verbose=NULL) {
   
 # TRAP COMMAND, SET VERSION
   
@@ -48,7 +48,7 @@ utils.reset.flags <- function(x, set=FALSE, set.verbosity=2, verbose=NULL) {
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[Build =",build,"\n")
+      cat("Starting",funname,"[ Build =",build,"]\n")
     } else {
       cat("Starting",funname,"\n")
     }

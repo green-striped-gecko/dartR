@@ -69,7 +69,7 @@ gl.fixed.diff <- function(x, tloc=0, test=FALSE, delta=0.02, reps=1000, mono.rm=
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[Build =",build,"\n")
+      cat("Starting",funname,"[ Build =",build,"]\n")
     } else {
       cat("Starting",funname,"\n")
     }

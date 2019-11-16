@@ -15,48 +15,61 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.tree.nj(testset.gl,type="fan")
+#' # SNP data
+#'   gl.tree.nj(testset.gl,type="fan")
+#' # Tag P/A data
+#'   gl.tree.nj(testset.gs,type="fan")
 
-# Last amended 3-Aug-19
+gl.tree.nj <- function(x, 
+                       type="phylogram", 
+                       outgroup=NULL, 
+                       labelsize=0.7, 
+                       treefile=NULL, 
+                       verbose=NULL) {
 
-gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, treefile=NULL, verbose=NULL) {
-
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
-
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
-  
+
   if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+    stop("Fatal Error: genlight object required!\n")
   }
-
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+  
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
 
 # DO THE JOB
 
@@ -93,15 +106,15 @@ gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, treefi
       if(verbose>=2){cat("  Writing the tree topology to",treefile,"\n")}
       write.tree(tree,file=treefile)
     }  
-
-    # FLAG SCRIPT END
+    
+  # Reset the par options    
+    par(op)
+    
+# FLAG SCRIPT END
     
     if (verbose > 0) {
       cat("Completed:",funname,"\n")
     }
-    
-    # Reset the par options    
-    par(op)
     
     return(tree)
 

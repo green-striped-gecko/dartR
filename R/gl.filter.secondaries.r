@@ -46,7 +46,7 @@ gl.filter.secondaries <- function(x, method="random", verbose=NULL) {
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[Build =",build,"\n")
+      cat("Starting",funname,"[ Build =",build,"]\n")
     } else {
       cat("Starting",funname,"\n")
     }

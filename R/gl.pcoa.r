@@ -103,7 +103,7 @@ gl.pcoa <- function(x, nfactors=5, correction=NULL, parallel=FALSE, n.cores=16, 
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[Build =",build,"\n")
+      cat("Starting",funname,"[ Build =",build,"]\n")
     } else {
       cat("Starting",funname,"\n")
     }

@@ -12,9 +12,9 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl <- gl.set.verbosity(testset.gl, set.verbosity=2)
+#' gl <- gl.set.verbosity(testset.gl, value=2)
 
-gl.set.verbosity <- function(x, set.verbosity=2, verbose=NULL) {
+gl.set.verbosity <- function(x, value=2, verbose=NULL) {
 
 # TRAP COMMAND, SET VERSION
   

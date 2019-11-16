@@ -39,21 +39,34 @@ gl.read.csv <- function(filename,
                         loc.metafile=NULL, 
                         verbose=NULL){
   
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose)) verbose=2
- 
-
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
@@ -244,10 +257,8 @@ gl.read.csv <- function(filename,
   
 # MAKE COMPLIANT
   
-  gl <- gl.check(gl, verbose=1)
-  gl <- utils.reset.flags(gl, set=FALSE, verbose=1)
-  gl <- gl.recalc.metrics(gl, verbose=1) 
-  
+  gl <- gl.compatability.check(gl, verbose=1)
+
 # FLAG SCRIPT END
 
   if (verbose > 0) {

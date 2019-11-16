@@ -45,7 +45,7 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[Build =",build,"\n")
+      cat("Starting",funname,"[ Build =",build,"]\n")
     } else {
       cat("Starting",funname,"\n")
     }

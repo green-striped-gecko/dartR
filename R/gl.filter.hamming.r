@@ -65,7 +65,7 @@ gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=NULL) {
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[Build =",build,"\n")
+      cat("Starting",funname,"[ Build =",build,"]\n")
     } else {
       cat("Starting",funname,"\n")
     }

@@ -34,40 +34,61 @@
 #'@author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 #'  
 #'@examples
-#'#gl.plot.network(D)
+#'  D <- gl.grm(testset.gl)
+#'  gl.plot.network(D,testset.gl)
 
-# Last amended 3-Feb-19 
-
-gl.plot.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALSE, node.label.size=0.7, node.label.color="black", alpha=0.005, title="Network based on genetic distance", verbose=NULL){
+gl.plot.network <- function(D, 
+                            x=NULL, 
+                            method="fr", 
+                            node.size=3, 
+                            node.label=FALSE, 
+                            node.label.size=0.7, 
+                            node.label.color="black", 
+                            alpha=0.005, 
+                            title="Network based on genetic distance", 
+                            verbose=2){
   
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if(!is.null(x)) {
+    if (is.null(verbose)){ 
+      if(!is.null(x@other$verbose)){ 
+        verbose <- x@other$verbose
+      } else { 
+        verbose <- 2
+      }
+    } 
+  }
 
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
-
+  
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if(class(D)!="dist") {
-      cat("Fatal Error: distance matrix required for gl.dist.network!\n"); stop("Execution terminated\n")
+      stop("Fatal Error: distance matrix required for gl.dist.network!\n")
   }
   
   if (!is.null(x)){
     if(class(x)!="genlight") {
-      cat("Fatal Error: if specified, genlight object required for gl.dist.network!\n"); stop("Execution terminated\n")
+      stop("Fatal Error: if specified, genlight object required for gl.dist.network!\n")
     }
   } else {
     if (verbose>=2) {
