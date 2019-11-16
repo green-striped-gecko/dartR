@@ -6,34 +6,45 @@
 #' @param loc.list -- a list of loci to be kept [required, if loc.range not specified]
 #' @param first -- first of a range of loci to be kept [required, if loc.list not specified]
 #' @param last -- last of a range of loci to be kept [if not specified, last locus in the dataset]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.keep.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
+#'  gl <- gl.keep.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
 
 gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
-  build <- "Jacob"
   funname <- match.call()[[1]]
+  build <- "Jacob"
   hold <- x
-  # Note does not draw upon or modify the loc.metrics.flags
-
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
-  if (is.null(verbose)) verbose=2
- 
-
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
 
 # STANDARD ERROR CHECKING
   
@@ -99,7 +110,7 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 # DO THE JOB
 
   if (verbose >= 2) {
-    cat("    Deleteing all but the specified loci\n")
+    cat("    Deleting all but the specified loci\n")
   }
 
   # Remove duplicated loci if specified
@@ -136,9 +147,9 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
     
 # FLAG SCRIPT END
     
-    if (verbose > 0) {
-      cat("Completed: gl.keep.ind\n")
-    }
+  if (verbose >= 1) {
+    cat("Completed:",funname,"\n")
+  }
     
-    return(x)
+    return(x2)
 }    

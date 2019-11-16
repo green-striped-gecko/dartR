@@ -8,7 +8,7 @@
 #' 
 #' @param x1 -- name of the first genlight object [required]
 #' @param x2 -- name of the first genlight object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A new genlight object
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -24,23 +24,34 @@
 
 gl.join <- function(x1, x2, verbose=NULL) {
 
-# TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
   build <- "Jacob"
+
+# SET VERBOSITY
   
-# FLAG SCRIPT START
-  # set verbosity
-  if (is.null(verbose)) verbose=2
- 
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
+# FLAG SCRIPT START
+  
   if (verbose >= 1){
-    cat("Starting",funname,"\n")
+    if(verbose==5){
+      cat("Starting",funname,"[Build =",build,"\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
 # STANDARD ERROR CHECKING
@@ -84,14 +95,14 @@ gl.join <- function(x1, x2, verbose=NULL) {
     stop("Fatal Error: the two genlight objects do not have data for the same individuals in the same order\n")
   }
   if (!is.null(x1@other$ind.metrics)){
-  if (!identical(x1@other$ind.metrics,x1@other$ind.metrics)){
-    stop("  Fatal Error: the two genlight objects do not have identical metadata for the same individuals\n")
-  }
+    if (!identical(x1@other$ind.metrics,x1@other$ind.metrics)){
+      stop("  Fatal Error: the two genlight objects do not have identical metadata for the same individuals\n")
+    }
   }
   if (!is.null(x1@other$latlon)){
-  if (!identical(x1@other$latlon,x1@other$latlon)){
-    stop("  Fatal Error: the two genlight objects do not have latlong data for the same individuals\n")
-  }
+    if (!identical(x1@other$latlon,x1@other$latlon)){
+      stop("  Fatal Error: the two genlight objects do not have latlong data for the same individuals\n")
+    }
   }
   
 # DO THE JOB
@@ -131,7 +142,7 @@ gl.join <- function(x1, x2, verbose=NULL) {
   # Recalculate metrics
   
   x@other$loc.metrics.flags$monomorphs <- FALSE
-  x <- gl.recalc.metrics(x,verbose=min(c(verbose,1)))
+  x <- gl.recalc.metrics(x,verbose=0)
   if (verbose>=2) cat("  Locus metrics recalculated\n")
   
   # Check monomorphs
@@ -143,10 +154,10 @@ gl.join <- function(x1, x2, verbose=NULL) {
 
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
-    cat("\nCompleted:",funname,"\n")
+  if (verbose >= 1) {
+    cat("Completed:",funname,"\n")
   }
     
-    return(x)
+  return(x)
 }
 
