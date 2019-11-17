@@ -141,7 +141,7 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
     cat(paste("    No. of loci deleted:",nLoc(hold)-nLoc(x2),"\n"))
     cat(paste("    No. of loci retained:",nLoc(x2),"\n"))
     cat(paste("    No. of individuals:", nInd(x2),"\n"))
-    cat(paste("    No. of populations: ", length(levels(factor(pop(x2)))),"\n"))
+    cat(paste("    No. of populations: ", nPop(x2),"\n"))
   }
     
 # ADD TO HISTORY

@@ -123,7 +123,7 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
     cat("  Summary of recoded dataset\n")
     cat(paste("    No. of loci:",nLoc(x),"\n"))
     cat(paste("    No. of individuals:", nInd(x),"\n"))
-    cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n"))
+    cat(paste("    No. of populations:", nPop(x),"\n"))
   }
     
 # ADD TO HISTORY

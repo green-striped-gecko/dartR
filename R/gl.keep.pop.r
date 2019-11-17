@@ -154,7 +154,7 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
         cat(paste("    No. of loci:",nLoc(x),"\n"))
         cat(paste("    No. of individuals:", nInd(x),"\n"))
         cat(paste("    No. of levels of",as.pop,"remaining: ",nPop(x),"\n"))
-        cat(paste("    No. of populations: ",nPop(pop.hold),"\n"))
+        cat(paste("    No. of populations: ",length(unique((pop.hold))),"\n"))
       } else {
         cat("  Summary of recoded dataset\n")
         cat(paste("    No. of loci:",nLoc(x),"\n"))

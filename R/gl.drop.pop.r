@@ -23,7 +23,7 @@
 #'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
 #'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("Male","Unknown"),as.pop="sex")
 #'  # Tag P/A data  
-#'    gs2 <- gl.keep.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+#'    gs2 <- gl.drop.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 #'
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
@@ -153,7 +153,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
       cat(paste("    No. of loci:",nLoc(x),"\n"))
       cat(paste("    No. of individuals:", nInd(x),"\n"))
       cat(paste("    No. of levels of",as.pop,"remaining: ",nPop(x),"\n"))
-      cat(paste("    No. of populations: ",nPop(pop.hold),"\n"))
+      cat(paste("    No. of populations: ",length(unique((pop.hold))),"\n"))
     } else {
       cat("  Summary of recoded dataset\n")
       cat(paste("    No. of loci:",nLoc(x),"\n"))

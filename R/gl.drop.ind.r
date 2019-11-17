@@ -15,9 +15,9 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'   # SNP data
+#'  # SNP data
 #'     gl2 <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"))
-#'   # Tag P/A data
+#'  # Tag P/A data
 #'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"))
 #'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"),mono.rm=TRUE, recalc=TRUE)
 #'    
@@ -124,7 +124,7 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
     cat("Summary of recoded dataset\n")
     cat(paste("  No. of loci:",nLoc(x),"\n"))
     cat(paste("  No. of individuals:", nInd(x),"\n"))
-    cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
+    cat(paste("  No. of populations: ", nPop(x),"\n"))
   }
 
 # ADD TO HISTORY 
