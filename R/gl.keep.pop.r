@@ -18,8 +18,13 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-#'    gl <- gl.keep.pop(testset.gl, pop.list=c("Female"),as.pop="sex")
+#'  # SNP data
+#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
+#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c("Female"),as.pop="sex")
+#'  # Tag P/A data  
+#'    gs2 <- gl.keep.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+#'
 #' @seealso \code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
 #' @seealso \code{\link{gl.drop.pop}} to drop rather than keep specified populations
 
@@ -72,15 +77,29 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
   }
   
 # FUNCTION SPECIFIC ERROR CHECKING
+  
+  # Population labels assigned?
+  if(is.null(as.pop)){
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+      stop("Fatal Error: Population assignments not detected, run gl.compliance.check() and revisit population assignments\n")
+    }
+  }
     
   # Assign the new population list if as.pop is specified
-    pop.hold <- pop(x)
-    if (!is.null(as.pop)){
-      pop.hold <- pop(x)
+  pop.hold <- pop(x)
+  if (!is.null(as.pop)){    
+    if(as.pop %in% names(x@other$ind.metrics)){
       pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
-      if (verbose >= 3) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
+      if (verbose >= 2) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
+    } else {
+      stop("Fatal Error: individual metric assigned to 'pop' does not exist. Check names(gl@other$loc.metrics) and select again\n")
     }
+  }
 
+  if (verbose >= 2) {
+    cat("  Checking for presence of nominated populations\n")
+  }
+  
   for (case in pop.list){
     if (!(case%in%popNames(x))){
       cat("  Warning: Listed population",case,"not present in the dataset -- ignored\n")
@@ -88,7 +107,7 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     }
   }
   if (length(pop.list) == 0) {
-    cat("  Fatal Error: no populations listed to keep!\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: no populations listed to keep!\n")
   }
 
 # DO THE JOB
@@ -103,46 +122,46 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     x2 <- x[x$pop%in%pop.list]
     pop.hold <- pop.hold[x$pop%in%pop.list]
     x <- x2
-  # Reset the flags
-    x <- utils.reset.flags(x, verbose=0)
+
   # Remove monomorphic loci
-    if (mono.rm) {
-      x <- gl.filter.monomorphs(x,verbose=verbose)
+    if(mono.rm){
+      if(verbose >= 2){cat("  Deleting monomorphic loc\n")}
+      x <- gl.filter.monomorphs(x,verbose=0)
+    } 
+  # Check monomorphs have been removed
+    if (x@other$loc.metrics.flags$monomorphs == FALSE){
+      if (verbose >= 2){
+        cat("  Warning: Resultant dataset may contain monomorphic loci\n")
+      }  
     }
+    
   # Recalculate statistics
     if (recalc) {
-      x <- gl.recalc.metrics(x,verbose=verbose)
+      x <- gl.recalc.metrics(x,verbose=0)
+      if(verbose >= 2){cat("  Recalculating locus metrics\n")}
+    } else {
+      if(verbose >= 2){
+        cat("  Locus metrics not recalculated\n")
+        x <- utils.reset.flags(x,verbose=0)
+      }
     }
-
-    # REPORT A SUMMARY
+    
+# REPORT A SUMMARY
     
     if (verbose >= 3) {
       if (!is.null(as.pop)) {
         cat("  Summary of recoded dataset\n")
         cat(paste("    No. of loci:",nLoc(x),"\n"))
         cat(paste("    No. of individuals:", nInd(x),"\n"))
-        cat(paste("    No. of levels of",as.pop,"remaining: ", length(levels(factor(pop(x)))),"\n"))
-        cat(paste("    No. of populations: ", length(levels(factor(pop.hold))),"\n"))
+        cat(paste("    No. of levels of",as.pop,"remaining: ",nPop(x),"\n"))
+        cat(paste("    No. of populations: ",nPop(pop.hold),"\n"))
       } else {
         cat("  Summary of recoded dataset\n")
         cat(paste("    No. of loci:",nLoc(x),"\n"))
         cat(paste("    No. of individuals:", nInd(x),"\n"))
-        cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n"))
+        cat(paste("    No. of populations: ",nPop(x),"\n"))
       }  
     }
-    if (verbose >= 2) {
-      if (!recalc) {
-        cat("  Note: Locus metrics not recalculated\n")
-      } else {
-        cat("  Note: Locus metrics recalculated\n")
-      }
-      if (!mono.rm) {
-        cat("  Note: Resultant monomorphic loci not deleted\n")
-      } else{
-        cat("  Note: Resultant monomorphic loci deleted\n")
-      }
-    }
-    
     
   # Reassign the initial population list if as.pop is specified
     

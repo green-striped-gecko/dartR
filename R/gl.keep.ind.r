@@ -15,7 +15,11 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.keep.ind(testset.gl, ind.list=c("AA019073","AA004859"))
+#'   # SNP data
+#'     gl2 <- gl.keep.ind(testset.gl, ind.list=c("AA019073","AA004859"))
+#'   # Tag P/A data
+#'    gs2 <- gl.keep.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"))
+#'    
 #' @seealso \code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
 #' @seealso \code{\link{gl.drop.ind}} to drop rather than keep specified individuals
 
@@ -76,13 +80,12 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
     }
   }
   if (length(ind.list) == 0) {
-    cat("  Fatal Error: no individuals listed to keep!\n"); stop("Execution terminated\n")
+    stop("  Fatal Error: no individuals listed to keep!\n")
   }
 
 # DO THE JOB
 
   if (verbose >= 2) {
-    cat("  Processing",class(x),"object\n")
     cat("    Deleteing all but the listed individuals", ind.list, "\n")
   }
 
@@ -90,15 +93,28 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
   
   # Remove rows flagged for deletion
     x <- x[x$ind.names%in%ind.list]
-  # Reset the flags
-    x <- utils.reset.flags(x, verbose=0)
+    
   # Remove monomorphic loci
-    if (mono.rm) {
-      x <- gl.filter.monomorphs(x,verbose=verbose)
+    if(mono.rm){
+      if(verbose >= 2){cat("  Deleting monomorphic loc\n")}
+      x <- gl.filter.monomorphs(x,verbose=0)
+    } 
+  # Check monomorphs have been removed
+    if (x@other$loc.metrics.flags$monomorphs == FALSE){
+      if (verbose >= 2){
+        cat("  Warning: Resultant dataset may contain monomorphic loci\n")
+      }  
     }
+    
   # Recalculate statistics
     if (recalc) {
-      x <- gl.recalc.metrics(x,verbose=verbose)
+      x <- gl.recalc.metrics(x,verbose=0)
+      if(verbose >= 2){cat("  Recalculating locus metrics\n")}
+    } else {
+      if(verbose >= 2){
+        cat("  Locus metrics not recalculated\n")
+        x <- utils.reset.flags(x,verbose=0)
+      }
     }
 
 # REPORT A SUMMARY
@@ -108,19 +124,6 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
     cat(paste("    No. of loci:",nLoc(x),"\n"))
     cat(paste("    No. of individuals:", nInd(x),"\n"))
     cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n"))
-  }
-    
-  if (verbose >= 2) {
-    if (!recalc) {
-      cat("  Note: Locus metrics not recalculated\n")
-    } else {
-      cat("  Note: Locus metrics recalculated\n")
-    }
-    if (!mono.rm) {
-      cat("  Note: Resultant monomorphic loci not deleted\n")
-    } else{
-      cat("  Note: Resultant monomorphic loci deleted\n")
-    }
   }
     
 # ADD TO HISTORY

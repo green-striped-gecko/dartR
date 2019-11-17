@@ -7,14 +7,18 @@
 #' @param n -- number of loci to include in the subsample [required]
 #' @param method -- "random", in which case the loci are sampled at random; or avgPIC, in which case the top n loci
 #' ranked on information content (AvgPIC) are chosen [default 'random']
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param mono.rm -- delete monomorphic loci before sampling [default FALSE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with n loci
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.subsample.loci(testset.gl, n=200, method="pic")
+#' # SNP data
+#'   gl2 <- gl.subsample.loci(testset.gl, n=200, method="pic")
+#' # Tag P/A data
+#'   gl2 <- gl.subsample.loci(testset.gl, n=100, method="random")
 
-gl.subsample.loci <- function(x, n, method="random", verbose=NULL) {
+gl.subsample.loci <- function(x, n, method="random", mono.rm=FALSE, verbose=NULL) {
 
   # TRAP COMMAND, SET VERSION
   
@@ -65,21 +69,36 @@ gl.subsample.loci <- function(x, n, method="random", verbose=NULL) {
     }
   }
   
-  # Check monomorphs have been removed up to date
+# FUNCTION SPECIFIC ERROR CHECKING
+
+  if(mono.rm){
+    if(x@other$loc.metrics.flags$monomorphs==FALSE){
+      if(verbose >= 2){cat("  Deleting monomorphic loc\n")}
+      x <- gl.filter.monomorphs(x,verbose=0)
+    } else {
+      if(verbose >= 2){cat("  Zero monomorphic loci, none deleted\n")}
+    }  
+  }
+  # Check monomorphs have been removed
   if (x@other$loc.metrics.flags$monomorphs == FALSE){
     if (verbose >= 2){
       cat("  Warning: Dataset contains monomorphic loci which will be included in the",funname,"selections\n")
     }  
   }
   
-# FUNCTION SPECIFIC ERROR CHECKING
-
-  # To be added
+  if(!method=='PIC' & !method=='random'){
+    if(verbose >= 1){cat("  Warning: parameter method must be set to PIC or random, set to random\n")}
+    method <- "random"
+  }
+  
+  if(n <= 0 | n > nLoc(x)){
+    stop("Fatal Error: subsample size must be a postive integer >= 1 or <=",nLoc(x),"\n")
+  }
 
 # DO THE JOB
   
   if(method=="random") {
-    if (verbose>=3){cat("  Subsampling at random",n,"loci from",class(x),"object","\n")}
+    if (verbose>=2){cat("  Subsampling at random",n,"loci from",class(x),"object","\n")}
     randsel <- sample(1:nLoc(x), n, replace = F)
     x.new <- x[, randsel]
     x.new@other$loc.metrics <- x@other$loc.metrics[randsel,]
@@ -98,9 +117,13 @@ gl.subsample.loci <- function(x, n, method="random", verbose=NULL) {
     stop("  Fatal Error: method must be 'random' or 'pic'\n");
   }
 
+# ADD TO HISTORY -- should this carry forward the history of genlight object x?
+  nh <- length(x.new@other$history)
+  x.new@other$history[[nh + 1]] <- match.call() 
+  
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
 

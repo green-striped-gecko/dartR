@@ -17,9 +17,16 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#' # SNP data
+#'    popNames(testset.gl)
 #'    gl <- gl.reassign.pop(testset.gl, as.pop='sex',verbose=3)
+#'    popNames(gl)
+#' # Tag P/A data
+#'    popNames(testset.gs)
+#'    gs <- gl.reassign.pop(testset.gs, as.pop='sex',verbose=3)
+#'    popNames(gs)
 
-gl.reassign.pop <- function (x, as.pop, verbose = 2) {
+gl.reassign.pop <- function (x, as.pop, verbose = NULL) {
   
 # TRAP COMMAND, SET VERSION
   
@@ -59,10 +66,8 @@ gl.reassign.pop <- function (x, as.pop, verbose = 2) {
   
   if (all(x@ploidy == 1)){
     if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
   } else if (all(x@ploidy == 2)){
     if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
   } else {
     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }  
@@ -76,8 +81,8 @@ gl.reassign.pop <- function (x, as.pop, verbose = 2) {
 # DO THE JOB
   
   pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
-  if (verbose >= 3) {
-    cat("  Setting population assignments to", as.pop,"\n")
+  if (verbose >= 2) {
+    cat("  Setting population assignments to individual metric", as.pop,"\n")
   }
   
   if (verbose >= 3) {
@@ -93,7 +98,7 @@ gl.reassign.pop <- function (x, as.pop, verbose = 2) {
   
 # FLAG SCRIPT END
   
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:", funname, "\n")
   }
   

@@ -12,6 +12,7 @@
 #' The script returns a genlight object with the recalculated locus metadata.
 #'
 #' @param x -- name of the genlight object containing SNP genotypes [required]
+#' @param mono.rm -- if TRUE, removes monomorphic loci [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the recalculated locus metadata
 #' @export
@@ -20,20 +21,19 @@
 #'   gl <- gl.recalc.metrics(testset.gl, verbose=2)
 #' @seealso \code{\link{gl.filter.monomorphs}}
 
-gl.recalc.metrics <- function(x, verbose=NULL){
+gl.recalc.metrics <- function(x, mono.rm =FALSE, verbose=NULL){
   
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
   build <- "Jacob"
-  hold <- x@other$loc.metrics.flags$monomorphs  
-  
+
 # SET VERBOSITY
   
   if (is.null(verbose)){ 
     if(!is.null(x@other$verbose)){ 
       verbose <- x@other$verbose
-    } else { 
+    }else { 
       verbose <- 2
     }
   } 
@@ -86,11 +86,14 @@ gl.recalc.metrics <- function(x, verbose=NULL){
   if (verbose >= 2) {
     cat("  Locus metrics recalculated\n")
   }
-  
-# # Reset the locus metrics flags to signal the changes
-#   x <- utils.reset.flags(x,set=TRUE,verbose=verbose)
-#   x@other$loc.metrics.flags$monomorphs <- hold
-  
+
+  if(mono.rm) {
+    x <- gl.filter.monomorphs(x,verbose=0)
+    if (verbose >= 2) {
+      cat("  Monomorphic loci deleted\n")
+    }
+  }
+
 # ADD TO HISTORY
   nh <- length(x@other$history)
   x@other$history[[nh + 1]] <- match.call() 

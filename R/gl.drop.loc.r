@@ -11,7 +11,10 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
+#' # SNP data
+#'   gl2 <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
+#' # Tag P/A data
+#'   gs2 <- gl.drop.loc(testset.gs, loc.list=c("20134188","19249144"))
 
 gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 

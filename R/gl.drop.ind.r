@@ -15,7 +15,12 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"))
+#'   # SNP data
+#'     gl2 <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"))
+#'   # Tag P/A data
+#'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"))
+#'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"),mono.rm=TRUE, recalc=TRUE)
+#'    
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
 
@@ -59,10 +64,8 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
   
   if (all(x@ploidy == 1)){
     if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
   } else if (all(x@ploidy == 2)){
     if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
   } else {
     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
@@ -81,7 +84,7 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
 
 # DO THE JOB
 
-# REMOVE INDIVIDUALS
+# Remobe individuals
   
   if (verbose >= 2) {
     cat("  Deleting individuals", ind.list, "\n")
@@ -92,16 +95,27 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
   # Remove rows flagged for deletion
     x <- x[!x$ind.names%in%ind.list]
     
-  # Reset the flags
-    x <- utils.reset.flags(x, verbose=0)
-    
   # Remove monomorphic loci
-    if (mono.rm) {
-      x <- gl.filter.monomorphs(x,verbose=verbose)
+    if(mono.rm){
+      if(verbose >= 2){cat("  Deleting monomorphic loc\n")}
+      x <- gl.filter.monomorphs(x,verbose=0)
+    } 
+  # Check monomorphs have been removed
+    if (x@other$loc.metrics.flags$monomorphs == FALSE){
+      if (verbose >= 2){
+        cat("  Warning: Resultant dataset may contain monomorphic loci\n")
+      }  
     }
+    
   # Recalculate statistics
     if (recalc) {
-      x <- gl.recalc.metrics(x,verbose=verbose)
+      x <- gl.recalc.metrics(x,verbose=0)
+      if(verbose >= 2){cat("  Recalculating locus metrics\n")}
+    } else {
+      if(verbose >= 2){
+        cat("  Locus metrics not recalculated\n")
+        x <- utils.reset.flags(x,verbose=0)
+      }
     }
 
 # REPORT A SUMMARY
@@ -111,18 +125,6 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
     cat(paste("  No. of loci:",nLoc(x),"\n"))
     cat(paste("  No. of individuals:", nInd(x),"\n"))
     cat(paste("  No. of populations: ", length(levels(factor(pop(x)))),"\n"))
-  }
-  if (verbose >= 2) {
-    if (!recalc) {
-      cat("Note: Locus metrics not recalculated\n")
-    } else {
-      cat("Note: Locus metrics recalculated\n")
-    }
-    if (!mono.rm) {
-      cat("Note: Resultant monomorphic loci not deleted\n")
-    } else{
-      cat("Note: Resultant monomorphic loci deleted\n")
-    }
   }
 
 # ADD TO HISTORY 

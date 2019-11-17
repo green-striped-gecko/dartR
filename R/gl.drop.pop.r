@@ -18,8 +18,13 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-#'    gl <- gl.drop.pop(testset.gl, pop.list=c("Male","Unknown"),as.pop="sex")
+#'  # SNP data
+#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
+#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("Male","Unknown"),as.pop="sex")
+#'  # Tag P/A data  
+#'    gs2 <- gl.keep.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+#'
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
 
@@ -63,39 +68,38 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
   
   if (all(x@ploidy == 1)){
     if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
   } else if (all(x@ploidy == 2)){
     if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
   } else {
     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
   
 # FUNCTION SPECIFIC ERROR CHECKING
     
-    # Set a population if none is specified (such as if the genlight object has been generated manually)
+  # Population labels assigned?
+  if(is.null(as.pop)){
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ 
-        cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
-      }
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
+        stop("Fatal Error: Population assignments not detected, run gl.compliance.check() and revisit population assignments\n")
     }
+  }
     
   # Assign the new population list if as.pop is specified
-    pop.hold <- pop(x)
-    if (!is.null(as.pop)){
-      pop.hold <- pop(x)
+  pop.hold <- pop(x)
+  if (!is.null(as.pop)){    
+    if(as.pop %in% names(x@other$ind.metrics)){
       pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
-      if (verbose >= 3) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
+      if (verbose >= 2) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
+    } else {
+      stop("Fatal Error: individual metric assigned to 'pop' does not exist. Check names(gl@other$loc.metrics) and select again\n")
     }
+  }
     
   if (verbose >= 2) {
     cat("  Checking for presence of nominated populations\n")
   }
   for (case in pop.list){
     if (!(case%in%popNames(x))){
-      cat("  Warning: Listed population",case,"not present in the dataset -- ignored\n")
+      if(verbose >= 1){cat("  Warning: Listed population",case,"not present in the dataset -- ignored\n")}
       pop.list <- pop.list[!(pop.list==case)]
     }
   }
@@ -105,66 +109,65 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     
 # DO THE JOB
 
-# REMOVE POPULATIONS
+  # Remove populations
   
   if (verbose >= 2) {
     cat("  Deleting populations", pop.list, "\n")
   }
 
-# Delete listed populations, recalculate relevant locus metadata and remove monomorphic loci
+  # Delete listed populations, recalculate relevant locus metadata and remove monomorphic loci
   
   # Remove rows flagged for deletion
     x2 <- x[!x$pop%in%pop.list]
     pop.hold <- pop.hold[!x$pop%in%pop.list]
     x <- x2
     
-  # Reset the flags
-    x <- utils.reset.flags(x, verbose=0)
-    
   # Remove monomorphic loci
-    if (mono.rm) {
-      x <- gl.filter.monomorphs(x,verbose=verbose)
+    if(mono.rm){
+      if(verbose >= 2){cat("  Deleting monomorphic loc\n")}
+      x <- gl.filter.monomorphs(x,verbose=0)
+    } 
+    # Check monomorphs have been removed
+    if (x@other$loc.metrics.flags$monomorphs == FALSE){
+      if (verbose >= 2){
+        cat("  Warning: Resultant dataset may contain monomorphic loci\n")
+      }  
     }
+    
   # Recalculate statistics
     if (recalc) {
-      x <- gl.recalc.metrics(x,verbose=verbose)
+      x <- gl.recalc.metrics(x,verbose=0)
+      if(verbose >= 2){cat("  Recalculating locus metrics\n")}
+    } else {
+      if(verbose >= 2){
+        cat("  Locus metrics not recalculated\n")
+        x <- utils.reset.flags(x,verbose=0)
+      }
     }
 
-  # REPORT A SUMMARY
+# REPORT A SUMMARY
     
   if (verbose >= 3) {
     if (!is.null(as.pop)) {
       cat("  Summary of recoded dataset\n")
       cat(paste("    No. of loci:",nLoc(x),"\n"))
       cat(paste("    No. of individuals:", nInd(x),"\n"))
-      cat(paste("    No. of levels of",as.pop,"remaining: ", length(levels(factor(pop(x)))),"\n"))
-      cat(paste("    No. of populations: ", length(levels(factor(pop.hold))),"\n"))
+      cat(paste("    No. of levels of",as.pop,"remaining: ",nPop(x),"\n"))
+      cat(paste("    No. of populations: ",nPop(pop.hold),"\n"))
     } else {
       cat("  Summary of recoded dataset\n")
       cat(paste("    No. of loci:",nLoc(x),"\n"))
       cat(paste("    No. of individuals:", nInd(x),"\n"))
-      cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n"))
+      cat(paste("    No. of populations: ", nPop(x),"\n"))
     }  
   }
-  if (verbose >= 2) {
-    if (!recalc) {
-      cat("  Note: Locus metrics not recalculated\n")
-    } else {
-      cat("  Note: Locus metrics recalculated\n")
-    }
-    if (!mono.rm) {
-      cat("  Note: Resultant monomorphic loci not deleted\n")
-    } else{
-      cat("  Note: Resultant monomorphic loci deleted\n")
-    }
-  }
-  
+
   # Reassign the initial population list if as.pop is specified
     
-    if (!is.null(as.pop)){
-      pop(x) <- pop.hold
-      if (verbose >= 3) {cat("  Resetting population assignments to initial state\n")}
-    }
+  if (!is.null(as.pop)){
+    pop(x) <- pop.hold
+    if (verbose >= 3) {cat("  Resetting population assignments to initial state\n")}
+  }
 
 # ADD TO HISTORY
   nh <- length(x@other$history)
