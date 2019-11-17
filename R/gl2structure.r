@@ -10,7 +10,7 @@
 #' @param outfile -- file name of the output file (including extension) [default gl.str]
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
-' @export
+#' @export
 #' @author Bernd Gruber (wrapper) and Lindsay V. Clark [lvclark@illinois.edu] 
 #' @examples
 #' \donttest{

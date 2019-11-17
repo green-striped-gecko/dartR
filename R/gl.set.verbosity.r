@@ -65,9 +65,9 @@ gl.set.verbosity <- function(x, value=2, verbose=NULL) {
 # DO THE JOB
   
   if (verbose >= 2){
-    cat(paste("  Setting default verbosity to",set.verbosity,"\n"))
+    cat(paste("  Setting default verbosity to",value,"\n"))
   }
-  x@other$verbose <- set.verbosity
+  x@other$verbose <- value
   
 # ADD TO HISTORY
   

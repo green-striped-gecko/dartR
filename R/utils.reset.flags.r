@@ -11,7 +11,7 @@
 #'
 #' @param x -- name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]
 #' @param set -- set the flags to TRUE or FALSE [FALSE]
-#' @param set.verbosity -- set the default verbosity for all functions, where verbosity is not specified
+#' @param value -- set the default verbosity for all functions, where verbosity is not specified
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @return The modified genlight object
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -72,9 +72,9 @@ utils.reset.flags <- function(x, set=FALSE, value=2, verbose=NULL) {
 
 # SCRIPT SPECIFIC ERROR TESTING
 
-  if (set.verbosity < 0 | set.verbosity > 5){
-    cat("  Warning: Parameter 'set.verbosity' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
-    set.verbosity <- 2
+  if (value < 0 | value > 5){
+    cat("  Warning: Parameter 'value' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    value <- 2
   }
   
 # DO THE JOB
@@ -203,13 +203,12 @@ utils.reset.flags <- function(x, set=FALSE, value=2, verbose=NULL) {
     x@other$loc.metrics.flags$PIC <- FALSE
     
   #verbosity
-    if (is.null(x@other$loc.metrics$verbose)) {
-      x@other$loc.metrics$verbose <- array(NA,nLoc(x))
+    if (is.null(x@other$verbose)) {
+      x@other$verbose <- 2
       if (verbose >= 3){
-        cat("  Locus metric 'PIC'verbose' does not exist, creating slot @other$loc.metrics$verbose\n")
+        cat("  Locus metric 'verbose' does not exist, creating slot @other$verbose, setting to default [2]\n")
       }
     }
-    x@other$verbose <- set.verbosity
   }
   
   if (data.type=="SilicoDArT"){
@@ -336,14 +335,12 @@ utils.reset.flags <- function(x, set=FALSE, value=2, verbose=NULL) {
     x@other$loc.metrics.flags$PIC <- set
     
     #verbosity
-    if (is.null(x@other$loc.metrics$verbose)) {
-      x@other$loc.metrics$verbose <- array(NA,nLoc(x))
+    if (is.null(x@other$verbose)) {
+      x@other$verbose <- 2
       if (verbose >= 3){
-        cat("  Locus metric 'PIC'verbose' does not exist, creating slot @other$loc.metrics$verbose\n")
+        cat("  Locus metric 'verbose' does not exist, creating slot @other$verbose, setting to default [2]\n")
       }
     }
-    x@other$verbose <- set.verbosity
-    
   }
 
 # ADD TO HISTORY not in utils functions

@@ -26,6 +26,7 @@
 #' @param nas -- missing data character [default "-"]
 #' @param topskip -- number of rows to skip before the header row (containing the specimen identities) [optional]
 #' @param lastmetric -- specifies the last non genetic column (Default is "Reproducibility"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number. [default Reproducibility]
+#' @param probar show progress bar
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, or as set by gl.set.verbose()]
 #' @return An object of class \code{genlight} with ploidy set to 1, containing the presence/absence data, and locus and individual metadata
 #' @export
@@ -52,6 +53,7 @@ gl.read.silicodart <- function(filename,
                                nas="-",  
                                topskip=NULL, 
                                lastmetric="Reproducibility",
+                               probar=TRUE,
                                verbose=NULL) {
 
 # TRAP COMMAND, SET VERSION
@@ -189,7 +191,7 @@ gl.read.silicodart <- function(filename,
         ord <- ord[!is.na(ord)]
     
         if (length(ord)>1 & length(ord)<=nind ){
-          cat (paste("Ids for individual metadata (at least a subset of) are matching!\nFound ", length( ord ==nind),"matching ids out of" , nrow(ind.cov), "ids provided in the ind.metadata file. Subsetting snps now!.\n "))
+          cat (paste("Ids for individual metadata (at least a subset of) are matching!\nFound ", length( ord ==nind),"matching ids out of" , nrow(ind.cov), "ids provided in the ind.metadata file. Subsetting loci now!.\n "))
           ord2 <- match(ind.cov[ord,id.col], indNames(glout))
           glout <- glout[ord2,]
         } else {
