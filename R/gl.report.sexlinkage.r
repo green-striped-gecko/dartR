@@ -1,4 +1,4 @@
-#' Identify loci that are sex linked in specimens in a genlight \{adegenet\} object
+#' Identify loci that are sex linked in specimens in a genlight \code{adegenet} object
 #'
 #' Alleles unique to the Y or W chromosome and monomorphic on the X chromosomes will appear in the SNP dataset as 
 #' genotypes that are heterozygotic in all individuals of the heterogametic sex and homozygous in all individuals 
@@ -6,53 +6,46 @@
 #' 
 #' This script will identify loci with alleles that behave in this way, as putative sex specific SNP markers.
 #' 
-#' Sex of the individuals for which sex is known with certainty is to be held in the variable x@other$ind.metrics$sex, 
-#' as M for male, F for female, NA otherwise. The script abbreviates the entries here to the first character. So coding of "Female" and "Male" works as well. Character are also converted to upper cases.
+#' Sex of the individuals for which sex is known with certainty can be provided via a factor (equal to the length of the number of individuals) or to be held in the variable \code{x@other$ind.metrics$sex}.
+#' Coding is: M for male, F for female, U or NA for unknown/missing. The script abbreviates the entries here to the first character. So coding of "Female" and "Male" works as well. Character are also converted to upper cases.
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param as.sex -- specify the individual metric variable that spedifies known sexes (M or F) [default 'sex']
+#' @param sex -- factor that defines the sex of individuals. See explanation above.
 #' @param t.het -- tolerance, that is tm=0.05 means that 5% of the heterogametic sex can be homozygous and still 
 #' be regarded as consistent with a sex specific marker [default 0]
 #' @param t.hom -- tolerance, that is tf=0.05 means that 5% of the homogametic sex can be heterozygous and still
+#' 
+#' @param -- creates a plot that shows the heterozygosity of males and females at each loci.
 #' be regarded as consistent with a sex specific marker [default 0]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
-#' @return The list of sex specific loci
-#' @importFrom gridExtra grid.arrange
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @return two list of sex specific loci, for XX/XY and ZZ/ZW systems.
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges, Bernd Gruber & Floriaan Devloo-Delvan (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' out <- gl.report.sexlinkage(testset.gl)
+#' cat("does not work yet")
+#' #result <- gl.sexlinkage(testset.gl)
 
-gl.report.sexlinkage <- function(x, as.sex="sex", t.het=0, t.hom=0, verbose=NULL) {
+# Last amended 3-Feb-19
 
-# TRAP COMMAND, SET VERSION
-  
+gl.report.sexlinkage <- function(x,sex=NULL, t.het=0, t.hom=0,t.pres=0, plot=TRUE,verbose=NULL) {
+
+# TIDY UP FILE SPECS
+
   funname <- match.call()[[1]]
-  build <- "Jacob"
-  
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
+
+# FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
+
   if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
     verbose <- 2
   }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
+
+  if (verbose > 0) {
+    cat("Starting",funname,"\n")
   }
 
 # STANDARD ERROR CHECKING
@@ -60,33 +53,54 @@ gl.report.sexlinkage <- function(x, as.sex="sex", t.het=0, t.hom=0, verbose=NULL
   if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
-
+  if (all(x@ploidy ==1)){
+    if (verbose>0) ("Processing Presence/Absence (SilicoDArT) data [ploidy=1]), use gs.report.sexlinkage for this kind of data\n")
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset [ploidy=2]\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 2 (SNP data)")
+  }
+  
+  
+  
+  
   # Work around a bug in adegenet if genlight object is created by subsetting
-    x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nLoc(x))
-      pop(x) <- as.factor(pop(x))
-    }
+  #  if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+  #    if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+  #    pop(x) <- factor(rep("pop1",nInd(x)))
+  #  }
+
+  
 
   # Check for monomorphic loci
     tmp <- gl.filter.monomorphs(x, verbose=0)
     if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
 
-# SCRIPT SPECIFIC ERROR CHECKS
-    
-    if (!(as.sex %in% names(x@other$ind.metrics))) {
-      cat("  Fatal Error: 'sex' or the individual metric specified as the sex variable does not exist\n")
-      stop()
-    }
-    
 # DO THE JOB
+  
+# sex should be provided as it is not a default setting, if not provided it will be searched here: reproducibility
+  if (is.null(sex)) sex <- x@other$ind.metrics$sex
+  
+  if (is.null(sex)) stop("No definition for the sex of individuals is provided. If not provided via the function is needs to be at gl@other$ind.metrics$sex.")
 
-# Extract the sex variable from whereever it may be -- might need alteration    
-  sex <- toupper(substr(x@other$ind.metrics$sex,1,1))
-
+  
+  if (length(sex) != nInd(x)) stop("The number of individuals and the number of entries defining the sex do not match. Check your genlight object and your sex defining column.")
+  
+  sex <- as.character(sex)
+  UP <- toupper(sex)
+  UP <- substring(UP, 1, 1)
+  sex[UP == 'F'] <- 'F'
+  sex[UP == 'M'] <- 'M'
+  sex <- ifelse(sex=='F' | sex=='M', sex, 'U')
+  sex[is.na(sex)] <- 'U'  
+  
+  
+  if (data.type=="SNP") {  #for SNP data
 # Extract the data for the females
   matf <- as.matrix(x[sex=="F"])
   # For each individual
@@ -112,95 +126,143 @@ gl.report.sexlinkage <- function(x, as.sex="sex", t.het=0, t.hom=0, verbose=NULL
   dfm <- data.frame(m)
   row.names(dfm) <- locNames(x)
   colnames(dfm) <- c("M0","M1","M2")
-  
-  
-  # Save the prior settings for mfrow, oma, mai and pty, and reassign
-  op <- par(mfrow = c(1, 2), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
-  # Set margins for first plot
-  par(mai=c(1.5,1.5,1.5,1.5))
-  f <- dff$F1/(dff$F0+dff$F1+dff$F2)
-  m <- dfm$M1/(dfm$M0+dfm$M1+dfm$M2)
-
-  # Plot Box-Whisker plot
-  plot(x=f,y=m,xlab="Female Heterozygosity",ylab="Male Heterozygosity",col='red')
-  p1 <- ggplot(df, aes(x=f, y=m-f)) + 
-    geom_point(colour='red') +
-    labs(y='Ho Difference', x='Female Heterozygosity') +
-    xlim(0, 1) + ylim(-1, 1) +
-    geom_hline(yintercept=c(0,1,-1))
-  z <- m-f
-  p2 <- adjbox(c(0,m),
-         horizontal = F,
-         col='red',
-         range=range,
-         main = "Box and Whisker Plot")
-  
-  grid.arrange(p1, p2, nrow = 1)
-  par(op)
-
-  
 
 # Combine the two files
-  Trimmed_Sequence <- x@other$loc.metrics$TrimmedSequence
-  df <- cbind(dff,dfm,Trimmed_Sequence)
-  a <- strsplit(row.names(df), split="-")
-  a <- do.call(rbind,a)
-  a <- strsplit(a[,1], split="\\|")
-  a <- do.call(rbind,a)
-  a <- as.numeric(a[,2])
   
-  df$Trimmed_Sequence <- as.character(df$Trimmed_Sequence)
-  b <- substr(df$Trimmed_Sequence,1,a)
-  c <- substr(df$Trimmed_Sequence,a+1,a+1)
-  c <- tolower(c)
-  d <- substr(df$Trimmed_Sequence,a+2,nchar(df$Trimmed_Sequence))
+  df <- cbind(dff,dfm)
   
-  df$Trimmed_Sequence <- paste0(b,c,d)
-  df$AvgCountRef <- x@other$loc.metrics$AvgCountRef
-  df$AvgCountSnp <- x@other$loc.metrics$AvgCountSnp
+  df$read.depth <- x@other$loc.metrics$rdepth
+  
   
 # Check for hets in all males, homs in all females (XY); ditto for ZW
   sumf <- df$F0+df$F1+df$F2
   summ <- df$M0+df$M1+df$M2
   # Pull loci that are 100% homozygous for females and 100% heterozygous for males
-  index <- ((df$F0/(sumf)>=(1-t.hom) | df$F2/(sumf)>=(1-t.hom)) & df$M1/(summ)>=(1-t.het))
-  zw <- df[index,]
+  indexxy <- ((df$F0/(sumf)>=(1-t.hom) | df$F2/(sumf)>=(1-t.hom)) & df$M1/(summ)>=(1-t.het))
+  xy <- cbind(locnr =which(indexxy==TRUE), df[indexxy,])
+ 
   # Pull loci that are 100% homozygous for males and 100% heterozygous for females
-  index <- ((df$M0/(summ)>=(1-t.hom) | df$M2/(summ)>=(1-t.hom)) & df$F1/(sumf)>=(1-t.het))
-  xy <- df[index,]
-  
-if (nrow(zw) == 0){
-  cat("  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
+  indexzw <- ((df$M0/(summ)>=(1-t.hom) | df$M2/(summ)>=(1-t.hom)) & df$F1/(sumf)>=(1-t.het))
+  zw <- cbind(locnr =which(indexzw==TRUE),df[indexzw,])
+ 
+    if (nrow(zw) == 0){
+  if(verbose>0) cat("  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
 } else {
-  cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n")
-  cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n"))
-  cat(paste("    for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
-  cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
-  print(zw)
-  cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-  cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, approx one half of that for the other\n")
+  if(verbose>0) cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n")
+  if(verbose>0) cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n"))
+  if(verbose>0) cat(paste("    for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
+  if(verbose>0) cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
+  if(verbose>0) print(zw)
+  if(verbose>0) cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
+  if(verbose>0) cat("  Note: The most reliable putative markers will have read depth of 10 or more.\n")
 }
-  
 if (nrow(xy) == 0){
-  cat("  No sex linked markers consistent with male heterogamety (XX/XY)\n")
+  if(verbose>0) cat("  No sex linked markers consistent with male heterogamety (XX/XY)\n")
 } else {
-  cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n")
-  cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,"\n"))
-  cat(paste("    for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
-  cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
-  print(xy)
-  cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-  cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+  if(verbose>0) cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n")
+  if(verbose>0) cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,"\n"))
+  if(verbose>0) cat(paste("    for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
+  if(verbose>0) cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
+  if(verbose>0) print(xy)
+  if(verbose>0) cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
+  if(verbose>0) cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
   }
 
-l <- list(zw,xy)
-
+  if (plot)  {
+      # Set margins for first plot
+    df$fhet <- dff$F1/(dff$F0+dff$F1+dff$F2)
+    df$mhet <- dfm$M1/(dfm$M0+dfm$M1+dfm$M2)
+    gg <- ggplot(df, aes(x=fhet, y=mhet))+geom_rect(xmin=0, xmax=t.het, ymin=1-t.het, ymax=1, fill="darkgrey")+geom_text(x=0, y=1.03, label="XX/XY")+geom_rect(xmin=1, xmax=1-t.het, ymin=0, ymax=t.het, fill="darkgrey")+geom_text(x=1, y=-0.02, label="ZZ/ZW")  +geom_point(color=indexxy+indexzw+1,  alpha = 0.3, size=2)+xlab("Female Heterozygosity")+ ylab("Male Heterozygosity")+xlim(0,1)+ylim(0,1)
+    print(gg)
+  }
+l <- list(xxxy=xy, zzzw=zw, plot=gg)
+} #end if data.type='SNP'
+  
+if (data.type=="SilicoDArT")
+{
+  
+  matf <- as.matrix(x[sex=="F"])
+  # For each individual
+  f <- array(data=NA, dim=c(ncol(matf),2))
+  for (i in 1:ncol(matf)) {
+    for (j in 1:2) {
+      f[i,j] <- length(which(matf[,i]==(j-1)))
+    }  
+  }
+  dff <- data.frame(f)
+  row.names(dff) <- locNames(x)
+  colnames(dff) <- c("F0","F1")
+  
+  # Extract the data for the males
+  matm <- as.matrix(x[sex=="M"])
+  # For each individual
+  m <- array(data=NA, dim=c(ncol(matm),2))
+  for (i in 1:ncol(matm)) {
+    for (j in 1:2) {
+      m[i,j] <- length(which(matm[,i]==(j-1)))
+    }  
+  }
+  dfm <- data.frame(m)
+  row.names(dfm) <- locNames(x)
+  colnames(dfm) <- c("M0","M1")
+  
+  # Combine the two files
+  
+  df <- cbind(round(dff/sum(sex=="F"),3),round(dfm/sum(sex=="M"),3))
+  
+  df$read.depth <- x@other$loc.metrics$AvgReadDepth
+  
+  # Check for hets in all males, homs in all females (XY); ditto for ZW
+  sumf <- df$F0+df$F1
+  summ <- df$M0+df$M1
+  # Pull loci that are 100% present in  females and 0% in males
+  indexzw <- (df$F1/(sumf)>=(1-t.pres)  & df$M0/(summ)>=(1-t.pres))
+  zw <- cbind(locnr =which(indexzw==TRUE), df[indexzw,])
+  # Pull loci that are 100% present in males and 0% in females
+  indexxy <- (df$M1/(summ)>=(1-t.pres)  & df$F0/(sumf)>=(1-t.pres))
+  xy <- cbind(locnr =which(indexxy==TRUE),df[indexxy,])
+  if (nrow(zw) == 0){
+    if(verbose>0) cat("  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
+  } else {
+    if(verbose>0) cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n")
+    if(verbose>0) cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n"))
+    if(verbose>0) cat(paste("    for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
+    if(verbose>0) cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
+    if(verbose>0) print(zw)
+    if(verbose>0) cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
+    if(verbose>0) cat("  Note: The most reliable putative markers will have read depth of 10 or more.\n")
+  }
+  if (nrow(xy) == 0){
+    if(verbose>0) cat("  No sex linked markers consistent with male heterogamety (XX/XY)\n")
+  } else {
+    if(verbose>0) cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n")
+    if(verbose>0) cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,"\n"))
+    if(verbose>0) cat(paste("    for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
+    if(verbose>0) cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
+    if(verbose>0) print(xy)
+    if(verbose>0) cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
+    if(verbose>0) cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+  }
+  
+  if (plot)  {
+    # Set margins for first plot
+    df$fhet <- dff$F1/(dff$F0+dff$F1)
+    df$mhet <- dfm$M1/(dfm$M0+dfm$M1)
+    gg <- ggplot(df, aes(x=fhet, y=mhet))+geom_rect(xmin=0, xmax=t.pres, ymin=1-t.pres, ymax=1, fill="darkgrey")+geom_text(x=0, y=1.03, label="XX/XY")+geom_rect(xmin=1, xmax=1-t.pres, ymin=0, ymax=t.pres, fill="darkgrey")+geom_text(x=1, y=-0.02, label="ZZ/ZW")  +geom_point(color=indexxy+indexzw+1,  alpha = 0.3, size=2)+xlab("% present in females")+ ylab("% present in males")+xlim(0,1)+ylim(0,1)
+    print(gg)
+  }
+  l <- list(xxxy=xy, zzzw=zw, plot=gg) 
+}
+  
 # FLAG SCRIPT END
 
-  if (verbose >= 1) {
+  if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-
-  return(l)
-
+return(l)
 }
+
+
+
+
+
