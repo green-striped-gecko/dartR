@@ -102,12 +102,12 @@ gl.report.sexlinkage <- function(x,sex=NULL, t.het=0, t.hom=0,t.pres=0, plot=TRU
   
   if (data.type=="SNP") {  #for SNP data
 # Extract the data for the females
-  matf <- as.matrix(x[sex=="F"])
+  matf <- as.matrix(x[sex=="F",])
   # For each individual
     f <- array(data=NA, dim=c(ncol(matf),3))
     for (i in 1:ncol(matf)) {
       for (j in 1:3) {
-        f[i,j] <- length(which(matf[,i]==(j-1)))
+        f[i,j] <- sum(matf[,i]==(j-1), na.rm=T)
       }  
     }
     dff <- data.frame(f)
@@ -115,12 +115,12 @@ gl.report.sexlinkage <- function(x,sex=NULL, t.het=0, t.hom=0,t.pres=0, plot=TRU
     colnames(dff) <- c("F0","F1","F2")
 
 # Extract the data for the males
-  matm <- as.matrix(x[sex=="M"])
+  matm <- as.matrix(x[sex=="M",])
 # For each individual
   m <- array(data=NA, dim=c(ncol(matm),3))
   for (i in 1:ncol(matm)) {
     for (j in 1:3) {
-      m[i,j] <- length(which(matm[,i]==(j-1)))
+      m[i,j] <- sum(matm[,i]==(j-1), na.rm=T)
     }  
   }
   dfm <- data.frame(m)
@@ -145,6 +145,12 @@ gl.report.sexlinkage <- function(x,sex=NULL, t.het=0, t.hom=0,t.pres=0, plot=TRU
   indexzw <- ((df$M0/(summ)>=(1-t.hom) | df$M2/(summ)>=(1-t.hom)) & df$F1/(sumf)>=(1-t.het))
   zw <- cbind(locnr =which(indexzw==TRUE),df[indexzw,])
  
+  if(verbose>0) {
+    
+    cat("Number of females:",sum(sex=="F"),"\n")
+    cat("Number of males:",sum(sex=="M"),"\n")
+    cat("Sexratio females:(males+females):",round(sum(sex=="F")/(sum(sex=="F")+sum(sex=="M")),2),"\n")
+  }
     if (nrow(zw) == 0){
   if(verbose>0) cat("  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n")
 } else {
@@ -153,7 +159,6 @@ gl.report.sexlinkage <- function(x,sex=NULL, t.het=0, t.hom=0,t.pres=0, plot=TRU
   if(verbose>0) cat(paste("    for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
   if(verbose>0) cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   if(verbose>0) print(zw)
-  if(verbose>0) cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
   if(verbose>0) cat("  Note: The most reliable putative markers will have read depth of 10 or more.\n")
 }
 if (nrow(xy) == 0){
@@ -164,8 +169,7 @@ if (nrow(xy) == 0){
   if(verbose>0) cat(paste("    for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
   if(verbose>0) cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
   if(verbose>0) print(xy)
-  if(verbose>0) cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-  if(verbose>0) cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+  if(verbose>0) cat("  Note: The most reliable putative markers will have read depth for Ref or Snp 10 or more, one ca half the other\n")
   }
 
   if (plot)  {
@@ -208,7 +212,7 @@ if (data.type=="SilicoDArT")
   
   # Combine the two files
   
-  df <- cbind(round(dff/sum(sex=="F"),3),round(dfm/sum(sex=="M"),3))
+  df <- cbind(dff,dfm)
   
   df$read.depth <- x@other$loc.metrics$AvgReadDepth
   
@@ -229,7 +233,6 @@ if (data.type=="SilicoDArT")
     if(verbose>0) cat(paste("    for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
     if(verbose>0) cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
     if(verbose>0) print(zw)
-    if(verbose>0) cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
     if(verbose>0) cat("  Note: The most reliable putative markers will have read depth of 10 or more.\n")
   }
   if (nrow(xy) == 0){
@@ -240,8 +243,8 @@ if (data.type=="SilicoDArT")
     if(verbose>0) cat(paste("    for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
     if(verbose>0) cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternate\n")
     if(verbose>0) print(xy)
-    if(verbose>0) cat("  Note: Snp location in Trimmed Sequence indexed from 0 not 1, SNP position in lower case\n")
-    if(verbose>0) cat("  Note: The most reliable putative markers will have AvgCount for Ref or Snp 10 or more, one ca half the other\n")
+
+    if(verbose>0) cat("  Note: The most reliable putative markers will have read depth for Ref or Snp 10 or more, one ca half the other\n")
   }
   
   if (plot)  {
