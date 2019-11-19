@@ -11,10 +11,9 @@
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param sex -- factor that defines the sex of individuals. See explanation above.
-#' @param t.het -- tolerance, that is tm=0.05 means that 5% of the heterogametic sex can be homozygous and still 
-#' be regarded as consistent with a sex specific marker [default 0]
-#' @param t.hom -- tolerance, that is tf=0.05 means that 5% of the homogametic sex can be heterozygous and still
-#' 
+#' @param t.het -- tolerance, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0]
+#' @param t.hom -- tolerance, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0]
+#' @param t.pres -- tolerance, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker. [default 0]
 #' @param plot -- creates a plot that shows the heterozygosity of males and females at each loci for SNP data or percentage of present/absent in the case of silicodart data.
 #' be regarded as consistent with a sex specific marker [default 0]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]

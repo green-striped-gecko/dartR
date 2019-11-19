@@ -13,21 +13,18 @@
 #' @param sex -- factor that defines the sex of individuals. See explanation above.
 #' @param filter -- switch to either 'keep' sexlinked markers only from the genlight object or drop them. Default is NULL, so has to be specified.
 #' @param read.depth -- additional filter option to keep only loci above a certain read.depth. Default to 0, which means read.depth is not taken into account.
-#' @param t.het -- tolerance, that is tm=0.05 means that 5% of the heterogametic sex can be homozygous and still 
-#' be regarded as consistent with a sex specific marker [default 0]
-#' @param t.hom -- tolerance, that is tf=0.05 means that 5% of the homogametic sex can be heterozygous and still
-#' 
+#' @param t.het -- tolerance, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0]
+#' @param t.hom -- tolerance, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0]
 #' @param plot -- creates a plot that shows the heterozygosity of males and females at each loci.
 #' be regarded as consistent with a sex specific marker [default 0]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return two list of sex specific loci, for XX/XY and ZZ/ZW systems.
-#' @export
+#' @return the filtered genlight object (filter="keep": sexlinked loci,filter="drop", everything except sexlinked loci).
 #' @author Arthur Georges, Bernd Gruber & Floriaan Devloo-Delvan (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @export
 #' @examples
 #' cat("does not work yet")
 #' #result <- gl.sexlinkage(testset.gl)
 
-# Last amended 3-Feb-19
 
 gl.filter.sexlinked <- function(x,sex=NULL,filter=NULL, read.depth=0, t.het=0, t.hom=0,t.pres=0, plot=FALSE,verbose=NULL) {
   
