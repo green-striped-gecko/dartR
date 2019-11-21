@@ -4,19 +4,17 @@
 \alias{gl.report.bases}
 \title{Summary of base pair frequencies}
 \usage{
-gl.report.bases(x, plot = TRUE, silent = TRUE, verbose = 2)
+gl.report.bases(x, plot = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP or presence/absence data [required]}
 
 \item{plot}{-- if TRUE, histograms of base composition are produced [default TRUE]}
 
-\item{silent}{-- if FALSE, function returns an object, otherwise NULL [default TRUE]}
-
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-If silent==TRUE, returns NULL; otherwise a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
+returns a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
 }
 \description{
 This script calculates the frequencies of the four bases, and the frequency of transitions and
@@ -32,8 +30,12 @@ For presence/absence data (SilicoDArT), it is not possible to count transitions 
 because the SNP data is not available, only a single sequence tag.
 }
 \examples{
-lst <- gl.report.bases(testset.gl,silent=FALSE)
-lst
+# SNP data
+  out <- gl.report.bases(testset.gl)
+  out
+# Tag P/A data
+  out <- gl.report.bases(testset.gs)
+  out
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

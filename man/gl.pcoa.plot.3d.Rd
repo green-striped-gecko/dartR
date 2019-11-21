@@ -27,7 +27,7 @@ gl.pcoa.plot.3d(x, gl, title = "PCoA", xaxis = 1, yaxis = 2,
 
 \item{legend}{-- one of bottomright, bottom, bottomleft, left, topleft, top, topright, right, center [default "bottom"]}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 NULL, plots an interactive 3D plot of the ordination in a separate window

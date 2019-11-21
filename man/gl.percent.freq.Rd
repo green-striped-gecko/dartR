@@ -9,7 +9,7 @@ gl.percent.freq(x, verbose = NULL)
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP or Tag P/A (SilicoDArT) data [required]}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A matrix with allele (SNP data) or presence/absence frequencies (Tag P/A data) broken down by population and locus

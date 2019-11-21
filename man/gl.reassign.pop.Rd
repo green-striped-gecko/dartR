@@ -4,14 +4,14 @@
 \alias{gl.reassign.pop}
 \title{Assign a individual metric as pop in a genlight \{adegenet\} object}
 \usage{
-gl.reassign.pop(x, as.pop, verbose = 2)
+gl.reassign.pop(x, as.pop, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes [required]}
 
 \item{as.pop}{-- specify the name of the individual metric to set as the pop variable. [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the reassigned populations
@@ -29,7 +29,14 @@ The script returns a genlight object with the new population assignments Note th
 assigments are lost.
 }
 \examples{
+# SNP data
+   popNames(testset.gl)
    gl <- gl.reassign.pop(testset.gl, as.pop='sex',verbose=3)
+   popNames(gl)
+# Tag P/A data
+   popNames(testset.gs)
+   gs <- gl.reassign.pop(testset.gs, as.pop='sex',verbose=3)
+   popNames(gs)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

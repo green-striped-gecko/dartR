@@ -21,7 +21,7 @@ This script recalculates the FreqHets and places these recalculated values in th
 Note that the frequency of the homozygote reference SNPS is calculated from the individuals that could be scored.
 }
 \examples{
-#result <- utils.recalc.freqhets(testset.gl)
+#out <- utils.recalc.freqhets(testset.gl)
 }
 \seealso{
 \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,

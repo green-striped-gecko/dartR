@@ -28,7 +28,7 @@ tables (also stored to disk) [default "collapse"]}
 
 \item{reps}{-- number of replications to undertake in the simulation to estimate probability of false positives [default 1000]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A list containing the gl object x and the following square matricies

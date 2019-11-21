@@ -11,7 +11,7 @@ gl.filter.secondaries(x, method = "random", verbose = NULL)
 
 \item{method}{-- method of selecting SNP locus to retain, best or random [random]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight, plus a summary

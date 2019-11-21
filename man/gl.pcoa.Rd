@@ -18,7 +18,7 @@ gl.pcoa(x, nfactors = 5, correction = NULL, parallel = FALSE,
 
 \item{n.cores}{Number of cores to use if parallel processing is requested [default 16]}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 An object of class pcoa containing the eigenvalues and factor scores

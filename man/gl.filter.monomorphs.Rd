@@ -9,7 +9,7 @@ gl.filter.monomorphs(x, verbose = NULL)
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with monomorphic ( and all NA) loci removed
@@ -25,7 +25,10 @@ Note that for SNP data, NAs likely represent null alleles; in tag presence/absen
 be reliably scored)
 }
 \examples{
-result <- gl.filter.monomorphs(testset.gl, verbose=3)
+# SNP data
+  result <- gl.filter.monomorphs(testset.gl, verbose=3)
+# Tag P/A data
+  result <- gl.filter.monomorphs(testset.gs, verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

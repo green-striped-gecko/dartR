@@ -7,7 +7,7 @@
 gl.read.dart(filename, ind.metafile = NULL, recalc = FALSE,
   mono.rm = FALSE, nas = "-", topskip = NULL,
   lastmetric = "RepAvg", covfilename = NULL, probar = FALSE,
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{filename}{file containing the SNP data (csv file) [required]}
@@ -28,7 +28,7 @@ gl.read.dart(filename, ind.metafile = NULL, recalc = FALSE,
 
 \item{probar}{show progress bar}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, or as set by gl.set.verbose()]}
 }
 \value{
 a dart genlight object that contains individual metrics [if data were provided] and locus metrics [from a DArT report]. The dart genlight object can then be fed into a number of initial screening, export and export functions provided by the package. For some of the function it is necessary to have the metadata that was provided from DArT. Please check the vignette for more information. Additional information can also be found in the help documents for  \code{utils.read.dart}.

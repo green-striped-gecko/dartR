@@ -6,7 +6,7 @@
 \usage{
 gl.plot.heatmap(D, ncolors = 5, labels = TRUE, labels.cex = 1,
   values = TRUE, values.cex = 1, legend = TRUE, rank = FALSE,
-  verbose = 2)
+  verbose = NULL)
 }
 \arguments{
 \item{D}{-- name of the distance matrix [required]}

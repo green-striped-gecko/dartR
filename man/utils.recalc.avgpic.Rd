@@ -26,7 +26,7 @@ If the locus metadata OneRatioRef|Snp, PICRef|Snp and/or AvgPIC do not exist, th
 creates and populates them.
 }
 \examples{
-#result <- utils.recalc.avgpic(testset.gl)
+#out <- utils.recalc.avgpic(testset.gl)
 }
 \seealso{
 \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,

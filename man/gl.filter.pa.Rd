@@ -15,8 +15,7 @@ gl.filter.pa(x, pop1, pop2, invers = FALSE, verbose = NULL)
 
 \item{invers}{-- switch to filter for all loci that have no private alleles and are not fixed [FALSE]}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default NULL]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight dataset, containing now only fixed and private alleles

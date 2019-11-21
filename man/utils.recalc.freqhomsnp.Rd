@@ -21,7 +21,7 @@ This script recalculates the FreqHomSnp and places these recalculated values in 
 Note that the frequency of the homozygote alternate SNPS is calculated from the individuals that could be scored.
 }
 \examples{
-#result <- utils.recalc.freqhomsnp(testset.gl)
+#out <- utils.recalc.freqhomsnp(testset.gl)
 }
 \seealso{
 \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,

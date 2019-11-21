@@ -26,7 +26,7 @@ to remove loci that fail to meet the specified threshold in any one population [
 
 \item{bins}{-- number of bins to display in histograms [default 25]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight or genind object, plus a summary
@@ -49,8 +49,12 @@ the nominated threshold, and so retained, may come to have a call rate lower tha
 of this function will resolve the issue. This is done by setting mono.rm=TRUE and recursive=TRUE, or it can be done manually.
 }
 \examples{
-result <- gl.filter.callrate(testset.gl, method="LOC", threshold=0.95, verbose=3)
-result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8, verbose=3)
+# SNP data
+  result <- gl.filter.callrate(testset.gl, method="loc", threshold=0.95, verbose=3)
+  result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8, verbose=3)
+# Tag P/A data
+  result <- gl.filter.callrate(testset.gs, method="loc", threshold=0.95, verbose=3)
+  result <- gl.filter.callrate(testset.gs, method="ind", threshold=0.8, verbose=3)
 }
 \author{
 Arthur Georges and Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

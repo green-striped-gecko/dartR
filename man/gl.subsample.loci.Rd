@@ -4,7 +4,8 @@
 \alias{gl.subsample.loci}
 \title{Subsample n loci from a genlight object and return as a genlight object}
 \usage{
-gl.subsample.loci(x, n, method = "random", verbose = NULL)
+gl.subsample.loci(x, n, method = "random", mono.rm = FALSE,
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -14,7 +15,9 @@ gl.subsample.loci(x, n, method = "random", verbose = NULL)
 \item{method}{-- "random", in which case the loci are sampled at random; or avgPIC, in which case the top n loci
 ranked on information content (AvgPIC) are chosen [default 'random']}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{mono.rm}{-- delete monomorphic loci before sampling [default FALSE]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with n loci
@@ -24,7 +27,10 @@ This is a support script, to subsample a genlight \{adegenet\} object based on l
 to subsample, random and based on information content (avgPIC).
 }
 \examples{
-result <- gl.subsample.loci(testset.gl, n=200, method="pic")
+# SNP data
+  gl2 <- gl.subsample.loci(testset.gl, n=200, method="pic")
+# Tag P/A data
+  gl2 <- gl.subsample.loci(testset.gl, n=100, method="random")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

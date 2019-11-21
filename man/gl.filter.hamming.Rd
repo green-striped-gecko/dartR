@@ -16,7 +16,7 @@ gl.filter.hamming(x, threshold = 0.2, rs = 5, pb = FALSE,
 
 \item{pb}{-- switch to output progress bar [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 a genlight object filtered on Hamming distance.
@@ -47,7 +47,10 @@ Only one of two loci are retained if their Hamming distance is less that a speci
 percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 }
 \examples{
-result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
+# SNP data
+  result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
+# Tag P/A data
+  result <- gl.filter.hamming(testset.gs, threshold=0.25, verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

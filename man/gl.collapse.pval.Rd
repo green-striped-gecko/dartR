@@ -24,7 +24,7 @@ arising from the amalgamation of populations [tmp.csv]}
 
 \item{plot}{-- if TRUE, plot a PCoA with the new groupings [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A list containing the gl object with the new collapsed populations and the following square matricies

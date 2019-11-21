@@ -31,7 +31,7 @@ gl.pcoa.plot(glPca, x, scale = FALSE, ellipse = FALSE, p = 0.95,
 
 \item{plot.out}{If TRUE, returns a plot object compatable with ggplot, otherwise returns a dataframe [default TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A plot of the ordination [plot.out=TRUE] or a dataframe [plot.out=FALSE]

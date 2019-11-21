@@ -21,7 +21,7 @@ but the call rate will change when some individuals are removed from the dataset
 and places these recalculated values in the appropriate place in the genlight object. It sets the Call Rate flag to TRUE.
 }
 \examples{
-#result <- utils.recalc.callrate(testset.gl)
+#out <- utils.recalc.callrate(testset.gl)
 }
 \seealso{
 \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.avgpic} for recalculating avgPIC,

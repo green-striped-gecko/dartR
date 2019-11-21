@@ -15,7 +15,7 @@ plots a boxplot adjusted for skewed distributions [default 'adjusted']}
 
 \item{range}{-- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 -- dataframe with loci that are outliers
@@ -36,6 +36,10 @@ Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
 Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed
 Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
 Box and Whisker Plots.
+}
+\examples{
+# SNP data
+out <- gl.report.rdepth(testset.gl)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

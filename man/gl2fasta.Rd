@@ -18,7 +18,7 @@ gl2fasta(x, method = 1, outfile = "output.fasta",
 
 \item{probar}{-- if TRUE, a progress bar will be displayed for long loops [default = TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A new gl object with all loci rendered homozygous
@@ -55,7 +55,7 @@ The script writes out the composite haplotypes for each individual as a fastA fi
 'TrimmedSequence' to be among the locus metrics (\code{@other$loc.metrics}) and information of the type of alleles (slot loc.all e.g. "G/A") and the position of the SNP in slot position of the ```genlight``` object (see testset.gl@position and testset.gl@loc.all for how to format these slots.)
 }
 \examples{
-gl <- gl.filter.repeatability(testset.gl,t=1)
+gl <- gl.filter.reproducibility(testset.gl,t=1)
 gl <- gl.filter.overshoot(gl,verbose=3)
 gl <- gl.filter.callrate(testset.gl,t=.98)
 gl <- gl.filter.monomorphs(gl)

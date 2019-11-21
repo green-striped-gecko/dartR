@@ -429,7 +429,7 @@ The last line of code stores the loci metadata in the right location and we can 
 
 ```{r}
 gl.report.callrate(platy.gl)
-gl2 <- gl.filter.repeatability(platy.gl, t=0.5)
+gl2 <- gl.filter.reproducibility(platy.gl, t=0.5)
 ```
 
 Some of the functions require additional meta data, e.g. the gl2fasta need sequence data (TrimmedSequnce), the position of the SNP in the sequence for each loci ```@position``` and the type of allelels for each loci ```@loc.all```. If such data is available the information needs to be stored in the correct slots to work with the function. The code below exports our genlight object to a fasta format (again we create random meta data via the code below).
@@ -483,7 +483,7 @@ Refer to the help on each function for details of the parameters taken by each o
 Filtering of data is often necessary to make sure only high quality loci (few missing data) and with a consistent quality are retained and "noise" in the data set is minimised. In addition by filtering you reduce the number of loci, which often speeds up the analysis considerably. The kind and order of filtering that someone applies depends very much on the intended analysis. For example for classical calculation of indices of population structure, loci and individuals with lots of missing data might be discarded, though for other kind of analysis the amount of missing data may hint to "hidden" subspecies in the populations. Therefore a general adivse on the order and amount of filtering cannot be given. As an example if the focus is towards studying population structure, where only a limited number of individuals are sampled, a valid strategy is to filter in such a way that the number of individuals per population are maintained, but the number of loci can be reduced. So a suggested order here is:
 
 
-1. Filter by repeatability (```gl.filter.repavg``` in dartR) (a meassurement of quality per loci)
+1. Filter by reproducibility (```gl.filter.reproducibility``` in dartR) (a meassurement of quality per loci)
 2. Fitler by monomorphic loci (```gl.filter.monomorphs```)(as they do not provide information for population structure and simply slow the analysis)
 3. Filter by amount of missing data (```gl.filter.callrate, method="loc"```) per locus
 4. Filter to remove all but one of multiple snps in the same fragment (```gl.filter.secondaries```)
@@ -508,7 +508,7 @@ gl2 <- gl.filter.callrate(gl, method="ind", threshold = 0.90)
 3.	Filter on reproducibility, threshold (here called t, do not ask why) 100% reproducible
 
 ```{r}
-gl2 <- gl.filter.repeatability(gl, t=1)
+gl2 <- gl.filter.reproducibility(gl, t=1)
 ```
 
 4.	Filter out multiple snps in single sequence tags (!!!!!produces an error currently!!!!!)

@@ -4,19 +4,17 @@
 \alias{gl.report.pa}
 \title{Report private alleles (and fixed alleles) per pair of populations}
 \usage{
-gl.report.pa(gl1, gl2 = NULL, silent = FALSE, verbose = 3)
+gl.report.pa(gl1, gl2 = NULL, verbose = NULL)
 }
 \arguments{
 \item{gl1}{-- name of the genlight object containing the SNP data [required]}
 
 \item{gl2}{-- if two seperate genlight objects are to be compared this can be provided here [default NULL]}
 
-\item{silent}{-- if TRUE, returns NULL; otherwise returns an object [default TRUE]}
-
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]}
+\item{verbose}{-- verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-If silent=TRUE, returns NULL; otherwise returns a data.frame. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequendy difference between loci (mdf).
+returns a data.frame. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequendy difference between loci (mdf).
 }
 \description{
 This function reports private alleles in one population compared with a second population, for all populations
@@ -48,7 +46,7 @@ f: cases where there is a fixed allele in pop1 (and pop2, as those cases are sym
 }
 }
 \examples{
-gl.report.pa(testset.gl[1:20,])
+out <- gl.report.pa(testset.gl[1:20,])
 
 }
 \author{

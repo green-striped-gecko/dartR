@@ -13,7 +13,7 @@ gl.filter.rdepth(x, lower = 5, upper = 50, verbose = NULL)
 
 \item{upper}{-- upper threshold value above which loci will be removed [default 50]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 Returns a genlight object retaining loci with a Read Depth in the range specified by the lower and upper threshold.
@@ -28,8 +28,11 @@ Filtering on Read Depth using the companion script gl.filter.rdepth can be on th
 or loci with exceptionally high counts.
 }
 \examples{
-gl.report.rdepth(testset.gl)
-result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
+# SNP data
+  gl.report.rdepth(testset.gl)
+  result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
+# Tag P/A data
+  result <- gl.filter.rdepth(testset.gs, lower=8, upper=50)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

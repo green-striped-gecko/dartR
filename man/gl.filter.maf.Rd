@@ -11,7 +11,7 @@ gl.filter.maf(x, threshold = 0.01, verbose = NULL)
 
 \item{threshold}{-- threshold MAF -- loci with a MAF less than the threshold will be removed [default 0.01]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight dataset

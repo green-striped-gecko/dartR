@@ -4,14 +4,14 @@
 \alias{utils.reset.flags}
 \title{A utility script to reset to FALSE (or TRUE) the locus metric flags after some individuals or populations have been deleted.}
 \usage{
-utils.reset.flags(x, set = FALSE, set.verbosity = 2, verbose = NULL)
+utils.reset.flags(x, set = FALSE, value = 2, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]}
 
 \item{set}{-- set the flags to TRUE or FALSE [FALSE]}
 
-\item{set.verbosity}{-- set the default verbosity for all functions, where verbosity is not specified}
+\item{value}{-- set the default verbosity for all functions, where verbosity is not specified}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]}
 }

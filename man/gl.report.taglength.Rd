@@ -15,7 +15,7 @@ plots a boxplot adjusted for skewed distributions [default 'adjusted']}
 
 \item{range}{-- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 -- dataframe with loci that are outliers
@@ -33,7 +33,7 @@ Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjust
 Box and Whisker Plots.
 }
 \examples{
-gl.report.taglength(testset.gl)
+out <- gl.report.taglength(testset.gl)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

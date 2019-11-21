@@ -43,7 +43,7 @@ if (nrow(matrix)==nPop(x)) xys <- centers else xys <- df
 if (symmetric) {
 for (ii in 1:nrow(matrix)){
   for (i in ii:nrow(matrix)){
-    m <- m %>% addPolylines(lng=c(xys[i,"lon"],xys[ii,"lon"]), lat=c(xys[i,"lat"], xys[ii,"lat"]), weight = matrix[i,ii], color = "#0000FF" , opacity = 1)
+    if(!is.null(matrix[i,ii])) m <- m %>% addPolylines(lng=c(xys[i,"lon"],xys[ii,"lon"]), lat=c(xys[i,"lat"], xys[ii,"lat"]), weight = matrix[i,ii], color = "#0000FF" , opacity = 1)
   }
 }
 }

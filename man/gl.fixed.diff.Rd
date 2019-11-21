@@ -24,7 +24,7 @@ gl.fixed.diff(x, tloc = 0, test = FALSE, delta = 0.02, reps = 1000,
 
 \item{pb}{-- if TRUE, show a progress bar on time consuming loops [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 3]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A list containing the gl object and square matricies, as follows

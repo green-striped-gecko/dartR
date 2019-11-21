@@ -16,7 +16,7 @@ gl.keep.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE,
 
 \item{mono.rm}{-- Remove monomorphic loci [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the reduced data
@@ -30,7 +30,11 @@ recalculates statistics made redundant by the deletion of individuals from the d
 The script returns a genlight object with the individuals deleted and, optionally, the recalculated locus metadata.
 }
 \examples{
-   gl <- gl.keep.ind(testset.gl, ind.list=c("AA019073","AA004859"))
+  # SNP data
+    gl2 <- gl.keep.ind(testset.gl, ind.list=c("AA019073","AA004859"))
+  # Tag P/A data
+   gs2 <- gl.keep.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"))
+   
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE

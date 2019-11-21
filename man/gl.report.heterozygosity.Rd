@@ -6,7 +6,7 @@
 \usage{
 gl.report.heterozygosity(x, method = "pop", n.invariant = 0,
   boxplot = "adjusted", range = 1.5, cex.labels = 0.7,
-  silent = TRUE, verbose = NULL)
+  verbose = NULL)
 }
 \arguments{
 \item{x}{-- a genlight object containing the SNP genotypes [Required]}
@@ -22,12 +22,10 @@ plots a boxplot adjusted for skewed distributions [default 'adjusted']}
 
 \item{cex.labels}{-- sets the size of the population labels [default 0.7]}
 
-\item{silent}{-- if FALSE, function returns an object, otherwise NULL [default TRUE]}
-
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-If silent==FALSE, returns a dataframe containing population labels, heterozygosities and sample sizes; otherwise NULL
+returns a dataframe containing population labels, heterozygosities and sample sizes
 }
 \description{
 Calculates the observed and expected heterozygosities for each population (method="pop") 
@@ -68,8 +66,8 @@ such as provided by gl.report.secondaries, you can specify it with the n.invaria
 parameter to standardize your estimates of heterozygosity.
 }
 \examples{
-gl.report.heterozygosity(testset.gl,verbose=3)
-gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
+out <- gl.report.heterozygosity(testset.gl,verbose=3)
+out <- gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
 }
 \author{
 Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})

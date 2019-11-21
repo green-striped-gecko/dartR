@@ -19,7 +19,7 @@ plots a boxplot adjusted for skewed distributions ['standard']}
 
 \item{range}{-- specifies the range for delimiting outliers [1.5 interquartile ranges]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 An object of class 'dist' giving distances between individuals

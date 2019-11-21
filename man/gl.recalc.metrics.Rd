@@ -4,12 +4,14 @@
 \alias{gl.recalc.metrics}
 \title{Recalculate locus metrics when individuals or populations are deleted from a genlight \{adegenet\} object}
 \usage{
-gl.recalc.metrics(x, verbose = NULL)
+gl.recalc.metrics(x, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{mono.rm}{-- if TRUE, removes monomorphic loci [default FALSE]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the recalculated locus metadata

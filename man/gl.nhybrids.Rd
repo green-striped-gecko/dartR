@@ -46,7 +46,7 @@ if both parental populations are specified]}
 
 \item{ThetaPrior}{-- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight object, if parentals are provided; output of NewHybrids is saved to disk

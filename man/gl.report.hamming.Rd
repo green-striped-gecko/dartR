@@ -5,8 +5,7 @@
 \title{Calculates the pairwise Hamming distance between DArT trimmed DNA sequences}
 \usage{
 gl.report.hamming(x, rs = 5, boxplot = "adjusted", range = 1.5,
-  threshold = 3, taglength = 69, probar = FALSE, silent = TRUE,
-  verbose = 2)
+  threshold = 3, taglength = 69, probar = FALSE, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -24,9 +23,7 @@ if 'adjusted', plots a boxplot adjusted for skewed distributions [default 'adjus
 
 \item{probar}{-- if TRUE, then a progress bar is desplayed on long loops [default TRUE]}
 
-\item{silent}{-- if FALSE, function returns an object, otherwise NULL [default TRUE]}
-
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 Tabulation of loc that will be lost on filtering, against values of the threshold
@@ -56,7 +53,7 @@ A histogram and whiskerplot can be requested. Both display a user specified valu
 for the minumum acceptable Hamming distance.
 }
 \examples{
-gl.report.hamming(testset.gl)
+out <- gl.report.hamming(testset.gl)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

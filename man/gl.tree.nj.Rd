@@ -28,7 +28,10 @@ This function is a wrapper for the nj\{ape\} function applied to Euclidian
 distances calculated from the genlight object.
 }
 \examples{
-gl.tree.nj(testset.gl,type="fan")
+# SNP data
+  gl.tree.nj(testset.gl,type="fan")
+# Tag P/A data
+  gl.tree.nj(testset.gs,type="fan")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

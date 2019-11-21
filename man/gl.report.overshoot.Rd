@@ -4,17 +4,15 @@
 \alias{gl.report.overshoot}
 \title{Reports loci for which the SNP has been trimmed from the sequence tag along with the adaptor}
 \usage{
-gl.report.overshoot(x, silent = TRUE, verbose = NULL)
+gl.report.overshoot(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object [required]}
 
-\item{silent}{-- if TRUE, returns NULL; otherwise returns an object [default TRUE]}
-
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-if silent==TRUE, returns NULL; otherwise returns names of the recalcitrant loci
+returns names of the recalcitrant loci
 }
 \description{
 This function checks the position of the SNP within the trimmed sequence tag and identifies those for which the SNP position is outside
@@ -25,8 +23,7 @@ The SNP genotype can still be used in most analyses, but functions like gl2fasta
 the sequence tag.
 }
 \examples{
-gl <- testset.gl
-gl.report.overshoot(gl)
+out <- gl.report.overshoot(testset.gl)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -4,14 +4,17 @@
 \alias{gl.grm}
 \title{Calculates the genomic relatedness matrix}
 \usage{
-gl.grm(gl, plotheatmap = TRUE, return.imputed = FALSE, ...)
+gl.grm(x, plotheatmap = TRUE, return.imputed = FALSE, verbose = NULL,
+  ...)
 }
 \arguments{
-\item{gl}{-- a genlight object}
+\item{x}{-- a genlight object}
 
 \item{plotheatmap}{-- a switch if a heatmap should be shown [Default:TRUE]}
 
 \item{return.imputed}{switch if loci with imputed data should be returned (see ?A.mat in package rrBLUP)}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 
 \item{...}{parameters passed to function A.mat from package rrBLUP}
 }

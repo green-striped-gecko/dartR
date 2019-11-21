@@ -24,7 +24,7 @@ plots a boxplot adjusted for skewed distributions ['standard']}
 
 \item{p}{-- The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [0.5]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 An object of class 'dist' giving distances between populations

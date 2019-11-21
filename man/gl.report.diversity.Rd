@@ -5,7 +5,7 @@
 \title{Calculate diversity indices for SNPs}
 \usage{
 gl.report.diversity(gl, spectrumplot = TRUE, confiplot = FALSE,
-  pbar = TRUE, table = "DH", silent = TRUE, verbose = NULL)
+  pbar = TRUE, table = "DH", verbose = NULL)
 }
 \arguments{
 \item{gl}{genlight object containing the SNP genotypes  [required]}
@@ -18,12 +18,10 @@ gl.report.diversity(gl, spectrumplot = TRUE, confiplot = FALSE,
 
 \item{table}{prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.}
 
-\item{silent}{-- if FALSE, function returns an object, otherwise NULL [default TRUE]}
-
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-if silent==TRUE, returns NULL; otherwise returns a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
+returns a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
 }
 \description{
 !!Just an intro placeholder!! This script takes a genlight object and calculates alpha and beta diversity for q=0:2. Formulas are taken from Sherwin et al. 2017. The paper describes nicely the relationship between the different q levels and how they relate to population genetic processes such as dispersal and selection. For all indices the entropies (H) and corrosponding effective numbers Hill numbers (D), which reflect the amount of entities that are needed to get the observed valuea are calculated. In a nutshell the alpha indices between the different q-values should be similar if there are no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index this links to a process causing it such as dispersal, selection or strong drift. For a detailed explanation of all the indices, we recommend to resort to the literature provided below.

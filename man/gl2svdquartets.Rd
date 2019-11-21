@@ -18,7 +18,7 @@ to direct output files to your working directory.}
 \item{method}{-- method = 1, nexus file with two lines per individual; method = 2, nexus
 file with one line per individual, ambiguity codes for SNP genotypes, 0 or 1 for presence/absence data [default 2]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \description{
 The output nexus file contains the snp data in one of two forms, depending upon what you regard

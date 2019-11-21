@@ -16,7 +16,7 @@ gl.filter.hwe(x, alpha = 0.05, basis = "any", bon = TRUE,
 
 \item{bon}{-- apply bonferroni correction to significance levels for filtering [default TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 a genlight object with the loci departing significantly from HWE removed

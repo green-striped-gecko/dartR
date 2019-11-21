@@ -14,7 +14,7 @@ gl.filter.heterozygosity(x, t.upper = 0.7, t.lower = 0,
 
 \item{t.lower}{-- filter individuals < the threshold [default 0]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 the filtered genlight object
@@ -24,8 +24,8 @@ Calculates the observed heterozyosity for each individual in a genlight object a
 Use gl.report.heterozygosity to determine the appropriate thresholds.
 }
 \examples{
-result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
-gl.report.heterozygosity(result,method="ind")
+ result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
+ tmp <- gl.report.heterozygosity(result,method="ind")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

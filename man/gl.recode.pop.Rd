@@ -16,7 +16,7 @@ gl.recode.pop(x, pop.recode, recalc = TRUE, mono.rm = TRUE,
 
 \item{mono.rm}{-- Remove monomorphic loci [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the recoded and reduced data

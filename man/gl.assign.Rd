@@ -20,7 +20,7 @@ gl.assign(x, unknown, nmin = 10, dim = NULL, alpha = 0.05,
 
 \item{threshold}{-- populations to retain for consideration; those for which the focal individual has less than or equal to threshold loci with private alleles [default 0]}
 
-\item{verbose}{-- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default 3]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
@@ -61,8 +61,8 @@ Each of these approaches provides evidence, none are 100% definitive. They need 
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-x <- gl.assign(testset.gl, unknown="UC_00146", nmin=10, 
-alpha=0.05, threshold=1)
+  x <- gl.assign(testset.gl, unknown="UC_00146", nmin=10, 
+  alpha=0.05, threshold=1)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

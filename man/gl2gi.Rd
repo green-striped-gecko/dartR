@@ -11,7 +11,7 @@ gl2gi(gl, probar = FALSE, verbose = NULL)
 
 \item{probar}{-- if TRUE, a progress bar will be displayed for long loops [default = TRUE]}
 
-\item{verbose}{-- level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genind object, with all slots filled.
