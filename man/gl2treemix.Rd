@@ -22,7 +22,8 @@ The output file contains the snp data in the format expected by treemix -- see t
 by treemix. Plotting functions provided with treemix will need to be sourced from the treemix download page.
 }
 \examples{
-gl2treemix(testset.gl, outpath=getwd())
+
+gl2treemix(testset.gl, outpath=tempdir())
 }
 \references{
 Pickrell and Pritchard (2012). Inference of population splits and mixtures from genome-wide allele frequency data. PLoS Genetics https://doi.org/10.1371/journal.pgen.1002967

@@ -24,7 +24,7 @@ Reference: Peakall, R. and Smouse P.E. (2012) GenAlEx 6.5: genetic analysis in E
 http://bioinformatics.oxfordjournals.org/content/28/19/2537
 }
 \examples{
-\dontrun{
+\donttest{
 gl2genalex(testset.gl, outfile="testset.csv")
 }
 }

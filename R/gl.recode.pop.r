@@ -23,11 +23,12 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#' \donttest{
 #'   mfile <- system.file("extdata", "testset_pop_recode.csv", package="dartR")
 #'   nPop(testset.gl)
 #'   gl <- gl.recode.pop(gl, pop.recode=mfile, verbose=3)
+#'  }
 #' @seealso \code{\link{gl.filter.monomorphs}}
-#' 
 
 gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=NULL){
 

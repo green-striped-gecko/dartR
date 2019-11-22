@@ -85,7 +85,7 @@ NULL
 #' platy.gl <- (gi2gl(platy))
 #' df.loc <- data.frame(RepAvg = runif(nLoc(platy.gl)), CallRate = 1)
 #' platy.gl@other$loc.metrics <- df.loc
-#' gl.report.repavg(platy.gl)
+#' gl.report.reproducibility(platy.gl)
 #' }
 NULL
 

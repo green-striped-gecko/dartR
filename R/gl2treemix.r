@@ -14,7 +14,8 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl2treemix(testset.gl, outpath=getwd())
+#' 
+#' gl2treemix(testset.gl, outpath=tempdir())
 
 gl2treemix <- function(x, outfile="treemix_input.gz", outpath=tempdir(), verbose=NULL) {
   

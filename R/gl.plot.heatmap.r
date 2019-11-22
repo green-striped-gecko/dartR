@@ -41,12 +41,8 @@ gl.plot.heatmap <- function(D,
 # SET VERBOSITY
   
   if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
+          verbose <- 2
+      } 
   
   if (verbose < 0 | verbose > 5){
     cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
@@ -155,6 +151,6 @@ gl.plot.heatmap <- function(D,
     cat("Completed:",funname,"\n")
   }
   
-  return()
+  return(NULL)
 
 }

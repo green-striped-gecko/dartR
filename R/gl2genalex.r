@@ -14,7 +14,7 @@
 #' @export
 #' @author Katrin Hohwieler, wrapper Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' gl2genalex(testset.gl, outfile="testset.csv")
 #' }
 
