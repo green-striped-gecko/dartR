@@ -88,7 +88,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
   
   funname <- match.call()[[1]]
   build <- "Jacob"
-  
+  x<-gl
 # SET VERBOSITY
   
   if (is.null(verbose)){ 

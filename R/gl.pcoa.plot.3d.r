@@ -48,8 +48,8 @@ gl.pcoa.plot.3d <- function(x,
 # SET VERBOSITY
   
   if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
+    if(!is.null(gl@other$verbose)){ 
+      verbose <- gl@other$verbose
     } else { 
       verbose <- 2
     }

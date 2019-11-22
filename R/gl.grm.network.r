@@ -75,7 +75,7 @@ gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, nod
   colors = rainbow(nlevels(pop(x)))
   my_colors <- colors[pop(x)]
   
-  q <- quantile(links$weight, p = 1-alpha)
+  q <- stats::quantile(links$weight, p = 1-alpha)
   network.FS <- delete_edges(network, E(network)[links$weight < q ])
   
   if (method=="fr"){

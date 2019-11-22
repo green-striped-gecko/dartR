@@ -18,11 +18,7 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
 # SET VERBOSITY
   
   if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
+         verbose <- 2
   } 
   
   if (verbose < 0 | verbose > 5){

@@ -6,8 +6,8 @@
 #' sets the value of the flag.
 #' 
 #' @param  x name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]
+#' @param value -- set the default verbosity to be this value: 0, silent only fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @param set.verbosity -- set the default verbosity to be: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return The genlight with the verbosity flag reset
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

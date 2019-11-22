@@ -20,6 +20,8 @@ gl.filter.sexlinked(x, sex = NULL, filter = NULL, read.depth = 0,
 
 \item{t.hom}{-- tolerance, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0]}
 
+\item{t.pres}{-- tolerance, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker. [default 0]}
+
 \item{plot}{-- creates a plot that shows the heterozygosity of males and females at each loci.
 be regarded as consistent with a sex specific marker [default 0]}
 

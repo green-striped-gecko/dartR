@@ -5,7 +5,7 @@
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
-gl.Hs <- function(gl)
+gl.He <- function(gl)
 {
   alf <- colMeans(as.matrix(gl), na.rm = T)/2
   out <- alf*(1-alf)*2

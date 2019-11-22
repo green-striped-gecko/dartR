@@ -78,7 +78,7 @@ FstDistPlotterZoom = function(df, FSTlist,  FSTbar, binwidth = 0.005,titletext =
   FSTlistNoNA=FSTlist[which(!is.na(FSTlist))]
   
   xPlotUpperBound=ceiling(max(FSTlistNoNA)*100)/100
-  xPlotLowerBound=floor(as.numeric(quantile(FSTlistNoNA, prob = 1 - RightZoomFraction, na.rm=TRUE)) * 100) / 100
+  xPlotLowerBound=floor(as.numeric(stats::quantile(FSTlistNoNA, prob = 1 - RightZoomFraction, na.rm=TRUE)) * 100) / 100
   flist=FSTlistNoNA[which(FSTlistNoNA>xPlotLowerBound)]
   
   
@@ -103,7 +103,7 @@ FstDistPlotterAddBadCurve = function(df, FSTlist,  FSTbar, binwidth = 0.005, Rig
   FSTlistNoNA=FSTlist[which(!is.na(FSTlist))]
   
   xPlotUpperBound=ceiling(max(FSTlistNoNA)*100)/100
-  xPlotLowerBound=floor(as.numeric(quantile(FSTlistNoNA, prob = 1 - RightZoomFraction, na.rm=TRUE)) * 100) / 100
+  xPlotLowerBound=floor(as.numeric(stats::quantile(FSTlistNoNA, prob = 1 - RightZoomFraction, na.rm=TRUE)) * 100) / 100
   
   
   breakslist=seq(xPlotLowerBound,xPlotUpperBound,by=binwidth)

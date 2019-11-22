@@ -15,6 +15,7 @@
 #' @param read.depth -- additional filter option to keep only loci above a certain read.depth. Default to 0, which means read.depth is not taken into account.
 #' @param t.het -- tolerance, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0]
 #' @param t.hom -- tolerance, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0]
+#' @param t.pres -- tolerance, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker. [default 0]
 #' @param plot -- creates a plot that shows the heterozygosity of males and females at each loci.
 #' be regarded as consistent with a sex specific marker [default 0]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
@@ -179,7 +180,7 @@ if (is.null(filter)) stop("Filter option needs to be set to either 'keep' or 'dr
       # Set margins for first plot
       df$fhet <- dff$F1/(dff$F0+dff$F1+dff$F2)
       df$mhet <- dfm$M1/(dfm$M0+dfm$M1+dfm$M2)
-      gg <- ggplot(df, aes(x=fhet, y=mhet))+geom_rect(xmin=0, xmax=t.het, ymin=1-t.het, ymax=1, fill="darkgrey")+geom_text(x=0, y=1.03, label="XX/XY")+geom_rect(xmin=1, xmax=1-t.het, ymin=0, ymax=t.het, fill="darkgrey")+geom_text(x=1, y=-0.02, label="ZZ/ZW")  +geom_point(color=indexxy+indexzw+1,  alpha = 0.3, size=2)+xlab("Female Heterozygosity")+ ylab("Male Heterozygosity")+xlim(0,1)+ylim(0,1)
+      gg <- ggplot(df, aes(x=df$fhet, y=df$mhet))+geom_rect(xmin=0, xmax=t.het, ymin=1-t.het, ymax=1, fill="darkgrey")+geom_text(x=0, y=1.03, label="XX/XY")+geom_rect(xmin=1, xmax=1-t.het, ymin=0, ymax=t.het, fill="darkgrey")+geom_text(x=1, y=-0.02, label="ZZ/ZW")  +geom_point(color=indexxy+indexzw+1,  alpha = 0.3, size=2)+xlab("Female Heterozygosity")+ ylab("Male Heterozygosity")+xlim(0,1)+ylim(0,1)
       print(gg)
     }
     l <- list(xxxy=xy, zzzw=zw, plot=gg)
@@ -258,7 +259,7 @@ if (is.null(filter)) stop("Filter option needs to be set to either 'keep' or 'dr
       # Set margins for first plot
       df$fhet <- dff$F1/(dff$F0+dff$F1)
       df$mhet <- dfm$M1/(dfm$M0+dfm$M1)
-      gg <- ggplot(df, aes(x=fhet, y=mhet))+geom_rect(xmin=0, xmax=t.pres, ymin=1-t.pres, ymax=1, fill="darkgrey")+geom_text(x=0, y=1.03, label="XX/XY")+geom_rect(xmin=1, xmax=1-t.pres, ymin=0, ymax=t.pres, fill="darkgrey")+geom_text(x=1, y=-0.02, label="ZZ/ZW")  +geom_point(color=indexxy+indexzw+1,  alpha = 0.3, size=2)+xlab("% present in females")+ ylab("% present in males")+xlim(0,1)+ylim(0,1)
+      gg <- ggplot(df, aes(x=df$fhet, y=df$mhet))+geom_rect(xmin=0, xmax=t.pres, ymin=1-t.pres, ymax=1, fill="darkgrey")+geom_text(x=0, y=1.03, label="XX/XY")+geom_rect(xmin=1, xmax=1-t.pres, ymin=0, ymax=t.pres, fill="darkgrey")+geom_text(x=1, y=-0.02, label="ZZ/ZW")  +geom_point(color=indexxy+indexzw+1,  alpha = 0.3, size=2)+xlab("% present in females")+ ylab("% present in males")+xlim(0,1)+ylim(0,1)
       print(gg)
     }
     l <- list(xxxy=xy, zzzw=zw, plot=gg) 

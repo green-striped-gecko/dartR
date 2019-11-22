@@ -16,7 +16,12 @@
 #' Sherwin, W.B., Chao, A., Johst, L., Smouse, P.E. (2017). Information Theory Broadens the Spectrum of Molecular Ecology and Evolution. TREE 32(12) 948-963. doi:10.1016/j.tree.2017.09.12
 #' 
 #' Chao et al. 2014
-#' 
+#' @examples 
+#' div <- gl.report.diversity(bandicoot.gl, spectrumplot = TRUE, table = FALSE, pbar=FALSE)
+#' div$zero_H_alpha
+#' div$two_H_beta
+#' names(div)
+
 
 ### To be done:
 # adjust calculation of betas for population sizes (switch)
@@ -26,7 +31,7 @@
 gl.report.diversity <- function(gl, spectrumplot=TRUE, confiplot=FALSE, pbar=TRUE, table="DH", verbose=NULL) {
   
 # TRAP COMMAND, SET VERSION
-  
+  x<- gl
   funname <- match.call()[[1]]
   build <- "Jacob"
   

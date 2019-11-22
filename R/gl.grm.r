@@ -63,7 +63,7 @@ gl.grm <- function(x, plotheatmap=TRUE, return.imputed=FALSE, verbose=NULL, ...)
 
 # DO THE JOB    
   
-G <- A.mat(as.matrix(gl)-1,return.imputed = return.imputed)
+G <- A.mat(as.matrix(x)-1,return.imputed = return.imputed)
 #if (plotheatmap & return.imputed==FALSE) heatmap(G) else heatmap(G$A) ####   BERND, G$A THROWS AND ERROR
 if (plotheatmap & return.imputed==FALSE) heatmap(G) else heatmap(G)
 

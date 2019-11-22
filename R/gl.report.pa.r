@@ -46,8 +46,8 @@ gl.report.pa <- function(gl1, gl2=NULL, verbose=NULL){
 # SET VERBOSITY
   
   if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
+    if(!is.null(gl1@other$verbose)){ 
+      verbose <- gl1@other$verbose
     } else { 
       verbose <- 2
     }

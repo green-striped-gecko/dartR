@@ -154,21 +154,26 @@ gl.report.heterozygosity <- function(x,
   if (verbose >=2){cat("  Calculating Observed Heterozygosities, averaged across loci, for each population\n")}
     
   # Calculate heterozygosity for each population in the list
-  Ho <- data.frame(lapply(sgl, function(x) mean(colMeans(as.matrix(x, na.rm=TRUE)==1), na.rm=TRUE) ))
+  Ho <- unlist(lapply(sgl, function(x) mean(colMeans(as.matrix(x)==1, na.rm=TRUE), na.rm=TRUE) ))
   
   # Calculate the number of loci used
   
-  nl <- colSums(data.frame(lapply(sgl, function(x) is.na(colMeans(as.matrix(x, na.rm=TRUE))))))
-  nl.adj <- nl + n.invariant
-  Ho.adj <- Ho*nl/nl.adj
+  nl <- unlist(lapply(sgl, function(x) sum(colSums(is.na(as.matrix(x)))==0)))
+  # Apply correction
+  Ho.adj <- Ho*nLoc(x)/(nLoc(x)+n.invariant)
   
-  # Calculate sample sizes
-  sums <- data.frame(lapply(sgl, function(x) mean(colSums(as.matrix(x, na.rm=TRUE)==1), na.rm=TRUE) ))
+  # Calculate sample sizes =Number of individuals
+  
+  
+  
+  
+  
+  sums <- data.frame(lapply(sgl, function(x) mean(colSums(as.matrix(x)==1, na.rm=TRUE), na.rm=TRUE)))
   n <- t(sums/Ho)
-  n <- cbind(row.names(n),n,nl,nl.adj)
+  n <- cbind(row.names(n),n,nl,nLoc(x)/(nLoc(x)+n.invariant))
   
   # Join the sample sizes with the heteozygosities
-  df1 <- data.frame(pop=names(Ho), Ho=as.numeric(Ho[1,]), Ho.adj=as.numeric(Ho.adj))
+  df1 <- data.frame(pop=names(Ho), Ho=as.numeric(Ho), Ho.adj=as.numeric(Ho.adj))
   df2 <- data.frame(n)
   names(df2)<- c("pop","nInd","nLoc","nLoc.adj")
   df <- plyr::join(df1,df2, by="pop")  
@@ -191,20 +196,21 @@ gl.report.heterozygosity <- function(x,
     q <- (2*q + hets)/2
     H <- 1 - (p*p + q*q)
     Hexp[i] <- mean(H,na.rm=T)
-    Hexp.adj[i] <- Hexp[i]*nl[i]/nl.adj[i]
+    Hexp.adj[i] <- Hexp[i]*nLoc(x)/(nLoc(x)+n.invariant)
   }
   
   df <- data.frame(popNames(x),
                    as.numeric(table(pop(x))),
                    nl,
+                   n.invariant,
                    round(df$Ho,6),
                    round(df$Ho.adj,6),
                    round(Hexp,6),
                    round(Hexp.adj,6)
                    )
-  names(df) <- c("pop","nInd","nLoc","Ho","Ho.adj","He","He.adj")
+  names(df) <- c("pop","nInd","nLoc","nLoc.inv","Ho","Ho.adj","He","He.adj")
   
-  op <- par(mfrow=c(2,1),mai=c(1.7,0.5,0.1,0),oma=c(2,2,2,0), pty="m")
+  op <- par(mfrow=c(2,1),mai=c(1,1,1,0),pty="m")
   if(is.null(n.invariant)){
     df.ordered <- df[order(df$Ho),]
     barplot(df.ordered$Ho, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
@@ -267,7 +273,7 @@ gl.report.heterozygosity <- function(x,
     }  
     
     if (n.invariant > 0){
-      cat("  Average correction factor for invariant loci =",mean(nl/(nl.adj),rn.na=TRUE),"\n")
+      cat("  Average correction factor for invariant loci =",nLoc(x)/(nLoc(x)+n.invariant),"\n")
     } else {
       cat("  Heterozygosity estimates not corrected for uncalled invariant loci\n")
     }
@@ -312,9 +318,9 @@ gl.report.heterozygosity <- function(x,
     
     # Prepare for plotting
     # Save the prior settings for mfrow, oma, mai and pty, and reassign
-      op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+    op <- par(mfrow = c(2, 1),  mai=c(0.5,0.5,0.5,0.5),pty="m")
     # Set margins for first plot
-    par(mai=c(1,0.5,0.5,0.5))
+    #par(mai=c(1,0.5,0.5,0.5))
     # Plot Box-Whisker plot
     if (boxplot == "standard"){
       whisker <- boxplot(df$Ho, horizontal=TRUE, col='red', range=range, main = "Heterozygosity by Individual")
@@ -343,7 +349,7 @@ gl.report.heterozygosity <- function(x,
       }
     }  
     # Set margins for second plot
-    par(mai=c(0.5,0.5,0,0.5))  
+    #par(mai=c(0.5,0.5,0,0.5))  
     # Plot Histogram
       hist(c.hets, col='red', main=NULL, breaks=100)
       

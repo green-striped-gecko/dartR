@@ -50,9 +50,9 @@ The data matrix, locus names (forced to be unique), locus metadata, specimen nam
 specimen metadata are combined into a genInd object. Refer to the documentation for \{adegenet\} for further details.
 }
 \examples{
-\dontrun{
-gs<- gl.read.silicodart(filename="SNP_DFwt15-1908_scores_2Row.csv", ind.metafile="metadata.csv" )
-}
+silicodartfile <- system.file("extdata","testset_SilicoDArT.csv", package="dartR")
+metadata <- system.file("extdata",ind.metafile ="testset_metadata_silicodart.csv", package="dartR")
+testset.gs <- gl.read.silicodart(filename = silicodartfile, ind.metafile = metadata)
 }
 \author{
 Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

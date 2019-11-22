@@ -210,7 +210,7 @@ pOutlierFinderChiSqNoCorr=function(DataList, Fstbar, dfInferred, qthreshold=0.05
   pListRightTail=1-pchisq(DataListGood$FSTNoCorr*(dfInferred)/Fstbar,dfInferred)
   
   #Note: Change made 13 June 2014; q-values now only calcualted on right-tail one-sided p-values
-  qtemp=qvalue(pListRightTail,fdr.level=qthreshold,pi0.method="bootstrap")
+  qtemp=qvalue::qvalue(pListRightTail,fdr.level=qthreshold,pi0.method="bootstrap")
   #Note:  Using the bootstrap method here seems OK, but if this causes problems remove the pi0.method="bootstrap" in the previous line to revert to the default.
   
   DataListGood$pvalues=pList

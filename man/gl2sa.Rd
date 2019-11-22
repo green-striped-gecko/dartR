@@ -18,7 +18,7 @@ Returns an object of class 'snp' to be used with \pkg{SNPassoc}
 This function exports a genlight object into a SNPassoc object. See \link[SNPassoc]{setupSNP}
 }
 \examples{
-gl2sa(testset.gl)
+sa <-gl2sa(testset.gl )
 }
 \references{
 Gonz?lez, J.R., Armengol, L., Sol?, X., Guin?, E., Mercader, J.M., Estivill, X. and Moreno, V. (2017). SNPassoc: an R package to perform whole genome association studies. Bioinformatics 23:654-655.

@@ -28,13 +28,13 @@ EffectiveNumberSamplesMLE=function(FstVect, Fstbar, NumberOfSamples, SmallestFst
     sum(localNLLOneLocus(trimmedFstVect))
   }
   
-  optim(NumberOfSamples, localNLLAllData, lower=2, method="L-BFGS-B")$par
+  stats::optim(NumberOfSamples, localNLLAllData, lower=2, method="L-BFGS-B")$par
 }
 
 IncompleteGammaFunction=function(a, z) {
   #equivalence to Mathematica Gamma[a,z] according to 
   #   http://r.789695.n4.nabble.com/Incomplete-Gamma-function-td833545.html
-  pgamma(z,a,lower.tail=FALSE)*gamma(a)
+  stats::pgamma(z,a,lower.tail=FALSE)*gamma(a)
 }
 
 negLLdfFstTrim=function(Fst, dfInferred, Fstbar, LowTrimPoint, HighTrimPoint){

@@ -108,7 +108,7 @@ gl.compliance.check <- function (x, verbose=NULL) {
   if (verbose >= 2){cat("  Checking verbosity flag\n")}
   if(is.null(x@other$verbose)){
     if (verbose >= 1){cat("    Creating verbosity flag\n")}
-    x <- utils.reset.verbosity(x,value=2,verbose=0)
+    x <- gl.set.verbosity(x,value=2,verbose=0)
   } else {
     if (verbose >= 1){cat("    Verbosity flag confirmed\n")}
   }
@@ -120,7 +120,7 @@ gl.compliance.check <- function (x, verbose=NULL) {
   
   # Check that the number of values in the loc.metrics dataframe is the same as the number of loci
 
-  if (nLoc(gl)!=nrow(gl@other$loc.metrics)) { 
+  if (nLoc(x)!=nrow(x@other$loc.metrics)) { 
     cat("  The number of rows in the loc.metrics table does not match the number of loci! This is potentially a major problem if there is a mismatch of the loci with the metadata. Trace back to identify the cause.\n")  
   }
   

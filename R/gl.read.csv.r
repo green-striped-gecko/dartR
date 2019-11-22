@@ -47,11 +47,7 @@ gl.read.csv <- function(filename,
 # SET VERBOSITY
   
   if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
+    verbose <- 2
   } 
   
   if (verbose < 0 | verbose > 5){
@@ -257,7 +253,7 @@ gl.read.csv <- function(filename,
   
 # MAKE COMPLIANT
   
-  gl <- gl.compatability.check(gl, verbose=1)
+  gl <- gl.compliance.check(gl, verbose=1)
 
 # FLAG SCRIPT END
 

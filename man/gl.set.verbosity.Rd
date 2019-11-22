@@ -9,9 +9,9 @@ gl.set.verbosity(x, value = 2, verbose = NULL)
 \arguments{
 \item{x}{name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{value}{-- set the default verbosity to be this value: 0, silent only fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 
-\item{set.verbosity}{-- set the default verbosity to be: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 The genlight with the verbosity flag reset

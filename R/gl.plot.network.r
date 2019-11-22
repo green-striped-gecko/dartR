@@ -82,7 +82,7 @@ gl.plot.network <- function(D,
   
 # FUNCTION SPECIFIC ERROR CHECKING
 
-  if(class(D)!="dist") {
+  if(class(D)!="dist" & class(D)!="matrix") {
       stop("Fatal Error: distance matrix required for gl.dist.network!\n")
   }
   
@@ -134,7 +134,7 @@ gl.plot.network <- function(D,
     my_colors <- "red"
   }
   
-  q <- quantile(links$weight, p = 1-alpha)
+  q <- stats::quantile(links$weight, p = 1-alpha)
   network.FS <- igraph::delete_edges(network, igraph::E(network)[links$weight < q ])
   
   if (method=="fr"){

@@ -10,7 +10,7 @@
 #' @references Gonz?lez, J.R., Armengol, L., Sol?, X., Guin?, E., Mercader, J.M., Estivill, X. and Moreno, V. (2017). SNPassoc: an R package to perform whole genome association studies. Bioinformatics 23:654-655.
 #' @author Bernd Guber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl2sa(testset.gl)
+#' sa <-gl2sa(testset.gl )
 
 gl2sa <- function(x, verbose=NULL){
 
@@ -65,7 +65,7 @@ gl2sa <- function(x, verbose=NULL){
   if (verbose >= 2){ cat("  Writing data to SNPassoc object\n")}
   pop <- gl2gi(x)
   xxx <- pegas::as.loci(pop)[,-1]
-  sa <- SNPassoc::setupSNP(data.frame(xxx), 1:ncol(xxx))
+  sa <- SNPassoc::setupSNP(data.frame(xxx), 1:ncol(xxx), )
 
 # FLAG SCRIPT END
 

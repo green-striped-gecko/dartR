@@ -32,20 +32,11 @@
 #' @export
 #' @author Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \dontrun{
-#' gs<- gl.read.silicodart(filename="SNP_DFwt15-1908_scores_2Row.csv", ind.metafile="metadata.csv" )
-#' }
+#' silicodartfile <- system.file("extdata","testset_SilicoDArT.csv", package="dartR")
+#' metadata <- system.file("extdata",ind.metafile ="testset_metadata_silicodart.csv", package="dartR")
+#' testset.gs <- gl.read.silicodart(filename = silicodartfile, ind.metafile = metadata)
+ 
 
-# Debug
-#   datafile <- "silicodart.header.fixed.csv"
-#   topskip <- 4
-#   nmetavar <- 19
-#   ind.metafile <- "metadata.csv"
-#   nas="4"
-#
-
-#filename<- "d:/Bernd/Projects/PeterDartSilico/Report_DRaf15-1973_1_moreOrders_SilicoDArT_1.csv"
-#ind.metafile <- "d:/Bernd/Projects/PeterDartSilico/indis.csv"
 
 
 gl.read.silicodart <- function(filename, 
