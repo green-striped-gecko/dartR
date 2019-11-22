@@ -49,8 +49,8 @@ drl -- Martin, S., Brown, W.M., Klavans, R., Boyack, K.W., DrL: Distributed Recu
 colors of node symbols are those of the rainbow.
 }
 \examples{
- D <- gl.grm(testset.gl)
- gl.plot.network(D,testset.gl)
+ D <- gl.grm(bandicoot.gl)
+ gl.plot.network(D,bandicoot.gl)
 }
 \author{
 Arthur Georges (Post to https://groups.google.com/d/forum/dartr)

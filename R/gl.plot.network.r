@@ -34,8 +34,8 @@
 #'@author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 #'  
 #'@examples
-#'  D <- gl.grm(testset.gl)
-#'  gl.plot.network(D,testset.gl)
+#'  D <- gl.grm(bandicoot.gl)
+#'  gl.plot.network(D,bandicoot.gl)
 
 gl.plot.network <- function(D, 
                             x=NULL, 
