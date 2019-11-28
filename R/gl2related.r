@@ -11,12 +11,12 @@
 #' @examples
 #' gtd <- gl2related(bandicoot.gl[1:10,1:20])
 #' \dontrun{
-#' #running with the related package
+#' ##running with the related package
 #' #install.packages("related", repos="http://R-Forge.R-project.org")
 #' library(related)
 #' coan <- coancestry(gtd, wang=1) 
 #' head(coan$relatedness)
-#' #check ?coancestry for information how to use the function.
+#' ##check ?coancestry for information how to use the function.
 #' }
 #' @references Jack Pew, Jinliang Wang, Paul Muir and Tim Frasier (2014). 
 #' related: related: an R package for analyzing pairwise relatedness
