@@ -20,7 +20,7 @@ a data.frame that can be used to run with the related package
 The output txt file contains the snp data and an additional column with the names if the individual. The file then can be used and loaded into coancestry or - if installed - run with the related package. Be aware the related package was crashing in previous versions, but in general is using the same code as coancestry and therefore should have identical results. Also running coancestry with thousands of SNPs via the GUI seems to be not reliable and therefore for comparisons between coancestry and related we suggest to use the command line version of coancestry.
 }
 \examples{
-gtd <- gl.gl2related(bandicoot.gl[1:10,1:20])
+gtd <- gl2related(bandicoot.gl[1:10,1:20])
 \dontrun{
 #running with the related package
 #install.packages("related", repos="http://R-Forge.R-project.org")

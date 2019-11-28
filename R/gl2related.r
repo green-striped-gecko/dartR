@@ -9,7 +9,7 @@
 #' @export
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gtd <- gl.gl2related(bandicoot.gl[1:10,1:20])
+#' gtd <- gl2related(bandicoot.gl[1:10,1:20])
 #' \dontrun{
 #' #running with the related package
 #' #install.packages("related", repos="http://R-Forge.R-project.org")
