@@ -66,8 +66,10 @@ gl.report.bases <- function(x, plot=TRUE, verbose = NULL) {
   
     if (all(x@ploidy == 1)){
       cat("  Processing Presence/Absence (SilicoDArT) data\n")
+      datatype <- "SilicoDArT"
     } else if (all(x@ploidy == 2)){
       cat("  Processing a SNP dataset\n")
+      datatype <- "SNP"
     } else {
       stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
@@ -102,6 +104,7 @@ gl.report.bases <- function(x, plot=TRUE, verbose = NULL) {
   T <- T*100/total
   C <- C*100/total
   
+if(datatype=="SNP"){
 # Calculate the fragment lengths  
   mn <- mean(str_length(x@other$loc.metrics$TrimmedSequence))
   mx <- max(str_length(x@other$loc.metrics$TrimmedSequence))
@@ -137,6 +140,7 @@ gl.report.bases <- function(x, plot=TRUE, verbose = NULL) {
   ts <- ts*100/length(x@other$loc.metrics$TrimmedSequence)
   tv <- tv*100/length(x@other$loc.metrics$TrimmedSequence)
   ratio <- ts/tv
+}
 
 # Report
   cat(paste("  Average trimmed sequence length:",round(mn,digits=1),"(",mi,"to",mx,")"),"\n")
@@ -146,9 +150,9 @@ gl.report.bases <- function(x, plot=TRUE, verbose = NULL) {
   cat(paste("    G:",round(G,2)),"\n")
   cat(paste("    T:",round(T,2)),"\n")
   cat(paste("    C:",round(C,2)),"\n\n")
-  if (all(ploidy(x)==1)) {
+  if (datatype=="SilicoDArT"){
     if(verbose >= 2){
-      cat("  Presence Absence data (SilicoDArT), transition/transversions cannot be calculated\n")
+      cat("  Tag P/A data (SilicoDArT), transition/transversions cannot be calculated\n")
     }
     tv <- NA
     ts <- NA
@@ -159,19 +163,32 @@ gl.report.bases <- function(x, plot=TRUE, verbose = NULL) {
   }
   
   if (plot) {
-    par(mfrow = c(2, 1),pty="s")
-    df <- cbind(A,C,T,G)
-    if (all(x@ploidy==2)){
-      title <- paste0("SNP data (DArTSeq)\nBase Frequencies")
+    if (datatype=="SNP"){
+      title <- paste0("SNP: Base Frequencies")
     } else {
-      title <- paste0("Fragment P/A data (SilicoDArT)\nBase Frequencies")
+      title <- paste0("Tag P/A: Base Frequencies")
     }  
-    barplot(df, main=title, col=rainbow(1), width=c(.1,.1,.1,.1))
-    if (all(x@ploidy!=1)){
-      df <- cbind(ts,tv)
-      title <- paste("Transitions and Transversion Rates\n (ts/tv ratio =",round(ratio,2),")")
-      barplot(df, main=title, col=rainbow(1))
-    }
+    bases <- c("A","C","T","G")
+    freq <- round(c(A,C,T,G),1)
+    df <- data.frame(bases=bases,freq=freq)
+    p1 <- ggplot(data=df,aes(x=df$bases, y=df$freq)) +
+            geom_bar(stat="identity", fill="steelblue") +
+            xlab("Bases") + ylab("Frequency") +
+            ggtitle(title)
+    #p1
+    if(datatype=="SNP"){
+      bases <- c("Ts","Tv")
+      freq <- round(c(ts,tv),1)
+      df2 <- data.frame(bases=bases,freq=freq)
+      p2 <- ggplot(data=df2,aes(x=df2$bases, y=df2$freq)) +
+          geom_bar(stat="identity", fill="steelblue") +
+          xlab("Mutation Type") + ylab("Frequency") +
+          ggtitle(paste("SNP: Ts/Tv Rates [ratio =",round(ratio,2),"]"))
+      #p2
+      grid.arrange(p1, p2)
+    } else {
+      show(p1)
+    }  
   }  
   
 # Create return matrix
