@@ -1,6 +1,6 @@
 #' Checks a gl object to see if it complies with dartR expectations, and amends to comply if necessary
 #'
-#' A genelight object used by dartR has a number of requirements that allow functions within the package to operate
+#' A genlight object used by dartR has a number of requirements that allow functions within the package to operate
 #' correctly. The genlight object comprises
 #' 
 #' (a) The SNP genotypes or Tag Presence/Absence data (SilicoDArT);
@@ -89,7 +89,7 @@ gl.compliance.check <- function (x, verbose=NULL) {
     if (max(mat) %in% scores){
       if (verbose >= 1){cat("    Tag P/A data (SilicoDArT) scored 1, 0 (present or absent) confirmed\n")}
     } else {
-      if (verbose >= 1){cat("    Error: Tag P/A data (SilicoDArT) must be scored 0 for absent or 1 for present, revisit data input\n")}
+      if (verbose >= 1){cat("    Error: Tag P/A data (SilicoDArT) must be scored NA for missing, 0 for absent or 1 for present, revisit data input\n")}
     }
   }
   
@@ -116,7 +116,18 @@ gl.compliance.check <- function (x, verbose=NULL) {
   # Calculate locus metrics
   
   if (verbose >= 2){cat("  Recalculating locus metrics\n")}
-  x <- gl.recalc.metrics(x,verbose=verbose)
+  x <- gl.recalc.metrics(x,verbose=0)
+  
+  # Check for monomorphic loci
+  if (verbose >= 2){cat("  Checking for monomorphic loci\n")}
+  x2 <- gl.filter.monomorphs(x,verbose=0)
+  if(nLoc(x2)==nLoc(x)){
+    if (verbose >= 1){cat("    No monomorphic loci detected\n")}
+    x@other$loc.metrics.flags$monomorphs <- TRUE
+  } else {
+    if (verbose >= 1){cat("    Dataset containes monomorphic loci\n")}
+    x@other$loc.metrics.flags$monomorphs <- FALSE
+  }
   
   # Check that the number of values in the loc.metrics dataframe is the same as the number of loci
 
@@ -134,7 +145,7 @@ gl.compliance.check <- function (x, verbose=NULL) {
     if (verbose >= 1){cat("    Individual metrics confirmed\n")}
   }
   
-  # Check that the population variable exists, and if it does not, create it with a single population 'A'
+  # Check that the population variable exists, and if it does not, create it with a single population 'pop1'
   
   if (verbose >= 2){cat("  Checking for population assignments\n")}
   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
