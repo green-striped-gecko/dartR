@@ -19,7 +19,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return two list of sex specific loci, for XX/XY and ZZ/ZW systems.
 #' @export
-#' @author Arthur Georges, Bernd Gruber & Floriaan Devloo-Delvan (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges, Bernd Gruber & Floriaan Devloo-Delva (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' cat("does not work yet")
 #' #result <- gl.sexlinkage(testset.gl)

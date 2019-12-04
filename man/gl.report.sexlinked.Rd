@@ -42,5 +42,5 @@ cat("does not work yet")
 #result <- gl.sexlinkage(testset.gl)
 }
 \author{
-Arthur Georges, Bernd Gruber & Floriaan Devloo-Delvan (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges, Bernd Gruber & Floriaan Devloo-Delva (Post to \url{https://groups.google.com/d/forum/dartr})
 }
