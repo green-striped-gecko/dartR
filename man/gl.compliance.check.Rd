@@ -15,7 +15,7 @@ gl.compliance.check(x, verbose = NULL)
 A genlight object that conforms to the expectations of dartR
 }
 \description{
-A genelight object used by dartR has a number of requirements that allow functions within the package to operate
+A genlight object used by dartR has a number of requirements that allow functions within the package to operate
 correctly. The genlight object comprises
 }
 \details{
