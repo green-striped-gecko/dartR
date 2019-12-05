@@ -4,7 +4,8 @@
 \alias{gl2related}
 \title{Convert a genlight object to format suitable to be run with Coancestry}
 \usage{
-gl2related(x, outfile = "related.txt", outpath = tempdir())
+gl2related(x, outfile = "related.txt", outpath = tempdir(),
+  save = TRUE)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -12,6 +13,8 @@ gl2related(x, outfile = "related.txt", outpath = tempdir())
 \item{outfile}{-- file name of the output file (including extension) [default 'related.txt']}
 
 \item{outpath}{-- path where to save the output file [default tempdir()]}
+
+\item{save}{-- a switch if you want to save the file or not. This might be useful for someone who wants to use the coancestry function to calculate relatedness and not export to coancestry. See the example below. [default TRUE]}
 }
 \value{
 a data.frame that can be used to run with the related package
@@ -20,7 +23,7 @@ a data.frame that can be used to run with the related package
 The output txt file contains the snp data and an additional column with the names if the individual. The file then can be used and loaded into coancestry or - if installed - run with the related package. Be aware the related package was crashing in previous versions, but in general is using the same code as coancestry and therefore should have identical results. Also running coancestry with thousands of SNPs via the GUI seems to be not reliable and therefore for comparisons between coancestry and related we suggest to use the command line version of coancestry.
 }
 \examples{
-gtd <- gl2related(bandicoot.gl[1:10,1:20])
+gtd <- gl2related(bandicoot.gl[1:10,1:20], save=FALSE)
 \dontrun{
 ##running with the related package
 #install.packages("related", repos="http://R-Forge.R-project.org")
