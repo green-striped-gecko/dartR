@@ -40,7 +40,7 @@ gl.report.pa <- function (x, id, nmin=10, threshold=0, verbose=2) {
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

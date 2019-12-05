@@ -33,7 +33,7 @@ gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=TRUE
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

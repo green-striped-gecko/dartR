@@ -42,7 +42,7 @@ gl.plot.heatmap <- function(D, ncolors=5, labels=TRUE, labels.cex=1, values=TRUE
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
-  if(class(D)!="dist") {
+  if(!is(D,"dist")) {
     cat("  Fatal Error: distance matrix of class 'dist' required!\n"); stop("Execution terminated\n")
   }
   if (ncolors < 0){

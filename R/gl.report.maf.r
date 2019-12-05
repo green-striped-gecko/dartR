@@ -28,7 +28,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

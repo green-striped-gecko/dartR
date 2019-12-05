@@ -23,7 +23,7 @@
 gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=TRUE)
 {
   # convert genlight to genind 
-  if (class(gi)=="genlight") gi <- gl2gi(gi)
+  if (is(gi,"genlight")) gi <- gl2gi(gi)
   #library(doParallel)
   #library(adegenet)
   #library(data.table)

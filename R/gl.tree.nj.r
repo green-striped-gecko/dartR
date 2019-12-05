@@ -37,7 +37,7 @@ gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, verbos
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

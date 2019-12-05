@@ -68,7 +68,7 @@ gl.assign <- function (x, id, nmin=10, dim=NULL, alpha= 0.05, threshold=0, verbo
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

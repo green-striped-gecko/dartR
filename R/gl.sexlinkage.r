@@ -42,7 +42,7 @@ gl.sexlinkage <- function(x, t.het=0, t.hom=0, verbose=2) {
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

@@ -51,7 +51,7 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=2)
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   # Set a population if none is specified (such as if the genlight object has been generated manually)

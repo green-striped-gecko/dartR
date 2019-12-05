@@ -57,7 +57,7 @@ gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=2) {
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

@@ -84,7 +84,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     ThetaPrior = "Jeffreys",
                     verbose=2) {
 
-  if(class(gl)!="genlight") {
+  if(!is(gl, "genlight")) {
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   # Work around a bug in adegenet if genlight object is created by subsetting

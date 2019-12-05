@@ -52,7 +52,7 @@
 gl2fasta <- function(gl, method=1, outfile="output.fasta", outpath=tempdir(), probar=TRUE) {
   outfile <- file.path(outpath, outfile)
   
-  if(class(gl) != "genlight") {
+  if(!is(gl, "genlight")) {
     stop("Fatal Error: Specify a genlight object\n")
   }
   if(length(gl@other$loc.metrics$TrimmedSequence) != nLoc(gl)) {

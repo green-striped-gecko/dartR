@@ -44,7 +44,7 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

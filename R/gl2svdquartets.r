@@ -44,7 +44,7 @@ gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, ve
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

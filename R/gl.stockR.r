@@ -35,7 +35,7 @@ gl.stockR <- function (x,verbose = 2) {
   
   # STANDARD ERROR CHECKING
   
-  if (class(x) != "genlight") {
+  if (!is(x,"genlight")) {
     cat("  Fatal Error: genlight object required!\n")
     stop("Execution terminated\n")
   }

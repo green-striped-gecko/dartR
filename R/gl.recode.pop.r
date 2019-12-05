@@ -49,7 +49,7 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=2){
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

@@ -12,7 +12,7 @@ gl2demerelate <- function(gl, verbose=2) {
 
 # ERROR CHECKING
   
-  if(class(gl)!="genlight") {
+  if(!is(gl, "genlight")) {
     cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

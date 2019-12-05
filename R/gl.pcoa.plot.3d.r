@@ -23,6 +23,7 @@
 #' @return NULL, plots an interactive 3D plot of the ordination in a separate window
 #' @export
 #' @importFrom pca3d pca3d
+#' @importFrom methods is
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' library(rgl)  #needed for the example
@@ -51,7 +52,7 @@ gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  sh
 
 # STANDARD ERROR CHECKING
   
-  if(class(gl)!="genlight") {
+  if(!is(gl,"genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

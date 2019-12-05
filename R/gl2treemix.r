@@ -36,7 +36,7 @@ gl2treemix <- function(x, outfile="treemix_input.gz", outpath=tempdir(), verbose
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

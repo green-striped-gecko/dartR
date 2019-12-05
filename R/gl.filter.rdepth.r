@@ -33,7 +33,7 @@ gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=2) {
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   

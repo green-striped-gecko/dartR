@@ -17,7 +17,7 @@
 gl.hwe.pop <- function(gi, pvalue=0.05, plot=TRUE)
 {
 # convert genlight to genind 
-  if (class(gi)=="genlight") gi <- gl2gi(gi)
+  if (is(gi,"genlight")) gi <- gl2gi(gi)
   
   
 #  library(SNPassoc)   #package for LD and Hardy Weinberg...

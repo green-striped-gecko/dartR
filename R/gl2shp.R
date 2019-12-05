@@ -36,7 +36,7 @@ gl2shp <- function(x, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS8
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

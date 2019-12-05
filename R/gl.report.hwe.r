@@ -50,7 +50,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

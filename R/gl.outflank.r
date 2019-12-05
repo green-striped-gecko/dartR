@@ -27,7 +27,7 @@
 gl.outflank <- function(gi, plot=TRUE, LeftTrimFraction=0.05, RightTrimFraction=0.05, Hmin=0.1, qthreshold=0.05, ... )
 {
 # convert genlight to genind 
-if (class(gi)=="genlight") gi <- gl2gi(gi)
+if (is(gi,"genlight")) gi <- gl2gi(gi)
   
 # missing value is 9!!! tempted to rewrite their model to be able to use genlight directly....
   snpmat <- as.matrix(gi)#(matrix(NA, nrow=nind, ncol=nsnp)

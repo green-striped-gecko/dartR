@@ -39,7 +39,7 @@ gl2gds <- function(x, outfile="gl2gds.gds", outpath=tempdir(), verbose=2) {
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

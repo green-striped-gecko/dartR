@@ -24,7 +24,7 @@ gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, verbose
     cat("Starting gl.utils.fdsim: Using simulation to estimate frequency of false positives\n")
   }
   # Determine data type
-  if(!(class(gl)=="genlight")){
+  if(!(is(gl, "genlight"))){
     cat("Fatal Error: Input data must be a genlight object\n")
     stop("Execution terminated\n")
   }

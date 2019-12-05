@@ -59,7 +59,7 @@ gl.edit.recode.ind <- function(x, ind.recode=NULL, recalc=TRUE, mono.rm=TRUE, ve
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

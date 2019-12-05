@@ -34,7 +34,7 @@ gl.filter.repavg <- function(x, threshold=0.99, verbose=2) {
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
@@ -57,7 +57,7 @@ gl.filter.repavg <- function(x, threshold=0.99, verbose=2) {
   n0 <- nLoc(x)
   if (verbose > 2) {cat("  Initial no. of loci =", n0, "\n")}
 
-  if(class(x)=="genlight") {
+  if(is(x, "genlight")) {
     # Remove SNP loci with RepAvg < threshold
     if (verbose > 1){cat("    Removing loci with RepAvg <",threshold,"\n")}
     x2 <- x[, x@other$loc.metrics["RepAvg"]>=threshold]
@@ -65,7 +65,7 @@ gl.filter.repavg <- function(x, threshold=0.99, verbose=2) {
     x2@other$loc.metrics <- x@other$loc.metrics[x@other$loc.metrics["RepAvg"]>=threshold,]
     if (verbose > 2) {cat ("  No. of loci deleted =", (n0-nLoc(x2)),"\n")}
     
-  } else if (class(x)=="genind") {
+  } else if (is(x,"genind")) {
     x2 <- x[,(colSums(is.na(tab((x))))/nInd(x))<(1-threshold)]
     idx <- which((colSums(is.na(tab((x))))/nInd(x))<(1-threshold))
     x2@other$loc.metrics <- x@other$loc.metrics[c(idx),]

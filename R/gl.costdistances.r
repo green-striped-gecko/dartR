@@ -11,7 +11,7 @@
 
 gl.costdistances <- function(landscape, locs, method, NN)
 {
-  if (class(locs)=="genlight")
+  if (is(locs,"genlight"))
   {
     if (is.null(locs@other$latlong)) stop("no locations were provided in the genlight object [@other$latlong].\n")
     if (is.null(pop(locs))) 

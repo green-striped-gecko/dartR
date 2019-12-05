@@ -40,7 +40,7 @@
 
 gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, node.label.size=0.7, node.label.color="black", alpha=0.004, title="Network based on G-matrix of genetic relatedness", verbose=3){
 
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("Fatal Error: genlight object required for gl.drop.pop.r!\n"); stop("Execution terminated\n")
   }
   if (!(method=="fr" || method=="kk" || method=="drl")) {

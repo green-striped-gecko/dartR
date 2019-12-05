@@ -43,7 +43,7 @@
 gl.pcoa.plot <- function(glPca, data, scale=FALSE, ellipse=FALSE, p=0.95, labels="pop", hadjust=1.5, 
                          vadjust=1, xaxis=1, yaxis=2) {
 
-  if(class(glPca)!="glPca" | class(data)!="genlight") {
+  if(!is(glPca,"glPca") | !is(data,"genlight")) {
     cat("Fatal Error: glPca and genlight objects required for glPca and data parameters respectively!\n"); stop()
   }
   

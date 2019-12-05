@@ -35,7 +35,7 @@ gl.ibd <- function(gl=NULL, Dgen=NULL, Dgeo=NULL, projected=FALSE, permutations=
 if (!is.null(Dgen) & !is.null(Dgeo)) cat("Analysis performed on provided genetic and Euclidean distance matrices.")
 
 
-if (class(gl)=="genlight") 
+if (is(gl, "genlight")) 
 {
   cat("Standard analysis performed on the genlight object. Mantel test and plot will be Fst/1-Fst versus log(distance)\n")
 if (nrow(gl@other$latlong)!=nInd(gl)) stop("Cannot find coordinates for each individual in slot @other$latlong")

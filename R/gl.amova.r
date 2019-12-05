@@ -13,7 +13,7 @@ gl.amova <- function(x, permutations=100)
   #### had to include stamppAnova (because amova function is masked by ade4)
   stamppAmova2 <-  function (dist.mat, geno, perm = 100)   
   {
-    if (class(geno) == "genlight") {
+    if (is(geno,"genlight")) {
       geno2 <- geno
       geno <- as.matrix(geno2)
       sample <- row.names(geno)

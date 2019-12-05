@@ -57,12 +57,12 @@ gl.plot.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALS
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
-  if(class(D)!="dist") {
+  if(!is(D,"dist")) {
       cat("Fatal Error: distance matrix required for gl.dist.network!\n"); stop("Execution terminated\n")
   }
   
   if (!is.null(x)){
-    if(class(x)!="genlight") {
+    if(!is(x, "genlight")) {
       cat("Fatal Error: if specified, genlight object required for gl.dist.network!\n"); stop("Execution terminated\n")
     }
   } else {

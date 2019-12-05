@@ -44,7 +44,7 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 

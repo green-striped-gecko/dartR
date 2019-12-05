@@ -40,7 +40,7 @@ gl.reassign.pop <- function (x, as.pop, verbose = 2) {
   
   # STANDARD ERROR CHECKING
   
-  if (class(x) != "genlight") {
+  if (!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n")
     stop("Execution terminated\n")
   }

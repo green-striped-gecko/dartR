@@ -69,7 +69,7 @@ gl.fixed.diff <- function(x, tloc=0, test=FALSE, delta=0.02, reps=1000, mono.rm=
   
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
   

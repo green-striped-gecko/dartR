@@ -38,7 +38,7 @@ gl2phylip <- function(x, outfile="phyinput.txt", outpath=tempdir(), bstrap=1, ve
 
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(!is(x, "genlight")) {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
