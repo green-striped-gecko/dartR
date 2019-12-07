@@ -181,9 +181,9 @@ if (!is.null(ind.metafile)){
 
  if (is.na(pop.col)) {
    if (verbose >= 1){
-     cat ("Warning: There is no pop column, created one with all NAs\n")
+     cat ("Warning: There is no pop column, created one with all pop1 as default for all individuals\n")
    }
-   pop(out) <- array(NA,nInd(gl))
+   pop(gout) <- factor(rep("pop1",nInd(gout)))
  }  else {
     pop(gout) <- as.factor(ind.cov[ord,pop.col])
     if (verbose >= 2){
