@@ -34,7 +34,7 @@ gl.read.dart <- function(filename,
   
 # TRAP COMMAND, SET VERSION
 
-  funname <- match.call()[[1]]
+  funname <- as.character(match.call()[[1]])
   build <- "Jacob"
   
 # SET VERBOSITY
@@ -48,7 +48,7 @@ gl.read.dart <- function(filename,
     verbose <- 2
   }
   
-  if(verbose == 0 & probar){
+  if(verbose == 0){
     probar=FALSE
     #cat("  Note: Progress bar set to FALSE for verbosity==0\n")
   }
@@ -57,9 +57,9 @@ gl.read.dart <- function(filename,
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
+      cat(paste("Starting",funname,"[ Build =",build,"]\n"))
     } else {
-      cat("Starting",funname,"\n")
+      cat(paste("Starting",funname,"\n"))
     }
   }
   

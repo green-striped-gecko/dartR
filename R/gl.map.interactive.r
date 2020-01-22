@@ -21,6 +21,20 @@
 gl.map.interactive <- function(x, matrix=NULL, standard=TRUE,symmetric=TRUE, ind.circles=TRUE, pop.labels=TRUE, pop.labels.cex=12,  provider="Esri.NatGeoWorldMap")
 {
 
+  
+if (!is(x, "genlight"))   stop("Not a valid genlight object provided!!!")
+
+
+if (is.null(x@other$latlong)) stop("No valid coordinates are supplied at gl@other$latlong")
+
+if (sum(colnames(x@other$latlong) %in% c("lat","lon"))!=2) stop("Coordinates under gl@other$latlong are not named 'lat' and 'lon'.")
+  
+  
+if (!is.null(matrix))
+{
+if (nrow(matrix) != nInd(x) & nrow(matrix)!= nPop(x)) stop("The dimension of the provided matrix does neither match the number of individuals nor the number of populations.")
+}
+  
 cols <- rainbow(nPop(x))
 cols <- substr(cols, 1,7)
 df <- x@other$latlong

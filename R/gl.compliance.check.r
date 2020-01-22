@@ -156,6 +156,18 @@ gl.compliance.check <- function (x, verbose=NULL) {
     if (verbose >= 1){cat("  Population assignments confirmed\n")}
   }
   
+  #check if coordinates are in the right place and not mispelt 
+  if (!is.null(x@other$latlon)) x@other$latlong <- x@other$latlon
+  
+  if (!is.null(x@other$latlong)) { 
+    if (!is.null(x@other$latlong$long)) x@other$latlong$lon <- x@other$latlong$long
+    }
+  #remove misspelt columns if they exist...
+  x@other$latlon <- NULL
+  x@other$latlong$long <- NULL
+  if (verbose>=2) cat("Spelling of coordinates checked and changed if necessary\n")
+  
+  
   # ADD TO HISTORY
   nh <- length(x@other$history)
   x@other$history[[nh + 1]] <- match.call()  

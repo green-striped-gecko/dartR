@@ -5,11 +5,12 @@
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- file name of the output file (including extension) [default 'related.txt']
 #' @param outpath -- path where to save the output file [default tempdir()]
+#' @param save -- a switch if you want to save the file or not. This might be useful for someone who wants to use the coancestry function to calculate relatedness and not export to coancestry. See the example below. [default TRUE]
 #' @return a data.frame that can be used to run with the related package
 #' @export
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gtd <- gl2related(bandicoot.gl[1:10,1:20])
+#' gtd <- gl2related(bandicoot.gl[1:10,1:20], save=FALSE)
 #' \dontrun{
 #' ##running with the related package
 #' #install.packages("related", repos="http://R-Forge.R-project.org")
@@ -27,7 +28,7 @@
 
 
 
-gl2related <- function(x, outfile="related.txt", outpath=tempdir())
+gl2related <- function(x, outfile="related.txt", outpath=tempdir(), save=TRUE)
 {
 gd <- as.matrix(x)
 
@@ -46,7 +47,7 @@ gtd$V1 <- as.character(gtd$V1)
 
 fn <- file.path(outpath, outfile)
 #export as file
-write.table(gtd, file = fn, sep = "\t",col.names = F, row.names = F)
+if (save) write.table(gtd, file = fn, sep = "\t",col.names = F, row.names = F)
 
 return(gtd)
 
