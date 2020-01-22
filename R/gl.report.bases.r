@@ -17,6 +17,7 @@
 #' @return returns a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
 #' @export
 #' @import stringr
+#' @importFrom gridExtra grid.arrange
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # SNP data
