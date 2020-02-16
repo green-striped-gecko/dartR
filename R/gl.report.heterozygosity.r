@@ -39,6 +39,7 @@
 #' @param x -- a genlight object containing the SNP genotypes [Required]
 #' @param method -- calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']
 #' @param n.invariant -- an estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
+#' @param plot -- if TRUE, plots barcharts of observed and expected heterozygosity for populations [TRUE]
 #' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 #' plots a boxplot adjusted for skewed distributions [default 'adjusted']
 #' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
@@ -58,6 +59,7 @@
 gl.report.heterozygosity <- function(x, 
                                      method="pop", 
                                      n.invariant=0,
+                                     plot=TRUE,
                                      boxplot="adjusted",
                                      range=1.5,
                                      cex.labels=0.7,
@@ -81,6 +83,9 @@ gl.report.heterozygosity <- function(x,
   if (verbose < 0 | verbose > 5){
     cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
+  }
+  if (verbose == 0){
+    plot <- FALSE
   }
   
 # FLAG SCRIPT START
@@ -159,15 +164,12 @@ gl.report.heterozygosity <- function(x,
   # Calculate the number of loci used
   
   nl <- unlist(lapply(sgl, function(x) sum(colSums(is.na(as.matrix(x)))==0)))
+  
   # Apply correction
   Ho.adj <- Ho*nLoc(x)/(nLoc(x)+n.invariant)
   
   # Calculate sample sizes =Number of individuals
-  
-  
-  
-  
-  
+
   sums <- data.frame(lapply(sgl, function(x) mean(colSums(as.matrix(x)==1, na.rm=TRUE), na.rm=TRUE)))
   n <- t(sums/Ho)
   n <- cbind(row.names(n),n,nl,nLoc(x)/(nLoc(x)+n.invariant))
@@ -210,7 +212,8 @@ gl.report.heterozygosity <- function(x,
                    )
   names(df) <- c("pop","nInd","nLoc","nLoc.inv","Ho","Ho.adj","He","He.adj")
   
-  op <- par(mfrow=c(2,1),mai=c(1,1,1,0),pty="m")
+  if (plot){
+    op <- par(mfrow=c(2,1),mai=c(1,1,1,0),pty="m")
   if(is.null(n.invariant)){
     df.ordered <- df[order(df$Ho),]
     barplot(df.ordered$Ho, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
@@ -225,6 +228,7 @@ gl.report.heterozygosity <- function(x,
     df.ordered <- df[order(df$He.adj),]
     barplot(df.ordered$He.adj, names.arg=paste(df.ordered$pop, df.ordered$nInd, sep=" | "), las=2, cex.names=cex.labels, space=0, border=F, col=rainbow(nrow(df.ordered)), 
           main="Expected Heterozygosity by Population")
+  }
   }
   
 # OUTPUT REPORT
@@ -317,6 +321,7 @@ gl.report.heterozygosity <- function(x,
     names(df)<- c("ind.name", "Ho", "f.hom.ref", "f.hom.alt")
     
     # Prepare for plotting
+    if (plot) {
     # Save the prior settings for mfrow, oma, mai and pty, and reassign
     op <- par(mfrow = c(2, 1),  mai=c(0.5,0.5,0.5,0.5),pty="m")
     # Set margins for first plot
@@ -352,7 +357,9 @@ gl.report.heterozygosity <- function(x,
     #par(mai=c(0.5,0.5,0,0.5))  
     # Plot Histogram
       hist(c.hets, col='red', main=NULL, breaks=100)
-      
+     
+  } # end if (plot)
+  
     # OUTPUT REPORT
       if (verbose >= 3){
         cat("Reporting Heterozygosity by Individual\n")
@@ -373,7 +380,7 @@ gl.report.heterozygosity <- function(x,
   }  
 
   # Reset the par options    
-    par(op)  
+    if(verbose >= 1){par(op)}
     
 # FLAG SCRIPT END
 
