@@ -78,14 +78,23 @@ utils.reset.flags <- function(x, set=FALSE, value=2, verbose=NULL) {
   }
   
 # DO THE JOB
-  
+  ##################################   
   if (data.type=="SNP"){
     if(verbose >= 2){
       cat("  Resetting flags for AvgPIC, OneRatioRef, OneRatioSnp, PICRef, PICSnp, CallRate, maf, FreqHets, FreqHomRef, FreqHomSnp, monomorphs, OneRatio, PIC to",set,"\n")
       cat("  Resetting SilicoDArT flags for OneRatio, PIC to FALSE\n")
     }
     
-  #AvgPIC
+    # Check if the x@other$loc.metrics slot exists, if not, create as a dataframe
+    if (is.null(x@other$loc.metrics)) {
+      x@other$loc.metrics <- as.data.frame(array(NA,nLoc(x)))
+    }  
+    # Check if the x@other$loc.metrics.flags slot exists, if not, create as a dataframe
+    if (is.null(x@other$loc.metrics.flags)) {
+      x@other$loc.metrics.flags <- as.data.frame(array(NA,1))
+    }
+    
+    #AvgPIC
     if (is.null(x@other$loc.metrics$AvgPIC)) {
       x@other$loc.metrics$AvgPIC <- array(NA,nLoc(x))
       if (verbose >= 3){
@@ -202,6 +211,15 @@ utils.reset.flags <- function(x, set=FALSE, value=2, verbose=NULL) {
     }
     x@other$loc.metrics.flags$PIC <- FALSE
     
+  #monomorphs
+    # if (is.null(x@other$loc.metrics$monomorphs)) {
+    #   x@other$loc.metrics$monomorphs <- array(NA,nLoc(x))
+    #   if (verbose >= 3){
+    #     cat("  Locus metric monomorphs does not exist, creating slot @other$loc.metrics$monomorphs\n")
+    #   }
+    # }
+    x@other$loc.metrics.flags$monomorphs <- set
+    
   #verbosity
     if (is.null(x@other$verbose)) {
       x@other$verbose <- 2
@@ -210,11 +228,20 @@ utils.reset.flags <- function(x, set=FALSE, value=2, verbose=NULL) {
       }
     }
   }
-  
+ ################################## 
   if (data.type=="SilicoDArT"){
     if(verbose >= 2){
       cat("  Resetting flags for CallRate, PIC, OneRatio, monomorphs to",set,"\n")
       cat("  Setting SNP flags for AvgPIC, OneRatioRef, OneRatioSnp, PICRef, PICSnp, maf, FreqHets, FreqHomRef, FreqHomSnp to FALSE\n")
+    }
+    
+    # Check if the x@other$loc.metrics slot exists, if not, create as a dataframe
+    if (is.null(x@other$loc.metrics)) {
+      x@other$loc.metrics <- as.data.frame(array(NA,nLoc(x)))
+    }  
+    # Check if the x@other$loc.metrics.flags slot exists, if not, create as a dataframe
+    if (is.null(x@other$loc.metrics.flags)) {
+      x@other$loc.metrics.flags <- as.data.frame(array(NA,1))
     }
     
     #AvgPIC
@@ -299,12 +326,12 @@ utils.reset.flags <- function(x, set=FALSE, value=2, verbose=NULL) {
     x@other$loc.metrics.flags$FreqHets <- FALSE
     
     #monomorphs
-    if (is.null(x@other$loc.metrics$monomorphs)) {
-      x@other$loc.metrics$monomorphs <- array(NA,nLoc(x))
-      if (verbose >= 3){
-        cat("  Locus metric monomorphs does not exist, creating slot @other$loc.metrics$monomorphs\n")
-      }
-    }
+    # if (is.null(x@other$loc.metrics$monomorphs)) {
+    #   x@other$loc.metrics$monomorphs <- array(NA,nLoc(x))
+    #   if (verbose >= 3){
+    #     cat("  Locus metric monomorphs does not exist, creating slot @other$loc.metrics$monomorphs\n")
+    #   }
+    # }
     x@other$loc.metrics.flags$monomorphs <- set
     
     #maf

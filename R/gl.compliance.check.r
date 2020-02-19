@@ -93,26 +93,13 @@ gl.compliance.check <- function (x, verbose=NULL) {
     }
   }
   
+  # Check for the locus metrics, and create if they do not exist.
   # Check for the locus metrics flags, and create if they do not exist.
+  # Check for the verbosity flag, and create if it does not exist.
   
-  if (verbose >= 2){cat("  Checking locus metrics flags\n")}
-  if(is.null(x@other$loc.metrics.flags)){
-    if (verbose >= 1){cat("    Creating locus metrics flags\n")}
+  if (verbose >= 2){cat("  Checking locus metrics and flags\n")}
     x <- utils.reset.flags(x,set=FALSE,verbose=0)
-  } else {
-    if (verbose >= 1){cat("    Locus metrics flags confirmed\n")}
-  }
-  
-  # Check that the verbosity flag exists, and if not, create it
-  
-  if (verbose >= 2){cat("  Checking verbosity flag\n")}
-  if(is.null(x@other$verbose)){
-    if (verbose >= 1){cat("    Creating verbosity flag\n")}
-    x <- gl.set.verbosity(x,value=2,verbose=0)
-  } else {
-    if (verbose >= 1){cat("    Verbosity flag confirmed\n")}
-  }
-  
+
   # Calculate locus metrics
   
   if (verbose >= 2){cat("  Recalculating locus metrics\n")}
