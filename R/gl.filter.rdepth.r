@@ -62,7 +62,7 @@ gl.filter.rdepth <- function(x, lower=5, upper=50, verbose=NULL) {
   if (all(x@ploidy == 1)){
     cat("  Processing Presence/Absence (SilicoDArT) data\n")
   } else if (all(x@ploidy == 2)){
-    cat("  Processing a SNP dataset\n")
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
   } else {
     stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
   }
