@@ -128,7 +128,7 @@ gl.read.silicodart <- function(filename,
   covmetrics <-  snpraw[,stdmetricscols]
   
   nind <- ncol(datas)
-  #nsnp <- nrow(covmetrics)/nrows
+  nsnp <- nrow(covmetrics)/nrows
   
   if (verbose >= 2){cat(paste("Recognised:", nind, "individuals and",nsnp,"Sequence Tags using", filename,"\n"))}
  
