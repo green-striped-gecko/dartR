@@ -83,9 +83,10 @@ gl.filter.monomorphs <- function (x, verbose=NULL) {
   
   # Tag presence/absence data
   if (data.type=="SilicoDArT"){
+    nL <- nLoc(x)
     matrix <- as.matrix(x)
     l.names <- locNames(x)
-    for (i in 1:nLoc(x)){
+    for (i in 1:nL){
       row <- matrix[,i] # Row for each locus
       if (all(row == 0, na.rm=TRUE) | all(row == 1, na.rm=TRUE) | all(is.na(row))){
         loc.list[i] <- l.names[i]
@@ -98,12 +99,13 @@ gl.filter.monomorphs <- function (x, verbose=NULL) {
   
   # SNP data
   if (data.type=="SNP"){
+    nL <- nLoc(x)
     matrix <- as.matrix(x)
-    l.names <- locNames(x)
-    for (i in 1:nLoc(x)){
+    lN <- locNames(x)
+    for (i in 1:nL){
       row <- matrix[,i] # Row for each locus
       if (all(row == 0, na.rm=TRUE) | all(row == 2, na.rm=TRUE) | all(is.na(row))){
-        loc.list[i] <- l.names[i]
+        loc.list[i] <- lN[i]
         if (all(is.na(row))){
           na.counter = na.counter + 1
         }
