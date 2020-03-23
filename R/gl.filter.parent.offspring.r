@@ -1,6 +1,7 @@
-#' Identify putative parent offspring within a population
+#' Filter putative parent offspring within a population
 #'
-#' This script examines the frequency of pedigree inconsistent loci, that is,
+#' This script removes individuals suspected of being related as parent-offspring.
+#' It examines the frequency of pedigree inconsistent loci, that is,
 #' those loci that are homozygotes in the parent for the reference allele, and
 #' homozygous in the offspring for the alternate allele. This condition is not
 #' consistent with any pedigree, regardless of the (unkonwn) genotype of the other
@@ -29,23 +30,25 @@
 #' many sibs. Note also that if an individual has been genotyped twice in the dataset, 
 #' the replicate pair will be assessed by this script as being in a parent-offspring 
 #' relationship.
+#' 
+#' You should run gl.report.parent.offspring() before filtering. Use this report to 
+#' decide min.rdepth and min.reproducibility and assess impact on your dataset.
 #'
 #' @param x Name of the genlight object containing the SNP genotypes [required]
 #' @param -- min.rdepth Minimum read depth to include in analysis [default = 12]
 #' @param -- min.reproducibility Minimum reproducibility to include in analysis [default = 1]
-#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
-#' plots a boxplot adjusted for skewed distributions [default 'standard']
-#' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
+#' @param range -- specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]
+#' @param rm.monomorphs -- if TRUE, remove monomorphic loci after filtering individuals [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A set of individuals in parent-offspring relationship
 #' @export
-#' @rawNamespace import(ggplot2, except = empty)
+# @rawNamespace import(ggplot2, except = empty)
 
-gl.report.parent.offspring <- function(x,
+gl.filter.parent.offspring <- function(x,
                                        min.rdepth=12,
                                        min.reproducibility=1,
-                                       boxplot="standard",
                                        range=1.5,
+                                       rm.monomorphs=FALSE,
                                        verbose=NULL) {
   
 # TRAP COMMAND, SET VERSION
@@ -96,12 +99,15 @@ gl.report.parent.offspring <- function(x,
   
 # DO THE JOB
   
+# Hold the genlight object
+  hold <- x
+  
 # Generate null expectation for pedigree inconsistency, and outliers
   if (verbose >= 2){
     cat("  Generating null expectation for distribution of counts of pedigree incompatability\n")
   } 
   # Assign individuals as populations
-  x <- gl.reassign.pop(x,as.pop="id")
+  x <- gl.reassign.pop(x,as.pop="id",v=0)
   # Filter stringently on reproducibility to minimize miscalls
   x <- gl.filter.reproducibility(x,threshold=min.repr,v=0)
   # Filter stringently on read depth, to further minimize miscalls
@@ -131,7 +137,7 @@ gl.report.parent.offspring <- function(x,
   # Prepare for plotting
   
   if (verbose >= 2){
-    cat(  "Identifying outliers with lower than expected counts of pedigree inconsistencies\n")
+    cat(  "  Identifying outliers with lower than expected counts of pedigree inconsistencies\n")
   }
     title <- paste0("SNP data (DArTSeq)\nCounts of pedigree incompatable loci per pair")
   # Save the prior settings for mfrow, oma, mai and pty, and reassign
@@ -140,35 +146,18 @@ gl.report.parent.offspring <- function(x,
     par(mai=c(1,0.5,0.5,0.5))
 
   # Plot Box-Whisker plot
-  if (boxplot == "standard"){
+    if (verbose >= 2) {cat("  Standard boxplot, no adjustment for skewness\n")} 
     whisker <- boxplot(counts, horizontal=TRUE, col='steelblue', range=range, main = title)
     lower.extremes <- whisker$out[whisker$out < median(counts)]
     if (length(lower.extremes)==0){
-      cat("  Standard boxplot, no adjustment for skewness\n")
       outliers <- NULL
     } else {
       outliers <- data.frame(Outlier=lower.extremes)
-      cat("  Standard boxplot, no adjustment for skewness\n")
     }
-  } else {
-  whisker <- robustbase::adjbox(counts,
-                                horizontal = TRUE,
-                                col='steelblue',
-                                range=range,
-                                main = title)
-  lower.extremes <- whisker$out[whisker$out < median(counts)]
-  if (length(lower.extremes)==0){
-    cat("  Boxplot adjusted to account for skewness\n")
-    outliers <- NULL
-  } else {
-    outliers <- data.frame(Outlier=lower.extremes)
-    cat("  Boxplot adjusted to account for skewness\n")
-  }
-  }  
-  
+
 # Ascertain the identity of the pairs
   if (verbose >= 2){
-      cat(  "Identifying outlying pairs\n")
+      cat(  "  Identifying outlying pairs\n")
   }
   tmp <- count
   tmp[lower.tri(tmp)] = t(tmp)[lower.tri(tmp)]
@@ -183,10 +172,17 @@ gl.report.parent.offspring <- function(x,
     outliers$p[i] <- round(pnorm(mean=mean(count,na.rm=TRUE),sd=sd(count,na.rm=TRUE),q=outliers$zscore[i]),4)
   }
   
+# Extract the quantile threshold
+  iqr <- IQR(counts,na.rm = TRUE)
+  qth <- quantile(counts,0.25,na.rm=TRUE)
+  cutoff <- qth - iqr*range
+
 # Set margins for second plot
-par(mai=c(0.5,0.5,0,0.5))  
+  par(mai=c(0.5,0.5,0,0.5)) 
+  
 # Plot Histogram
-hist(counts, xlab="No. Pedigree Incompatable", col='steelblue',breaks=100, main=NULL)
+   hist(counts, xlab="No. Pedigree Incompatable", col='steelblue',breaks=100, main=NULL)
+   abline(v=cutoff, col="red")
 
 # Output the outlier loci 
 if (length(whisker$out)==0){
@@ -194,8 +190,9 @@ if (length(whisker$out)==0){
     cat("  No outliers detected\n")
   }
 } else {  
+  outliers <- outliers[order(outliers$Outlier),]
   if (verbose >= 3){
-    cat("  Outliers detected -- \n")
+    #cat("  Outliers detected -- \n")
     print(outliers)
   }  
 }
@@ -203,12 +200,19 @@ if (length(whisker$out)==0){
 # Reset the par options    
   par(op)  
   
+# Remove the outliers
+  
+  hold <- gl.drop.ind(hold,ind.list = unique(outliers$ind1),v=5)
+  if (rm.monomorphs==TRUE){
+    hold <- gl.filter.monomorphs(hold)
+  }
+  
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
 
-  return(outliers)
+  return(x)
 
 }
