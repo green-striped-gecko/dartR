@@ -109,11 +109,12 @@ gl.read.silicodart <- function(filename,
   
   ind.names <- colnames(snpraw)[(lmet+1):ncol(snpraw) ]
   ind.names <- trimws(ind.names, which = "both") #trim for spaces
-  if (length(ind.names)!= length(unique(ind.names))) {
+  if (length(ind.names) != length(unique(ind.names))) {
     cat("The following labels for individuals are not unique:\n")
-    cat(ind.names[table(ind.names)>1])
+    cat(ind.names[duplicated(ind.names)])
     cat("\n")
-    stop("Fatal Error: Individual names are not unique. You need to edit your input file!\n")
+    cat("Warning: Individual names are not unique. Rendering locus names unique with sequential suffix _1, _2 for duplicates.\n")
+    ind.names <- make.unique(ind.names)
   }  
   
   datas <- snpraw[, (lmet+1):ncol(snpraw)]
@@ -121,7 +122,7 @@ gl.read.silicodart <- function(filename,
   stdmetricscols <- 1:lmet
   
   if (verbose >= 2){ 
-    cat ("Added the following covmetrics:\n")
+    cat ("Added the following locus metrics:\n")
     cat (paste(paste(names(snpraw)[stdmetricscols], collapse=" "),".\n"))
   }  
   covmetrics <-  snpraw[,stdmetricscols]
@@ -129,7 +130,7 @@ gl.read.silicodart <- function(filename,
   nind <- ncol(datas)
   nsnp <- nrow(covmetrics)/nrows
   
-  if (verbose >= 2){cat(paste("Recognised:", nind, "individuals and",nsnp," SNPs in a",nrows,"row format using", filename,"\n"))}
+  if (verbose >= 2){cat(paste("Recognised:", nind, "individuals and",nsnp,"Sequence Tags using", filename,"\n"))}
  
  
   if(max(datas,na.rm=TRUE)!=1 || min(datas,na.rm=TRUE)!=0) {
