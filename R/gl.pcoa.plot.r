@@ -24,6 +24,7 @@
 #' @param ellipse Flag to indicate whether or not to display ellipses to encapsulate points for each population [default FALSE]
 #' @param p Value of the percentile for the ellipse to encapsulate points for each population [default 0.95]
 #' @param labels Flag to specify the labels are to be added to the plot. ["none"|"ind"|"pop"|"interactive"|"legend", default = "pop"]
+#' @param as.pop -- assign another metric to represent populations for the plot [default NULL]
 #' @param hadjust Horizontal adjustment of label position [default 1.5]
 #' @param vadjust Vertical adjustment of label position [default 1]
 #' @param xaxis Identify the x axis from those available in the ordination (xaxis <= nfactors)
@@ -58,7 +59,8 @@ gl.pcoa.plot <- function(glPca,
                          scale=FALSE, 
                          ellipse=FALSE, 
                          p=0.95, 
-                         labels="pop", 
+                         labels="pop",
+                         as.pop=NULL,
                          hadjust=1.5, 
                          vadjust=1, 
                          xaxis=1, 
@@ -127,6 +129,17 @@ gl.pcoa.plot <- function(glPca,
   if (xaxis < 1 | xaxis > ncol(glPca$scores)){
     cat("  Warning: Y-axis must be specified to lie between 1 and the number of retained dimensions of the ordination",ncol(glPca$scores),"; set to 2\n")
     yaxis <- 2
+  }
+  
+  # Assign the new population list if as.pop is specified
+  pop.hold <- pop(x)
+  if (!is.null(as.pop)){    
+    if(as.pop %in% names(x@other$ind.metrics)){
+      pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
+      if (verbose >= 2) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
+    } else {
+      stop("Fatal Error: individual metric assigned to 'pop' does not exist. Check names(gl@other$loc.metrics) and select again\n")
+    }
   }
   
 # DO THE JOB
@@ -308,6 +321,13 @@ gl.pcoa.plot <- function(glPca,
       if(verbose >= 2){cat("  While waiting, returning dataframe with coordinates of points in the ordinated space\n")}
       df <- data.frame(id=indNames(x), pop=popNames(x), glPca$scores)
       row.names(df) <- NULL
+    }
+    
+    # Reassign the initial population list if as.pop is specified
+    
+    if (!is.null(as.pop)){
+      pop(x) <- pop.hold
+      if (verbose >= 3) {cat("  Resetting population assignments to initial state\n")}
     }
     
     if (verbose >= 1) {
