@@ -99,6 +99,9 @@
       }  
         x <- utils.recalc.callrate(x,verbose=0)
     }
+   
+  # Suppress plotting on verbose == 0
+   if(verbose==0){plot=FALSE}
   
 # FUNCTION SPECIFIC ERROR CHECKING
 
