@@ -81,7 +81,8 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
   # Population labels assigned?
   if(is.null(as.pop)){
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-        stop("Fatal Error: Population assignments not detected, run gl.compliance.check() and revisit population assignments\n")
+        cat("Fatal Error: Population assignments not detected, running compliance check\n")
+        x <- gl.compliance.check(x,v=0)
     }
   }
     
@@ -123,6 +124,9 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     x2 <- x[!x$pop%in%pop.list]
     pop.hold <- pop.hold[!x$pop%in%pop.list]
     x <- x2
+    
+  # Monomorphic loci may have been created
+    x@other$loc.metrics.flags$monomorphs == FALSE
     
   # Remove monomorphic loci
     if(mono.rm){

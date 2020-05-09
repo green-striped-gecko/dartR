@@ -93,7 +93,8 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
       pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
       if (verbose >= 2) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
     } else {
-      stop("Fatal Error: individual metric assigned to 'pop' does not exist. Check names(gl@other$loc.metrics) and select again\n")
+      cat("Warning: individual metric assigned to 'pop' does not exist. Running compliance check\n")
+      x <- gl.compliance.check(x,v=0)
     }
   }
 
@@ -123,6 +124,9 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     x2 <- x[x$pop%in%pop.list]
     pop.hold <- pop.hold[x$pop%in%pop.list]
     x <- x2
+    
+  # Monomorphic loci may have been created
+    x@other$loc.metrics.flags$monomorphs == FALSE
 
   # Remove monomorphic loci
     if(mono.rm){
