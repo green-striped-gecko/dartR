@@ -59,11 +59,12 @@ gl.filter.secondaries <- function(x, method="random", verbose=NULL) {
   }
   
   if (all(x@ploidy == 1)){
-    stop("  Detected Presence/Absence (SilicoDArT) data. This filter is not yet available for Presence/Absence data. Sorry.\n")
+    stop("  Processing  Presence/Absence (SilicoDArT) data -- this filter not yet available for SilicoDArT data\n")
   } else if (all(x@ploidy == 2)){
-    cat("  Processing a SNP dataset\n")
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
   } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
   }
 
 # FUNCTION SPECIFIC ERROR CHECKING
