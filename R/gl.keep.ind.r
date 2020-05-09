@@ -94,6 +94,9 @@ gl.keep.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
   # Remove rows flagged for deletion
     x <- x[x$ind.names%in%ind.list]
     
+  # Monomorphic loci may have been created
+    x@other$loc.metrics.flags$monomorphs == FALSE
+    
   # Remove monomorphic loci
     if(mono.rm){
       if(verbose >= 2){cat("  Deleting monomorphic loc\n")}
