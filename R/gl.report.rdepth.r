@@ -173,8 +173,8 @@ gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=NULL) {
     cat("  No outliers detected\n")
   } else {  
     if (verbose >=3){
-      cat("  Outliers detected -- \n")
-      print(outliers)
+      cat("  Outliers detected -- returned \n")
+      #print(outliers)
     }  
   }
   
