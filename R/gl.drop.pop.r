@@ -10,7 +10,8 @@
 #'
 #' @param x -- name of the genlight object containing SNP genotypes or Tag P/A data (SilicoDArT) [required]
 #' @param pop.list -- a list of populations to be removed [required]
-#' @param as.pop -- assign another metric to represent population [default NULL]
+#' @param as.pop -- temporarily assign another metric to represent population for the purposes
+#' of deletions [default NULL]
 #' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
 #' @param mono.rm -- Remove monomorphic loci [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
