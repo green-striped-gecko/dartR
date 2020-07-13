@@ -26,12 +26,19 @@ gl.sim.offspring <- function(fathers, mothers, noffpermother, sexratio=0.5)
   
   mmat <- as.matrix(mothers)[mother,]
   mhet <- sum(mmat==1)
-  mother.half <- ifelse(mmat==1, sample(c(0,2), mhet, replace = T), mmat) 
+  if(!is.na(mhet)){
+     mother.half <- ifelse(mmat==1, sample(c(0,2), mhet, replace = T), mmat) 
+  } else {
+    mother.half <- mmat
+  }
   
   fmat <- as.matrix(fathers)[father,]
   fhet <- sum(fmat==1)
-  father.half <- ifelse(fmat==1, sample(c(0,2), fhet, replace = T), fmat) 
-  
+  if(!is.na(fhet)){
+    father.half <- ifelse(fmat==1, sample(c(0,2), fhet, replace = T), fmat) 
+  } else {
+    father.half <- fmat
+  }
   
   offmat <- (mother.half+father.half)/2
   gl2 <- new("genlight",gen=offmat,  ind.names = paste0("Po_",1:noff), loc.names=locNames(mothers), ploidy=rep(2, nrow(offmat)))
