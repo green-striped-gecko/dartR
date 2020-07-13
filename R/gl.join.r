@@ -32,8 +32,8 @@ gl.join <- function(x1, x2, verbose=NULL) {
 # SET VERBOSITY
   
   if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
+    if(!is.null(x1@other$verbose)){ 
+      verbose <- x1@other$verbose
     } else { 
       verbose <- 2
     }
