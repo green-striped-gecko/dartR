@@ -72,7 +72,6 @@ gl.test.heterozygosity <- function(x,
   
   if (all(x@ploidy == 1)){
     stop("  Processing  Presence/Absence (SilicoDArT) data, heterozygosity can only be calculated for SNP data\n")
-    data.type <- "SilicoDArT"
   } else if (all(x@ploidy == 2)){
     if (verbose >= 2){cat("  Processing a SNP dataset\n")}
     data.type <- "SNP"
