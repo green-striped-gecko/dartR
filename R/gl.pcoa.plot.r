@@ -184,7 +184,7 @@ gl.pcoa.plot <- function(glPca,
       if (verbose>0) cat("  Plotting individuals\n")
 
     # Plot
-      p <- ggplot(df, aes(x=df$PCoAx, y=df$PCoAy, group=ind, colour=pop)) +
+      p <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=ind, colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
         geom_dl(aes(label=ind),method="first.points") +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
@@ -212,7 +212,7 @@ gl.pcoa.plot <- function(glPca,
       }  
 
       # Plot
-      p <- ggplot(df, aes(x=df$PCoAx, y=df$PCoAy, group=pop, colour=pop)) +
+      p <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
         geom_dl(aes(label=pop),method="smart.grid") +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
@@ -239,7 +239,7 @@ gl.pcoa.plot <- function(glPca,
       plot.out <- FALSE
 
       # Plot
-      p <- ggplot(df, aes(x=df$PCoAx, y=df$PCoAy)) +
+      p <- ggplot(df, aes(x=PCoAx, y=PCoAy)) +
         geom_point(size=2,aes(colour=pop, fill=ind)) +
          theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -264,7 +264,7 @@ gl.pcoa.plot <- function(glPca,
       if (verbose>0) cat("Plotting populations identified by a legend\n")
 
       # Plot
-      p <- ggplot(df, aes(x=df$PCoAx, y=df$PCoAy,colour=pop)) +
+      p <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -287,7 +287,7 @@ gl.pcoa.plot <- function(glPca,
       if (verbose>0) cat("Plotting points with no labels\n")
 
       # Plot
-      p <- ggplot(df, aes(x=df$PCoAx, y=df$PCoAy,colour=pop)) +
+      p <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
