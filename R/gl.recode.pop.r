@@ -26,7 +26,7 @@
 #' \donttest{
 #'   mfile <- system.file("extdata", "testset_pop_recode.csv", package="dartR")
 #'   nPop(testset.gl)
-#'   gl <- gl.recode.pop(gl, pop.recode=mfile, verbose=3)
+#'   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=3)
 #'  }
 #' @seealso \code{\link{gl.filter.monomorphs}}
 
@@ -112,7 +112,7 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=NULL
 
 # Remove rows flagged for deletion
   
-  if ("delete" %in% indNames(x) | "Delete" %in% indNames(x)) {
+  if ("delete" %in% popNames(x) | "Delete" %in% popNames(x)) {
     if (verbose >= 2){cat("Deleting populations flagged for deletion (flagged 'Delete' or 'delete')\n")}
     x <- gl.drop.pop(x,pop.list=c("Delete","delete"),verbose=0)
   }
