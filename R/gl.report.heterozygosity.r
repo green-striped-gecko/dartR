@@ -84,6 +84,7 @@ gl.report.heterozygosity <- function(x,
     cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
+  
   if (verbose == 0){
     plot <- FALSE
   }
