@@ -21,6 +21,8 @@
 #' @param test -- if TRUE, calculate p values for the observed fixed differences [default FALSE]
 #' @param reps -- number of replications to undertake in the simulation to estimate probability of false positives [default 1000]
 #' @param delta -- the threshold value for the minor allele frequency to regard the difference between two populations to be operationally fixed [default 0.02]
+#' @param alpha -- level of significance used to display non-significant differences between
+#' populations as they are compared pairwise [default 0.05]
 #' @param plot -- if TRUE, plot a heat map of the raw fixed differences [default FALSE]
 #' @param mono.rm -- if TRUE, loci that are monomorphic across all individuals are removed before beginning computations [default TRUE]
 #' @param pb -- if TRUE, show a progress bar on time consuming loops [default FALSE]
@@ -43,7 +45,16 @@
 #' }
 #' @seealso \code{\link{is.fixed}}
 
-gl.fixed.diff <- function(x, tloc=0, test=FALSE, delta=0.02, reps=1000, mono.rm=TRUE, plot=FALSE, pb=TRUE, verbose=3) {
+gl.fixed.diff <- function(x, 
+                          tloc=0, 
+                          test=FALSE, 
+                          delta=0.02, 
+                          alpha=0.05,
+                          reps=1000, 
+                          mono.rm=TRUE, 
+                          plot=FALSE, 
+                          pb=TRUE, 
+                          verbose=NULL) {
 
 # TRAP COMMAND, SET VERSION
   
@@ -192,12 +203,16 @@ gl.fixed.diff <- function(x, tloc=0, test=FALSE, delta=0.02, reps=1000, mono.rm=
           
         # Calculate the probability that the observed differences are false positives
             if (test) {
-              if (verbose >= 2) {
-                cat("    Testing for significance of fixed differences between",popNames(x)[popi],"and",popNames(x)[popj],"\n")
-              }
             outlist <- gl.utils.fdsim(x,c(levels(pop(x))[popi],levels(pop(x))[popj]),obs=fixed.matrix[popi,popj],delta=delta,reps=reps,verbose=0)
             p.false.pos.matrix[popi,popj] <- round(outlist$prob,4)
             exp.matrix[popi,popj] <- round(outlist$mnexpected,1)
+            if (verbose >= 2) {
+              if (p.false.pos.matrix[popi,popj] > alpha){
+              cat("    ",popNames(x)[popi],"vs",
+                  popNames(x)[popj],
+                  " [p =", p.false.pos.matrix[popi,popj],"]\n")
+              }
+            }
           # Make full matrix and add row and column names    
             exp.matrix[popj,popi] <- exp.matrix[popi,popj]
             exp.matrix[popi,popi] <- 0; exp.matrix[npops,npops] <- 0
