@@ -14,8 +14,8 @@
 #' @param test -- should a test be performed, default is [FALSE]
 #' @param delta -- needs to be described
 #' @param reps -- number of repeats - needs to be described
-#' @param tpop -- threshold number of fixed differences for amalgamating populations [0]
-#' @param plot -- if TRUE, plot a PCoA with the new groupings [TRUE]
+#' @param tpop -- threshold number of fixed differences above which populatons will not be amalgamated [0]
+#' @param plot -- if TRUE, plot a PCoA with the new groupings [FALSE]
 #' @param pb -- if TRUE, show a progress bar on time consuming loops [FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A list containing the gl object x and the following square matricies
@@ -43,7 +43,7 @@ gl.collapse <- function(fd,
                         test=FALSE,
                         delta = 0.02,
                         reps = 1000,
-                        plot=TRUE,
+                        plot=FALSE,
                         pb=FALSE,
                         verbose=NULL) {
   
@@ -56,7 +56,6 @@ gl.collapse <- function(fd,
   
   if (is.null(verbose)){ 
       verbose <- 2
-    
   } 
   
   if (verbose < 0 | verbose > 5){
