@@ -158,6 +158,25 @@
              breaks=bins
         )
       }  
+      if (mono.rm) {
+        # Remove monomorphic loci  
+        x2 <- gl.filter.monomorphs(x2,verbose=0)
+      }
+      if (recalc) {
+        # Recalculate all metrics, including Call Rate (flags reset in utils scripts)
+        x2 <- gl.recalc.metrics(x2, verbose=verbose)
+      } else {
+        # Reset the flags as FALSE for all metrics except Call Rate (dealt with elsewhere)
+        x2@other$loc.metrics.flags$AvgPIC <- FALSE
+        x2@other$loc.metrics.flags$OneRatioRef <- FALSE
+        x2@other$loc.metrics.flags$OneRatioSnp <- FALSE
+        x2@other$loc.metrics.flags$PICRef <- FALSE
+        x2@other$loc.metrics.flags$PICSnp <- FALSE
+        x2@other$loc.metrics.flags$maf <- FALSE
+        x2@other$loc.metrics.flags$FreqHets <- FALSE
+        x2@other$loc.metrics.flags$FreqHomRef <- FALSE
+        x2@other$loc.metrics.flags$FreqHomSnp <- FALSE
+      }
   }
   
 # FOR METHOD BASED ON INDIVIDUALS    
