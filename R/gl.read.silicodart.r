@@ -87,7 +87,7 @@ gl.read.silicodart <- function(filename,
   
   if (is.null(topskip)) {
     if (verbose >= 2){cat("Topskip not provided. Guessing topskip...\n")}   
-    tdummy <- read.csv(filename,   na.strings=nas,  check.names=FALSE, nrows = 20, header=FALSE)
+    tdummy <- read.csv(filename,   na.strings=nas,  check.names=FALSE, nrows = 20, header=FALSE, stringsAsFactors = TRUE)
     
     nskip <- sum(tdummy[,1] == "*"  )
     if (nskip > 0) { 
@@ -96,7 +96,7 @@ gl.read.silicodart <- function(filename,
       stop("Could not determine topskip (the number of rows that need to be skipped. Please provide it manually.\n") 
     }
   }
-  snpraw <- read.csv(filename, na.strings=nas, skip = topskip, check.names=FALSE)
+  snpraw <- read.csv(filename, na.strings=nas, skip = topskip, check.names=FALSE, stringsAsFactors = TRUE)
   
   if (is.character(lastmetric)) {
     lmet <- which(lastmetric==names(snpraw))

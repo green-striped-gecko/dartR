@@ -88,7 +88,7 @@ gl.read.csv <- function(filename,
 
   # Create the SNP data matrix, indNames and LocNames
   
-  df0 <- read.csv(file=filename,header=FALSE)
+  df0 <- read.csv(file=filename,header=FALSE, stringsAsFactors = TRUE)
   
    if (transpose) {
     df0 <- t(df0)
@@ -203,7 +203,7 @@ gl.read.csv <- function(filename,
   # NOW THE LOCUS METADATA
   
   if(!is.null(loc.metafile)){
-    loc.metrics <- read.csv(file=loc.metafile,header=TRUE)
+    loc.metrics <- read.csv(file=loc.metafile,header=TRUE,stringsAsFactors = TRUE)
     if (!("AlleleID" %in% names(loc.metrics))) {cat("Fatal Error: mandatory AlleleID column absent 
                                                from the locus metrics file\n")}
     for (i in 1:nLoc(gl)){
@@ -224,7 +224,7 @@ gl.read.csv <- function(filename,
   # NOW THE INDIVIDUAL METADATA
   
   if(!is.null(ind.metafile)){
-    ind.metrics <- read.csv(file=ind.metafile,header=TRUE)
+    ind.metrics <- read.csv(file=ind.metafile,header=TRUE, stringsAsFactors = TRUE)
     if (!("id" %in% names(ind.metrics))) {cat("Fatal Error: mandatory id column absent 
                                                from the individual metadata file\n")}
     for (i in 1:nInd(gl)){

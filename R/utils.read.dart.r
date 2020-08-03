@@ -43,7 +43,7 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
     if (verbose >= 2){
       cat("  Topskip not provided. ") 
     }
-    tdummy <- read.csv(filename,   na.strings=nas,  check.names=FALSE, nrows = 20, header=FALSE)
+    tdummy <- read.csv(filename,   na.strings=nas,  check.names=FALSE, nrows = 20, header=FALSE,stringsAsFactors = TRUE)
   
     nskip <- sum(tdummy[,1] == "*"  )
     if (nskip > 0) { 
@@ -59,7 +59,7 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
   if (verbose >= 2){
     cat("  Reading in the SNP data\n")
   }
-  snpraw <- read.csv(filename, na.strings=nas, skip = topskip, check.names=FALSE)
+  snpraw <- read.csv(filename, na.strings=nas, skip = topskip, check.names=FALSE, stringsAsFactors = TRUE)
 
   if (is.character(lastmetric)) {
     lmet <- which(lastmetric==names(snpraw))
