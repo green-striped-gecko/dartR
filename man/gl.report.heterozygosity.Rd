@@ -4,9 +4,16 @@
 \alias{gl.report.heterozygosity}
 \title{Reports observed and expected heterozygosity by population or by individual from SNP data.}
 \usage{
-gl.report.heterozygosity(x, method = "pop", n.invariant = 0,
-  boxplot = "adjusted", range = 1.5, cex.labels = 0.7,
-  verbose = NULL)
+gl.report.heterozygosity(
+  x,
+  method = "pop",
+  n.invariant = 0,
+  plot = TRUE,
+  boxplot = "adjusted",
+  range = 1.5,
+  cex.labels = 0.7,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- a genlight object containing the SNP genotypes [Required]}
@@ -14,6 +21,8 @@ gl.report.heterozygosity(x, method = "pop", n.invariant = 0,
 \item{method}{-- calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']}
 
 \item{n.invariant}{-- an estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]}
+
+\item{plot}{-- if TRUE, plots barcharts of observed and expected heterozygosity for populations [TRUE]}
 
 \item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 plots a boxplot adjusted for skewed distributions [default 'adjusted']}
@@ -50,7 +59,7 @@ are heterozygous for that individual.
 
 Output for method="ind" is a histogram of heterozygosity across individuals.
 The histogram is accompanied by a box and whisker plot presented either in standard 
-(boxplot="standard") or adjusted for skewness (boxplot=adjusted).
+(boxplot="standard") or adjusted for skewness (boxplot=adjusted). 
 
 Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
 Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed

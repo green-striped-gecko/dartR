@@ -4,8 +4,7 @@
 \alias{gl2related}
 \title{Convert a genlight object to format suitable to be run with Coancestry}
 \usage{
-gl2related(x, outfile = "related.txt", outpath = tempdir(),
-  save = TRUE)
+gl2related(x, outfile = "related.txt", outpath = tempdir(), save = TRUE)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

@@ -4,8 +4,15 @@
 \alias{gl.genleastcost}
 \title{Least-cost path analysis based on a friction matrix}
 \usage{
-gl.genleastcost(x, fric.raster, gen.distance, NN = NULL,
-  pathtype = "leastcost", plotpath = TRUE, theta = 1)
+gl.genleastcost(
+  x,
+  fric.raster,
+  gen.distance,
+  NN = NULL,
+  pathtype = "leastcost",
+  plotpath = TRUE,
+  theta = 1
+)
 }
 \arguments{
 \item{x}{a spatial genind object. see ?popgenreport how to provide coordinates in genind objects}

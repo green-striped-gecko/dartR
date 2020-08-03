@@ -4,8 +4,16 @@
 \alias{gl.report.ld}
 \title{Calculates pairwise population based Linkage Disequilibirum across all loci using the specifyied number of cores}
 \usage{
-gl.report.ld(x, name = NULL, save = TRUE, nchunks = 2, ncores = 1,
-  chunkname = NULL, probar = FALSE, verbose = NULL)
+gl.report.ld(
+  x,
+  name = NULL,
+  save = TRUE,
+  nchunks = 2,
+  ncores = 1,
+  chunkname = NULL,
+  probar = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)}

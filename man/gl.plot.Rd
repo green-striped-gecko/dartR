@@ -4,9 +4,17 @@
 \alias{gl.plot}
 \title{Plotting genlight object as a smear plot (loci by individuals color coded for scores of 0, 1, 2 and NA)}
 \usage{
-gl.plot(x, labels = FALSE, indlabels = indNames(x), col = NULL,
-  legend = TRUE, posi = "bottomleft", bg = rgb(1, 1, 1, 0.5),
-  verbose = NULL, ...)
+gl.plot(
+  x,
+  labels = FALSE,
+  indlabels = indNames(x),
+  col = NULL,
+  legend = TRUE,
+  posi = "bottomleft",
+  bg = rgb(1, 1, 1, 0.5),
+  verbose = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{-- a genlight object [required]}

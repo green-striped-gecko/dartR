@@ -4,8 +4,7 @@
 \alias{gl.subsample.loci}
 \title{Subsample n loci from a genlight object and return as a genlight object}
 \usage{
-gl.subsample.loci(x, n, method = "random", mono.rm = FALSE,
-  verbose = NULL)
+gl.subsample.loci(x, n, method = "random", mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

@@ -4,8 +4,16 @@
 \alias{gl.report.hamming}
 \title{Calculates the pairwise Hamming distance between DArT trimmed DNA sequences}
 \usage{
-gl.report.hamming(x, rs = 5, boxplot = "adjusted", range = 1.5,
-  threshold = 3, taglength = 69, probar = FALSE, verbose = 2)
+gl.report.hamming(
+  x,
+  rs = 5,
+  boxplot = "adjusted",
+  range = 1.5,
+  threshold = 3,
+  taglength = 69,
+  probar = FALSE,
+  verbose = 2
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

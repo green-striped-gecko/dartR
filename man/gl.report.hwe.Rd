@@ -4,8 +4,15 @@
 \alias{gl.report.hwe}
 \title{Reports departure from Hardy-Weinberg Equilibrium}
 \usage{
-gl.report.hwe(x, subset = "each", plot = FALSE, method = "ChiSquare",
-  alpha = 0.05, bonf = TRUE, verbose = NULL)
+gl.report.hwe(
+  x,
+  subset = "each",
+  plot = FALSE,
+  method = "ChiSquare",
+  alpha = 0.05,
+  bonf = TRUE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- a genlight object containing the SNP genotypes [Required]}

@@ -4,8 +4,7 @@
 \alias{gl2snapp}
 \title{Convert a genlight object to nexus format suitable for phylogenetic analysis by SNAPP (via BEAUti)}
 \usage{
-gl2snapp(x, outfile = "snapp.nex", outpath = tempdir(),
-  verbose = NULL)
+gl2snapp(x, outfile = "snapp.nex", outpath = tempdir(), verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

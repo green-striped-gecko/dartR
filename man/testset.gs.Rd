@@ -4,7 +4,9 @@
 \name{testset.gs}
 \alias{testset.gs}
 \title{A genlight object created via the gl.read.silicodart function}
-\format{genlight object}
+\format{
+genlight object
+}
 \usage{
 testset.gs
 }

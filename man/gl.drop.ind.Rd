@@ -4,8 +4,7 @@
 \alias{gl.drop.ind}
 \title{Remove specified individuals from a genelight \{adegenet\} object}
 \usage{
-gl.drop.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE,
-  verbose = NULL)
+gl.drop.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes [required]}

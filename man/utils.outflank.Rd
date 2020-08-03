@@ -4,9 +4,14 @@
 \alias{utils.outflank}
 \title{OutFLANK:  An Fst outlier approach by Mike Whitlock and Katie Lotterhos, University of British Columbia.}
 \usage{
-utils.outflank(FstDataFrame, LeftTrimFraction = 0.05,
-  RightTrimFraction = 0.05, Hmin = 0.1, NumberOfSamples,
-  qthreshold = 0.05)
+utils.outflank(
+  FstDataFrame,
+  LeftTrimFraction = 0.05,
+  RightTrimFraction = 0.05,
+  Hmin = 0.1,
+  NumberOfSamples,
+  qthreshold = 0.05
+)
 }
 \arguments{
 \item{FstDataFrame}{A data frame that includes a row for each locus, with columns as follows: 

@@ -4,8 +4,7 @@
 \alias{gl.recode.pop}
 \title{Recode population assignments in a genlight object \{adegenet\}}
 \usage{
-gl.recode.pop(x, pop.recode, recalc = TRUE, mono.rm = TRUE,
-  verbose = NULL)
+gl.recode.pop(x, pop.recode, recalc = TRUE, mono.rm = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -41,7 +40,7 @@ recalculates the locus metadata as appropriate.
 \donttest{
   mfile <- system.file("extdata", "testset_pop_recode.csv", package="dartR")
   nPop(testset.gl)
-  gl <- gl.recode.pop(gl, pop.recode=mfile, verbose=3)
+  gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=3)
  }
 }
 \seealso{

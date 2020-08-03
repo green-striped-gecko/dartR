@@ -4,12 +4,25 @@
 \alias{gl.nhybrids}
 \title{Create an input file for the program NewHybrids and run it if NewHybrids is installed}
 \usage{
-gl.nhybrids(gl, outfile = "nhyb.txt", outpath = tempdir(), p0 = NULL,
-  p1 = NULL, threshold = 0, method = "random", plot = TRUE,
-  pprob = 0.95, nhyb.directory = NULL, BurnIn = 10000,
-  sweeps = 10000, GtypFile = "TwoGensGtypFreq.txt",
-  AFPriorFile = NULL, PiPrior = "Jeffreys", ThetaPrior = "Jeffreys",
-  verbose = NULL)
+gl.nhybrids(
+  gl,
+  outfile = "nhyb.txt",
+  outpath = tempdir(),
+  p0 = NULL,
+  p1 = NULL,
+  threshold = 0,
+  method = "random",
+  plot = TRUE,
+  pprob = 0.95,
+  nhyb.directory = NULL,
+  BurnIn = 10000,
+  sweeps = 10000,
+  GtypFile = "TwoGensGtypFreq.txt",
+  AFPriorFile = NULL,
+  PiPrior = "Jeffreys",
+  ThetaPrior = "Jeffreys",
+  verbose = NULL
+)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing the SNP data [required]}

@@ -4,8 +4,14 @@
 \alias{gl.utils.fdsim}
 \title{Estimate the rate of false positives in a fixed difference analysis}
 \usage{
-gl.utils.fdsim(gl, poppair, obs = NULL, reps = 1000, delta = 0.02,
-  verbose = NULL)
+gl.utils.fdsim(
+  gl,
+  poppair,
+  obs = NULL,
+  reps = 1000,
+  delta = 0.02,
+  verbose = NULL
+)
 }
 \arguments{
 \item{gl}{-- name of the genlight containing the SNP genotypes [required]}

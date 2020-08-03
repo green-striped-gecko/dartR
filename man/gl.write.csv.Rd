@@ -4,8 +4,7 @@
 \alias{gl.write.csv}
 \title{Write out data from a gl object \link{adegenet} to csv file}
 \usage{
-gl.write.csv(x, outfile = "outfile.csv", outpath = tempdir(),
-  verbose = NULL)
+gl.write.csv(x, outfile = "outfile.csv", outpath = tempdir(), verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

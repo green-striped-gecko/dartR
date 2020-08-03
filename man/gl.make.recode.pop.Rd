@@ -4,8 +4,12 @@
 \alias{gl.make.recode.pop}
 \title{Create a proforma recode_pop_table file for reassigning population names}
 \usage{
-gl.make.recode.pop(x, out.recode.file = "recode_pop_table.csv",
-  outpath = tempdir(), verbose = NULL)
+gl.make.recode.pop(
+  x,
+  out.recode.file = "recode_pop_table.csv",
+  outpath = tempdir(),
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

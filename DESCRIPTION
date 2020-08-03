@@ -76,4 +76,4 @@ Suggests:
     rgl
 License: GPL-2
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1

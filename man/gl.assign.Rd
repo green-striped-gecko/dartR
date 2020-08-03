@@ -4,8 +4,15 @@
 \alias{gl.assign}
 \title{Assign an individual of unknown provenance to population}
 \usage{
-gl.assign(x, unknown, nmin = 10, dim = NULL, alpha = 0.05,
-  threshold = 0, verbose = 3)
+gl.assign(
+  x,
+  unknown,
+  nmin = 10,
+  dim = NULL,
+  alpha = 0.05,
+  threshold = 0,
+  verbose = 3
+)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
@@ -43,14 +50,14 @@ the 95% (or as specified) confidence envelope.
 
 There are three considerations to the assignment. First, consider only those populations for which the unknown has no
 private alleles. Private alleles are an indication that the unknown does not belong to a target population (provided that
-the sample size is adequate, say >=10).
+the sample size is adequate, say >=10). 
 
 Second, consider the PCoA plot for populations where no private alleles have been
 detected and the position of the unknown in relation to the confidence ellipses. Note, this is considering only the 
 top two dimensions of the ordination, and so an unknown lying outside the confidence ellipse can be interpreted as it lying 
 outside the confidence envelope. However, if the unknown lies inside the confidence ellipse in two dimensions, then it may still lie outside
 the confidence envelope. This is good for eliminating populations from consideration, but does not provide confidence in
-assignment.
+assignment. 
 
 Third, consider the assignment probabilities. This approach calculates the squared Generalised Linear Distance (Mahalanobis
 distance) of the unknown from the centroid for each population, and calculates the probability associated with its quantile

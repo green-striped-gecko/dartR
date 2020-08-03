@@ -4,8 +4,7 @@
 \alias{gl.report.rdepth}
 \title{Report summary of Read Depth for each locus}
 \usage{
-gl.report.rdepth(x, boxplot = "adjusted", range = 1.5,
-  verbose = NULL)
+gl.report.rdepth(x, boxplot = "adjusted", range = 1.5, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -30,7 +29,7 @@ Filtering on Read Depth using the companion script gl.filter.rdepth can be on th
 or loci with exceptionally high counts.
 
 The minimum, maximum and mean read depth are provided. Output also is a histogram of read depth, accompanied by a box and 
-whisker plot presented either in standard (boxplot="standard") or adjusted for skewness (boxplot=adjusted).
+whisker plot presented either in standard (boxplot="standard") or adjusted for skewness (boxplot=adjusted). 
 
 Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
 Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed

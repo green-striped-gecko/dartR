@@ -4,8 +4,17 @@
 \alias{gl.filter.sexlinked}
 \title{Identify loci that are sex linked in specimens in a genlight \code{adegenet} object}
 \usage{
-gl.filter.sexlinked(x, sex = NULL, filter = NULL, read.depth = 0,
-  t.het = 0, t.hom = 0, t.pres = 0, plot = FALSE, verbose = NULL)
+gl.filter.sexlinked(
+  x,
+  sex = NULL,
+  filter = NULL,
+  read.depth = 0,
+  t.het = 0,
+  t.hom = 0,
+  t.pres = 0,
+  plot = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

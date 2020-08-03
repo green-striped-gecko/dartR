@@ -4,8 +4,7 @@
 \alias{gl.filter.hwe}
 \title{Filters loci that show significant departure from Hardy-Weinberg Equilibrium}
 \usage{
-gl.filter.hwe(x, alpha = 0.05, basis = "any", bon = TRUE,
-  verbose = NULL)
+gl.filter.hwe(x, alpha = 0.05, basis = "any", bon = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- a genlight object containing the SNP genotypes [Required]}

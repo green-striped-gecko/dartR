@@ -4,8 +4,14 @@
 \alias{gl.tree.nj}
 \title{Output an nj tree to summarize genetic similarity among populations}
 \usage{
-gl.tree.nj(x, type = "phylogram", outgroup = NULL, labelsize = 0.7,
-  treefile = NULL, verbose = NULL)
+gl.tree.nj(
+  x,
+  type = "phylogram",
+  outgroup = NULL,
+  labelsize = 0.7,
+  treefile = NULL,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

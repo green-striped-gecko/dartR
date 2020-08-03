@@ -4,8 +4,14 @@
 \alias{gl.dist.ind}
 \title{Calculate a distance matrix for individuals defined in an \{adegenet\} genlight object}
 \usage{
-gl.dist.ind(x, method = NULL, plot = TRUE, boxplot = "standard",
-  range = 1.5, verbose = NULL)
+gl.dist.ind(
+  x,
+  method = NULL,
+  plot = TRUE,
+  boxplot = "standard",
+  range = 1.5,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}
@@ -30,9 +36,9 @@ calculated by scripts in the {stats} or {vegan} libraries, with the exception of
 differences) distance.
 }
 \details{
-The distance measure for SNP data can be one of
+The distance measure for SNP data can be one of 
 
-Euclidean -- eclidean distance as computed by dist() in {stat}
+ Euclidean -- eclidean distance as computed by dist() in {stat}
  locus.count -- number of loci for which individuals differ, as implemented by dist.gene() in {ape}
  allele.count -- number of allelic differences between two individuals, as implemented by diss.dist() in {poppr}
  relatedness -- genetic relatedness between individuals (G matrix), as implemented by A.mat() in {rrBLUP}

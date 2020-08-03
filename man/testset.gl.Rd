@@ -4,7 +4,9 @@
 \name{testset.gl}
 \alias{testset.gl}
 \title{A genlight object created via the gl.read.dart function}
-\format{genlight object}
+\format{
+genlight object
+}
 \usage{
 testset.gl
 }
