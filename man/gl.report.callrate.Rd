@@ -37,7 +37,7 @@ Tag Presence/Absence datasets (SilicoDArT) have missing values where it is not p
 sequence tag can be called at a particular locus.
 
 The minimum, maximum and mean call rate are provided. Output also is a histogram of read depth, accompanied by a box and 
-whisker plot presented either in standard (boxplot="standard") or adjusted for skewness (boxplot=adjusted). 
+whisker plot. 
 
 Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
 Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed

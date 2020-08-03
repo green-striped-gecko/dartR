@@ -8,7 +8,7 @@
 #' sequence tag can be called at a particular locus.
 #' 
 #' The minimum, maximum and mean call rate are provided. Output also is a histogram of read depth, accompanied by a box and 
-#' whisker plot presented either in standard (boxplot="standard") or adjusted for skewness (boxplot=adjusted). 
+#' whisker plot. 
 #' 
 #' Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
 #' Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed
@@ -95,42 +95,49 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
 
 ########### FOR METHOD BASED ON LOCUS    
   
+  p1 <- p2 <- NULL
+  
   if(method == "loc") {
     
     callrate <- x@other$loc.metrics$CallRate
     
     # Prepare for plotting
     # Save the prior settings for mfrow, oma, mai and pty, and reassign
-    op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+    #op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
     # Set margins for first plot
-    par(mai=c(1,0.5,0.5,0.5))
+    #par(mai=c(1,0.5,0.5,0.5))
     # Plot Box-Whisker plot
     if (all(x@ploidy==2)){
-      title <- paste0("SNP data (DArTSeq)\nCall Rate by Locus")
+      title1 <- paste0("SNP data - Call Rate by Locus")
     } else {
-      title <- paste0("Fragment P/A data (SilicoDArT)\nCall Rate by Locus")
-    }  
-    if (boxplot == "standard"){
-      boxplot(callrate, horizontal=TRUE, col='red', range=range, main = title)
-      if(verbose >= 1){cat("  Standard boxplot, no adjustment for skewness\n")}
-    } else {
-      robustbase::adjbox(callrate,
-                        horizontal = TRUE,
-                        col='red',
-                        range=range,
-                        main = title)
-      if(verbose >= 1){cat("  Boxplot adjusted to account for skewness\n")}
-    }  
+      title1 <- paste0("Fragment P/A data - Call Rate by Locus")
+      
+    }
+    p1 <- ggplot(data.frame(callrate), aes(y=callrate))+geom_boxplot() +coord_flip()+theme()+xlim(range=c(-1,1))+ylim(0,1)+ylab(" ")+ggtitle(title1)
+    #if (boxplot == "standard"){
+    #  boxplot(callrate, horizontal=TRUE, col='red', range=range, main = title)
+    #  if(verbose >= 1){cat("  Standard boxplot, no adjustment for skewness\n")}
+    #} else {
+    #  robustbase::adjbox(callrate,
+    #                    horizontal = TRUE,
+    #                    col='red',
+    #                    range=range,
+    #                    main = title)
+    #  if(verbose >= 1){cat("  Boxplot adjusted to account for skewness\n")}
+    #}  
     # Set margins for second plot
-    par(mai=c(0.5,0.5,0,0.5))
-    hist(callrate, 
-         main="", 
-         xlab="", 
-         border="blue", 
-         col="red",
-         xlim=c(min(x@other$loc.metrics$CallRate),1),
-         breaks=100)
+    #par(mai=c(0.5,0.5,0,0.5))
+    #hist(callrate, 
+    #     main="", 
+    #     xlab="", 
+    #     border="blue", 
+    #     col="red",
+    #     xlim=c(min(x@other$loc.metrics$CallRate),1),
+    #     breaks=100)
 
+  p2 <- ggplot(data.frame(callrate), aes(x=callrate))+geom_histogram(bins = 50)+ coord_cartesian(xlim = c(0,1)) 
+  grid.arrange(p1,p2)
+  
   # Print out some statistics
     cat("  Reporting Call Rate by Locus\n")
     cat("  No. of loci =", nLoc(x), "\n")
@@ -170,40 +177,43 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
 
     # Prepare for plotting
     # Save the prior settings for mfrow, oma, mai and pty, and reassign
-    op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+    #op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
     # Set margins for first plot
-    par(mai=c(1,0.5,0.5,0.5))
+    #par(mai=c(1,0.5,0.5,0.5))
     # Plot Box-Whisker plot
     if (all(x@ploidy==2)){
-      title <- paste0("SNP data (DArTSeq)\nCall Rate by Individual")
+      title1 <- paste0("SNP data (DArTSeq)\nCall Rate by Individual")
     } else {
-      title <- paste0("Fragment P/A data (SilicoDArT)\nCall Rate by Individual")
-    }  
-    if (boxplot == "standard"){
-      boxplot(ind.call.rate, 
-              horizontal=TRUE, 
-              col='red', 
-              range=range, 
-              ylim=c(min(ind.call.rate),1),
-              main = title)
-      cat("  Standard boxplot, no adjustment for skewness\n")
-    } else {
-      robustbase::adjbox(ind.call.rate,
-                         horizontal = TRUE,
-                         col='red',
-                         range=range,
-                         ylim=c(min(ind.call.rate),1),
-                         main = title)
-      cat("  Boxplot adjusted to account for skewness\n")
-    }  
+      title1 <- paste0("Fragment P/A data (SilicoDArT)\nCall Rate by Individual")
+    }
+    p1 <- ggplot(data.frame(ind.call.rate), aes(y=ind.call.rate))+geom_boxplot() +coord_flip()+theme()+xlim(range=c(-1,1))+ylim(0,1)+ylab(" ")+ggtitle(title1)
+    #if (boxplot == "standard"){
+    #  boxplot(ind.call.rate, 
+    #          horizontal=TRUE, 
+    #          col='red', 
+    #          range=range, 
+    #          ylim=c(min(ind.call.rate),1),
+    #          main = title)
+    #  cat("  Standard boxplot, no adjustment for skewness\n")
+    #} else {
+    #  robustbase::adjbox(ind.call.rate,
+    #                     horizontal = TRUE,
+    #                     col='red',
+    #                     range=range,
+    #                     ylim=c(min(ind.call.rate),1),
+    #                     main = title)
+    #  cat("  Boxplot adjusted to account for skewness\n")
+    #}  
     # Set margins for second plot
-    par(mai=c(0.5,0.5,0,0.5))
-    hist(ind.call.rate, 
-         main="", 
-         xlab="", 
-         col="red",
-         xlim=c(min(ind.call.rate),1),
-         breaks=100)
+    #par(mai=c(0.5,0.5,0,0.5))
+    #hist(ind.call.rate, 
+    #     main="", 
+    #     xlab="", 
+    #     col="red",
+    #     xlim=c(min(ind.call.rate),1),
+    #     breaks=100)
+    p2 <- ggplot(data.frame(ind.call.rate), aes(x=ind.call.rate))+geom_histogram(bins = 50)+ coord_cartesian(xlim = c(0,1)) 
+    grid.arrange(p1,p2)
 
     cat("  Reporting Call Rate by Individual\n")
     cat("  No. of loci =", nLoc(x), "\n")
@@ -236,7 +246,7 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
   }
 
     # Reset the par options    
-    par(op) 
+    #par(op) 
     
  # FLAG SCRIPT END
     
@@ -244,6 +254,6 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
       cat("Completed:",funname,"\n")
     }
     
-    return(df)
+    return(list(callrates=df, boxplot=p1, hist=p2))
 
 }

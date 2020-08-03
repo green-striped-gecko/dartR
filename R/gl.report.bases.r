@@ -15,6 +15,7 @@
 #' @param plot -- if TRUE, histograms of base composition are produced [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return returns a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
+#' @return returns a named vector of base frequencies and the transversion and transitions. I also returns the plot as an ggplot object, which can be further customised. See example.
 #' @export
 #' @import stringr
 #' @importFrom gridExtra grid.arrange
@@ -22,7 +23,9 @@
 #' @examples
 #' # SNP data
 #'   out <- gl.report.bases(testset.gl)
-#'   out
+#'   out$freq
+#'   out$plotbases
+#'   out$plottvts
 #' # Tag P/A data
 #'   out <- gl.report.bases(testset.gs)
 #'   out
@@ -82,7 +85,7 @@ gl.report.bases <- function(x, plot=TRUE, verbose = NULL) {
     }
 
 # DO THE JOB
-  
+p1 <- p2 <- NULL #initialise plots in case they are not defined  
 # Count up the number of bases, and the number of each of ATGC, and other
   if (verbose >= 2){
     cat("  Counting the bases\n")
@@ -105,12 +108,12 @@ gl.report.bases <- function(x, plot=TRUE, verbose = NULL) {
   T <- T*100/total
   C <- C*100/total
   
-if(datatype=="SNP"){
+
 # Calculate the fragment lengths  
   mn <- mean(str_length(x@other$loc.metrics$TrimmedSequence))
   mx <- max(str_length(x@other$loc.metrics$TrimmedSequence))
   mi <- min(str_length(x@other$loc.metrics$TrimmedSequence))
-
+  if(datatype=="SNP"){
 # Extract the SNPs  
   matrix <- str_split_fixed(x@other$loc.metrics$SNP,":",2)
   state.change <- matrix[,2]
@@ -162,7 +165,7 @@ if(datatype=="SNP"){
     cat(paste("  Transversions:",round(tv,2),"\n"))
     cat(paste("  tv/ts ratio:", round(ratio,4),"\n\n"))
   }
-  
+  gg<- NULL
   if (plot) {
     if (datatype=="SNP"){
       title <- paste0("SNP: Base Frequencies")
@@ -172,7 +175,7 @@ if(datatype=="SNP"){
     bases <- c("A","C","T","G")
     freq <- round(c(A,C,T,G),1)
     df <- data.frame(bases=bases,freq=freq)
-    p1 <- ggplot(data=df,aes(x=df$bases, y=df$freq)) +
+    p1 <- ggplot(data=df,aes(x=bases, y=freq)) +
             geom_bar(stat="identity", fill="steelblue") +
             xlab("Bases") + ylab("Frequency") +
             ggtitle(title)
@@ -181,7 +184,7 @@ if(datatype=="SNP"){
       bases <- c("Ts","Tv")
       freq <- round(c(ts,tv),1)
       df2 <- data.frame(bases=bases,freq=freq)
-      p2 <- ggplot(data=df2,aes(x=df2$bases, y=df2$freq)) +
+      p2 <- ggplot(data=df2,aes(x=bases, y=freq)) +
           geom_bar(stat="identity", fill="steelblue") +
           xlab("Mutation Type") + ylab("Frequency") +
           ggtitle(paste("SNP: Ts/Tv Rates [ratio =",round(ratio,2),"]"))
@@ -194,11 +197,12 @@ if(datatype=="SNP"){
   
 # Create return matrix
   if (verbose >= 2){
-    cat("  Creating an output matrix to return\n")
+    cat("  Creating an output vector to return\n")
   }
-  col1 <- c("A","G","T","C","tv","ts")
-  col2 <- c(round(A,2),round(G,2),round(T,2),round(C,2),round(tv,2),round(ts,2))
-  matrix <- cbind(col1, col2)
+  
+  out <- c(round(A,2),round(G,2),round(T,2),round(C,2),round(tv,2),round(ts,2))
+  names(out) <- c("A","G","T","C","tv","ts")
+ 
   #colnames(matrix) <- c("Base","Pcent")
   
 # FLAG SCRIPT END
@@ -206,7 +210,7 @@ if(datatype=="SNP"){
   if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
-
-  return(matrix)
+  
+  return(list(freq=out, plotbases=p1, plottstv=p2))
 
 }
