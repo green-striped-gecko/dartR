@@ -4,8 +4,13 @@
 \alias{gl2phylip}
 \title{Create a Phylip input distance matrix from a genlight (SNP) \{adegenet\} object}
 \usage{
-gl2phylip(x, outfile = "phyinput.txt", outpath = tempdir(),
-  bstrap = 1, verbose = NULL)
+gl2phylip(
+  x,
+  outfile = "phyinput.txt",
+  outpath = tempdir(),
+  bstrap = 1,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data or a genind object containing presence absence data [required]}

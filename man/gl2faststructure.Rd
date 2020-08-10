@@ -4,8 +4,13 @@
 \alias{gl2faststructure}
 \title{Export DArT genlight object \{adegenet\} to faststructure format (to run faststructure elsewhere)}
 \usage{
-gl2faststructure(x, outfile = "gl.str", outpath = tempdir(),
-  probar = FALSE, verbose = NULL)
+gl2faststructure(
+  x,
+  outfile = "gl.str",
+  outpath = tempdir(),
+  probar = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

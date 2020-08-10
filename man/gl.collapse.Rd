@@ -4,9 +4,19 @@
 \alias{gl.collapse}
 \title{Collapse a distance matrix by amalgamating populations with pairwise fixed difference count less that an threshold}
 \usage{
-gl.collapse(fd, recode.table = "tmp.csv", outpath = tempdir(),
-  tpop = 0, tloc = 0, test = FALSE, delta = 0.02, reps = 1000,
-  plot = TRUE, pb = FALSE, verbose = NULL)
+gl.collapse(
+  fd,
+  recode.table = "tmp.csv",
+  outpath = tempdir(),
+  tpop = 0,
+  tloc = 0,
+  test = FALSE,
+  delta = 0.02,
+  reps = 1000,
+  plot = FALSE,
+  pb = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{fd}{-- name of the list of matricies produced by gl.fixed.diff() [required]}
@@ -16,7 +26,7 @@ arising from the amalgamation of populations [tmp.csv]}
 
 \item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
-\item{tpop}{-- threshold number of fixed differences for amalgamating populations [0]}
+\item{tpop}{-- threshold number of fixed differences above which populatons will not be amalgamated [0]}
 
 \item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]}
 
@@ -26,7 +36,7 @@ arising from the amalgamation of populations [tmp.csv]}
 
 \item{reps}{-- number of repeats - needs to be described}
 
-\item{plot}{-- if TRUE, plot a PCoA with the new groupings [TRUE]}
+\item{plot}{-- if TRUE, plot a PCoA with the new groupings [FALSE]}
 
 \item{pb}{-- if TRUE, show a progress bar on time consuming loops [FALSE]}
 

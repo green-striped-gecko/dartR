@@ -4,9 +4,16 @@
 \alias{gl.map.interactive}
 \title{Creates an interactive map (based on latlong) from a genlight object}
 \usage{
-gl.map.interactive(x, matrix = NULL, standard = TRUE,
-  symmetric = TRUE, ind.circles = TRUE, pop.labels = TRUE,
-  pop.labels.cex = 12, provider = "Esri.NatGeoWorldMap")
+gl.map.interactive(
+  x,
+  matrix = NULL,
+  standard = TRUE,
+  symmetric = TRUE,
+  ind.circles = TRUE,
+  pop.labels = TRUE,
+  pop.labels.cex = 12,
+  provider = "Esri.NatGeoWorldMap"
+)
 }
 \arguments{
 \item{x}{-- a genlight object [including coordinates within the latlong slot]}

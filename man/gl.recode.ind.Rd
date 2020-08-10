@@ -4,8 +4,7 @@
 \alias{gl.recode.ind}
 \title{Recode individual (=specimen = sample) labels in a genelight object \{adegenet\}}
 \usage{
-gl.recode.ind(x, ind.recode, recalc = FALSE, mono.rm = FALSE,
-  verbose = NULL)
+gl.recode.ind(x, ind.recode, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes [required]}

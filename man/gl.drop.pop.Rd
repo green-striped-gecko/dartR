@@ -4,15 +4,22 @@
 \alias{gl.drop.pop}
 \title{Remove specified populations from a genelight \{adegenet\} object}
 \usage{
-gl.drop.pop(x, pop.list, as.pop = NULL, recalc = FALSE,
-  mono.rm = FALSE, verbose = NULL)
+gl.drop.pop(
+  x,
+  pop.list,
+  as.pop = NULL,
+  recalc = FALSE,
+  mono.rm = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or Tag P/A data (SilicoDArT) [required]}
 
 \item{pop.list}{-- a list of populations to be removed [required]}
 
-\item{as.pop}{-- assign another metric to represent population [default NULL]}
+\item{as.pop}{-- temporarily assign another metric to represent population for the purposes
+of deletions [default NULL]}
 
 \item{recalc}{-- Recalculate the locus metadata statistics [default FALSE]}
 

@@ -4,9 +4,21 @@
 \alias{gl.pcoa.plot}
 \title{Bivariate plot of the results of an ordination generated using gl.pcoa()}
 \usage{
-gl.pcoa.plot(glPca, x, scale = FALSE, ellipse = FALSE, p = 0.95,
-  labels = "pop", hadjust = 1.5, vadjust = 1, xaxis = 1,
-  yaxis = 2, plot.out = TRUE, verbose = NULL)
+gl.pcoa.plot(
+  glPca,
+  x,
+  scale = FALSE,
+  ellipse = FALSE,
+  p = 0.95,
+  labels = "pop",
+  as.pop = NULL,
+  hadjust = 1.5,
+  vadjust = 1,
+  xaxis = 1,
+  yaxis = 2,
+  plot.out = TRUE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{glPca}{Name of the PCA or PCoA object containing the factor scores and eigenvalues [required]}
@@ -20,6 +32,8 @@ gl.pcoa.plot(glPca, x, scale = FALSE, ellipse = FALSE, p = 0.95,
 \item{p}{Value of the percentile for the ellipse to encapsulate points for each population [default 0.95]}
 
 \item{labels}{Flag to specify the labels are to be added to the plot. ["none"|"ind"|"pop"|"interactive"|"legend", default = "pop"]}
+
+\item{as.pop}{-- assign another metric to represent populations for the plot [default NULL]}
 
 \item{hadjust}{Horizontal adjustment of label position [default 1.5]}
 
@@ -51,7 +65,7 @@ represent the proportion of variation explained. In any case, the proportion of 
 
 Points displayed in the ordination can be identified if the option labels="interactive" is chosen, in which case the resultant plot is
 ggplotly() friendly. Identification of points is by moving the mouse
-over them. Refer to the plotly package for further information.
+over them. Refer to the plotly package for further information. 
 
 If plot.out=TRUE, returns an object of class ggplot so that layers can subsequently be added; if plot.out=FALSE, returns a dataframe
 with the individual labels, population labels and PCOA scores for subsequent plotting by the user with ggplot or other plotting software.

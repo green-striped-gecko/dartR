@@ -4,9 +4,16 @@
 \alias{gl.collapse.pval}
 \title{Collapse a fixed distance matrix by amalgamating populations for which pairwise fixed differences are not significant}
 \usage{
-gl.collapse.pval(fd, recode.table = "tmp.csv", outpath = tempdir(),
-  delta = 0.02, reps = 1000, alpha = 0.05, plot = FALSE,
-  verbose = NULL)
+gl.collapse.pval(
+  fd,
+  recode.table = "tmp.csv",
+  outpath = tempdir(),
+  delta = 0.02,
+  reps = 1000,
+  alpha = 0.05,
+  plot = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{fd}{-- name of the list containing the collapsed gl object and associated distance matricies output by gl.collapse run with test=TRUE [required]}

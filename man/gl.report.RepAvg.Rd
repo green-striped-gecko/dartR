@@ -4,8 +4,7 @@
 \alias{gl.report.RepAvg}
 \title{Report summary of RepAvg averaged over both alleles for each locus or reproducibility (repeatability of the scores for fragment presence/absence).}
 \usage{
-gl.report.RepAvg(x, boxplot = "adjusted", range = 1.5,
-  verbose = NULL)
+gl.report.RepAvg(x, boxplot = "adjusted", range = 1.5, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

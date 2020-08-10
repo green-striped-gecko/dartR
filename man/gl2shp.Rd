@@ -4,9 +4,14 @@
 \alias{gl2shp}
 \title{Convert genlight objects to ESRI shapefiles or kml files}
 \usage{
-gl2shp(x, type = "shp",
+gl2shp(
+  x,
+  type = "shp",
   proj4 = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
-  outfile = "gl", outpath = tempdir(), verbose = NULL)
+  outfile = "gl",
+  outpath = tempdir(),
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data and location data, lat longs  [required]}

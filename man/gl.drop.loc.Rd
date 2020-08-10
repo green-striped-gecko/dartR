@@ -4,8 +4,7 @@
 \alias{gl.drop.loc}
 \title{Remove specified loci from a genelight \{adegenet\} object}
 \usage{
-gl.drop.loc(x, loc.list = NULL, first = NULL, last = NULL,
-  verbose = NULL)
+gl.drop.loc(x, loc.list = NULL, first = NULL, last = NULL, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or presence/absence data [required]}

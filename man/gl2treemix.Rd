@@ -4,8 +4,12 @@
 \alias{gl2treemix}
 \title{Convert a genlight object to a treemix input file}
 \usage{
-gl2treemix(x, outfile = "treemix_input.gz", outpath = tempdir(),
-  verbose = NULL)
+gl2treemix(
+  x,
+  outfile = "treemix_input.gz",
+  outpath = tempdir(),
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

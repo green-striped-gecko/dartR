@@ -4,10 +4,18 @@
 \alias{gl.read.dart}
 \title{Import DarT data into R and conver it to a genlight object}
 \usage{
-gl.read.dart(filename, ind.metafile = NULL, recalc = FALSE,
-  mono.rm = FALSE, nas = "-", topskip = NULL,
-  lastmetric = "RepAvg", covfilename = NULL, probar = FALSE,
-  verbose = NULL)
+gl.read.dart(
+  filename,
+  ind.metafile = NULL,
+  recalc = FALSE,
+  mono.rm = FALSE,
+  nas = "-",
+  topskip = NULL,
+  lastmetric = "RepAvg",
+  covfilename = NULL,
+  probar = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{filename}{file containing the SNP data (csv file) [required]}

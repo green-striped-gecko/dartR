@@ -4,7 +4,9 @@
 \name{platy}
 \alias{platy}
 \title{Example data set as text file to be imported into a genlight object}
-\format{csv}
+\format{
+csv
+}
 \description{
 Check ?read.genetable in pacakge PopGenReport for details on the format.
 }

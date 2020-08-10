@@ -4,7 +4,9 @@
 \name{testset_metadata}
 \alias{testset_metadata}
 \title{Metadata file. Can be integrated via the dart2genlight function.}
-\format{csv}
+\format{
+csv
+}
 \description{
 Metadata file. Can be integrated via the dart2genlight function.
 }

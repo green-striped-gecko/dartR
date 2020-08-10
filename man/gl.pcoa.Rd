@@ -4,8 +4,14 @@
 \alias{gl.pcoa}
 \title{Ordination applied to genotypes in a genlight object (PCA) or to a distance matrix (PCoA)}
 \usage{
-gl.pcoa(x, nfactors = 5, correction = NULL, parallel = FALSE,
-  n.cores = 16, verbose = NULL)
+gl.pcoa(
+  x,
+  nfactors = 5,
+  correction = NULL,
+  parallel = FALSE,
+  n.cores = 16,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data or a distance matrix of type dist [required]}
@@ -45,14 +51,14 @@ distance or dissimilarity matrix can be represented in an ordinated space, the d
 in that space (that is, without stress) only if the distances are metric. Furthermore, for distances between entities to be faithfully 
 represented in a rigid Cartesian space, the distance measure needs to be Euclidean. If this is not the case, 
 the distances between the entities in the ordinated visualized space will not exactly represent the distances in the input matrix 
-(stress will be non-zero). This source of stress will be evident as negative eigenvalues in the deeper dimensions.
+(stress will be non-zero). This source of stress will be evident as negative eigenvalues in the deeper dimensions. 
 
 A third source of stress arises from having a sparse dataset, one with missing values. This affects both PCA and PCoA. If the original data matrix 
 is not fully populated, that is, if there are missing values, then even a Euclidean distance matrix will not necessarily be 'positive definite'. 
 It follows that some of the eigenvalues may be negative, even though the distance metric is Euclidean. This issue is exacerbated when the number 
 of loci greatly exceeds the number of individuals, as is typically the case when working with SNP data. The impact of missing values can be minimized 
 by stringently filtering on Call Rate, albeit with loss of data. An alternative is given in a paper "Honey, I shrunk the sample covariance matrix" 
-and more recently by Ledoit and Wolf (2018), but their approach has not been implemented here.
+and more recently by Ledoit and Wolf (2018), but their approach has not been implemented here. 
 
 The good news is that, unless the sum of the negative eigenvalues, arising from a non-Euclidean distance measure or from missing values, approaches those 
 of the final PCA or PCoA axes to be displayed, the distortion is probably of no practical consequence and certainly not comparable to the stress arising from
@@ -64,7 +70,7 @@ to be retained in the visual summaries. As a rule of thumb, axes with more than 
 
 The second graph shows the distribution of eigenvalues for the remaining uninformative (noise) axes, including those with negative eigenvalues. 
 Action is recommended (verbose >= 2) if the negative eigenvalues are dominant, their sum approaching in magnitude the eigenvalues for axes selected for 
-the final visual solution.
+the final visual solution. 
 
 Output is a glPca object conforming to adegenet::glPca but with only the following retained.
  $call
@@ -74,7 +80,7 @@ Output is a glPca object conforming to adegenet::glPca but with only the followi
  $scores 
    Scores (coefficients) for each individual
  $loadings
-   Loadings of each SNP for each principal component
+   Loadings of each SNP for each principal component  
 
 PCA was developed by Pearson (1901) and Hotelling (1933), whilst the best modern reference is Jolliffe (2002). PCoA was developed by Gower (1966) while the
 best modern reference is Legendre & Legendre (1998).

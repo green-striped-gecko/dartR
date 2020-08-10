@@ -4,8 +4,7 @@
 \alias{gl.grm}
 \title{Calculates the genomic relatedness matrix}
 \usage{
-gl.grm(x, plotheatmap = TRUE, return.imputed = FALSE, verbose = NULL,
-  ...)
+gl.grm(x, plotheatmap = TRUE, return.imputed = FALSE, verbose = NULL, ...)
 }
 \arguments{
 \item{x}{-- a genlight object}

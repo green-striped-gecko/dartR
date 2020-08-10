@@ -25,7 +25,7 @@ unaltered are RepAvg and TrimmedSeq as they are unaffected by the removal of ind
 }
 \details{
 The script optionally removes resultant monomorphic loci or loci
-with all values missing and deletes them (using gl.filter.monomorphs.r).
+with all values missing and deletes them (using gl.filter.monomorphs.r). 
 
 The script returns a genlight object with the recalculated locus metadata.
 }

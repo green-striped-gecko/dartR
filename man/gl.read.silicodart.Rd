@@ -4,9 +4,15 @@
 \alias{gl.read.silicodart}
 \title{Import presence/absence data from SilicoDArT to genlight \{agegenet\} format (ploidy=1)}
 \usage{
-gl.read.silicodart(filename, ind.metafile = NULL, nas = "-",
-  topskip = NULL, lastmetric = "Reproducibility", probar = TRUE,
-  verbose = NULL)
+gl.read.silicodart(
+  filename,
+  ind.metafile = NULL,
+  nas = "-",
+  topskip = NULL,
+  lastmetric = "Reproducibility",
+  probar = TRUE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{filename}{-- name of csv file containing the SilicoDArT data [required]}

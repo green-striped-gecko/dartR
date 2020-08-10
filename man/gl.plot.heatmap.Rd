@@ -4,9 +4,17 @@
 \alias{gl.plot.heatmap}
 \title{Represent a distance matrix as a heatmap}
 \usage{
-gl.plot.heatmap(D, ncolors = 5, labels = TRUE, labels.cex = 1,
-  values = TRUE, values.cex = 1, legend = TRUE, rank = FALSE,
-  verbose = NULL)
+gl.plot.heatmap(
+  D,
+  ncolors = 5,
+  labels = TRUE,
+  labels.cex = 1,
+  values = TRUE,
+  values.cex = 1,
+  legend = TRUE,
+  rank = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{D}{-- name of the distance matrix [required]}

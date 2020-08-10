@@ -4,7 +4,9 @@
 \name{bandicoot.gl}
 \alias{bandicoot.gl}
 \title{A genlight object created via the read.dart functions}
-\format{genlight object}
+\format{
+genlight object
+}
 \usage{
 bandicoot.gl
 }

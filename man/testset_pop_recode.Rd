@@ -4,7 +4,9 @@
 \name{testset_pop_recode}
 \alias{testset_pop_recode}
 \title{Recode file to be used with the function.}
-\format{csv}
+\format{
+csv
+}
 \description{
 This test data set is provided to show a typical recode file format.
 }

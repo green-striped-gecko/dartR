@@ -4,8 +4,14 @@
 \alias{gl.keep.pop}
 \title{Remove all but specified populations from a genelight \{adegenet\} object}
 \usage{
-gl.keep.pop(x, pop.list, as.pop = NULL, recalc = FALSE,
-  mono.rm = FALSE, verbose = NULL)
+gl.keep.pop(
+  x,
+  pop.list,
+  as.pop = NULL,
+  recalc = FALSE,
+  mono.rm = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}

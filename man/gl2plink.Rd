@@ -4,8 +4,7 @@
 \alias{gl2plink}
 \title{Converts a genlight object to PLINK file format}
 \usage{
-gl2plink(x, outfile = "plink.csv", outpath = tempdir(),
-  verbose = NULL)
+gl2plink(x, outfile = "plink.csv", outpath = tempdir(), verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

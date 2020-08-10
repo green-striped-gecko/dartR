@@ -4,8 +4,18 @@
 \alias{gl.fixed.diff}
 \title{Generate a matrix of fixed differences}
 \usage{
-gl.fixed.diff(x, tloc = 0, test = FALSE, delta = 0.02, reps = 1000,
-  mono.rm = TRUE, plot = FALSE, pb = TRUE, verbose = 3)
+gl.fixed.diff(
+  x,
+  tloc = 0,
+  test = FALSE,
+  delta = 0.02,
+  alpha = 0.05,
+  reps = 1000,
+  mono.rm = TRUE,
+  plot = FALSE,
+  pb = TRUE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or tag P/A data (SilicoDArT) [required]}
@@ -15,6 +25,9 @@ gl.fixed.diff(x, tloc = 0, test = FALSE, delta = 0.02, reps = 1000,
 \item{test}{-- if TRUE, calculate p values for the observed fixed differences [default FALSE]}
 
 \item{delta}{-- the threshold value for the minor allele frequency to regard the difference between two populations to be operationally fixed [default 0.02]}
+
+\item{alpha}{-- level of significance used to display non-significant differences between
+populations as they are compared pairwise [default 0.05]}
 
 \item{reps}{-- number of replications to undertake in the simulation to estimate probability of false positives [default 1000]}
 

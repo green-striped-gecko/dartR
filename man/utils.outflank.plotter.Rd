@@ -9,9 +9,16 @@ input with the OFoutput parameter.  It plots a histogram of the FST (by
 default, the uncorrected FSTs used by OutFLANK) of loci and overlays the
 inferred null histogram.}
 \usage{
-utils.outflank.plotter(OFoutput, withOutliers = TRUE, NoCorr = TRUE,
-  Hmin = 0.1, binwidth = 0.005, Zoom = FALSE,
-  RightZoomFraction = 0.05, titletext = NULL)
+utils.outflank.plotter(
+  OFoutput,
+  withOutliers = TRUE,
+  NoCorr = TRUE,
+  Hmin = 0.1,
+  binwidth = 0.005,
+  Zoom = FALSE,
+  RightZoomFraction = 0.05,
+  titletext = NULL
+)
 }
 \arguments{
 \item{OFoutput}{The output of the function OutFLANK()}

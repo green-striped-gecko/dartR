@@ -15,6 +15,8 @@ gl.report.bases(x, plot = TRUE, verbose = NULL)
 }
 \value{
 returns a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
+
+returns a named vector of base frequencies and the transversion and transitions. I also returns the plot as an ggplot object, which can be further customised. See example.
 }
 \description{
 This script calculates the frequencies of the four bases, and the frequency of transitions and
@@ -32,7 +34,9 @@ because the SNP data is not available, only a single sequence tag.
 \examples{
 # SNP data
   out <- gl.report.bases(testset.gl)
-  out
+  out$freq
+  out$plotbases
+  out$plottvts
 # Tag P/A data
   out <- gl.report.bases(testset.gs)
   out

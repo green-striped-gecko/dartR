@@ -4,8 +4,7 @@
 \alias{gl.report.secondaries}
 \title{Report loci containing secondary SNPs in sequence tags}
 \usage{
-gl.report.secondaries(x, boxplot = "adjusted", range = 1.5,
-  verbose = 2)
+gl.report.secondaries(x, boxplot = "adjusted", range = 1.5, verbose = 2)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
