@@ -19,7 +19,9 @@
 #' with the individual labels, population labels and PCOA scores for subsequent plotting by the user with ggplot or other plotting software. 
 #'
 #' @param glPca Name of the PCA or PCoA object containing the factor scores and eigenvalues [required]
-#' @param x Name of the genlight object containing the SNP or Tag P/A (SilicoDArT) genotypes or the Distance Matrix used to generate the ordination [required]
+#' @param x Name of the genlight object or fd object containing the SNP genotypes or 
+#' a genlight object containing the Tag P/A (SilicoDArT) genotypes or 
+#' the Distance Matrix used to generate the ordination [required]
 #' @param scale Flag indicating whether or not to scale the x and y axes in proportion to \% variation explained [default FALSE]
 #' @param ellipse Flag to indicate whether or not to display ellipses to encapsulate points for each population [default FALSE]
 #' @param p Value of the percentile for the ellipse to encapsulate points for each population [default 0.95]
@@ -75,13 +77,26 @@ gl.pcoa.plot <- function(glPca,
   
 # SET VERBOSITY
   
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
+  if(class(x)=="genlight"){
+    if (is.null(verbose)){ 
+      if(!is.null(x@other$verbose)){ 
+        verbose <- x@other$verbose
+      } else { 
+        verbose <- 2
+      }
     }
-  } 
+  }
+  if(class(x)=="fd"){
+    x <- x$gl
+    if (is.null(verbose)){
+      verbose <- 2
+    }  
+  }
+  if(class(x)=="dist"){
+    if (is.null(verbose)){
+      verbose <- 2
+    }  
+  }
   
   if (verbose < 0 | verbose > 5){
     cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
@@ -103,8 +118,8 @@ gl.pcoa.plot <- function(glPca,
   if(class(glPca)!="glPca") {
     stop("Fatal Error: glPca object required as primary input (parameter glPca)!\n")
   }
-  if(class(x) != "genlight" && class(x) != "dist") {
-    stop("Fatal Error: genlight or dist object required as secondary input (parameter x)!\n")
+  if(class(x) != "genlight" && class(x) != "dist" && class(x)  != "fd") {
+    stop("Fatal Error: genlight, fd or dist object required as secondary input (parameter x)!\n")
   }
   if (labels != "none" && labels != "ind" && labels != "pop" && labels != "interactive" && labels != "legend"){
     cat("  Warning: Parameter 'labels' must be one of none|ind|pop|interactive|legend, set to 'pop'\n")

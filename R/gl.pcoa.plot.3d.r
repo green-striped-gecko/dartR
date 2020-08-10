@@ -10,8 +10,8 @@
 #'
 #' This script is essentially a wrapper for function pca3d \{pca3d\} maintained by January Weiner.
 #' 
-#' @param x -- name of the glPca object containing the factor scores and eigenvalues [required]
-#' @param gl -- name of the genlight object from which the PCoA was generated
+#' @param glPca -- name of the glPca object containing the factor scores and eigenvalues [required]
+#' @param x -- name of the genlight object or fd object from which the PCoA was generated
 #' @param title -- a title for the plot [default "PCoA"]
 #' @param xaxis -- identify the x axis from those available in the ordination (xaxis <= nfactors) [default 1]
 #' @param yaxis -- identify the y axis from those available in the ordination (yaxis <= nfactors) [default 2]
@@ -28,10 +28,15 @@
 #' library(rgl)  #needed for the example
 #' pcoa <- gl.pcoa(testset.gl, nfactor=5)
 #' gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
+#' 
+#' fd <- gl.fixed.diff(testset.gl)
+#' fd <- gl.collapse(fd)
+#' pca <- gl.pcoa(fd)
+#' gl.pcoa.plot.3d(pca,fd)
 
-gl.pcoa.plot.3d <- function(x, 
-                            gl, 
-                            title= "PCoA", 
+gl.pcoa.plot.3d <- function(glPca, 
+                            x, 
+                            title= "PCA", 
                             xaxis=1, 
                             yaxis=2, 
                             zaxis=3,  
@@ -47,13 +52,21 @@ gl.pcoa.plot.3d <- function(x,
   
 # SET VERBOSITY
   
-  if (is.null(verbose)){ 
-    if(!is.null(gl@other$verbose)){ 
-      verbose <- gl@other$verbose
-    } else { 
-      verbose <- 2
+  if(class(x)=="genlight"){
+    if (is.null(verbose)){ 
+      if(!is.null(x@other$verbose)){ 
+        verbose <- x@other$verbose
+      } else { 
+        verbose <- 2
+      }
     }
-  } 
+  }
+  if(class(x)=="fd"){
+    x <- x$gl
+    if (is.null(verbose)){
+      verbose <- 2
+    }  
+  }
   
   if (verbose < 0 | verbose > 5){
     cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
@@ -89,11 +102,11 @@ gl.pcoa.plot.3d <- function(x,
                             
   # Extract the coordinates in a form suitable for pca3d
     if (verbose >= 2) {cat("  Extracting coordinates of PCoA solution\n")}
-    coords <- cbind(x$scores[,xaxis],x$scores[,yaxis],x$scores[,zaxis])
+    coords <- cbind(glPca$scores[,xaxis],glPca$scores[,yaxis],glPca$scores[,zaxis])
   
   # Convert the eigenvalues to percentages
-   s <- sum(x$eig)
-   e <- round(x$eig*100/s,1)
+   s <- sum(glPca$eig)
+   e <- round(glPca$eig*100/s,1)
   # Create labels for the axes
    xlab <- paste0("P", xaxis, " (",e[xaxis],"%)")
    ylab <- paste0("P", yaxis, " (",e[yaxis],"%)")
@@ -101,10 +114,10 @@ gl.pcoa.plot.3d <- function(x,
   # Create a title
    #t <- paste("PCoA plot of Axes", xaxis, yaxis,"and",zaxis)
   # Set the row labels to the population names
-   row.names(x$scores) <- as.character(pop(gl))
+   row.names(glPca$scores) <- as.character(pop(x))
   # Plot
     if (verbose >= 2) {cat("  Plotting three specified axes\n")}
-   pca3d(coords, shape=shape, radius=radius, group=row.names(x$scores), legend=legend, 
+   pca3d(coords, shape=shape, radius=radius, group=row.names(glPca$scores), legend=legend, 
          axe.titles=c(xlab,ylab,zlab))
 
 # FLAG SCRIPT END

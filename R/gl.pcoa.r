@@ -1,4 +1,4 @@
-#' Ordination applied to genotypes in a genlight object (PCA) or to a distance matrix (PCoA)
+#' Ordination applied to genotypes in a genlight object (PCA), in an fd object, or to a distance matrix (PCoA)
 #'
 #' This function takes the genotypes for individuals and undertakes a Pearson Principal Component analysis (PCA) on SNP or Tag P/A (SilicoDArT) 
 #' data; it undertakes a Gower Principal Coordinate analysis (PCoA) if supplied with a distance matrix. Technically, any distance matrix can 
@@ -64,7 +64,7 @@
 #' Lingoes, J. C. (1971) Some boundary conditions for a monotone analysis of symmetric matrices. Psychometrika, 36, 195–203.
 #' Pearson, K. (1901). On lines and planes of closest fit to systems of points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp. 559-572.
 #'  
-#' @param x -- name of the genlight object containing the SNP data or a distance matrix of type dist [required]
+#' @param x -- name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required]
 #' @param nfactors -- number of axes to retain in the output of factor scores.
 #' @param correction Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL]
 #' @param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE]
@@ -76,6 +76,12 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' pca <- gl.pcoa(testset.gl)
+#' gl.pcoa.plot(pca,testset.gl)
+#' 
+#' fd <- gl.fixed.diff(testset.gl)
+#' fd <- gl.collapse(fd)
+#' pca <- gl.pcoa(fd)
+#' gl.pcoa.plot(pca,fd)
 
 gl.pcoa <- function(x, nfactors=5, correction=NULL, parallel=FALSE, n.cores=16, verbose=NULL) {
 
@@ -86,13 +92,26 @@ gl.pcoa <- function(x, nfactors=5, correction=NULL, parallel=FALSE, n.cores=16, 
   
 # SET VERBOSITY
   
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
+  if(class(x)=="genlight"){
+    if (is.null(verbose)){ 
+      if(!is.null(x@other$verbose)){ 
+        verbose <- x@other$verbose
+      } else { 
+        verbose <- 2
+      }
     }
-  } 
+  }
+  if(class(x)=="fd"){
+    x <- x$gl
+    if (is.null(verbose)){
+      verbose <- 2
+    }  
+  }
+  if(class(x)=="dist"){
+    if (is.null(verbose)){
+      verbose <- 2
+    }  
+  }
   
   if (verbose < 0 | verbose > 5){
     cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
@@ -125,6 +144,9 @@ gl.pcoa <- function(x, nfactors=5, correction=NULL, parallel=FALSE, n.cores=16, 
   } else if(class(x)=='dist'){
     if (verbose >= 2){cat("  Processing a Distance Matrix, D \n")}
     data.type <- "dist"
+  } else if(class(x)=='fd'){
+    if (verbose >= 2){cat("  Processing a genlight object after a fixed difference analysis, x$fd \n")}
+    data.type <- "SNP"
   } else {
     stop("Fatal Error: Expecting either a genlight object (SNP or SilicoDArT) or a distance matrix\n")
   }

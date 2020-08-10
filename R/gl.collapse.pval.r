@@ -61,6 +61,8 @@ gl.collapse.pval <- function(fd,
     }
   }
   
+  stop("This script has been discontinued. Requires subjective judgement.\n  Amalgamate non-significant pairs manually using gl.fixed.diff with test=TRUE and gl.merge.pop\n")
+
   if ( verbose >= 2){
     cat("  Amalgamating populations based on non-significant fixed differences\n")
   }
