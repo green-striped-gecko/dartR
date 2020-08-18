@@ -96,10 +96,15 @@ gl.report.pa <- function(gl1, gl2=NULL, verbose=NULL){
 
 # FUNCTION SPECIFIC ERROR CHECKING
   
-if (!is.null(gl2)) pops <- list(pop1=gl1, pop2=gl2) else 
-  {
-   if (length(unique(pop(gl1)))>1) pops <- seppop(gl1) else stop("Only one population provided. Check the @pop slot in your genlight object.\n ")
-  }
+if (!is.null(gl2)) {
+  pops <- list(pop1=gl1, pop2=gl2) 
+  } else {
+   if (length(unique(pop(gl1)))>1){
+     pops <- seppop(gl1)
+  } else {
+    stop("Only one population provided. Check the @pop slot in your genlight object.\n ")
+  }  
+}
  
 # DO THE JOB
   
