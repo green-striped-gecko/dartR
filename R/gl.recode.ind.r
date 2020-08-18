@@ -80,7 +80,7 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=NU
   
 # SCRIPT SPECIFIC ERROR CHECKING
   
-  recode.table <- read.csv(ind.recode, stringsAsFactors=FALSE, header=FALSE, stringsAsFactors = TRUE);
+  recode.table <- read.csv(ind.recode, stringsAsFactors=FALSE, header=FALSE);
   if(length(unique(indNames(x))) != length(unique(recode.table[,1]))) {
     stop("  Fatal Error: Individual names in data file are not the same as in the recode table\n")
   }
