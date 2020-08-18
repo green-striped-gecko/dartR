@@ -334,7 +334,7 @@ gl.pcoa.plot <- function(glPca,
       if(verbose >= 2){cat("  While waiting, returning ggplot compliant object\n")}
     } else {
       if(verbose >= 2){cat("  While waiting, returning dataframe with coordinates of points in the ordinated space\n")}
-      df <- data.frame(id=indNames(x), pop=popNames(x), glPca$scores)
+      df <- data.frame(id=indNames(x), pop=as.character(pop(x)), glPca$scores)
       row.names(df) <- NULL
     }
     
