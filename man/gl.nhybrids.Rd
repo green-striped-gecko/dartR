@@ -4,12 +4,25 @@
 \alias{gl.nhybrids}
 \title{Create an input file for the program NewHybrids and run it if NewHybrids is installed}
 \usage{
-gl.nhybrids(gl, outfile = "nhyb.txt", outpath = tempdir(), p0 = NULL,
-  p1 = NULL, threshold = 0, method = "random", plot = TRUE,
-  pprob = 0.95, nhyb.directory = NULL, BurnIn = 10000,
-  sweeps = 10000, GtypFile = "TwoGensGtypFreq.txt",
-  AFPriorFile = NULL, PiPrior = "Jeffreys", ThetaPrior = "Jeffreys",
-  verbose = 2)
+gl.nhybrids(
+  gl,
+  outfile = "nhyb.txt",
+  outpath = tempdir(),
+  p0 = NULL,
+  p1 = NULL,
+  threshold = 0,
+  method = "random",
+  plot = TRUE,
+  pprob = 0.95,
+  nhyb.directory = NULL,
+  BurnIn = 10000,
+  sweeps = 10000,
+  GtypFile = "TwoGensGtypFreq.txt",
+  AFPriorFile = NULL,
+  PiPrior = "Jeffreys",
+  ThetaPrior = "Jeffreys",
+  verbose = NULL
+)
 }
 \arguments{
 \item{gl}{-- name of the genlight object containing the SNP data [required]}
@@ -46,7 +59,7 @@ if both parental populations are specified]}
 
 \item{ThetaPrior}{-- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight object, if parentals are provided; output of NewHybrids is saved to disk

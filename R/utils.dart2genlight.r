@@ -5,14 +5,42 @@
 #' @param ind.metafile optional file in csv format with metadata for each individual (see details for explanation)
 #' @param covfilename depreciated, use parameter ind.metafile
 #' @param probar show progress bar
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a genlight object is returned. Including all available slots are filled. loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
 #' @details the ind.metadata file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (perferable in decimal degrees WGS1984 format). Additional columns with individual metadata can be imported (e.g. age, gender).
 
 
-utils.dart2genlight <- function(dart, ind.metafile=NULL, covfilename=NULL, probar = TRUE)
- {
+utils.dart2genlight <- function(dart, ind.metafile=NULL, covfilename=NULL, probar = TRUE, verbose=2){
 
-if (is.null(ind.metafile)) {ind.metafile <- covfilename}
+# TRAP COMMAND, SET VERSION
+  
+  funname <- match.call()[[1]]
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+         verbose <- 2
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
+  }
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# DO THE JOB
+  
+  if (is.null(ind.metafile)) {ind.metafile <- covfilename}
  
 #### out contains the dart data
 nind <- dart[["nind"]]
@@ -34,14 +62,15 @@ if (is.null(nrows)){
 }
 
 if (sum(c("SNP", "SnpPosition") %in% names(sraw))!=2) {
-  cat("Could not find SNP or SnpPosition in Dart file. Check you headers!!!")
-  stop()
+  stop("Could not find SNP or SnpPosition in Dart file. Check you headers!!!")
 }
 
-cat("Start conversion....\n")
-cat(paste0("Format is ", nrows," rows.\n"))
-cat("Please note conversion of bigger data sets will take some time!\n")
-cat("Once finished, we recommend to save the object using save(object, file=\"object.rdata\")\n")
+if (verbose >= 2){
+  cat("Starting conversion....\n")
+  cat(paste0("Format is ", nrows," rows.\n"))
+  cat("Please note conversion of bigger data sets will take some time!\n")
+  cat("Once finished, we recommend to save the object using save(object, file=\"object.rdata\")\n")
+}
 
 if(probar) pb <- txtProgressBar(min=0, max=1, style=3, initial=NA)
 
@@ -95,70 +124,111 @@ gout@other$loc.metrics <- df
 ####
 #additional metadata and long lat to the data file are stored in other
 
-if (!is.null(ind.metafile))
-{
-cat(paste("Try to add individual metadata:", ind.metafile,".\n"))
-###### population and individual file to link AAnumbers to populations...
-ind.cov <- read.csv(ind.metafile, header=T, stringsAsFactors=T)
-# is there an entry for every individual
+if (!is.null(ind.metafile)){
+  if (verbose >= 2){
+    cat(paste("Adding individual metrics:", ind.metafile,".\n"))
+  }  
+  ###### population and individual file to link AAnumbers to populations...
+  ind.cov <- read.csv(ind.metafile, header=T, stringsAsFactors=T)
+  # is there an entry for every individual
 
-id.col = match( "id", names(ind.cov))
+  id.col = match( "id", names(ind.cov))
 
-if (is.na(id.col)) {cat ("There is no id column\n") ;stop()} else {
-  ind.cov[,id.col]<- trimws(ind.cov[,id.col], which="both")  #trim spaces
+  if (is.na(id.col)) {
+    stop("Fatal Error: There is no id column\n")
+  } else {
+    ind.cov[,id.col]<- trimws(ind.cov[,id.col], which="both")  #trim spaces
 
-if (length(ind.cov[,id.col])!= length(unique(ind.cov[,id.col]))) {cat("Individual names are not unique. You need to change them!\n"); stop()}  
+    if (length(ind.cov[,id.col])!= length(unique(ind.cov[,id.col]))) {cat("Individual names are not unique. You need to change them!\n"); stop()}  
   
-  
-#reorder
-if (length(ind.cov[,id.col]) !=length(names(sdata)))  {cat ("Ids for individual metadata does not match the number of ids in the SNP data file. Maybe this is fine if a subset matches.\n") } 
+    #reorder
+    if (length(ind.cov[,id.col]) !=length(names(sdata))){
+      cat ("Ids for individual metadata does not match the number of ids in the SNP data file. Maybe this is fine if a subset matches.\n") 
+      nam.indmeta <- ind.cov[,id.col]
+      nam.dart <- names(sdata)
+      
+      nm.indmeta <- nam.indmeta[!nam.indmeta %in% nam.dart]
+      nm.inddart <- nam.dart[!nam.dart %in% nam.indmeta]
+      if (length(nm.indmeta)>0) {
+        cat("ind.metafile ids not matched were:\n")
+        print(nm.indmeta)
+      }
+      if (length(nm.inddart)>0) {
+        cat("dart file ids not matched were:\n")
+        print(nm.inddart)
+      }
+      
+    } 
 
-ord <- match(names(sdata), ind.cov[,id.col])
-ord <- ord[!is.na(ord)]
+    ord <- match(names(sdata), ind.cov[,id.col])
+    ord <- ord[!is.na(ord)]
 
   
-if (length(ord)>1 & length(ord)<=nind ) 
-  {cat (paste("Ids for individual metadata (at least a subset of) are matching!\nFound ", length( ord ==nind),"matching ids out of" , nrow(ind.cov), "ids provided in the ind.metadata file. Subsetting snps now!.\n "))
-  ord2 <- match(ind.cov[ord,id.col], indNames(gout))
-  gout <- gout[ord2,]
-  }else {cat("Ids are not matching!!!!\n");stop()}
-}
+    if (length(ord)>1 & length(ord)<=nind ){ 
+      if (verbose >= 2){
+        cat (paste("  Ids for individual metadata (at least a subset of) are matching!\n"))
+        cat (paste("  Found ",length( ord ==nind),"matching ids out of" , nrow(ind.cov), "ids provided in the ind.metadata file.\n "))
+      }
+      ord2 <- match(ind.cov[ord,id.col], indNames(gout))
+      gout <- gout[ord2,]
+    } else{
+      stop("Fatal Error: Individual ids are not matching!!!!\n")
+    }
+  }
 
 
  pop.col = match( "pop", names(ind.cov))
 
  if (is.na(pop.col)) {
-   cat ("Please note: there is no pop column\n") 
-   pop(out) <- array(NA,nInd(gl))
-   cat("Created pop column with NAs\n")
+   if (verbose >= 1){
+     cat ("Warning: There is no pop column, created one with all pop1 as default for all individuals\n")
+   }
+   pop(gout) <- factor(rep("pop1",nInd(gout)))
  }  else {
     pop(gout) <- as.factor(ind.cov[ord,pop.col])
-    cat("Added pop factor.\n")
+    if (verbose >= 2){
+      cat("Added population assignments.\n")
+    }
  }
  
- lat.col = match( "lat", names(ind.cov))
- lon.col = match( "lon", names(ind.cov))
-
-  if (is.na(lat.col)) {cat ("Please note: there is no lat column\n") }
-  if (is.na(lon.col)) {cat ("Please note: there is no lon column\n") }
-  if (!is.na(lat.col) & !is.na(lon.col))
-    {
+   lat.col = match( "lat", names(ind.cov))
+   lon.col = match( "lon", names(ind.cov))
+  if(verbose >= 2){
+    if (is.na(lat.col)) {
+      cat ("Warning: Individual metrics do not include a latitude (lat) column\n") 
+    }
+    if (is.na(lon.col)) {
+      cat ("Warning: Individual metrics do not include a longitude (lon) column\n") 
+    }
+  }
+  if (!is.na(lat.col) & !is.na(lon.col)){
     gout@other$latlong <- ind.cov[ord,c(lat.col, lon.col)]
     rownames(gout@other$latlong)  <-  ind.cov[ord,id.col]
-    cat(" Added latlon data.\n" )
+    if (verbose >= 2){
+      cat("  Added latlon data\n" )
     }
+  }
 
 # known.col <- names( ind.cov) %in% c("id","pop", "lat", "lon")
 # known.col <- ifelse(is.na(known.col), , known.col)
 # other.col <- names(ind.cov)[!known.col]
   other.col <- names(ind.cov)
- if (length(other.col>0) )
-    {
+ if (length(other.col>0) ){
     gout@other$ind.metrics<-ind.cov[ord,other.col, drop=FALSE]
     rownames(gout@other$ind.metrics) <- ind.cov[ord,id.col]
-    cat(paste(" Added ",other.col," to the other$ind.metrics slot.\n"))
+    if (verbose >= 2){
+      cat(paste(" Added ",other.col," to the other$ind.metrics slot.\n"))
     }
+  }
 }
-gout
+
+# FLAG SCRIPT END
+
+  if (verbose >= 1) {
+    cat(paste("Completed:",funname,"\n"))
+  }
+
+  return(gout)
+
 }
 

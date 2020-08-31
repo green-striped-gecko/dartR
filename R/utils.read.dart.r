@@ -5,23 +5,61 @@
 #' @param nas a character specifying NAs (default is "-")
 #' @param topskip a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.
 #' @param lastmetric specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a list of length 5. #dart format (one or two rows) #individuals, #snps, #non genetic metrics, #genetic data (still two line format, rows=snps, columns=individuals)
 
-utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="RepAvg"){
+utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="RepAvg",verbose=2){
   
+# TRAP COMMAND, SET VERSION
+  
+  funname <- match.call()[[1]]
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+         verbose <- 2
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
+  }
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# DO THE JOB
+  
+
   if (is.null(topskip)) {
-    cat("Topskip not provided. Guessing topskip...\n")    
-    tdummy <- read.csv(filename,   na.strings=nas,  check.names=FALSE, nrows = 20, header=FALSE)
+    if (verbose >= 2){
+      cat("  Topskip not provided. ") 
+    }
+    tdummy <- read.csv(filename,   na.strings=nas,  check.names=FALSE, nrows = 20, header=FALSE,stringsAsFactors = TRUE)
   
     nskip <- sum(tdummy[,1] == "*"  )
     if (nskip > 0) { 
-      topskip <- nskip; cat(paste("Set topskip to ", nskip,". Proceeding ...\n"))
+      topskip <- nskip
+      if (verbose >= 2){
+        cat(paste("Setting topskip to",nskip,".\n"))
+      }  
     } else {
-      stop("Could not determine topskip (the number of rows that need to be skipped. Please provide it manually.\n") 
+      stop("Could not determine the number of rows that need to be skipped. Please provide it manually by setting the topskip parameter.\n") 
     }
   }
 
-  snpraw <- read.csv(filename, na.strings=nas, skip = topskip, check.names=FALSE)
+  if (verbose >= 2){
+    cat("  Reading in the SNP data\n")
+  }
+  snpraw <- read.csv(filename, na.strings=nas, skip = topskip, check.names=FALSE, stringsAsFactors = TRUE)
 
   if (is.character(lastmetric)) {
     lmet <- which(lastmetric==names(snpraw))
@@ -35,21 +73,23 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
   ind.names <- colnames(snpraw)[(lmet+1):ncol(snpraw) ]
   ind.names <- trimws(ind.names, which = "both") #trim for spaces
   if (length(ind.names)!= length(unique(ind.names))) {
-    stop("Individual names are not unique. You need to change them!\n")
+    cat("Warning: Individual names are not unique, adding '_n' to replicates (but not the first instance) to render them unique.\n")
+    ind.names <- make.unique(as.character(ind.names), sep = "_")
   }  
   
   datas <- snpraw[, (lmet+1):ncol(snpraw)]
   
   nrows = NULL
   if (is.null(nrows)) {
-    cat("Trying to determine if one row or two row format...\n")
     gnrows = 3-max(datas, na.rm = TRUE)  #if max(datas==1) then two row format, if two then one row format
     
     if (gnrows==1 | gnrows==2)  {
       nrows <-gnrows
-      cat(paste("Found ", nrows , " row(s) format. Proceed...\n"))
+      if (verbose >= 2){
+        cat(paste("  Detected",nrows,"row format.\n"))
+      }  
     } else {
-      stop("The dart format either one row or two row format. This does not seem to be the case here.\n")
+      stop("The DArT format must be either 1row or 2row. This does not seem to be the case here.\n")
     }
     
   } 
@@ -72,8 +112,11 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
   #   }
   #   stdmetricscols <- c(stdmetricscols, addmetricscols)
   # } 
-  cat ("Added the following covmetrics:\n")
-  cat (paste(paste(names(snpraw)[stdmetricscols], collapse=" "),".\n"))
+  
+  if (verbose >= 2){
+    cat ("Added the following locus metrics:\n")
+    cat (paste(paste(names(snpraw)[stdmetricscols], collapse=" "),".\n"))
+  }
   covmetrics <-  snpraw[,stdmetricscols]
   
   #####Various checks (first are there two rows per allele?
@@ -94,17 +137,27 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
   covmetrics$uid <- paste(covmetrics$clone, spp,sep="-")
   ### there should be only twos (and maybe fours)
   tt <- table(table(covmetrics$uid) )
-  cat(paste("Number of rows per Clone. Should be only ", nrows,"s:", names(tt),"\n "))
+  if (verbose >= 2){
+    cat(paste("Number of rows per clone (should be only ", nrows,"s):", names(tt),"\n "))
+  }
   if (nrows!=as.numeric(names(tt))) {
-    cat("!!!!!Number of rows per clone does not fit with nrow format. Most likely your data are not read in correctly.!!!!!\n") 
+    cat("  Warning: The no. rows per Clone does not fit with nrow format. Most likely your data are not read in correctly!\n") 
   }  
   nind <- ncol(datas)
   nsnp <- nrow(covmetrics)/nrows
   
-  cat(paste("Recognised:", nind, "individuals and",nsnp," SNPs in a",nrows,"row format using", filename,"\n"))
+  if (verbose >= 2){
+    cat(paste("Recognised:", nind, "individuals and",nsnp," SNPs in a",nrows,"row format using", filename,"\n"))
+  }
   
   out <- list(nrows=nrows, nind=nind, nsnp=nsnp, covmetrics= covmetrics, gendata =datas)
   
-  out
+# FLAG SCRIPT END
+  
+  if (verbose >= 1) {
+    cat(paste("Completed:",funname,"\n"))
+  }
+  
+  return(out)
   
 }

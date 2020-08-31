@@ -2,21 +2,20 @@
 % Please edit documentation in R/gl.filter.hamming.r
 \name{gl.filter.hamming}
 \alias{gl.filter.hamming}
-\title{Filters loci in a genlight object based on pairwise Hamming distance between sequence tags}
+\title{Filters loci based on pairwise Hamming distance between sequence tags}
 \usage{
-gl.filter.hamming(x, threshold = 0.2, rs = 5, pb = FALSE,
-  verbose = 2)
+gl.filter.hamming(x, threshold = 0.2, rs = 5, pb = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{threshold}{-- a threshold Hamming distance for filtering loci [default 0.2]}
+\item{threshold}{-- a threshold Hamming distance for filtering loci [default threshold <= 0.2]}
 
 \item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 4]}
 
 \item{pb}{-- switch to output progress bar [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 a genlight object filtered on Hamming distance.
@@ -47,7 +46,8 @@ Only one of two loci are retained if their Hamming distance is less that a speci
 percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 }
 \examples{
-gl <- gl.filter.hamming(testset.gl, threshold=0.25)
+# SNP data
+  result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

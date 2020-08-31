@@ -4,7 +4,9 @@
 \name{platy}
 \alias{platy}
 \title{Example data set as text file to be imported into a genlight object}
-\format{csv}
+\format{
+csv
+}
 \description{
 Check ?read.genetable in pacakge PopGenReport for details on the format.
 }
@@ -18,7 +20,7 @@ sep="/")
 platy.gl <- (gi2gl(platy))
 df.loc <- data.frame(RepAvg = runif(nLoc(platy.gl)), CallRate = 1)
 platy.gl@other$loc.metrics <- df.loc
-gl.report.repavg(platy.gl)
+gl.report.reproducibility(platy.gl)
 }
 }
 \author{

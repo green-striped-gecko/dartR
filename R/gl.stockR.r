@@ -23,6 +23,10 @@ gl.stockR <- function (x,verbose = 2) {
   funname <- match.call()[[1]]
   
   # FLAG SCRIPT START
+  # set verbosity
+  if (is.null(verbose) & !is.null(x@other$verbose)) verbose=x@other$verbose
+  if (is.null(verbose)) verbose=2
+ 
   
   if (verbose < 0 | verbose > 5) {
     cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
@@ -35,7 +39,7 @@ gl.stockR <- function (x,verbose = 2) {
   
   # STANDARD ERROR CHECKING
   
-  if (!is(x,"genlight")) {
+  if (class(x) != "genlight") {
     cat("  Fatal Error: genlight object required!\n")
     stop("Execution terminated\n")
   }

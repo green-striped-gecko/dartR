@@ -54,7 +54,7 @@
 #' @param AFPriorFile -- name of the file containing prior allele frequency information [default NULL]
 #' @param PiPrior -- Jeffreys-like priors or Uniform priors for the parameter pi [default Jeffreys]
 #' @param ThetaPrior -- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return The reduced genlight object, if parentals are provided; output of NewHybrids is saved to disk
 #' @export
 #' @importFrom MASS write.matrix
@@ -82,19 +82,53 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     AFPriorFile = NULL,
                     PiPrior = "Jeffreys",
                     ThetaPrior = "Jeffreys",
-                    verbose=2) {
+                    verbose=NULL) {
 
-  if(!is(gl, "genlight")) {
-    cat("Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-  }
-  # Work around a bug in adegenet if genlight object is created by subsetting
-  if (nLoc(gl)!=nrow(gl@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-
+# TRAP COMMAND, SET VERSION
+  
+  funname <- match.call()[[1]]
+  build <- "Jacob"
+  x<-gl
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
   
   if (verbose < 0 | verbose > 5){
-    cat("    Warning: verbosity must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+  if (all(x@ploidy == 1)){
+    stop("  Detected Tag Presence/Absence (SilicoDArT) data. Please provide a SNP dataset\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
+  }
+  
+  # FUNCTION SPECIFIC ERROR CHECKING
   
   if (!(method=="random" | method=="AvgPic" | method=="avgPic" | method=="AvgPIC")){
     cat("    Warning: method must be either 'random' or AvgPic, set to 'random'\n")
@@ -106,12 +140,8 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     pprob <- 0.99
   }
 
-  if (verbose > 0) {
-    cat("Starting gl.nhybrids: Assigning individual to hybrid categories\n")
-  }
+# DO THE JOB
   
-  #if (verbose < 2) { sink("/dev/null") }
-
     gl.tmp <- gl
     thold<-threshold
     loc.limit <- 200
@@ -184,7 +214,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       if ( verbose >= 3 ) {cat("  No. of fixed loci identified:",nloci,"\n")}
         if (nloci > loc.limit) {
           if (verbose>=3){cat("  Selecting",loc.limit,"loci showing fixed differences between parentals at random\n")}
-          gl.fixed.used <- utils.subsample.loci(gl, loc.limit, method="random",verbose=0)
+          gl.fixed.used <- gl.subsample.loci(gl, loc.limit, method="random",verbose=0)
           gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
           gl.fixed.all@other$loc.metrics <- gl@other$loc.metrics[(locNames(gl) %in% fixed.loci),]
           gl2nhyb <- gl.fixed.used
@@ -193,14 +223,14 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
             if(verbose>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected at random\n")}
             gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
             gl.fixed.used <- gl.fixed.all
-            tmp <- utils.subsample.loci(gl, 200-nloci, method="random",verbose=0)
+            tmp <- gl.subsample.loci(gl, 200-nloci, method="random",verbose=0)
             gl2nhyb <- cbind(gl.fixed.used,tmp)
             gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
           } else {
             if(verbose>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected based on AvgPic\n")}
             gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
             gl.fixed.used <- gl.fixed.all
-            tmp <- utils.subsample.loci(gl, loc.limit-nloci, method="AvgPic",verbose=0)
+            tmp <- gl.subsample.loci(gl, loc.limit-nloci, method="AvgPic",verbose=0)
             gl2nhyb <- cbind(gl.fixed.used,tmp)
             gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
           }
@@ -226,7 +256,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       
       if(method=="random" & verbose>=3) {cat("    Selecting",loc.limit,"random loci\n")}
       if (method=="avgpic" & verbose>=3) {cat("    Selecting",loc.limit,"loci with most information content (AvgPIC)\n")}
-      gl2nhyb <- utils.subsample.loci(gl, loc.limit, method=method, verbose=0)
+      gl2nhyb <- gl.subsample.loci(gl, loc.limit, method=method, verbose=0)
       gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
       flag <- "onepar"
     }
@@ -237,7 +267,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       
       if(method=="random" & verbose>=3) {cat("    Selecting",loc.limit,"random loci\n")}
       if (method=="avgpic" & verbose>=3) {cat("    Selecting",loc.limit,"loci with most information content (AvgPIC)\n")}
-      gl2nhyb <- utils.subsample.loci(gl, loc.limit, method=method, verbose=0)
+      gl2nhyb <- gl.subsample.loci(gl, loc.limit, method=method, verbose=0)
       gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
       flag <- "nopar"
     }
@@ -403,7 +433,12 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       cat("\nResults are stored in file aa-PofZ.csv\n")
       cat("Returning data used by New Hybrids in generating the results, as a genlight object\n")
     }
-    if (verbose > 0) {cat("gl.nhybrids Completed\n")}
+    
+    # FLAG SCRIPT END
+    
+    if(verbose >= 1){
+      cat("Completed:",funname,"\n")
+    }  
 
     return(gl2nhyb)
 

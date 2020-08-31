@@ -4,7 +4,7 @@
 \alias{gl2plink}
 \title{Converts a genlight object to PLINK file format}
 \usage{
-gl2plink(x, outfile = "plink.csv", outpath = tempdir(), verbose = 2)
+gl2plink(x, outfile = "plink.csv", outpath = tempdir(), verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -14,7 +14,7 @@ gl2plink(x, outfile = "plink.csv", outpath = tempdir(), verbose = 2)
 \item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
 to direct output files to your working directory.}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \description{
 This function exports a genlight object into PLINK format and save it into a file

@@ -4,11 +4,17 @@
 \alias{gl2fasta}
 \title{Concatenates DArT trimmed sequences and outputs a fastA file.}
 \usage{
-gl2fasta(gl, method = 1, outfile = "output.fasta",
-  outpath = tempdir(), probar = TRUE)
+gl2fasta(
+  x,
+  method = 1,
+  outfile = "output.fasta",
+  outpath = tempdir(),
+  probar = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
-\item{gl}{-- name of the DArT genlight object [required]}
+\item{x}{-- name of the DArT genlight object [required]}
 
 \item{method}{-- 1 | 2 | 3 | 4. Type method=0 for a list of options  [method=1]}
 
@@ -17,6 +23,8 @@ gl2fasta(gl, method = 1, outfile = "output.fasta",
 \item{outpath}{-- path where to save the output file (set to tempdir by default)}
 
 \item{probar}{-- if TRUE, a progress bar will be displayed for long loops [default = TRUE]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A new gl object with all loci rendered homozygous
@@ -53,9 +61,11 @@ The script writes out the composite haplotypes for each individual as a fastA fi
 'TrimmedSequence' to be among the locus metrics (\code{@other$loc.metrics}) and information of the type of alleles (slot loc.all e.g. "G/A") and the position of the SNP in slot position of the ```genlight``` object (see testset.gl@position and testset.gl@loc.all for how to format these slots.)
 }
 \examples{
-gl <- gl.filter.repavg(testset.gl,t=1)
+gl <- gl.filter.reproducibility(testset.gl,t=1)
+gl <- gl.filter.overshoot(gl,verbose=3)
 gl <- gl.filter.callrate(testset.gl,t=.98)
-gl2fasta(gl, method=1, outfile="test.fasta")
+gl <- gl.filter.monomorphs(gl)
+gl2fasta(gl, method=1, outfile="test.fasta",verbose=3)
 }
 \author{
 Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

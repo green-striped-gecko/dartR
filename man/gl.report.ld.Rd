@@ -4,11 +4,19 @@
 \alias{gl.report.ld}
 \title{Calculates pairwise population based Linkage Disequilibirum across all loci using the specifyied number of cores}
 \usage{
-gl.report.ld(gi, name = NULL, save = TRUE, nchunks = 2, ncores = 1,
-  chunkname = NULL, probar = TRUE)
+gl.report.ld(
+  x,
+  name = NULL,
+  save = TRUE,
+  nchunks = 2,
+  ncores = 1,
+  chunkname = NULL,
+  probar = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
-\item{gi}{a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)}
+\item{x}{a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)}
 
 \item{name}{character string for rdata file. If not given genind object name is used}
 
@@ -21,6 +29,8 @@ gl.report.ld(gi, name = NULL, save = TRUE, nchunks = 2, ncores = 1,
 \item{chunkname}{the name of the chunks for saving [default is NULL]}
 
 \item{probar}{if TRUE, a progress bar is displayed for long loops [default = TRUE]}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed. The final output is a data frame that holds all statistics of pairwise LD between loci. (See ?LD in package genetics for details).

@@ -4,8 +4,14 @@
 \alias{gl.ibd}
 \title{Isolation by distance}
 \usage{
-gl.ibd(gl = NULL, Dgen = NULL, Dgeo = NULL, projected = FALSE,
-  permutations = 999, plot = TRUE)
+gl.ibd(
+  gl = NULL,
+  Dgen = NULL,
+  Dgeo = NULL,
+  projected = FALSE,
+  permutations = 999,
+  plot = TRUE
+)
 }
 \arguments{
 \item{gl}{genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed}

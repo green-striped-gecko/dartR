@@ -7,51 +7,69 @@
 #' @param outgroup -- Vector containing the population names that are the outgroups [Default NULL]
 #' @param type -- Type of dendrogram phylogram|cladogram|fan|unrooted [Default Phylogram]
 #' @param labelsize -- Size of the labels as a proportion of the graphics default [Default 0.7]
+#' @param treefile -- Name of the file for the tree topology using Newick format [Default NULL].
 #' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A tree file of class phylo
 #' @importFrom stringr str_pad
-#' @importFrom ape nj root plot.phylo
+#' @importFrom ape nj root plot.phylo write.tree
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.tree.nj(testset.gl,type="fan")
+#' # SNP data
+#'   gl.tree.nj(testset.gl,type="fan")
+#' # Tag P/A data
+#'   gl.tree.nj(testset.gs,type="fan")
 
-# Last amended 3-Feb-19
+gl.tree.nj <- function(x, 
+                       type="phylogram", 
+                       outgroup=NULL, 
+                       labelsize=0.7, 
+                       treefile=NULL, 
+                       verbose=NULL) {
 
-gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, verbose=2) {
-
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
-  
-  if(!is(x, "genlight")) {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
   }
-
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+  
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
 
 # DO THE JOB
 
@@ -65,27 +83,39 @@ gl.tree.nj <- function(x, type="phylogram", outgroup=NULL, labelsize=0.7, verbos
     row.names(d) <- substr(row.names(d),1,10)
     
   # Plot the distances as an nj tree  
-    tree <- nj(d)
+    tree <- ape::nj(d)
     if (!is.null(outgroup)) {
       # Function plot.phylo{ape} has the labels all of the same length
-      outgroup <- str_pad(outgroup, nchar(tree$tip.label[1]), side = c("right"), pad = " ")
+      outgroup <- stringr::str_pad(outgroup, nchar(tree$tip.label[1]), side = c("right"), pad = " ")
       # Truncate to 10 characters
       outgroup <- substr(outgroup,1,10)
       # Root the tree
-      rtree <- root(tree, outgroup)
+      tree <- ape::root(tree, outgroup)
       # Plot the tree
-      plot.phylo(rtree, type=type, cex=labelsize)
-      return(rtree)
+      # Save the prior settings for mfrow, oma, mai and pty, and reassign
+      op <- par(mfrow = c(1, 1), oma=c(1,1,1,1), mai=c(0,0,0,0),pty="m")
+      ape::plot.phylo(tree, type=type, cex=labelsize)
     } else {
       # Just plot the tree unrooted
-      plot.phylo(tree, type=type, cex=labelsize)
-      return(tree)
+      op <- par(mfrow = c(1, 1), oma=c(1,1,1,1), mai=c(0,0,0,0),pty="m")
+      ape::plot.phylo(tree, type=type, cex=labelsize)
     }
-
-# FLAG SCRIPT END
-
-  if (verbose > 0) {
-    cat("Completed:",funname,"\n")
-  }
     
+  # Output the tree file
+    if(!is.null(treefile)){
+      if(verbose>=2){cat("  Writing the tree topology to",treefile,"\n")}
+      write.tree(tree,file=treefile)
+    }  
+    
+  # Reset the par options    
+    par(op)
+    
+# FLAG SCRIPT END
+    
+    if (verbose > 0) {
+      cat("Completed:",funname,"\n")
+    }
+    
+    return(tree)
+
 }

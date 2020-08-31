@@ -4,8 +4,7 @@
 \alias{gl.write.csv}
 \title{Write out data from a gl object \link{adegenet} to csv file}
 \usage{
-gl.write.csv(x, outfile = "outfile.csv", outpath = tempdir(),
-  verbose = 2)
+gl.write.csv(x, outfile = "outfile.csv", outpath = tempdir(), verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -14,7 +13,7 @@ gl.write.csv(x, outfile = "outfile.csv", outpath = tempdir(),
 
 \item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 saves a glenlight object to csv, returns NULL
@@ -29,7 +28,10 @@ The data coding differs from the DArT 1row format in that 0 = reference homozygo
 alternate homozygous, 1 = heterozyous, and NA = missing SNP assignment.
 }
 \examples{
-gl.write.csv(testset.gl, outfile="SNP_1row.csv")
+# SNP data
+  gl.write.csv(testset.gl, outfile="SNP_1row.csv")
+# Tag P/A data
+  gl.write.csv(testset.gs, outfile="PA_1row.csv")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

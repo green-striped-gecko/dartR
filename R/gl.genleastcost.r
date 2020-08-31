@@ -5,12 +5,11 @@
 #' @param fric.raster a friction matrix
 #' @param gen.distance specification which genetic distance method should be used to calculate pairwise genetic distances between populations ( "D", "Gst.Nei", "Gst.Hedrick") or individuals ("Smouse", "Kosman", "propShared")
 #' @param NN Number of neighbours used when calculating the cost distance (possible values 4,8 or 16). As the default is NULL a value has to be provided if pathtype='leastcost'. NN=8 is most commonly used. Be aware that linear structures may cause artefacts in the least-cost paths, therefore inspect the actual least-cost paths in the provided output.
-#' @param pathtype Type of cost distance to be calculated (based on function in the \code{\link{gdistance}} package. Available distances are 'leastcost', 'commute' or 'rSPDistance'. See functions in the gdistance package for futher explanations. If the path type is set to 'leastcost' then paths and also pathlength are returned.
+#' @param pathtype Type of cost distance to be calculated (based on function in the \code{gdistance} package. Available distances are 'leastcost', 'commute' or 'rSPDistance'. See functions in the gdistance package for futher explanations. If the path type is set to 'leastcost' then paths and also pathlength are returned.
 #' @param plotpath switch if least cost paths should be plotted (works only if pathtype='leastcost'. Be aware this slows down the computation, but it is recommended to do this to check least cost paths visually.
-#' @param theta value needed for rSPDistance function. see \code{\link{rSPDistance}} in package \code{gdistance}.
+#' @param theta value needed for rSPDistance function. see \code{\link[gdistance]{rSPDistance}} in package \code{gdistance}.
 #' @importFrom mmod pairwise_D pairwise_Gst_Hedrick pairwise_Gst_Nei
 #' @importFrom PopGenReport lgrMMRR wassermann gd.smouse gd.kosman
-#' @importFrom gdistance transition costDistance shortestPath geoCorrection
 #' @importFrom stats step
 #' @importFrom raster plot
 #' @importFrom sp Line Lines SpatialLines SpatialLinesLengths
@@ -35,71 +34,14 @@
 #' @export
 gl.genleastcost <- function(x, fric.raster, gen.distance, NN=NULL, pathtype="leastcost", plotpath=TRUE, theta=1)
 {
-# 
-# pairwise_D2 <- function (x, linearized = FALSE) 
-# {
-#       pops <- seppop(x)
-#       n.pops <- length(pops)
-#       allP <- utils::combn(1:n.pops, 2)
-#       pair <- function(index.a, index.b) {
-#         a <- pops[[index.a]]
-#         b <- pops[[index.b]]
-#         temp <- repool(a, b)
-#         return(D_Jost(temp)$global.het)
-#       }
-#       res <- sapply(1:dim(allP)[2], function(i) pair(allP[, i][1], 
-#                                                      allP[, i][2]))
-#       attributes(res) <- list(class = "dist", Diag = FALSE, Upper = FALSE, 
-#                               Labels = popNames(x), Size = n.pops)
-# 
-#       if (linearized) res <- res/(1 - res)
-#       return(res)
-# }
-#   
-#   pairwise_Gst_Hedrick2 <-
-#     function (x, linearized = FALSE) 
-#     {
-#       pops <- seppop(x)
-#       n.pops <- length(pops)
-#       allP <- utils::combn(1:n.pops, 2)
-#       pair <- function(index.a, index.b) {
-#         a <- pops[[index.a]]
-#         b <- pops[[index.b]]
-#         temp <- repool(a, b)
-#         return(Gst_Hedrick(temp)$global)
-#       }
-#       res <- sapply(1:dim(allP)[2], function(i) pair(allP[, i][1], 
-#                                                      allP[, i][2]))
-#       attributes(res) <- list(class = "dist", Diag = FALSE, Upper = FALSE, 
-#                               Labels = popNames(x), Size = n.pops)
-#        if (linearized) res <- res/(1 - res)
-#       return(res)
-#      }
-#   
-#   pairwise_Gst_Nei2 <-
-#     function (x, linearized = FALSE) 
-#     {
-#       pops <- seppop(x)
-#       n.pops <- length(pops)
-#       allP <- utils::combn(1:n.pops, 2)
-#       pair <- function(index.a, index.b) {
-#         a <- pops[[index.a]]
-#         b <- pops[[index.b]]
-#         temp <- repool(a, b)
-#         return(Gst_Nei(temp)$global)
-#       }
-#       res <- sapply(1:dim(allP)[2], function(i) pair(allP[, i][1], 
-#                                                      allP[, i][2]))
-#       attributes(res) <- list(class = "dist", Diag = FALSE, Upper = FALSE, 
-#                               Labels = popNames(x), Size = n.pops)
-#       if (linearized) res <- res/(1 - res)
-#       return(res)
-#     }
-#   
-# 
-#   
   
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "gdistance"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") } 
   
+
+
   if (is.null(NN) & pathtype=="leastcost") 
   {
     stop("NN is not specified!\nPlease specify the number of nearest neighbour to use for the least-cost path calculations (NN=4 or NN=8). If linear features are tested you may want to consider NN=4 otherwise NN=8 is the most commonly used and prefered option. In any case check the actual least-cost paths for artefacts by inspecting the plot on least-cost paths.\n")
@@ -171,17 +113,17 @@ if (dist.type=="pop")  points(cp,cex=1.5 , pch= 15, col="black")
 
 
 #create friction matrix
-fric.mat <- transition(fric.raster[[ci]],function(x) 1/x[2],NN)
+fric.mat <- gdistance::transition(fric.raster[[ci]],function(x) 1/x[2],NN)
 
 #set distances to meters  if not projected already
 fric.mat@crs@projargs<- "+proj=merc +units=m"
-fric.mat.cor <- geoCorrection(fric.mat)
+fric.mat.cor <- gdistance::geoCorrection(fric.mat)
 
-if (pathtype=="leastcost") cd.mat <-costDistance(fric.mat.cor, cp, cp)
+if (pathtype=="leastcost") cd.mat <-gdistance::costDistance(fric.mat.cor, cp, cp)
 
-if (pathtype=="rSPDistance") cd.mat <- rSPDistance(fric.mat.cor, cp, cp, theta=1)
+if (pathtype=="rSPDistance") cd.mat <- gdistance::rSPDistance(fric.mat.cor, cp, cp, theta=1)
 
-if (pathtype=="commute") cd.mat <-as.matrix(commuteDistance(fric.mat.cor, cp))
+if (pathtype=="commute") cd.mat <-as.matrix(gdistance::commuteDistance(fric.mat.cor, cp))
 dimnames(cd.mat) <- dimnames(eucl.mat) 
 
 
@@ -208,7 +150,7 @@ if (dist(rbind(cp[comb[i,1],], cp[comb[i,2],]))==0)
  sPath <- SpatialLines(list(S1))
 } else 
 {
-sPath <- shortestPath(fric.mat.cor, cp[comb[i,1],], cp[comb[i,2],], output="SpatialLines")
+sPath <- gdistance::shortestPath(fric.mat.cor, cp[comb[i,1],], cp[comb[i,2],], output="SpatialLines")
 }
 
 lines(sPath, lwd=1.5, col=cols[i])

@@ -4,14 +4,23 @@
 \alias{gl.pcoa.plot.3d}
 \title{3D interactive plot of the results of a PCoA ordination}
 \usage{
-gl.pcoa.plot.3d(x, gl, title = "PCoA", xaxis = 1, yaxis = 2,
-  zaxis = 3, shape = "sphere", radius = 2, legend = "topright",
-  verbose = 2)
+gl.pcoa.plot.3d(
+  glPca,
+  x,
+  title = "PCA",
+  xaxis = 1,
+  yaxis = 2,
+  zaxis = 3,
+  shape = "sphere",
+  radius = 2,
+  legend = "topright",
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{-- name of the glPca object containing the factor scores and eigenvalues [required]}
+\item{glPca}{-- name of the glPca object containing the factor scores and eigenvalues [required]}
 
-\item{gl}{-- name of the genlight object from which the PCoA was generated}
+\item{x}{-- name of the genlight object or fd object from which the PCoA was generated}
 
 \item{title}{-- a title for the plot [default "PCoA"]}
 
@@ -27,7 +36,7 @@ gl.pcoa.plot.3d(x, gl, title = "PCoA", xaxis = 1, yaxis = 2,
 
 \item{legend}{-- one of bottomright, bottom, bottomleft, left, topleft, top, topright, right, center [default "bottom"]}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 NULL, plots an interactive 3D plot of the ordination in a separate window

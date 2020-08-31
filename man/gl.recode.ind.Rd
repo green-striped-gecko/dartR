@@ -4,8 +4,7 @@
 \alias{gl.recode.ind}
 \title{Recode individual (=specimen = sample) labels in a genelight object \{adegenet\}}
 \usage{
-gl.recode.ind(x, ind.recode, recalc = FALSE, mono.rm = FALSE,
-  verbose = 2)
+gl.recode.ind(x, ind.recode, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes [required]}
@@ -16,7 +15,7 @@ gl.recode.ind(x, ind.recode, recalc = FALSE, mono.rm = FALSE,
 
 \item{mono.rm}{-- if TRUE, remove monomorphic loci [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight or genind object with the recoded and reduced data
@@ -40,9 +39,8 @@ The script returns a genlight object with the new individual labels, the monomor
 and the optionally recalculated locus metadata.
 }
 \examples{
-\dontrun{
-   gl <- gl.recode.ind(testset.gl, ind.recode="testset_pop_recode.csv")
-}
+  file <- system.file("extdata","testset_pop_recode.csv", package="dartR")
+  #gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=0)
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}} for filtering monomorphs, \code{\link{gl.recalc.metrics}} for recalculating locus metrics,

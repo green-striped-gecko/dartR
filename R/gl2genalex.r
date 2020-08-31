@@ -8,53 +8,69 @@
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param outfile -- file name of the output file (including extension) [default 'genalex.csv']
 #' @param outpath -- path where to save the output file [default tempdir()]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @importFrom poppr genind2genalex
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return NULL
 #' @export
 #' @author Katrin Hohwieler, wrapper Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' gl2genalex(testset.gl, outfile="testset.csv")
 #' }
 
 
-gl2genalex <- function(x, outfile="genalex.csv", outpath=tempdir(), verbose=2) {
+gl2genalex <- function(x, outfile="genalex.csv", outpath=tempdir(), verbose=NULL) {
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "poppr"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") } 
   
-# TIDY UP FILE SPECS
-
-  outfilespec <- file.path(outpath, outfile)
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  build <- "Jacob"
+  outfilespec <- file.path(outpath, outfile)
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
   
-  if(!is(x, "genlight")) {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  if(class(x)!="genlight") {
+    stop("  Fatal Error: genlight object required!\n")
   }
 
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
+  if (verbose >= 2){
+    if (all(x@ploidy == 1)){
+      stop("Fatal Error: Detected Presence/Absence (SilicoDArT) data. Please provide a SNP dataset\n")
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+    } else {
+      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
-
+  }
+  
 # DO THE JOB
   
   gind <- gl2gi(x, verbose=0)

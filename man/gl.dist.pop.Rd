@@ -4,43 +4,53 @@
 \alias{gl.dist.pop}
 \title{Calculate a distance matrix for populations defined in an \{adegenet\} genlight object}
 \usage{
-gl.dist.pop(x, method = "euclidean", binary = FALSE, diag = FALSE,
-  upper = FALSE, p = NULL, verbose = 2)
+gl.dist.pop(
+  x,
+  method = "euclidean",
+  plot = TRUE,
+  boxplot = "standard",
+  range = 1.5,
+  binary = FALSE,
+  p = NULL,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}
 
-\item{method}{-- Specify distance measure [method=euclidean]}
+\item{method}{-- Specify distance measure [euclidean]}
 
-\item{binary}{-- Perform presence/absence standardization before analysis using decostand [binary=FALSE]}
+\item{plot}{-- if TRUE, display a histogram of the genetic distances, and a whisker plot [TRUE]}
 
-\item{diag}{-- Compute and display diagonal [FALSE]}
+\item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
+plots a boxplot adjusted for skewed distributions ['standard']}
 
-\item{upper}{-- Return also upper triangle [FALSE]}
+\item{range}{-- specifies the range for delimiting outliers [1.5 interquartile ranges]}
+
+\item{binary}{-- Perform presence/absence standardization before analysis using decostand [FALSE]}
 
 \item{p}{-- The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [0.5]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-A matrix of distances between populations (class dist)
+An object of class 'dist' giving distances between populations
 }
 \description{
 This script calculates various distances between populations based on allele frequencies. The distances are
 calculated by scripts in the {stats} or {vegan} libraries, with the exception of the pcfixed (percent fixed
-differences) and pa (total private alleles) distances.
+differences) distance.
 }
 \details{
 The distance measure can be one of "manhattan", "euclidean", "pcfixed", "pa", canberra", "bray", 
 "kulczynski", "jaccard", "gower", "morisita", "horn", "mountford", "raup" , 
 "binomial", "chao", "cao", "mahalanobis", "maximum", "binary" or "minkowski". Refer to the documentation for
-dist stats or vegdist vegan for definitions.
+dist stats or vegdist vegan for definitions. 
 
-Distance pcfixed calculates the pair-wise count of fixed allelic differences between populations. Distance pa
-tallies the total number of private alleles possessed by one or the other population.
+Distance pcfixed calculates the pair-wise count of fixed allelic differences between populations.
 }
 \examples{
-gl.dist.pop(testset.gl, method="euclidean", diag=TRUE)
+gl.dist.pop(testset.gl, method="euclidean")
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -10,36 +10,50 @@
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param threshold -- threshold MAF -- loci with a MAF less than the threshold will be removed [default 0.01]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return The reduced genlight dataset
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' f <- gl.filter.maf(testset.gl, threshold=0.05)
+#' result <- gl.filter.monomorphs(testset.gl)
+#' result <- gl.filter.maf(result, threshold=0.05, verbose=3)
 
-# Last amended 3-Feb-19
-
-gl.filter.maf <- function(x, threshold=0.01, verbose=2) {
+gl.filter.maf <- function(x, threshold=0.01, verbose=NULL) {
   
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
+  build <- "Jacob"
 
-# FLAG SCRIPT START
-
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
   
-  if(!is(x, "genlight")) {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  if(class(x)!="genlight") {
+    stop("  Fatal Error: genlight object required!\n")
   }
 
   # Work around a bug in adegenet if genlight object is created by subsetting
@@ -69,7 +83,7 @@ gl.filter.maf <- function(x, threshold=0.01, verbose=2) {
   
   if (verbose >= 3) {cat("  Removing monomorphic loci and recalculating FreqHoms and FreqHets\n")}
 
-  x <- utils.recalc.maf(x,verbose=verbose)
+  x <- utils.recalc.maf(x,verbose=0)
   
   # Remove loci with NA count <= 1-threshold
   index <- x@other$loc.metrics$maf >= threshold
@@ -81,14 +95,16 @@ gl.filter.maf <- function(x, threshold=0.01, verbose=2) {
     cat("      Number of loci deleted:", nLoc(x) - nLoc(x2), "\n")
     cat("    Final number of loci:", nLoc(x2), "\n")
   }
+
+# ADD TO HISTORY  
+  nh <- length(x2@other$history)
+  x2@other$history[[nh + 1]] <- match.call()
   
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  #add to history
-  nh <- length(x2@other$history)
-  x2@other$history[[nh + 1]] <- match.call()
+
   return(x2)
 }  

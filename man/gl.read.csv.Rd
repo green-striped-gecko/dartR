@@ -4,8 +4,13 @@
 \alias{gl.read.csv}
 \title{Read SNP data from a csv file into a genlight object}
 \usage{
-gl.read.csv(filename, transpose = FALSE, ind.metafile = NULL,
-  loc.metafile = NULL, verbose = 2)
+gl.read.csv(
+  filename,
+  transpose = FALSE,
+  ind.metafile = NULL,
+  loc.metafile = NULL,
+  verbose = NULL
+)
 }
 \arguments{
 \item{filename}{-- name of the csv file containing the SNP genotypes [required]}
@@ -36,7 +41,7 @@ If the orientation is individuals as columns and loci by rows, then set transpos
 
 The individual metrics need to be in a csv file, with headings, with a mandatory 
 id column corresponding exactly to the individual identity labels provided with the SNP data
-and in the same order.
+and in the same order. 
 
 The locus metadata needs to be in a csv file with headings, with a mandatory column
 headed AlleleID corresponding exactly to the locus identity labels provided with

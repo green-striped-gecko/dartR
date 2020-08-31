@@ -12,78 +12,95 @@
 #'
 #' @param x -- name of the genlight object containing SNP genotypes [required]
 #' @param as.pop -- specify the name of the individual metric to set as the pop variable. [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reassigned populations
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'    gl <- gl.reassign.pop(testset.gl, as.pop='sex')
+#' # SNP data
+#'    popNames(testset.gl)
+#'    gl <- gl.reassign.pop(testset.gl, as.pop='sex',verbose=3)
+#'    popNames(gl)
+#' # Tag P/A data
+#'    popNames(testset.gs)
+#'    gs <- gl.reassign.pop(testset.gs, as.pop='sex',verbose=3)
+#'    popNames(gs)
 
-# Last amended 2-Apr-19
-
-gl.reassign.pop <- function (x, as.pop, verbose = 2) {
+gl.reassign.pop <- function (x, as.pop, verbose = NULL) {
   
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
+  build <- "Jacob"
   
-  # FLAG SCRIPT START
+# SET VERBOSITY
   
-  if (verbose < 0 | verbose > 5) {
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  if (verbose > 0) {
-    cat("Starting", funname, "\n")
-  }
+# FLAG SCRIPT START
   
-  # STANDARD ERROR CHECKING
-  
-  if (!is(x, "genlight")) {
-    cat("  Fatal Error: genlight object required!\n")
-    stop("Execution terminated\n")
-  }
-  
-
-  if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 
-      0) {
-    if (verbose >= 2) {
-      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
     }
-    pop(x) <- array("pop1", dim = nLoc(x))
-    pop(x) <- as.factor(pop(x))
-  }
-  tmp <- gl.filter.monomorphs(x, verbose = 0)
-  if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {
-    cat("  Warning: genlight object contains monomorphic loci\n")
   }
   
-  # SCRIPT SPECIFIC ERROR CHECKING
+# STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }  
+  
+# SCRIPT SPECIFIC ERROR CHECKING
   
   if (!(as.pop %in% names(x@other$ind.metrics))) {
-    cat("  Fatal Error: Specified individual metric", as.pop, "not present in the dataset\n")
-    stop()
+    stop("  Fatal Error: Specified individual metric", as.pop, "not present in the dataset\n")
   }
   
-  # DO THE JOB
+# DO THE JOB
   
   pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
-  if (verbose >= 3) {
-    cat("  Setting population assignments to", as.pop,"\n")
+  if (verbose >= 2) {
+    cat("  Setting population assignments to individual metric", as.pop,"\n")
   }
   
   if (verbose >= 3) {
       cat("  Summary of recoded dataset\n")
       cat(paste("    No. of loci:", nLoc(x), "\n"))
       cat(paste("    No. of individuals:", nInd(x), "\n"))
-      cat(paste("    No. of populations: ", length(levels(factor(pop(x)))), "\n"))
-      #cat(paste("    No. of populations: ", length(levels(factor(pop.hold))), "\n"))
+      cat(paste("    No. of populations: ", nPop(x), "\n"))
   }
 
-  if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+# ADD TO HISTORY
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call() 
+  
+# FLAG SCRIPT END
+  
+  if (verbose >= 1) {
+    cat("Completed:", funname, "\n")
   }
   
-  return <- x
+  return(x)
 }

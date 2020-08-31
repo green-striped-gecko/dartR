@@ -12,7 +12,8 @@
 #' The script returns a genlight object with the recalculated locus metadata.
 #'
 #' @param x -- name of the genlight object containing SNP genotypes [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param mono.rm -- if TRUE, removes monomorphic loci [default FALSE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the recalculated locus metadata
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -20,64 +21,89 @@
 #'   gl <- gl.recalc.metrics(testset.gl, verbose=2)
 #' @seealso \code{\link{gl.filter.monomorphs}}
 
-gl.recalc.metrics <- function(x, verbose=2){
+gl.recalc.metrics <- function(x, mono.rm =FALSE, verbose=NULL){
   
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
+  build <- "Jacob"
 
-# FLAG SCRIPT START
-
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    }else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
-
+  
 # STANDARD ERROR CHECKING
   
-  if(!is(x, "genlight")) {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
   }
-  #if empty simple fill in blanks to allow recalculation
-  if (is.null(x@other$loc.metrics)) x@other$loc.metrics <- data.frame(nr=1:nLoc(x))
   
-  if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the @other$loc.metrics table does not match the number of loci in your genlight object!! Most likely you subset your dataset using the '[ , ]' function of adegenet. This function does not subset the number of loci [you need to subset the loci metrics by 'hand' if you are using this approach]. Or you can set to NULL to recalculate everything!")  }
-  
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- factor(rep("pop1", nInd(x)))
-    }
-
-  # Check for monomorphic loci [done in utils.recalc.avgpic]
-  #  tmp <- gl.filter.monomorphs(x, verbose=0)
-  #  if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+  if (all(x@ploidy == 1)){
+    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
 
 # DO THE JOB
 
 # Recalculate statistics
-  x <- utils.recalc.avgpic(x,verbose=verbose)
-  x <- utils.recalc.callrate(x,verbose=verbose)
-  x <- utils.recalc.maf(x,verbose=verbose)
-  ###################################################
-  ####x <- utils.recalc.rdepth(x,verbose=verbose)
-  ###################################################
+  
+  if (data.type == 'SNP'){
+    x <- utils.recalc.avgpic(x,verbose=verbose)
+    x <- utils.recalc.callrate(x,verbose=verbose)
+    x <- utils.recalc.maf(x,verbose=verbose)
+  }
+  if (data.type == 'SilicoDArT'){
+    x <- utils.recalc.avgpic(x,verbose=verbose)
+    x <- utils.recalc.callrate(x,verbose=verbose)
+  }
+  
   if (verbose >= 2) {
     cat("  Locus metrics recalculated\n")
   }
+
+  if(mono.rm) {
+    x <- gl.filter.monomorphs(x,verbose=0)
+    if (verbose >= 2) {
+      cat("  Monomorphic loci deleted\n")
+    }
+  }
+
+# ADD TO HISTORY
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call() 
   
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  #add to history
-  nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call()  
+
   return (x)
 
 }  

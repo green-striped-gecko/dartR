@@ -17,6 +17,9 @@ several tables and lists with all basic stats. Check \code{\link[hierfstat]{basi
 \description{
 Based on function \code{\link[hierfstat]{basic.stats}}. Check ?basic.stats for help.
 }
+\examples{
+gl.basic.stats(possums.gl)
+}
 \author{
 Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 }

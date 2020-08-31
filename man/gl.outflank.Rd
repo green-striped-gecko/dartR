@@ -4,8 +4,15 @@
 \alias{gl.outflank}
 \title{Function to identify loci under selection per population using the outflank method of Whitlock and Lotterhos (2015)}
 \usage{
-gl.outflank(gi, plot = TRUE, LeftTrimFraction = 0.05,
-  RightTrimFraction = 0.05, Hmin = 0.1, qthreshold = 0.05, ...)
+gl.outflank(
+  gi,
+  plot = TRUE,
+  LeftTrimFraction = 0.05,
+  RightTrimFraction = 0.05,
+  Hmin = 0.1,
+  qthreshold = 0.05,
+  ...
+)
 }
 \arguments{
 \item{gi}{a genlight of genind object, with a defined population structure}

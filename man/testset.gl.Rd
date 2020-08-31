@@ -3,13 +3,15 @@
 \docType{data}
 \name{testset.gl}
 \alias{testset.gl}
-\title{A genlight object created via the read.dart functions}
-\format{genlight object}
+\title{A genlight object created via the gl.read.dart function}
+\format{
+genlight object
+}
 \usage{
 testset.gl
 }
 \description{
-This is a test data set on turtles. 250 individuals on >30 populations.
+This is a test data set on turtles. 250 individuals, 255 loci in >30 populations.
 }
 \author{
 Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}

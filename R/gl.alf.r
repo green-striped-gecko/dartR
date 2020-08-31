@@ -5,6 +5,10 @@
 #' @export
 #' @rawNamespace import(adegenet, except = plot)
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @examples 
+#' #for the first 10 loci only
+#' gl.alf(possums.gl[,1:10])
+#' barplot(t(as.matrix(gl.alf(possums.gl[,1:10]))))
 
 gl.alf <- function(gl)
 {

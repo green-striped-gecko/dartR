@@ -7,6 +7,8 @@
 #' @return several tables and lists with all basic stats. Check \code{\link[hierfstat]{basic.stats}} for details.
 #' @export
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @examples 
+#' gl.basic.stats(possums.gl)
 
 gl.basic.stats <- function(gl, digits=4)
 {

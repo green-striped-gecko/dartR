@@ -27,43 +27,71 @@
 #'@param title -- title for the plot [default: "Network based on G-matrix of genetic relatedness"]
 #'@param verbose -- verbosity. If zero silent, max 3.
 #'@return NULL 
-#'@importFrom igraph layout_with_kk layout_with_fr layout_with_drl graph_from_data_frame delete_edges V E 
 #'@importFrom grDevices rgb
 #'@importFrom graphics legend
 #'@export
 #'@author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 #'  
 #'@examples
-#'#gl.plot.network(D)
+#'  D <- gl.grm(bandicoot.gl)
+#'  gl.plot.network(D,bandicoot.gl)
 
-# Last amended 3-Feb-19 
+gl.plot.network <- function(D, 
+                            x=NULL, 
+                            method="fr", 
+                            node.size=3, 
+                            node.label=FALSE, 
+                            node.label.size=0.7, 
+                            node.label.color="black", 
+                            alpha=0.005, 
+                            title="Network based on genetic distance", 
+                            verbose=2){
 
-gl.plot.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALSE, node.label.size=0.7, node.label.color="black", alpha=0.005, title="Network based on genetic distance", verbose=2){
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "igraph"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") }   
+# TRAP COMMAND, SET VERSION
   
-# TIDY UP FILE SPECS
-
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if(!is.null(x)) {
+    if (is.null(verbose)){ 
+      if(!is.null(x@other$verbose)){ 
+        verbose <- x@other$verbose
+      } else { 
+        verbose <- 2
+      }
+    } 
+  }
 
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
-
+  
 # FUNCTION SPECIFIC ERROR CHECKING
 
-  if(!is(D,"dist")) {
-      cat("Fatal Error: distance matrix required for gl.dist.network!\n"); stop("Execution terminated\n")
+  if( !is(D,"dist") & !is(D,"matrix")) {
+      stop("Fatal Error: distance matrix required for gl.dist.network!\n")
   }
   
   if (!is.null(x)){
-    if(!is(x, "genlight")) {
-      cat("Fatal Error: if specified, genlight object required for gl.dist.network!\n"); stop("Execution terminated\n")
+    if(class(x)!="genlight") {
+      stop("Fatal Error: if specified, genlight object required for gl.dist.network!\n")
     }
   } else {
     if (verbose>=2) {
@@ -109,7 +137,7 @@ gl.plot.network <- function(D, x=NULL, method="fr", node.size=3, node.label=FALS
     my_colors <- "red"
   }
   
-  q <- quantile(links$weight, p = 1-alpha)
+  q <- stats::quantile(links$weight, p = 1-alpha)
   network.FS <- igraph::delete_edges(network, igraph::E(network)[links$weight < q ])
   
   if (method=="fr"){

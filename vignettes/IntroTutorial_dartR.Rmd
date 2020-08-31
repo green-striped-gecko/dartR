@@ -396,7 +396,7 @@ platy
 To convert the genind to a genlight object simply type:
 
 ```{r, eval=FALSE}
-platy.gl <- (gi2gl(platy)
+platy.gl <- (gi2gl(platy))
 ```
 
 
@@ -422,13 +422,14 @@ df.loc <- data.frame(RepAvg = runif(nLoc(platy.gl)),  TrimmedSequence=ts)
 
 platy.gl@other$loc.metrics <- df.loc
 
+
 ```
 
 The last line of code stores the loci metadata in the right location and we can use our filter and report function now on the genlight object as before.
 
 ```{r}
 gl.report.callrate(platy.gl)
-gl2 <- gl.filter.repavg(platy.gl, t=0.5)
+gl2 <- gl.filter.reproducibility(platy.gl, t=0.5)
 ```
 
 Some of the functions require additional meta data, e.g. the gl2fasta need sequence data (TrimmedSequnce), the position of the SNP in the sequence for each loci ```@position``` and the type of allelels for each loci ```@loc.all```. If such data is available the information needs to be stored in the correct slots to work with the function. The code below exports our genlight object to a fasta format (again we create random meta data via the code below).
@@ -482,7 +483,7 @@ Refer to the help on each function for details of the parameters taken by each o
 Filtering of data is often necessary to make sure only high quality loci (few missing data) and with a consistent quality are retained and "noise" in the data set is minimised. In addition by filtering you reduce the number of loci, which often speeds up the analysis considerably. The kind and order of filtering that someone applies depends very much on the intended analysis. For example for classical calculation of indices of population structure, loci and individuals with lots of missing data might be discarded, though for other kind of analysis the amount of missing data may hint to "hidden" subspecies in the populations. Therefore a general adivse on the order and amount of filtering cannot be given. As an example if the focus is towards studying population structure, where only a limited number of individuals are sampled, a valid strategy is to filter in such a way that the number of individuals per population are maintained, but the number of loci can be reduced. So a suggested order here is:
 
 
-1. Filter by repeatability (```gl.filter.repavg``` in dartR) (a meassurement of quality per loci)
+1. Filter by reproducibility (```gl.filter.reproducibility``` in dartR) (a meassurement of quality per loci)
 2. Fitler by monomorphic loci (```gl.filter.monomorphs```)(as they do not provide information for population structure and simply slow the analysis)
 3. Filter by amount of missing data (```gl.filter.callrate, method="loc"```) per locus
 4. Filter to remove all but one of multiple snps in the same fragment (```gl.filter.secondaries```)
@@ -507,7 +508,7 @@ gl2 <- gl.filter.callrate(gl, method="ind", threshold = 0.90)
 3.	Filter on reproducibility, threshold (here called t, do not ask why) 100% reproducible
 
 ```{r}
-gl2 <- gl.filter.repavg(gl, t=1)
+gl2 <- gl.filter.reproducibility(gl, t=1)
 ```
 
 4.	Filter out multiple snps in single sequence tags (!!!!!produces an error currently!!!!!)
@@ -1229,7 +1230,7 @@ A 95\% confidence envelope (or some other level of confidence specified by the u
 An Assignment Index is calculated in the same way for a notional individual residing on the boundary of the confidence envelope. Comparing the assignment index for each population with that of the notional boundary individual provides a basis for a decision on assignment. If the Assignment Index for the unknown is less than the critical value for the Assignment Index (that of the boundary individual), then the unknown is assigned to that population. Where more than one population is selected, the population with the greatest Assignment Index is the most likely. This will become evident in the examples that follow.
 
 ```{r}
-x <- gl.report.pa(testset.gl, id="UC_00146", nmin=10, t=0)
+x <- gl.assign(testset.gl, unknown = "UC_00146", nmin=10, t=0)
 ```
 
 In this example, the unknown individual, UC_00146, is assigned to only one population, EmmaclGeor, so the assignment problem is resolved. This individual does indeed come from the Georges Creek, a tributary of the Macleay River.
@@ -1238,7 +1239,7 @@ If we are worried that the 1 locus with a private allele out of 255 loci for pop
 
 
 ```{r, fig.height=4}
-x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.95, t=1)
+x <- gl.assign(testset.gl, unknown ="UC_00146", nmin=10, alpha=0.95, t=1)
 ```
 
 The plot allows us to eliminate populations EmmacRichCasi and EmmacBurnBara from consideration as the unknown individual does not fall within or near their confidence ellipses. EmmacTweeUki and EmmacMaclGeor remain in contention.

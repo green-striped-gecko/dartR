@@ -4,14 +4,14 @@
 \alias{gl.filter.maf}
 \title{Filter loci on the basis of minor allele frequency (MAF) in a genlight {adegenet} object}
 \usage{
-gl.filter.maf(x, threshold = 0.01, verbose = 2)
+gl.filter.maf(x, threshold = 0.01, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{threshold}{-- threshold MAF -- loci with a MAF less than the threshold will be removed [default 0.01]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight dataset
@@ -27,7 +27,8 @@ to population structure. It is a means of removing overall rare alleles. To appl
 single populations, use sepPop and lapply.
 }
 \examples{
-f <- gl.filter.maf(testset.gl, threshold=0.05)
+result <- gl.filter.monomorphs(testset.gl)
+result <- gl.filter.maf(result, threshold=0.05, verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

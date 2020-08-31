@@ -4,13 +4,20 @@
 \alias{gl.assign}
 \title{Assign an individual of unknown provenance to population}
 \usage{
-gl.assign(x, id, nmin = 10, dim = NULL, alpha = 0.05,
-  threshold = 0, verbose = 3)
+gl.assign(
+  x,
+  unknown,
+  nmin = 10,
+  dim = NULL,
+  alpha = 0.05,
+  threshold = 0,
+  verbose = 3
+)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
 
-\item{id}{-- identity label of the focal individual whose provenance is unknown [required]}
+\item{unknown}{-- identity label of the focal individual whose provenance is unknown [required]}
 
 \item{nmin}{-- minimum sample size for a target population to be included in the analysis [default 10]}
 
@@ -20,7 +27,7 @@ gl.assign(x, id, nmin = 10, dim = NULL, alpha = 0.05,
 
 \item{threshold}{-- populations to retain for consideration; those for which the focal individual has less than or equal to threshold loci with private alleles [default 0]}
 
-\item{verbose}{-- verbosity: 0, silent or errors only; 1, begin and end; 2, progress log; 3, progress and results; 5, full report [default 3]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
@@ -43,14 +50,14 @@ the 95% (or as specified) confidence envelope.
 
 There are three considerations to the assignment. First, consider only those populations for which the unknown has no
 private alleles. Private alleles are an indication that the unknown does not belong to a target population (provided that
-the sample size is adequate, say >=10).
+the sample size is adequate, say >=10). 
 
 Second, consider the PCoA plot for populations where no private alleles have been
 detected and the position of the unknown in relation to the confidence ellipses. Note, this is considering only the 
 top two dimensions of the ordination, and so an unknown lying outside the confidence ellipse can be interpreted as it lying 
 outside the confidence envelope. However, if the unknown lies inside the confidence ellipse in two dimensions, then it may still lie outside
 the confidence envelope. This is good for eliminating populations from consideration, but does not provide confidence in
-assignment.
+assignment. 
 
 Third, consider the assignment probabilities. This approach calculates the squared Generalised Linear Distance (Mahalanobis
 distance) of the unknown from the centroid for each population, and calculates the probability associated with its quantile
@@ -61,7 +68,8 @@ Each of these approaches provides evidence, none are 100% definitive. They need 
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-x <- gl.assign(testset.gl, id="UC_00146", nmin=10, alpha=0.05, threshold=1)
+  x <- gl.assign(testset.gl, unknown="UC_00146", nmin=10, 
+  alpha=0.05, threshold=1)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

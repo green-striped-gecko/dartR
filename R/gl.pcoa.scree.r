@@ -13,7 +13,7 @@
 #' @param top -- a flag to indicate whether or not plot only those eigenvalues greater in value than the average for the
 #'        unordinated original variables (top=TRUE) or to plot all eigenvalues (top=FALSE). If top=FALSE, then a
 #'        reference line showing the average eigenvalue for the unordinated variables is shown. [default TRUE]
-#' @param verbose specifies is completion of the function should be output to the console.
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return The scree plot
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -21,17 +21,37 @@
 #' pcoa <- gl.pcoa(testset.gl)
 #' gl.pcoa.scree(pcoa)
 
-# Last amended 3-Feb-19
-
 gl.pcoa.scree <- function(x, top=TRUE, verbose=0) {
 
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
+  }
+  
 # FLAG SCRIPT START
-
-    cat("Starting",funname,"\n")
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
 
 # DO THE JOB
 

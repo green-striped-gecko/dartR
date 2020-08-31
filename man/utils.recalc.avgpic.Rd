@@ -5,7 +5,7 @@
 \title{A utility script to recalculate the OneRatioRef, OneRatioSnp, PICRef, PICSnp, and AvgPIC by locus after some
 populations have been deleted.}
 \usage{
-utils.recalc.avgpic(x, verbose = 2)
+utils.recalc.avgpic(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -26,7 +26,7 @@ If the locus metadata OneRatioRef|Snp, PICRef|Snp and/or AvgPIC do not exist, th
 creates and populates them.
 }
 \examples{
-#result <- utils.recalc.avgpic(testset.gl)
+#out <- utils.recalc.avgpic(testset.gl)
 }
 \seealso{
 \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,

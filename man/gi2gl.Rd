@@ -4,12 +4,14 @@
 \alias{gi2gl}
 \title{Converts a genind object to genlight object}
 \usage{
-gi2gl(gi, parallel = TRUE)
+gi2gl(gi, parallel = TRUE, verbose = NULL)
 }
 \arguments{
 \item{gi}{-- a genind object}
 
 \item{parallel}{-- switch to deactivate parallel version. Default set to TRUE. Only for testing purpose.}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
 A genlight object, with all slots filled.
@@ -21,5 +23,5 @@ Converts a genind object to genlight object
 Be aware due to ambiguity which one is the reference allele a combination of gi2gl(gl2gi(gl)) does not return an identical object (but in terms of analysis this conversions are equivalent)
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

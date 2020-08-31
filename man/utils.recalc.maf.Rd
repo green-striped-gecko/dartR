@@ -4,7 +4,7 @@
 \alias{utils.recalc.maf}
 \title{A utility script to recalculate the the minor allele frequency by locus, typically after some populations have been deleted}
 \usage{
-utils.recalc.maf(x, verbose = 2)
+utils.recalc.maf(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -21,7 +21,7 @@ some individuals are removed from the dataset. This script recalculates the MAF 
 places these recalculated values in the appropriate place in the genlight object.
 }
 \examples{
-#f <- dartR:::utils.recalc.maf(testset.gl)
+#f <- dartR::utils.recalc.maf(testset.gl)
 }
 \seealso{
 \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,

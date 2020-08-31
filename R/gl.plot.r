@@ -12,7 +12,7 @@
 #' @param legend -- if TRUE, a legend will be added [default = TRUE]
 #' @param posi -- position of the legend [default = "bottomleft"]
 #' @param bg -- background color of the legend [default transparent white]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @param ... --- additional arguments passed to glPlot function.
 #' @export
 #'@examples 
@@ -20,29 +20,42 @@
 #'gl.plot(bandicoot.gl[1:30,])
 #'gl.plot(bandicoot.gl[1:10,],labels=TRUE)
 
-# Last amended 3-Feb-19
-
-gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TRUE, posi="bottomleft", bg=rgb(1,1,1,.5), verbose=2,...)
+gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TRUE, posi="bottomleft", bg=rgb(1,1,1,.5), verbose=NULL,...)
 {
   
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
   
-  if(!is(x, "genlight")) {
+  if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
@@ -60,7 +73,7 @@ gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TR
 # DO THE JOB
   
   if (!labels){
-    glPlot(x)
+    adegenet::glPlot(x)
   } else {
     X <- t(as.matrix(x))
     X <- X[, ncol(X):1]

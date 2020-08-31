@@ -4,7 +4,7 @@
 \alias{gl2gds}
 \title{Convert a genlight object to gds format}
 \usage{
-gl2gds(x, outfile = "gl2gds.gds", outpath = tempdir(), verbose = 2)
+gl2gds(x, outfile = "gl2gds.gds", outpath = tempdir(), verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -13,7 +13,7 @@ gl2gds(x, outfile = "gl2gds.gds", outpath = tempdir(), verbose = 2)
 
 \item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \description{
 Package SNPRelate relies on a bit-level representation of a SNP dataset that competes with \{adegenet\} genlight

@@ -4,7 +4,7 @@
 \alias{utils.recalc.freqhomsnp}
 \title{A utility script to recalculate the the frequency of the homozygous alternate SNP by locus after some populations have been deleted}
 \usage{
-utils.recalc.freqhomsnp(x, verbose = 2)
+utils.recalc.freqhomsnp(x, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -21,7 +21,7 @@ This script recalculates the FreqHomSnp and places these recalculated values in 
 Note that the frequency of the homozygote alternate SNPS is calculated from the individuals that could be scored.
 }
 \examples{
-#result <- utils.recalc.freqhomsnp(testset.gl)
+#out <- utils.recalc.freqhomsnp(testset.gl)
 }
 \seealso{
 \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,

@@ -68,7 +68,7 @@
 #'              }
 #'  }
 #' @export
-#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}); original implementation of Whitlock & Lotterhos
+#' @author Bernd Gruber (glbugs@@aerg.canberra.edu.au); original implementation of Whitlock & Lotterhos
 
 
 util.outflank <- function(FstDataFrame, LeftTrimFraction=0.05, RightTrimFraction=0.05, Hmin=0.1, NumberOfSamples, qthreshold=0.05){

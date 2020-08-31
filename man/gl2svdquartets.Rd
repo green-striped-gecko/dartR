@@ -4,11 +4,16 @@
 \alias{gl2svdquartets}
 \title{Convert a genlight object to nexus format PAUP SVDquartets}
 \usage{
-gl2svdquartets(x, outfile = "svd.nex", outpath = tempdir(),
-  method = 2, verbose = 2)
+gl2svdquartets(
+  x,
+  outfile = "svd.nex",
+  outpath = tempdir(),
+  method = 2,
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{-- name of the genlight object containing the SNP data or tag P/A data [required]}
 
 \item{outfile}{-- file name of the output file (including extension) [default svd.nex]}
 
@@ -16,9 +21,9 @@ gl2svdquartets(x, outfile = "svd.nex", outpath = tempdir(),
 to direct output files to your working directory.}
 
 \item{method}{-- method = 1, nexus file with two lines per individual; method = 2, nexus
-file with one line per individual, ambiguity codes [default 2]}
+file with one line per individual, ambiguity codes for SNP genotypes, 0 or 1 for presence/absence data [default 2]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \description{
 The output nexus file contains the snp data in one of two forms, depending upon what you regard
@@ -27,6 +32,9 @@ one providing the reference SNP the second providing the alternate SNP (method=1
 A second form, recommended by Dave Swofford, has
 a single line per individual, resolving heterozygous SNPs by replacing them with standard
 ambiguity codes (method=2).
+}
+\details{
+If the data are tag presence/absence, then method=2 is assumed.
 }
 \examples{
 gg <- testset.gl[1:20,1:100]

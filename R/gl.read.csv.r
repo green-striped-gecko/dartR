@@ -37,20 +37,32 @@ gl.read.csv <- function(filename,
                         transpose=FALSE,
                         ind.metafile=NULL, 
                         loc.metafile=NULL, 
-                        verbose=2){
+                        verbose=NULL){
   
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    verbose <- 2
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
@@ -76,7 +88,7 @@ gl.read.csv <- function(filename,
 
   # Create the SNP data matrix, indNames and LocNames
   
-  df0 <- read.csv(file=filename,header=FALSE)
+  df0 <- read.csv(file=filename,header=FALSE, stringsAsFactors = TRUE)
   
    if (transpose) {
     df0 <- t(df0)
@@ -183,15 +195,15 @@ gl.read.csv <- function(filename,
   gl <- as.genlight(data)
   locNames(gl) <- loci
   indNames(gl) <- individuals
-  #pop(gl) <- array('A',nInd(gl))
+  pop(gl) <- array('A',nInd(gl))
   
   gl@other$loc.metrics <- data.frame(CloneID = locNames(gl), AlleleID = locNames(gl))
-  #gl@other$ind.metrics <- data.frame(id <- indNames(gl), pop = array("A",nInd(gl)))
+  gl@other$ind.metrics <- data.frame(id <- indNames(gl), pop = array("A",nInd(gl)))
   
   # NOW THE LOCUS METADATA
   
   if(!is.null(loc.metafile)){
-    loc.metrics <- read.csv(file=loc.metafile,header=TRUE)
+    loc.metrics <- read.csv(file=loc.metafile,header=TRUE,stringsAsFactors = TRUE)
     if (!("AlleleID" %in% names(loc.metrics))) {cat("Fatal Error: mandatory AlleleID column absent 
                                                from the locus metrics file\n")}
     for (i in 1:nLoc(gl)){
@@ -212,7 +224,7 @@ gl.read.csv <- function(filename,
   # NOW THE INDIVIDUAL METADATA
   
   if(!is.null(ind.metafile)){
-    ind.metrics <- read.csv(file=ind.metafile,header=TRUE)
+    ind.metrics <- read.csv(file=ind.metafile,header=TRUE, stringsAsFactors = TRUE)
     if (!("id" %in% names(ind.metrics))) {cat("Fatal Error: mandatory id column absent 
                                                from the individual metadata file\n")}
     for (i in 1:nInd(gl)){
@@ -238,6 +250,11 @@ gl.read.csv <- function(filename,
   if (verbose >= 2){cat(paste(" Added ",names(gl@other$ind.metrics),
                               " to the other$ind.metrics slot.\n"))}
   }
+  
+# MAKE COMPLIANT
+  
+  gl <- gl.compliance.check(gl, verbose=1)
+
 # FLAG SCRIPT END
 
   if (verbose > 0) {

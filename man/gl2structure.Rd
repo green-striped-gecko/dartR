@@ -4,9 +4,16 @@
 \alias{gl2structure}
 \title{Converts genlight objects to STRUCTURE formated files}
 \usage{
-gl2structure(x, indNames = NULL, addcolumns = NULL, ploidy = 2,
-  exportMarkerNames = TRUE, outfile = "gl.str", outpath = tempdir(),
-  verbose = 2)
+gl2structure(
+  x,
+  indNames = NULL,
+  addcolumns = NULL,
+  ploidy = 2,
+  exportMarkerNames = TRUE,
+  outfile = "gl.str",
+  outpath = tempdir(),
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data and location data, lat longs [required]}
@@ -23,10 +30,10 @@ gl2structure(x, indNames = NULL, addcolumns = NULL, ploidy = 2,
 
 \item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \description{
-This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststructure version as well). It is based on the code provided by Lindsay Clark (see \url{https://github.com/lvclark/R_genetics_conv})  and this function is basically a wrapper around her numeric2structure function. See also: Lindsay Clark. (2017, August 22). lvclark/R_genetics_conv: R_genetics_conv 1.1 (Version v1.1). Zenodo: \url{http://doi.org/10.5281/zenodo.846816}.
+This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststructure version as well). It is based on the code provided by Lindsay Clark (see \url{https://github.com/lvclark/R_genetics_conv})  and this function is basically a wrapper around her numeric2structure function. See also: Lindsay Clark. (2017, August 22). lvclark/R_genetics_conv: R_genetics_conv 1.1 (Version v1.1). Zenodo: doi.org/10.5281/zenodo.846816.
 }
 \examples{
 \donttest{

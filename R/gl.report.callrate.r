@@ -4,86 +4,148 @@
 #' at one or both of the the restriction enzyme recognition sites. This script reports the number of missing values for each
 #' of several percentiles. The script gl.filter.callrate() will filter out the loci with call rates below a specified threshold.
 #' 
-#' A histogram and or a smearplot can be requested. Note that the smearplot is computationally intensive, and will take time to 
-#' execute on large datasets.
-#'
-#' @param x -- name of the genlight or genind object containing the SNP data [required]
+#' Tag Presence/Absence datasets (SilicoDArT) have missing values where it is not possible to determine reliably if there the
+#' sequence tag can be called at a particular locus.
+#' 
+#' The minimum, maximum and mean call rate are provided. Output also is a histogram of read depth, accompanied by a box and 
+#' whisker plot. 
+#' 
+#' Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
+#' Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed
+#' Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
+#' Box and Whisker Plots.
+#' 
+#' @param x -- name of the genlightobject containing the SNP or presence/absence (SilicoDArT) data [required]
 #' @param method specify the type of report by locus (method="loc") or individual (method="ind") [default method="loc"]
-#' @param plot specify if a histogram of call rate is to be produced [default FALSE]
-#' @param smearplot if TRUE, will produce a smearplot of individuals against loci [default FALSE]
-#' @return Tabulation of CallRate against Threshold
-#' @importFrom adegenet glPlot
+#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
+#' plots a boxplot adjusted for skewed distributions [default 'adjusted']
+#' @param range -- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @return returns a tabulation of CallRate against Threshold
 #' @importFrom graphics hist
+#' @importFrom robustbase adjbox
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.report.callrate(testset.gl)
+#' # SNP data
+#'   out <- gl.report.callrate(testset.gl)
+#' # Tag P/A data
+#'   out <- gl.report.callrate(testset.gs)
 
 
-gl.report.callrate <- function(x, method="loc", plot=FALSE, smearplot=FALSE) {
+gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, verbose=NULL) {
   
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
-    cat("Starting",funname,"\n")
-
-# STANDARD ERROR CHECKING
+  build <- "Jacob"
   
-  if(!is(x, "genlight")) {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
   }
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# STANDARD ERROR CHECKING
 
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+    if (all(x@ploidy == 1)){
+      cat("  Processing Presence/Absence (SilicoDArT) data\n")
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+    } else {
+      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
     }
 
   # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if (nLoc(tmp) < nLoc(x)) {cat("  Warning: genlight object contains monomorphic loci\n")}
+
+  if (!x@other$loc.metrics.flags$monomorphs) {
+    if(verbose >= 1){cat("  Warning: genlight object contains monomorphic loci which will be factored into Callrate calculations\n")}
+  }
 
 # DO THE JOB
 
-# RECALCULATE THE CALL RATE, BRING IT UP TO DATE IN CASE gl.recalc.metrics HAS NOT BEEN RUN
+# RECALCULATE THE CALL RATE, IF NOT PREVIOUSLY DONE
   
-    x <- utils.recalc.callrate(x, verbose=1)
+  if (!x@other$loc.metrics.flags$monomorphs){
+      x <- utils.recalc.callrate(x, verbose=0)
+  }  
 
-# FOR METHOD BASED ON LOCUS    
+########### FOR METHOD BASED ON LOCUS    
+  
+  p1 <- p2 <- NULL
   
   if(method == "loc") {
     
-  # Plot a histogram of Call Rate
-
-    if (plot) {
-      par(mfrow = c(2, 1),pty="m")
-      hist(x@other$loc.metrics$CallRate, 
-         main="Call Rate by Locus", 
-         xlab="Call Rate", 
-         border="blue", 
-         col="red",
-         xlim=c(min(x@other$loc.metrics$CallRate),1),
-         breaks=100)
+    callrate <- x@other$loc.metrics$CallRate
+    
+    # Prepare for plotting
+    # Save the prior settings for mfrow, oma, mai and pty, and reassign
+    #op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+    # Set margins for first plot
+    #par(mai=c(1,0.5,0.5,0.5))
+    # Plot Box-Whisker plot
+    if (all(x@ploidy==2)){
+      title1 <- paste0("SNP data - Call Rate by Locus")
+    } else {
+      title1 <- paste0("Fragment P/A data - Call Rate by Locus")
+      
     }
-    if(smearplot){
-      glPlot(x)
-    }  
+    p1 <- ggplot(data.frame(callrate), aes(y=callrate))+geom_boxplot() +coord_flip()+theme()+xlim(range=c(-1,1))+ylim(0,1)+ylab(" ")+ggtitle(title1)
+    #if (boxplot == "standard"){
+    #  boxplot(callrate, horizontal=TRUE, col='red', range=range, main = title)
+    #  if(verbose >= 1){cat("  Standard boxplot, no adjustment for skewness\n")}
+    #} else {
+    #  robustbase::adjbox(callrate,
+    #                    horizontal = TRUE,
+    #                    col='red',
+    #                    range=range,
+    #                    main = title)
+    #  if(verbose >= 1){cat("  Boxplot adjusted to account for skewness\n")}
+    #}  
+    # Set margins for second plot
+    #par(mai=c(0.5,0.5,0,0.5))
+    #hist(callrate, 
+    #     main="", 
+    #     xlab="", 
+    #     border="blue", 
+    #     col="red",
+    #     xlim=c(min(x@other$loc.metrics$CallRate),1),
+    #     breaks=100)
 
+  p2 <- ggplot(data.frame(callrate), aes(x=callrate))+geom_histogram(bins = 50)+ coord_cartesian(xlim = c(0,1)) 
+  grid.arrange(p1,p2)
+  
   # Print out some statistics
-    cat("Reporting Call Rate by Locus\n")
-    cat("No. of loci =", nLoc(x), "\n")
-    cat("No. of individuals =", nInd(x), "\n")
-    cat("  Miniumum Call Rate: ",round(min(x@other$loc.metrics$CallRate),2),"\n")
-    cat("  Maximum Call Rate: ",round(max(x@other$loc.metrics$CallRate),2),"\n")
-    cat("  Average Call Rate: ",round(mean(x@other$loc.metrics$CallRate),3),"\n")
-    cat("  Missing Rate Overall: ",round(sum(is.na(as.matrix(x)))/(nLoc(x)*nInd(x)),2),"\n\n")
+    cat("  Reporting Call Rate by Locus\n")
+    cat("  No. of loci =", nLoc(x), "\n")
+    cat("  No. of individuals =", nInd(x), "\n")
+    cat("    Miniumum Call Rate: ",round(min(x@other$loc.metrics$CallRate),2),"\n")
+    cat("    Maximum Call Rate: ",round(max(x@other$loc.metrics$CallRate),2),"\n")
+    cat("    Average Call Rate: ",round(mean(x@other$loc.metrics$CallRate),3),"\n")
+    cat("    Missing Rate Overall: ",round(sum(is.na(as.matrix(x)))/(nLoc(x)*nInd(x)),2),"\n")
 
   # Determine the loss of loci for a given filter cut-off
     retained <- array(NA,21)
@@ -91,11 +153,10 @@ gl.report.callrate <- function(x, method="loc", plot=FALSE, smearplot=FALSE) {
     filtered <- array(NA,21)
     pc.filtered <- array(NA,21)
     percentile <- array(NA,21)
-    crate <- x@other$loc.metrics$CallRate
     for (index in 1:21) {
       i <- (index-1)*5
       percentile[index] <- i/100
-      retained[index] <- length(crate[crate>=percentile[index]])
+      retained[index] <- length(callrate[callrate>=percentile[index]])
       pc.retained[index] <- round(retained[index]*100/nLoc(x),1)
       filtered[index] <- nLoc(x) - retained[index]
       pc.filtered[index] <- 100 - pc.retained[index]
@@ -105,39 +166,62 @@ gl.report.callrate <- function(x, method="loc", plot=FALSE, smearplot=FALSE) {
     colnames(df) <- c("Threshold", "Retained", "Percent", "Filtered", "Percent")
     df <- df[order(-df$Threshold),]
     rownames(df) <- NULL
-    print(df)
   }
   
-# FOR METHOD BASED ON INDIVIDUAL   
+########### FOR METHOD BASED ON INDIVIDUAL   
     
   if(method == "ind") {
     
     # Calculate the call rate by individual
     ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)
-    
-    # Plot a histogram and smearplot of Call Rate
-    
-    if (plot) {
-      par(mfrow = c(2, 1),pty="m")
-      hist(ind.call.rate, 
-        main="Call Rate by Individual", 
-        xlab="Call Rate", 
-        border="blue", 
-        col="red",
-        xlim=c(min(ind.call.rate),1),
-        breaks=100)
-    }  
-    if(smearplot){
-      glPlot(x)
-    } 
-    
-    cat("Reporting Call Rate by Individual\n")
-    cat("No. of loci =", nLoc(x), "\n")
-    cat("No. of individuals =", nInd(x), "\n")
-    cat("  Miniumum Call Rate: ",round(min(ind.call.rate),2),"\n")
-    cat("  Maximum Call Rate: ",round(max(ind.call.rate),2),"\n")
-    cat("  Average Call Rate: ",round(mean(ind.call.rate),3),"\n")
-    cat("  Missing Rate Overall: ",round(sum(is.na(as.matrix(x)))/(nLoc(x)*nInd(x)),2),"\n\n")
+
+    # Prepare for plotting
+    # Save the prior settings for mfrow, oma, mai and pty, and reassign
+    #op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
+    # Set margins for first plot
+    #par(mai=c(1,0.5,0.5,0.5))
+    # Plot Box-Whisker plot
+    if (all(x@ploidy==2)){
+      title1 <- paste0("SNP data (DArTSeq)\nCall Rate by Individual")
+    } else {
+      title1 <- paste0("Fragment P/A data (SilicoDArT)\nCall Rate by Individual")
+    }
+    p1 <- ggplot(data.frame(ind.call.rate), aes(y=ind.call.rate))+geom_boxplot() +coord_flip()+theme()+xlim(range=c(-1,1))+ylim(0,1)+ylab(" ")+ggtitle(title1)
+    #if (boxplot == "standard"){
+    #  boxplot(ind.call.rate, 
+    #          horizontal=TRUE, 
+    #          col='red', 
+    #          range=range, 
+    #          ylim=c(min(ind.call.rate),1),
+    #          main = title)
+    #  cat("  Standard boxplot, no adjustment for skewness\n")
+    #} else {
+    #  robustbase::adjbox(ind.call.rate,
+    #                     horizontal = TRUE,
+    #                     col='red',
+    #                     range=range,
+    #                     ylim=c(min(ind.call.rate),1),
+    #                     main = title)
+    #  cat("  Boxplot adjusted to account for skewness\n")
+    #}  
+    # Set margins for second plot
+    #par(mai=c(0.5,0.5,0,0.5))
+    #hist(ind.call.rate, 
+    #     main="", 
+    #     xlab="", 
+    #     col="red",
+    #     xlim=c(min(ind.call.rate),1),
+    #     breaks=100)
+    p2 <- ggplot(data.frame(ind.call.rate), aes(x=ind.call.rate))+geom_histogram(bins = 50)+ coord_cartesian(xlim = c(0,1)) 
+    grid.arrange(p1,p2)
+
+    cat("  Reporting Call Rate by Individual\n")
+    cat("  No. of loci =", nLoc(x), "\n")
+    cat("  No. of individuals =", nInd(x), "\n")
+    cat("    Miniumum Call Rate: ",round(min(ind.call.rate),2),"\n")
+    cat("    Maximum Call Rate: ",round(max(ind.call.rate),2),"\n")
+    cat("    Average Call Rate: ",round(mean(ind.call.rate),3),"\n")
+    cat("    Missing Rate Overall: ",round(sum(is.na(as.matrix(x)))/(nLoc(x)*nInd(x)),2),"\n\n")
 
     # Determine the loss of individuals for a given filter cut-off
     retained <- array(NA,21)
@@ -159,13 +243,17 @@ gl.report.callrate <- function(x, method="loc", plot=FALSE, smearplot=FALSE) {
     colnames(df) <- c("Threshold", "Retained", "Percent", "Filtered", "Percent")
     df <- df[order(-df$Threshold),]
     rownames(df) <- NULL
-    print(df)
   }
 
-# FLAG SCRIPT END
+    # Reset the par options    
+    #par(op) 
+    
+ # FLAG SCRIPT END
+    
+    if (verbose >= 1) {
+      cat("Completed:",funname,"\n")
+    }
+    
+    return(list(callrates=df, boxplot=p1, hist=p2))
 
-    cat("Completed:",funname,"\n")
-
-  return(df)
-  
 }

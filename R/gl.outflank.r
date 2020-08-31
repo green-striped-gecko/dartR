@@ -10,7 +10,6 @@
 #' @return returns an index of outliers and the full outflank list
 #' @details this function is a wrapper around the outflank function provided by Whitlock and Lotterhus. To be able to run this function the packages qvalue (from bioconductor) and outflank (from github) needs to be installed. To do so see example below.
 #' @export
-#' @importFrom qvalue qvalue
 #' @importFrom stats optim pgamma quantile
 #' @examples
 #' \donttest{
@@ -26,6 +25,12 @@
 
 gl.outflank <- function(gi, plot=TRUE, LeftTrimFraction=0.05, RightTrimFraction=0.05, Hmin=0.1, qthreshold=0.05, ... )
 {
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "qvalue"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") }   
+  
+
 # convert genlight to genind 
 if (is(gi,"genlight")) gi <- gl2gi(gi)
   

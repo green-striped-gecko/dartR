@@ -1,11 +1,20 @@
 #' Estimate the rate of false positives in a fixed difference analysis
 #'
-#' This is a support script, called by gl.collapse.recursive.
-#' The script takes two populations and generates allele frequency profiles for them. It then samples an allele frequency for each, at random, and estimates a sampling distribution for those two allele frequencies. Drawing two samples from those sampling distributions, it calculates whether or not they represent a fixed difference. This is applied to all loci, and the number of fixed differences so
-#' generated are counted, as an expectation. The script distinguished between true fixed differences (with a tolerance of delta), and false positives. The simulation is repeated a given number of times (default=1000) to provide an expectation of the number of false positives, given the observed allele frequency profiles and the sample sizes. The probability of the observed count of fixed differences is greater than the expected number of false positives is calculated.
+#' This is a support script, called by gl.fixed.diff and gl.collapse.recursive.
+#' The script takes two populations and generates allele frequency profiles for them. It then 
+#' samples an allele frequency for each, at random, and estimates a sampling distribution 
+#' for those two allele frequencies. Drawing two samples from those sampling distributions, 
+#' it calculates whether or not they represent a fixed difference. This is applied to all loci, 
+#' and the number of fixed differences so generated are counted, as an expectation. The script 
+#' distinguished between true fixed differences (with a tolerance of delta), and false positives. 
+#' The simulation is repeated a given number of times (default=1000) to provide an expectation 
+#' of the number of false positives, given the observed allele frequency profiles and the 
+#' sample sizes. The probability of the observed count of fixed differences is greater than 
+#' the expected number of false positives is calculated.
 #' @param gl -- name of the genlight containing the SNP genotypes [required]
 #' @param poppair -- labels of two populations for comparison in the form c(popA,popB) [required]
 #' @param obs -- observed number of fixed differences between the two populations [required]
+#' @param sympatric -- if TRUE, the two populations are sympatric, if FALSE then allopatric [FALSE]
 #' @param reps -- number of replications to undertake in the simulation [default 1000]
 #' @param delta -- the threshold value for the minor allele frequency to regard the difference between two populations to be fixed [default 0.02]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
@@ -13,18 +22,18 @@
 #'         [[1]] observed fixed differences;
 #'         [[2]] mean expected number of false positives for each comparison;
 #'         [[3]] standard deviation of the no. of false positives for each comparison;
-#'         [[4]] probability the observed fixed differences arose by chance for each comparison;
+#'         [[4]] probability the observed fixed differences arose by chance for each comparison.
 #' @export
 #' @importFrom stats pnorm rbinom
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 
-gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, verbose=2) {
+gl.utils.fdsim <- function(gl, poppair, obs, sympatric=FALSE, reps=1000, delta=0.02, verbose=NULL) {
   
   if (verbose > 0) {
     cat("Starting gl.utils.fdsim: Using simulation to estimate frequency of false positives\n")
   }
   # Determine data type
-  if(!(is(gl, "genlight"))){
+  if(!(class(gl)=="genlight")){
     cat("Fatal Error: Input data must be a genlight object\n")
     stop("Execution terminated\n")
   }
@@ -46,11 +55,11 @@ gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, verbose
     stop("Execution terminated\n")
   }  
 
-  if (verbose > 1) {cat("Comparing ",poppair[1],"and",poppair[2],"\n")}
-  if (verbose > 2) {
-    cat("Sample sizes:",table(pop(pair)),"\n")
-    cat("No. of loci:",nLoc(pair),"\n")
-    cat("No. of observed fixed differences:",obs,"\n")
+  if (verbose >= 2) {cat("Comparing ",poppair[1],"and",poppair[2],"\n")}
+  if (verbose >= 3) {
+    cat("  Sample sizes:",table(pop(pair)),"\n")
+    cat("  No. of loci:",nLoc(pair),"\n")
+    cat("  No. of observed fixed differences:",obs,"\n")
   }
 
   # Calculate the percentage frequencies
@@ -59,8 +68,18 @@ gl.utils.fdsim <- function(gl, poppair, obs=NULL, reps=1000, delta=0.02, verbose
   # Disaggregate the data for the two populations
   rfA <- rf[rf$popn==poppair[1],]
   rfB <- rf[rf$popn==poppair[2],]
+  if(verbose >= 2){cat("  Calculations based on allopatric populations\n")}
   # hist(rfA$frequency)
   # hist(rfB$frequency)
+  
+  # If sympatric, then null hypothesis is that the two putative taxa are drawn from 
+  # the one population
+  
+  if(sympatric){
+    rfA <- rf
+    rfB <- rf
+    if(verbose >= 2){cat("  Calculations based on sympatric populations\n")}
+  }  
   
   # Initialize storage vectors
   simA <- array(data=NA,dim=nLoc(pair))

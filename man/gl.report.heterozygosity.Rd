@@ -2,10 +2,18 @@
 % Please edit documentation in R/gl.report.heterozygosity.r
 \name{gl.report.heterozygosity}
 \alias{gl.report.heterozygosity}
-\title{Reports observed and expected heterozygosity by population or by individual.}
+\title{Reports observed and expected heterozygosity by population or by individual from SNP data.}
 \usage{
-gl.report.heterozygosity(x, method = "pop", n.invariant = 0,
-  boxplot = "adjusted", range = 1.5, cex.labels = 0.7, verbose = 2)
+gl.report.heterozygosity(
+  x,
+  method = "pop",
+  n.invariant = 0,
+  plot = TRUE,
+  boxplot = "adjusted",
+  range = 1.5,
+  cex.labels = 0.7,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- a genlight object containing the SNP genotypes [Required]}
@@ -14,6 +22,8 @@ gl.report.heterozygosity(x, method = "pop", n.invariant = 0,
 
 \item{n.invariant}{-- an estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]}
 
+\item{plot}{-- if TRUE, plots barcharts of observed and expected heterozygosity for populations [TRUE]}
+
 \item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
 plots a boxplot adjusted for skewed distributions [default 'adjusted']}
 
@@ -21,10 +31,10 @@ plots a boxplot adjusted for skewed distributions [default 'adjusted']}
 
 \item{cex.labels}{-- sets the size of the population labels [default 0.7]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-a dataframe containing population labels, heterozygosities and sample sizes
+returns a dataframe containing population labels, heterozygosities and sample sizes
 }
 \description{
 Calculates the observed and expected heterozygosities for each population (method="pop") 
@@ -49,10 +59,10 @@ are heterozygous for that individual.
 
 Output for method="ind" is a histogram of heterozygosity across individuals.
 The histogram is accompanied by a box and whisker plot presented either in standard 
-(boxplot="standard") or adjusted for skewness (boxplot=adjusted).
+(boxplot="standard") or adjusted for skewness (boxplot=adjusted). 
 
 Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
-Box and Whisker Plots and Hubert & Vandervieren (2008, An Adjusted Boxplot for Skewed
+Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed
 Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
 Box and Whisker Plots.
 
@@ -65,8 +75,8 @@ such as provided by gl.report.secondaries, you can specify it with the n.invaria
 parameter to standardize your estimates of heterozygosity.
 }
 \examples{
-tmp <- gl.report.heterozygosity(testset.gl,verbose=3)
-tmp <- gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
+out <- gl.report.heterozygosity(testset.gl,verbose=3)
+out <- gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
 }
 \author{
 Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})

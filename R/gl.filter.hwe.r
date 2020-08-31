@@ -16,50 +16,63 @@
 #' @param alpha -- level of significance (per locus) [Default 0.05]
 #' @param basis -- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]
 #' @param bon -- apply bonferroni correction to significance levels for filtering [default TRUE] 
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return a genlight object with the loci departing significantly from HWE removed
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @examples
-#' list <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE)
+#' result <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE, verbose=3)
 
-# Last amended 3-Feb-19
-
-gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
+gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=NULL) {
   
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
+  build <- "Jacob"
 
-# FLAG SCRIPT START
-
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
 
 # STANDARD ERROR CHECKING
   
-  if(!is(x, "genlight")) {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  # STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("  Fatal Error: genlight object required!\n")
   }
-
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
-
+  
+  if (all(x@ploidy == 1)){
+    stop("  Processing  Presence/Absence (SilicoDArT) data, heterozygosity can only be calculated for SNP data\n")
+    data.type <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
+    data.type <- "SNP"
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  }
+  
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if (alpha < 0 | alpha > 1){
@@ -83,11 +96,11 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
     for (i in poplist) {
       count <- count + 1
       if (count==1) {
-        result <- utils.hwe(i, prob=alpha)
+        result <- utils.hwe(i, prob=alpha, verbose=0)
         Population <- rep(names(poplist)[count],nrow(result))
         result <- cbind(Population,result)
       } else {
-        r <- utils.hwe(i, prob=alpha)
+        r <- utils.hwe(i, prob=alpha, verbose=0)
         Population <- rep(names(poplist)[count],nrow(r))
         r <- cbind(Population,r)
         result <- rbind(result, r)
@@ -103,27 +116,30 @@ gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=2) {
   failed.loci <- as.character(unique(result$Locus))
 
   if (verbose >= 2){
-    cat("Loci examined:", nLoc(x),"\n")
+    cat("  Loci examined:", nLoc(x),"\n")
     if (bon) {
       cat("  Deleted",length(failed.loci),"loci with significant departure from HWE, bonferroni corrected, at experiment-wide alpha =",alpha,"\n")
     } else {
       cat("  Deleted",length(failed.loci),"loci with significant departure from HWE at alpha =",alpha,"applied locus by locus\n")
     }  
   } 
-  
-  x <- x[,!locNames(x) %in% failed.loci]
+  index <- !locNames(x) %in% failed.loci
+  x <- x[,index]
+  x@other$loc.metrics <- x@other$loc.metrics[index,]
   
   if (verbose >= 2){
     cat("  Loci retained:",nLoc(x),"\n")
   }
+  
+# ADD TO HISTORY
+  nh <- length(x@other$history)
+  x@other$history[[nh + 1]] <- match.call()
   
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat("Completed:",funname,"\n")
   }
-  #add to history
-  nh <- length(x@other$history)
-  x@other$history[[nh + 1]] <- match.call()
+
   return(x) 
 }

@@ -4,8 +4,7 @@
 \alias{gl2genalex}
 \title{Convert a genlight object to format suitable for input to genalex}
 \usage{
-gl2genalex(x, outfile = "genalex.csv", outpath = tempdir(),
-  verbose = 2)
+gl2genalex(x, outfile = "genalex.csv", outpath = tempdir(), verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -14,7 +13,7 @@ gl2genalex(x, outfile = "genalex.csv", outpath = tempdir(),
 
 \item{outpath}{-- path where to save the output file [default tempdir()]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \description{
 The output csv file contains the snp data and other relevant lines suitable for genalex. This script is a wrapper for genind2genalex {poppr}
@@ -24,7 +23,7 @@ Reference: Peakall, R. and Smouse P.E. (2012) GenAlEx 6.5: genetic analysis in E
 http://bioinformatics.oxfordjournals.org/content/28/19/2537
 }
 \examples{
-\dontrun{
+\donttest{
 gl2genalex(testset.gl, outfile="testset.csv")
 }
 }

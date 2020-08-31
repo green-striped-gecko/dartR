@@ -2,7 +2,9 @@
 % Please edit documentation in R/gl.hwe.pop.r
 \name{gl.hwe.pop}
 \alias{gl.hwe.pop}
-\title{Filter function to facilitate analysing of dart data}
+\title{Filter function to facilitate analysing of dart data
+ 
+This function needs package SNPassoc. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/isglobal-brge/SNPassoc} and/or use \code{install_github("isglobal-brge/SNPassoc")} to install the function.}
 \usage{
 gl.hwe.pop(gi, pvalue = 0.05, plot = TRUE)
 }
@@ -18,10 +20,17 @@ This functions performs a HWE test for every population (rows) and loci (columns
 }
 \description{
 Filter function to facilitate analysing of dart data
+ 
+This function needs package SNPassoc. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/isglobal-brge/SNPassoc} and/or use \code{install_github("isglobal-brge/SNPassoc")} to install the function.
 }
 \examples{
-\donttest{
+\dontrun{
+if (!requireNamespace("parallel", quietly = TRUE)) {
+ stop("Package parallel needed for this function to work. Please install it.")} else {
 library(parallel)
-gl.hwe.pop(testset.gl, pvalue = 0.05, plot = TRUE)
+out <- gl.hwe.pop(possums.gl[,1:20], pvalue = 0.05, plot = TRUE)
+out$indHWE
+out$plot
+}
 }
 }

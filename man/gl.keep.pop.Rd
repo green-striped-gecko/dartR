@@ -4,8 +4,14 @@
 \alias{gl.keep.pop}
 \title{Remove all but specified populations from a genelight \{adegenet\} object}
 \usage{
-gl.keep.pop(x, pop.list, as.pop = NULL, recalc = FALSE,
-  mono.rm = FALSE, verbose = 2)
+gl.keep.pop(
+  x,
+  pop.list,
+  as.pop = NULL,
+  recalc = FALSE,
+  mono.rm = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
@@ -18,7 +24,7 @@ gl.keep.pop(x, pop.list, as.pop = NULL, recalc = FALSE,
 
 \item{mono.rm}{-- Remove monomorphic loci [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the reduced data
@@ -34,8 +40,14 @@ recalculates statistics made redundant by the deletion of individuals from the d
 The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 }
 \examples{
-   gl <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-   gl <- gl.keep.pop(testset.gl, pop.list=c("Female"),as.pop="sex")
+ # SNP data
+   gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+   gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),
+   mono.rm=TRUE,recalc=TRUE)
+   gl2 <- gl.keep.pop(testset.gl, pop.list=c("Female"),as.pop="sex")
+ # Tag P/A data  
+   gs2 <- gl.keep.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
+
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE

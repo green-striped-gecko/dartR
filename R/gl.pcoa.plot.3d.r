@@ -10,8 +10,8 @@
 #'
 #' This script is essentially a wrapper for function pca3d \{pca3d\} maintained by January Weiner.
 #' 
-#' @param x -- name of the glPca object containing the factor scores and eigenvalues [required]
-#' @param gl -- name of the genlight object from which the PCoA was generated
+#' @param glPca -- name of the glPca object containing the factor scores and eigenvalues [required]
+#' @param x -- name of the genlight object or fd object from which the PCoA was generated
 #' @param title -- a title for the plot [default "PCoA"]
 #' @param xaxis -- identify the x axis from those available in the ordination (xaxis <= nfactors) [default 1]
 #' @param yaxis -- identify the y axis from those available in the ordination (yaxis <= nfactors) [default 2]
@@ -19,48 +19,82 @@
 #' @param shape -- shape of the points, one of sphere, tetrahaedron or cube [default "sphere"]
 #' @param radius -- size of the points [default 2]
 #' @param legend -- one of bottomright, bottom, bottomleft, left, topleft, top, topright, right, center [default "bottom"]
-#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return NULL, plots an interactive 3D plot of the ordination in a separate window
 #' @export
-#' @importFrom pca3d pca3d
-#' @importFrom methods is
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' library(rgl)  #needed for the example
 #' pcoa <- gl.pcoa(testset.gl, nfactor=5)
 #' gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
 
-# Last amended 3-Feb-19
 
-gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  shape="sphere", radius=2, legend="topright", verbose=2) {
+gl.pcoa.plot.3d <- function(glPca, 
+                            x, 
+                            title= "PCA", 
+                            xaxis=1, 
+                            yaxis=2, 
+                            zaxis=3,  
+                            shape="sphere", 
+                            radius=2, 
+                            legend="topright", 
+                            verbose=NULL) {
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "pca3d"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.")
+  } else {
 
-# TIDY UP FILE SPECS
-
-  #outfilespec <- file.path(outpath, outfile)
+  
+  # TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if(class(x)=="genlight"){
+    if (is.null(verbose)){ 
+      if(!is.null(x@other$verbose)){ 
+        verbose <- x@other$verbose
+      } else { 
+        verbose <- 2
+      }
+    }
+  }
+  if(class(x)=="fd"){
+    x <- x$gl
+    if (is.null(verbose)){
+      verbose <- 2
+    }  
+  }
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
-
+  
 # STANDARD ERROR CHECKING
   
-  if(!is(gl,"genlight")) {
+  if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(gl)) | is.na(length(pop(gl))) | length(pop(gl)) <= 0) {
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(gl) <- array("pop1",dim = nLoc(gl))
-      pop(gl) <- as.factor(pop(gl))
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
     }
 
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -69,11 +103,11 @@ gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  sh
                             
   # Extract the coordinates in a form suitable for pca3d
     if (verbose >= 2) {cat("  Extracting coordinates of PCoA solution\n")}
-    coords <- cbind(x$scores[,xaxis],x$scores[,yaxis],x$scores[,zaxis])
+    coords <- cbind(glPca$scores[,xaxis],glPca$scores[,yaxis],glPca$scores[,zaxis])
   
   # Convert the eigenvalues to percentages
-   s <- sum(x$eig)
-   e <- round(x$eig*100/s,1)
+   s <- sum(glPca$eig)
+   e <- round(glPca$eig*100/s,1)
   # Create labels for the axes
    xlab <- paste0("P", xaxis, " (",e[xaxis],"%)")
    ylab <- paste0("P", yaxis, " (",e[yaxis],"%)")
@@ -81,10 +115,10 @@ gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  sh
   # Create a title
    #t <- paste("PCoA plot of Axes", xaxis, yaxis,"and",zaxis)
   # Set the row labels to the population names
-   row.names(x$scores) <- as.character(pop(gl))
+   row.names(glPca$scores) <- as.character(pop(x))
   # Plot
     if (verbose >= 2) {cat("  Plotting three specified axes\n")}
-   pca3d(coords, shape=shape, radius=radius, group=row.names(x$scores), legend=legend, 
+   pca3d::pca3d(coords, shape=shape, radius=radius, group=row.names(glPca$scores), legend=legend, 
          axe.titles=c(xlab,ylab,zlab))
 
 # FLAG SCRIPT END
@@ -94,5 +128,5 @@ gl.pcoa.plot.3d <- function(x, gl, title= "PCoA", xaxis=1, yaxis=2, zaxis=3,  sh
   }
 
   return(NULL)
+  }
 }
-

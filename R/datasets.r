@@ -18,15 +18,25 @@
 #' @keywords datasets
 "bandicoot.gl"
 
-#' A genlight object created via the read.dart functions
+#' A genlight object created via the gl.read.dart function
 #'
-#' This is a test data set on turtles. 250 individuals on >30 populations.
+#' This is a test data set on turtles. 250 individuals, 255 loci in >30 populations.
 #' @name testset.gl
 #' @format genlight object
 #' @docType data
 #' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "testset.gl"
+
+#' A genlight object created via the gl.read.silicodart function
+#'
+#' This is a test data set on turtles. 218 individuals, 255 loci in >30 populations.
+#' @name testset.gs
+#' @format genlight object
+#' @docType data
+#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
+#' @keywords datasets
+"testset.gs"
 
 #' Testfile in DArT format (as provided by DArT)
 #' 
@@ -75,7 +85,7 @@ NULL
 #' platy.gl <- (gi2gl(platy))
 #' df.loc <- data.frame(RepAvg = runif(nLoc(platy.gl)), CallRate = 1)
 #' platy.gl@other$loc.metrics <- df.loc
-#' gl.report.repavg(platy.gl)
+#' gl.report.reproducibility(platy.gl)
 #' }
 NULL
 

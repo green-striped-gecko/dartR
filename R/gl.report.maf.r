@@ -1,4 +1,4 @@
-#' Report minor allele frequency (MAF) for each locus in a genlight {adegenet} object
+#' Report minor allele frequency (MAF) for each locus in a SNP dataset
 #'
 #' This script provides summary histograms of MAF for each population in the dataset as a basis for decisions on filtering.
 #' 
@@ -6,48 +6,64 @@
 #' @param maf.limit -- show histograms maf range <= maf.limit [default 0.5]
 #' @param ind.limit -- show histograms only for populations of size greater than ind.limit [default 5]
 #' @param loc.limit -- show histograms only for populations with more than loc.limit polymorphic loci [default 30]
-#' @param verbose level of verbosity. verbose=0 is silent, verbose=1 returns more detailed output during conversion.
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return NULL
 #' @export
 #' @importFrom graphics layout hist
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' f <- gl.report.maf(testset.gl)
+#' gl.report.maf(testset.gl)
+#'
 
-# Last amended 3-Feb-19
-
-gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose = 0) {
+gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose = NULL) {
   
-# TIDY UP FILE SPECS
-
+# TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
+  }
+  
 # FLAG SCRIPT START
-
-    cat("Starting",funname,"\n")
-
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
 # STANDARD ERROR CHECKING
   
-  if(!is(x, "genlight")) {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+  if (all(x@ploidy == 1)){
+    cat("  Detected Presence/Absence (SilicoDArT) data\n")
+    stop("Cannot calculate minor allele frequences for Tag presence/absence data. Please provide a SNP dataset.\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (Tag P/A data) or 2 (SNP data)!\n")
   }
 
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-    }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x))) {cat("  Warning: genlight object contains monomorphic loci\n")}
-
 # FUNCTION SPECIFIC ERROR CHECKING
-
+  
   if (maf.limit > 0.5 | maf.limit <= 0) {
     cat("Warning: maf.limit must be in the range (0,0.5], set to 0.5\n")
     maf.limit <- 0.5
@@ -69,8 +85,10 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
   
 # Recalculate the relevant loc.metrics
   
-  cat("  Recalculating MAF\n")
-  x <- utils.recalc.maf(x,verbose=1)
+  if(x@other$loc.metrics.flags$maf==FALSE){
+    if(verbose >= 2){cat("  Recalculating MAF\n")}
+    x <- utils.recalc.maf(x,verbose=0)
+  }  
 
 # Check for status -- any populations with loc > loc.limit; ind > ind.limit; and is nPop > 1
   
@@ -105,19 +123,24 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
     
 # Calculate and plot overall MAF
   
-  cat("  Calculating MAF across populations\n")
+  if(verbose >= 2){cat("  Calculating MAF across populations\n")}
+  
   maf <- x@other$loc.metrics$maf
-
+  if (is.null(maf)) {
+    x <- gl.recalc.metrics(x,verbose = 0)
+    maf <- x@other$loc.metrics$maf
+  }
     if (flag == 1){
       layout(matrix(c(1,1,1,2,3,4,5,6,7), 3, 3, byrow = TRUE))
     }
     hist(maf, 
-         breaks=seq(0,0.5,0.05), 
-         col=rainbow(10), 
+         #breaks=seq(0,0.5,0.05), 
+         col='red', 
          main=title.str, 
-         xlab="Minor Allele Frequency")
+         xlab="Minor Allele Frequency",
+         breaks=100)
   
- cat("  Calculating MAF by population\n")
+    if(verbose >= 2){cat("  Calculating MAF by population\n")}
   
   plot.count <- 1
   if (flag == 1){   
@@ -128,10 +151,6 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
       genl <- utils.recalc.maf(genl,verbose=0)
       maf <- genl@other$loc.metrics$maf
       
-      #cat(popn,"Pops: ",nPop(genl),"\n")
-      #cat(popn,"Inds: ",nInd(genl),"\n")
-      #cat(popn,"Locs******: ",nLoc(genl),"\n")
-    
       if (plot.count <= 6) {
         maf <- maf[maf<maf.limit]
         hist(maf, 
@@ -164,11 +183,14 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
     }   
   }
   
-  if(plot.count > 6) {
-        cat("Completed: gl.report.maf once plots are displayed\n  Refer to histograms which extend over multiple screens\n\n")
-  } else {
-        cat("Completed: gl.report.maf once plots are displayed\n  Refer to histograms\n\n")
-  }
+# FLAG SCRIPT END
   
+  if(plot.count > 6) {
+        if(verbose >= 1){cat("Completed:",funname,"(once plots are displayed). Refer to histograms which extend over multiple screens\n\n")}
+  } else {
+    if(verbose >= 1){cat("Completed:",funname,"(once plots are displayed). Refer to histograms\n\n")}
+  }
+
   return(NULL)
+
 }  

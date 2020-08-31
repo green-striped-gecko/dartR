@@ -4,7 +4,9 @@
 \name{possums.gl}
 \alias{possums.gl}
 \title{A simulated genlight object created to run a landscape genetic example}
-\format{genlight object}
+\format{
+genlight object
+}
 \usage{
 possums.gl
 }

@@ -13,7 +13,7 @@ gl.pcoa.scree(x, top = TRUE, verbose = 0)
 unordinated original variables (top=TRUE) or to plot all eigenvalues (top=FALSE). If top=FALSE, then a
 reference line showing the average eigenvalue for the unordinated variables is shown. [default TRUE]}
 
-\item{verbose}{specifies is completion of the function should be output to the console.}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 The scree plot

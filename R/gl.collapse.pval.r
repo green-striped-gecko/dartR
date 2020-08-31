@@ -5,11 +5,14 @@
 #' diagnosability is demonstrated in the sample set, but non-significant. 
 #' 
 #' @param fd -- name of the list containing the collapsed gl object and associated distance matricies output by gl.collapse run with test=TRUE [required]
+#' @param recode.table -- name of the new recode.table to receive the new population reassignments 
+#' arising from the amalgamation of populations [tmp.csv]
+#' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 #' @param delta -- threshold for the level of difference between two populations that will be regarded as operationally fixed [Default 0.02]
 #' @param reps number of repetitions in the simulations to estimate false positives. [Default 1000].
 #' @param alpha -- significance level for test of false positives [default 0.05]
 #' @param plot -- if TRUE, plot a PCoA with the new groupings [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A list containing the gl object with the new collapsed populations and the following square matricies
 #'         [[1]] $gl -- the input genlight object;
 #'         [[2]] $fd -- raw fixed differences;
@@ -19,30 +22,47 @@
 #'         [[6]] $expobs -- the expected count of false positives for each comparison [by simulation], otherwise NAs
 #'         [[7]] $prob -- the significance of the count of fixed differences [by simulation]. These should all be significant (< alpha)
 #' @export
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 
 gl.collapse.pval <- function(fd, 
+                             recode.table="tmp.csv",
+                             outpath=tempdir(),
                              delta=0.02, 
                              reps=1000, 
                              alpha=0.05, 
-                             plot=FALSE, 
-                             verbose=2) {
+                             plot=FALSE,
+                             verbose=NULL) {
   
-  # TIDY UP FILE SPECS
+# TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
+  build <- "Jacob"
   
-  # FLAG SCRIPT START
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    
+      verbose <- 2
+    }
+  
   
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
   
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
   
+  stop("This script has been discontinued. Requires subjective judgement.\n  Amalgamate non-significant pairs manually using gl.fixed.diff with test=TRUE and gl.merge.pop\n")
+
   if ( verbose >= 2){
     cat("  Amalgamating populations based on non-significant fixed differences\n")
   }
@@ -51,8 +71,7 @@ gl.collapse.pval <- function(fd,
   
   # Checking count of populations
   if(nPop(fd$gl) < 2) {
-    cat("Fatal Error: Distance calculation requires at least two populations, one or none present\n")
-    stop("Execution terminated\n")
+    stop("Fatal Error: Distance calculation requires at least two populations, one or none present\n")
   }
 
   if (!("fd" %in% names(fd)) ||
@@ -61,14 +80,14 @@ gl.collapse.pval <- function(fd,
       !("nloc" %in% names(fd)) ||
       !("pval" %in% names(fd)) ||
       !("expobs" %in% names(fd))) {
-    cat("Fatal Error: fd must be a list produced by gl.collapse\n"); stop("Execution terminated\n")
+    stop("Fatal Error: fd must be a list produced by gl.collapse\n")
   }
 
   # DO THE JOB      
   
   if (is.na(fd$pval[1,1])) {
     cat("\nWarning: gl.collapse needed to be run with test set to TRUE, running now\n")
-    fd <- gl.fixed.diff(fd$gl,tloc=0,test=TRUE,delta=delta,reps=reps,mono.rm=TRUE,plot=FALSE,pb=FALSE, verbose=verbose)
+    fd <- gl.fixed.diff(fd$gl,tloc=0,test=TRUE,delta=delta,reps=reps,mono.rm=TRUE,pb=FALSE, verbose=verbose)
     cat("\n")
   } 
   
@@ -169,17 +188,18 @@ gl.collapse.pval <- function(fd,
   
   # Create a recode table corresponding to the aggregations
     recode.table <- "tmp.csv"
-    write.table(df, file="tmp.csv", sep=",", row.names=FALSE, col.names=FALSE)
+    outfilespec <- file.path(outpath,recode.table)
+    write.table(df, file=outfilespec, sep=",", row.names=FALSE, col.names=FALSE)
   
   # Recode the data file (genlight object)
-    x2 <- gl.recode.pop(fd$gl, pop.recode="tmp.csv", verbose=0)
+    x2 <- gl.recode.pop(fd$gl, pop.recode=outfilespec, verbose=0)
     if (verbose >= 2){
       cat("Recalculating fixed difference matrix for collapsed populations\n\n")
     }
-    fd2 <- gl.fixed.diff(x2,tloc=0,test=TRUE,delta=delta,reps=reps,mono.rm=TRUE,plot=FALSE,pb=FALSE, verbose=verbose)
+    fd2 <- gl.fixed.diff(x2,tloc=0,test=TRUE,delta=delta,reps=reps,mono.rm=TRUE,pb=FALSE, verbose=verbose)
   
   # Display the fd matrix
-    if (verbose >= 2) {
+    if (verbose >= 3) {
       
       cat("\n\nRaw fixed differences for the collapsed matrix\n")
       print(fd2$fd)
@@ -194,7 +214,7 @@ gl.collapse.pval <- function(fd,
       cat("\n")
       
       if (any(fd2$pval > alpha)){
-        cat("  Warning: Some resulting pairwise differences between populations are non-signicant\n")
+        cat("  Warning: Some resulting pairwise differences between populations are now non-signicant\n")
         cat("  Consider running gl.collapse.pval again.\n\n")
       }
     }
@@ -209,7 +229,7 @@ gl.collapse.pval <- function(fd,
     }  
     
     # Return the matricies
-    if (verbose >= 3) {
+    if (verbose >= 4) {
       cat("Returning a list containing the new genlight object and square matricies, as follows:\n",
           "         [[1]] $gl -- input genlight object;\n",
           "         [[2]] $fd -- raw fixed differences;\n",
@@ -222,8 +242,8 @@ gl.collapse.pval <- function(fd,
 
   # FLAG SCRIPT END
   
-  if (verbose > 0) {
-    cat("\nCompleted:",funname,"\n")
+  if (verbose >= 1) {
+    cat("Completed:",funname,"\n")
   }  
   
     return(l)

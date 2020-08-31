@@ -4,8 +4,13 @@
 \alias{gl2phylip}
 \title{Create a Phylip input distance matrix from a genlight (SNP) \{adegenet\} object}
 \usage{
-gl2phylip(x, outfile = "phyinput.txt", outpath = tempdir(),
-  bstrap = 1, verbose = 2)
+gl2phylip(
+  x,
+  outfile = "phyinput.txt",
+  outpath = tempdir(),
+  bstrap = 1,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data or a genind object containing presence absence data [required]}
@@ -16,7 +21,7 @@ gl2phylip(x, outfile = "phyinput.txt", outpath = tempdir(),
 
 \item{bstrap}{Number of bootstrap replicates [default 1]}
 
-\item{verbose}{-- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 Matrix of Euclidean distances between populations

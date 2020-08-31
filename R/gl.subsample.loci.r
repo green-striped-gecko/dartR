@@ -7,95 +7,126 @@
 #' @param n -- number of loci to include in the subsample [required]
 #' @param method -- "random", in which case the loci are sampled at random; or avgPIC, in which case the top n loci
 #' ranked on information content (AvgPIC) are chosen [default 'random']
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param mono.rm -- delete monomorphic loci before sampling [default FALSE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with n loci
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' result <- gl.subsample.loci(testset.gl, n=200, method="avgPIC")
+#' # SNP data
+#'   gl2 <- gl.subsample.loci(testset.gl, n=200, method="pic")
+#' # Tag P/A data
+#'   gl2 <- gl.subsample.loci(testset.gl, n=100, method="random")
 
-# Last amended 3-Feb-19
+gl.subsample.loci <- function(x, n, method="random", mono.rm=FALSE, verbose=NULL) {
 
-gl.subsample.loci <- function(x, n, method="random", verbose=2) {
-
-# TIDY UP FILE SPECS
-
+  # TRAP COMMAND, SET VERSION
+  
   funname <- match.call()[[1]]
-
-# FLAG SCRIPT START
-
+  build <- "Jacob"
+  hold <- x
+  
+  # SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
   if (verbose < 0 | verbose > 5){
-    cat("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n")
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
   }
-
-  if (verbose > 0) {
-    cat("Starting",funname,"\n")
+  
+  # FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
   }
-
+  
 # STANDARD ERROR CHECKING
   
-  if(!is(x, "genlight")) {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
   }
-
-  # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
-
-  # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
+  
+  if (verbose >= 2){
+    if (all(x@ploidy == 1)){
+      cat("  Processing  Presence/Absence (SilicoDArT) data\n")
+      pic <- x@other$loc.metrics$PIC
+    } else if (all(x@ploidy == 2)){
+      cat("  Processing a SNP dataset\n")
+      pic <- x@other$loc.metrics$AvgPIC
+    } else {
+      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
-
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
-
+  }
+  
 # FUNCTION SPECIFIC ERROR CHECKING
 
-  # To be added
+  if(mono.rm){
+    if(x@other$loc.metrics.flags$monomorphs==FALSE){
+      if(verbose >= 2){cat("  Deleting monomorphic loc\n")}
+      x <- gl.filter.monomorphs(x,verbose=0)
+    } else {
+      if(verbose >= 2){cat("  Zero monomorphic loci, none deleted\n")}
+    }  
+  }
+  # Check monomorphs have been removed
+  if (x@other$loc.metrics.flags$monomorphs == FALSE){
+    if (verbose >= 2){
+      cat("  Warning: Dataset contains monomorphic loci which will be included in the",funname,"selections\n")
+    }  
+  }
+  
+  if(!method=='PIC' & !method=='random'){
+    if(verbose >= 1){cat("  Warning: parameter method must be set to PIC or random, set to random\n")}
+    method <- "random"
+  }
+  
+  if(n <= 0 | n > nLoc(x)){
+    stop("Fatal Error: subsample size must be a postive integer >= 1 or <=",nLoc(x),"\n")
+  }
 
 # DO THE JOB
   
   if(method=="random") {
-    if (verbose>=3){cat("  Subsampling at random, approximately",n,"loci from",class(x),"object","\n")}
-    nblocks <- trunc((ncol(x)/n)+1)
-    blocks <- lapply(seploc(x, n.block=nblocks, random=TRUE, parallel=FALSE),as.matrix)
-    x.new <- blocks$block.1
+    if (verbose>=2){cat("  Subsampling at random",n,"loci from",class(x),"object","\n")}
+    randsel <- sample(1:nLoc(x), n, replace = F)
+    x.new <- x[, randsel]
+    x.new@other$loc.metrics <- x@other$loc.metrics[randsel,]
+    
     if (verbose>=3) {
       cat("     No. of loci retained =", ncol(x.new),"\n")
-      cat("     Note: SNP metadata discarded\n")
-    }
-  } else if (method=="AvgPIC" | method=="avgpic" | method=='avgPIC'){
-    x.new <- x[, order(-x@other$loc.metrics["AvgPIC"])]
+      }
+  } else if (method=="PIC" | method=="pic"){
+    x.new <- x[, order(-pic)]
     x.new <- x.new[,1:n]
+    x.new@other$loc.metrics <- x.new@other$loc.metrics[1:n,]
     if (verbose>=3) {
-      cat("     No. of loci retained =", ncol(x.new),"\n")
-      cat("     Note: SNP metadata discarded\n")
+      cat("  No. of loci retained =", ncol(x.new),"\n")
     }
   } else {
-    cat ("  Fatal Error in gl.sample.loci.r: method must be random or repavg\n"); stop()
+    stop("  Fatal Error: method must be 'random' or 'pic'\n");
   }
 
+# ADD TO HISTORY -- should this carry forward the history of genlight object x?
+  nh <- length(x.new@other$history)
+  x.new@other$history[[nh + 1]] <- match.call() 
+  
 # FLAG SCRIPT END
 
-  if (verbose > 0) {
+  if (verbose >= 1) {
     cat("Completed:",funname,"\n")
   }
 
   return(x.new)
 
 }
-
-#test <- gl.subsample.loci(gl, 12, method="avgpic")
-#as.matrix(test)[1:20,]
-
-#as.matrix(x)[1:20,1:10]
-
-#as.matrix(x.new)[1:20,1:10]
-
-#x<-gl
-#method<-"random"
-#n=100

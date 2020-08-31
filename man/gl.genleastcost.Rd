@@ -4,8 +4,15 @@
 \alias{gl.genleastcost}
 \title{Least-cost path analysis based on a friction matrix}
 \usage{
-gl.genleastcost(x, fric.raster, gen.distance, NN = NULL,
-  pathtype = "leastcost", plotpath = TRUE, theta = 1)
+gl.genleastcost(
+  x,
+  fric.raster,
+  gen.distance,
+  NN = NULL,
+  pathtype = "leastcost",
+  plotpath = TRUE,
+  theta = 1
+)
 }
 \arguments{
 \item{x}{a spatial genind object. see ?popgenreport how to provide coordinates in genind objects}
@@ -16,11 +23,11 @@ gl.genleastcost(x, fric.raster, gen.distance, NN = NULL,
 
 \item{NN}{Number of neighbours used when calculating the cost distance (possible values 4,8 or 16). As the default is NULL a value has to be provided if pathtype='leastcost'. NN=8 is most commonly used. Be aware that linear structures may cause artefacts in the least-cost paths, therefore inspect the actual least-cost paths in the provided output.}
 
-\item{pathtype}{Type of cost distance to be calculated (based on function in the \code{\link{gdistance}} package. Available distances are 'leastcost', 'commute' or 'rSPDistance'. See functions in the gdistance package for futher explanations. If the path type is set to 'leastcost' then paths and also pathlength are returned.}
+\item{pathtype}{Type of cost distance to be calculated (based on function in the \code{gdistance} package. Available distances are 'leastcost', 'commute' or 'rSPDistance'. See functions in the gdistance package for futher explanations. If the path type is set to 'leastcost' then paths and also pathlength are returned.}
 
 \item{plotpath}{switch if least cost paths should be plotted (works only if pathtype='leastcost'. Be aware this slows down the computation, but it is recommended to do this to check least cost paths visually.}
 
-\item{theta}{value needed for rSPDistance function. see \code{\link{rSPDistance}} in package \code{gdistance}.}
+\item{theta}{value needed for rSPDistance function. see \code{\link[gdistance]{rSPDistance}} in package \code{gdistance}.}
 }
 \value{
 returns a list that consists of four pairwise distance matrixes (Euclidean, Cost, length of path and genetic) and the actual paths as spatial line objects.

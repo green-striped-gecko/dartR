@@ -7,9 +7,9 @@
 is.fixed(s1, s2, tloc = 0)
 }
 \arguments{
-\item{s1}{-- percentage SNP allele frequency for the first population [required]}
+\item{s1}{-- percentage SNP allele or sequence tag frequency for the first population [required]}
 
-\item{s2}{-- percentage SNP allele frequency for the second population [required]}
+\item{s2}{-- percentage SNP allele or sequence tag frequency for the second population [required]}
 
 \item{tloc}{-- threshold value for tolerance in when a difference is regarded as fixed [default 0]}
 }

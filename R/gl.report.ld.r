@@ -4,34 +4,97 @@
 #' Calculates pairwise population based Linkage Disequilibirum across all loci using the specifyied number of cores
 #' @description this function is implemented in a parallel fashion to speed up the process. There is also the ability to restart the function if crashed by specifying the chunkfile names or restarting the function exactly in the same way as in the first run. This is implemented as sometimes due to connectivity loss between cores the function my crash half way. Also remove loci with have only missing value before running the function.
 #' 
-#' @param gi a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)
+#' @param x a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)
 #' @param name character string for rdata file. If not given genind object name is used
 #' @param save switch if results are saved in a file
 #' @param nchunks how many subchunks will be used (the less the faster, but if the routine crashes more bits are lost
 #' @param ncores how many cores should be used
 #' @param chunkname the name of the chunks for saving [default is NULL]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @param probar if TRUE, a progress bar is displayed for long loops [default = TRUE]
 #' @return returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed. The final output is a data frame that holds all statistics of pairwise LD between loci. (See ?LD in package genetics for details).
 #' @export
-#' @importFrom data.table rbindlist setnames
-#' @import parallel 
 #' @import foreach
-#' @importFrom doParallel registerDoParallel
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
-gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=TRUE)
-{
+gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE, verbose=NULL){
+ 
+  if (!(requireNamespace("doParallel", quietly = TRUE))) {
+    stop("Package doParallel needed for this function to work. Please install it.")
+  }
+  if (!(requireNamespace("parallel", quietly = TRUE))) {
+    stop("Package parallel needed for this function to work. Please install it.")
+  }
+  if (!(requireNamespace("data.table", quietly = TRUE))) {
+    stop("Package data.table needed for this function to work. Please install it.")
+  }
+  if (!(requireNamespace("foreach", quietly = TRUE))) {
+    stop("Package foreach needed for this function to work. Please install it.")
+  } else {
+# TRAP COMMAND, SET VERSION
+  
+  funname <- match.call()[[1]]
+  build <- "Jacob"
+  
+# SET VERBOSITY
+  
+  if (is.null(verbose)){ 
+    if(!is.null(x@other$verbose)){ 
+      verbose <- x@other$verbose
+    } else { 
+      verbose <- 2
+    }
+  } 
+  
+  if (verbose < 0 | verbose > 5){
+    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+    verbose <- 2
+  }
+  
+# FLAG SCRIPT START
+  
+  if (verbose >= 1){
+    if(verbose==5){
+      cat("Starting",funname,"[ Build =",build,"]\n")
+    } else {
+      cat("Starting",funname,"\n")
+    }
+  }
+  
+# STANDARD ERROR CHECKING
+  
+  if(class(x)!="genlight") {
+    stop("Fatal Error: genlight object required!\n")
+  }
+  
+  if (all(x@ploidy == 1)){
+    cat("  Detected Presence/Absence (SilicoDArT) data\n")
+    stop("Cannot calculate linkage disequilibrium from fragment presence/absence data. Please provide a SNP dataset.\n")
+  } else if (all(x@ploidy == 2)){
+    cat("  Processing a SNP dataset\n")
+  } else {
+    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
+  }
+  
+  # No Jacob build changes from this point.
+  
   # convert genlight to genind 
-  if (is(gi,"genlight")) gi <- gl2gi(gi)
+  if (class(x)=="genlight") gi <- gl2gi(x)
   #library(doParallel)
   #library(adegenet)
   #library(data.table)
-  cat(paste("Start to calculate LD for all pairs of loci...\n"))
-  cat(paste("Using", ncores,"cores in", nchunks," chunks.\n"))
-  cat("Depending on the number of loci this may take a while...\n")
-  cat("nchunks specifies the number of steps in the progress bar and the number of intermediate saves, but slows the computation a bit. nchunks = 1 is fastest.\n")
-  cat(paste("Seperate all",length(indNames(gi)),"loci...\n"))
+  if(verbose>=2){
+    cat(paste("  Calculating LD for all pairs of loci...\n"))
+    cat(paste("  Using", ncores,"cores in", nchunks," chunks.\n"))
+  }
+  if(verbose>=3){
+    cat("  Depending on the number of loci this may take a while...\n")
+    cat("  nchunks specifies the number of steps in the progress bar and the number of intermediate saves, but slows the computation a bit. nchunks = 1 is fastest.\n")
+  }
+  if(verbose>=2){
+    cat(paste("  Separating all",length(locNames(gi)),"loci...\n"))
+  }  
   flush.console()
   
   #convert into list of 
@@ -39,7 +102,9 @@ gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkna
     for (i in 1:length(slg)) slg[[i]] <- slg[[i]]@tab
   
   
-  cat(paste("Generate all possible pairs:", length(slg)*(length(slg)-1)/2,"...\n"))
+  if(verbose>=2){
+    cat(paste("  Generating all possible pairs:", length(slg)*(length(slg)-1)/2,"...\n"))
+  }
   flush.console()
   allp <- combn(length(slg),2)
   resnames <- c("loc1" ,"loc2","D", "Dprime", "r", "R2", "n", "X2", "p")
@@ -47,29 +112,36 @@ gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkna
   chunknr <- 0  #to make sure old chunks are not overridden
   if (!is.null(chunkname)) 
   {
-    cat("You specified results from a previous runs ...\n")
-    cat(paste("Loooking for LD_chunks_", chunkname, "files.\n"))
+    if(verbose>=2){
+      cat("  You specified results from a previous run ...\n")
+      cat(paste("  Loooking for LD_chunks_", chunkname, "files.\n"))
+    }
     chunkfiles <- list.files(pattern=paste0("LD_chunks_",chunkname))
     if (length(chunkfiles>0))
       {
-      cat(paste("Found", length(chunkfiles), "file(s).\n"))
+      if(verbose>=2){cat(paste("  Found", length(chunkfiles), "file(s).\n"))}
       for (i in 1:length(chunkfiles))
         {
         load(paste0("LD_chunks_", chunkname,"_",i,".rdata"))
         lddone[[i]] <- ldc
         }
       chunknr<-length(chunkfiles)
-      lddone <- rbindlist(lddone)
+      lddone <- data.table::rbindlist(lddone)
       
-      cat(paste("Found", nrow(lddone),"pairs...\n"))
-      setnames(lddone,resnames)
+      if(verbose>=2){cat(paste("  Found", nrow(lddone),"pairs...\n"))}
+      data.table::setnames(lddone,resnames)
       done <- nrow(lddone)
-      if (done==ncol(allp)) {cat("Already everyting is calculated. If you want to recalculate please delete al LD_chunk files or specify a different chunkname.\n Aborting function...\n");return(lddone)}
-      allp <- allp[,-c(1:done)]  
-      cat(paste("...only", ncol(allp), "pairs left to be done...\n"))
-      } else cat(paste("No chunkfiles with LD_chunks_",chunkname,"_x.rdata found. \nTherefore I restart to calculate all pairs.\n"))
+      if (done==ncol(allp)) {
+        if(verbose>=2){
+          cat("  Already everyting is calculated. If you want to recalculate please delete al LD_chunk files or specify a different chunkname.\n Aborting function...\n");return(lddone)}
+        }
+        allp <- allp[,-c(1:done)]  
+        if(verbose>=2){cat(paste("  ...only", ncol(allp), "pairs left to be done...\n"))}
+      } else {
+        if(verbose>=2){cat(paste("  No chunkfiles with LD_chunks_",chunkname,"_x.rdata found. \nRestart to calculation of all pairs.\n"))}
+      }  
   }
-  cat(paste("Calculate LD for all pairs...\n"))
+  if(verbose>=2){cat(paste("  Calculate LD for all pairs...\n"))}
   flush.console()
   n<- ncol(allp)
   ptm <- proc.time()[3]
@@ -173,15 +245,15 @@ gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkna
   chunks <- function(x,n) split(x, cut(seq_along(x), n, labels = FALSE)) 
   if (nchunks<2 ) splitruns <- list( runs) else splitruns <- chunks(runs, nchunks)
   ldchunks <- list()
-  cl<-makeCluster(ncores) #adjust the number of cores of your computer!!!!
-  registerDoParallel(cl)
+  cl<-parallel::makeCluster(ncores) #adjust the number of cores of your computer!!!!
+  doParallel::registerDoParallel(cl)
   if(probar){pbar <- txtProgressBar(min=0, max=nchunks, style=3, initial=NA)}
   for (i in 1:nchunks)
   {
     iter <- splitruns[[i]]
     if (ncores <2) it2 <- list(iter) else it2 <- chunks(iter, ncores)
     ip <- NA
-    ll <- foreach (ip=1:length(it2), .combine=rbind) %dopar% {
+    ll <- foreach::foreach (ip=1:length(it2), .combine=rbind) %dopar% {
         res <- matrix(NA, ncol=9, nrow=length(it2[[ip]]))
         for (ii in 1:length(it2[[ip]]))
           {
@@ -202,14 +274,14 @@ gl.report.ld <- function(gi, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkna
   ldc <- ldchunks[[i]]
   save(ldc, file=paste0("LD_chunks_",chunkname,"_",i+chunknr,".rdata"))
   }
-stopCluster(cl)
-LDres2 <- rbindlist(ldchunks)
+parallel::stopCluster(cl)
+LDres2 <- data.table::rbindlist(ldchunks)
 #LDres2 <- t(do.call(cbind, ldchunks))
-setnames(LDres2,resnames)
-if (!is.null(lddone)) LDres2 <- rbindlist(list(lddone, LDres2))
+data.table::setnames(LDres2,resnames)
+if (!is.null(lddone)) LDres2 <- data.table::rbindlist(list(lddone, LDres2))
 #colnames(LDres2)<- resnames
 
-cat(paste("\n# Simulations:", n,". Took", round(proc.time()[3]-ptm),"seconds.\n"))
+if(verbose>=2){cat(paste("\n  No. of Simulations:", n,". Took", round(proc.time()[3]-ptm),"seconds.\n"))}
 if (save) 
 {
   if (!is.null(name)) 
@@ -222,11 +294,21 @@ if (save)
       nobj <- "LDallp"
     
   }
-  cat(paste0("\n Results are saved as object ", nobj," under ", filename,".\n"))
-  (cat(paste("Once you have checked you can delete your LD_chunks_",chunkname,"files.\n")))
+  if(verbose>=2){
+    cat(paste0("\n  Results are saved as object ", nobj," under ", filename,".\n"))
+   (cat(paste("  Once you have checked you can delete your LD_chunks_",chunkname,"files.\n")))
+  }  
   assign(nobj, LDres2)
   save(list=nobj, file=filename)
 }
-LDres2
-}
 
+# FLAG SCRIPT END
+
+  if (verbose >= 1) {
+    cat("Completed:",funname,"\n")
+  }
+
+  return(LDres2)
+
+  }
+}

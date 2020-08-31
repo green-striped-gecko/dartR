@@ -2,29 +2,40 @@
 % Please edit documentation in R/gl.read.silicodart.r
 \name{gl.read.silicodart}
 \alias{gl.read.silicodart}
-\title{Import presence/absence data from SilicoDArT and convert to  genind \{agegenet\} format}
+\title{Import presence/absence data from SilicoDArT to genlight \{agegenet\} format (ploidy=1)}
 \usage{
-gl.read.silicodart(datafile, topskip, nmetavar, nas = "-",
-  ind.metafile = NULL)
+gl.read.silicodart(
+  filename,
+  ind.metafile = NULL,
+  nas = "-",
+  topskip = NULL,
+  lastmetric = "Reproducibility",
+  probar = TRUE,
+  verbose = NULL
+)
 }
 \arguments{
-\item{datafile}{-- name of csv file containing the SilicoDArT data [required]}
+\item{filename}{-- name of csv file containing the SilicoDArT data [required]}
 
-\item{topskip}{-- number of rows to skip before the header row (containing the specimen identities) [required]}
-
-\item{nmetavar}{-- number of columns containing the locus metadata (e.g. CloneID, Reproducibility) [required]}
+\item{ind.metafile}{-- name of csv file containing metadata assigned to each entity (individual) [default NULL]}
 
 \item{nas}{-- missing data character [default "-"]}
 
-\item{ind.metafile}{-- name of csv file containing metadata assigned to each entity (individual) [default NULL]}
+\item{topskip}{-- number of rows to skip before the header row (containing the specimen identities) [optional]}
+
+\item{lastmetric}{-- specifies the last non genetic column (Default is "Reproducibility"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number. [default Reproducibility]}
+
+\item{probar}{show progress bar}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, or as set by gl.set.verbose()]}
 }
 \value{
-An object of class ("genInd") containing the presence/absence data, and locus and individual metadata
+An object of class \code{genlight} with ploidy set to 1, containing the presence/absence data, and locus and individual metadata
 }
 \description{
 DaRT provide the data as a matrix of entities (individual animals) across the top and
 attributes (P/A of sequenced fragment) down the side in a format that is unique to DArT. This program
-reads the data in to adegenet format (genind) for consistency with
+reads the data in to adegenet format for consistency with
 other programming activity. The script may require modification as DArT modify their
 data formats from time to time.
 }
@@ -45,11 +56,10 @@ The data matrix, locus names (forced to be unique), locus metadata, specimen nam
 specimen metadata are combined into a genInd object. Refer to the documentation for \{adegenet\} for further details.
 }
 \examples{
-\dontrun{
-glind <- gl.read.silicodart(datafile="SNP_DFwt15-1908_scores_2Row.csv", topskip=6, 
-nmetavar=16, nas="-", ind.metafile="metadata.csv" )
-}
+silicodartfile <- system.file("extdata","testset_SilicoDArT.csv", package="dartR")
+metadata <- system.file("extdata",ind.metafile ="testset_metadata_silicodart.csv", package="dartR")
+testset.gs <- gl.read.silicodart(filename = silicodartfile, ind.metafile = metadata)
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
