@@ -48,8 +48,6 @@ percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 \examples{
 # SNP data
   result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
-# Tag P/A data
-  result <- gl.filter.hamming(testset.gs, threshold=0.25, verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

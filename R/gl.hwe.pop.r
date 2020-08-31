@@ -7,12 +7,14 @@
 #' @return This functions performs a HWE test for every population (rows) and loci (columns) and returns a true false matrix. True is reported if the p-value of an HWE-test for a particular loci and population was below the specified threshold (pvalue, default=0.05). The thinking behind this approach is that loci that are not in HWE in several populations have most likely to be treated (e.g. filtered if loci under selection are of interest). If plot=TRUE a barplot on the on the loci and the sum of deviation over all population is returned. Loci that deviate in the majority of populations can be identified via colSums on the resulting matrix.
 #' @export
 #' @examples
+#' \dontrun{
 #' if (!requireNamespace("parallel", quietly = TRUE)) {
 #'  stop("Package parallel needed for this function to work. Please install it.")} else {
 #' library(parallel)
 #' out <- gl.hwe.pop(possums.gl[,1:20], pvalue = 0.05, plot = TRUE)
 #' out$indHWE
 #' out$plot
+#' }
 #' }
 
 #########
