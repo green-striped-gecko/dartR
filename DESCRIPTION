@@ -73,7 +73,12 @@ Suggests:
     gdistance,
     seqinr,
     pheatmap,
-    RColorBrewer
+    RColorBrewer,
+    SNPassoc,
+    vcfR
+Remotes:
+    github::isglobal-brge/SNPassoc
+    github::knausb/vcfR
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1
