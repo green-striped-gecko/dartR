@@ -14,15 +14,24 @@
 #' @param probar if TRUE, a progress bar is displayed for long loops [default = TRUE]
 #' @return returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed. The final output is a data frame that holds all statistics of pairwise LD between loci. (See ?LD in package genetics for details).
 #' @export
-#' @importFrom data.table rbindlist setnames
-#' @import parallel 
 #' @import foreach
-#' @importFrom doParallel registerDoParallel
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
 gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE, verbose=NULL){
-  
+ 
+  if (!(requireNamespace("doParallel", quietly = TRUE))) {
+    stop("Package doParallel needed for this function to work. Please install it.")
+  }
+  if (!(requireNamespace("parallel", quietly = TRUE))) {
+    stop("Package parallel needed for this function to work. Please install it.")
+  }
+  if (!(requireNamespace("data.table", quietly = TRUE))) {
+    stop("Package data.table needed for this function to work. Please install it.")
+  }
+  if (!(requireNamespace("foreach", quietly = TRUE))) {
+    stop("Package foreach needed for this function to work. Please install it.")
+  } else {
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
@@ -117,10 +126,10 @@ gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunknam
         lddone[[i]] <- ldc
         }
       chunknr<-length(chunkfiles)
-      lddone <- rbindlist(lddone)
+      lddone <- data.table::rbindlist(lddone)
       
       if(verbose>=2){cat(paste("  Found", nrow(lddone),"pairs...\n"))}
-      setnames(lddone,resnames)
+      data.table::setnames(lddone,resnames)
       done <- nrow(lddone)
       if (done==ncol(allp)) {
         if(verbose>=2){
@@ -244,7 +253,7 @@ gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunknam
     iter <- splitruns[[i]]
     if (ncores <2) it2 <- list(iter) else it2 <- chunks(iter, ncores)
     ip <- NA
-    ll <- foreach (ip=1:length(it2), .combine=rbind) %dopar% {
+    ll <- foreach::foreach (ip=1:length(it2), .combine=rbind) %dopar% {
         res <- matrix(NA, ncol=9, nrow=length(it2[[ip]]))
         for (ii in 1:length(it2[[ip]]))
           {
@@ -265,10 +274,10 @@ gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunknam
   ldc <- ldchunks[[i]]
   save(ldc, file=paste0("LD_chunks_",chunkname,"_",i+chunknr,".rdata"))
   }
-stopCluster(cl)
+parallel::stopCluster(cl)
 LDres2 <- data.table::rbindlist(ldchunks)
 #LDres2 <- t(do.call(cbind, ldchunks))
-setnames(LDres2,resnames)
+data.table::setnames(LDres2,resnames)
 if (!is.null(lddone)) LDres2 <- data.table::rbindlist(list(lddone, LDres2))
 #colnames(LDres2)<- resnames
 
@@ -301,5 +310,5 @@ if (save)
 
   return(LDres2)
 
+  }
 }
-

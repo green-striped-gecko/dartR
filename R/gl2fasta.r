@@ -37,7 +37,6 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A new gl object with all loci rendered homozygous
 #' @export
-#' @importFrom seqinr write.fasta
 #' @importFrom utils combn edit flush.console getTxtProgressBar read.csv setTxtProgressBar txtProgressBar write.csv write.table
 #' @importFrom graphics axis barplot box image lines text
 #' @importFrom methods new
@@ -53,7 +52,10 @@
 
 
 gl2fasta <- function(x, method=1, outfile="output.fasta", outpath=tempdir(), probar=FALSE, verbose=NULL) {
-
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "seqinr"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") } 
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]

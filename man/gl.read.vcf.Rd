@@ -15,7 +15,7 @@ gl.read.vcf(vcffile, verbose = 1)
 A genlight object, with most slots filled.
 }
 \description{
-Converts a vcf file into a genlight object
+This function needs package vcfR. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/knausb/vcfR}.
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

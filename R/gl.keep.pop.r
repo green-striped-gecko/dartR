@@ -94,7 +94,7 @@ gl.keep.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
       if (verbose >= 2) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
     } else {
       cat("Warning: individual metric assigned to 'pop' does not exist. Running compliance check\n")
-      x <- gl.compliance.check(x,v=0)
+      x <- gl.compliance.check(x,verbose=0)
     }
   }
 

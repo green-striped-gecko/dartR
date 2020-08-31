@@ -27,7 +27,6 @@
 #'@param title -- title for the plot [default: "Network based on G-matrix of genetic relatedness"]
 #'@param verbose -- verbosity. If zero silent, max 3.
 #'@return NULL 
-#'@importFrom igraph layout_with_kk layout_with_fr layout_with_drl graph_from_data_frame delete_edges V E 
 #'@importFrom grDevices rgb
 #'@importFrom graphics legend
 #'@export
@@ -47,7 +46,11 @@ gl.plot.network <- function(D,
                             alpha=0.005, 
                             title="Network based on genetic distance", 
                             verbose=2){
-  
+
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "igraph"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") }   
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
@@ -82,7 +85,7 @@ gl.plot.network <- function(D,
   
 # FUNCTION SPECIFIC ERROR CHECKING
 
-  if(class(D)!="dist" & class(D)!="matrix") {
+  if( !is(D,"dist") & !is(D,"matrix")) {
       stop("Fatal Error: distance matrix required for gl.dist.network!\n")
   }
   

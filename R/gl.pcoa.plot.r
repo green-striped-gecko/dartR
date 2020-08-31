@@ -35,26 +35,27 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A plot of the ordination [plot.out=TRUE] or a dataframe [plot.out=FALSE]
 #' @export
-#' @importFrom directlabels geom_dl
-#' @importFrom plotly ggplotly
 #' @import tidyr 
 #' @importFrom methods show
 #' @rawNamespace import(ggplot2, except = empty)
 
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#' if (requireNamespace("directlabels", quietly = TRUE)) {
 #' gl <- testset.gl
 #' levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
 #' rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
 #' pca<-gl.pcoa(gl,nfactors=5)
 #' gl.pcoa.plot(pca, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5,
 #'  vadjust=1)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5,
-#'  vadjust=1, xaxis=1, yaxis=3)
+#' if (requireNamespace("plotly", quietly = TRUE)) {
+#' #interactive plot to examine labels
 #' gl.pcoa.plot(pca, gl, labels="interactive")  
-#' 
+#' }
+#' #return plot into a data.frame (can be used by ggplot)
 #' df <- gl.pcoa.plot(pca, gl, plot.out=FALSE)
 #' df
+#' }
 
 gl.pcoa.plot <- function(glPca, 
                          x, 
@@ -69,6 +70,12 @@ gl.pcoa.plot <- function(glPca,
                          yaxis=2, 
                          plot.out=TRUE, 
                          verbose=NULL) {
+  pkg <- "plotly"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.") }
+  pkg <- "directlabels"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.") } else {  
 
 # TRAP COMMAND, SET VERSION
   
@@ -176,6 +183,7 @@ gl.pcoa.plot <- function(glPca,
       ind <- indNames(x)
       pop <- factor(pop(x))
       df <- cbind(df,ind,pop)
+      PCoAx <- PCoAy <- NA
       colnames(df) <- c("PCoAx","PCoAy","ind","pop")
       
     } else { # class(x) == "dist"
@@ -201,7 +209,7 @@ gl.pcoa.plot <- function(glPca,
     # Plot
       p <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=ind, colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
-        geom_dl(aes(label=ind),method="first.points") +
+        directlabels::geom_dl(aes(label=ind),method="first.points") +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -229,7 +237,7 @@ gl.pcoa.plot <- function(glPca,
       # Plot
       p <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
-        geom_dl(aes(label=pop),method="smart.grid") +
+        directlabels::geom_dl(aes(label=pop),method="smart.grid") +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -355,4 +363,5 @@ gl.pcoa.plot <- function(glPca,
     return(df)
   }
 
+  }
 }

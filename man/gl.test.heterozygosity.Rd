@@ -43,8 +43,8 @@ of heterozygosities, marked with the critical limits alpha1 and alpha2, the obse
 heterozygosity, and the zero value (if in range). Can output the plots to jpeg.
 }
 \examples{
-gl.report.heterozygosity(testset.gl)
-out <- gl.test.heterozygosity(testset.gl, nreps=100, verbose=3)
+gl.report.heterozygosity(possums.gl[1:120,])
+out <- gl.test.heterozygosity(possums.gl[1:120,], nreps=10, verbose=3, plot=TRUE)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

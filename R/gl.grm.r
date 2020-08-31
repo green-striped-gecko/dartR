@@ -8,7 +8,6 @@
 #'@param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'@return a genomic relatedness matrix 
 #'@importFrom stats heatmap cov var
-#'@importFrom rrBLUP A.mat
 #'@export
 #'  
 #'@examples
@@ -16,7 +15,13 @@
 
 
 gl.grm <- function(x, plotheatmap=TRUE, return.imputed=FALSE, verbose=NULL, ...){
+
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "rrBLUP"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.") }   
   
+ 
 # TRAP COMMAND, SET VERSION
     
     funname <- match.call()[[1]]
@@ -63,7 +68,7 @@ gl.grm <- function(x, plotheatmap=TRUE, return.imputed=FALSE, verbose=NULL, ...)
 
 # DO THE JOB    
   
-G <- A.mat(as.matrix(x)-1,return.imputed = return.imputed)
+G <- rrBLUP::A.mat(as.matrix(x)-1,return.imputed = return.imputed)
 #if (plotheatmap & return.imputed==FALSE) heatmap(G) else heatmap(G$A) ####   BERND, G$A THROWS AND ERROR
 if (plotheatmap & return.imputed==FALSE) heatmap(G) else heatmap(G)
 

@@ -1,16 +1,21 @@
 #' Converts a vcf file into a genlight object
 #'
+#' This function needs package vcfR. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/knausb/vcfR}. 
 #' @param vcffile -- a vcf file (works only for diploid data)
 #' @param verbose set to 2
 #' @return A genlight object, with most slots filled.
-#' @importFrom vcfR read.vcfR vcfR2genlight
+# @importFrom vcfR read.vcfR vcfR2genlight
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
 gl.read.vcf <- function(vcffile, verbose = 1) {
-  vcf <- read.vcfR(file = vcffile, verbose = verbose)
-  x <- vcfR2genlight(vcf)
+
+  if (!(requireNamespace("vcfR", quietly = TRUE))) {
+    stop("To use this function you need to install package: vcfR. Please refer to the help of the function for instructions (?gl.read.vcf).")
+  } else {  
+  vcf <- vcfR::read.vcfR(file = vcffile, verbose = verbose)
+  x <- vcfR::vcfR2genlight(vcf)
   
   #add history
   x@other$history <- list(match.call())
@@ -22,5 +27,5 @@ gl.read.vcf <- function(vcffile, verbose = 1) {
     )
   }
   return(x)
-  
+  }
 }

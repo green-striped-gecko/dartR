@@ -18,14 +18,13 @@
 #' @return returns a dataframe containing population labels, heterozygosities and sample sizes
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#' @importFrom grDevices rainbow
-#' @importFrom graphics par
+#' @importFrom grDevices rainbow dev.copy dev.off jpeg
+#' @importFrom graphics par boxplot 
 #' @importFrom plyr join
 #' @importFrom robustbase adjbox
 #' @examples
-#' gl.report.heterozygosity(testset.gl)
-#' out <- gl.test.heterozygosity(testset.gl, nreps=100, verbose=3)
-
+#' gl.report.heterozygosity(possums.gl[1:120,])
+#' out <- gl.test.heterozygosity(possums.gl[1:120,], nreps=10, verbose=3, plot=TRUE)
 gl.test.heterozygosity <- function(x, 
                                    nreps=10000,
                                    alpha1=0.05,
@@ -114,7 +113,7 @@ gl.test.heterozygosity <- function(x,
 # DO THE JOB
   
   # Calculate a matrix of heterozyosities (He)
-  out <- gl.report.heterozygosity(x, v=0)
+  out <- gl.report.heterozygosity(x, verbose=0)
   D <- outer(out$He,out$He,"-")
 
   # Simulate the distribution of differences in He by population, pairwise
@@ -219,8 +218,8 @@ gl.test.heterozygosity <- function(x,
       if(plot.out){
         if (verbose >= 2){cat("  Outputting plots as jpeg files\n")}
         plot.name <- paste0(popNames(x)[first]," x ",popNames(x)[second],".jpg")
-        dev.copy(jpeg,plot.name)
-        dev.off()
+        grDevices::dev.copy(grDevices::jpeg,plot.name)
+        grDevices::dev.off()
       }
 
     }

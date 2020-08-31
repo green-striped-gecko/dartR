@@ -9,7 +9,6 @@
 #' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @export
-#' @importFrom rgdal writeOGR
 #' @importFrom sp SpatialPointsDataFrame coordinates<- CRS proj4string<-
 #' @importFrom stats complete.cases
 #' @author Bernd Guber (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -18,6 +17,12 @@
 
 gl2shp <- function(x, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",  outfile="gl", outpath=tempdir(), verbose=NULL){
 
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "rgdal"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.") } else {
+  
+  
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
@@ -96,9 +101,9 @@ gl2shp <- function(x, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS8
   spdf = SpatialPointsDataFrame(glpoints, data.frame(glpoints))
   proj4string(spdf) <- CRS(proj4)
   # if (!is.null(reproj4)) spdf <- project(spdf, proj = reproj4, inv = TRUE)
-  if (type=="shp") writeOGR(spdf, dsn=outpath, layer=outfile, driver="ESRI Shapefile", overwrite_layer=TRUE)
+  if (type=="shp") rgdal::writeOGR(spdf, dsn=outpath, layer=outfile, driver="ESRI Shapefile", overwrite_layer=TRUE)
 
-  if (type=="kml") writeOGR(spdf,  driver = 'KML', dsn = paste0(file.path(outpath,outfile),".kml"), layer=outfile, overwrite_layer=TRUE)
+  if (type=="kml") rgdal::writeOGR(spdf,  driver = 'KML', dsn = paste0(file.path(outpath,outfile),".kml"), layer=outfile, overwrite_layer=TRUE)
 
   if (verbose >= 2)  cat(paste("Shapefile saved as:", paste0(outfile,".",type),"\nin folder:",outpath,"\n"))
 
@@ -109,4 +114,5 @@ gl2shp <- function(x, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS8
   }
 
   return(NULL)
+}
 }

@@ -6,7 +6,6 @@
 #'@param NN number of next neighbours recommendation is 8
 #'@return a costdistance matrix between all pairs of locs
 #'@description calculates a cost distance matrix, to be used with run.popgensim
-#'@importFrom gdistance costDistance rSPDistance commuteDistance
 #' @export
 #' @examples
 #' \dontrun{
@@ -21,6 +20,12 @@
 
 gl.costdistances <- function(landscape, locs, method, NN)
 {
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "gdistance"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") } 
+  
+
   if (class(locs)=="genlight")
   {
     if (is.null(locs@other$latlong)) stop("no locations were provided in the genlight object [@other$latlong].\n")
@@ -33,13 +38,13 @@ gl.costdistances <- function(landscape, locs, method, NN)
       locs <- apply(locs@other$latlong,2,function(x) tapply(x, pop(locs), mean))
    } else locs <- as.matrix(locs)
    
-  fric.mat <- transition(landscape,function(x) 1/x[2],NN)
+  fric.mat <- gdistance::transition(landscape,function(x) 1/x[2],NN)
   #set distances to meters  if no projected already
   fric.mat@crs@projargs<- "+proj=merc +units=m"
-  fric.mat.cor <- geoCorrection(fric.mat)
-  if (method=="leastcost") cd.mat <-costDistance(fric.mat.cor, locs, locs)
-  if (method=="rSPDistance") cd.mat <- rSPDistance(fric.mat.cor, locs, locs, theta=1)
-  if (method=="commute") cd.mat <-as.matrix(commuteDistance(fric.mat.cor,locs))
+  fric.mat.cor <- gdistance::geoCorrection(fric.mat)
+  if (method=="leastcost") cd.mat <-gdistance::costDistance(fric.mat.cor, locs, locs)
+  if (method=="rSPDistance") cd.mat <- gdistance::rSPDistance(fric.mat.cor, locs, locs, theta=1)
+  if (method=="commute") cd.mat <-as.matrix(gdistance::commuteDistance(fric.mat.cor,locs))
   colnames(cd.mat) <- row.names(locs)
   rownames(cd.mat) <- row.names(locs)
   return (cd.mat)

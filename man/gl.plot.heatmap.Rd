@@ -4,34 +4,10 @@
 \alias{gl.plot.heatmap}
 \title{Represent a distance matrix as a heatmap}
 \usage{
-gl.plot.heatmap(
-  D,
-  ncolors = 5,
-  labels = TRUE,
-  labels.cex = 1,
-  values = TRUE,
-  values.cex = 1,
-  legend = TRUE,
-  rank = FALSE,
-  verbose = NULL
-)
+gl.plot.heatmap(D, verbose = NULL)
 }
 \arguments{
-\item{D}{-- name of the distance matrix [required]}
-
-\item{ncolors}{-- number of colors to display [default 5]}
-
-\item{labels}{-- if TRUE, and the number of rows is <= 20, labels are added to the heatmap [default = TRUE]}
-
-\item{labels.cex}{-- size of the labels [default = 1]}
-
-\item{values}{-- if TRUE, and the number of rows is <= 20, distances are added to the body of the heatmap [default = TRUE]}
-
-\item{values.cex}{-- size of the values to print inside each cell [default = 1]}
-
-\item{legend}{-- if TRUE, a legend will be added to the plot [default = TRUE]}
-
-\item{rank}{-- if TRUE, then the distance matrix will be reordered to group like with like, otherwise order will be displayed as given [default FALSE]}
+\item{D}{-- name of the distance matrix or class fd object [required]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
@@ -42,8 +18,11 @@ The script plots a heat map to represent the distances in the distance or dissim
    gl <- testset.gl[1:10,]
    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
    gl.plot.heatmap(D)
-   gl.plot.heatmap(D, ncolors=10, rank=TRUE, legend=TRUE)
+   D2 <- gl.dist.pop(testset.gl)
+   gl.plot.heatmap(D2)
+   D3 <- gl.fixed.diff(testset.gl)
+   gl.plot.heatmap(D3)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr}) as a wrapper for pheatmap by Raivo Kolde.
 }

@@ -1,10 +1,10 @@
 #' Convert genlight objects to the format used in the SNPassoc package
 #'
 #' This function exports a genlight object into a SNPassoc object. See \link[SNPassoc]{setupSNP}
+#' #' This function needs package SNPassoc. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/isglobal-brge/SNPassoc} and/or use \code{install_github("isglobal-brge/SNPassoc")} to install the function. 
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
-#' @importFrom parallel mclapply
 #' @export
 #' @return Returns an object of class 'snp' to be used with \pkg{SNPassoc}
 #' @references Gonzalez, J.R., Armengol, L., Sol?, X., Guin?, E., Mercader, J.M., Estivill, X. and Moreno, V. (2017). SNPassoc: an R package to perform whole genome association studies. Bioinformatics 23:654-655.
@@ -16,7 +16,15 @@
 #' }
 
 gl2sa <- function(x, verbose=NULL){
-
+# CHECK IF PACKAGES ARE INSTALLED
+  if (!(requireNamespace("parallel", quietly = TRUE))) {
+    stop("Package parallel needed for this function to work. Please install it.") }
+  if (!(requireNamespace("pegas", quietly = TRUE))) {
+    stop("Package pegas needed for this function to work. Please install it.") }
+    
+  if (!(requireNamespace("SNPassoc", quietly = TRUE))) {
+    stop("To use this function you need to install package: SNPassoc. Please refer to the help of the function for instructions (?gl2sa).")
+  } else {
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
@@ -77,4 +85,5 @@ gl2sa <- function(x, verbose=NULL){
   }
   
   return(sa)
+  } 
 }

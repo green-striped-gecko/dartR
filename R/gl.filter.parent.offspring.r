@@ -35,8 +35,8 @@
 #' decide min.rdepth and min.reproducibility and assess impact on your dataset.
 #'
 #' @param x Name of the genlight object containing the SNP genotypes [required]
-#' @param -- min.rdepth Minimum read depth to include in analysis [default = 12]
-#' @param -- min.reproducibility Minimum reproducibility to include in analysis [default = 1]
+#' @param min.rdepth Minimum read depth to include in analysis [default = 12]
+#' @param min.reproducibility Minimum reproducibility to include in analysis [default = 1]
 #' @param range -- specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]
 #' @param rm.monomorphs -- if TRUE, remove monomorphic loci after filtering individuals [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
@@ -107,13 +107,13 @@ gl.filter.parent.offspring <- function(x,
     cat("  Generating null expectation for distribution of counts of pedigree incompatability\n")
   } 
   # Assign individuals as populations
-  x <- gl.reassign.pop(x,as.pop="id",v=0)
+  x <- gl.reassign.pop(x,as.pop="id",verbose=0)
   # Filter stringently on reproducibility to minimize miscalls
-  x <- gl.filter.reproducibility(x,threshold=min.repr,v=0)
+  x <- gl.filter.reproducibility(x,threshold=min.reproducibility,verbose=0)
   # Filter stringently on read depth, to further minimize miscalls
-  x <- gl.filter.rdepth(x,lower=min.rd,v=0)
+  x <- gl.filter.rdepth(x,lower=min.rdepth,verbose=0)
   # Filter on call rate to reduce computation time
-  x <- gl.filter.callrate(x,threshold = 0.95,plot=FALSE,v=0)
+  x <- gl.filter.callrate(x,threshold = 0.95,plot=FALSE,verbose=0)
   # Preliminaries before for loops
   nL <- nLoc(x)
   nP <- nPop(x)
@@ -124,7 +124,7 @@ gl.filter.parent.offspring <- function(x,
   # For pairs of individuals
   for (i in 1:(nP-1)){
   for (j in (i+1):nP){
-    pair <- gl.keep.pop(x,pop.list=c(pN[i],pN[j]),v=0)
+    pair <- gl.keep.pop(x,pop.list=c(pN[i],pN[j]),verbose=0)
     mat <- as.matrix(pair)
     vect <- mat[1,]*10+mat[2,]
     homalts <- sum(vect==2 | vect==20, na.rm=T)
@@ -202,7 +202,7 @@ if (length(whisker$out)==0){
   
 # Remove the outliers
   
-  hold <- gl.drop.ind(hold,ind.list = unique(outliers$ind1),v=5)
+  hold <- gl.drop.ind(hold,ind.list = unique(outliers$ind1),verbose=5)
   if (rm.monomorphs==TRUE){
     hold <- gl.filter.monomorphs(hold)
   }

@@ -9,7 +9,6 @@
 #' @importFrom graphics abline title points
 #' @importFrom stats as.dist lm
 #' @importFrom StAMPP stamppFst
-#' @importFrom dismo Mercator
 #' @param gl genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed
 #' @param Dgen genetic distance matrix if no genlight object with coordinates is provided
 #' @param Dgeo Euclidean distance matrix if no genlight object is provided
@@ -32,6 +31,11 @@
 
 gl.ibd <- function(gl=NULL, Dgen=NULL, Dgeo=NULL, projected=FALSE, permutations=999, plot=TRUE) {
 
+# CHECK IF PACKAGES ARE INSTALLED
+  if (!(requireNamespace("dismo", quietly = TRUE))) {
+    stop("Package dismo needed for this function to work. Please install it.") } else {
+  
+  
 if (!is.null(Dgen) & !is.null(Dgeo)) cat("Analysis performed on provided genetic and Euclidean distance matrices.")
 
 
@@ -45,7 +49,7 @@ if  (sum(match(names(gl@other$latlong),"long"), na.rm=T)==1) gl@other$latlong$lo
   
 #project coordinates into Mercator () needs lon/lat order
 if (!projected) {
-  xy <- Mercator(gl@other$latlong[,c("lon","lat")]) 
+  xy <- dismo::Mercator(gl@other$latlong[,c("lon","lat")]) 
   cat("Coordinates transformed to Mercator (google) projection to calculate distances in meters.\n")
   } else 
   {
@@ -101,6 +105,7 @@ if (plot)
 
 out <- list(Dgen=Dgen, Dgeo=Dgeo, mantel=manteltest)
 return(out)
-}
+    }
 
+}
 

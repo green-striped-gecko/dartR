@@ -342,7 +342,7 @@
     }  
     
     if (plot) {
-      par(mfrow = c(2, 1),pty="m")
+      par(mfrow = c(1, 1),pty="m")
       hist(hold@other$loc.metrics$CallRate, 
            main=title, 
            xlab="Call Rate", 

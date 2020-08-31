@@ -7,7 +7,6 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A matrix with allele (SNP data) or presence/absence frequencies (Tag P/A data) broken down by population and locus
 #' @export
-#' @importFrom reshape2 melt
 #' @importFrom plyr ddply
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -16,6 +15,11 @@
 
 gl.percent.freq<- function(x, verbose=NULL) {
 
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "reshape2"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.") } else {
+      
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
@@ -121,4 +125,5 @@ gl.percent.freq<- function(x, verbose=NULL) {
   
   return(m)
   
+  }
 }

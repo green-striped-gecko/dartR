@@ -31,11 +31,12 @@
 #' relationship.
 #'
 #' @param x Name of the genlight object containing the SNP genotypes [required]
-#' @param -- min.rdepth Minimum read depth to include in analysis [default = 12]
-#' @param -- min.reproducibility Minimum reproducibility to include in analysis [default = 1]
+#' @param min.rdepth Minimum read depth to include in analysis [default = 12]
+#' @param min.reproducibility Minimum reproducibility to include in analysis [default = 1]
 #' @param range -- specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A set of individuals in parent-offspring relationship
+#' @importFrom stats median IQR
 #' @export
 # @rawNamespace import(ggplot2, except = empty)
 
@@ -98,13 +99,13 @@ gl.report.parent.offspring <- function(x,
     cat("  Generating null expectation for distribution of counts of pedigree incompatability\n")
   } 
   # Assign individuals as populations
-  x <- gl.reassign.pop(x,as.pop="id",v=0)
+  x <- gl.reassign.pop(x,as.pop="id",verbose=0)
   # Filter stringently on reproducibility to minimize miscalls
-  x <- gl.filter.reproducibility(x,threshold=min.repr,v=0)
+  x <- gl.filter.reproducibility(x,threshold=min.reproducibility,verbose=0)
   # Filter stringently on read depth, to further minimize miscalls
-  x <- gl.filter.rdepth(x,lower=min.rd,v=0)
+  x <- gl.filter.rdepth(x,lower=min.rdepth,verbose=0)
   # Filter on call rate to reduce computation time
-  x <- gl.filter.callrate(x,threshold = 0.95,plot=FALSE,v=0)
+  x <- gl.filter.callrate(x,threshold = 0.95,plot=FALSE,verbose=0)
   # Preliminaries before for loops
   nL <- nLoc(x)
   nP <- nPop(x)
@@ -115,7 +116,7 @@ gl.report.parent.offspring <- function(x,
   # For pairs of individuals
   for (i in 1:(nP-1)){
   for (j in (i+1):nP){
-    pair <- gl.keep.pop(x,pop.list=c(pN[i],pN[j]),v=0)
+    pair <- gl.keep.pop(x,pop.list=c(pN[i],pN[j]),verbose=0)
     mat <- as.matrix(pair)
     vect <- mat[1,]*10+mat[2,]
     homalts <- sum(vect==2 | vect==20, na.rm=T)
@@ -138,8 +139,8 @@ gl.report.parent.offspring <- function(x,
 
   # Plot Box-Whisker plot
     if (verbose >= 2) {cat("  Standard boxplot, no adjustment for skewness\n")} 
-    whisker <- boxplot(counts, horizontal=TRUE, col='steelblue', range=range, main = title)
-    lower.extremes <- whisker$out[whisker$out < median(counts)]
+    whisker <- graphics::boxplot(counts, horizontal=TRUE, col='steelblue', range=range, main = title)
+    lower.extremes <- whisker$out[whisker$out < stats::median(counts)]
     if (length(lower.extremes)==0){
       outliers <- NULL
     } else {
@@ -164,7 +165,7 @@ gl.report.parent.offspring <- function(x,
   }
   
 # Extract the quantile threshold
-  iqr <- IQR(counts,na.rm = TRUE)
+  iqr <- stats::IQR(counts,na.rm = TRUE)
   qth <- quantile(counts,0.25,na.rm=TRUE)
   cutoff <- qth - iqr*range
 

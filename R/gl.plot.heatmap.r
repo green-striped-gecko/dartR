@@ -4,8 +4,6 @@
 #'
 #' @param D -- name of the distance matrix or class fd object [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @import pheatmap 
-#' @import RColorBrewer
 #' @return NULL
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr}) as a wrapper for pheatmap by Raivo Kolde.
@@ -19,6 +17,16 @@
 #'    gl.plot.heatmap(D3)
 
 gl.plot.heatmap <- function(D,verbose=NULL){
+
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "RColorBrewer"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") } 
+  
+  pkg <- "pheatmap"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") } 
+  
   
 # TRAP COMMAND, SET VERSION
   
@@ -61,10 +69,10 @@ gl.plot.heatmap <- function(D,verbose=NULL){
 # DO THE JOB
   
   if (class(D)=="dist"){
-    pheatmap(as.matrix(D),color=brewer.pal(n = 8, name = 'Blues'))
+    pheatmap::pheatmap(as.matrix(D),color=RColorBrewer::brewer.pal(n = 8, name = 'Blues'))
   }
   if (class(D)=="fd"){
-    pheatmap(as.matrix(D$fd),color=brewer.pal(n = 8, name = 'Blues'))
+    pheatmap::pheatmap(as.matrix(D$fd),color=RColorBrewer::brewer.pal(n = 8, name = 'Blues'))
   }
   
 # FLAG SCRIPT END

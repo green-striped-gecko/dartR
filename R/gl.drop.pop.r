@@ -82,7 +82,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
   if(is.null(as.pop)){
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
         cat("Fatal Error: Population assignments not detected, running compliance check\n")
-        x <- gl.compliance.check(x,v=0)
+        x <- gl.compliance.check(x,verbose=0)
     }
   }
     

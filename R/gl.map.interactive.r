@@ -9,8 +9,7 @@
 #' @param pop.labels.cex -- size of population labels, default is 20.
 #' @param provider -- passed to leaflet
 #' @return plots a map
-#' @importFrom leaflet leaflet addTiles addProviderTiles addCircleMarkers labelOptions addLabelOnlyMarkers addPolylines
-#' @importFrom leaflet.minicharts addFlows
+#' @importFrom methods is
 #' @export
 #' @details A wrapper around the \pkg{leaflet} package. For possible background maps check as specified via the provider: \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
 #' @author Bernd Gruber (glbugs@@aerg.canberra.edu.au)
@@ -20,7 +19,15 @@
 
 gl.map.interactive <- function(x, matrix=NULL, standard=TRUE,symmetric=TRUE, ind.circles=TRUE, pop.labels=TRUE, pop.labels.cex=12,  provider="Esri.NatGeoWorldMap")
 {
-
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "leaflet"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.") } 
+  pkg <- "leaflet.minicharts"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.") } else {
+  
+  
   
 if (!is(x, "genlight"))   stop("Not a valid genlight object provided!!!")
 
@@ -40,11 +47,11 @@ cols <- substr(cols, 1,7)
 df <- x@other$latlong
 centers <- apply(df, 2, function(xx) tapply(xx, pop(x), mean, na.rm=TRUE))
 # Add default OpenStreetMap map tiles
-m <- leaflet() %>%
-  addTiles()
-if (ind.circles) m <- m %>%  addCircleMarkers(lng=df$lon, lat=df$lat, popup=indNames(x),  color = cols[as.numeric(pop(x))], opacity = 0.8)
+m <- leaflet::leaflet() %>%
+  leaflet::addTiles()
+if (ind.circles) m <- m %>%  leaflet::addCircleMarkers(lng=df$lon, lat=df$lat, popup=indNames(x),  color = cols[as.numeric(pop(x))], opacity = 0.8)
 
-if (pop.labels)   m <- m %>% addLabelOnlyMarkers(lng=centers[,"lon"], lat=centers[,"lat"], label = popNames(x),labelOptions = labelOptions(noHide = T, direction = 'top', textOnly = T, textsize = paste0(pop.labels.cex,"px")))
+if (pop.labels)   m <- m %>% leaflet::addLabelOnlyMarkers(lng=centers[,"lon"], lat=centers[,"lat"], label = popNames(x),labelOptions = leaflet::labelOptions(noHide = T, direction = 'top', textOnly = T, textsize = paste0(pop.labels.cex,"px")))
 
 
 if (!is.null(matrix)){
@@ -57,7 +64,7 @@ if (nrow(matrix)==nPop(x)) xys <- centers else xys <- df
 if (symmetric) {
 for (ii in 1:nrow(matrix)){
   for (i in ii:nrow(matrix)){
-    if(!is.null(matrix[i,ii])) m <- m %>% addPolylines(lng=c(xys[i,"lon"],xys[ii,"lon"]), lat=c(xys[i,"lat"], xys[ii,"lat"]), weight = matrix[i,ii], color = "#0000FF" , opacity = 1)
+    if(!is.null(matrix[i,ii])) m <- m %>% leaflet::addPolylines(lng=c(xys[i,"lon"],xys[ii,"lon"]), lat=c(xys[i,"lat"], xys[ii,"lat"]), weight = matrix[i,ii], color = "#0000FF" , opacity = 1)
   }
 }
 }
@@ -73,12 +80,13 @@ if (!symmetric) {
         if (matrix[i,ii]>matrix[ii,i])  lcols="#FFAA00" else lcols="#00AAFF"
         if (matrix[i,ii]==matrix[ii,i]) lcols="#00AA00"
         } else lcols ="#333333"
-        m <- m %>% addFlows(lng0 = as.numeric(from["lon"]), lng1 =  as.numeric(to["lon"]), lat0=as.numeric( from["lat"]),lat1 =  as.numeric(to["lat"]),flow = matrix[i,ii], color = lcols, maxThickness = 10, minThickness=1, maxFlow = max(matrix, na.rm=T), opacity = 0.8)
+        m <- m %>% leaflet.minicharts::addFlows(lng0 = as.numeric(from["lon"]), lng1 =  as.numeric(to["lon"]), lat0=as.numeric( from["lat"]),lat1 =  as.numeric(to["lat"]),flow = matrix[i,ii], color = lcols, maxThickness = 10, minThickness=1, maxFlow = max(matrix, na.rm=T), opacity = 0.8)
       }
     }
   }
   }
 }
 
-m %>% addProviderTiles(provider)
+m %>% leaflet::addProviderTiles(provider)
+  }
 }

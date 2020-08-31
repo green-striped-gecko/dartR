@@ -9,7 +9,6 @@
 #' @param outfile -- file name of the output file (including extension) [default 'genalex.csv']
 #' @param outpath -- path where to save the output file [default tempdir()]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
-#' @importFrom poppr genind2genalex
 #' @return NULL
 #' @export
 #' @author Katrin Hohwieler, wrapper Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -20,6 +19,10 @@
 
 
 gl2genalex <- function(x, outfile="genalex.csv", outpath=tempdir(), verbose=NULL) {
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "poppr"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") } 
   
 # TRAP COMMAND, SET VERSION
   

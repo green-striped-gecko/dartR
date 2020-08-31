@@ -75,9 +75,6 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' pca <- gl.pcoa(testset.gl)
-#' gl.pcoa.plot(pca,testset.gl)
-#' 
 #' fd <- gl.fixed.diff(testset.gl)
 #' fd <- gl.collapse(fd)
 #' pca <- gl.pcoa(fd)

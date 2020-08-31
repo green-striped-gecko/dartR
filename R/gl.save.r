@@ -10,7 +10,7 @@
 #' @return the input object
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#' @example
+#' @examples
 #' gl.save(testset.gl,"testset.rds")
 #' gl.reloaded <- gl.load("testset.rds")
 

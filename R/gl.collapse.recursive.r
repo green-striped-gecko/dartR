@@ -32,7 +32,6 @@
 #'         [[6]] $expfpos -- NA's, populated if required by gl.fixed.diff setting test=T [by simulation];
 #'         [[7]] $sdfpos -- NA's, populated if required by gl.fixed.diff setting test=T [by simulation];
 #'         [[8]] $prob -- NA's, populated by gl.fixed.diff setting test=T [by simulation]
-#' @import reshape2
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples

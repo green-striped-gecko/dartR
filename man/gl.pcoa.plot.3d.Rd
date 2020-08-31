@@ -5,9 +5,9 @@
 \title{3D interactive plot of the results of a PCoA ordination}
 \usage{
 gl.pcoa.plot.3d(
+  glPca,
   x,
-  gl,
-  title = "PCoA",
+  title = "PCA",
   xaxis = 1,
   yaxis = 2,
   zaxis = 3,
@@ -18,9 +18,9 @@ gl.pcoa.plot.3d(
 )
 }
 \arguments{
-\item{x}{-- name of the glPca object containing the factor scores and eigenvalues [required]}
+\item{glPca}{-- name of the glPca object containing the factor scores and eigenvalues [required]}
 
-\item{gl}{-- name of the genlight object from which the PCoA was generated}
+\item{x}{-- name of the genlight object or fd object from which the PCoA was generated}
 
 \item{title}{-- a title for the plot [default "PCoA"]}
 
