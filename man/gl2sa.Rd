@@ -4,12 +4,14 @@
 \alias{gl2sa}
 \title{Convert genlight objects to the format used in the SNPassoc package}
 \usage{
-gl2sa(x, verbose = NULL)
+gl2sa(x, verbose = NULL, installed = FALSE)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+
+\item{installed}{switch to run the function once SNPassoc package is installed}
 }
 \value{
 Returns an object of class 'snp' to be used with \pkg{SNPassoc}

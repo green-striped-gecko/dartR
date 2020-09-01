@@ -5,6 +5,7 @@
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param installed switch to run the function once SNPassoc package is installed
 #' @export
 #' @return Returns an object of class 'snp' to be used with \pkg{SNPassoc}
 #' @references Gonzalez, J.R., Armengol, L., Sol?, X., Guin?, E., Mercader, J.M., Estivill, X. and Moreno, V. (2017). SNPassoc: an R package to perform whole genome association studies. Bioinformatics 23:654-655.
@@ -15,8 +16,14 @@
 #' sa <-gl2sa(testset.gl )
 #' }
 
-gl2sa <- function(x, verbose=NULL){
-# CHECK IF PACKAGES ARE INSTALLED
+gl2sa <- function(x, verbose=NULL, installed=FALSE){
+  sa <- NULL
+  #Delete those lines if you have installed SNPassoc
+  if (!installed) cat("This function requires the package SNPassoc, which is no longer supported by CRAN. See details in the help pages of the function ?gl2sa.")
+  
+  #Change 'if (FALSE) {' below to 'if (TRUE) {' to run the function.
+if (installed) {
+  # CHECK IF PACKAGES ARE INSTALLED
   if (!(requireNamespace("parallel", quietly = TRUE))) {
     stop("Package parallel needed for this function to work. Please install it.") }
   if (!(requireNamespace("pegas", quietly = TRUE))) {
@@ -86,4 +93,5 @@ gl2sa <- function(x, verbose=NULL){
   
   return(sa)
   } 
+} 
 }

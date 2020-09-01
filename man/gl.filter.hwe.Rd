@@ -22,7 +22,8 @@ a genlight object with the loci departing significantly from HWE removed
 }
 \description{
 Calculates the probabilities of agreement with H-W equilibrium based on observed
-frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
+frequencies of reference homozygotes, heterozygotes and alternate homozygotes.
+ 
 Uses the exact calculations contained in function prob.hwe() as developed by
 Wigginton, JE, Cutler, DJ, and Abecasis, GR.
 }
