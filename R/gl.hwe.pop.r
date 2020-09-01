@@ -41,6 +41,7 @@ gl.hwe.pop <- function(x, pvalue=0.05, plot=TRUE, HWformat=FALSE)
   ggp <- NA
   loci <- counts <- NA
   if (plot) {
+    Var1 <- Var2 <- value <- NA
     longData<-reshape2::melt((as.matrix(output))*1)
     
     ggp <- ggplot(longData, aes(x = Var2, y = Var1,)) + 

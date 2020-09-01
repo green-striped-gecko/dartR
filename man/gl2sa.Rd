@@ -18,13 +18,7 @@ Returns an object of class 'snp' to be used with \pkg{SNPassoc}
 }
 \description{
 This function exports a genlight object into a SNPassoc object. See \link[SNPassoc]{setupSNP}
-#' This function needs package SNPassoc. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/isglobal-brge/SNPassoc} and/or use \code{install_github("isglobal-brge/SNPassoc")} to install the function.
-}
-\examples{
-\donttest{
-library(parallel)
-sa <-gl2sa(testset.gl )
-}
+#' This function needs package SNPassoc. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/isglobal-brge/SNPassoc} and/or use \code{install_github("isglobal-brge/SNPassoc")} to install the function and uncomment the function code.
 }
 \references{
 Gonzalez, J.R., Armengol, L., Sol?, X., Guin?, E., Mercader, J.M., Estivill, X. and Moreno, V. (2017). SNPassoc: an R package to perform whole genome association studies. Bioinformatics 23:654-655.

@@ -18,7 +18,7 @@ A genlight object, with most slots filled.
 }
 \description{
 This function needs package vcfR. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/knausb/vcfR}. 
-Once installed run with installed=TRUE
+Once installed uncomment and run with installed=TRUE
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
