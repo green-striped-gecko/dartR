@@ -1,13 +1,13 @@
 #' Convert genlight objects to the format used in the SNPassoc package
 #'
-#' This function exports a genlight object into a SNPassoc object. See \link[SNPassoc]{setupSNP}
+#' This function exports a genlight object into a SNPassoc object. See package SNPassoc for details.
 #' #' This function needs package SNPassoc. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/isglobal-brge/SNPassoc} and/or use \code{install_github("isglobal-brge/SNPassoc")} to install the function and uncomment the function code. 
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @param installed switch to run the function once SNPassoc package is installed
 #' @export
-#' @return Returns an object of class 'snp' to be used with \pkg{SNPassoc}
+#' @return Returns an object of class 'snp' to be used with SNPassoc.
 #' @references Gonzalez, J.R., Armengol, L., Sol?, X., Guin?, E., Mercader, J.M., Estivill, X. and Moreno, V. (2017). SNPassoc: an R package to perform whole genome association studies. Bioinformatics 23:654-655.
 #' @author Bernd Guber (Post to \url{https://groups.google.com/d/forum/dartr})
 

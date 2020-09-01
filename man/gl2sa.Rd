@@ -14,10 +14,10 @@ gl2sa(x, verbose = NULL, installed = FALSE)
 \item{installed}{switch to run the function once SNPassoc package is installed}
 }
 \value{
-Returns an object of class 'snp' to be used with \pkg{SNPassoc}
+Returns an object of class 'snp' to be used with SNPassoc.
 }
 \description{
-This function exports a genlight object into a SNPassoc object. See \link[SNPassoc]{setupSNP}
+This function exports a genlight object into a SNPassoc object. See package SNPassoc for details.
 #' This function needs package SNPassoc. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/isglobal-brge/SNPassoc} and/or use \code{install_github("isglobal-brge/SNPassoc")} to install the function and uncomment the function code.
 }
 \references{
