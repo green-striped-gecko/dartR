@@ -1,7 +1,8 @@
 #' Filters loci that show significant departure from Hardy-Weinberg Equilibrium
 #' 
 #' Calculates the probabilities of agreement with H-W equilibrium based on observed
-#' frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
+#' frequencies of reference homozygotes, heterozygotes and alternate homozygotes.
+#'  
 #' Uses the exact calculations contained in function prob.hwe() as developed by
 #' Wigginton, JE, Cutler, DJ, and Abecasis, GR.
 #' 

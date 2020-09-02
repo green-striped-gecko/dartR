@@ -84,9 +84,6 @@ if (requireNamespace("plotly", quietly = TRUE)) {
 #interactive plot to examine labels
 gl.pcoa.plot(pca, gl, labels="interactive")  
 }
-#return plot into a data.frame (can be used by ggplot)
-df <- gl.pcoa.plot(pca, gl, plot.out=FALSE)
-df
 }
 }
 \author{

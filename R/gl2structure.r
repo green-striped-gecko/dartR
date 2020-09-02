@@ -13,9 +13,8 @@
 #' @export
 #' @author Bernd Gruber (wrapper) and Lindsay V. Clark [lvclark@illinois.edu] 
 #' @examples
-#' \donttest{
-#' gl2structure(testset.gl)
-#'}
+#' #not run here
+#' #gl2structure(testset.gl)
 
 
 gl2structure <- function(x, indNames=NULL, addcolumns=NULL, ploidy=2, exportMarkerNames=TRUE, outfile="gl.str", outpath=tempdir(), verbose=NULL){
@@ -130,13 +129,13 @@ gl2structure <- function(x, indNames=NULL, addcolumns=NULL, ploidy=2, exportMark
   
 # add marker name header
   if(exportMarkerNames){
-    cat(paste(locNames(x), collapse = "\t"), sep = "\n", file = outfile)
+    cat(paste(locNames(x), collapse = "\t"), sep = "\n", file = outfilespec)
   }
   
 # export all data
   write.table(StructTab, row.names = FALSE, col.names = FALSE, append = TRUE,
   sep = "\t", file = outfilespec, quote = FALSE)
-  if (verbose >=2 )  cat(paste("Structure file saved as:", outfile,"\nin folder:",outpath))
+  if (verbose >=2 )  cat(paste("Structure file saved as:", outfilespec))
 
 # FLAG SCRIPT END
 

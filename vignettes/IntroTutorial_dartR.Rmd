@@ -1376,7 +1376,7 @@ STRUCTURE is one of the most widely used population analysis tools that allows r
 To generate an input file for fastSTRUCTURE, use the function (this format can also be used for input to STRUCTURE, though the meta data options are not supported yet):
 
 ```{r, eval=T}
-gl2faststructure(gl, outfile=file.path(tempdir(),"myfile.fs"), probar = FALSE)
+gl2faststructure(gl, outfile="myfile.fs", probar = FALSE)
 ```
 
 # References

@@ -185,7 +185,7 @@ if (method==1 || method==3) {
     cat("Generating haplotypes ... This may take some time\n")
   }
 
-  sink(outfile)
+  sink(outfilespec)
 
   for (i in 1:nInd(x)) {
     seq <- NA
@@ -251,7 +251,7 @@ if (method==2 || method==4) {
 # Prepare the output fastA file
   if(verbose >= 2){cat("Generating haplotypes ... This may take some time\n")}
 
-  sink(outfile)
+  sink(outfilespec)
 
 # For each individual, and for each locus, generate the relevant haplotype 
   seq <- rep(" ", c)
