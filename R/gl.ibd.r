@@ -71,11 +71,16 @@ Dgeo <- as.dist(as.matrix(Dgeo)[ordering, ordering])
 }
 
 miss=FALSE
-if (sum(is.na(Dgen)>0)) {
+# the test for if was incorrect and add a test for infinite values
+# if (sum(is.na(Dgen)>0)) {
+if (sum(is.na(Dgen)) > 0 | sum(is.infinite(Dgen)) > 0 ) {
+
   miss=TRUE
   cat("There are missing values in the genetic distance matrix. No kernel distance plot is possible.\n")
-  }
-if (sum(is.na(Dgeo)>0)) {
+}
+# the test for if was incorrect and add a test for infinite values
+# if (sum(is.na(Dgeo)>0)) {
+if (sum(is.na(Dgeo)) > 0 | sum(is.infinite(Dgeo)) > 0 ) {
   miss=TRUE
   cat("There are missing values in the genetic distance matrix. No kernel distance plot is possible.\n")
 }
