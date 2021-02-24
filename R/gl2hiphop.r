@@ -49,14 +49,14 @@ gl2hiphop <- function(gl, probar = FALSE, verbose = NULL){
   }
     # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
+  if(class(gl)!="genlight") {
     stop("  Fatal Error: genlight object required!\n")
   }
   
   if (verbose >= 2){
-    if (all(x@ploidy == 1)){
+    if (all(gl@ploidy == 1)){
       stop("Fatal Error: Detected Presence/Absence (SilicoDArT) data. Please provide a SNP dataset\n")
-    } else if (all(x@ploidy == 2)){
+    } else if (all(gl@ploidy == 2)){
       cat("  Processing a SNP dataset\n")
     } else {
       stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
