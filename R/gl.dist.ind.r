@@ -6,7 +6,7 @@
 #' 
 #' The distance measure for SNP data can be one of 
 #' 
-#'  Euclidean -- eclidean distance as computed by dist() in {stat}
+#'  Euclidean -- Euclidean distance as computed by dist() in {stat}
 #'  locus.count -- number of loci for which individuals differ, as implemented by dist.gene() in {ape}
 #'  allele.count -- number of allelic differences between two individuals, as implemented by diss.dist() in {poppr}
 #'  relatedness -- genetic relatedness between individuals (G matrix), as implemented by A.mat() in {rrBLUP}
@@ -22,10 +22,7 @@
 #'  
 #' @param x -- name of the genlight containing the SNP genotypes [required]
 #' @param method -- Specify distance measure [SNP: Euclidean; P/A: Simple]
-#' @param plot -- if TRUE, display a histogram of the genetic distances, and a whisker plot [TRUE]
-#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
-#' plots a boxplot adjusted for skewed distributions ['standard']
-#' @param range -- specifies the range for delimiting outliers [1.5 interquartile ranges]
+#' @param plot -- if TRUE, display a histogram and a boxplot of the genetic distances [TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return An object of class 'dist' giving distances between individuals
 #' @importFrom ape dist.gene
@@ -35,18 +32,16 @@
 #' @examples
 #' gl.dist.pop(testset.gl, method="euclidean")
 
-gl.dist.ind <- function(x, method=NULL, plot=TRUE, boxplot="standard", range=1.5, verbose=NULL) {
+gl.dist.ind <- function(x, method=NULL, plot=TRUE, verbose=NULL) {
 
 # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "rrBLUP"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package",pkg," needed for this function to work. Please   install it.") } 
+    stop("Package ",pkg," needed for this function to work. Please install it.") } 
 # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "poppr"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package",pkg," needed for this function to work. Please   install it.") } 
-  
-
+    stop("Package ",pkg," needed for this function to work. Please install it.") } 
   
 # TRAP COMMAND, SET VERSION
   
@@ -85,7 +80,7 @@ gl.dist.ind <- function(x, method=NULL, plot=TRUE, boxplot="standard", range=1.5
   }
   
   if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    if (verbose >= 2){cat("  Processing Presence/Absence (SilicoDArT) data\n")}
     data.type <- "SilicoDArT"
   } else if (all(x@ploidy == 2)){
     if (verbose >= 2){cat("  Processing a SNP dataset\n")}
@@ -114,11 +109,9 @@ gl.dist.ind <- function(x, method=NULL, plot=TRUE, boxplot="standard", range=1.5
 
 if (data.type == "SNP"){
   
-#  method.list <- c("euclidean", "locus.count", "allele.count", "relatedness")
-
   # Calculate euclidean distance using dist {adegenet}
     if (method == 'euclidean'){
-      dd <- stats::dist(x)
+      dd <- stats::dist(bandicoot.gl)
       if (verbose >= 2){
         cat("  Calculating Euclidean Distances between individuals\n")
       }
@@ -156,16 +149,13 @@ if (data.type == "SNP"){
     dd <- as.dist(dd) 
     
   # Revert to original order  
-    ord <- rank(popNames(x))
+    ord <- rank(pop(bandicoot.gl))
     mat <- as.matrix(dd)[ord, ord]
     dd <- as.dist(mat)
     
 }  
   
 if (data.type == "SilicoDArT"){
-  
-#  method.list <- c("simple", "Jaccard", "Dice", "Sorenson", "Czekanowski", "Phi")
-
     if (method == 'simple'){
       if (verbose >= 2){cat("  Calculating the Simple Matching Index\n")}
     }
@@ -188,43 +178,29 @@ if (data.type == "SilicoDArT"){
 }
     
 # PLOT
-    if (plot){
+    if (plot){ 
       
-      # Save the prior settings for mfrow, oma, mai and pty, and reassign
-      op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
-      
-      # Set margins for first plot
-      par(mai=c(1,0.5,0.5,0.5))
-      
-      # Plot Box-Whisker plot
       if (data.type=="SNP"){
-        title <- paste0("SNP data (DArTSeq)\nInter-individual ",method," distance")
+        title_plot <- paste0("SNP data (DArTSeq)\nInter-individual ",method," distance")
       } else {
-        title <- paste0("Presence/Absence data (SilicoDArT)\nInter-individual ",method," distance")
+        title_plot <- paste0("Presence/Absence data (SilicoDArT)\nInter-individual ",method," distance")
       }  
       
-      if (boxplot == "standard"){
-        boxplot(dd, horizontal=TRUE, col='red', range=range, main = title)
-        if(verbose >= 2){cat("  Standard boxplot, no adjustment for skewness\n")}
-      } else {
-        robustbase::adjbox(dd,
-                           horizontal = TRUE,
-                           col='red',
-                           range=range,
-                           main = title)
-        if(verbose >= 2){cat("  Boxplot adjusted to account for skewness\n")}
-      }  
+      df_plot <- as.data.frame(as.vector(mat))
+      colnames(df_plot) <- "values"
       
-      # Set margins for second plot
-      par(mai=c(0.5,0.5,0,0.5))
-      hist(dd, 
-           main="", 
-           xlab="", 
-           border="blue", 
-           col="red",
-           xlim=c(min(dd),max(dd)),
-           breaks=100)
-    }  
+  p1 <- ggplot(df_plot,aes(y=values)) +
+    geom_boxplot(fill="red") +
+    theme()+
+    coord_flip() +
+    ggtitle(title_plot) +
+    theme(plot.title = element_text(hjust = 0.5))
+  
+  p2 <-  ggplot(df_plot, aes(x=values)) +
+    geom_histogram(bins = 50,fill="red") 
+  
+  gridExtra::grid.arrange(p1,p2)
+    }
     
 # SUMMARY 
     # Print out some statistics
@@ -247,13 +223,3 @@ if (data.type == "SilicoDArT"){
     
     return(dd)
 }
-
-# # # Test script
-# #D <- gl.dist.ind(testset.gl,method='relatedness',verbose=3)
-# D <- gl.dist.ind(testset.gs,verbose=3)
-# D <- gl.dist.ind(testset.gs,method='Simple',verbose=3)
-# D <- gl.dist.ind(testset.gs,method='Jaccard',verbose=3)
-# D <- gl.dist.ind(testset.gs,method='Sorenson',verbose=3)
-# D <- gl.dist.ind(testset.gs,method='Phi',verbose=3)
-# 
-# D <- gl.dist.ind(testset.gs,method='Simple',verbose=3)
