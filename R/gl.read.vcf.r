@@ -20,6 +20,7 @@ gl.read.vcf <- function(vcffile, verbose = 2) {
   } else {
   vcf <- vcfR::read.vcfR(file = vcffile, verbose = verbose)
   x <- vcfR::vcfR2genlight(vcf)
+  ploidy(x) <- 2
   x <- gl.compliance.check(x)
 
   #add history
