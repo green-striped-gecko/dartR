@@ -12,55 +12,68 @@ gl.fixed.diff(
   alpha = 0.05,
   reps = 1000,
   mono.rm = TRUE,
-  plot = FALSE,
   pb = TRUE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or tag P/A data (SilicoDArT) [required]}
+\item{x}{-- name of the genlight object containing SNP genotypes or tag P/A data (SilicoDArT) 
+or an object of class 'fd' [required]}
 
-\item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [default 0]}
+\item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) 
+[default 0]}
 
 \item{test}{-- if TRUE, calculate p values for the observed fixed differences [default FALSE]}
 
-\item{delta}{-- the threshold value for the minor allele frequency to regard the difference between two populations to be operationally fixed [default 0.02]}
+\item{delta}{-- threshold value for the true population minor allele frequency (MAF) from which 
+resultant sample fixed differences are considered true positives [default 0.02]}
 
 \item{alpha}{-- level of significance used to display non-significant differences between
 populations as they are compared pairwise [default 0.05]}
 
-\item{reps}{-- number of replications to undertake in the simulation to estimate probability of false positives [default 1000]}
+\item{reps}{-- number of replications to undertake in the simulation to estimate probability 
+of false positives [default 1000]}
 
-\item{mono.rm}{-- if TRUE, loci that are monomorphic across all individuals are removed before beginning computations [default TRUE]}
-
-\item{plot}{-- if TRUE, plot a heat map of the raw fixed differences [default FALSE]}
+\item{mono.rm}{-- if TRUE, loci that are monomorphic across all individuals are removed before 
+beginning computations [default TRUE]}
 
 \item{pb}{-- if TRUE, show a progress bar on time consuming loops [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-A list containing the gl object and square matricies, as follows
-        [[1]] $gl -- the input genlight object;
+A list of Class "fd" containing the gl object and square matricies, as follows
+        [[1]] $gl -- the output genlight object;
         [[2]] $fd -- raw fixed differences;
         [[3]] $pcfd -- percent fixed differences;
         [[4]] $nobs -- mean no. of individuals used in each comparison;
         [[5]] $nloc -- total number of loci used in each comparison;
-        [[6]] $expobs -- if test=TRUE, the expected count of false positives for each comparison [by simulation];
-        [[7]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
+        [[6]] $expfpos -- if test=TRUE, the expected count of false positives for each comparison [by simulation];
+        [[7]] $sdfpos -- if test=TRUE, the standard deviation of the count of false positives for each comparison [by simulation];
+        [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
 }
 \description{
 This script takes SNP data or sequence tag P/A data grouped into populations in a genlight object (DArTSeq)
 and generates a matrix of fixed differences between populations taken pairwise
 }
 \details{
-A fixed difference at a locus occurs when two populations share no alleles or where all members of one population
-has a sequence tag scored, and all members of the other population has the sequence tag absent. 
-The challenge with this approach is that when sample sizes are finite, fixed differences will occur 
-through sampling error, compounded when many loci are examined. Simulations suggest that sample sizes 
-of n1=5 and n2=5 is adequate to reduce the probability of [experiment-wide] type 1 error to 
-negligible levels [ploidy=2]. A warning is issued if comparison between two populations involves sample 
-sizes less than 5, taking into account allele drop-out.
+A fixed difference at a locus occurs when two populations share no alleles or where all members 
+of one population has a sequence tag scored, and all members of the other population has 
+the sequence tag absent. The challenge with this approach is that when sample sizes are finite, 
+fixed differences will occur through sampling error, compounded when many loci are examined. 
+Simulations suggest that sample sizes of n1=5 and n2=5 are adequate to reduce the probability 
+of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if 
+comparison between two populations involves sample sizes less than 5, taking into account 
+allele drop-out.
+
+Optionally, if test=TRUE, the script will test the fixed differences between final OTUs for statistical significance,
+using simulation, and then further amalgamate populations that for which there are no significant fixed differences at 
+a specified level of significance (alpha). To avoid conflation of true fixed differences with false positives in the
+simulations, it is necessary to decide a threshold value (delta) for extreme true allele frequencies that will be considered
+fixed for practical purposes. That is, fixed differences in the sample set will be considered to be positives (not false positives)
+if they arise from true allele frequencies of less than 1-delta in one or both populations.  The parameter
+delta is typically set to be small (e.g. delta = 0.02).
 
 An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
 level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
@@ -69,7 +82,7 @@ This adjustment can be done with the tloc parameter. For example, tloc=0.05 mean
 }
 \examples{
 \donttest{
-fd <- gl.fixed.diff(testset.gl, tloc=0, plot=TRUE, verbose=2 )
+fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=2 )
 fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, verbose=1 )
 }
 }

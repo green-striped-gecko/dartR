@@ -29,9 +29,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return An object of class 'dist' giving distances between individuals
 #' @importFrom ape dist.gene
-#' @importFrom poppr diss.dist
 #' @importFrom stats dist
-#' @importFrom rrBLUP A.mat
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -39,6 +37,17 @@
 
 gl.dist.ind <- function(x, method=NULL, plot=TRUE, boxplot="standard", range=1.5, verbose=NULL) {
 
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "rrBLUP"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.") } 
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "poppr"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.") } 
+  
+
+  
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
@@ -124,6 +133,9 @@ if (data.type == "SNP"){
   
   # Calculate the number of allelic differences between individuals using dist.gene {poppr}
   if (method == 'allele.count'){
+    pkg <- "poppr"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+      stop("Package",pkg," needed for this function to work. Please   install it.") }
     dd <- poppr::diss.dist(gl2gi(x), percent = FALSE, mat = FALSE)
     if (verbose >= 2){
       cat("  Calculating number of allelic differences between individuals\n")
@@ -132,7 +144,10 @@ if (data.type == "SNP"){
     
   # Calculate the genetic relatedness G matrix
   if (method == 'relatedness'){
-    G <- A.mat(as.matrix(x)-1)
+    pkg <- "rrBLUP"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+      stop("Package",pkg," needed for this function to work. Please   install it.") }
+    G <- rrBLUP::A.mat(as.matrix(x)-1)
     if (verbose >= 2){
       cat("  Calculating relatedness among individuals (G matrix)\n")
     }

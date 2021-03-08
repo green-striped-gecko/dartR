@@ -11,7 +11,6 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @importFrom plyr join
-#' @importFrom pegas heterozygosity
 #' @examples
 #'  result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
 #'  tmp <- gl.report.heterozygosity(result,method="ind")

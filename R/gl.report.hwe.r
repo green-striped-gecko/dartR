@@ -26,7 +26,6 @@
 #' and alternate SNP homozygotes; probability of departure from H-W equilibrium,
 #' and per locus significance with and without Bonferroni Correction.
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#' @importFrom HardyWeinberg HWTernaryPlot
 #' @export
 #' @references Wigginton, J.E., Cutler, D.J., & Abecasis, G.R. (2005). A Note on Exact Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics 76:887-893.
 #' @references Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
@@ -38,6 +37,12 @@
 #' gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
 
 gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alpha=0.05, bonf=TRUE, verbose=NULL) {
+
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "HardyWeinberg"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") } 
+  
   
 # TRAP COMMAND, SET VERSION
   

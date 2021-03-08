@@ -23,7 +23,9 @@ gl.pcoa.plot(
 \arguments{
 \item{glPca}{Name of the PCA or PCoA object containing the factor scores and eigenvalues [required]}
 
-\item{x}{Name of the genlight object containing the SNP or Tag P/A (SilicoDArT) genotypes or the Distance Matrix used to generate the ordination [required]}
+\item{x}{Name of the genlight object or fd object containing the SNP genotypes or 
+a genlight object containing the Tag P/A (SilicoDArT) genotypes or 
+the Distance Matrix used to generate the ordination [required]}
 
 \item{scale}{Flag indicating whether or not to scale the x and y axes in proportion to \% variation explained [default FALSE]}
 
@@ -71,18 +73,18 @@ If plot.out=TRUE, returns an object of class ggplot so that layers can subsequen
 with the individual labels, population labels and PCOA scores for subsequent plotting by the user with ggplot or other plotting software.
 }
 \examples{
+if (requireNamespace("directlabels", quietly = TRUE)) {
 gl <- testset.gl
 levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
 rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
 pca<-gl.pcoa(gl,nfactors=5)
 gl.pcoa.plot(pca, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5,
  vadjust=1)
-gl.pcoa.plot(pca, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5,
- vadjust=1, xaxis=1, yaxis=3)
+if (requireNamespace("plotly", quietly = TRUE)) {
+#interactive plot to examine labels
 gl.pcoa.plot(pca, gl, labels="interactive")  
-
-df <- gl.pcoa.plot(pca, gl, plot.out=FALSE)
-df
+}
+}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

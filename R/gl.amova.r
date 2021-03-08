@@ -7,7 +7,6 @@
 #' @param permutations -- number of permuations to perform for hypothesis testing [default 100]. Please note should be set to 1000 for analysis.]
 #' @return An object of class "amova" which is a list with a table of sums of square deviations (SSD), mean square deviations (MSD), and the number of degrees of freedom, and a vector of variance components.
 #' @importFrom StAMPP stamppNeisD
-#' @importFrom pegas amova
 #' @export
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples 
@@ -18,6 +17,11 @@
 #' 
 gl.amova <- function(x, dist =NULL, permutations=100)
 {
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "pegas"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please install it.") } 
+  
   if (is.null(dist)) dd <- StAMPP::stamppNeisD(x, FALSE) else dd <- dist
   
   if (class(x) == "genlight") {

@@ -34,8 +34,7 @@
 #' @examples
 #' # SNP data
 #'   result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
-#' # Tag P/A data
-#'   result <- gl.filter.hamming(testset.gs, threshold=0.25, verbose=3)
+
 
 gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=NULL) {
   

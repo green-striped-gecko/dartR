@@ -10,11 +10,14 @@ gl.propShared(x)
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}
 }
 \description{
-This script calculates a individual based distance matrix. It uses an C++ implementation, so package Rcpp needs to be installed and it is therefore really fast.
+This script calculates a individual based distance matrix. It uses an C++ implementation, so package Rcpp needs to be installed and it is therefore really fast (once it has compiled the function after the first run).
 }
 \examples{
-res <- gl.propShared(testset.gl)
+#takes some time at the first run of the function...
+\dontrun{
+res <- gl.propShared(bandicoot.gl)
 res[1:5,1:7] #show only a small part of the matrix
+}
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

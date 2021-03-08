@@ -84,8 +84,7 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=NULL
     stop("  Fatal Error: Population names not detected\n")
   }
 
-  recode.table <- read.csv(pop.recode, stringsAsFactors=FALSE, header=FALSE, stringsAsFactors = TRUE)
-  recode.table <- read.csv(pop.recode, stringsAsFactors=FALSE, header=FALSE)
+  recode.table <- read.csv(pop.recode,  header=FALSE, stringsAsFactors = TRUE)
   if(length(unique(pop(x))) != length(unique(recode.table[,1]))) {
     stop("Fatal Error: Population names in data file are not the same as in the recode table\n")
   }

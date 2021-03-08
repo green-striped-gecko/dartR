@@ -71,7 +71,7 @@ gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=FALS
   #add six dummy colums
   nc <- ncol(x)+6
   if (probar) pb <- txtProgressBar(min=0, 1, style=3, initial=NA)
-  zz <- file(outfile, "w")
+  zz <- file(outfilespec, "w")
   for (i in 1:nrow(x))
   {
     dummy <- rbind(x[i,], x[i,])
@@ -80,13 +80,13 @@ gl2faststructure <- function(x, outfile="gl.str", outpath=tempdir(), probar=FALS
     dummy <- ifelse(is.na(dummy), -9, dummy)
     dummy <- ifelse(dummy==0,1, dummy)
     dummy <- cbind(i,i,i,i,i,i,dummy)
-    write(t(dummy), file=outfile, sep="\t", ncolumns = nc, append=TRUE)  
+    write(t(dummy), file=outfilespec, sep="\t", ncolumns = nc, append=TRUE)  
     if (probar)   setTxtProgressBar(pb, i/nrow(x))  
   }
   close(zz)
   if (probar) close(pb)
   #gi <-read.structure("project_data.str", ask=F, n.ind=50, n.loc=100, col.pop=0, col.lab = 1, onerowperind = TRUE, sep="\t")
-  if (verbose >= 2){cat(paste0("Saved faststructure file: ",getwd(),"/", outfile, "\n") )}
+  if (verbose >= 2){cat(paste0("Saved faststructure file: ", outfilespec, "\n") )}
   if (verbose >= 3){cat(paste("Consists of", nrow(x), "individuals and ", ncol(x), "loci."))}
 
 # FLAG SCRIPT END

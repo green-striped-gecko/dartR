@@ -5,14 +5,14 @@
 #' The script saves the object to the current workspace and returns the input gl object.
 #'
 #' @param x -- name of the genlight object containing SNP genotypes [required]
-#' @param file -- name of the file to recieve the binary version of the object [required]
+#' @param file -- name of the file to receive the binary version of the object [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return the input object
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#' @example
-#' gl.save(testset.gl,"testset.rds")
-#' gl.reloaded <- gl.load("testset.rds")
+#' @examples
+#' gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
+#' gl.reloaded <- gl.load(file.path(tempdir(),"testset.rds"))
 
 gl.save <- function(x, file, verbose=NULL){
 

@@ -15,11 +15,13 @@ gl.report.parent.offspring(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP genotypes [required]}
 
+\item{min.rdepth}{Minimum read depth to include in analysis [default = 12]}
+
+\item{min.reproducibility}{Minimum reproducibility to include in analysis [default = 1]}
+
 \item{range}{-- specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
-
-\item{--}{min.reproducibility Minimum reproducibility to include in analysis [default = 1]}
 }
 \value{
 A set of individuals in parent-offspring relationship

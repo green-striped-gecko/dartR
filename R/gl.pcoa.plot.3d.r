@@ -22,17 +22,12 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return NULL, plots an interactive 3D plot of the ordination in a separate window
 #' @export
-#' @importFrom pca3d pca3d
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' library(rgl)  #needed for the example
 #' pcoa <- gl.pcoa(testset.gl, nfactor=5)
 #' gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
-#' 
-#' fd <- gl.fixed.diff(testset.gl)
-#' fd <- gl.collapse(fd)
-#' pca <- gl.pcoa(fd)
-#' gl.pcoa.plot.3d(pca,fd)
+
 
 gl.pcoa.plot.3d <- function(glPca, 
                             x, 
@@ -44,8 +39,14 @@ gl.pcoa.plot.3d <- function(glPca,
                             radius=2, 
                             legend="topright", 
                             verbose=NULL) {
+# CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "pca3d"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.")
+  } else {
 
-# TRAP COMMAND, SET VERSION
+  
+  # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
   build <- "Jacob"
@@ -85,15 +86,15 @@ gl.pcoa.plot.3d <- function(glPca,
   
 # STANDARD ERROR CHECKING
   
-  if(class(gl)!="genlight") {
+  if(class(x)!="genlight") {
     cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
   }
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(gl)) | is.na(length(pop(gl))) | length(pop(gl)) <= 0) {
+    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(gl) <- array("pop1",dim = nLoc(gl))
-      pop(gl) <- as.factor(pop(gl))
+      pop(x) <- array("pop1",dim = nLoc(x))
+      pop(x) <- as.factor(pop(x))
     }
 
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -117,7 +118,7 @@ gl.pcoa.plot.3d <- function(glPca,
    row.names(glPca$scores) <- as.character(pop(x))
   # Plot
     if (verbose >= 2) {cat("  Plotting three specified axes\n")}
-   pca3d(coords, shape=shape, radius=radius, group=row.names(glPca$scores), legend=legend, 
+   pca3d::pca3d(coords, shape=shape, radius=radius, group=row.names(glPca$scores), legend=legend, 
          axe.titles=c(xlab,ylab,zlab))
 
 # FLAG SCRIPT END
@@ -127,5 +128,5 @@ gl.pcoa.plot.3d <- function(glPca,
   }
 
   return(NULL)
+  }
 }
-

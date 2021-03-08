@@ -17,6 +17,11 @@
 #'
 #' If plot.out=TRUE, returns an object of class ggplot so that layers can subsequently be added; if plot.out=FALSE, returns a dataframe
 #' with the individual labels, population labels and PCOA scores for subsequent plotting by the user with ggplot or other plotting software. 
+#' 
+#' The themes available to format the plot are the following:
+#' theme_minimal[1], theme_classic[2],theme_bw[3],theme_gray[4],theme_linedraw[5],theme_light[6],theme_dark[7],theme_economist[8],theme_economist_white[9],theme_calc[10],theme_clean[11],theme_excel[12],theme_excel_new[13],theme_few[14],theme_fivethirtyeight[15],theme_foundation[16],theme_gdocs[17],theme_hc[18],theme_igray[19],theme_solarized[20],theme_solarized_2[21],theme_solid[22],theme_stata[23],theme_tufte[24],theme_wsj[25]
+#' Examples of these themes can be consulted in 
+#' \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'
 #' @param glPca Name of the PCA or PCoA object containing the factor scores and eigenvalues [required]
 #' @param x Name of the genlight object or fd object containing the SNP genotypes or 
@@ -26,6 +31,7 @@
 #' @param ellipse Flag to indicate whether or not to display ellipses to encapsulate points for each population [default FALSE]
 #' @param p Value of the percentile for the ellipse to encapsulate points for each population [default 0.95]
 #' @param labels Flag to specify the labels are to be added to the plot. ["none"|"ind"|"pop"|"interactive"|"legend", default = "pop"]
+#' @param theme_plot Theme for the plot. See Details for options [default 4]
 #' @param as.pop -- assign another metric to represent populations for the plot [default NULL]
 #' @param hadjust Horizontal adjustment of label position [default 1.5]
 #' @param vadjust Vertical adjustment of label position [default 1]
@@ -35,26 +41,24 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A plot of the ordination [plot.out=TRUE] or a dataframe [plot.out=FALSE]
 #' @export
-#' @importFrom directlabels geom_dl
-#' @importFrom plotly ggplotly
 #' @import tidyr 
 #' @importFrom methods show
 #' @rawNamespace import(ggplot2, except = empty)
 
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#' if (requireNamespace("directlabels", quietly = TRUE)) {
 #' gl <- testset.gl
 #' levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
 #' rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
 #' pca<-gl.pcoa(gl,nfactors=5)
 #' gl.pcoa.plot(pca, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5,
 #'  vadjust=1)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, p=0.99, labels="pop",hadjust=1.5,
-#'  vadjust=1, xaxis=1, yaxis=3)
+#' if (requireNamespace("plotly", quietly = TRUE)) {
+#' #interactive plot to examine labels
 #' gl.pcoa.plot(pca, gl, labels="interactive")  
-#' 
-#' df <- gl.pcoa.plot(pca, gl, plot.out=FALSE)
-#' df
+#' }
+#' }
 
 gl.pcoa.plot <- function(glPca, 
                          x, 
@@ -62,6 +66,7 @@ gl.pcoa.plot <- function(glPca,
                          ellipse=FALSE, 
                          p=0.95, 
                          labels="pop",
+                         theme_plot=4,
                          as.pop=NULL,
                          hadjust=1.5, 
                          vadjust=1, 
@@ -69,6 +74,18 @@ gl.pcoa.plot <- function(glPca,
                          yaxis=2, 
                          plot.out=TRUE, 
                          verbose=NULL) {
+  pkg <- "plotly"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package ",pkg," needed for this function to work. Please install it.") }
+  pkg <- "directlabels"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package ",pkg," needed for this function to work. Please install it.") }
+   pkg <- "ggrepel"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package ",pkg," needed for this function to work. Please install it.") } 
+    pkg <- "ggthemes"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package ",pkg," needed for this function to work. Please install it.") } else {  
 
 # TRAP COMMAND, SET VERSION
   
@@ -176,6 +193,7 @@ gl.pcoa.plot <- function(glPca,
       ind <- indNames(x)
       pop <- factor(pop(x))
       df <- cbind(df,ind,pop)
+      PCoAx <- PCoAy <- NA
       colnames(df) <- c("PCoAx","PCoAy","ind","pop")
       
     } else { # class(x) == "dist"
@@ -192,16 +210,44 @@ gl.pcoa.plot <- function(glPca,
       }
       labels <- "pop"
     }  
+    # list of themes
+    theme_list <- list(
+    theme_minimal(),
+    theme_classic(),
+    theme_bw(),
+    theme_gray(),
+    theme_linedraw(),
+    theme_light(),
+    theme_dark(),
+    ggthemes::theme_economist(),
+    ggthemes::theme_economist_white(),
+    ggthemes::theme_calc(),
+    ggthemes::theme_clean(),
+    ggthemes::theme_excel(),
+    ggthemes::theme_excel_new(),
+    ggthemes::theme_few(),
+    ggthemes::theme_fivethirtyeight(),
+    ggthemes::theme_foundation(),
+    ggthemes::theme_gdocs(),
+    ggthemes::theme_hc(),
+    ggthemes::theme_igray(),
+    ggthemes::theme_solarized(),
+    ggthemes::theme_solarized_2(),
+    ggthemes::theme_solid(),
+    ggthemes::theme_stata(),
+    ggthemes::theme_tufte(),
+    ggthemes::theme_wsj())
     
   # If individual labels
-
     if (labels == "ind") {
       if (verbose>0) cat("  Plotting individuals\n")
 
     # Plot
       p <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=ind, colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
-        geom_dl(aes(label=ind),method="first.points") +
+        theme_list[theme_plot] +
+        ggrepel::geom_text_repel(aes(label = ind),show.legend=FALSE) +
+        # directlabels::geom_dl(aes(label=ind),method="first.points") +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -229,7 +275,8 @@ gl.pcoa.plot <- function(glPca,
       # Plot
       p <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
-        geom_dl(aes(label=pop),method="smart.grid") +
+        theme_list[theme_plot] +
+        directlabels::geom_dl(aes(label=pop),method="smart.grid") +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -256,6 +303,7 @@ gl.pcoa.plot <- function(glPca,
       # Plot
       p <- ggplot(df, aes(x=PCoAx, y=PCoAy)) +
         geom_point(size=2,aes(colour=pop, fill=ind)) +
+         theme_list[theme_plot] +
          theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -281,6 +329,8 @@ gl.pcoa.plot <- function(glPca,
       # Plot
       p <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
+        theme_list[theme_plot] +
+        ggrepel::geom_text_repel(aes(label = pop),show.legend=FALSE) +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -304,6 +354,7 @@ gl.pcoa.plot <- function(glPca,
       # Plot
       p <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
+        theme_list[theme_plot] +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -355,4 +406,5 @@ gl.pcoa.plot <- function(glPca,
     return(df)
   }
 
+  }
 }

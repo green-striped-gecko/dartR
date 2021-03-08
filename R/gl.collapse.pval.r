@@ -87,7 +87,7 @@ gl.collapse.pval <- function(fd,
   
   if (is.na(fd$pval[1,1])) {
     cat("\nWarning: gl.collapse needed to be run with test set to TRUE, running now\n")
-    fd <- gl.fixed.diff(fd$gl,tloc=0,test=TRUE,delta=delta,reps=reps,mono.rm=TRUE,plot=FALSE,pb=FALSE, verbose=verbose)
+    fd <- gl.fixed.diff(fd$gl,tloc=0,test=TRUE,delta=delta,reps=reps,mono.rm=TRUE,pb=FALSE, verbose=verbose)
     cat("\n")
   } 
   
@@ -196,7 +196,7 @@ gl.collapse.pval <- function(fd,
     if (verbose >= 2){
       cat("Recalculating fixed difference matrix for collapsed populations\n\n")
     }
-    fd2 <- gl.fixed.diff(x2,tloc=0,test=TRUE,delta=delta,reps=reps,mono.rm=TRUE,plot=FALSE,pb=FALSE, verbose=verbose)
+    fd2 <- gl.fixed.diff(x2,tloc=0,test=TRUE,delta=delta,reps=reps,mono.rm=TRUE,pb=FALSE, verbose=verbose)
   
   # Display the fd matrix
     if (verbose >= 3) {

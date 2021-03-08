@@ -23,7 +23,6 @@
 #' @return An object of class 'dist' giving distances between populations
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
-#' @importFrom reshape2 dcast
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -31,6 +30,13 @@
 
 gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", range=1.5, binary=FALSE, p=NULL, verbose=NULL) {
 
+# CHECK IF PACKAGES ARE INSTALLED
+  # CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "reshape2"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop("Package",pkg," needed for this function to work. Please   install it.")} else {
+  
+  
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
@@ -244,4 +250,5 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
   }
     
     return(dd)
+  }
 }

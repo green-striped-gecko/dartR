@@ -4,24 +4,21 @@
 \alias{gl2sa}
 \title{Convert genlight objects to the format used in the SNPassoc package}
 \usage{
-gl2sa(x, verbose = NULL)
+gl2sa(x, verbose = NULL, installed = FALSE)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+
+\item{installed}{switch to run the function once SNPassoc package is installed}
 }
 \value{
-Returns an object of class 'snp' to be used with \pkg{SNPassoc}
+Returns an object of class 'snp' to be used with SNPassoc.
 }
 \description{
-This function exports a genlight object into a SNPassoc object. See \link[SNPassoc]{setupSNP}
-}
-\examples{
-\donttest{
-library(parallel)
-sa <-gl2sa(testset.gl )
-}
+This function exports a genlight object into a SNPassoc object. See package SNPassoc for details.
+#' This function needs package SNPassoc. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/isglobal-brge/SNPassoc} and/or use \code{install_github("isglobal-brge/SNPassoc")} to install the function and uncomment the function code.
 }
 \references{
 Gonzalez, J.R., Armengol, L., Sol?, X., Guin?, E., Mercader, J.M., Estivill, X. and Moreno, V. (2017). SNPassoc: an R package to perform whole genome association studies. Bioinformatics 23:654-655.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.pcoa.r
 \name{gl.pcoa}
 \alias{gl.pcoa}
-\title{Ordination applied to genotypes in a genlight object (PCA) or to a distance matrix (PCoA)}
+\title{Ordination applied to genotypes in a genlight object (PCA), in an fd object, or to a distance matrix (PCoA)}
 \usage{
 gl.pcoa(
   x,
@@ -14,7 +14,7 @@ gl.pcoa(
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data or a distance matrix of type dist [required]}
+\item{x}{-- name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required]}
 
 \item{nfactors}{-- number of axes to retain in the output of factor scores.}
 
@@ -86,7 +86,10 @@ PCA was developed by Pearson (1901) and Hotelling (1933), whilst the best modern
 best modern reference is Legendre & Legendre (1998).
 }
 \examples{
-pca <- gl.pcoa(testset.gl)
+fd <- gl.fixed.diff(testset.gl)
+fd <- gl.collapse(fd)
+pca <- gl.pcoa(fd)
+gl.pcoa.plot(pca,fd)
 }
 \references{
 Cailliez, F. (1983) The analytical solution of the additive constant problem. Psychometrika, 48, 305–308.

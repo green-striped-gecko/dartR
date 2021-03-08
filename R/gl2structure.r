@@ -1,6 +1,6 @@
 #' Converts genlight objects to STRUCTURE formated files
 #'
-#' This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststructure version as well). It is based on the code provided by Lindsay Clark (see \url{https://github.com/lvclark/R_genetics_conv})  and this function is basically a wrapper around her numeric2structure function. See also: Lindsay Clark. (2017, August 22). lvclark/R_genetics_conv: R_genetics_conv 1.1 (Version v1.1). Zenodo: \url{http://doi.org/10.5281/zenodo.846816}.
+#' This function exports genlight objects to STRUCTURE formatted files (be aware there is a gl2faststructure version as well). It is based on the code provided by Lindsay Clark (see \url{https://github.com/lvclark/R_genetics_conv})  and this function is basically a wrapper around her numeric2structure function. See also: Lindsay Clark. (2017, August 22). lvclark/R_genetics_conv: R_genetics_conv 1.1 (Version v1.1). Zenodo: doi.org/10.5281/zenodo.846816.
 #' 
 #' @param x -- name of the genlight object containing the SNP data and location data, lat longs [required]
 #' @param indNames -- specify individuals names to be added [if NULL, defaults to indNames(x)]
@@ -13,9 +13,8 @@
 #' @export
 #' @author Bernd Gruber (wrapper) and Lindsay V. Clark [lvclark@illinois.edu] 
 #' @examples
-#' \donttest{
-#' gl2structure(testset.gl)
-#'}
+#' #not run here
+#' #gl2structure(testset.gl)
 
 
 gl2structure <- function(x, indNames=NULL, addcolumns=NULL, ploidy=2, exportMarkerNames=TRUE, outfile="gl.str", outpath=tempdir(), verbose=NULL){
@@ -130,13 +129,13 @@ gl2structure <- function(x, indNames=NULL, addcolumns=NULL, ploidy=2, exportMark
   
 # add marker name header
   if(exportMarkerNames){
-    cat(paste(locNames(x), collapse = "\t"), sep = "\n", file = outfile)
+    cat(paste(locNames(x), collapse = "\t"), sep = "\n", file = outfilespec)
   }
   
 # export all data
   write.table(StructTab, row.names = FALSE, col.names = FALSE, append = TRUE,
   sep = "\t", file = outfilespec, quote = FALSE)
-  if (verbose >=2 )  cat(paste("Structure file saved as:", outfile,"\nin folder:",outpath))
+  if (verbose >=2 )  cat(paste("Structure file saved as:", outfilespec))
 
 # FLAG SCRIPT END
 

@@ -2,26 +2,25 @@
 % Please edit documentation in R/gl.hwe.pop.r
 \name{gl.hwe.pop}
 \alias{gl.hwe.pop}
-\title{Filter function to facilitate analysing of dart data}
+\title{Function to run Hardy-Weinberg tests over each loci and population}
 \usage{
-gl.hwe.pop(gi, pvalue = 0.05, plot = TRUE)
+gl.hwe.pop(x, pvalue = 0.05, plot = TRUE, HWformat = FALSE)
 }
 \arguments{
-\item{gi}{a genlight or genind object(genlight is internally converted to genind)}
+\item{x}{a genlight object with a population defined [pop(x) does not return NULL]}
 
 \item{pvalue}{the p-value for the HWE test.}
 
-\item{plot}{a switch if a barplot is wanted.}
+\item{plot}{a switch if a barplot is returned.}
+
+\item{HWformat}{switch if data should be returned in HWformat (counts of Genotypes to be used in package \code{HardyWeinberg})}
 }
 \value{
-This functions performs a HWE test for every population (rows) and loci (columns) and returns a true false matrix. True is reported if the p-value of an HWE-test for a particular loci and population was below the specified threshold (pvalue, default=0.05). The thinking behind this approach is that loci that are not in HWE in several populations have most likely to be treated (e.g. filtered if loci under selection are of interest). If plot=TRUE a barplot on the on the loci and the sum of deviation over all population is returned. Loci that deviate in the majority of populations can be identified via colSums on the resulting matrix.
+This functions performs a HWE test for every population (rows) and loci (columns) and returns a true false matrix. True is reported if the p-value of an HWE-test for a particular loci and population was below the specified threshold (pvalue, default=0.05). The thinking behind this approach is that loci that are not in HWE in several populations have most likely to be treated (e.g. filtered if loci under selection are of interest). If plot=TRUE a barplot on the on the loci and the sum of deviation over all population is returned. Loci that deviate in the majority of populations can be identified via colSums on the resulting matrix. The function returns a list with up to three components: 'HWE' is the matrix over loci and populations, 'plot' is a matrixplot (ggplot) which shows the significant results for population and loci (can be amended further using ggplot syntax), and finally if 'HWEformat=TRUE' the 'HWformat' entails SNP data for each population in 'HardyWeinberg'-format to be used with other functions of the package (e.g \code{\link[HardyWeinberg]{HWPerm}} or \code{\link[HardyWeinberg]{HWExactPrevious}}).
 }
 \description{
-Filter function to facilitate analysing of dart data
+Does a Hardy-Weinberg-Test for each loci in each of the populations as defined by the pop slot in a genlight object. The function is completely rewritten as the previous function was based on package SNPassoc, which no longer is supported by CRAN. It now employs the \code{HardyWeinberg} package, which needs to be installed.  The function that is used is \code{\link[HardyWeinberg]{HWExactStats}}, but there are several other great function implemented in the package regarding HWE. Therefore you can return the data in the format the HWE package expects, via \code{HWformat=TRUE} and then use this to run other functions of the package.
 }
 \examples{
-\donttest{
-library(parallel)
-gl.hwe.pop(testset.gl, pvalue = 0.05, plot = TRUE)
-}
+out <- gl.hwe.pop(bandicoot.gl[,1:33], pvalue=0.05, plot=TRUE, HWformat=FALSE)
 }

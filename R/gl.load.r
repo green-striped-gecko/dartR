@@ -9,9 +9,9 @@
 #' @return the retrieved object
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#' @example
-#' gl.save(testset.gl,"testset.rds")
-#' gl.reloaded <- gl.load("testset.rds")
+#' @examples
+#' gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
+#' gl.reloaded <- gl.load(file.path(tempdir(),"testset.rds"))
 
 gl.load <- function(file, verbose=NULL){
 
@@ -20,17 +20,8 @@ gl.load <- function(file, verbose=NULL){
   funname <- match.call()[[1]]
   build <- "Jacob"
   
+  if (is.null(verbose)) verbose=0
 
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(class(x)=="genlight" && !is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
   if (verbose < 0 | verbose > 5){
     cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
     verbose <- 2
