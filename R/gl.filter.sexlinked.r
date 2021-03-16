@@ -183,7 +183,6 @@ if (is.null(filter)) stop("Filter option needs to be set to either 'keep' or 'dr
       gg <- ggplot(df, aes(x=df$fhet, y=df$mhet))+geom_rect(xmin=0, xmax=t.het, ymin=1-t.het, ymax=1, fill="darkgrey")+geom_text(x=0, y=1.03, label="XX/XY")+geom_rect(xmin=1, xmax=1-t.het, ymin=0, ymax=t.het, fill="darkgrey")+geom_text(x=1, y=-0.02, label="ZZ/ZW")  +geom_point(color=indexxy+indexzw+1,  alpha = 0.3, size=2)+xlab("Female Heterozygosity")+ ylab("Male Heterozygosity")+xlim(0,1)+ylim(0,1)
       print(gg)
     }
-    l <- list(xxxy=xy, zzzw=zw, plot=gg)
   } #end if data.type='SNP'
   
   if (data.type=="SilicoDArT")
@@ -262,7 +261,6 @@ if (is.null(filter)) stop("Filter option needs to be set to either 'keep' or 'dr
       gg <- ggplot(df, aes(x=df$fhet, y=df$mhet))+geom_rect(xmin=0, xmax=t.pres, ymin=1-t.pres, ymax=1, fill="darkgrey")+geom_text(x=0, y=1.03, label="XX/XY")+geom_rect(xmin=1, xmax=1-t.pres, ymin=0, ymax=t.pres, fill="darkgrey")+geom_text(x=1, y=-0.02, label="ZZ/ZW")  +geom_point(color=indexxy+indexzw+1,  alpha = 0.3, size=2)+xlab("% present in females")+ ylab("% present in males")+xlim(0,1)+ylim(0,1)
       print(gg)
     }
-    l <- list(xxxy=xy, zzzw=zw, plot=gg) 
   }
 
   

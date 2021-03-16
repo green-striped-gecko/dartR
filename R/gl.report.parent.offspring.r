@@ -99,7 +99,8 @@ gl.report.parent.offspring <- function(x,
     cat("  Generating null expectation for distribution of counts of pedigree incompatability\n")
   } 
   # Assign individuals as populations
-  x <- gl.reassign.pop(x,as.pop="id",verbose=0)
+  # x <- gl.reassign.pop(x,as.pop="id",verbose=0)
+  pop(x) <- x$ind.names
   # Filter stringently on reproducibility to minimize miscalls
   x <- gl.filter.reproducibility(x,threshold=min.reproducibility,verbose=0)
   # Filter stringently on read depth, to further minimize miscalls
@@ -151,6 +152,7 @@ gl.report.parent.offspring <- function(x,
   if (verbose >= 2){
       cat(  "  Identifying outlying pairs\n")
   }
+    if(length(lower.extremes)>0){
   tmp <- count
   tmp[lower.tri(tmp)] = t(tmp)[lower.tri(tmp)]
   for (i in 1:length(outliers$Outlier)){
@@ -163,7 +165,7 @@ gl.report.parent.offspring <- function(x,
     outliers$zscore[i] <- round(zscore,2)
     outliers$p[i] <- round(pnorm(mean=mean(count,na.rm=TRUE),sd=sd(count,na.rm=TRUE),q=outliers$zscore[i]),4)
   }
-  
+    }
 # Extract the quantile threshold
   iqr <- stats::IQR(counts,na.rm = TRUE)
   qth <- quantile(counts,0.25,na.rm=TRUE)
@@ -177,11 +179,15 @@ gl.report.parent.offspring <- function(x,
    abline(v=cutoff, col="red")
 
 # Output the outlier loci 
-if (length(whisker$out)==0){
-  if (verbose >= 3){
+# if (length(whisker$out)==0){
+  if(length(lower.extremes)==0){
+    
+  # if (verbose >= 3){
     cat("  No outliers detected\n")
-  }
-} else {  
+  # }
+} 
+   # else {  
+   if(length(lower.extremes)>0){  
   outliers <- outliers[order(outliers$Outlier),]
   if (verbose >= 3){
     #cat("  Outliers detected -- \n")

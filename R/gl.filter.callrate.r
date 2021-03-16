@@ -133,9 +133,9 @@
     # Plot a histogram of Call Rate
       
       if(all(x@ploidy==2)){
-        title <- "Call Rate by Individual\n[pre-filtering, SNP dataset]"
+        title <- "Call Rate by locus\n[pre-filtering, SNP dataset]"
       } else {
-        title <- "Call Rate by Individual\n[pre-filtering, Tag presence/absence dataset]"
+        title <- "Call Rate by locus\n[pre-filtering, Tag presence/absence dataset]"
       }  
       
       if (plot) {
@@ -289,9 +289,9 @@
       # Plot a histogram of Call Rate
 
       if(all(x@ploidy==2)){
-        title <- "Call Rate by Individual\n[pre-filtering, SNP dataset]"
+        title <- "Call Rate by individual\n[pre-filtering, SNP dataset]"
       } else {
-        title <- "Call Rate by Individual\n[pre-filtering, Tag presence/absence dataset]"
+        title <- "Call Rate by individual\n[pre-filtering, Tag presence/absence dataset]"
       }  
   
       if (plot) {
@@ -336,9 +336,9 @@
     # Plot a histogram of Call Rate
     
     if(all(x@ploidy==2)){
-      title <- "Call Rate by locus\n[pre-filtering by population, SNP dataset]"
+      title <- "Call Rate by population\n[pre-filtering by population, SNP dataset]"
     } else {
-      title <- "Call Rate by locus\n[pre-filtering by population, Tag presence/absence dataset]"
+      title <- "Call Rate by population\n[pre-filtering by population, Tag presence/absence dataset]"
     }  
     
     if (plot) {
