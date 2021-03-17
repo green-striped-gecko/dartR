@@ -23,7 +23,8 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return returns a tabulation of CallRate against Threshold
 #' @importFrom graphics hist
-#' @importFrom robustbase adjbox
+#' @importFrom ggplot2 ggplot
+#' @importFrom gridExtra grid.arrange
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -113,7 +114,7 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
       title1 <- paste0("Fragment P/A data - Call Rate by Locus")
       
     }
-    p1 <- ggplot(data.frame(callrate), aes(y=callrate))+geom_boxplot() +coord_flip()+theme()+xlim(range=c(-1,1))+ylim(0,1)+ylab(" ")+ggtitle(title1)
+    p1 <- ggplot2::ggplot(data.frame(callrate), aes(y=callrate))+geom_boxplot() +coord_flip()+theme()+xlim(range=c(-1,1))+ylim(0,1)+ylab(" ")+ggtitle(title1)
     #if (boxplot == "standard"){
     #  boxplot(callrate, horizontal=TRUE, col='red', range=range, main = title)
     #  if(verbose >= 1){cat("  Standard boxplot, no adjustment for skewness\n")}
@@ -135,8 +136,8 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
     #     xlim=c(min(x@other$loc.metrics$CallRate),1),
     #     breaks=100)
 
-  p2 <- ggplot(data.frame(callrate), aes(x=callrate))+geom_histogram(bins = 50)+ coord_cartesian(xlim = c(0,1)) 
-  grid.arrange(p1,p2)
+  p2 <- ggplot2::ggplot(data.frame(callrate), aes(x=callrate))+geom_histogram(bins = 50)+ coord_cartesian(xlim = c(0,1)) 
+  gridExtra::grid.arrange(p1,p2)
   
   # Print out some statistics
     cat("  Reporting Call Rate by Locus\n")
@@ -212,8 +213,8 @@ gl.report.callrate <- function(x, method="loc", boxplot="adjusted", range=1.5, v
     #     col="red",
     #     xlim=c(min(ind.call.rate),1),
     #     breaks=100)
-    p2 <- ggplot(data.frame(ind.call.rate), aes(x=ind.call.rate))+geom_histogram(bins = 50)+ coord_cartesian(xlim = c(0,1)) 
-    grid.arrange(p1,p2)
+    p2 <- ggplot2::ggplot(data.frame(ind.call.rate), aes(x=ind.call.rate))+geom_histogram(bins = 50)+ coord_cartesian(xlim = c(0,1)) 
+    gridExtra::grid.arrange(p1,p2)
 
     cat("  Reporting Call Rate by Individual\n")
     cat("  No. of loci =", nLoc(x), "\n")
