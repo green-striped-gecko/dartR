@@ -25,8 +25,8 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#'   file <- system.file("extdata","testset_pop_recode.csv", package="dartR")
-#'   #gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=0)
+#'   file <- system.file("extdata","testset_ind_recode.csv", package="dartR")
+#'   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=3)
 #' @seealso \code{\link{gl.filter.monomorphs}} for filtering monomorphs, \code{\link{gl.recalc.metrics}} for recalculating locus metrics,
 #' \code{\link{gl.recode.pop}} for recoding populations
 
@@ -80,9 +80,20 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=NU
   
 # SCRIPT SPECIFIC ERROR CHECKING
   
-  recode.table <- read.csv(ind.recode, stringsAsFactors=FALSE, header=FALSE);
-  if(length(unique(indNames(x))) != length(unique(recode.table[,1]))) {
-    stop("  Fatal Error: Individual names in data file are not the same as in the recode table\n")
+  recode.table <- read.csv(ind.recode,  header=FALSE, stringsAsFactors = FALSE)
+  
+  v1 <- unique(indNames(x))
+  v2 <- unique(recode.table[,1])
+  v1_v2 <- v1[!(v1 %in% v2)]
+  l1 <- length(v1)
+  l2 <- length(v2)
+  
+  if(l1 != l2) {
+    stop("Fatal Error: Individuals do not agree in number with those listed in the recode table\n")
+  }
+  if(!(length(v1_v2)==0)){
+    cat("Fatal Error: Some individuals have no reassignment specified in the recode table:",v1_v2,"\n")
+    stop()
   }
   
 # DO THE JOB
@@ -117,7 +128,12 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=NU
       if (verbose >= 2){
         cat("    Deleting individuals/samples flagged for deletion\n")
       }
-      x <- gl.drop.ind(x,ind.list=c("Delete","delete"),verbose=0)
+    deletions <- indNames(x)[tolower(recode.table[,2])=="delete"]
+    if (verbose==3){
+      cat("Dropping\n",deletions,"\n")
+      cat("A total of",length(deletions),"individuals dropped\n")
+    }
+    x <- gl.drop.ind(x,ind.list=c("Delete","delete"),verbose=0)
   } 
   
   # Recalculate statistics
@@ -141,7 +157,7 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=NU
     cat(paste("  Original No. of populations:", hold.nPop,"\n"))
     cat(paste("    New No. of populations:", nPop(x),"\n\n"))
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
-    if (!mono.rm) {cat("Note: Resultant monomorphic loci not deleted\n")}
+    if (!mono.rm) {cat("Note: Any resultant monomorphic loci not deleted\n")}
   }
   
 # ADD TO HISTORY
