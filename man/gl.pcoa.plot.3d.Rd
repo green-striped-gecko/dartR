@@ -7,22 +7,17 @@
 gl.pcoa.plot.3d(
   glPca,
   x,
-  title = "PCA",
   xaxis = 1,
   yaxis = 2,
   zaxis = 3,
-  shape = "sphere",
-  radius = 2,
-  legend = "topright",
+  radius = 8,
   verbose = NULL
 )
 }
 \arguments{
 \item{glPca}{-- name of the glPca object containing the factor scores and eigenvalues [required]}
 
-\item{x}{-- name of the genlight object or fd object from which the PCoA was generated}
-
-\item{title}{-- a title for the plot [default "PCoA"]}
+\item{x}{-- name of the genlight object or fd object from which the PCoA was generated [required]}
 
 \item{xaxis}{-- identify the x axis from those available in the ordination (xaxis <= nfactors) [default 1]}
 
@@ -30,11 +25,7 @@ gl.pcoa.plot.3d(
 
 \item{zaxis}{-- identify the z axis from those available in the ordination (zaxis <= nfactors) [default 3]}
 
-\item{shape}{-- shape of the points, one of sphere, tetrahaedron or cube [default "sphere"]}
-
-\item{radius}{-- size of the points [default 2]}
-
-\item{legend}{-- one of bottomright, bottom, bottomleft, left, topleft, top, topright, right, center [default "bottom"]}
+\item{radius}{-- size of the points [default 8]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
@@ -43,20 +34,17 @@ NULL, plots an interactive 3D plot of the ordination in a separate window
 }
 \description{
 This script takes output from the ordination undertaken using gl.pcoa() and plots the individuals in 3D space. The visualisation
-can be rotated with the mouse to examine the structure.
+can be rotated, zoomed in and zoomed out with the mouse to examine the structure.
 }
 \details{
 The factor scores are taken from the output of gl.pcoa(), an object of class glPca, and the population assignments from the original data file
 and plots the specimens in a 3D plot.
 
 Axes can be specified from the ordination, provided they are within the range of the nfactors value provided to gl.pcoa().
-
-This script is essentially a wrapper for function pca3d \{pca3d\} maintained by January Weiner.
 }
 \examples{
-library(rgl)  #needed for the example
-pcoa <- gl.pcoa(testset.gl, nfactor=5)
-gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
+pcoa <- gl.pcoa(possums.gl, nfactor=5)
+gl.pcoa.plot.3d(pcoa, possums.gl, xaxis=1, yaxis=2, zaxis=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

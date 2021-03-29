@@ -1,10 +1,10 @@
-#' Filter loci on the basis of numeric information stored in $other$loc.metrics in a genlight \{adegenet\} object
+#' Filter loci on the basis of numeric information stored in other$loc.metrics in a genlight \{adegenet\} object
 #'
 #' This script uses any field with numeric values stored in $other$loc.metrics to filter loci. The loci to keep can be within the upper and lower thresholds ("within") or outside of the upper and lower thresholds ("outside").
 #' The fields that are included in dartR, and a short description, are found below. Optionally, the user can also set his/her own filter by adding a vector into $other$loc.metrics as shown in the example.
 #' 
 #' - SnpPosition - position (zero is position 1) in the sequence tag of the defined SNP variant base 
-#' - CallRate - proportion of samples for which the genotype call is non‐ missing (that is, not “‐” ) 
+#' - CallRate - proportion of samples for which the genotype call is non-missing (that is, not '-' ) 
 #' - OneRatioRef - proportion of samples for which the genotype score is 0 
 #' - OneRatioSnp - proportion of samples for which the genotype score is 2 
 #' - FreqHomRef - proportion of samples homozygous for the Reference allele 
@@ -13,8 +13,8 @@
 #' - PICRef - polymorphism information content (PIC) for the Reference allele 
 #' - PICSnp - polymorphism information content (PIC) for the SNP 
 #' - AvgPIC - average of the polymorphism information content (PIC) of the Reference and SNP alleles 
-#' - AvgCountRef - sum of the tag read counts for all samples, divided by the number of samples with non‐zero tag read counts, for the Reference allele row 
-#' - AvgCountSnp - sum of the tag read counts for all samples, divided by the number of samples with non‐zero tag read counts, for the Alternate (SNP) allele row 
+#' - AvgCountRef - sum of the tag read counts for all samples, divided by the number of samples with non-zero tag read counts, for the Reference allele row 
+#' - AvgCountSnp - sum of the tag read counts for all samples, divided by the number of samples with non-zero tag read counts, for the Alternate (SNP) allele row 
 #' - RepAvg - proportion of technical replicate assay pairs for which the marker score is consistent 
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
@@ -30,7 +30,8 @@
 #' # adding dummy data
 #' test <- testset.gl
 #' test$other$loc.metrics$test <- 1:nLoc(test)
-#' result <- gl.filter.locmetric(x=test, metric= "test", upper=255, lower=200, keep= "within", verbose=3)
+#' result <- gl.filter.locmetric(x=test, metric= "test", upper=255, 
+#' lower=200, keep= "within", verbose=3)
 
 gl.filter.locmetric <- function(x, metric, upper, lower, keep="within", verbose=2) {
   
