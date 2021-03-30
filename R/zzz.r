@@ -1,6 +1,5 @@
 .onAttach <- function(...) {
-  
- 
+
   report <- crayon::green
   note <- crayon::cyan
   code <- crayon::blue
