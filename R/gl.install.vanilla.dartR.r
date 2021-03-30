@@ -41,10 +41,10 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
       devtools::install_github("green-striped-gecko/dartR", ref="master", dependencies = TRUE)
 
     }
-    if (flavour=="dev"){
+    if (substr(flavour,1,3)=="dev"){
       detach("package:dartR", unload=TRUE)
       if (verbose) message(report("Installing dartR from github (dev)"))
-      devtools::install_github("green-striped-gecko/dartR", ref="dev", dependencies = TRUE)
+      devtools::install_github("green-striped-gecko/dartR", ref=flavour, dependencies = TRUE)
       
     }
   }
