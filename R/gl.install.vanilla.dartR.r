@@ -25,6 +25,7 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
   err <- NULL
   report <- crayon::green
   warn <- crayon::red
+  note <- crayon::cyan
   important <- crayon::cyan$bold
   
   if (!is.null(flavour))
@@ -73,7 +74,7 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
     }
     if (verbose) message(report("All required packages are now installed. If there are still errors you might need to update them using\n update.packages().\n"))  
     if (verbose) message(report(paste("You have installed dartR:",packageVersion("dartR"))))
-    if (verbose) message(report("\nHave fun using Vanilla dartR!\n"))    
+    if (verbose) message(note("\nHave fun using Vanilla dartR!\n"))    
     
     
   } else  if(length(toinstall)>0)  #package installed but not available
@@ -85,7 +86,7 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
   } else {
     if (verbose) message(report("All required packages are already installed.\n If there are still errors you might need to update them using:\n update.packages()."))   
     if (verbose) message(report(paste("You have installed dartR:",packageVersion("dartR"))))
-    if (verbose) message(report("\nHave fun using Vanilla dartR!\n"))    
+    if (verbose) message(note("\nHave fun using Vanilla dartR!\n"))    
   }
   
   if (verbose & is.null(err) & !is.null(flavour)) {
