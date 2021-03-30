@@ -28,10 +28,7 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
   report <- crayon::green
   warn <- crayon::red
   note <- crayon::cyan
-<<<<<<< HEAD
   code <- crayon::blue
-=======
->>>>>>> ef3392d5ef9b2dc95c4df78c2d6c37f62d67da04
   important <- crayon::cyan$bold
   
   if (!is.null(flavour))
@@ -55,10 +52,7 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
       
     }
   }
-  
-  
-  
-  
+
   ip <- installed.packages()[,"Package"]
   #check all depends #check all imports
   #check all suggests
@@ -78,14 +72,10 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
       install.packages(toinsav[ii])
       if (verbose) message(report(paste("Package:",toinsav[ii],"installed.\n")))
     }
-<<<<<<< HEAD
     if (verbose) message(report("All required packages are now installed. If there are still errors you might need to update them using"))
     if (verbose) message(code("update.packages()"))  
     if (verbose) message(report(paste("\nYou have installed dartR",packageVersion("dartR"))))
-=======
-    if (verbose) message(report("All required packages are now installed. If there are still errors you might need to update them using\n update.packages().\n"))  
-    if (verbose) message(report(paste("You have installed dartR:",packageVersion("dartR"))))
->>>>>>> ef3392d5ef9b2dc95c4df78c2d6c37f62d67da04
+
     if (verbose) message(note("\nHave fun using Vanilla dartR!\n"))    
     
     
