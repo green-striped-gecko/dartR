@@ -2,9 +2,11 @@
 #'  
 #' The function compares the installed packages with the the currently available ones on cran. Be aware this function only works if a version of dartR is already installed on your system. You can choose if you also want to have a specific version of dartR installed ("CRAN", "master" or "dev" ). "master" and "dev" are installed from Github. Be aware the dev version from github is not fully tested and most certainly will contain untested functions.
 #' @param flavour -- If and which version of R you want to install. If NULL then only needed packages for the current version will be installed. If "CRAN" current CRAN version will be installed. "master" installs the GitHub master branch and "dev" installs the experimental development branch from GitHub.
-#' @return returns a message if the installation was successful/required
+#' @param verbose returns information on packages and dartR versions
+#'  @return returns a message if the installation was successful/required
 #' @export
 #' @importFrom stringr str_trim
+#' @importFrom devtools install_github
 #' @rawNamespace import (crayon, except = c(chr, '%+%') )
 #' @importFrom utils installed.packages install.packages available.packages
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})

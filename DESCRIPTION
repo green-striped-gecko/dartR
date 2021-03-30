@@ -44,13 +44,13 @@ Imports:
     sp,
     PopGenReport,
     hierfstat,
-    raster, 
     robustbase,
     gridExtra,
     HardyWeinberg,
     foreach,
     dplyr,
-    crayon
+    crayon,
+    devtools
 Suggests:
     knitr,
     rmarkdown,
@@ -80,7 +80,8 @@ Suggests:
     mmod,
     plotly,
     ggthemes,
-    ggrepel
+    ggrepel,
+    raster
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1
