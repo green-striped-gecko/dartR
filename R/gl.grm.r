@@ -104,7 +104,7 @@ mypalette <- colorRampPalette(cols)(255)
 
 if(plotheatmap==T){
 # plotting heatmap 
-gplots::heatmap.2(G,col=mypalette,dendrogram="column",ColSideColors=cols_pops$colour,RowSideColors=cols_pops$colour, trace = "none", density.info = "none",scale="none",main="Probability of identity by descent")
+gplots::heatmap.2(G,col=mypalette,dendrogram="column",ColSideColors=as.character(cols_pops$colour),RowSideColors=as.character(cols_pops$colour), trace = "none", density.info = "none",scale="none",main="Probability of identity by descent")
 legend(0,0.8,legend=unique(cols_pops$pop),fill=unique(cols_pops$colour),cex=0.75,title="Populations")
 }
 
