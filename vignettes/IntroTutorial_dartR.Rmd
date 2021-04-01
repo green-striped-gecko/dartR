@@ -1110,7 +1110,7 @@ An isolation by distance analysis will be carried out and a plot will be returne
 An example run (using only a subset of the test data):
 
 ```{r, fig.height=4}
-gl <- gl.ibd(gl=testset.gl[1:180,])
+gl <- gl.ibd(x=testset.gl[1:180,])
 ```
 
 # Phylogenetic Analysis

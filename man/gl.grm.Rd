@@ -2,27 +2,30 @@
 % Please edit documentation in R/gl.grm.r
 \name{gl.grm}
 \alias{gl.grm}
-\title{Calculates the genomic relatedness matrix}
+\title{Calculates an identity by descent matrix}
 \usage{
-gl.grm(x, plotheatmap = TRUE, return.imputed = FALSE, verbose = NULL, ...)
+gl.grm(x, plotheatmap = TRUE, verbose = NULL, ...)
 }
 \arguments{
 \item{x}{-- a genlight object}
 
 \item{plotheatmap}{-- a switch if a heatmap should be shown [Default:TRUE]}
 
-\item{return.imputed}{switch if loci with imputed data should be returned (see ?A.mat in package rrBLUP)}
-
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 
 \item{...}{parameters passed to function A.mat from package rrBLUP}
 }
 \value{
-a genomic relatedness matrix
+an identity by descent matrix and a heatmap plot
 }
 \description{
-The G matrix is calculated by centering the allele frequency matrix  of the second allele by substracting 2 times the allefrequency
+This function calculates the mean probability of identity by descent (IBD) across loci that would result from all the possible crosses of the individuals analyzed. IBD is calculated by an additive relationship matrix approach developed by Endelman and Jannink (2012) as implemented in the function \link[rrBLUP]{A.mat} (package rrBLUP). Two or more alleles are identical by descent (IBD) if they are identical copies of the same ancestral allele in a base population. The additive relationship matrix is a theoretical framework for estimating a relationship matrix that is consistent with an approach to estimate the probability that the alleles at a random locus are identical in state (IBS).
+This function also plots a heatmap, and a dendrogram, of IBD values where each diagonal element has a mean that equals 1+f, where f is the inbreeding coefficient (i.e. the probability that the two alleles at a randomly chosen locus are IBD from the base population). As this probability lies between 0 and 1, the diagonal elements range from 1 to 2. Because the inbreeding coefficients are expressed relative to the current population, the mean of the off-diagonal elements is -(1+f)/n, where n is the number of loci. Individual names are shown in the margins of the heatmap and colors represent different populations.
 }
 \examples{
-gl.grm(bandicoot.gl[1:5,1:10],plotheatmap=TRUE)  
+gl.grm(bandicoot.gl[1:20,])  
+}
+\references{
+Endelman, J. B. (2011). Ridge regression and other kernels for genomic selection with r package rrblup. The Plant Genome 4, 250.
+Endelman, J. B. , Jannink, J.-L. (2012). Shrinkage estimation of the realized relationship matrix. G3: Genes, Genomics, Genetics 2, 1405.
 }

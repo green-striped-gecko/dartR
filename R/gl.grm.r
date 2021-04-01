@@ -8,6 +8,8 @@
 #'@param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'@return an identity by descent matrix and a heatmap plot
 #'@export
+#'@importFrom grDevices rgb2hsv col2rgb hcl
+#@importFrom gplots heatmap.2
 #'@references 
 #' Endelman, J. B. (2011). Ridge regression and other kernels for genomic selection with r package rrblup. The Plant Genome 4, 250.
 #' Endelman, J. B. , Jannink, J.-L. (2012). Shrinkage estimation of the realized relationship matrix. G3: Genes, Genomics, Genetics 2, 1405.
@@ -80,7 +82,7 @@ gl.grm <- function(x, plotheatmap=TRUE, verbose=NULL, ...){
 # function to replicate defaults colors of ggplot
 gg_color_hue <- function(n) {
   hues = seq(15, 375, length = n + 1)
-  hcl(h = hues, l = 65, c = 100)[1:n]
+  return (hcl(h = hues, l = 65, c = 100)[1:n])
 }
 
 # assigning colors to populations

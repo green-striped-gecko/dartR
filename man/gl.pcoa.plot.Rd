@@ -11,6 +11,7 @@ gl.pcoa.plot(
   ellipse = FALSE,
   p = 0.95,
   labels = "pop",
+  theme_plot = 4,
   as.pop = NULL,
   hadjust = 1.5,
   vadjust = 1,
@@ -34,6 +35,8 @@ the Distance Matrix used to generate the ordination [required]}
 \item{p}{Value of the percentile for the ellipse to encapsulate points for each population [default 0.95]}
 
 \item{labels}{Flag to specify the labels are to be added to the plot. ["none"|"ind"|"pop"|"interactive"|"legend", default = "pop"]}
+
+\item{theme_plot}{Theme for the plot. See Details for options [default 4]}
 
 \item{as.pop}{-- assign another metric to represent populations for the plot [default NULL]}
 
@@ -70,7 +73,12 @@ ggplotly() friendly. Identification of points is by moving the mouse
 over them. Refer to the plotly package for further information. 
 
 If plot.out=TRUE, returns an object of class ggplot so that layers can subsequently be added; if plot.out=FALSE, returns a dataframe
-with the individual labels, population labels and PCOA scores for subsequent plotting by the user with ggplot or other plotting software.
+with the individual labels, population labels and PCOA scores for subsequent plotting by the user with ggplot or other plotting software. 
+
+The themes available to format the plot are the following:
+theme_minimal[1], theme_classic[2],theme_bw[3],theme_gray[4],theme_linedraw[5],theme_light[6],theme_dark[7],theme_economist[8],theme_economist_white[9],theme_calc[10],theme_clean[11],theme_excel[12],theme_excel_new[13],theme_few[14],theme_fivethirtyeight[15],theme_foundation[16],theme_gdocs[17],theme_hc[18],theme_igray[19],theme_solarized[20],theme_solarized_2[21],theme_solid[22],theme_stata[23],theme_tufte[24],theme_wsj[25]
+Examples of these themes can be consulted in 
+\url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 }
 \examples{
 if (requireNamespace("directlabels", quietly = TRUE)) {
