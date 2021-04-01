@@ -7,7 +7,6 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A matrix with allele (SNP data) or presence/absence frequencies (Tag P/A data) broken down by population and locus
 #' @export
-#' @importFrom plyr ddply
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' m <-  gl.percent.freq(testset.gl)
@@ -15,11 +14,6 @@
 
 gl.percent.freq<- function(x, verbose=NULL) {
 
-# CHECK IF PACKAGES ARE INSTALLED
-  pkg <- "reshape2"
-  if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package",pkg," needed for this function to work. Please   install it.") } else {
-      
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
@@ -57,7 +51,7 @@ gl.percent.freq<- function(x, verbose=NULL) {
   }
   
   if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
+    if (verbose >= 2){cat("  Processing Presence/Absence (SilicoDArT) data\n")}
     data.type <- "SilicoDArT"
   } else if (all(x@ploidy == 2)){
     if (verbose >= 2){cat("  Processing a SNP dataset\n")}
@@ -75,7 +69,8 @@ gl.percent.freq<- function(x, verbose=NULL) {
 
 # DO THE JOB
   
-  mat <- as.matrix(x)
+  x2 <- seppop(x)
+  x2_list <- lapply(x2,as.matrix)
   
   if(data.type=="SilicoDArT"){
 
@@ -83,7 +78,10 @@ gl.percent.freq<- function(x, verbose=NULL) {
       cat("Starting gl.percent.freq: Calculating Tag P/A frequencies for populations\n")
     }
     # Treat SilicoDArT as biallelic, no heterozygotes
-    mat[mat==1] <- 2
+    x2_list <- lapply(x2_list,function(x){
+      x[x==1] <- 2
+      return(x)
+    })
 
   } else {
 
@@ -95,27 +93,43 @@ gl.percent.freq<- function(x, verbose=NULL) {
     }
   }
   
-# Calculate the required statistics, to be backward compatible 
-  nmissing <- apply(mat,2, tapply, pop(x), function(x){sum(is.na(x))})
-  nobs <- apply(mat,2, tapply, pop(x), function(x){sum(!is.na(x))})
-  n <- nmissing + nobs
-  sum <- apply(mat,2, tapply, pop(x), function(x){sum(x,na.rm=TRUE)})
-  f <- apply(mat,2, tapply, pop(x), function(x){mean(x, na.rm=TRUE)/2})
-  f <- f*100
-
-# Convert the matricies to long format pop, locus, value
-  nobs <- reshape2::melt(nobs, na.rm=FALSE)
-  nmissing <- reshape2::melt(nmissing, na.rm=FALSE)
-  n <- reshape2::melt(n, na.rm=FALSE)
-  f <- reshape2::melt(f, na.rm=FALSE)
-  sum <- reshape2::melt(sum, na.rm=FALSE)
+  loc_names <- lapply(x2_list,colnames)
   
-  if(nPop(x) == 1) {
-    m <- cbind(levels(pop(x)),rownames(sum),sum,nobs,nmissing,f,n)
-  } else {
-    m <- cbind(sum,nobs[,3],nmissing[,3],f[,3],n[,3])
-  }  
-  colnames(m) <- c("popn","locus","sum","nobs","nmissing","frequency","n")
+  nmissing_temp <- lapply(x2_list, is.na)
+  nmissing <- lapply(nmissing_temp, colSums)
+  
+  n_temp <- lapply(x2_list,nrow)
+  n <- lapply(n_temp,rep,nLoc(x))
+  
+  nobs_temp <- lapply(nmissing,unname)
+  nobs <- Map("-",n,nobs_temp)
+  
+  sum_res <- lapply(x2_list, colSums,na.rm=T)
+  
+  f <- lapply(x2_list,colMeans, na.rm = T)
+  f <- lapply(f, "/",2)
+  f <- lapply(f, "*",100)
+  f <- lapply(f, "round",2)
+  
+  m <- Map(cbind,names(sum_res),loc_names,sum_res,nobs,nmissing,f,n)
+  m <- lapply(m,cbind,1:nLoc(x))
+  m <- as.data.frame(do.call(rbind,m))
+  
+  colnames(m) <- c("popn","locus","sum","nobs","nmissing","frequency","n","loc_order")
+  
+  m$popn <- as.factor(m$popn)
+  m$locus <- as.factor(m$locus)
+  m$sum <- as.numeric(m$sum)
+  m$nobs <- as.numeric(m$nobs)
+  m$nmissing <- as.numeric(m$nmissing)
+  m$frequency <- as.numeric(m$frequency)
+  m$n <- as.numeric(m$n)
+  m$loc_order <- as.numeric(m$loc_order)
+  
+  m <- m[order(m$loc_order,m$popn),]
+  m <- m[,-ncol(m)]
+  
+  rownames(m) <- NULL
   
 # FLAG SCRIPT END
 
