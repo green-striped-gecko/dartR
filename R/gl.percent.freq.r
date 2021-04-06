@@ -7,6 +7,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A matrix with allele (SNP data) or presence/absence frequencies (Tag P/A data) broken down by population and locus
 #' @export
+#' @importFrom plyr
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' m <-  gl.percent.freq(testset.gl)
@@ -15,7 +16,6 @@
 gl.percent.freq<- function(x, verbose=NULL) {
 
 # TRAP COMMAND, SET VERSION
-  
   funname <- match.call()[[1]]
   build <- "Jacob"
   
@@ -66,12 +66,10 @@ gl.percent.freq<- function(x, verbose=NULL) {
     if(!(x@other$loc.metrics.flags$monomorphs==TRUE)){
       if (verbose >= 1) {cat("Warning: Monomorphic loci retained, used in calculations\n")}
     } 
-
 # DO THE JOB
-  
   x2 <- seppop(x)
   x2_list <- lapply(x2,as.matrix)
-  
+
   if(data.type=="SilicoDArT"){
 
     if (verbose >= 2) {
@@ -92,7 +90,7 @@ gl.percent.freq<- function(x, verbose=NULL) {
       cat("  This may take some time -- be patient\n")
     }
   }
-  
+
   loc_names <- lapply(x2_list,colnames)
   
   nmissing_temp <- lapply(x2_list, is.na)
@@ -105,16 +103,17 @@ gl.percent.freq<- function(x, verbose=NULL) {
   nobs <- Map("-",n,nobs_temp)
   
   sum_res <- lapply(x2_list, colSums,na.rm=T)
-  
+
   f <- lapply(x2_list,colMeans, na.rm = T)
-  f <- lapply(f, "/",2)
-  f <- lapply(f, "*",100)
-  f <- lapply(f, "round",2)
-  
+  f <- lapply(f, "/", 2)
+  f <- lapply(f, "*", 100)
+  f <- lapply(f, "round", 2)
+
   m <- Map(cbind,names(sum_res),loc_names,sum_res,nobs,nmissing,f,n)
   m <- lapply(m,cbind,1:nLoc(x))
-  m <- as.data.frame(do.call(rbind,m))
-  
+  m <- lapply(m,as.data.frame)
+  m <- rbind.fill(m)
+
   colnames(m) <- c("popn","locus","sum","nobs","nmissing","frequency","n","loc_order")
   
   m$popn <- as.factor(m$popn)
@@ -130,7 +129,7 @@ gl.percent.freq<- function(x, verbose=NULL) {
   m <- m[,-ncol(m)]
   
   rownames(m) <- NULL
-  
+
 # FLAG SCRIPT END
 
   if (verbose >= 1) {
@@ -140,4 +139,4 @@ gl.percent.freq<- function(x, verbose=NULL) {
   return(m)
   
   }
-}
+
