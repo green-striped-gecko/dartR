@@ -4,21 +4,23 @@
 \alias{gl.read.vcf}
 \title{Converts a vcf file into a genlight object}
 \usage{
-gl.read.vcf(vcffile, verbose = 1, installed = FALSE)
+gl.read.vcf(vcffile, verbose = 2)
 }
 \arguments{
 \item{vcffile}{-- a vcf file (works only for diploid data)}
 
 \item{verbose}{set to 2}
-
-\item{installed}{switch to run the function once vcfR package is installed}
 }
 \value{
-A genlight object, with most slots filled.
+A genlight object.
 }
 \description{
-This function needs package vcfR. At the time of writing (August 2020) the package was no longer available from CRAN. To install the package check their github repository. \url{https://github.com/knausb/vcfR}. 
-Once installed uncomment and run with installed=TRUE
+This function needs package vcfR, please install it. The converted genlight object does not have individual metrics. You need to add them 'manually' to the other$ind.metrics slot.
+}
+\examples{
+\dontrun{
+test <- gl.read.vcf("your_data.vcf")
+}
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

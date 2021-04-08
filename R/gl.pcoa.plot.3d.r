@@ -1,49 +1,43 @@
 #' 3D interactive plot of the results of a PCoA ordination
 #'
 #' This script takes output from the ordination undertaken using gl.pcoa() and plots the individuals in 3D space. The visualisation
-#' can be rotated with the mouse to examine the structure.
+#' can be rotated, zoomed in and zoomed out with the mouse to examine the structure.
 #'
 #' The factor scores are taken from the output of gl.pcoa(), an object of class glPca, and the population assignments from the original data file
 #' and plots the specimens in a 3D plot.
 #'
 #' Axes can be specified from the ordination, provided they are within the range of the nfactors value provided to gl.pcoa().
-#'
-#' This script is essentially a wrapper for function pca3d \{pca3d\} maintained by January Weiner.
 #' 
 #' @param glPca -- name of the glPca object containing the factor scores and eigenvalues [required]
-#' @param x -- name of the genlight object or fd object from which the PCoA was generated
-#' @param title -- a title for the plot [default "PCoA"]
+#' @param x -- name of the genlight object or fd object from which the PCoA was generated [required]
 #' @param xaxis -- identify the x axis from those available in the ordination (xaxis <= nfactors) [default 1]
 #' @param yaxis -- identify the y axis from those available in the ordination (yaxis <= nfactors) [default 2]
 #' @param zaxis -- identify the z axis from those available in the ordination (zaxis <= nfactors) [default 3]
-#' @param shape -- shape of the points, one of sphere, tetrahaedron or cube [default "sphere"]
-#' @param radius -- size of the points [default 2]
-#' @param legend -- one of bottomright, bottom, bottomleft, left, topleft, top, topright, right, center [default "bottom"]
+#' @param radius -- size of the points [default 8]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return NULL, plots an interactive 3D plot of the ordination in a separate window
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' library(rgl)  #needed for the example
-#' pcoa <- gl.pcoa(testset.gl, nfactor=5)
-#' gl.pcoa.plot.3d(pcoa, testset.gl, xaxis=1, yaxis=2, zaxis=3)
-
+#' pcoa <- gl.pcoa(possums.gl, nfactor=5)
+#' gl.pcoa.plot.3d(pcoa, possums.gl, xaxis=1, yaxis=2, zaxis=3)
 
 gl.pcoa.plot.3d <- function(glPca, 
                             x, 
-                            title= "PCA", 
-                            xaxis=1, 
-                            yaxis=2, 
-                            zaxis=3,  
-                            shape="sphere", 
-                            radius=2, 
-                            legend="topright", 
+                            xaxis=1,
+                            yaxis=2,
+                            zaxis=3,
+                            radius=8,
                             verbose=NULL) {
 # CHECK IF PACKAGES ARE INSTALLED
-  pkg <- "pca3d"
-  if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package",pkg," needed for this function to work. Please   install it.")
-  } else {
+  pkg <- "dplyr"
+  if (!(requireNamespace(pkg, quietly = TRUE))){
+    stop("Package ",pkg," needed for this function to work. Please install it.")
+    }
+  pkg <- "plotly"
+  if (!(requireNamespace(pkg, quietly = TRUE))){
+    stop("Package ",pkg," needed for this function to work. Please install it.")
+  }else{
 
   
   # TRAP COMMAND, SET VERSION
@@ -100,26 +94,31 @@ gl.pcoa.plot.3d <- function(glPca,
 # FUNCTION SPECIFIC ERROR CHECKING
 
 # DO THE JOB
-                            
-  # Extract the coordinates in a form suitable for pca3d
-    if (verbose >= 2) {cat("  Extracting coordinates of PCoA solution\n")}
-    coords <- cbind(glPca$scores[,xaxis],glPca$scores[,yaxis],glPca$scores[,zaxis])
   
-  # Convert the eigenvalues to percentages
-   s <- sum(glPca$eig)
-   e <- round(glPca$eig*100/s,1)
-  # Create labels for the axes
-   xlab <- paste0("P", xaxis, " (",e[xaxis],"%)")
-   ylab <- paste0("P", yaxis, " (",e[yaxis],"%)")
-   zlab <- paste0("P", zaxis, " (",e[zaxis],"%)")
-  # Create a title
-   #t <- paste("PCoA plot of Axes", xaxis, yaxis,"and",zaxis)
-  # Set the row labels to the population names
-   row.names(glPca$scores) <- as.character(pop(x))
-  # Plot
-    if (verbose >= 2) {cat("  Plotting three specified axes\n")}
-   pca3d::pca3d(coords, shape=shape, radius=radius, group=row.names(glPca$scores), legend=legend, 
-         axe.titles=c(xlab,ylab,zlab))
+  # function to replicate defaults colors of ggplot
+  gg_color_hue <- function(n) {
+    hues = seq(15, 375, length = n + 1)
+    return(hcl(h = hues, l = 65, c = 100)[1:n])
+  }
+  
+  # assigning colors to populations
+  colors_pop <- gg_color_hue(length(levels(pop(x))))
+  names(colors_pop) <- as.character(levels(x$pop))
+  
+  # extracting PCs
+  PCOA_scores <- as.data.frame(glPca$scores)
+  PCOA_scores$pop <- x$pop
+ 
+  # PCA 3D
+  print(
+  plotly::plot_ly(PCOA_scores,x=~PCOA_scores[,xaxis],y=~PCOA_scores[,yaxis],z=~PCOA_scores[,zaxis],
+          marker = list(size = radius),colors = colors_pop, text=indNames(x)) %>% 
+    plotly::add_markers(color=~pop)%>% 
+    plotly::layout(legend=list(title=list(text='Populations')),
+           scene = list(xaxis = list(title = paste0('PC ',xaxis),titlefont = list(size = 25)),
+                        yaxis = list(title = paste0('PC ',yaxis),titlefont = list(size = 25)),
+                        zaxis = list(title = paste0('PC ',zaxis),titlefont = list(size = 25))))
+  )
 
 # FLAG SCRIPT END
 

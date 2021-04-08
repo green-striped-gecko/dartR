@@ -90,7 +90,12 @@ gl.filter.overshoot <- function(x, verbose=NULL) {
   if (verbose >= 2){
     cat("  Deleting loci with SNPs falling outside the trimmed sequence\n")
   }
-  xx <- x[,snpos <= nchar(trimmed)]
+  # extracting indexes of loci to keep
+  index <- which((snpos <= nchar(trimmed)) == TRUE)
+  # loci to keep
+  xx <- x[, index]
+  # updating loc.metrics
+  xx@other$loc.metrics <- x@other$loc.metrics[index, ]
  
 # ADD TO HISTORY
   nh <- length(xx@other$history)

@@ -21,11 +21,11 @@ gl.plot.heatmap <- function(D,verbose=NULL){
 # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "RColorBrewer"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package",pkg," needed for this function to work. Please install it.") } 
+    stop("Package ",pkg," needed for this function to work. Please install it.") } 
   
   pkg <- "pheatmap"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package",pkg," needed for this function to work. Please install it.") } 
+    stop("Package ",pkg," needed for this function to work. Please install it.") } 
   
   
 # TRAP COMMAND, SET VERSION

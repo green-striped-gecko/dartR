@@ -28,7 +28,7 @@
 #'@param verbose -- verbosity. If zero silent, max 3.
 #'@return NULL 
 #'@importFrom grDevices rgb
-#'@importFrom graphics legend
+#'@importFrom graphics legend plot
 #'@export
 #'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'  

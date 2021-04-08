@@ -81,7 +81,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
 
 # DO THE JOB
 
-  layout(1,1)
+  graphics::layout(1,1)
   
 # Recalculate the relevant loc.metrics
   
@@ -131,7 +131,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
     maf <- x@other$loc.metrics$maf
   }
     if (flag == 1){
-      layout(matrix(c(1,1,1,2,3,4,5,6,7), 3, 3, byrow = TRUE))
+      graphics::layout(matrix(c(1,1,1,2,3,4,5,6,7), 3, 3, byrow = TRUE))
     }
     hist(maf, 
          #breaks=seq(0,0.5,0.05), 
@@ -165,7 +165,7 @@ gl.report.maf <- function(x, maf.limit=0.5, ind.limit=5, loc.limit=30, verbose =
       }
         
       if (plot.count == 7) {
-        layout(matrix(c(1,2,3,4,5,6,7,8,9), 3, 3, byrow = TRUE))
+        graphics::layout(matrix(c(1,2,3,4,5,6,7,8,9), 3, 3, byrow = TRUE))
         cat ("  Overflow of plots across multiple pages\n") 
       }
         

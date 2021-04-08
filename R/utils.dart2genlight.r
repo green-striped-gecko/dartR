@@ -213,7 +213,7 @@ if (!is.null(ind.metafile)){
 # known.col <- ifelse(is.na(known.col), , known.col)
 # other.col <- names(ind.cov)[!known.col]
   other.col <- names(ind.cov)
- if (length(other.col>0) ){
+ if (length(other.col)>0 ){
     gout@other$ind.metrics<-ind.cov[ord,other.col, drop=FALSE]
     rownames(gout@other$ind.metrics) <- ind.cov[ord,id.col]
     if (verbose >= 2){

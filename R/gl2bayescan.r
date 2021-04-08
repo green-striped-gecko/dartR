@@ -71,6 +71,9 @@ gl2bayescan <- function(x, outfile="bayescan.txt", outpath=tempdir(), verbose=NU
 # Prepare the data  
   mat <- gl.percent.freq(x, verbose=verbose)
   mat <- mat[order(mat$popn),]
+  
+# convert to character so it can be used in the for loop
+  mat$popn <- as.character(mat$popn)
 
 # Create the bayescan input file  
   if (verbose >= 2) {cat(paste("Writing text input file for Bayescan",outfilespec,"\n"))}
@@ -79,14 +82,25 @@ gl2bayescan <- function(x, outfile="bayescan.txt", outpath=tempdir(), verbose=NU
   cat(paste0("[loci]=",nLoc(x)),"\n\n")
   cat(paste0("[populations]=",nPop(x)),"\n\n")
 
-  for (i in 1:nPop(x)){
-    cat(paste0("[pop]=",i),"\n")
-    popi <- mat[mat$popn==mat$popn[i],]
-    for (j in 1:length(popi$popn)){
-      cat(j,(2*popi$nobs[j]),2,popi$sum[j],(2*popi$nobs[j]-popi$sum[j]),"\n")
+# creating a counter to be used in the for loop
+  pop_id <- 0
+# adding  one parenthesis that was missing and using pop names in the for loop 
+  # for (i in 1:nPop(x)) {
+    for (i in as.character(unique(pop(x)))){
+        # counter
+         pop_id <- pop_id + 1
+        # change the variable used in the loop
+        # cat(paste0("[pop]=", i), "\n")
+        cat(paste0("[pop]=", pop_id), "\n")
+        # change the variable used in the loop
+        # popi <- mat[mat$popn == mat$popn[i], ]
+        popi <- mat[mat$popn == i, ]
+        for (j in 1:length(popi$popn)) {
+            cat(j, (2 * popi$nobs[j]), 2, popi$sum[j], (2 * popi$nobs[j] - 
+                popi$sum[j]), "\n")
+        }
+        cat("\n")
     }
-    cat("\n")
-  }
   
   sink()
 

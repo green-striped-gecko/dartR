@@ -55,13 +55,13 @@
 #' best modern reference is Legendre & Legendre (1998).
 #' 
 #' @references
-#' Cailliez, F. (1983) The analytical solution of the additive constant problem. Psychometrika, 48, 305–308.
-#' Gower, J. C. (1966) Some distance properties of latent root and vector methods used in multivariate analysis. Biometrika, 53, 325–338.
+#' Cailliez, F. (1983) The analytical solution of the additive constant problem. Psychometrika, 48, 305-308.
+#' Gower, J. C. (1966) Some distance properties of latent root and vector methods used in multivariate analysis. Biometrika, 53, 325-338.
 #' Hotelling, H., 1933. Analysis of a complex of statistical variables into Principal Components. Journal of Educational Psychology 24:417-441, 498-520.
 #' Jolliffe, I. (2002) Principal Component Analysis. 2nd Edition, Springer, New York. 
 #' Ledoit, O. and Wolf, M. (2018). Analytical nonlinear shrinkage of large-dimensional covariance matrices. University of Zurich, Department of Economics, Working Paper No. 264, Revised version. Available at SSRN: https://ssrn.com/abstract=3047302 or http://dx.doi.org/10.2139/ssrn.3047302 
 #' Legendre, P. and Legendre, L. (1998). Numerical Ecology, Volume 24, 2nd Edition. Elsevier Science, NY.
-#' Lingoes, J. C. (1971) Some boundary conditions for a monotone analysis of symmetric matrices. Psychometrika, 36, 195–203.
+#' Lingoes, J. C. (1971) Some boundary conditions for a monotone analysis of symmetric matrices. Psychometrika, 36, 195-203.
 #' Pearson, K. (1901). On lines and planes of closest fit to systems of points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp. 559-572.
 #'  
 #' @param x -- name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required]

@@ -4,26 +4,14 @@
 \alias{gl.dist.ind}
 \title{Calculate a distance matrix for individuals defined in an \{adegenet\} genlight object}
 \usage{
-gl.dist.ind(
-  x,
-  method = NULL,
-  plot = TRUE,
-  boxplot = "standard",
-  range = 1.5,
-  verbose = NULL
-)
+gl.dist.ind(x, method = NULL, plot = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes [required]}
 
 \item{method}{-- Specify distance measure [SNP: Euclidean; P/A: Simple]}
 
-\item{plot}{-- if TRUE, display a histogram of the genetic distances, and a whisker plot [TRUE]}
-
-\item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
-plots a boxplot adjusted for skewed distributions ['standard']}
-
-\item{range}{-- specifies the range for delimiting outliers [1.5 interquartile ranges]}
+\item{plot}{-- if TRUE, display a histogram and a boxplot of the genetic distances [TRUE]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
@@ -38,7 +26,7 @@ differences) distance.
 \details{
 The distance measure for SNP data can be one of 
 
- Euclidean -- eclidean distance as computed by dist() in {stat}
+ Euclidean -- Euclidean distance as computed by dist() in {stat}
  locus.count -- number of loci for which individuals differ, as implemented by dist.gene() in {ape}
  allele.count -- number of allelic differences between two individuals, as implemented by diss.dist() in {poppr}
  relatedness -- genetic relatedness between individuals (G matrix), as implemented by A.mat() in {rrBLUP}
