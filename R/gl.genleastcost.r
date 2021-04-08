@@ -10,7 +10,6 @@
 #' @param theta value needed for rSPDistance function. see \code{\link[gdistance]{rSPDistance}} in package \code{gdistance}.
 #' @importFrom PopGenReport lgrMMRR wassermann gd.smouse gd.kosman
 #' @importFrom stats step
-#' @importFrom raster plot
 #' @importFrom sp Line Lines SpatialLines SpatialLinesLengths
 #' @return returns a list that consists of four pairwise distance matrixes (Euclidean, Cost, length of path and genetic) and the actual paths as spatial line objects.
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})

@@ -108,12 +108,12 @@ gl.pcoa.plot.3d <- function(glPca,
   # extracting PCs
   PCOA_scores <- as.data.frame(glPca$scores)
   PCOA_scores$pop <- x$pop
-  
+ 
   # PCA 3D
   print(
   plotly::plot_ly(PCOA_scores,x=~PCOA_scores[,xaxis],y=~PCOA_scores[,yaxis],z=~PCOA_scores[,zaxis],
-          marker = list(size = radius),colors = colors_pop) %>% 
-    plotly::add_markers(color=~pop)%>%
+          marker = list(size = radius),colors = colors_pop, text=indNames(x)) %>% 
+    plotly::add_markers(color=~pop)%>% 
     plotly::layout(legend=list(title=list(text='Populations')),
            scene = list(xaxis = list(title = paste0('PC ',xaxis),titlefont = list(size = 25)),
                         yaxis = list(title = paste0('PC ',yaxis),titlefont = list(size = 25)),
