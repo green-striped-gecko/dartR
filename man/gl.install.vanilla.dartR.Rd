@@ -11,8 +11,10 @@ gl.install.vanilla.dartR(flavour = NULL, verbose = TRUE)
 \arguments{
 \item{flavour}{-- If and which version of R you want to install. If NULL then only needed packages for the current version will be installed. If "CRAN" current CRAN version will be installed. "master" installs the GitHub master branch and "dev" installs the experimental development branch from GitHub.}
 
-\item{verbose}{returns information on packages and dartR versions
-@return returns a message if the installation was successful/required}
+\item{verbose}{returns information on packages and dartR versions}
+}
+\value{
+returns a message if the installation was successful/required
 }
 \description{
 This functions installs all required packages for using all functions available in dartR
