@@ -8,10 +8,8 @@
 #' @param pathtype Type of cost distance to be calculated (based on function in the \code{gdistance} package. Available distances are 'leastcost', 'commute' or 'rSPDistance'. See functions in the gdistance package for futher explanations. If the path type is set to 'leastcost' then paths and also pathlength are returned.
 #' @param plotpath switch if least cost paths should be plotted (works only if pathtype='leastcost'. Be aware this slows down the computation, but it is recommended to do this to check least cost paths visually.
 #' @param theta value needed for rSPDistance function. see \code{\link[gdistance]{rSPDistance}} in package \code{gdistance}.
-#' @importFrom mmod pairwise_D pairwise_Gst_Hedrick pairwise_Gst_Nei
 #' @importFrom PopGenReport lgrMMRR wassermann gd.smouse gd.kosman
 #' @importFrom stats step
-#' @importFrom raster plot
 #' @importFrom sp Line Lines SpatialLines SpatialLinesLengths
 #' @return returns a list that consists of four pairwise distance matrixes (Euclidean, Cost, length of path and genetic) and the actual paths as spatial line objects.
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
@@ -39,7 +37,11 @@ gl.genleastcost <- function(x, fric.raster, gen.distance, NN=NULL, pathtype="lea
   pkg <- "gdistance"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop("Package",pkg," needed for this function to work. Please install it.") } 
-  
+  pkg <- "mmod"
+  if (!(requireNamespace(pkg, quietly = TRUE))){
+    stop("Package ",pkg," needed for this function to work. Please install it.")
+    }
+
 
 
   if (is.null(NN) & pathtype=="leastcost") 
@@ -182,15 +184,15 @@ xx <- gl2gi(x, verbose=0)
 
 if (gen.distance=="Gst.Nei")
 {
-gendist.mat<-as.matrix(pairwise_Gst_Nei(xx))
+gendist.mat<-as.matrix(mmod::pairwise_Gst_Nei(xx))
 }
 if (gen.distance=="Gst.Hedrick")
 {
-gendist.mat<-as.matrix(pairwise_Gst_Hedrick(xx))
+gendist.mat<-as.matrix(mmod::pairwise_Gst_Hedrick(xx))
 }
 if (gen.distance=="D")
 {
-gendist.mat<-as.matrix(pairwise_D(xx))
+gendist.mat<-as.matrix(mmod::pairwise_D(xx))
 }
 
 if (gen.distance=="Smouse")

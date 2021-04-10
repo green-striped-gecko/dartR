@@ -79,7 +79,7 @@ gl.recode.ind <- function(x, ind.recode, recalc=FALSE, mono.rm=FALSE, verbose=NU
   }
   
 # SCRIPT SPECIFIC ERROR CHECKING
-  
+  # change stringsAsFactors=FALSE due to the new default in r
   recode.table <- read.csv(ind.recode,  header=FALSE, stringsAsFactors = FALSE)
   
   v1 <- unique(indNames(x))
