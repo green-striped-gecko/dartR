@@ -70,6 +70,14 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
     lmet  <- lastmetric
   }  
   
+  # extracting service information
+  service <- tdummy[1,(lmet+1):ncol(tdummy)]
+  # extracting plate information
+  plate <- unlist(unname(tdummy[3,(lmet+1):ncol(tdummy)]))
+  plate_row <- unlist(unname(tdummy[4,(lmet+1):ncol(tdummy)]))
+  plate_col <- unlist(unname(tdummy[5,(lmet+1):ncol(tdummy)]))
+  plate_location <- paste0(plate,"-",plate_row,plate_col)
+  
   ind.names <- colnames(snpraw)[(lmet+1):ncol(snpraw) ]
   ind.names <- trimws(ind.names, which = "both") #trim for spaces
   if (length(ind.names)!= length(unique(ind.names))) {
@@ -150,7 +158,7 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
     cat(paste("Recognised:", nind, "individuals and",nsnp," SNPs in a",nrows,"row format using", filename,"\n"))
   }
   
-  out <- list(nrows=nrows, nind=nind, nsnp=nsnp, covmetrics= covmetrics, gendata =datas)
+  out <- list(nrows=nrows, nind=nind, nsnp=nsnp, covmetrics= covmetrics, gendata =datas,service=service, plate_location = plate_location)
   
 # FLAG SCRIPT END
   
@@ -161,3 +169,4 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
   return(out)
   
 }
+
