@@ -9,8 +9,11 @@
 #' @return a genlight object is returned. Including all available slots are filled. loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
 #' @details the ind.metadata file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (perferable in decimal degrees WGS1984 format). Additional columns with individual metadata can be imported (e.g. age, gender).
 
-
-utils.dart2genlight <- function(dart, ind.metafile=NULL, covfilename=NULL, probar = TRUE, verbose=2){
+utils.dart2genlight <- function(dart,
+                                ind.metafile=NULL,
+                                covfilename=NULL, 
+                                probar = TRUE, 
+                                verbose=2){
 
 # TRAP COMMAND, SET VERSION
   
