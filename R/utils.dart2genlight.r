@@ -47,6 +47,8 @@ nind <- dart[["nind"]]
 nsnp <- dart[["nsnp"]]
 sraw <- dart[["covmetrics"]]
 nrows <- dart[["nrows"]] #check if nrows are provided...
+service <- as.character(unlist(unname(dart[["service"]])))
+plate_location <-  as.character(unlist(unname(dart[["plate_location"]])))
 
 
 if (is.null(nrows)){
@@ -120,6 +122,9 @@ if (probar) close(pb)
 df <- as.data.frame(lapply( sraw[esl,], function (x) if (is.factor(x)) factor(x) else x)) 
 
 gout@other$loc.metrics <- df
+df_ind.metrics <- as.data.frame(matrix(nrow = nInd(gout),ncol = 2))
+colnames(df_ind.metrics) <- c("service","plate_location")
+gout@other$ind.metrics <- df_ind.metrics
 
 ####
 #additional metadata and long lat to the data file are stored in other
@@ -171,12 +176,15 @@ if (!is.null(ind.metafile)){
       }
       ord2 <- match(ind.cov[ord,id.col], indNames(gout))
       gout <- gout[ord2,]
+      service <- service[ord2]
+      plate_location <- plate_location[ord2]
     } else{
       stop("Fatal Error: Individual ids are not matching!!!!\n")
     }
   }
 
-
+ ind.cov$service <- service
+ ind.cov$plate_location <- plate_location
  pop.col = match( "pop", names(ind.cov))
 
  if (is.na(pop.col)) {
@@ -221,6 +229,9 @@ if (!is.null(ind.metafile)){
     }
   }
 }
+
+gout@other$ind.metrics$service <- service
+gout@other$ind.metrics$plate_location <- plate_location
 
 # FLAG SCRIPT END
 
