@@ -4,11 +4,19 @@
 #' @param filename path to file (csv file only currently)
 #' @param nas a character specifying NAs (default is "-")
 #' @param topskip a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.
+#' @param service_row the row number in which the information of the DArT service is contained [1]
+#' @param plate_row the row number in which the information of the plate location is contained [3]
 #' @param lastmetric specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a list of length 5. #dart format (one or two rows) #individuals, #snps, #non genetic metrics, #genetic data (still two line format, rows=snps, columns=individuals)
 
-utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="RepAvg",verbose=2){
+utils.read.dart <- function(filename, 
+                            nas = "-", 
+                            topskip=NULL,  
+                            lastmetric ="RepAvg",
+                            service_row =1,
+                            plate_row=3,
+                            verbose=2){
   
 # TRAP COMMAND, SET VERSION
   
@@ -71,12 +79,12 @@ utils.read.dart <- function(filename, nas = "-", topskip=NULL,  lastmetric ="Rep
   }  
   
   # extracting service information
-  service <- tdummy[1,(lmet+1):ncol(tdummy)]
+  service <- tdummy[service_row,(lmet+1):ncol(tdummy)]
   # extracting plate information
-  plate <- unlist(unname(tdummy[3,(lmet+1):ncol(tdummy)]))
-  plate_row <- unlist(unname(tdummy[4,(lmet+1):ncol(tdummy)]))
-  plate_col <- unlist(unname(tdummy[5,(lmet+1):ncol(tdummy)]))
-  plate_location <- paste0(plate,"-",plate_row,plate_col)
+  plate <- unlist(unname(tdummy[plate_row,(lmet+1):ncol(tdummy)]))
+  plate_row_res <- unlist(unname(tdummy[(plate_row+1),(lmet+1):ncol(tdummy)]))
+  plate_col_res <- unlist(unname(tdummy[(plate_row+2),(lmet+1):ncol(tdummy)]))
+  plate_location <- paste0(plate,"-",plate_row_res,plate_col_res)
   
   ind.names <- colnames(snpraw)[(lmet+1):ncol(snpraw) ]
   ind.names <- trimws(ind.names, which = "both") #trim for spaces
