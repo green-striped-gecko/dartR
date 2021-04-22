@@ -4,12 +4,12 @@
 \alias{gi2gl}
 \title{Converts a genind object to genlight object}
 \usage{
-gi2gl(gi, parallel = TRUE, verbose = NULL)
+gi2gl(gi, parallel = FALSE, verbose = NULL)
 }
 \arguments{
 \item{gi}{-- a genind object}
 
-\item{parallel}{-- switch to deactivate parallel version. Default set to TRUE. Only for testing purpose.}
+\item{parallel}{-- switch to deactivate parallel version. Default set to FALSE. Might not be worth to run it parallel most of the times.}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
