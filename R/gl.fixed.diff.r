@@ -51,6 +51,7 @@
 #'         [[7]] $sdfpos -- if test=TRUE, the standard deviation of the count of false positives for each comparison [by simulation];
 #'         [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
 #' @import utils
+#' @importfrom spaa dist2list
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -182,7 +183,7 @@ gl.fixed.diff <- function(x,
     if (verbose >= 2 & pb){
       progress <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
       getTxtProgressBar(progress)
-      cat("\n")
+      cat("\n\n")
     }
     
     # Cycle through the data to sum the fixed differences into a square matrix
@@ -257,6 +258,19 @@ gl.fixed.diff <- function(x,
       }    
       if (verbose >= 2 & pb){setTxtProgressBar(progress, popi/(npops-1))}
     }
+ 
+  # Return the extreme low distances -- candidates for lack of significance
+    if (verbose >= 3) {
+      cat("\nDisplaying a list of 5% of pairs with smallest non-zero differences\n")
+      df <- spaa::dist2list(as.dist(fixed.matrix))
+      df <- df[!df$col==df$row,]
+      #df <- df[!df$value<=tpop,]
+      pctile <- quantile(df$value[df$value>0],probs=0.05)
+      df <- df[df$value<=pctile,]
+      df <- df[order(df$value),]
+      print(df)
+      cat("\n")
+    }
 
   # Return the matricies
     if (verbose >= 4) {
@@ -269,9 +283,11 @@ gl.fixed.diff <- function(x,
       "         [[5]] $nloc -- total number of loci used in each comparison;\n",
       "         [[6]] $expfpos -- if test=TRUE, the expected count of false positives for each comparison [by simulation]\n",
       "         [[7]] $sdfpos -- if test=TRUE, the expected count of false positives for each comparison [by simulation]\n",
-      "         [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n")
+      "         [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n\n")
     }
-    
+
+    fixed.matrix <- as.dist(fixed.matrix)
+    pcfixed.matrix <- as.dist(pcfixed.matrix)
     l <- list(gl=x,fd=fixed.matrix,pcfd=pcfixed.matrix,nobs=ind.count.matrix,nloc=loc.count.matrix,expfpos=exp.matrix,sdfpos=sd.matrix,pval=p.false.pos.matrix)
     class(l) <- "fd"
     
