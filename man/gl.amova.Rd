@@ -4,12 +4,12 @@
 \alias{gl.amova}
 \title{Performs and AMOVA using genlight data.}
 \usage{
-gl.amova(x, dist = NULL, permutations = 100)
+gl.amova(x, distance = NULL, permutations = 100)
 }
 \arguments{
 \item{x}{-- name of the genlight containing the SNP genotypes, with population information [required]}
 
-\item{dist}{-- distance matrix between individuals (if not provided NeisD from StAMPP::stamppNeisD is calculated)}
+\item{distance}{-- distance matrix between individuals (if not provided NeisD from StAMPP::stamppNeisD is calculated)}
 
 \item{permutations}{-- number of permuations to perform for hypothesis testing [default 100]. Please note should be set to 1000 for analysis.]}
 }
