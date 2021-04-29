@@ -1,4 +1,4 @@
-#' Generate a matrix of fixed differences
+#' Generate a matrix of fixed differences and associated statistics for populations taken pairwise
 #'
 #' This script takes SNP data or sequence tag P/A data grouped into populations in a genlight object (DArTSeq)
 #' and generates a matrix of fixed differences between populations taken pairwise
@@ -19,6 +19,8 @@
 #' fixed for practical purposes. That is, fixed differences in the sample set will be considered to be positives (not false positives)
 #' if they arise from true allele frequencies of less than 1-delta in one or both populations.  The parameter
 #' delta is typically set to be small (e.g. delta = 0.02).
+#' 
+#' NOTE: The above test will only be calculated if tloc=0, that is, for analyses of absolute fixed differences.
 #'
 #' An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
 #' level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
@@ -131,6 +133,9 @@ gl.fixed.diff <- function(x,
   if (tloc > 0.5 || tloc < 0 ) {
     stop("Fatal Error: Parameter tloc should be positive in the range 0 to 0.5\n")
   }  
+  if(!(tloc == 0) & test=TRUE){
+    cat("  Warning: false positives can only be simulated for tloc=0, setting tloc to zero\n")
+  }
   
   if ( verbose >= 2){
     if (tloc > 0) {cat("  Comparing populations for fixed differences with tolerance",tloc,"\n")}
@@ -228,6 +233,11 @@ gl.fixed.diff <- function(x,
           
         # Calculate the probability that the observed differences are false positives
             if (test) {
+            if(tloc != 0){
+              cat("  Setting tloc to zero\n")
+              tloc.hold <- tloc
+              tloc <- 0
+            }
             outlist <- gl.utils.fdsim(x,c(levels(pop(x))[popi],levels(pop(x))[popj]),obs=fixed.matrix[popi,popj],delta=delta,reps=reps,verbose=0)
             p.false.pos.matrix[popi,popj] <- round(outlist$prob,4)
             exp.matrix[popi,popj] <- round(outlist$mnexpected,1)
