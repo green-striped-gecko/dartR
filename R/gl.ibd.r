@@ -9,7 +9,7 @@
 #' @importFrom graphics abline title points
 #' @importFrom stats as.dist lm
 #' @importFrom StAMPP stamppFst
-#' @param gl genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed
+#' @param x genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed
 #' @param Dgen genetic distance matrix if no genlight object with coordinates is provided
 #' @param Dgeo Euclidean distance matrix if no genlight object is provided
 #' @param projected Switch to indicate that coordinates are already projected (not in lat long) and therefore no projection is carried out. Default is FALSE, so it is assumed coordinates are in lat/longs.
@@ -29,9 +29,24 @@
 #' }
 
 
-gl.ibd <- function(gl=NULL, Dgen=NULL, Dgeo=NULL, projected=FALSE, permutations=999, plot=TRUE) {
+gl.ibd <- 
+  function(x, 
+           Dgen=NULL, 
+           Dgeo=NULL, 
+           projected=FALSE, 
+           permutations=999, 
+           plot=TRUE) {
 
-# CHECK IF PACKAGES ARE INSTALLED
+    # TRAP COMMAND, SET VERSION
+    #funname <- match.call()[[1]]
+    #build <- "Jacob"
+    
+    # ERROR CHECKING
+    #x <- utils.check.gl(x,verbose)
+    #verbose <- x@other$verbose
+    
+    
+  # CHECK IF PACKAGES ARE INSTALLED
   if (!(requireNamespace("dismo", quietly = TRUE))) {
     stop("Package dismo needed for this function to work. Please install it.") } else {
   
@@ -39,33 +54,33 @@ gl.ibd <- function(gl=NULL, Dgen=NULL, Dgeo=NULL, projected=FALSE, permutations=
 if (!is.null(Dgen) & !is.null(Dgeo)) cat("Analysis performed on provided genetic and Euclidean distance matrices.")
 
 
-if (class(gl)=="genlight") 
+if (class(x)=="genlight") 
 {
   cat("Standard analysis performed on the genlight object. Mantel test and plot will be Fst/1-Fst versus log(distance)\n")
-if (nrow(gl@other$latlong)!=nInd(gl)) stop("Cannot find coordinates for each individual in slot @other$latlong")
+if (nrow(x@other$latlong)!=nInd(x)) stop("Cannot find coordinates for each individual in slot @other$latlong")
 #rename long to lon if necessary
-if  (sum(match(names(gl@other$latlong),"long"), na.rm=T)==1) gl@other$latlong$lon <- gl@other$latlong$long
+if  (sum(match(names(x@other$latlong),"long"), na.rm=T)==1) x@other$latlong$lon <- x@other$latlong$long
 
   
 #project coordinates into Mercator () needs lon/lat order
 if (!projected) {
-  xy <- dismo::Mercator(gl@other$latlong[,c("lon","lat")]) 
+  xy <- dismo::Mercator(x@other$latlong[,c("lon","lat")]) 
   cat("Coordinates transformed to Mercator (google) projection to calculate distances in meters.\n")
   } else 
   {
-  xy=gl@other$latlong[,c("lon","lat")]
+  xy=x@other$latlong[,c("lon","lat")]
   cat("Coordinates not transformed. Distances calculated on the provided coordinates.")
   }
 
-pop.xy <- apply(xy, 2, function(a) tapply(a, pop(gl), mean, na.rm=T) )
+pop.xy <- apply(xy, 2, function(a) tapply(a, pop(x), mean, na.rm=T) )
 Dgeo <- dist(pop.xy)
 Dgeo <- log(Dgeo)
-Dgen <- as.dist(stamppFst(gl, nboots=1))
+Dgen <- as.dist(StAMPP::stamppFst(x, nboots=1))
 Dgen <- Dgen/(1-Dgen)
 
 ### order both matrices to be alphabetically as levels in genlight
 
-ordering <- levels(pop(gl))
+ordering <- levels(pop(x))
 Dgen <- as.dist(as.matrix(Dgen)[ordering, ordering])
 Dgeo <- as.dist(as.matrix(Dgeo)[ordering, ordering])
 }
@@ -86,23 +101,23 @@ if (sum(is.na(Dgeo)) > 0 | sum(is.infinite(Dgeo)) > 0 ) {
 }
 
 
-manteltest <- mantel(Dgen, Dgeo, na.rm=TRUE, permutations = 999)
+manteltest <- vegan::mantel(Dgen, Dgeo, na.rm=TRUE, permutations = 999)
 print(manteltest)
 
 if (plot) 
   {
   if (!miss) {
   # from adegenet tutorial
-  dens <- kde2d(Dgeo,Dgen, n=300)
+  dens <- MASS::kde2d(as.numeric(Dgeo),as.numeric(Dgen), n=300)
   myPal <- colorRampPalette(c("white","blue","gold", "orange", "red"))
   plot(Dgeo, Dgen, pch=20,cex=0.8)
   image(dens, col=transp(myPal(300),.7), add=TRUE)
   points(Dgeo, Dgen, pch=20,cex=0.8)
-  abline(lm(Dgen~Dgeo))
+  abline(lm(as.numeric(Dgen)~as.numeric(Dgeo)))
   title("Isolation by distance")
   } else {
     plot(Dgeo, Dgen)
-    abline(lm(Dgen~Dgeo))
+    abline(lm(as.numeric(Dgen)~as.numeric(Dgeo)))
     title("Isolation by distance")
   }
   

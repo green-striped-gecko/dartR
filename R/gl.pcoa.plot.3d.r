@@ -98,7 +98,7 @@ gl.pcoa.plot.3d <- function(glPca,
   # function to replicate defaults colors of ggplot
   gg_color_hue <- function(n) {
     hues = seq(15, 375, length = n + 1)
-    hcl(h = hues, l = 65, c = 100)[1:n]
+    return(hcl(h = hues, l = 65, c = 100)[1:n])
   }
   
   # assigning colors to populations
@@ -108,13 +108,13 @@ gl.pcoa.plot.3d <- function(glPca,
   # extracting PCs
   PCOA_scores <- as.data.frame(glPca$scores)
   PCOA_scores$pop <- x$pop
-  
+ 
   # PCA 3D
   print(
-  plot_ly(PCOA_scores,x=~PCOA_scores[,xaxis],y=~PCOA_scores[,yaxis],z=~PCOA_scores[,zaxis],
-          marker = list(size = radius),colors = colors_pop)%>% 
-    add_markers(color=~pop)%>%
-    layout(legend=list(title=list(text='<b> Populations <b>')),
+  plotly::plot_ly(PCOA_scores,x=~PCOA_scores[,xaxis],y=~PCOA_scores[,yaxis],z=~PCOA_scores[,zaxis],
+          marker = list(size = radius),colors = colors_pop, text=indNames(x)) %>% 
+    plotly::add_markers(color=~pop)%>% 
+    plotly::layout(legend=list(title=list(text='Populations')),
            scene = list(xaxis = list(title = paste0('PC ',xaxis),titlefont = list(size = 25)),
                         yaxis = list(title = paste0('PC ',yaxis),titlefont = list(size = 25)),
                         zaxis = list(title = paste0('PC ',zaxis),titlefont = list(size = 25))))

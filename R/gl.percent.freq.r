@@ -7,7 +7,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A matrix with allele (SNP data) or presence/absence frequencies (Tag P/A data) broken down by population and locus
 #' @export
-#' @importFrom plyr
+# #' @importFrom plyr
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' m <-  gl.percent.freq(testset.gl)
@@ -118,12 +118,12 @@ gl.percent.freq<- function(x, verbose=NULL) {
   
   m$popn <- as.factor(m$popn)
   m$locus <- as.factor(m$locus)
-  m$sum <- as.numeric(m$sum)
-  m$nobs <- as.numeric(m$nobs)
-  m$nmissing <- as.numeric(m$nmissing)
-  m$frequency <- as.numeric(m$frequency)
-  m$n <- as.numeric(m$n)
-  m$loc_order <- as.numeric(m$loc_order)
+  m$sum <- as.numeric(as.character(m$sum))
+  m$nobs <- as.numeric(as.character(m$nobs))
+  m$nmissing <- as.numeric(as.character(m$nmissing))
+  m$frequency <- as.numeric(as.character(m$frequency))
+  m$n <- as.numeric(as.character(m$n))
+  m$loc_order <- as.numeric(as.character(m$loc_order))
   
   m <- m[order(m$loc_order,m$popn),]
   m <- m[,-ncol(m)]

@@ -111,7 +111,7 @@ if (data.type == "SNP"){
   
   # Calculate euclidean distance using dist {adegenet}
     if (method == 'euclidean'){
-      dd <- stats::dist(bandicoot.gl)
+      dd <- stats::dist(x)
       if (verbose >= 2){
         cat("  Calculating Euclidean Distances between individuals\n")
       }
@@ -149,7 +149,7 @@ if (data.type == "SNP"){
     dd <- as.dist(dd) 
     
   # Revert to original order  
-    ord <- rank(pop(bandicoot.gl))
+    ord <- rank(pop(x))
     mat <- as.matrix(dd)[ord, ord]
     dd <- as.dist(mat)
     
@@ -185,9 +185,9 @@ if (data.type == "SilicoDArT"){
       } else {
         title_plot <- paste0("Presence/Absence data (SilicoDArT)\nInter-individual ",method," distance")
       }  
-      
-      df_plot <- as.data.frame(as.vector(mat))
-      colnames(df_plot) <- "values"
+      values <- NULL
+      df_plot <- data.frame(values =as.vector(mat))
+      #colnames(df_plot) <- "values"
       
   p1 <- ggplot(df_plot,aes(y=values)) +
     geom_boxplot(fill="red") +

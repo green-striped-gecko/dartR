@@ -5,6 +5,7 @@
 #' @param verbose set to 2
 #' @return A genlight object.
 #' @export
+#@importFrom vcfR read.vcfR vcfR2genlight
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \dontrun{

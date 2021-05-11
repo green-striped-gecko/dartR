@@ -8,6 +8,7 @@ gl.report.ld(
   x,
   name = NULL,
   save = TRUE,
+  outpath = tempdir(),
   nchunks = 2,
   ncores = 1,
   chunkname = NULL,
@@ -21,6 +22,8 @@ gl.report.ld(
 \item{name}{character string for rdata file. If not given genind object name is used}
 
 \item{save}{switch if results are saved in a file}
+
+\item{outpath}{folder where chunks and results are saved (if save=TRUE). Default it tempdir()}
 
 \item{nchunks}{how many subchunks will be used (the less the faster, but if the routine crashes more bits are lost}
 

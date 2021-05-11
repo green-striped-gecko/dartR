@@ -5,7 +5,7 @@
 \title{Isolation by distance}
 \usage{
 gl.ibd(
-  gl = NULL,
+  x,
   Dgen = NULL,
   Dgeo = NULL,
   projected = FALSE,
@@ -14,7 +14,7 @@ gl.ibd(
 )
 }
 \arguments{
-\item{gl}{genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed}
+\item{x}{genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed}
 
 \item{Dgen}{genetic distance matrix if no genlight object with coordinates is provided}
 

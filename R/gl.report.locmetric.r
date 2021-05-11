@@ -4,7 +4,7 @@
 #' The fields that are included in dartR, and a short description, are found below. Optionally, the user can also set his/her own field by adding a vector into $other$loc.metrics as shown in the example. You can check the names of all available loc.metrics via: names(gl$other$loc.metrics).
 #' 
 #' - SnpPosition - position (zero is position 1) in the sequence tag of the defined SNP variant base 
-#' - CallRate - proportion of samples for which the genotype call is non‐ missing (that is, not “‐” ) 
+#' - CallRate - proportion of samples for which the genotype call is non- missing (that is, not '-' ) 
 #' - OneRatioRef - proportion of samples for which the genotype score is 0 
 #' - OneRatioSnp - proportion of samples for which the genotype score is 2 
 #' - FreqHomRef - proportion of samples homozygous for the Reference allele 
@@ -13,8 +13,8 @@
 #' - PICRef - polymorphism information content (PIC) for the Reference allele 
 #' - PICSnp - polymorphism information content (PIC) for the SNP 
 #' - AvgPIC - average of the polymorphism information content (PIC) of the Reference and SNP alleles 
-#' - AvgCountRef - sum of the tag read counts for all samples, divided by the number of samples with non‐zero tag read counts, for the Reference allele row 
-#' - AvgCountSnp - sum of the tag read counts for all samples, divided by the number of samples with non‐zero tag read counts, for the Alternate (SNP) allele row 
+#' - AvgCountRef - sum of the tag read counts for all samples, divided by the number of samples with non-zero tag read counts, for the Reference allele row 
+#' - AvgCountSnp - sum of the tag read counts for all samples, divided by the number of samples with non-zero tag read counts, for the Alternate (SNP) allele row 
 #' - RepAvg - proportion of technical replicate assay pairs for which the marker score is consistent 
 #' - rdepth - read depth
 #' 

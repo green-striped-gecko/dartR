@@ -1,14 +1,14 @@
 #' Converts a genind object to genlight object
 #' 
 #' @param gi -- a genind object
-#' @param parallel -- switch to deactivate parallel version. Default set to TRUE. Only for testing purpose.
+#' @param parallel -- switch to deactivate parallel version. Default set to FALSE. Might not be worth to run it parallel most of the times.
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return A genlight object, with all slots filled.
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @details Be aware due to ambiguity which one is the reference allele a combination of gi2gl(gl2gi(gl)) does not return an identical object (but in terms of analysis this conversions are equivalent)
 
-gi2gl <- function(gi, parallel=TRUE, verbose=NULL){
+gi2gl <- function(gi, parallel=FALSE, verbose=NULL){
   
 # TRAP COMMAND, SET VERSION
 
@@ -45,6 +45,11 @@ gi2gl <- function(gi, parallel=TRUE, verbose=NULL){
   gl <-new("genlight", gi@tab[,ccc], pop = pop(gi), other=gi@other, ploidy=2, loc.names=locNames(gi), ind.names=indNames(gi), parallel=parallel)
   if (is.null(gl@other$loc.metrics.flags$monomorphs)) gl@other$loc.metrics.flags$monomorphs <- FALSE
 # FLAG SCRIPT END
+  
+  # ADD TO HISTORY
+  
+  nh <- length(gl@other$history)
+  gl@other$history[[nh + 1]] <- match.call()   
   
   if (verbose >= 1) {
     cat("Completed:",funname,"\n")

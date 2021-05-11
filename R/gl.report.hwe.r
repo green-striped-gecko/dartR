@@ -191,19 +191,19 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
     } 
     
     # Determine the page layout for plots based on the number of populations to plot   
-    layout(mat = matrix(c(1,1),1,1, byrow=FALSE))
+    graphics::layout(mat = matrix(c(1,1),1,1, byrow=FALSE))
     if (npops2plot > 1){
       if (npops2plot == 2) {
-        layout(matrix(c(1,2), 1, 2, byrow = TRUE),widths=c(0.5,0.5))
+        graphics::layout(matrix(c(1,2), 1, 2, byrow = TRUE),widths=c(0.5,0.5))
         if(verbose >= 2){cat("  Plotting two ternary plots on the one page\n\n")}
       } else if (npops2plot == 3) {
-        layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
+        graphics::layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
         if(verbose >= 2){cat("  Plotting three ternary plots on the one page\n\n")}
       } else if (npops2plot == 4) {
-        layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
+        graphics::layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
         if(verbose >= 2){cat("  Plotting four ternary plots on the one page\n\n")}
       } else {
-        layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
+        graphics::layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
         if(verbose >= 2){cat("  Plotting four ternary plots per page\n\n")}
       }
     } else {
@@ -238,7 +238,7 @@ gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alph
       } 
     }
   }
-  layout(mat = matrix(c(1,1),1,1, byrow=FALSE))
+  graphics::layout(mat = matrix(c(1,1),1,1, byrow=FALSE))
   
   #### Report the results
   
