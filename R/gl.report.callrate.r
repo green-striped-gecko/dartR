@@ -20,7 +20,7 @@
 #' @param method -- specify the type of report by locus (method="loc") or individual (method="ind") [default method="loc"]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @param plot_theme -- theme for the plot. See Details for options [default theme_dartR()]
-#' @param plot_colours -- two colour names for borders and fill of the plots [default wes_palette("Zissou1")]
+#' @param plot_colours -- two colour names for borders and fill of the plots [default wes_palette_Zissou1)]
 #' @return returns a genlight object with the file names of plots and table that were saved in the tempdir stored in the slot other$history
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -34,7 +34,7 @@ gl.report.callrate <-
   function(x,
            method = "loc",
            plot_theme = theme_dartR(),
-           plot_colours = wes_palette("Zissou1"),
+           plot_colours = wes_palette_Zissou1,
            verbose = NULL) {
     
     # TRAP COMMAND, SET VERSION
@@ -53,17 +53,17 @@ gl.report.callrate <-
         cat(report("Starting", funname, "\n\n"))
       }
     }
-
+    
     # DO THE JOB
     
     # RECALCULATE CALL RATE, IF NOT PREVIOUSLY DONE
-    # if (!x@other$loc.metrics.flags$monomorphs){
-      x <- dartR:::utils.recalc.callrate(x, verbose=0)
-     # }
-
+     if (!x@other$loc.metrics.flags$monomorphs){
+    x <- dartR:::utils.recalc.callrate(x, verbose=0)
+     }
+    
     ########### FOR METHOD BASED ON LOCUS
-      # get title for plots    
-      if (method == "loc") {
+    # get title for plots    
+    if (method == "loc") {
       if (all(x@ploidy == 2)) {
         title1 <- "SNP data - Call Rate by Locus"
       } else {
@@ -124,7 +124,7 @@ gl.report.callrate <-
     }
     
     ########### FOR METHOD BASED ON INDIVIDUAL
-      # get title for plots
+    # get title for plots
     if (method == "ind") {
       if (all(x@ploidy == 2)) {
         title1 <- "SNP data - Call Rate by Individual"
@@ -134,7 +134,7 @@ gl.report.callrate <-
       # Calculate the call rate by individual
       ind.call.rate <- data.frame(1 - rowSums(is.na(as.matrix(x))) / nLoc(x))
       colnames(ind.call.rate) <- "ind.call.rate"
-
+      
       # Boxplot
       p1 <- ggplot(ind.call.rate, aes(y = ind.call.rate)) +
         geom_boxplot(color=plot_colours[1],fill=plot_colours[2]) +
@@ -182,7 +182,7 @@ gl.report.callrate <-
     }
     
     # printing outputs
-    p3 <- p1 / p2
+    p3 <- (p1 / p2) + plot_layout(heights=c(1,4))
     print(p3)
     print(df)
     # creating file names
@@ -191,7 +191,7 @@ gl.report.callrate <-
     # saving to tempdir
     saveRDS(p3,file=temp_plot)
     saveRDS(df,file=temp_table)
-  
+    
     # ADD TO HISTORY
     nh <- length(x@other$history)
     x@other$history[[nh + 1]] <- c(match.call(),temp_plot,temp_table)
@@ -201,7 +201,7 @@ gl.report.callrate <-
       cat(report("\n\nCompleted:", funname, "\n\n"))
     }
     
-    cat(important("Plots and table were saved to the temporal directory (tempdir) and can be\n accesed with the function gl.access.report(). Note that they can be accessed\n only in the current R session because tempdir is cleared each time that the\n R session is closed.\n\n"))
-  
-     return(x)
+    cat(important(strwrap("Plots and table were saved to the temporal directory (tempdir) and can be accesed with the function gl.access.report(). Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.")))
+    
+    return(x)
   }
