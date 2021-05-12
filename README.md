@@ -1,6 +1,6 @@
 Github status
 
-  <!-- badges: start -->
+<!-- badges: start -->
   [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
   <!-- badges: end -->
   
