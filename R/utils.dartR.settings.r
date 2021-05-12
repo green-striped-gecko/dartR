@@ -164,3 +164,8 @@ report <- crayon::green
 important <- crayon::blue 
 code <- crayon::cyan
 wes_palette_Zissou1 <- colorRampPalette(c("#3B9AB2" ,"#78B7C5" ,"#EBCC2A" ,"#E1AF00" ,"#F21A00"))
+
+
+# SET VERSION
+build <- "Jacob"
+
