@@ -90,7 +90,7 @@ gl.pcoa.plot <- function(glPca,
 # TRAP COMMAND, SET VERSION
   
   funname <- match.call()[[1]]
-  build <- "Jacob"
+  build <- "Juliette"
   
 # SET VERBOSITY
   
@@ -136,11 +136,15 @@ gl.pcoa.plot <- function(glPca,
     stop("Fatal Error: glPca object required as primary input (parameter glPca)!\n")
   }
   if(class(x) != "genlight" && class(x) != "dist" && class(x)  != "fd") {
-    stop("Fatal Error: genlight, fd or dist object required as secondary input (parameter x)!\n")
+    stop("Fatal Error: genlight, fd or dist object required as second input (parameter x)!\n")
   }
   if (labels != "none" && labels != "ind" && labels != "pop" && labels != "interactive" && labels != "legend"){
     cat("  Warning: Parameter 'labels' must be one of none|ind|pop|interactive|legend, set to 'pop'\n")
     labels <- "pop"
+  }
+  if (labels=="ind" && class(x)=="dist"){
+    cat("  Warning: Individual labels cannot be applied to a PCoA based on distances between populations\n  Using population labels\n")
+    labels="pop"
   }
   if (p < 0 | p > 1){
     cat("  Warning: Parameter 'p' must fall between 0 and 1, set to 0.95\n")
@@ -162,17 +166,53 @@ gl.pcoa.plot <- function(glPca,
     cat("  Warning: Y-axis must be specified to lie between 1 and the number of retained dimensions of the ordination",ncol(glPca$scores),"; set to 2\n")
     yaxis <- 2
   }
+  if (class(glPca) == "dist" && !is.null(as.pop)){
+    cat("  Warning: Temporary reassignment of population assignment not available for distance matricies\n")
+    as.pop <- NULL
+  }
   
   # Assign the new population list if as.pop is specified
-  pop.hold <- pop(x)
-  if (!is.null(as.pop)){    
-    if(as.pop %in% names(x@other$ind.metrics)){
-      pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
-      if (verbose >= 2) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
-    } else {
-      stop("Fatal Error: individual metric assigned to 'pop' does not exist. Check names(gl@other$loc.metrics) and select again\n")
+  if (class(x) == "genlight"){
+    pop.hold <- pop(x)
+    if (!is.null(as.pop)){    
+      if(as.pop %in% names(x@other$ind.metrics)){
+        pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
+        if (verbose >= 2) {cat("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n")}
+      } else {
+        stop("Fatal Error: individual metric assigned to 'pop' does not exist. Check names(gl@other$loc.metrics) and select again\n")
+      }
     }
   }
+  
+# Define themes for plotting
+  
+  theme_list <- list(
+    theme_minimal(),
+    theme_classic(),
+    theme_bw(),
+    theme_gray(),
+    theme_linedraw(),
+    theme_light(),
+    theme_dark(),
+    ggthemes::theme_economist(),
+    ggthemes::theme_economist_white(),
+    ggthemes::theme_calc(),
+    ggthemes::theme_clean(),
+    ggthemes::theme_excel(),
+    ggthemes::theme_excel_new(),
+    ggthemes::theme_few(),
+    ggthemes::theme_fivethirtyeight(),
+    ggthemes::theme_foundation(),
+    ggthemes::theme_gdocs(),
+    ggthemes::theme_hc(),
+    ggthemes::theme_igray(),
+    ggthemes::theme_solarized(),
+    ggthemes::theme_solarized_2(),
+    ggthemes::theme_solid(),
+    ggthemes::theme_stata(),
+    ggthemes::theme_tufte(),
+    ggthemes::theme_wsj()
+    )
   
 # DO THE JOB
   
@@ -204,47 +244,22 @@ gl.pcoa.plot <- function(glPca,
       pop <- ind
       df <- cbind(df,ind,pop)
       colnames(df) <- c("PCoAx","PCoAy","ind","pop")
-      if(labels == "interactive"){
-        cat("  Sorry, interactive labels are not available for an ordination generated from a Distance Matrix\n")
-        cat("  Labelling the plot with names taken from the Distance Matrix\n")
-      }
-      labels <- "pop"
+      # if(labels == "interactive"){
+      #   cat("  Sorry, interactive labels are not available for an ordination generated from a Distance Matrix\n")
+      #   cat("  Labelling the plot with names taken from the Distance Matrix\n")
+      # }
+      # labels <- "pop"
     }  
-    # list of themes
-    theme_list <- list(
-    theme_minimal(),
-    theme_classic(),
-    theme_bw(),
-    theme_gray(),
-    theme_linedraw(),
-    theme_light(),
-    theme_dark(),
-    ggthemes::theme_economist(),
-    ggthemes::theme_economist_white(),
-    ggthemes::theme_calc(),
-    ggthemes::theme_clean(),
-    ggthemes::theme_excel(),
-    ggthemes::theme_excel_new(),
-    ggthemes::theme_few(),
-    ggthemes::theme_fivethirtyeight(),
-    ggthemes::theme_foundation(),
-    ggthemes::theme_gdocs(),
-    ggthemes::theme_hc(),
-    ggthemes::theme_igray(),
-    ggthemes::theme_solarized(),
-    ggthemes::theme_solarized_2(),
-    ggthemes::theme_solid(),
-    ggthemes::theme_stata(),
-    ggthemes::theme_tufte(),
-    ggthemes::theme_wsj())
+
     
-  # If individual labels
-    if (labels == "ind") {
-      if (verbose>0) cat("  Plotting individuals\n")
+  # If a PCA and individual labels are requested
+    if (!(class(x)=="dist")){
+      if(labels == "ind") {
+      if (verbose>=2) cat("  Plotting and labelling individuals in a PCA with loci as attributes\n")
 
     # Plot
-      p <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=ind, colour=pop)) +
-        geom_point(size=2,show.legend=FALSE) +
+      p <- ggplot2::ggplot(df, aes(x=PCoAx, y=PCoAy, group=ind, colour=pop)) +
+        geom_point(size=2,aes(colour=pop),show.legend=FALSE) +
         theme_list[theme_plot] +
         ggrepel::geom_text_repel(aes(label = ind),show.legend=FALSE) +
         # directlabels::geom_dl(aes(label=ind),method="first.points") +
@@ -261,21 +276,27 @@ gl.pcoa.plot <- function(glPca,
         if(scale==TRUE) { p <- p + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
       # Add ellipses if requested
         if(ellipse==TRUE) {p <- p + stat_ellipse(aes(colour=pop), type="norm", level=0.95)}
-    } 
+      } else {
+        if (verbose>=2){
+          cat("  Warning: Data on individuals not available when applying PCoA to a distance matrix\n")
+          cat("    Displaying populations as entities in a space defined by allele frequencies\n")
+        }
+      }
+    }
     
     # If population labels
 
     if (labels == "pop") {
       if (class(x)=="genlight"){
-        if (verbose>0) cat("  Plotting populations\n")
+        if (verbose>=2){ cat("  Plotting individuals labelled by population in a PCA with loci as attributes\n")}
       } else {
-        if (verbose>0) cat("  Plotting entities from the Distance Matrix\n")
+        if (verbose>0) cat("  Plotting populations in a PCoA with loci as attributes based on a distance matrix\n")
       }  
 
       # Plot
-      p <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop)) +
+      p <- ggplot2::ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
-        theme_list[theme_plot] +
+        #theme_list[theme_plot] +
         directlabels::geom_dl(aes(label=pop),method="smart.grid") +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -296,8 +317,15 @@ gl.pcoa.plot <- function(glPca,
   # If interactive labels
 
     if (labels=="interactive" | labels=="ggplotly") {
-      cat("  Displaying an interactive plot\n")
-      cat("    NOTE: Returning the ordination scores, not a ggplot2 compatable object\n")
+      if (verbose>=2){
+        if (class(x)=="genlight"){
+          cat("  Plotting individuals in a PCA with loci as attributes\n")
+        }  else {
+          cat("  Plotting populations in a PCoA with loci as attributes based on a distance matrix\n")
+        }
+        cat("  Displaying an interactive plot, mouseover for details for each point\n")
+        cat("    NOTE: Returning the ordination scores, not a ggplot2 compatable object\n")
+      }
       plot.out <- FALSE
 
       # Plot
@@ -330,7 +358,7 @@ gl.pcoa.plot <- function(glPca,
       p <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
         theme_list[theme_plot] +
-        ggrepel::geom_text_repel(aes(label = pop),show.legend=FALSE) +
+        #ggrepel::geom_text_repel(aes(label = pop),show.legend=FALSE) +
         theme(axis.title=element_text(face="bold.italic",size="20", color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=10),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=10),
@@ -349,8 +377,12 @@ gl.pcoa.plot <- function(glPca,
     # If labels = none
     
     if (labels == "none" | labels==FALSE) {
-      if (verbose>0) cat("Plotting points with no labels\n")
-
+      if (class(x)=="genlight"){
+        if (verbose>=2){ cat("  Plotting individuals without labels in a PCA with loci as attributes\n")}
+      } else {
+        if (verbose>0) cat("  Plotting populations in a PCoA with loci as attributes based on a distance matrix\n")
+      }  
+      
       # Plot
       p <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
         geom_point(size=2,aes(colour=pop)) +
@@ -385,15 +417,21 @@ gl.pcoa.plot <- function(glPca,
       if(verbose >= 2){cat("  While waiting, returning ggplot compliant object\n")}
     } else {
       if(verbose >= 2){cat("  While waiting, returning dataframe with coordinates of points in the ordinated space\n")}
-      df <- data.frame(id=indNames(x), pop=as.character(pop(x)), glPca$scores)
-      row.names(df) <- NULL
+        if(class(x)=="dist"){
+          df <- data.frame(id=labels(x),glPca$scores)
+        } else {
+          df <- data.frame(id=indNames(x), pop=as.character(pop(x)), glPca$scores)
+          row.names(df) <- NULL
+        }
     }
     
     # Reassign the initial population list if as.pop is specified
     
-    if (!is.null(as.pop)){
-      pop(x) <- pop.hold
-      if (verbose >= 3) {cat("  Resetting population assignments to initial state\n")}
+    if(class(x) == "genlight"){
+      if (!is.null(as.pop)){
+        pop(x) <- pop.hold
+        if (verbose >= 3) {cat("  Resetting population assignments to initial state\n")}
+      }
     }
     
     if (verbose >= 1) {
@@ -408,3 +446,4 @@ gl.pcoa.plot <- function(glPca,
 
   }
 }
+

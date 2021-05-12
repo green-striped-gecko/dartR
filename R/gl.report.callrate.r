@@ -122,7 +122,6 @@ gl.report.callrate <-
       df$Quantile <- paste0(df$Quantile,"%")
       rownames(df) <- NULL
     }
-    
     ########### FOR METHOD BASED ON INDIVIDUAL
       # get title for plots
     if (method == "ind") {
