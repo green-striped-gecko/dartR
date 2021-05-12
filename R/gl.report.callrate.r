@@ -100,7 +100,8 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(), pl
         rownames(df) <- NULL
     }
 
-    ########### FOR METHOD BASED ON INDIVIDUAL get title for plots
+    ########### FOR METHOD BASED ON INDIVIDUAL
+      # get title for plots
     if (method == "ind") {
         if (all(x@ploidy == 2)) {
             title1 <- "SNP data - Call Rate by Individual"
