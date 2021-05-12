@@ -259,7 +259,7 @@ gl.pcoa.plot <- function(glPca,
 
     # Plot
       p <- ggplot2::ggplot(df, aes(x=PCoAx, y=PCoAy, group=ind, colour=pop)) +
-        geom_point(size=2,aes(colour=pop)) +
+        geom_point(size=2,aes(colour=pop),show.legend=FALSE) +
         theme_list[theme_plot] +
         ggrepel::geom_text_repel(aes(label = ind),show.legend=FALSE) +
         # directlabels::geom_dl(aes(label=ind),method="first.points") +
