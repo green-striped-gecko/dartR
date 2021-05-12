@@ -15,8 +15,8 @@
 #'  theme_dartR()
 #'
 theme_dartR <- function(base_size = 11, base_family = "",
-                       base_line_size = base_size / 22,
-                       base_rect_size = base_size / 22) {
+                        base_line_size = base_size / 22,
+                        base_rect_size = base_size / 22) {
   
   # The half-line (base-fontsize / 2) sets up the basic vertical
   # rhythm of the theme. Most margins will be set to this value.
@@ -157,3 +157,15 @@ theme_dartR <- function(base_size = 11, base_family = "",
   )
   
 }
+
+error <- crayon::red 
+warn <- crayon::yellow
+report <- crayon::green
+important <- crayon::blue 
+code <- crayon::cyan
+wes_palette_Zissou1 <- colorRampPalette(c("#3B9AB2" ,"#78B7C5" ,"#EBCC2A" ,"#E1AF00" ,"#F21A00"))
+
+
+# SET VERSION
+build <- "Jacob"
+

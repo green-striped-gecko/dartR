@@ -16,83 +16,90 @@
 #' @examples
 #' #out <- utils.recalc.callrate(testset.gl)
 
-utils.recalc.callrate <- function(x, verbose=NULL) {
- 
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-  hold <- x
-  
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
+utils.recalc.callrate <- function(x, verbose = NULL) {
+
+    # TRAP COMMAND, SET VERSION
+
+    funname <- match.call()[[1]]
+    build <- "Jacob"
+    hold <- x
+
+    # SET VERBOSITY
+
+    if (is.null(verbose)) {
+        if (!is.null(x@other$verbose)) {
+            verbose <- x@other$verbose
+        } else {
+            verbose <- 2
+        }
     }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
+
+    if (verbose < 0 | verbose > 5) {
+        cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
+        verbose <- 2
+    }
+
+    # FLAG SCRIPT START
+
+    if (verbose >= 1) {
+        if (verbose == 5) {
+            cat("Starting", funname, "[ Build =", build, "]\n")
+        } else {
+            cat("Starting", funname, "\n")
+        }
+    }
+
+    # STANDARD ERROR CHECKING
+
+    if (class(x) != "genlight") {
+        cat("  Fatal Error: genlight object required!\n")
+        stop("Execution terminated\n")
+    }
+
+    if (all(x@ploidy == 1)) {
+        if (verbose >= 2) {
+            cat("  Processing  Presence/Absence (SilicoDArT) data\n")
+        }
+        data.type <- "SilicoDArT"
+    } else if (all(x@ploidy == 2)) {
+        if (verbose >= 2) {
+            cat("  Processing a SNP dataset\n")
+        }
+        data.type <- "SNP"
     } else {
-      cat("Starting",funname,"\n")
+        stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
     }
-  }
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-  }
-  
-  # Check monomorphs have been removed up to date
-  if (x@other$loc.metrics.flags$monomorphs == FALSE){
-    if (verbose >= 2){
-      cat("  Warning: Dataset contains monomorphic loci which will be included in the Call Rate calculations\n")
-    }  
-  }
-  
-# FUNCTION SPECIFIC ERROR CHECKING
 
-  if (is.null(x@other$loc.metrics$CallRate)) {
-    x@other$loc.metrics$CallRate <- array(NA,nLoc(x))
-    if (verbose >= 2){
-      cat("  Locus metric CallRate does not exist, creating slot @other$loc.metrics$CallRate\n")
+    # Check monomorphs have been removed up to date
+    if (x@other$loc.metrics.flags$monomorphs == FALSE) {
+        if (verbose >= 2) {
+            cat("  Warning: Dataset contains monomorphic loci which will be included in the Call Rate calculations\n")
+        }
     }
-  }
 
-# DO THE DEED
+    # FUNCTION SPECIFIC ERROR CHECKING
 
-     if (verbose >= 2) {cat("  Recalculating locus metric CallRate\n")}
-     x@other$loc.metrics$CallRate <- 1-(glNA(x,alleleAsUnit=FALSE))/nInd(x)
-     x@other$loc.metrics.flags$CallRate <- TRUE
+    if (is.null(x@other$loc.metrics$CallRate)) {
+        x@other$loc.metrics$CallRate <- array(NA, nLoc(x))
+        if (verbose >= 2) {
+            cat("  Locus metric CallRate does not exist, creating slot @other$loc.metrics$CallRate\n")
+        }
+    }
 
-# FLAG SCRIPT END
+    # DO THE DEED
 
-  if (verbose > 0) {
-    cat("Completed:",funname,"\n")
-  }
-     
-   return(x)
+    if (verbose >= 2) {
+        cat("  Recalculating locus metric CallRate\n")
+    }
+    x@other$loc.metrics$CallRate <- 1 - (glNA(x, alleleAsUnit = FALSE))/nInd(x)
+    x@other$loc.metrics.flags$CallRate <- TRUE
+
+    # FLAG SCRIPT END
+
+    if (verbose > 0) {
+        cat("Completed:", funname, "\n")
+    }
+
+    return(x)
 }
 
