@@ -30,7 +30,7 @@
 #'  }
 #' @seealso \code{\link{gl.filter.monomorphs}}
 
-gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=NULL){
+gl.recode.pop <- function(x, pop.recode, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
 
 # TRAP COMMAND, SET VERSION
   
@@ -85,8 +85,20 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=NULL
   }
 
   recode.table <- read.csv(pop.recode,  header=FALSE, stringsAsFactors = FALSE)
-  if(length(unique(pop(x))) != length(unique(recode.table[,1]))) {
-    stop("Fatal Error: Population names in data file are not the same as in the recode table\n")
+
+  v1 <- unique(pop(x))
+  v2 <- unique(recode.table[,1])
+  v1_v2 <- v1[!(v1 %in% v2)]
+  #v2_v1 <- v2[! v2 %in% v1]
+  l1 <- length(v1)
+  l2 <- length(v2)
+  
+  if(l1 != l2) {
+    stop("Fatal Error: Population names do not agree in number with those in the recode table\n")
+  }
+  if(!(length(v1_v2)==0)){
+    cat("Fatal Error: Some population names have no reassignment specified in the recode table:",v1_v2,"\n")
+    stop()
   }
 
 # DO THE JOB
@@ -113,7 +125,12 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=NULL
 # Remove rows flagged for deletion
   
   if ("delete" %in% popNames(x) | "Delete" %in% popNames(x)) {
-    if (verbose >= 2){cat("Deleting populations flagged for deletion (flagged 'Delete' or 'delete')\n")}
+    if (verbose >= 2){cat("Deleting individuals in populations flagged for deletion (flagged 'Delete' or 'delete')\n")}
+    deletions <- indNames(x)[tolower(recode.table[,2])=="delete"]
+    if (verbose==3){
+      cat("Dropping\n",deletions,"\n")
+      cat("A total of",length(deletions),"individuals dropped\n")
+    }
     x <- gl.drop.pop(x,pop.list=c("Delete","delete"),verbose=0)
   }
   
@@ -138,7 +155,7 @@ gl.recode.pop <- function(x, pop.recode, recalc=TRUE, mono.rm=TRUE, verbose=NULL
     cat(paste("  Original No. of populations:", hold.nPop,"\n"))
     cat(paste("    New No. of populations:", nPop(x),"\n\n"))
     if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
-    if (!mono.rm) {cat("Note: Resultant monomorphic loci not deleted\n")}
+    if (!mono.rm) {cat("Note: Any resultant monomorphic loci not deleted\n")}
   }
   
 # ADD TO HISTORY

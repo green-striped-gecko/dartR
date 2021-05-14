@@ -3,7 +3,7 @@
 #' This script performs an AMOVA based on the genetic distance matrix from stamppNeisD() [package StAMPP] using the amova() function from the package PEGAS for exploring within and between population variation. For detailed information use their help pages: ?pegas::amova, ?StAMPP::stamppAmova. Be aware due to a conflict of the amova functions from various packages I had to "hack" StAMPP::stamppAmova to avoid a namespace conflict.
 #' 
 #' @param x -- name of the genlight containing the SNP genotypes, with population information [required]
-#' @param dist -- distance matrix between individuals (if not provided NeisD from StAMPP::stamppNeisD is calculated)
+#' @param distance -- distance matrix between individuals (if not provided NeisD from StAMPP::stamppNeisD is calculated)
 #' @param permutations -- number of permuations to perform for hypothesis testing [default 100]. Please note should be set to 1000 for analysis.]
 #' @return An object of class "amova" which is a list with a table of sums of square deviations (SSD), mean square deviations (MSD), and the number of degrees of freedom, and a vector of variance components.
 #' @importFrom StAMPP stamppNeisD
@@ -15,14 +15,14 @@
 #' gl.amova(bandicoot.gl, permutations=10)
 #' 
 #' 
-gl.amova <- function(x, dist =NULL, permutations=100)
+gl.amova <- function(x, distance =NULL, permutations=100)
 {
 # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "pegas"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop("Package",pkg," needed for this function to work. Please install it.") } 
   
-  if (is.null(dist)) dd <- StAMPP::stamppNeisD(x, FALSE) else dd <- dist
+  if (is.null(distance)) dd <- StAMPP::stamppNeisD(x, FALSE) else dd <- distance
   
   if (class(x) == "genlight") {
     geno2 <- x
@@ -48,11 +48,11 @@ gl.amova <- function(x, dist =NULL, permutations=100)
   }
   pop.names <- geno[, 2]
   pop.names <- factor(pop.names)
-  temp <- environment(environment)
-  assign("dist", dd, envir = temp)
+  temp <- new.env()
+  assign("distance", dd, envir = temp)
   assign("pop.names", pop.names, envir = temp)
   assign("permutations", permutations, envir = temp)
-  res <- with(temp, pegas::amova(dist ~ pop.names, nperm = permutations))
+  res <- with(temp, pegas::amova(distance ~ pop.names, nperm = permutations))
   rm(pop.names, permutations, temp)
   return(res)
   
