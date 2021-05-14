@@ -1,6 +1,11 @@
 <!-- badges: start -->
+<<<<<<< HEAD
   [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_bernd/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
   <!-- badges: end -->
+=======
+  [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+<!-- badges: end -->
+>>>>>>> 88c286a9e0161cb59672a5769c5d377569c4ce09
   
 ![][id]
 
