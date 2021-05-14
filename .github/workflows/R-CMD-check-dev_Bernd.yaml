@@ -10,7 +10,7 @@ on:
       - dev_bernd
    
 
-name: R-CMD-check
+name: R-CMD-check-dev_Bernd
 
 jobs:
   R-CMD-check:
