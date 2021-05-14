@@ -1,5 +1,5 @@
 <!-- badges: start -->
-  [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+  [![R-CMD-check-dev](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
   <!-- badges: end -->
 
 ![][id]
