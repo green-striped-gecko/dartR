@@ -1,5 +1,5 @@
 .onAttach <- function(...) {
-
+  
   report <- crayon::green
   note <- crayon::cyan
   code <- crayon::blue
@@ -12,3 +12,4 @@
   packageStartupMessage(code("citation('dartR')"))
   packageStartupMessage(note("\n**** Have fun using dartR! ****"))
 }
+
