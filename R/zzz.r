@@ -1,7 +1,3 @@
-#' Startup function
-#'
-#' setting up all starting values
-
 report <- crayon::green
 note <- crayon::cyan
 code <- crayon::blue
