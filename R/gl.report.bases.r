@@ -32,8 +32,6 @@
 #'   out <- gl.report.bases(testset.gs)
 #'   out
 #'
-#'@references <reference to literature>
-#'
 #'@import stringr
 #'
 #'@export 
@@ -67,10 +65,12 @@ gl.report.bases <- function(x, plot = TRUE,plot_theme = theme_dartR(),
     }
 
     # DO THE JOB 
+    
     # Count up the number of bases, and the number of each of ATGC, and other
     if (verbose >= 2) {
         cat(report("  Counting the bases\n"))
     }
+    
     A <- sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "A"))
     G <- sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "G"))
     C <- sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "C"))
@@ -129,6 +129,7 @@ gl.report.bases <- function(x, plot = TRUE,plot_theme = theme_dartR(),
     cat(paste("    G:", round(G, 2)), "\n")
     cat(paste("    T:", round(T, 2)), "\n")
     cat(paste("    C:", round(C, 2)), "\n\n")
+    
     if (datatype == "SilicoDArT") {
         if (verbose >= 2) {
             cat(important("  Tag P/A data (SilicoDArT), transition/transversions cannot be calculated\n"))
