@@ -22,7 +22,7 @@
 #'
 #'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
-#'@examples <executable R code showing how to use the function>
+#'@examples
 #' # SNP data
 #'   out <- gl.report.bases(testset.gl)
 #'   out$freq
