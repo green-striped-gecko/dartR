@@ -242,5 +242,5 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   
   cat(important(strwrap("Plots and table were saved to the temporal directory (tempdir) and can be accesed with the function gl.access.report(). Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.")))
   
-  return(x)
+  invisible(x)
 }
