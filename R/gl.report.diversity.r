@@ -311,8 +311,6 @@ gl.report.diversity <- function(x, pbar = TRUE, table = "DH", plot_theme = theme
               facet_wrap(~q,scales = "free_x") +
               plot_theme + 
               theme(  text = element_text(size=14),
-                      strip.text.x = element_text(size = 14, face = "bold"),
-                      strip.background =element_rect(colour="black",fill="white"),
                       axis.ticks.x=element_blank() ,
                       axis.text.x = element_blank(),
                       axis.title.x=element_blank(),
