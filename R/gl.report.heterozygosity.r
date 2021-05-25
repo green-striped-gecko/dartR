@@ -316,8 +316,8 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
             cat("  Maximum Observed Heterozygosity: ", round(max(df$Ho), 6), "\n")
             cat("  Average Observed Heterozygosity: ", round(mean(df$Ho), 6), "\n\n")
             cat("  Results returned as a dataframe\n\n")
-            if (length(outliers)==0) {
-                cat("  No outliers detected\n")
+            if (nrow(outliers)==0) {
+                cat("  No outliers detected\n\n")
             } else {
                 cat("  Outliers detected\n")
                 print(outliers)
