@@ -3,34 +3,27 @@
 #' This function checks for errors in verbosity, loc.metrics, ind.metrics, ploidy, metadata, populations, individuals and loci.
 #'
 #' @param x -- name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @return The modified genlight object
 #' @examples
 #' test <- utils.check.gl(testset.gl)
 
-utils.check.gl <- function(x, verbose = NULL) {
-  #### SET VERBOSITY ####
-  if (is.null(verbose)) {
-    if (!is.null(x@other$verbose)) {
-      verbose <- x@other$verbose
-    } else {
-      verbose <- 2
-      x@other$verbose <- 2
-    }
-  }
-  if (verbose < 0 | verbose > 5) {
-    message(paste(
-      warn(
-        "  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2"
-      )
-    ))
-    verbose <- 2
-    x@other$verbose <- 2
-  }
+utils.check.gl <- function(x) {
+  
   
   #### CHECK GENLIGHT OBJECT ####
   if (class(x) != "genlight") {
     stop(error("Fatal Error: genlight object required!"))
+  }
+  
+  #### SETTING DATA TYPE ####
+  if (all(x@ploidy == 1)){
+    cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
+    datatype <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    cat(report("  Processing a SNP dataset\n"))
+    datatype <- "SNP"
+  } else {
+    stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
   }
   
   #### CHECK METRICS ####
@@ -201,17 +194,6 @@ utils.check.gl <- function(x, verbose = NULL) {
   # } else{
   #   x@other$loc.metrics.flags$PIC <- T
   # }
-  
-  #### CHECK PLOIDY ####
-  if (all(x@ploidy == 1)) {
-    message(report("  Processing a Tag Presence/Absence (SilicoDArT) dataset"))
-  } else if (all(x@ploidy == 2)) {
-    message(report("  Processing a SNP dataset"))
-  } else {
-    stop(error(
-      "Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!"
-    ))
-  }
   
   #### CHECK POPULATIONS ####
   # Set a population if none is specified (such as if the genlight object has been generated manually)
