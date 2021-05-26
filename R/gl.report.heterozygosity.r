@@ -38,6 +38,11 @@
 #' If you have an estimate of the number of invariant sequence tags (loci) in your data,
 #' such as provided by gl.report.secondaries, you can specify it with the n.invariant
 #' parameter to standardize your estimates of heterozygosity.
+#' 
+#'  Examples of other themes that can be used can be consulted in \itemize{
+#'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+#'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+#'  }
 #'
 #'@return Returns a dataframe containing population labels, heterozygosities and sample sizes
 #'
