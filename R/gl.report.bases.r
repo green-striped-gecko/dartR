@@ -4,10 +4,10 @@
 #'
 #'@description This script calculates the frequencies of the four DNA nucleobases: adenine (A), cytosine (C), guanine (G) and thymine (T), and the frequency of transitions (Ts) and transversions (Tv) in a DArT genlight object.
 #'
-#' @param x -- name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required]
-#' @param plot -- if TRUE, histograms of base composition are produced [default TRUE]
-#' @param plot_theme -- theme for the plot. See Details for options [default theme_dartR()]
-#' @param plot_colours -- two color names for borders and fill of the plots [default two_colors)]
+#' @param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required]
+#' @param plot If TRUE, histograms of base composition are produced [default TRUE]
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
+#' @param plot_colours Two color names for borders and fill of the plots [default two_colors)]
 #'
 #'@details The script checks first if trimmed sequences are included in the locus metadata (@@other$loc.metrics$TrimmedSequence), and if so, tallies up
 #' the numbers of A, T, G and C bases. Only the reference state at the SNP locus is counted. Counts of transitions (Ts)
@@ -16,9 +16,14 @@
 #'
 #' For presence/absence data (SilicoDArT), it is not possible to count transversions or transitions or transversions/transitions ratio
 #' because the SNP data is not available, only a single sequence tag.
+#' 
+#'  Examples of other themes that can be used can be consulted in \itemize{
+#'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+#'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+#'  }
 #'
-#' @return returns a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
-#' @return returns a named vector of base frequencies and the transversion and transitions. It also returns the plot as an ggplot object, which can be further customised. See example.
+#' @return Returns a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
+#' @return Returns a named vector of base frequencies and the transversion and transitions. It also returns the plot as an ggplot object, which can be further customised. See example.
 #'
 #'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
