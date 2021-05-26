@@ -5,12 +5,4 @@ Meta
 .Ruserdata
 dartR.Rproj
 .Rbuildignore
-<<<<<<< HEAD
-=======
-brenna2.R
-dartR_sex_markers_function.R
-gl.read.silico.count.R
-pherm2.R
-Filter_Individual_heterozygosity_Function.R
->>>>>>> fb10e50a3c2aa1e36c8b6cb8e74c10b2183afefb
 doc
