@@ -39,7 +39,7 @@ diverging_palette <- colorRampPalette(c("#3B9AB2" ,"#78B7C5" ,"#EBCC2A" ,"#E1AF0
 cool <- rainbow(50, start = rgb2hsv(col2rgb("cyan"))[1], end = rgb2hsv(col2rgb("blue"))[1])
 warm <- rainbow(50, start = rgb2hsv(col2rgb("red"))[1], end = rgb2hsv(col2rgb("yellow"))[1])
 cols <- c(rev(cool), rev(warm))
-convergent_palette <- colorRampPalette(cols)(255)
+convergent_palette <- colorRampPalette(cols)
 # taken from adegenet
 viridis_palette <- colorRampPalette(c("#440154FF", "#482173FF", "#433E85FF", "#38598CFF",
                                       "#2D708EFF", "#25858EFF", "#1E9B8AFF", "#2BB07FFF",
@@ -91,7 +91,7 @@ theme_dartR <- function(base_size = 11, base_family = "",
     ),
     text = element_text(family = base_family, face = "plain",colour = "black", size = base_size,lineheight = 0.9, hjust = 0.5, vjust = 0.5, angle = 0, margin = margin(), debug = FALSE),
     axis.line =          element_blank(),axis.line.x=NULL,axis.line.y = NULL,
-    axis.text =          element_text(size = rel(0.8), colour = "black"),
+    axis.text =          element_text(size = rel(1), colour = "black"),
     axis.text.x =        element_text(margin = margin(t = 0.8 * half_line / 2), vjust = 1),
     axis.text.x.top =    element_text(margin = margin(b = 0.8 * half_line / 2), vjust = 0),
     axis.text.y =        element_text(margin = margin(r = 0.8 * half_line / 2), hjust = 1),
@@ -136,13 +136,14 @@ theme_dartR <- function(base_size = 11, base_family = "",
     panel.spacing.x =    NULL,
     panel.spacing.y =    NULL,
     panel.ontop    =     FALSE,
-    strip.background =   element_rect(fill = "gray80", colour = NA),
+    strip.background =   element_rect(fill = "white", colour = "black"),
     strip.text =         element_text(
       colour = "black",
-      size = rel(0.8),
+      size = rel(1),
+      face = "bold",
       margin = margin(0.8 * half_line, 0.8 * half_line, 0.8 * half_line, 0.8 * half_line)
     ),
-    strip.text.x =       NULL,
+    strip.text.x =      element_text(size = 14, face = "bold"),
     strip.text.y =       element_text(angle = -90),
     strip.text.y.left =  element_text(angle = 90),
     strip.placement =    "inside",
@@ -153,8 +154,8 @@ theme_dartR <- function(base_size = 11, base_family = "",
     plot.background =    element_rect(colour = "white"),
     plot.title =         element_text( 
       face="bold",
-      size = rel(1.3),
-      hjust = 0, vjust = 1,
+      size = rel(1.2),
+      hjust = 0.5, vjust = 1,
       margin = margin(b = half_line)
     ),
     plot.title.position = "panel",
