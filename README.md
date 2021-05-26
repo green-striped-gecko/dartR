@@ -1,3 +1,9 @@
+<!-- badges: start -->
+  [![R-CMD-check-dev_Arthur](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Arthur/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+<!-- badges: end -->
+
+
+
 
 ![][id]
 
