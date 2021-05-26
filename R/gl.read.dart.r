@@ -8,6 +8,8 @@
 #' @param nas a character specifying NAs [nas = '-']
 #' @param topskip a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.
 #' @param lastmetric specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.
+#' @param service_row the row number in which the information of the DArT service is contained [1]
+#' @param plate_row the row number in which the information of the plate location is contained [3]
 #' @param recalc force the recalculation of locus metrics, in case individuals have been manually deleted from the input csv file [FALSE]
 #' @param mono.rm force the removal of monomorphic loci (including all NAs), in case individuals have been manually deleted from the input csv file [FALSE]
 #' @param probar show progress bar
@@ -29,6 +31,8 @@ gl.read.dart <- function(filename,
                          topskip=NULL,  
                          lastmetric ="RepAvg", 
                          covfilename=NULL, 
+                         service_row=1,
+                         plate_row=3,
                          probar=FALSE, 
                          verbose=NULL){
   
@@ -70,7 +74,7 @@ gl.read.dart <- function(filename,
     ind.metafile <- covfilename
   }
   
-  dout <-utils.read.dart(filename = filename, nas=nas, topskip=topskip, lastmetric = lastmetric, verbose=verbose)
+  dout <-utils.read.dart(filename = filename, nas=nas, topskip=topskip, lastmetric = lastmetric,service_row =service_row,plate_row=plate_row, verbose=verbose)
   glout <- utils.dart2genlight(dout, ind.metafile = ind.metafile, probar = probar, verbose=verbose)
   
   if (verbose>=2){
@@ -104,7 +108,7 @@ gl.read.dart <- function(filename,
   
     # Calculate maf
     if (is.null(glout@other$loc.metrics$maf)) {
-     utils.recalc.maf(glout, verbose=0)
+     dartR:::utils.recalc.maf(glout, verbose=0)
      if (verbose >= 2){
        cat("  Minor Allele Frequency (maf) calculated and added to the locus metrics\n")
      }
@@ -116,11 +120,11 @@ gl.read.dart <- function(filename,
       if (verbose >= 2){
         cat("  Recalculating locus metrics provided by DArT (optionally specified)\n")
       }
-      glout <- utils.recalc.avgpic(glout, verbose=0)
-      glout <- utils.recalc.callrate(glout, verbose=0)
-      glout <- utils.recalc.freqhets(glout, verbose=0)
-      glout <- utils.recalc.freqhomref(glout, verbose=0)
-      glout <- utils.recalc.freqhomsnp(glout, verbose=0)
+      glout <- dartR:::utils.recalc.avgpic(glout, verbose=0)
+      glout <- dartR:::utils.recalc.callrate(glout, verbose=0)
+      glout <- dartR:::utils.recalc.freqhets(glout, verbose=0)
+      glout <- dartR:::utils.recalc.freqhomref(glout, verbose=0)
+      glout <- dartR:::utils.recalc.freqhomsnp(glout, verbose=0)
     }
   
   # Remove monomorphs, which should not be present, but might have been introduced it the user deleted individuals from the input csv file

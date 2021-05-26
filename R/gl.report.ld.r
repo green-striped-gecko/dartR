@@ -7,6 +7,7 @@
 #' @param x a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)
 #' @param name character string for rdata file. If not given genind object name is used
 #' @param save switch if results are saved in a file
+#' @param outpath folder where chunks and results are saved (if save=TRUE). Default it tempdir()
 #' @param nchunks how many subchunks will be used (the less the faster, but if the routine crashes more bits are lost
 #' @param ncores how many cores should be used
 #' @param chunkname the name of the chunks for saving [default is NULL]
@@ -18,14 +19,14 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
-gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunkname=NULL, probar=FALSE, verbose=NULL){
+gl.report.ld <- function(x, name=NULL, save=TRUE, outpath=tempdir(), nchunks=2, ncores=1, chunkname=NULL, probar=FALSE, verbose=NULL){
  
   if (!(requireNamespace("doParallel", quietly = TRUE))) {
     stop("Package doParallel needed for this function to work. Please install it.")
   }
-  if (!(requireNamespace("parallel", quietly = TRUE))) {
-    stop("Package parallel needed for this function to work. Please install it.")
-  }
+#  if (!(requireNamespace("parallel", quietly = TRUE))) {
+#    stop("Package parallel needed for this function to work. Please #install it.")
+#  }
   if (!(requireNamespace("data.table", quietly = TRUE))) {
     stop("Package data.table needed for this function to work. Please install it.")
   }
@@ -122,7 +123,7 @@ gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunknam
       if(verbose>=2){cat(paste("  Found", length(chunkfiles), "file(s).\n"))}
       for (i in 1:length(chunkfiles))
         {
-        load(paste0("LD_chunks_", chunkname,"_",i,".rdata"))
+        load(file.path(outpath, paste0("LD_chunks_", chunkname,"_",i,".rdata")))
         lddone[[i]] <- ldc
         }
       chunknr<-length(chunkfiles)
@@ -272,7 +273,7 @@ gl.report.ld <- function(x, name=NULL, save=TRUE,  nchunks=2, ncores=1, chunknam
   ldchunks[[i]] <-as.data.frame(ll)
   if(probar){setTxtProgressBar(pbar, i)}
   ldc <- ldchunks[[i]]
-  save(ldc, file=paste0("LD_chunks_",chunkname,"_",i+chunknr,".rdata"))
+  save(ldc, file=file.path(outpath,paste0("LD_chunks_",chunkname,"_",i+chunknr,".rdata")))
   }
 parallel::stopCluster(cl)
 LDres2 <- data.table::rbindlist(ldchunks)
@@ -299,7 +300,7 @@ if (save)
    (cat(paste("  Once you have checked you can delete your LD_chunks_",chunkname,"files.\n")))
   }  
   assign(nobj, LDres2)
-  save(list=nobj, file=filename)
+  save(list=nobj, file=file.path(outpath,filename))
 }
 
 # FLAG SCRIPT END

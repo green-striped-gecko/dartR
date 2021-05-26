@@ -9,8 +9,11 @@
 #' @return a genlight object is returned. Including all available slots are filled. loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
 #' @details the ind.metadata file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (perferable in decimal degrees WGS1984 format). Additional columns with individual metadata can be imported (e.g. age, gender).
 
-
-utils.dart2genlight <- function(dart, ind.metafile=NULL, covfilename=NULL, probar = TRUE, verbose=2){
+utils.dart2genlight <- function(dart,
+                                ind.metafile=NULL,
+                                covfilename=NULL, 
+                                probar = TRUE, 
+                                verbose=2){
 
 # TRAP COMMAND, SET VERSION
   
@@ -47,6 +50,8 @@ nind <- dart[["nind"]]
 nsnp <- dart[["nsnp"]]
 sraw <- dart[["covmetrics"]]
 nrows <- dart[["nrows"]] #check if nrows are provided...
+service <- as.character(unlist(unname(dart[["service"]])))
+plate_location <-  as.character(unlist(unname(dart[["plate_location"]])))
 
 
 if (is.null(nrows)){
@@ -120,6 +125,9 @@ if (probar) close(pb)
 df <- as.data.frame(lapply( sraw[esl,], function (x) if (is.factor(x)) factor(x) else x)) 
 
 gout@other$loc.metrics <- df
+df_ind.metrics <- as.data.frame(matrix(nrow = nInd(gout),ncol = 2))
+colnames(df_ind.metrics) <- c("service","plate_location")
+gout@other$ind.metrics <- df_ind.metrics
 
 ####
 #additional metadata and long lat to the data file are stored in other
@@ -171,12 +179,15 @@ if (!is.null(ind.metafile)){
       }
       ord2 <- match(ind.cov[ord,id.col], indNames(gout))
       gout <- gout[ord2,]
+      service <- service[ord2]
+      plate_location <- plate_location[ord2]
     } else{
       stop("Fatal Error: Individual ids are not matching!!!!\n")
     }
   }
 
-
+ ind.cov$service <- service
+ ind.cov$plate_location <- plate_location
  pop.col = match( "pop", names(ind.cov))
 
  if (is.na(pop.col)) {
@@ -213,7 +224,7 @@ if (!is.null(ind.metafile)){
 # known.col <- ifelse(is.na(known.col), , known.col)
 # other.col <- names(ind.cov)[!known.col]
   other.col <- names(ind.cov)
- if (length(other.col>0) ){
+ if (length(other.col)>0 ){
     gout@other$ind.metrics<-ind.cov[ord,other.col, drop=FALSE]
     rownames(gout@other$ind.metrics) <- ind.cov[ord,id.col]
     if (verbose >= 2){
@@ -221,6 +232,9 @@ if (!is.null(ind.metafile)){
     }
   }
 }
+
+gout@other$ind.metrics$service <- service
+gout@other$ind.metrics$plate_location <- plate_location
 
 # FLAG SCRIPT END
 
