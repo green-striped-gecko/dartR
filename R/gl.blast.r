@@ -122,7 +122,7 @@
 #' @examples
 #' \dontrun{
 #' res <- gl.blast(x= testset.gl,ref_genome = 'sequence.fasta')
-#' # display of the slot history to identify which report the user want to plot
+#' # display of the slot history to identify which report the user wants to plot
 #' gl.print.history(res)
 #' # reopen the plots from the last report
 #' blast_databases <- gl.access.report(res)
