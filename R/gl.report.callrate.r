@@ -14,7 +14,8 @@
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours List of two color names for the borders and fill of the
 #'  plots [default two_colors].
-#'
+#'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#'  
 #'@details The function \code{\link{gl.filter.callrate}} will filter out the
 #'  loci with call rates below a specified threshold.
 #'
@@ -33,7 +34,7 @@
 #'  In this function q = 20. Quantiles are useful measures because they are less
 #'  susceptible to long-tailed distributions and outliers.
 #'
-#'  Plots and table were saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+#'  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
 #'   
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -61,7 +62,7 @@
 #'  
 
 gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(), 
-                               plot_colours = two_colors) {
+                               plot_colours = two_colors,verbose=2) {
   
   # TRAP COMMAND
   
@@ -69,7 +70,7 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   
   # GENERAL ERROR CHECKING
   
-  x <- utils.check.gl(x)
+  x <- utils.check.gl(x,verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
@@ -119,15 +120,16 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
       plot_theme
     
     # Print out some statistics
+    stats <- strsplit(summary(x@other$loc.metrics$CallRate),split = ":")
     cat("  Reporting Call Rate by Locus\n")
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
-    cat("    Minimum Call Rate: ", round(min(x@other$loc.metrics$CallRate), 
-                                         2), "\n")
-    cat("    Maximum Call Rate: ", round(max(x@other$loc.metrics$CallRate), 
-                                         2), "\n")
-    cat("    Average Call Rate: ", round(mean(x@other$loc.metrics$CallRate), 
-                                         3), "\n")
+    cat("    Minimum      : ", stats[[1]][2], "\n")
+    cat("    1st quantile : ", stats[[2]][2], "\n")
+    cat("    Median       : ", stats[[3]][2], "\n")
+    cat("    Mean         : ", stats[[4]][2], "\n")
+    cat("    3r quantile  : ", stats[[5]][2], "\n")
+    cat("    Maximum      : ", stats[[6]][2], "\n")
     cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                         nInd(x)), 2), "\n\n")
     
