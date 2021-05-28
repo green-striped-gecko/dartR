@@ -31,10 +31,14 @@ utils.check.gl <- function(x) {
   if (is.null(x@other$loc.metrics)) {
     x@other$loc.metrics <- as.data.frame(array(NA, nLoc(x)))
   }
-  x@other$loc.metrics <- data.frame(x@other$loc.metrics)
+  x@other$loc.metrics <- as.data.frame(x@other$loc.metrics)
   # Check if the x@other$loc.metrics.flags slot exists, if not, create a dataframe
   if (is.null(x@other$loc.metrics.flags)) {
     x@other$loc.metrics.flags <- as.data.frame(array(NA, 1))
+  }
+  # check if loc.metrics has been calculated
+  if(is.null(x$other$loc.metrics$maf) | is.na(x$other$loc.metrics$maf)[1]){
+    x <- gl.recalc.metrics(x,verbose = 0)
   }
   # Check if the x@other$ind.metrics slot exists, if not, create a dataframe
   if (verbose >= 2) {
