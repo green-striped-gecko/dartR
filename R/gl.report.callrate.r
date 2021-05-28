@@ -9,12 +9,12 @@
 #'
 #'@param x Name of the genlight object containing the SNP or presence/absence
 #'  (SilicoDArT) data [required].
-#'@param method Specify the type of report by locus (method='loc') or individual
-#'  (method='ind') [default method='loc'].
+#'@param method Specify the type of report by locus ('loc') or individual
+#'  ('ind') [default 'loc'].
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours List of two color names for the borders and fill of the
 #'  plots [default two_colors].
-#'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#'@param verbose verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'  
 #'@details The function \code{\link{gl.filter.callrate}} will filter out the
 #'  loci with call rates below a specified threshold.
@@ -62,7 +62,7 @@
 #'  
 
 gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(), 
-                               plot_colours = two_colors,verbose=2) {
+                               plot_colours = two_colors, verbose = 2) {
   
   # TRAP COMMAND
   
@@ -185,15 +185,16 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
       plot_theme
     
     # Print out some statistics
+    stats <- strsplit(summary(ind.call.rate$ind.call.rate),split = ":")
     cat("  Reporting Call Rate by Individual\n")
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
-    cat("    Minimum Call Rate: ", round(min(ind.call.rate$ind.call.rate), 
-                                         2), "\n")
-    cat("    Maximum Call Rate: ", round(max(ind.call.rate$ind.call.rate), 
-                                         2), "\n")
-    cat("    Average Call Rate: ", round(mean(ind.call.rate$ind.call.rate), 
-                                         3), "\n")
+    cat("    Minimum      : ", stats[[1]][2], "\n")
+    cat("    1st quantile : ", stats[[2]][2], "\n")
+    cat("    Median       : ", stats[[3]][2], "\n")
+    cat("    Mean         : ", stats[[4]][2], "\n")
+    cat("    3r quantile  : ", stats[[5]][2], "\n")
+    cat("    Maximum      : ", stats[[6]][2], "\n")
     cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                         nInd(x)), 2), "\n\n")
     
