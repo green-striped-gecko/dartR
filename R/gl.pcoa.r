@@ -14,12 +14,12 @@
 #'@param n.cores Number of cores to use if parallel processing is requested [default 16]
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours List of two color names for the borders and fill of the plot [default two_colors].
-
-#'@param verbose verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
 #'@details The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\} with default settings apart from those specified as parameters in this 
 #' function.
-#'\strong { Sources of stress in the visual representation }
+#'\strong{ Sources of stress in the visual representation }
+#'
 #' While, technically, any distance matrix can be represented in an ordinated space, the representation will not typically be exact.There are three 
 #' major sources of stress in a reduced-representation of distances or dissimilarities among entities using PCA or PCoA. By far the greatest
 #' source comes from the decision to select only the top two or three axes from the ordinated set of axes derived from the PCA or PCoA. The representation of
@@ -46,7 +46,8 @@
 #' of the final PCA or PCoA axes to be displayed, the distortion is probably of no practical consequence and certainly not comparable to the stress arising from
 #' selecting only two or three final dimensions out of several informative dimensions for the visual representation.
 #' 
-#'\strong { Function's output }
+#'\strong{ Function's output }
+#'
 #' Two diagnostic plots are produced. The first is a Scree Plot, showing the percentage variation explained by each of the PCA or PCoA axes, for those axes that 
 #' explain more than the original variables (loci) on average. That is, only informative axes are displayed. The scree plot informs the number of dimensions
 #' to be retained in the visual summaries. As a rule of thumb, axes with more than 10% of variation explained should be included.
@@ -84,7 +85,7 @@
 #' gl.pcoa.plot(pca,fd)
 #'
 #'@references
-#'#'\itemize{ 
+#'\itemize{ 
 #'\item Cailliez, F. (1983) The analytical solution of the additive constant problem. Psychometrika, 48, 305-308.
 #'\item Gower, J. C. (1966) Some distance properties of latent root and vector methods used in multivariate analysis. Biometrika, 53, 325-338.
 #'\item Hotelling, H., 1933. Analysis of a complex of statistical variables into Principal Components. Journal of Educational Psychology 24:417-441, 498-520.
@@ -97,14 +98,14 @@
 #' 
 #'@seealso \code{\link{gl.pcoa.plot}}
 #'
-#'@family data exploration
+#'@family data exploration functions
 #'
 #'@importFrom ape pcoa
 #'
 #'@export 
 #'
 
-gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, parallel = FALSE, n.cores = 16, plot_theme = theme_dartR(),plot_colours = two_colors ,verbose = 2) {
+gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, parallel = FALSE, n.cores = 16, plot_theme = theme_dartR(),plot_colours = two_colors, verbose = 2) {
 
     # TRAP COMMAND, SET VERSION
 
