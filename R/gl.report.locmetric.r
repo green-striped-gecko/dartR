@@ -8,6 +8,7 @@
 #'@param metric Name of the metric to be used for filtering [required]
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
 #'@param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
+#'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
 #'@details 
 #'The function \code{\link{gl.filter.locmetric}} will filter out the
@@ -33,6 +34,7 @@
 #'}
 #'
 #'\strong{ Function's output }
+#'
 #' The minimum, maximum, mean and a tabulation of quantiles of the locmetric values against
 #'  thresholds rate are provided. Output also includes a boxplot and a
 #'  histogram.
@@ -74,7 +76,7 @@
 #'@export
 #'
 
-gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colours = two_colors) {
+gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colours = two_colors,verbose=2) {
 
     # TRAP COMMAND, SET VERSION
 
@@ -82,7 +84,7 @@ gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colo
 
     # GENERAL ERROR CHECKING
 
-    x <- utils.check.gl(x)
+    x <- utils.check.gl(x,verbose=verbose)
 
     # FLAG SCRIPT START
 
