@@ -12,6 +12,7 @@
 #'@param rm.monomorphs If TRUE, remove monomorphic loci [default TRUE]
 #'@param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE]
 #'@param n.cores Number of cores to use if parallel processing is requested [default 16]
+#'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours List of two color names for the borders and fill of the plot [default two_colors].
 
 #'@param verbose verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
@@ -62,6 +63,13 @@
 #'\item  $loadings - Loadings of each SNP for each principal component  
 #'    }
 #' 
+#' Plots and table were saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+#'   
+#'  Examples of other themes that can be used can be consulted in \itemize{
+#'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+#'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+#'  }
+#' 
 #' PCA was developed by Pearson (1901) and Hotelling (1933), whilst the best modern reference is Jolliffe (2002). PCoA was developed by Gower (1966) while the
 #' best modern reference is Legendre & Legendre (1998).
 #' 
@@ -89,12 +97,14 @@
 #' 
 #'@seealso \code{\link{gl.pcoa.plot}}
 #'
+#'@family data exploration
+#'
 #'@importFrom ape pcoa
 #'
 #'@export 
 #'
 
-gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, parallel = FALSE, n.cores = 16, plot_colours = two_colors ,verbose = 2) {
+gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, parallel = FALSE, n.cores = 16, plot_theme = theme_dartR(),plot_colours = two_colors ,verbose = 2) {
 
     # TRAP COMMAND, SET VERSION
 
@@ -305,7 +315,7 @@ gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, pa
             geom_line( color=plot_colours[2]) +
             geom_point(color=plot_colours[1],size=4 ) +
             geom_hline(yintercept = 10, color="blue" ) +
-            theme_dartR( ) +
+            plot_theme +
             xlab(xlab) +
             ylab(ylab) +
             ggtitle(title)
@@ -319,7 +329,7 @@ gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, pa
     p2 <- ggplot(as.data.frame(eig.raw.noise),aes(x= eig.raw.noise)) +
         geom_histogram(bins = 50, color = plot_colours[1], fill = plot_colours[2]) +
         geom_vline(xintercept = 0, color="blue" ) +
-        theme_dartR( ) +
+        plot_theme +
         xlab("Eigenvalue") +
         ylab("Count") +
         ggtitle(main)
@@ -329,7 +339,7 @@ gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, pa
     print(p3)
 
     # creating temp file names
-    temp_plot <- tempfile(pattern = "plot_")
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
 
     # saving to tempdir
     saveRDS(p3, file = temp_plot)
