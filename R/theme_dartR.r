@@ -7,6 +7,7 @@
 #' @param base_family base font family
 #' @param base_line_size base size for line elements
 #' @param base_rect_size base size for rect elements
+#' @export
 #' @examples
 #' 
 #' ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
