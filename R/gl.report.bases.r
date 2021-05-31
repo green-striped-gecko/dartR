@@ -2,30 +2,33 @@
 #'
 #'@title Report summary of base pair frequencies
 #'
-#'@description This script calculates the frequencies of the four DNA nucleobases: adenine (A), cytosine (C), guanine (G) and thymine (T), and the frequency of transitions (Ts) and transversions (Tv) in a DArT genlight object.
+#'@description This script calculates the frequencies of the four DNA nucleotide bases: adenine (A), cytosine (C), 
+#'guanine (G) and thymine (T), and the frequency of transitions (Ts) and transversions (Tv) in a DArT genlight object.
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required]
 #' @param plot If TRUE, histograms of base composition are produced [default TRUE]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
-#' @param plot_colours Two color names for borders and fill of the plots [default two_colors)]
+#' @param plot_colours Two color names for borders and fill of the plots [default two_colors]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #'
-#'@details The script checks first if trimmed sequences are included in the locus metadata (@@other$loc.metrics$TrimmedSequence), and if so, tallies up
-#' the numbers of A, T, G and C bases. Only the reference state at the SNP locus is counted. Counts of transitions (Ts)
-#' and transversions (Tv) assume that there is no directionality, that is C->T is the same as T->C, because
-#' the reference state is arbitrary.
+#'@details The script checks first if trimmed sequences are included in the locus metadata (@@other$loc.metrics$TrimmedSequence), 
+#'and if so, tallies up the numbers of A, T, G and C bases. Only the reference state at the SNP locus is counted. Counts of 
+#'transitions (Ts) and transversions (Tv) assume that there is no directionality, that is C->T is the same as T->C, because
+#'the reference state is arbitrary.
 #'
 #' For presence/absence data (SilicoDArT), it is not possible to count transversions or transitions or transversions/transitions ratio
 #' because the SNP data is not available, only a single sequence tag.
 #' 
-#'  Examples of other themes that can be used can be consulted in \itemize{
+#' Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#' @return Returns a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
-#' @return Returns a named vector of base frequencies and the transversion and transitions. It also returns the plot as an ggplot object, which can be further customised. See example.
-#'
-#'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @return A list containing 
+#'         [[1]] $freq -- the table of base frequencies and transition/transversion ratios;
+#'         [[2]] $plotbases -- ggplot bargraph of base frequencies;
+#'         [[3]] $plottstv -- ggplot bargraph of transitions and transversions.
+#'@author Core dartR Team (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples
 #' # SNP data
@@ -38,19 +41,22 @@
 #'   out
 #'
 #'@import stringr
+#'@import crayon
+#'@import patchwork
 #'
 #'@export 
 #'
 
-gl.report.bases <- function(x, plot = TRUE,plot_theme = theme_dartR(), 
-                            plot_colours = two_colors) {
+gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(), 
+                            plot_colours=two_colors,verbose=NULL) {
 
     # TRAP COMMAND, SET VERSION
     funname <- match.call()[[1]]
 
     # ERROR CHECKING
 
-    x <- utils.check.gl(x)
+    datatype <- utils.check.gl(x)
+    verbose <- utils.check.verbosity(verbose)
 
     # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -62,10 +68,10 @@ gl.report.bases <- function(x, plot = TRUE,plot_theme = theme_dartR(),
 
     if (verbose >= 1) {
       if (verbose == 5) {
-        cat(report("\n\nStarting", funname, "[ Build =", 
+        cat(report("\nStarting", funname, "[ Build =", 
                    build, "]\n\n"))
       } else {
-        cat(report("\n\nStarting", funname, "\n\n"))
+        cat(report("\nStarting", funname, "\n\n"))
       }
     }
 
@@ -99,7 +105,8 @@ gl.report.bases <- function(x, plot = TRUE,plot_theme = theme_dartR(),
     mx <- max(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
     mi <- min(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
     
-    if (datatype == "SNP") {
+    if (datatype == "SNP"){
+      
         # Extract the SNPs
         matrix <- stringr::str_split_fixed(x@other$loc.metrics$SNP, ":", 2)
         state.change <- matrix[, 2]
@@ -153,6 +160,7 @@ gl.report.bases <- function(x, plot = TRUE,plot_theme = theme_dartR(),
         } else {
             title <- paste0("Tag P/A: Base Frequencies")
         }
+      
         bases <- c("A", "C", "T", "G")
         freq <- round(c(A, C, T, G), 1)
         df <- data.frame(bases = bases, freq = freq)
@@ -161,7 +169,7 @@ gl.report.bases <- function(x, plot = TRUE,plot_theme = theme_dartR(),
           geom_bar(stat = "identity",color = plot_colours[1], 
                    fill = plot_colours[2]) + 
           xlab("Bases") + 
-          ylab("Frequency") +
+          ylab("Percent Frequency") +
           ggtitle(title) +
           plot_theme
 
@@ -174,11 +182,11 @@ gl.report.bases <- function(x, plot = TRUE,plot_theme = theme_dartR(),
               geom_bar(stat = "identity",color = plot_colours[1], 
                        fill = plot_colours[2]) + 
               xlab("Mutation Type") + 
-              ylab("Frequency") + 
+              ylab("Percent Frequency") + 
               ggtitle(paste("SNP: Ts/Tv Rates [ratio =", round(ratio, 2), "]")) +
               plot_theme
             
-            p3 <- (p1/p2)
+            p3 <- (p1/p2) # Using package patchwork
             print(p3)
         } else {
             print(p1)
@@ -187,7 +195,10 @@ gl.report.bases <- function(x, plot = TRUE,plot_theme = theme_dartR(),
 
     # Create return matrix
     if (verbose >= 2) {
-        cat(report("  Creating an output vector to return\n"))
+        cat(report("  Returning a list containing \n
+         [[1]] $freq -- the table of base frequencies and transition/transversion ratios;\n
+         [[2]] $plotbases -- ggplot bargraph of base frequencies;\n
+         [[3]] $plottstv -- ggplot bargraph of transitions and transversions.\n"))
     }
 
     out <- c(round(A, 2), round(G, 2), round(T, 2), round(C, 2), round(tv, 2), round(ts, 2))
