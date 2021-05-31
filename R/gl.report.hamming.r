@@ -69,6 +69,7 @@
 #'
 #'@export 
 #'
+#'#' @seealso \code{\link{gl.filter.hamming}}, \code{\link{gl.access.report}}
 
 gl.report.hamming <- function(x, 
                               rs = 5, 
@@ -216,7 +217,7 @@ gl.report.hamming <- function(x,
     saveRDS(p3, file = temp_plot)
     if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
     saveRDS(df, file = temp_table)
-    if(verbose>=2){cat(report("  Saving the percentile table to the tempfile as",temp_plot,"using saveRDS\n"))}
+    if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
     if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.access.report()\n"))}
     
     # FLAG SCRIPT END
