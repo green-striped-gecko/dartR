@@ -8,6 +8,8 @@
 #'@param x Name of the genlight object containing the SNP [required].
 #'@param method Calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']
 #'@param n.invariant An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours_pop A color palette [default discrete_palette].
 #'@param plot_colours_ind List of two color names for the borders and fill of the plots [default two_colors].
@@ -49,8 +51,8 @@
 #'@author Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples
-#'out <- gl.report.heterozygosity(testset.gl)
-#'out <- gl.report.heterozygosity(testset.gl,method='ind')
+#'df<- gl.report.heterozygosity(testset.gl)
+#'df <- gl.report.heterozygosity(testset.gl,method='ind')
 #'
 #'@references Nei, M. and R. K. Chesser (1983). 'Estimation of fixation indices and gene diversities.' Annals of human genetics 47(3): 253-259.
 #'
@@ -59,7 +61,13 @@
 #'@export 
 #'
 
-gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_theme = theme_dartR(), plot_colours_pop = discrete_palette,plot_colours_ind=two_colors) {
+gl.report.heterozygosity <- function(x, 
+                                     method = "pop", 
+                                     n.invariant = 0, 
+                                     plot_theme = theme_dartR(), 
+                                     plot_colours_pop = discrete_palette,
+                                     plot_colours_ind=two_colors,
+                                     verbose=NULL) {
 
     # TRAP COMMAND
 
@@ -67,7 +75,8 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
 
     # GENERAL ERROR CHECKING
 
-    x <- utils.check.gl(x)
+    datatype <- utils.check.gl(x)
+    verbose <- utils.check.verbosity(verbose)
 
     # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -79,6 +88,7 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
     if (n.invariant < 0) {
         cat(warn("Warning: Number of invariant loci must be non-negative, set to zero\n"))
         n.invariant <- 0
+        if(verbose==5){cat(report("  No. of invariant loci can be esimated using gl.report.secondaries\n"))}
     }
 
     # FLAG SCRIPT START
@@ -289,13 +299,14 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
         names(df) <- c("ind.name", "Ho", "f.hom.ref", "f.hom.alt")
         
         # Boxplot
+        upper <- ceiling(max(df$Ho)*10)/10
         p1 <- ggplot(df, aes(y = Ho)) + 
           geom_boxplot(color = plot_colours_ind[1], 
                        fill = plot_colours_ind[2]) + 
           coord_flip() + 
           plot_theme + 
-          xlim(range = c(-1, 1)) + 
-          ylim(0,1) +
+          xlim(range = c(-1,1)) + 
+          ylim(0,upper) +
           ylab(" ") + 
           theme(axis.text.y = element_blank(),axis.ticks.y = element_blank()) +
           ggtitle("Heterozygosity by Individual")
@@ -303,7 +314,7 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
         # Histogram
         p2 <- ggplot(df,aes(x=Ho)) + 
           geom_histogram(bins = 50, color =plot_colours_ind[1], fill = plot_colours_ind[2]) + 
-          coord_cartesian(xlim = c(0, 1)) + 
+          coord_cartesian(xlim = c(0, upper)) + 
           xlab("Observed heterozygosity") + 
           ylab("Count") + 
           plot_theme
@@ -335,6 +346,17 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
         print(df)
     }
     
+    # creating temp file names
+    temp_plot <- tempfile(pattern = "plot_")
+    temp_table <- tempfile(pattern = "table_")
+    
+    # saving to tempdir
+    setwd(tempdir())
+    saveRDS(p3, file = temp_plot)
+    if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
+    saveRDS(df, file = temp_table)
+    if(verbose>=2){cat(report("  Saving the percentile table to the tempfile as",temp_plot,"using saveRDS\n"))}
+    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.access.report()\n"))}
 
     # FLAG SCRIPT END
 
@@ -342,6 +364,6 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
         cat(report("\n\nCompleted:", funname, "\n\n"))
     }
 
+    if(verbose>=3){cat(report("  Returning a dataframe with heterozygosity values\n"))}
     invisible(df)
-
 }
