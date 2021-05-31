@@ -133,7 +133,7 @@ gl.fixed.diff <- function(x,
   if (tloc > 0.5 || tloc < 0 ) {
     stop("Fatal Error: Parameter tloc should be positive in the range 0 to 0.5\n")
   }  
-  if(!(tloc == 0) & test=TRUE){
+  if(!(tloc == 0) & test==TRUE){
     cat("  Warning: false positives can only be simulated for tloc=0, setting tloc to zero\n")
   }
   
