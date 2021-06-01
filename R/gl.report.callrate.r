@@ -71,7 +71,20 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   
 # GENERAL ERROR CHECKING
     x <- utils.check.gl(x)
+
     verbose <- gl.check.verbosity(verbose)
+
+    #### SETTING DATA TYPE ####
+    if (all(x@ploidy == 1)){
+      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
+      datatype <- "SilicoDArT"
+    } else if (all(x@ploidy == 2)){
+      cat(report("  Processing a SNP dataset\n"))
+      datatype <- "SNP"
+    } else {
+      stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
+    }
+
   
 # FUNCTION SPECIFIC ERROR CHECKING
     
