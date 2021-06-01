@@ -12,7 +12,7 @@ build <- "Jacob"
 # set by parameter 'verbose' can be one of verbose 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary;
 # 5, full report.
 
-options("dartR_verbose"=2)
+#options("dartR_verbose"=2)
 # SET MESSAGES COLORS
 
 # - For fatal errors use “error” which will print the message in red. Example usage: stop(error(“Fatal error”))
@@ -25,6 +25,8 @@ warn <- crayon::yellow
 report <- crayon::green
 important <- crayon::blue 
 code <- crayon::cyan
+
+gl.set.verbosity(2)
 
 # SET PLOTS COLORS
 
