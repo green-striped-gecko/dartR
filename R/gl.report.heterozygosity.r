@@ -9,8 +9,8 @@
 #'@param method Calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']
 #'@param n.invariant An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#'@param plot_colours_pop A color palette [default discrete_palette].
-#'@param plot_colours_ind List of two color names for the borders and fill of the plots [default two_colors].
+#'@param plot_colours_pop A color palette for population plots [default discrete_palette].
+#'@param plot_colours_ind List of two color names for the borders and fill of the plot by individual [default two_colors].
 #'
 #'@details Observed heterozygosity for a population takes the proportion of heterozygous
 #' loci for each individual then averages over the individuals in that population. 
@@ -27,9 +27,7 @@
 #' Observed heterozygosity for individuals is calculated as the proportion of loci that
 #' are heterozygous for that individual.
 #' 
-#' Output for method='ind' is a histogram of heterozygosity across individuals.
-#' The histogram is accompanied by a box and whisker plot presented either in standard 
-#' (boxplot='standard') or adjusted for skewness (boxplot=adjusted). 
+#' Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
 #' 
 #' Finally, the loci that are invariant across all individuals in the dataset (that is,
 #' across populations), is typically unknown. This can render estimates of heterozygosity
@@ -166,7 +164,8 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
         # printing plots and reports
         if (is.null(n.invariant)) {
             df.ordered <- df[order(df$Ho), ]
-
+            df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
+            
             p1 <- ggplot(df.ordered, aes(x = pop, y = Ho, fill = pop)) + geom_bar(position = "dodge", stat = "identity", color = "black") + 
                 scale_fill_manual(values = plot_colours_pop(nPop(x))) + scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd, 
                 sep = " | ")) + plot_theme + theme(axis.ticks.x = element_blank(), axis.text.x = element_text(angle = 90, hjust = 1, 
@@ -180,6 +179,7 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
                 legend.position = "none") + labs(fill = "Population") + ggtitle("Expected Heterozygosity by Population")
         } else {
             df.ordered <- df[order(df$Ho.adj), ]
+            df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
 
             p1 <- ggplot(df.ordered, aes(x = pop, y = Ho.adj, fill = pop)) + geom_bar(position = "dodge", stat = "identity", 
                 color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + scale_x_discrete(labels = paste(df.ordered$pop, 
@@ -258,7 +258,7 @@ gl.report.heterozygosity <- function(x, method = "pop", n.invariant = 0, plot_th
         # printing outputs
         p3 <- (p1/p2)
         print(p3)
-        print(df)
+        print(df.ordered)
 
     }
 
