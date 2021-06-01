@@ -2,12 +2,14 @@
 #'
 #' This function checks for errors in verbosity, loc.metrics, ind.metrics, ploidy, metadata, populations, individuals and loci.
 #'
-#' @param x -- name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]
-#' @return The modified genlight object
-#' @examples
+#'@param x Name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]
+#'@return The modified genlight object
+#'@examples
 #' test <- utils.check.gl(testset.gl)
+#' 
+#'@export
 
-utils.check.gl <- function(x) {
+utils.check.gl <- function(x,verbose=2) {
   
   
   #### CHECK GENLIGHT OBJECT ####
@@ -17,10 +19,14 @@ utils.check.gl <- function(x) {
   
   #### SETTING DATA TYPE ####
   if (all(x@ploidy == 1)){
+    if(verbose>2){
     cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
+    }
     datatype <- "SilicoDArT"
   } else if (all(x@ploidy == 2)){
+    if(verbose>2){
     cat(report("  Processing a SNP dataset\n"))
+    }
     datatype <- "SNP"
   } else {
     stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
@@ -263,7 +269,9 @@ utils.check.gl <- function(x) {
   #   message(report("  Spelling of coordinates checked and changed if necessary"))
   # }
   
+  if(verbose>2){
   message(report("Checking genlight object finalised\n"))
+  }
   
   return(x)
   
