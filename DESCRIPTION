@@ -28,9 +28,10 @@ Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2
 biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         SNPRelate, StAMPP, sp, PopGenReport, hierfstat, robustbase,
-        gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools, patchwork
+        gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools, 
+        patchwork, reshape2, spaa
 Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
-        reshape2, pca3d, dismo, pegas, directlabels, rgdal,
+        pca3d, dismo, pegas, directlabels, rgdal,
         leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp, igraph,
         qvalue, gdistance, seqinr, pheatmap, RColorBrewer, gplots,
         vcfR, mmod, plotly, ggthemes, ggrepel, raster
