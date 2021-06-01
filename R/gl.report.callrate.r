@@ -41,8 +41,7 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#' @return Returns a genlight object with the file names of plots and table that
-#'  were saved in the tempdir stored in the slot other$history
+#' @return Returns unaltered genlight object
 #'
 #' @export
 #'
@@ -229,7 +228,7 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
   saveRDS(df, file = temp_table)
   if(verbose>=2){cat(report("  Saving the percentile table to the tempfile as",temp_table,"using saveRDS\n"))}
-  if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir",tempdir(),"using gl.access.report()\n"))}
+  if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.access.report()\n"))}
   
 # FLAG SCRIPT END
   
