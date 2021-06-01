@@ -57,6 +57,18 @@ gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(),
     x <- utils.check.gl(x)
     verbose <- gl.check.verbosity(verbose)
 
+    #### SETTING DATA TYPE ####
+    if (all(x@ploidy == 1)){
+      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
+      datatype <- "SilicoDArT"
+    } else if (all(x@ploidy == 2)){
+      cat(report("  Processing a SNP dataset\n"))
+      datatype <- "SNP"
+    } else {
+      stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
+    }
+    
+    
     # FUNCTION SPECIFIC ERROR CHECKING
 
     if (!any(names(x@other$loc.metrics) == "TrimmedSequence")) {
