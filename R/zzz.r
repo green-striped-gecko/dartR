@@ -191,7 +191,7 @@ theme_dartR <- function(base_size = 11, base_family = "",
   packageStartupMessage(report("This installs all missing and required packages for your version of dartR. \nFor citation information please use:"))
   packageStartupMessage(code("citation('dartR')"))
   
-  options("dartR_verbosity"=2)
+  options("dartR_verbose"=2)
   packageStartupMessage(report("Global verbosity is set to: 2\n"))
   
   packageStartupMessage(important("\n**** Have fun using dartR! ****"))

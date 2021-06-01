@@ -63,7 +63,7 @@
 #'  
 
 gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(), 
-                               plot_colours = two_colors, verbose=NULL) {
+                               plot_colours = two_colors, verbose=options()$dartR_verbose) {
   
 # TRAP COMMAND
   

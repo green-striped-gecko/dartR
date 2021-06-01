@@ -13,7 +13,7 @@ gl.check.verbosity <- function(verbose=NULL) {
   
 # SET VERBOSITY or GET it from global
   if (is.null(verbose)) verbose <- options()$dartR_verbose else {
-  if (is.numeric(verbose) & verbose>=0 & verbose<=5) verbose <- verbose else verbose <- 2   
+  if (is.numeric(verbose) & verbose>=0 & verbose<=5) verbose <- verbose else verbose <- 2 
   }
     
   return(verbose)

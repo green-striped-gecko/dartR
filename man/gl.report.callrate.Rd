@@ -9,7 +9,7 @@ gl.report.callrate(
   method = "loc",
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
-  verbose = NULL
+  verbose = options()$dartR_verbose
 )
 }
 \arguments{

@@ -7,7 +7,7 @@
 #' @export
 #' @importFrom stringr str_trim
 #' @importFrom devtools install_github
-#' @rawNamespace import (crayon, except = c(chr, '%+%') )
+#' @rawNamespace import(crayon, except = c(chr, '%+%'))
 #' @importFrom utils installed.packages install.packages available.packages
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 
