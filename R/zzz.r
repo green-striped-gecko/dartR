@@ -187,5 +187,7 @@ theme_dartR <- function(base_size = 11, base_family = "",
   
   packageStartupMessage(report("This installs all missing and required packages for your version of dartR. \nFor citation information please use:"))
   packageStartupMessage(code("citation('dartR')"))
+
   packageStartupMessage(important("\n**** Have fun using dartR! ****"))
 }
+
