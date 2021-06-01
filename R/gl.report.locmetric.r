@@ -173,8 +173,8 @@ gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colo
     saveRDS(p3, file = temp_plot)
     if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
     saveRDS(df, file = temp_table)
-    if(verbose>=2){cat(report("  Saving the percentile table to the tempfile as",temp_table,"using saveRDS\n"))}
-    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir",tempdir(),"using gl.access.report()\n"))}
+    if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
+    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
 
     # FLAG SCRIPT END
 

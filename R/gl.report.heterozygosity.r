@@ -59,7 +59,9 @@
 #'
 #'@export 
 #'
-#'#' @seealso \code{\link{gl.filter.heterozygosity}}, \code{\link{gl.access.report}}
+#' @seealso \code{\link{gl.filter.heterozygosity}},\code{\link{gl.list.reports}},
+#'  \code{\link{gl.print.reports}}
+#'  
 
 gl.report.heterozygosity <- function(x, 
                                      method = "pop", 

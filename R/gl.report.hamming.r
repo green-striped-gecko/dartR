@@ -55,7 +55,9 @@
 #'
 #'@export 
 #'
-#'#' @seealso \code{\link{gl.filter.hamming}}, \code{\link{gl.access.report}}
+#'@seealso \code{\link{gl.filter.hamming}},\code{\link{gl.list.reports}},
+#'  \code{\link{gl.print.reports}}
+#'  
 
 gl.report.hamming <- function(x, 
                               rs = 5, 

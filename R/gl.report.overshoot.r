@@ -16,7 +16,8 @@
 #' @examples
 #' gl.report.overshoot(testset.gl)
 #' 
-#' #' @seealso \code{\link{gl.filter.overshoot}}, \code{\link{gl.access.report}}
+#' @seealso \code{\link{gl.filter.overshoot}},\code{\link{gl.list.reports}},
+#'  \code{\link{gl.print.reports}}
 
 gl.report.overshoot <- function(x, verbose=NULL) {
 
@@ -27,8 +28,19 @@ gl.report.overshoot <- function(x, verbose=NULL) {
   
   # GENERAL ERROR CHECKING
   
-  datatype <- utils.check.gl(x)
+  x <- utils.check.gl(x)
   verbose <- utils.check.verbosity(verbose)
+  
+  #### SETTING DATA TYPE ####
+  if (all(x@ploidy == 1)){
+    cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
+    datatype <- "SilicoDArT"
+  } else if (all(x@ploidy == 2)){
+    cat(report("  Processing a SNP dataset\n"))
+    datatype <- "SNP"
+  } else {
+    stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
+  }
   
 # FLAG SCRIPT START
   
@@ -76,11 +88,9 @@ gl.report.overshoot <- function(x, verbose=NULL) {
     temp_table <- tempfile(pattern = "table_")
     
     # saving to tempdir
-    setwd(tempdir())
     saveRDS(df, file = temp_table)
-    if(verbose>=2){cat(report("  Saving the list of recalitrant loci to the tempfile as",temp_table,"using saveRDS\n"))}
-    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.access.report()\n"))}  
-
+    if(verbose>=2){cat(report("  Saving the heterozygosity data to the tempfile as",temp_table,"using saveRDS\n"))}
+    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
 # FLAG SCRIPT END
 
   if (verbose >= 1) {
