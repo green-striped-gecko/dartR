@@ -93,21 +93,24 @@ gl.collapse <- function(fd,
     if (tpop == 0) {cat("  Amalgamating populations with zero fixed differences\n")}
   }
 
+# Convert fd$fd from a distance matrix to a square matrix
+  mat <- as.matrix(fd$fd)
+
 # Store the number of populations in the matrix
-  npops <- dim(fd$fd)[1]
+  npops <- dim(mat)[1]
   
 # Extract the column names
-  pops <- variable.names(fd$fd)
+  pops <- variable.names(mat)
   
 # Initialize a list to hold the populations that differ by <= tpop
   zero.list <- list()
 
   # For each pair of populations
   for(i in 1:npops){
-    zero.list[[i]] <- c(rownames(fd$fd)[i])
+    zero.list[[i]] <- c(rownames(mat)[i])
     for (j in 1:npops) {
-      if (fd$fd[i,j] <= tpop) {
-        zero.list[[i]] <- c(zero.list[[i]],rownames(fd$fd)[i],rownames(fd$fd)[j])
+      if (mat[i,j] <= tpop) {
+        zero.list[[i]] <- c(zero.list[[i]],rownames(mat)[i],rownames(mat)[j])
         zero.list[[i]] <- unique(zero.list[[i]])
       }
     }
@@ -178,14 +181,15 @@ gl.collapse <- function(fd,
     }
     if (verbose >= 3) {
       cat("Sample sizes")
-      print(table(pop(x)))
+      print(table(pop(fd2$gl)))
       cat("\n")
     }
 
-# Create the list for output
+    # Create the list for output
     l <- list(gl=fd2$gl,fd=fd2$fd,pcfd=fd2$pcfd,nobs=fd2$nobs,nloc=fd2$nloc,expfpos=fd2$expfpos,sdfpos=fd2$sdfpos,pval=fd2$pval)
+    class(l) <- "fd"
   }
-  class(l) <- "fd"
+
   
   # Explanatory bumpf
     if (verbose >= 4) {
