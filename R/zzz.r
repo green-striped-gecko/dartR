@@ -26,7 +26,7 @@ report <- crayon::green
 important <- crayon::blue 
 code <- crayon::cyan
 
-gl.set.verbosity(2)
+
 
 # SET PLOTS COLORS
 
@@ -183,13 +183,17 @@ theme_dartR <- function(base_size = 11, base_family = "",
 
 # WELCOME MESSAGE
 .onAttach <- function(...) {
+  
   packageStartupMessage(important("**** Welcome to dartR ****\n"))
   packageStartupMessage(report("Be aware that owing to CRAN requirements and compatibility reasons not all functions of the packages may run yet, as some dependencies could be missing. Hence for a most enjoyable experience we recommend to run the function "))
   packageStartupMessage(code("gl.install.vanilla.dartR()"))                 
   
   packageStartupMessage(report("This installs all missing and required packages for your version of dartR. \nFor citation information please use:"))
   packageStartupMessage(code("citation('dartR')"))
-
+  
+  options("dartR_verbosity"=2)
+  packageStartupMessage(report("Global verbosity is set to: 2\n"))
+  
   packageStartupMessage(important("\n**** Have fun using dartR! ****"))
 }
 
