@@ -26,32 +26,25 @@
 #'  Tag Presence/Absence datasets (SilicoDArT) have missing values where it is
 #'  not possible to determine reliably if the sequence tag can be called at a
 #'  particular locus.
+#'  
+#'\strong{ Function's output }
 #'
 #'  The minimum, maximum, mean and a tabulation of call rate quantiles against
 #'  thresholds rate are provided. Output also includes a boxplot and a
 #'  histogram to guide in the selection of a threshold for filtering on callrate.
 #'
-#'  \strong{Plots and table are saved to the temporal directory (tempdir) and
-#'  can be accessed with the function \code{\link{gl.access.report}}. Note that
-#'  they can be accessed only in the current R session because tempdir is
-#'  cleared each time that an R session is closed.}
-#'
+#'  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+#'   
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#' @return Returns a genlight object with the file names of plots and table that
-#'  were saved in the tempdir stored in the slot other$history
+#'@return Returns an unchanged genlight object
 #'
-#' @export
+#'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
-#' @import crayon
-#' @import patchwork
-#'
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-#'
-#' @examples
+#'@examples
 #' # SNP data
 #'   gl.report.callrate(testset.gl)
 #'   gl.report.callrate(testset.gl,method="ind")
@@ -59,7 +52,15 @@
 #'   gl.report.callrate(testset.gs)
 #'   gl.report.callrate(testset.gs,method="ind")
 #'
-#' @seealso \code{\link{gl.filter.callrate}}, \code{\link{gl.access.report}}
+#'@seealso \code{\link{gl.filter.callrate}}, \code{\link{gl.list.reports}},
+#'  \code{\link{gl.print.reports}}
+#'  
+#'@family filters and filter reports
+#'
+#'@import patchwork
+#'@import crayon
+#'
+#'@export
 #'  
 
 gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(), 
@@ -119,15 +120,16 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
       plot_theme
     
     # Print out some statistics
+    stats <- strsplit(summary(x@other$loc.metrics$CallRate),split = ":")
     cat("  Reporting Call Rate by Locus\n")
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
-    cat("    Minimum Call Rate: ", round(min(x@other$loc.metrics$CallRate), 
-                                         2), "\n")
-    cat("    Maximum Call Rate: ", round(max(x@other$loc.metrics$CallRate), 
-                                         2), "\n")
-    cat("    Average Call Rate: ", round(mean(x@other$loc.metrics$CallRate), 
-                                         3), "\n")
+    cat("    Minimum      : ", stats[[1]][2], "\n")
+    cat("    1st quantile : ", stats[[2]][2], "\n")
+    cat("    Median       : ", stats[[3]][2], "\n")
+    cat("    Mean         : ", stats[[4]][2], "\n")
+    cat("    3r quantile  : ", stats[[5]][2], "\n")
+    cat("    Maximum      : ", stats[[6]][2], "\n")
     cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                         nInd(x)), 2), "\n\n")
     
@@ -180,15 +182,16 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
       plot_theme
     
     # Print out some statistics
+    stats <- strsplit(summary(ind.call.rate$ind.call.rate),split = ":")
     cat("  Reporting Call Rate by Individual\n")
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
-    cat("    Minimum Call Rate: ", round(min(ind.call.rate$ind.call.rate), 
-                                         2), "\n")
-    cat("    Maximum Call Rate: ", round(max(ind.call.rate$ind.call.rate), 
-                                         2), "\n")
-    cat("    Average Call Rate: ", round(mean(ind.call.rate$ind.call.rate), 
-                                         3), "\n")
+    cat("    Minimum      : ", stats[[1]][2], "\n")
+    cat("    1st quantile : ", stats[[2]][2], "\n")
+    cat("    Median       : ", stats[[3]][2], "\n")
+    cat("    Mean         : ", stats[[4]][2], "\n")
+    cat("    3r quantile  : ", stats[[5]][2], "\n")
+    cat("    Maximum      : ", stats[[6]][2], "\n")
     cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                         nInd(x)), 2), "\n\n")
     
@@ -220,8 +223,8 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   print(df)
   
   # creating temp file names
-  temp_plot <- tempfile(pattern = "plot_")
-  temp_table <- tempfile(pattern = "table_")
+  temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+  temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
   
   # saving to tempdir
   setwd(tempdir())
@@ -239,4 +242,5 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
 
 # Return genlight object unaltered  
   invisible(x)
+
 }

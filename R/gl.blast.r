@@ -40,6 +40,7 @@
 #'  is almost always significant [default: 50].
 #'@param number_of_threads Number of threads (CPUs) to use in blastn search
 #'  [default: 2].
+#'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
 #'@details \strong{Installing BLAST}
 #'
@@ -93,12 +94,7 @@
 #'  \item PercentageOverlap - length / min(qlen,slen) }
 #'
 #'  Databases containing unfiltered aligned sequences, filtered aligned
-#'  sequences and one hit per sequence are saved to the temporal directory
-#'  (tempdir) and can be accessed with the function
-#'  \code{\link{gl.access.report}} if the input was a genlight object otherwise
-#'  use list.files(tempdir()) to locate the files. Note that they can be
-#'  accessed only in the current R session because tempdir is cleared each time
-#'  that the R session is closed.
+#'  sequences and one hit per sequence are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
 #'
 #'  \strong{BLAST filtering}
 #'
@@ -108,13 +104,8 @@
 #'  selection criteria.
 #'
 #'@return If the input is a genlight object: returns a genlight object with one
-#'  hit per sequence merged to the slot $other$loc.metrics and the file names of
-#'  databases containing unfiltered aligned sequences, filtered aligned
-#'  sequences and one hit per sequence that were saved in the tempdir stored in
-#'  the slot other$history. If the input is a fasta file: returns a dataframe
+#'  hit per sequence merged to the slot $other$loc.metrics. If the input is a fasta file: returns a dataframe
 #'  with one hit per sequence.
-#'
-#'@export
 #'
 #'@author Berenice Talamantes Becerra & Luis Mijangos (Post to
 #'  \url{https://groups.google.com/d/forum/dartr})
@@ -122,31 +113,41 @@
 #' @examples
 #' \dontrun{
 #' res <- gl.blast(x= testset.gl,ref_genome = 'sequence.fasta')
-#' # display of the slot history to identify which report the user want to plot
-#' gl.print.history(res)
-#' # reopen the plots from the last report
-#' blast_databases <- gl.access.report(res)
+#' # display of reports saved in the temporal directory
+#' gl.list.reports()
+#' # open the reports saved in the temporal directory 
+#' blast_databases <- gl.print.reports(1)
 #' }
 #'
-#'@references Altschul, S. F., Gish, W., Miller, W., Myers, E. W., & Lipman, D.
+#'@references 
+#'\itemize{
+#'\item Altschul, S. F., Gish, W., Miller, W., Myers, E. W., & Lipman, D.
 #'  J. (1990). Basic local alignment search tool. Journal of molecular biology,
 #'  215(3), 403-410.
-#'@references Altschul, S. F., Madden, T. L., Schäffer, A. A., Zhang, J., Zhang,
+#'\item Altschul, S. F., Madden, T. L., Schäffer, A. A., Zhang, J., Zhang,
 #'  Z., Miller, W., & Lipman, D. J. (1997). Gapped BLAST and PSI-BLAST: a new
 #'  generation of protein database search programs. Nucleic acids research,
 #'  25(17), 3389-3402.
-#'@references Pearson, W. R. (2013). An introduction to sequence similarity
+#'\item Pearson, W. R. (2013). An introduction to sequence similarity
 #'  (“homology”) searching. Current protocols in bioinformatics, 42(1), 3-1.
+#'  }
 #'
 #'@seealso \code{\link{gl.access.report}}, \code{\link{gl.print.history}}
+#'
+#'@family reference genomes
+#'
+#'@export
+#'
 
 gl.blast <- function(x, ref_genome, task = "megablast", 
                      Percentage_identity = 70, Percentage_overlap = 0.8, 
                      bitscore = 50, number_of_threads = 2, verbose = 2) {
-  # TRAP COMMAND, SET VERSION
-  funname <- match.call()[[1]]
-  build <- "Jacob"
   
+  # TRAP COMMAND
+  funname <- match.call()[[1]]
+  
+  # FUNCTION SPECIFIC ERROR CHECKING
+
   # Check if the x@other$loc.metrics$TrimmedSequence
   # slot exists
   if (class(x)[1] == "genlight") {
@@ -166,6 +167,7 @@ gl.blast <- function(x, ref_genome, task = "megablast",
   }
   
   # DO THE JOB 
+  
   # getting the query fasta files
   if (class(x)[1] == "genlight") {
     fasta.input <- c(rbind(paste("> ", 1:nLoc(x)), 
@@ -291,10 +293,11 @@ gl.blast <- function(x, ref_genome, task = "megablast",
   }
   
   # creating file names
-  temp_blast_unfiltered <- tempfile(pattern = "temp_blast_unfiltered_")
-  temp_blast_filtered <- tempfile(pattern = "temp_blast_filtered_")
-  temp_one_hit <- tempfile(pattern = "temp_one_hit_")
-  
+  temp_blast_unfiltered <- tempfile(pattern =paste0("dartR_blast_unfiltered",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+  temp_blast_filtered <- tempfile(pattern =paste0("dartR_blast_filtered",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+
+  temp_one_hit <- tempfile(pattern =paste0("dartR_one_hit",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+    
   # saving to tempdir
   saveRDS(blast_res_unfiltered, file = temp_blast_unfiltered)
   saveRDS(blast_res_filtered, file = temp_blast_filtered)
@@ -303,16 +306,12 @@ gl.blast <- function(x, ref_genome, task = "megablast",
   # ADD TO HISTORY
   if (class(x)[1] == "genlight") {
     nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- c(match.call(), 
-                                   temp_blast_unfiltered, temp_blast_filtered, 
-                                   temp_one_hit)
+    x@other$history[[nh + 1]] <- match.call()
   }
   
   # FLAG SCRIPT END
   if (verbose >= 1) {
     cat(report("\n\nCompleted:", funname, "\n\n"))
-    cat(important(strwrap("Databases containing unfiltered aligned sequences, filtered aligned sequences and one hit per sequence were saved to the temporal directory (tempdir) and can be accessed with the function gl.access.report() if the input was a genlight object otherwise use list.files(tempdir()) to locate the files. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.")))
-    
   }
   
   if (class(x)[1] == "genlight") {
