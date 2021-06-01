@@ -27,7 +27,7 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples 
 #' # SNP data
-#' out <- gl.report.rdepth(testset.gl)
+#' df <- gl.report.rdepth(testset.gl)
 
 gl.report.rdepth <- function(x, boxplot="adjusted", range=1.5, verbose=NULL) {
 

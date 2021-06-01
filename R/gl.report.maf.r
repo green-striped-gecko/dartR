@@ -2,19 +2,22 @@
 #'
 #'@title Report minor allele frequency (MAF) for each locus in a SNP dataset
 #'
-#'@description This script provides summary histograms of MAF for each population in the dataset and an overall histogram as a basis for decisions on filtering.
+#'@description This script provides summary histograms of MAF for each population in the dataset and an overall histogram to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.maf}}
 #'
 #'@param x Name of the genlight object containing the SNP data [required]
 #'@param maf.limit Show histograms MAF range <= maf.limit [default 0.5]
 #'@param ind.limit Show histograms only for populations of size greater than ind.limit [default 5]
 #'@param loc.limit Show histograms only for populations with more than loc.limit polymorphic loci [default 30]
-#'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#'@param plot_colours_pop A color palette for population plots [default discrete_palette].
-#'@param plot_colours_all List of two color names for the borders and fill of the overall plot [default two_colors].
+#'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
+#'@param plot_colours_pop A color palette for population plots [default discrete_palette]
+#'@param plot_colours_all List of two color names for the borders and fill of the overall plot [default two_colors]
+#'@param verbose verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
 #'@details 
 #'The function \code{\link{gl.filter.maf}} will filter out the
 #'  loci with MAF below a specified threshold.
+#'  
+#'\strong{ Function's output }
 #'  
 #'  The minimum, maximum, mean and a tabulation of MAF quantiles against
 #'  thresholds rate are provided. Output also includes a boxplot and a
@@ -26,36 +29,30 @@
 #'  In this function q = 20. Quantiles are useful measures because they are less
 #'  susceptible to long-tailed distributions and outliers.
 #'
-#'  \strong{Plots and table are saved to the temporal directory (tempdir) and
-#'  can be accessed with the function \code{\link{gl.access.report}}. Note that
-#'  they can be accessed only in the current R session because tempdir is
-#'  cleared each time that an R session is closed.}
+#'  Plots and table were saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
 #'
 #' Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#'@return Returns a genlight object with the file names of plots and table that
-#'  were saved in the tempdir stored in the slot other$history
+#'@return Returns an unchanged genlight object
 #'
 #'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples
 #' gl <- gl.report.maf(testset.gl)
-#' # display of the slot history to identify which report the user wants to plot
-#' gl.print.history(gl)
-#' # reopen the plots from the last report
-#' output <- gl.access.report(gl)
 #'
-#'@seealso \code{\link{gl.filter.maf}}, \code{\link{gl.access.report}},
-#'  \code{\link{gl.print.history}}
+#'@seealso \code{\link{gl.filter.maf}}, \code{\link{gl.list.reports}},
+#'  \code{\link{gl.print.reports}}
+#'  
+#'@family filters and filter reports
 #'
 #'@export 
 #'
 
 gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plot_theme = theme_dartR(), plot_colours_pop = discrete_palette, 
-    plot_colours_all = two_colors) {
+    plot_colours_all = two_colors, verbose = 2) {
 
     # TRAP COMMAND
 
@@ -63,7 +60,7 @@ gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plo
 
     # GENERAL ERROR CHECKING
 
-    x <- utils.check.gl(x)
+    x <- utils.check.gl(x, verbose = verbose)
 
     # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -129,14 +126,19 @@ gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plo
     colnames(maf) <- "maf"
 
     # Print out some statistics
+    stats <- strsplit(summary(x2@other$loc.metrics$maf),split = ":")
     cat("  Reporting Minor Allele Frequency (MAF) by Locus\n")
-    cat("  No. of loci =", nLoc(x2), "\n")
-    cat("  No. of individuals =", nInd(x2), "\n")
-    cat("    Minimum MAF: ", round(min(x2@other$loc.metrics$maf), 2), "\n")
-    cat("    Maximum MAF: ", round(max(x2@other$loc.metrics$maf), 2), "\n")
-    cat("    Average MAF: ", round(mean(x2@other$loc.metrics$maf), 3), "\n")
-    cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x2)))/(nLoc(x2) * nInd(x2)), 2), "\n\n")
-
+    cat("  No. of loci =", nLoc(x), "\n")
+    cat("  No. of individuals =", nInd(x), "\n")
+    cat("    Minimum      : ", stats[[1]][2], "\n")
+    cat("    1st quantile : ", stats[[2]][2], "\n")
+    cat("    Median       : ", stats[[3]][2], "\n")
+    cat("    Mean         : ", stats[[4]][2], "\n")
+    cat("    3r quantile  : ", stats[[5]][2], "\n")
+    cat("    Maximum      : ", stats[[6]][2], "\n")
+    cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
+                                                                          nInd(x)), 2), "\n\n")
+    
     # Determine the loss of loci for a given threshold using quantiles
     quantile_res <- quantile(maf$maf, probs = seq(0, 1, 1/20))
     retained <- unlist(lapply(quantile_res, function(y) {
@@ -197,25 +199,18 @@ gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plo
     print(df)
 
     # creating temp file names
-    temp_plot <- tempfile(pattern = "plot_")
-    temp_table <- tempfile(pattern = "table_")
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
 
     # saving to tempdir
     saveRDS(p3, file = temp_plot)
     saveRDS(df, file = temp_table)
-
-    # ADD TO HISTORY
-
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- c(match.call(), temp_plot, temp_table)
 
     # FLAG SCRIPT END
 
     if (verbose >= 1) {
         cat(report("\n\nCompleted:", funname, "\n\n"))
     }
-
-    cat(important(strwrap("Plots and table were saved to the temporal directory (tempdir) and can be accesed with the function gl.access.report(). Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.\n\n")))
 
     invisible(x)
 }
