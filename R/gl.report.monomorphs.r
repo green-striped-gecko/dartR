@@ -1,25 +1,31 @@
-#' Report monomorphic loci
+#' @name gl.report.monomorphs
+
+#' @title Report monomorphic loci
 #'
-#' This script reports the number of monomorphic locim and those with all NAsm from a genlight \{adegenet\} object
+#' @description
+#' This script reports the number of monomorphic loci and those with all NAs in a genlight \{adegenet\} object
 #'
-#' A DArT dataset will not have monomorphic loci, but they can arise, along with loci that are scored all NA, when populations or individuals are deleted.
-#' Retaining monomorphic loci unnecessarily increases the size of the dataset and will affect some calculations.
+#' @details A DArT dataset will not have monomorphic loci, but they can arise, along with loci that are scored all NA, when populations 
+#' or individuals are deleted. Retaining monomorphic loci unnecessarily increases the size of the dataset and will 
+#' affect some calculations.
 #' 
-#' Note that for SNP data, NAs likely represent null alleles; in tag presence/absence data, NAs represent missing values (presence/absence could not 
-#' be reliably scored)
+#' Note that for SNP data, NAs likely represent null alleles; in tag presence/absence data, NAs represent missing values 
+#' (presence/absence could not be reliably scored)
 #' 
 #' @param x -- name of the input genlight object [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return NULL
+#' 
 #' @rawNamespace import(adegenet, except = plot)
-#' @import plyr utils
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # SNP data
-#'   out <- gl.report.monomorphs(testset.gl)
+#'   gl.report.monomorphs(testset.gl)
 #' # SilicoDArT data
-#'   out <- gl.report.monomorphs(testset.gs)
+#'   gl.report.monomorphs(testset.gs)
+#'   
+#' @seealso \code{\link{gl.filter.monomorphs}}
 
 gl.report.monomorphs <- function (x, verbose=NULL) {
   
@@ -30,44 +36,21 @@ gl.report.monomorphs <- function (x, verbose=NULL) {
   
 # SET VERBOSITY
   
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  verbose <- utils.check.verbosity(verbose)
   
 # FLAG SCRIPT START
   
   if (verbose >= 1){
     if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
+      cat(report("Starting",funname,"[ Build =",build,"]\n"))
     } else {
-      cat("Starting",funname,"\n")
+      cat(report("Starting",funname,"\n"))
     }
   }
   
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!")
-  }
-  
-  if (all(x@ploidy == 1)){
-    cat("  Processing Presence/Absence (SilicoDArT) data\n")
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    cat("  Processing a SNP dataset\n")
-    data.type <- "SNP"
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
-  }
+  datatype <- utils.check.gl(x)
   
 # DO THE JOB
   
@@ -76,10 +59,10 @@ gl.report.monomorphs <- function (x, verbose=NULL) {
   loc.list <- array(NA,nLoc(x))
   
   if (verbose >= 2){
-    cat("  Identifying monomorphic loci\n")
+    cat(report("  Identifying monomorphic loci\n"))
   }  
   # Tag presence/absence data
-  if (data.type=="SilicoDArT"){
+  if (datatype=="SilicoDArT"){
     mat <- as.matrix(x)
     lN <- locNames(x)
     for (i in 1:nLoc(x)){
@@ -94,7 +77,7 @@ gl.report.monomorphs <- function (x, verbose=NULL) {
   } 
   
   # SNP data
-  if (data.type=="SNP"){
+  if (datatype=="SNP"){
     mat <- as.matrix(x)
     lN <- locNames(x)
     for (i in 1:nLoc(x)){
@@ -127,10 +110,10 @@ gl.report.monomorphs <- function (x, verbose=NULL) {
 # FLAG SCRIPT END
 
     if (verbose >= 1) {
-      cat("Completed:",funname,"\n")
+      cat(report("Completed:",funname,"\n"))
     }
     
-    return(NULL)
+    invisible(NULL)
 
 }
 

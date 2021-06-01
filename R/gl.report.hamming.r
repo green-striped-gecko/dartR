@@ -14,11 +14,14 @@
 #'@param rs Number of bases in the restriction enzyme recognition sequence [default 5]
 #'@param threshold Minimum acceptable base pair difference for display on the boxplot and histogram [default 3 bp]
 #'@param taglength Typical length of the sequence tags [default 69]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
 #'@param probar If TRUE, then a progress bar is displayed on long loops [default TRUE]
 #'
-#'@details The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance is less than a specified percentage
+#'@details The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
+#'is less than a specified percentage
 #'
 #' Hamming distance can be computed by exploiting the fact that the dot product 
 #' of two binary vectors x and (1-y) counts the corresponding elements that are 
@@ -57,48 +60,61 @@
 #'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples
-#' out <- gl.report.hamming(testset.gl)
+#' gl.report.hamming(testset.gl)
+#' gl.report.hamming(testset.gs)
 #'
 #'@importFrom stats sd
+#' @import crayon
+#' @import patchwork
 #'
 #'@export 
 #'
+#'#' @seealso \code{\link{gl.filter.hamming}}, \code{\link{gl.access.report}}
 
-gl.report.hamming <- function(x, rs = 5, threshold = 3, taglength = 69, plot_theme = theme_dartR(), plot_colours = two_colors, probar = FALSE) {
+gl.report.hamming <- function(x, 
+                              rs = 5, 
+                              threshold = 3, 
+                              taglength = 69, 
+                              plot_theme = theme_dartR(), 
+                              plot_colours = two_colors, 
+                              probar = FALSE,
+                              verbose=NULL) {
 
-    # TRAP COMMAND, SET VERSION
+# TRAP COMMAND, SET VERSION
 
     funname <- match.call()[[1]]
 
-    # GENERAL ERROR CHECKING
+# GENERAL ERROR CHECKING
 
-    x <- utils.check.gl(x)
+    datatype <- utils.check.gl(x)
+    verbose <- utils.check.verbosity(verbose)
+    
+# FLAG SCRIPT START
+    
+    if (verbose >= 1) {
+      if (verbose == 5) {
+        cat(report("Starting", funname, "[ Build =", build, "]\n"))
+      } else {
+        cat(report("Starting", funname, "\n"))
+      }
+    }
 
-    # FUNCTION SPECIFIC ERROR CHECKING
+# FUNCTION SPECIFIC ERROR CHECKING
 
     if (length(x@other$loc.metrics$TrimmedSequence) == 0) {
         stop(error("Fatal Error: Data must include Trimmed Sequences\n"))
     }
 
     if (rs < 0 | rs > taglength) {
-        stop(error("Fatal Error: Length of restriction enzyme recognition sequence must be greater than zero, and less that the maximum length of a sequence tag; usually it is less than 9\n"))
+        stop(error("Fatal Error: Length of restriction enzyme recognition sequence must be greater than zero, 
+                   and less that the maximum length of a sequence tag; usually it is less than 9\n"))
     }
 
     if (nLoc(x) == 1) {
         stop(error("Fatal Error: Data must include more than one locus\n"))
     }
 
-    # FLAG SCRIPT START
-
-    if (verbose >= 1) {
-        if (verbose == 5) {
-            cat(report("Starting", funname, "[ Build =", build, "]\n"))
-        } else {
-            cat(report("Starting", funname, "\n"))
-        }
-    }
-
-    # DO THE JOB
+# DO THE JOB
 
     s <- as.character(x@other$loc.metrics$TrimmedSequence)
     tld <- threshold/(taglength - rs)
@@ -108,9 +124,11 @@ gl.report.hamming <- function(x, rs = 5, threshold = 3, taglength = 69, plot_the
         getTxtProgressBar(pb)
     }
 
-    if (verbose >= 2) {
+    if (verbose >= 3) {
         cat(report("  Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n"))
-        cat(report("  Calculating pairwise Hamming distances between trimmed Reference sequence tags\n"))
+    }
+    if (verbose >= 2) {
+      cat(report("  Calculating pairwise Hamming distances between trimmed Reference sequence tags\n"))
     }
 
     count = 0
@@ -128,7 +146,7 @@ gl.report.hamming <- function(x, rs = 5, threshold = 3, taglength = 69, plot_the
     }
 
     # get title for plots
-    if (all(x@ploidy == 2)) {
+    if (datatype=="SNP") {
         title <- paste0("SNP data (DArTSeq)\nPairwise Hamming Distance between sequence tags")
     } else {
         title <- paste0("Fragment P/A data (SilicoDArT)\nPairwise Hamming Distance between sequence tags")
@@ -141,7 +159,7 @@ gl.report.hamming <- function(x, rs = 5, threshold = 3, taglength = 69, plot_the
     # Boxplot
     p1 <- ggplot(as.data.frame(d),aes(y=d)) + 
       geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
-      geom_hline(yintercept=tld,color="red",size=2) +
+      geom_hline(yintercept=tld,color="red",size=1) +
       coord_flip() + 
       plot_theme + 
       xlim(range = c(-1, 1)) + ylim(0, 1) + 
@@ -151,14 +169,13 @@ gl.report.hamming <- function(x, rs = 5, threshold = 3, taglength = 69, plot_the
     
     # Histogram
     p2 <- ggplot(as.data.frame(d),aes(x=d)) + 
-        geom_histogram(bins = 50, color =plot_colours[1], fill = plot_colours[2]) + 
-      geom_vline(xintercept=tld,color="red",size=2) +
+      geom_histogram(bins = 50, color =plot_colours[1], fill = plot_colours[2]) + 
+      geom_vline(xintercept=tld,color="red",size=1) +
       coord_cartesian(xlim = c(0, 1)) + 
       xlab("Hamming distance") + 
       ylab("Count") + 
-      annotate(geom = "text", x = tld+0.2,
-               y = max(hist(d,breaks=seq(0, 1, by=1/50), plot=FALSE)$counts)*0.75,
-               label = paste("Threshold of\n", threshold, "bp [HD", round(tld, 2), "]"))+
+      annotate(geom = "text", x = tld+0.2, y = max(hist(d,breaks=seq(0, 1, by=1/50), plot=FALSE)$counts)*0.75,
+               label = paste("Threshold of\n", threshold, "bp [HD", round(tld, 2), "]")) +
       plot_theme
 
     cat("  No. of loci =", nLoc(x), "\n")
@@ -173,9 +190,7 @@ gl.report.hamming <- function(x, rs = 5, threshold = 3, taglength = 69, plot_the
     # using quantiles
     nl <- nLoc(x)
     quantile_res <- quantile(d,probs = seq(0, 1, 1/20))
-    retained <- unlist(lapply(quantile_res, function(y) {
-      res <- sum(d >= y)
-    }))
+    retained <- unlist(lapply(quantile_res, function(y) {res <- sum(d >= y)}))
     pc.retained <- round(retained * 100/((((nL - 1) * nL)/2)),1)
     filtered <- ((((nL - 1) * nL)/2)) - retained
     pc.filtered <- 100 - pc.retained
@@ -189,7 +204,7 @@ gl.report.hamming <- function(x, rs = 5, threshold = 3, taglength = 69, plot_the
     rownames(df) <- NULL
     
     # printing outputs
-    p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
+    p3 <- (p1/p2) + plot_layout(heights = c(1, 4)) # using package patchwork
     print(p3)
     print(df)
     
@@ -198,23 +213,19 @@ gl.report.hamming <- function(x, rs = 5, threshold = 3, taglength = 69, plot_the
     temp_table <- tempfile(pattern = "table_")
     
     # saving to tempdir
+    setwd(tempdir())
     saveRDS(p3, file = temp_plot)
+    if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
     saveRDS(df, file = temp_table)
-    
-    # ADD TO HISTORY
-    
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- c(match.call(), temp_plot, 
-                                   temp_table)
+    if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
+    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.access.report()\n"))}
     
     # FLAG SCRIPT END
     
     if (verbose >= 1) {
       cat(report("\n\nCompleted:", funname, "\n\n"))
     }
-    
-    cat(important(strwrap("Plots and table were saved to the temporal directory (tempdir) and can be accesed with the function gl.access.report(). Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.")))
-    
+
+    # return unaltered genlight object
     invisible(x)
-    
 }
