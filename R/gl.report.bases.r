@@ -41,7 +41,6 @@
 #'   out
 #'
 #'@import stringr
-#'@import crayon
 #'@import patchwork
 #'
 #'@export 

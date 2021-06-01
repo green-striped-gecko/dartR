@@ -2,8 +2,8 @@
 #'
 #' setting up all starting values
 
-# SET VERSION
 
+# SET VERSION
 build <- "Jacob"
 
 # SET VERBOSITY
@@ -11,8 +11,8 @@ build <- "Jacob"
 # dartR functions have a verbosity parameter that sets the level of reporting during the execution of the function. The verbosity level,
 # set by parameter 'verbose' can be one of verbose 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary;
 # 5, full report.
-verbose <- 2
 
+options("dartR_verbose"=2)
 # SET MESSAGES COLORS
 
 # - For fatal errors use “error” which will print the message in red. Example usage: stop(error(“Fatal error”))

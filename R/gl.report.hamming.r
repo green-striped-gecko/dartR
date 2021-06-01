@@ -51,7 +51,6 @@
 #' gl.report.hamming(testset.gs)
 #'
 #'@importFrom stats sd
-#' @import crayon
 #' @import patchwork
 #'
 #'@export 

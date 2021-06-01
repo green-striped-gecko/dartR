@@ -58,7 +58,6 @@
 #'@family filters and filter reports
 #'
 #'@import patchwork
-#'@import crayon
 #'
 #'@export
 #'  

@@ -2,43 +2,40 @@
 % Please edit documentation in R/gl.report.heterozygosity.r
 \name{gl.report.heterozygosity}
 \alias{gl.report.heterozygosity}
-\title{Reports observed and expected heterozygosity by population or by individual from SNP data.}
+\title{Reports observed and expected heterozygosity by population or by individual from SNP data}
 \usage{
 gl.report.heterozygosity(
   x,
   method = "pop",
   n.invariant = 0,
-  plot = TRUE,
-  boxplot = "adjusted",
-  range = 1.5,
-  cex.labels = 0.7,
+  plot_theme = theme_dartR(),
+  plot_colours_pop = discrete_palette,
+  plot_colours_ind = two_colors,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- a genlight object containing the SNP genotypes [Required]}
+\item{x}{Name of the genlight object containing the SNP [required].}
 
-\item{method}{-- calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']}
+\item{method}{Calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']}
 
-\item{n.invariant}{-- an estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]}
+\item{n.invariant}{An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]}
 
-\item{plot}{-- if TRUE, plots barcharts of observed and expected heterozygosity for populations [TRUE]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
-plots a boxplot adjusted for skewed distributions [default 'adjusted']}
+\item{plot_colours_pop}{A color palette for population plots [default discrete_palette].}
 
-\item{range}{-- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
+\item{plot_colours_ind}{List of two color names for the borders and fill of the plot by individual [default two_colors].}
 
-\item{cex.labels}{-- sets the size of the population labels [default 0.7]}
-
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-returns a dataframe containing population labels, heterozygosities and sample sizes
+Returns a dataframe containing population labels, heterozygosities and sample sizes
 }
 \description{
-Calculates the observed and expected heterozygosities for each population (method="pop") 
-or the observed heterozyosity for each individual (method="ind") in a genlight object.
+Calculates the observed and expected heterozygosities for each population
+or the observed heterozygosity for each individual in a genlight object.
 }
 \details{
 Observed heterozygosity for a population takes the proportion of heterozygous
@@ -49,22 +46,12 @@ Expected heterozygosity for a population takes the expected proportion of
 heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each locus, then
 averages this across the loci for an average estimate for the population.
 The calculations of expected heterozygosity use the unbiassed estimates of Nei, M. (1987) 
-Molecular evolutionary genetics. New York: Columbia University Press.
 
-Output for method="pop" is an ordered barchart of observed heterozygosity across 
+Output for method='pop' is an ordered barchart of observed heterozygosity across 
 populations together with a table of observed and expected heterozygosity by population.
 
 Observed heterozygosity for individuals is calculated as the proportion of loci that
 are heterozygous for that individual.
-
-Output for method="ind" is a histogram of heterozygosity across individuals.
-The histogram is accompanied by a box and whisker plot presented either in standard 
-(boxplot="standard") or adjusted for skewness (boxplot=adjusted). 
-
-Refer to Tukey (1977, Exploratory Data Analysis. Addison-Wesley) for standard
-Box and Whisker Plots and Hubert & Vandervieren (2008), An Adjusted Boxplot for Skewed
-Distributions, Computational Statistics & Data Analysis 52:5186-5201) for adjusted
-Box and Whisker Plots.
 
 Finally, the loci that are invariant across all individuals in the dataset (that is,
 across populations), is typically unknown. This can render estimates of heterozygosity
@@ -73,10 +60,22 @@ or even across different analyses. This is a similar problem faced by microsatel
 If you have an estimate of the number of invariant sequence tags (loci) in your data,
 such as provided by gl.report.secondaries, you can specify it with the n.invariant
 parameter to standardize your estimates of heterozygosity.
+
+\strong{ Function's output }
+Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
+
+ Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
-out <- gl.report.heterozygosity(testset.gl,verbose=3)
-out <- gl.report.heterozygosity(testset.gl,method='ind',verbose=3)
+df<- gl.report.heterozygosity(testset.gl)
+df <- gl.report.heterozygosity(testset.gl,method='ind')
+
+}
+\references{
+Nei, M. and R. K. Chesser (1983). 'Estimation of fixation indices and gene diversities.' Annals of human genetics 47(3): 253-259.
 }
 \author{
 Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})

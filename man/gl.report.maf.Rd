@@ -9,27 +9,71 @@ gl.report.maf(
   maf.limit = 0.5,
   ind.limit = 5,
   loc.limit = 30,
-  verbose = NULL
+  plot_theme = theme_dartR(),
+  plot_colours_pop = discrete_palette,
+  plot_colours_all = two_colors,
+  verbose = 2
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required]}
 
-\item{maf.limit}{-- show histograms maf range <= maf.limit [default 0.5]}
+\item{maf.limit}{Show histograms MAF range <= maf.limit [default 0.5]}
 
-\item{ind.limit}{-- show histograms only for populations of size greater than ind.limit [default 5]}
+\item{ind.limit}{Show histograms only for populations of size greater than ind.limit [default 5]}
 
-\item{loc.limit}{-- show histograms only for populations with more than loc.limit polymorphic loci [default 30]}
+\item{loc.limit}{Show histograms only for populations with more than loc.limit polymorphic loci [default 30]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
+
+\item{plot_colours_pop}{A color palette for population plots [default discrete_palette]}
+
+\item{plot_colours_all}{List of two color names for the borders and fill of the overall plot [default two_colors]}
+
+\item{verbose}{verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+}
+\value{
+Returns an unchanged genlight object
 }
 \description{
-This script provides summary histograms of MAF for each population in the dataset as a basis for decisions on filtering.
+This script provides summary histograms of MAF for each population in the dataset and an overall histogram to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.maf}}
+}
+\details{
+The function \code{\link{gl.filter.maf}} will filter out the
+ loci with MAF below a specified threshold.
+ 
+\strong{ Function's output }
+ 
+ The minimum, maximum, mean and a tabulation of MAF quantiles against
+ thresholds rate are provided. Output also includes a boxplot and a
+ histogram.
+ 
+ This function reports the
+ MAF for each of several quantiles. Quantiles are
+ partitions of a finite set of values into q subsets of (nearly) equal sizes.
+ In this function q = 20. Quantiles are useful measures because they are less
+ susceptible to long-tailed distributions and outliers.
+
+ Plots and table were saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+
+Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
-gl.report.maf(testset.gl)
+gl <- gl.report.maf(testset.gl)
 
+}
+\seealso{
+\code{\link{gl.filter.maf}}, \code{\link{gl.list.reports}},
+ \code{\link{gl.print.reports}}
+
+Other filters and filter reports: 
+\code{\link{gl.report.callrate}()},
+\code{\link{gl.report.locmetric}()}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
+\concept{filters and filter reports}
