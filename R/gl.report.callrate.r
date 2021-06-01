@@ -71,7 +71,7 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   funname <- match.call()[[1]]
   
 # GENERAL ERROR CHECKING
-    datatype <- utils.check.gl(x)
+    x <- utils.check.gl(x)
     verbose <- utils.check.verbosity(verbose)
   
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -120,16 +120,16 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
       plot_theme
     
     # Print out some statistics
-    stats <- strsplit(summary(x@other$loc.metrics$CallRate),split = ":")
+    stats <- summary(x@other$loc.metrics$CallRate)
     cat("  Reporting Call Rate by Locus\n")
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
-    cat("    Minimum      : ", stats[[1]][2], "\n")
-    cat("    1st quantile : ", stats[[2]][2], "\n")
-    cat("    Median       : ", stats[[3]][2], "\n")
-    cat("    Mean         : ", stats[[4]][2], "\n")
-    cat("    3r quantile  : ", stats[[5]][2], "\n")
-    cat("    Maximum      : ", stats[[6]][2], "\n")
+    cat("    Minimum      : ", stats[1], "\n")
+    cat("    1st quantile : ", stats[2], "\n")
+    cat("    Median       : ", stats[3], "\n")
+    cat("    Mean         : ", stats[4], "\n")
+    cat("    3r quantile  : ", stats[5], "\n")
+    cat("    Maximum      : ", stats[6], "\n")
     cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                         nInd(x)), 2), "\n\n")
     
@@ -182,16 +182,16 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
       plot_theme
     
     # Print out some statistics
-    stats <- strsplit(summary(ind.call.rate$ind.call.rate),split = ":")
+    stats <- summary(ind.call.rate$ind.call.rate)
     cat("  Reporting Call Rate by Individual\n")
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
-    cat("    Minimum      : ", stats[[1]][2], "\n")
-    cat("    1st quantile : ", stats[[2]][2], "\n")
-    cat("    Median       : ", stats[[3]][2], "\n")
-    cat("    Mean         : ", stats[[4]][2], "\n")
-    cat("    3r quantile  : ", stats[[5]][2], "\n")
-    cat("    Maximum      : ", stats[[6]][2], "\n")
+    cat("    Minimum      : ", stats[1], "\n")
+    cat("    1st quantile : ", stats[2], "\n")
+    cat("    Median       : ", stats[3], "\n")
+    cat("    Mean         : ", stats[4], "\n")
+    cat("    3r quantile  : ", stats[5], "\n")
+    cat("    Maximum      : ", stats[6], "\n")
     cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                         nInd(x)), 2), "\n\n")
     
@@ -227,12 +227,11 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
   
   # saving to tempdir
-  setwd(tempdir())
   saveRDS(p3, file = temp_plot)
   if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
   saveRDS(df, file = temp_table)
-  if(verbose>=2){cat(report("  Saving the percentile table to the tempfile as",temp_table,"using saveRDS\n"))}
-  if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir",tempdir(),"using gl.access.report()\n"))}
+  if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
+  if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
   
 # FLAG SCRIPT END
   

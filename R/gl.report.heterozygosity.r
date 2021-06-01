@@ -29,8 +29,6 @@
 #' Observed heterozygosity for individuals is calculated as the proportion of loci that
 #' are heterozygous for that individual.
 #' 
-#' Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
-#' 
 #' Finally, the loci that are invariant across all individuals in the dataset (that is,
 #' across populations), is typically unknown. This can render estimates of heterozygosity
 #' analysis specific, and so it is not valid to compare such estimates across species
@@ -38,6 +36,9 @@
 #' If you have an estimate of the number of invariant sequence tags (loci) in your data,
 #' such as provided by gl.report.secondaries, you can specify it with the n.invariant
 #' parameter to standardize your estimates of heterozygosity.
+#' 
+#'\strong{ Function's output }
+#' Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
 #' 
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -74,7 +75,7 @@ gl.report.heterozygosity <- function(x,
 
     # GENERAL ERROR CHECKING
 
-    datatype <- utils.check.gl(x)
+    x <- utils.check.gl(x)
     verbose <- utils.check.verbosity(verbose)
 
     # FUNCTION SPECIFIC ERROR CHECKING
@@ -352,12 +353,11 @@ gl.report.heterozygosity <- function(x,
     temp_table <- tempfile(pattern = "table_")
     
     # saving to tempdir
-    setwd(tempdir())
     saveRDS(p3, file = temp_plot)
     if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
     saveRDS(df, file = temp_table)
     if(verbose>=2){cat(report("  Saving the heterozygosity data to the tempfile as",temp_table,"using saveRDS\n"))}
-    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.access.report()\n"))}
+    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
 
     # FLAG SCRIPT END
 

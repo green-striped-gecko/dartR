@@ -76,7 +76,7 @@
 #'@export
 #'
 
-gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colours = two_colors,verbose=2) {
+gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colours = two_colors,verbose=NULL) {
 
     # TRAP COMMAND, SET VERSION
 
@@ -84,7 +84,8 @@ gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colo
 
     # GENERAL ERROR CHECKING
 
-    x <- utils.check.gl(x,verbose=verbose)
+    x <- utils.check.gl(x)
+    verbose <- utils.check.verbosity(verbose)
 
     # FLAG SCRIPT START
 
@@ -127,16 +128,16 @@ gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colo
         xlab(metric) + ylab("Count") + plot_theme
 
     # Print out some statistics
-    stats <- strsplit(summary(metric_df),split = ":")
+    stats <- summary(metric_df)
     cat("  Reporting", metric, "by Locus\n")
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
-    cat("    Minimum      : ", stats[[1]][2], "\n")
-    cat("    1st quantile : ", stats[[2]][2], "\n")
-    cat("    Median       : ", stats[[3]][2], "\n")
-    cat("    Mean         : ", stats[[4]][2], "\n")
-    cat("    3r quantile  : ", stats[[5]][2], "\n")
-    cat("    Maximum      : ", stats[[6]][2], "\n\n")
+    cat("    Minimum      : ", stats[1], "\n")
+    cat("    1st quantile : ", stats[2], "\n")
+    cat("    Median       : ", stats[3], "\n")
+    cat("    Mean         : ", stats[4], "\n")
+    cat("    3r quantile  : ", stats[5], "\n")
+    cat("    Maximum      : ", stats[6], "\n\n")
 
     # Determine the loss of loci for a given threshold
     # using quantiles
@@ -170,7 +171,10 @@ gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colo
     
     # saving to tempdir
     saveRDS(p3, file = temp_plot)
+    if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
     saveRDS(df, file = temp_table)
+    if(verbose>=2){cat(report("  Saving the percentile table to the tempfile as",temp_table,"using saveRDS\n"))}
+    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir",tempdir(),"using gl.access.report()\n"))}
 
     # FLAG SCRIPT END
 

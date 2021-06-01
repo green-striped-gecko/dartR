@@ -31,6 +31,6 @@ utils.check.gl <- function(x=NULL,verbose=NULL) {
     stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
   }
   
-  invisible(datatype)
+  invisible(x)
   
 }

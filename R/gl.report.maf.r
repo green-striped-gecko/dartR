@@ -60,8 +60,9 @@ gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plo
 
     # GENERAL ERROR CHECKING
 
-    x <- utils.check.gl(x, verbose = verbose)
-
+    x <- utils.check.gl(x)
+    verbose <- utils.check.verbosity(verbose)
+    
     # FUNCTION SPECIFIC ERROR CHECKING
 
     if (maf.limit > 0.5 | maf.limit <= 0) {
@@ -126,16 +127,16 @@ gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plo
     colnames(maf) <- "maf"
 
     # Print out some statistics
-    stats <- strsplit(summary(x2@other$loc.metrics$maf),split = ":")
+    stats <- summary(x2@other$loc.metrics$maf)
     cat("  Reporting Minor Allele Frequency (MAF) by Locus\n")
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
-    cat("    Minimum      : ", stats[[1]][2], "\n")
-    cat("    1st quantile : ", stats[[2]][2], "\n")
-    cat("    Median       : ", stats[[3]][2], "\n")
-    cat("    Mean         : ", stats[[4]][2], "\n")
-    cat("    3r quantile  : ", stats[[5]][2], "\n")
-    cat("    Maximum      : ", stats[[6]][2], "\n")
+    cat("    Minimum      : ", stats[1], "\n")
+    cat("    1st quantile : ", stats[2], "\n")
+    cat("    Median       : ", stats[3], "\n")
+    cat("    Mean         : ", stats[4], "\n")
+    cat("    3r quantile  : ", stats[5], "\n")
+    cat("    Maximum      : ", stats[6], "\n")
     cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                           nInd(x)), 2), "\n\n")
     
@@ -204,7 +205,10 @@ gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plo
 
     # saving to tempdir
     saveRDS(p3, file = temp_plot)
+    if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
     saveRDS(df, file = temp_table)
+    if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
+    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
 
     # FLAG SCRIPT END
 
