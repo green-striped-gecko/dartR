@@ -53,7 +53,7 @@
 #'         [[7]] $sdfpos -- if test=TRUE, the standard deviation of the count of false positives for each comparison [by simulation];
 #'         [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
 #' @import utils
-#' @importfrom spaa dist2list
+#' @importFrom spaa dist2list
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples

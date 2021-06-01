@@ -12,7 +12,7 @@
 utils.check.gl <- function(x=NULL,verbose=NULL) {
   
 #### SET VERBOSITY
-  verbose <- utils.check.verbosity(verbose)
+  verbose <- gl.check.verbosity(verbose)
 
 
 #### CHECK FOR GENLIGHT OBJECT ####

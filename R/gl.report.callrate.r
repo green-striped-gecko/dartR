@@ -71,7 +71,7 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   
 # GENERAL ERROR CHECKING
     x <- utils.check.gl(x)
-    verbose <- utils.check.verbosity(verbose)
+    verbose <- gl.check.verbosity(verbose)
   
 # FUNCTION SPECIFIC ERROR CHECKING
     

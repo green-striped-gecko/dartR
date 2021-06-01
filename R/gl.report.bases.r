@@ -55,7 +55,7 @@ gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(),
     # ERROR CHECKING
 
     x <- utils.check.gl(x)
-    verbose <- utils.check.verbosity(verbose)
+    verbose <- gl.check.verbosity(verbose)
 
     # FUNCTION SPECIFIC ERROR CHECKING
 

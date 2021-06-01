@@ -22,7 +22,10 @@ the sequence tag.
 \examples{
 gl.report.overshoot(testset.gl)
 
-#' @seealso \code{\link{gl.filter.overshoot}}, \code{\link{gl.access.report}}
+}
+\seealso{
+\code{\link{gl.filter.overshoot}},\code{\link{gl.list.reports}},
+ \code{\link{gl.print.reports}}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

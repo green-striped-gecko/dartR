@@ -61,7 +61,7 @@ gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plo
     # GENERAL ERROR CHECKING
 
     x <- utils.check.gl(x)
-    verbose <- utils.check.verbosity(verbose)
+    verbose <- gl.check.verbosity(verbose)
     
     # FUNCTION SPECIFIC ERROR CHECKING
 

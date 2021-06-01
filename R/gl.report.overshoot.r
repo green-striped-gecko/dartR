@@ -29,7 +29,7 @@ gl.report.overshoot <- function(x, verbose=NULL) {
   # GENERAL ERROR CHECKING
   
   x <- utils.check.gl(x)
-  verbose <- utils.check.verbosity(verbose)
+  verbose <- gl.check.verbosity(verbose)
   
   #### SETTING DATA TYPE ####
   if (all(x@ploidy == 1)){

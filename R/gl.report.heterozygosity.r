@@ -78,7 +78,7 @@ gl.report.heterozygosity <- function(x,
     # GENERAL ERROR CHECKING
 
     x <- utils.check.gl(x)
-    verbose <- utils.check.verbosity(verbose)
+    verbose <- gl.check.verbosity(verbose)
 
     # FUNCTION SPECIFIC ERROR CHECKING
 

@@ -77,6 +77,10 @@ df <- gl.report.heterozygosity(testset.gl,method='ind')
 \references{
 Nei, M. and R. K. Chesser (1983). 'Estimation of fixation indices and gene diversities.' Annals of human genetics 47(3): 253-259.
 }
+\seealso{
+\code{\link{gl.filter.heterozygosity}},\code{\link{gl.list.reports}},
+ \code{\link{gl.print.reports}}
+}
 \author{
 Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
 }

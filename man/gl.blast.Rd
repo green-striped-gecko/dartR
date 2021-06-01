@@ -155,7 +155,7 @@ blast_databases <- gl.print.reports(1)
  }
 }
 \seealso{
-\code{\link{gl.access.report}}, \code{\link{gl.print.history}}
+\code{\link{gl.print.history}}
 }
 \author{
 Berenice Talamantes Becerra & Luis Mijangos (Post to

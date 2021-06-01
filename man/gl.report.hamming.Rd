@@ -73,6 +73,10 @@ gl.report.hamming(testset.gl)
 gl.report.hamming(testset.gs)
 
 }
+\seealso{
+\code{\link{gl.filter.hamming}},\code{\link{gl.list.reports}},
+ \code{\link{gl.print.reports}}
+}
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
