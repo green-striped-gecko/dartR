@@ -1,14 +1,12 @@
-#'@name gl.report.diversity
+#' Calculate diversity indexes for SNPs
 #'
-#'@title Calculate diversity indexes for SNPs
-#'
-#'@description This script takes a genlight object and calculates alpha and beta diversity for q = 0:2. Formulas are taken from Sherwin et al. 2017. The paper describes nicely the relationship between the different q levels and how they relate to population genetic processes such as dispersal and selection.
-#'
+#'This script takes a genlight object and calculates alpha and beta diversity for q = 0:2. Formulas are taken from Sherwin et al. 2017. The paper describes nicely the relationship between the different q levels and how they relate to population genetic processes such as dispersal and selection.
 #'@param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required].
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours A color palette [default discrete_palette].
 #'@param pbar Report on progress. Silent if set to FALSE. [default TRUE]
 #'@param table Prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table. [default "DH"]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
 #'@details For all indexes, the entropies (H) and corresponding effective numbers, i.e. Hill numbers (D), which reflect the number of needed entities to get the observed values, are calculated. In a nutshell, the alpha indexes between the different q-values should be similar if there is no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index, this links to a process causing it, such as dispersal, selection or strong drift. For a detailed explanation of all the indexes, we recommend resorting to the literature provided below. Confidence intervals are +/- 1 standard deviation.
 #'
@@ -23,7 +21,7 @@
 #'@author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella 
 #'
 #'@examples
-#' div <- gl.report.diversity(bandicoot.gl, spectrumplot = TRUE, table = FALSE, pbar=FALSE)
+#' div <- gl.report.diversity(bandicoot.gl, table = FALSE, pbar=FALSE)
 #' div$zero_H_alpha
 #' div$two_H_beta
 #' names(div)
@@ -38,8 +36,7 @@
 
 ### To be done: adjust calculation of betas for population sizes (switch) 
 
-gl.report.diversity <- function(x, pbar = TRUE, table = "DH", plot_theme = theme_dartR(), 
-                                plot_colours = discrete_palette) {
+gl.report.diversity <- function(x, pbar = TRUE, table = "DH", plot_theme = theme_dartR(),plot_colours = discrete_palette, verbose=NULL) {
 
     # TRAP COMMAND, SET VERSION
    
@@ -48,7 +45,7 @@ gl.report.diversity <- function(x, pbar = TRUE, table = "DH", plot_theme = theme
     # GENERAL ERROR CHECKING
     
     x <- utils.check.gl(x)
-    
+    verbose <- gl.check.verbosity(verbose)
     # FLAG SCRIPT START
 
     if (verbose >= 1) {
@@ -299,7 +296,8 @@ gl.report.diversity <- function(x, pbar = TRUE, table = "DH", plot_theme = theme
             fs_plot <- reshape2::melt(fs)
             fs_plot_up <- reshape2::melt(up)
             fs_plot_low <- reshape2::melt(low)
-            
+            #avoid no visible bindings
+            value <- NULL    
             fs_final <- as.data.frame(cbind(fs_plot,fs_plot_up[,3],fs_plot_low[,3]))
             colnames(fs_final) <- c("pop","q","value","up","low")
             

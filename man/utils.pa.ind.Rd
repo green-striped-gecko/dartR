@@ -31,7 +31,7 @@ may be heterozygous, in which case can share one but not both of its alleles wit
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#dartR:::utils.pa.ind(testset.gl, unknown="UC_00146", nmin=10, threshold=1, verbose=2)
+#utils.pa.ind(testset.gl, unknown="UC_00146", nmin=10, threshold=1, verbose=2)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

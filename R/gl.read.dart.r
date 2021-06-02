@@ -97,7 +97,7 @@ gl.read.dart <- function(filename, ind.metafile = NULL, recalc = TRUE, mono.rm =
 
     # Calculate MAF
     if (is.null(glout@other$loc.metrics$maf)) {
-        dartR:::utils.recalc.maf(glout, verbose = 0)
+        utils.recalc.maf(glout, verbose = 0)
         if (verbose >= 2) {
             cat(report("  Minor Allele Frequency (MAF) calculated and added to the locus metrics\n"))
         }
@@ -108,11 +108,11 @@ gl.read.dart <- function(filename, ind.metafile = NULL, recalc = TRUE, mono.rm =
         if (verbose >= 2) {
             cat(report("  Recalculating locus metrics provided by DArT (optionally specified)\n"))
         }
-        glout <- dartR:::utils.recalc.avgpic(glout, verbose = 0)
-        glout <- dartR:::utils.recalc.callrate(glout, verbose = 0)
-        glout <- dartR:::utils.recalc.freqhets(glout, verbose = 0)
-        glout <- dartR:::utils.recalc.freqhomref(glout, verbose = 0)
-        glout <- dartR:::utils.recalc.freqhomsnp(glout, verbose = 0)
+        glout <- utils.recalc.avgpic(glout, verbose = 0)
+        glout <- utils.recalc.callrate(glout, verbose = 0)
+        glout <- utils.recalc.freqhets(glout, verbose = 0)
+        glout <- utils.recalc.freqhomref(glout, verbose = 0)
+        glout <- utils.recalc.freqhomsnp(glout, verbose = 0)
     }
 
     # Remove monomorphs, which should not be present, but might have been introduced it the user deleted individuals from the input csv
@@ -137,7 +137,7 @@ gl.read.dart <- function(filename, ind.metafile = NULL, recalc = TRUE, mono.rm =
         cat("  No. of individuals:", nInd(glout), "\n")
         cat("  No. of populations:", nPop(glout), "\n")
         if (!recalc) {
-            cat(repor("  Locus metrics provided by DArT retained, not recalculated\n"))
+            cat(report("  Locus metrics provided by DArT retained, not recalculated\n"))
         }
         if (!mono.rm) {
             cat(report("  Monomoporhic loci not deleted, assumed absent initially\n\n"))

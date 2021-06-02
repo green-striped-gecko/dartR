@@ -4,7 +4,7 @@
 \alias{gl.recode.pop}
 \title{Recode population assignments in a genlight object \{adegenet\}}
 \usage{
-gl.recode.pop(x, pop.recode, recalc = TRUE, mono.rm = TRUE, verbose = NULL)
+gl.recode.pop(x, pop.recode, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}

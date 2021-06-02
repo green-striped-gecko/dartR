@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.fixed.diff.r
 \name{gl.fixed.diff}
 \alias{gl.fixed.diff}
-\title{Generate a matrix of fixed differences}
+\title{Generate a matrix of fixed differences and associated statistics for populations taken pairwise}
 \usage{
 gl.fixed.diff(
   x,
@@ -74,6 +74,8 @@ simulations, it is necessary to decide a threshold value (delta) for extreme tru
 fixed for practical purposes. That is, fixed differences in the sample set will be considered to be positives (not false positives)
 if they arise from true allele frequencies of less than 1-delta in one or both populations.  The parameter
 delta is typically set to be small (e.g. delta = 0.02).
+
+NOTE: The above test will only be calculated if tloc=0, that is, for analyses of absolute fixed differences.
 
 An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
 level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
