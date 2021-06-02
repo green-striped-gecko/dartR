@@ -1,8 +1,3 @@
-#' Startup function
-#'
-#' setting up all starting values
-
-
 # SET VERSION
 build <- "Jacob"
 

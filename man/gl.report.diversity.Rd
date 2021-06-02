@@ -41,7 +41,7 @@ For all indexes, the entropies (H) and corresponding effective numbers, i.e. Hil
  }
 }
 \examples{
-div <- gl.report.diversity(bandicoot.gl, spectrumplot = TRUE, table = FALSE, pbar=FALSE)
+div <- gl.report.diversity(bandicoot.gl, table = FALSE, pbar=FALSE)
 div$zero_H_alpha
 div$two_H_beta
 names(div)

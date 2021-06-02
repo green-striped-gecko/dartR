@@ -6,6 +6,7 @@
 #' @param x -- name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return datatype, "SNP" for SNP data or  "SilicoDArT" for P/A data
+#' @export
 #' @examples
 #' utils.check.gl(testset.gs)
 

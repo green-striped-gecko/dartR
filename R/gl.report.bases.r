@@ -220,8 +220,8 @@ gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(),
     if (verbose >= 1) {
       cat(report("\n\nCompleted:", funname, "\n\n"))
     }
-    
-    invisible(list(freq = out, plotbases = p1, plottstv = p2))
+    if (datatype=="SNP") 
+    invisible(list(freq = out, plotbases = p1, plottstv = p2)) else invisible(list(freq = out, plotbases = p1))
 
 }
 

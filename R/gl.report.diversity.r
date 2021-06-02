@@ -21,7 +21,7 @@
 #'@author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella 
 #'
 #'@examples
-#' div <- gl.report.diversity(bandicoot.gl, spectrumplot = TRUE, table = FALSE, pbar=FALSE)
+#' div <- gl.report.diversity(bandicoot.gl, table = FALSE, pbar=FALSE)
 #' div$zero_H_alpha
 #' div$two_H_beta
 #' names(div)

@@ -155,7 +155,7 @@ gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, pa
 
     # SCRIPT SPECIFIC ERROR CHECKING
 
-    if (rm.monomorphs == TRUE) {
+    if (rm.monomorphs == TRUE & (data.type=="SNP" | data.type=="SilicoDArT")) {
         x <- gl.filter.monomorphs(x,verbose=0)
     }
 
