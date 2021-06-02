@@ -53,7 +53,6 @@
 #'         [[7]] $sdfpos -- if test=TRUE, the standard deviation of the count of false positives for each comparison [by simulation];
 #'         [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
 #' @import utils
-#' @importFrom spaa dist2list
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -154,6 +153,26 @@ gl.fixed.diff <- function(x,
       if (verbose >= 2) {cat("  Monomorphic loci removed\n")}
       x <- gl.filter.monomorphs(x,verbose=0)
     }  
+#define dist2list function
+  
+dist2list <- function (dist) 
+{
+  if (!class(dist) == "dist") {
+    stop("the input data must be a dist object.")
+  }
+  dat <- as.data.frame(as.matrix(dist))
+  if (is.null(names(dat))) {
+    rownames(dat) <- paste(1:nrow(dat))
+  }
+  value <- stack(dat)$values
+  rnames <- rownames(dat)
+  namecol <- expand.grid(rnames, rnames)
+  colnames(namecol) <- c("col", "row")
+  res <- data.frame(namecol, value)
+  return(res)
+}
+  
+  
 
 # DO THE JOB      
 
@@ -272,7 +291,10 @@ gl.fixed.diff <- function(x,
   # Return the extreme low distances -- candidates for lack of significance
     if (verbose >= 3) {
       cat("\nDisplaying a list of 5% of pairs with smallest non-zero differences\n")
-      df <- spaa::dist2list(as.dist(fixed.matrix))
+      
+      
+      df <- dist2list(as.dist(fixed.matrix))
+      
       df <- df[!df$col==df$row,]
       #df <- df[!df$value<=tpop,]
       pctile <- quantile(df$value[df$value>0],probs=0.05)
