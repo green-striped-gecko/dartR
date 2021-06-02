@@ -91,7 +91,7 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   # Check that call rate is up to date and recalculate if necessary
     
     if (!x@other$loc.metrics.flags$monomorphs) {
-      x <- dartR:::utils.recalc.callrate(x, verbose = 0)
+      x <- utils.recalc.callrate(x, verbose = 0)
     }
     
 # FLAG SCRIPT START

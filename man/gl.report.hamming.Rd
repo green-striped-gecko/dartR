@@ -30,8 +30,7 @@ gl.report.hamming(
 
 \item{probar}{If TRUE, then a progress bar is displayed on long loops [default TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 Returns unaltered genlight object

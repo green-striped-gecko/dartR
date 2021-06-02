@@ -9,7 +9,8 @@ gl.report.diversity(
   pbar = TRUE,
   table = "DH",
   plot_theme = theme_dartR(),
-  plot_colours = discrete_palette
+  plot_colours = discrete_palette,
+  verbose = NULL
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ gl.report.diversity(
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{A color palette [default discrete_palette].}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 returns a list of entropy indexes for each level of q and equivalent numbers for alpha and beta diversity.

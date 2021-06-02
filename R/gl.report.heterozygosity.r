@@ -173,6 +173,7 @@ gl.report.heterozygosity <- function(x,
 
         df <- data.frame(popNames(x), as.numeric(table(pop(x))), nl, n.invariant, round(df$Ho, 6), round(df$Ho.adj, 6), round(Hexp, 
             6), round(Hexp.adj, 6))
+        He <- He.adj <- NULL
         names(df) <- c("pop", "nInd", "nLoc", "nLoc.inv", "Ho", "Ho.adj", "He", "He.adj")
 
         # printing plots and reports
@@ -351,8 +352,8 @@ gl.report.heterozygosity <- function(x,
     }
     
     # creating temp file names
-    temp_plot <- tempfile(pattern = "plot_")
-    temp_table <- tempfile(pattern = "table_")
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     
     # saving to tempdir
     saveRDS(p3, file = temp_plot)

@@ -85,10 +85,10 @@ gl.report.overshoot <- function(x, verbose=NULL) {
     if(nLoc(xx) > 0){cat("\n",paste(locNames(xx),"\n"))}
     
     # creating temp file names
-    temp_table <- tempfile(pattern = "table_")
+    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     
     # saving to tempdir
-    saveRDS(df, file = temp_table)
+    saveRDS(data.frame(locNames=locNames(xx)), file = temp_table)
     if(verbose>=2){cat(report("  Saving the heterozygosity data to the tempfile as",temp_table,"using saveRDS\n"))}
     if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
 # FLAG SCRIPT END

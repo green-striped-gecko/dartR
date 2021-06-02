@@ -14,11 +14,10 @@
 #'@param rs Number of bases in the restriction enzyme recognition sequence [default 5]
 #'@param threshold Minimum acceptable base pair difference for display on the boxplot and histogram [default 3 bp]
 #'@param taglength Typical length of the sequence tags [default 69]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
-#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
 #'@param probar If TRUE, then a progress bar is displayed on long loops [default TRUE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
 #'@details The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
 #'is less than a specified percentage
@@ -76,6 +75,20 @@ gl.report.hamming <- function(x,
 
     x <- utils.check.gl(x)
     verbose <- gl.check.verbosity(verbose)
+    
+    
+    #### SETTING DATA TYPE ####
+    if (all(x@ploidy == 1)){
+      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
+      datatype <- "SilicoDArT"
+    } else if (all(x@ploidy == 2)){
+      cat(report("  Processing a SNP dataset\n"))
+      datatype <- "SNP"
+    } else {
+      stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
+    }
+    
+
     
 # FLAG SCRIPT START
     

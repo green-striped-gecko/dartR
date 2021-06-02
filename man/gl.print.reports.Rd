@@ -6,6 +6,9 @@
 \usage{
 gl.print.reports(print_report)
 }
+\arguments{
+\item{print_report}{number of report from \code{\link{gl.list.reports}} that is to be printed}
+}
 \value{
 Prints reports that were saved in tempdir.
 }

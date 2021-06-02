@@ -7,7 +7,7 @@
 gl.check.verbosity(verbose = NULL)
 }
 \arguments{
-\item{verbosity}{-- user requested level of verbosity}
+\item{verbose}{-- user requested level of verbosity}
 }
 \value{
 The verbosity, in variable verbose
