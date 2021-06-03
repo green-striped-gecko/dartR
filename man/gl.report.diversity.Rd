@@ -2,46 +2,53 @@
 % Please edit documentation in R/gl.report.diversity.r
 \name{gl.report.diversity}
 \alias{gl.report.diversity}
-\title{Calculate diversity indices for SNPs}
+\title{Calculate diversity indexes for SNPs}
 \usage{
 gl.report.diversity(
-  gl,
-  spectrumplot = TRUE,
-  confiplot = FALSE,
+  x,
   pbar = TRUE,
   table = "DH",
+  plot_theme = theme_dartR(),
+  plot_colours = discrete_palette,
   verbose = NULL
 )
 }
 \arguments{
-\item{gl}{genlight object containing the SNP genotypes  [required]}
+\item{x}{Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required].}
 
-\item{spectrumplot}{switch to provide a plot [default TRUE]}
+\item{pbar}{Report on progress. Silent if set to FALSE. [default TRUE]}
 
-\item{confiplot}{switch if confidence intervals (1 sd) should be drawn [default FALSE]}
+\item{table}{Prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table. [default "DH"]}
 
-\item{pbar}{report on progress. Silent if set to FALSE. [default TRUE]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{table}{prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table.}
+\item{plot_colours}{A color palette [default discrete_palette].}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-returns a list of entropy indices for each level of q and equivalent numbers for alpha and beta diversity.
+returns a list of entropy indexes for each level of q and equivalent numbers for alpha and beta diversity.
 }
 \description{
-!!Just an intro placeholder!! This script takes a genlight object and calculates alpha and beta diversity for q=0:2. Formulas are taken from Sherwin et al. 2017. The paper describes nicely the relationship between the different q levels and how they relate to population genetic processes such as dispersal and selection. For all indices the entropies (H) and corrosponding effective numbers Hill numbers (D), which reflect the amount of entities that are needed to get the observed valuea are calculated. In a nutshell the alpha indices between the different q-values should be similar if there are no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index this links to a process causing it such as dispersal, selection or strong drift. For a detailed explanation of all the indices, we recommend to resort to the literature provided below.
+This script takes a genlight object and calculates alpha and beta diversity for q = 0:2. Formulas are taken from Sherwin et al. 2017. The paper describes nicely the relationship between the different q levels and how they relate to population genetic processes such as dispersal and selection.
+}
+\details{
+For all indexes, the entropies (H) and corresponding effective numbers, i.e. Hill numbers (D), which reflect the number of needed entities to get the observed values, are calculated. In a nutshell, the alpha indexes between the different q-values should be similar if there is no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index, this links to a process causing it, such as dispersal, selection or strong drift. For a detailed explanation of all the indexes, we recommend resorting to the literature provided below. Confidence intervals are +/- 1 standard deviation.
+
+ Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
-div <- gl.report.diversity(bandicoot.gl, spectrumplot = TRUE, table = FALSE, pbar=FALSE)
+div <- gl.report.diversity(bandicoot.gl, table = FALSE, pbar=FALSE)
 div$zero_H_alpha
 div$two_H_beta
 names(div)
+
 }
 \references{
 Sherwin, W.B., Chao, A., Johst, L., Smouse, P.E. (2017). Information Theory Broadens the Spectrum of Molecular Ecology and Evolution. TREE 32(12) 948-963. doi:10.1016/j.tree.2017.09.12
-
-Chao et al. 2014
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella
