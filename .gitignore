@@ -5,6 +5,6 @@ Meta
 .Ruserdata
 dartR.Rproj
 .Rbuildignore
-.github
+.github/*
 README.md
 doc
