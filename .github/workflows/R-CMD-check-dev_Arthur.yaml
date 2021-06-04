@@ -3,14 +3,11 @@
 on:
   push:
     branches:
-      - dev
+      - dev_arthur
     
-  pull_request:
-    branches:
-      - dev
    
 
-name: R-CMD-check-dev
+name: R-CMD-check-dev_Arthur
 
 jobs:
   R-CMD-check:
