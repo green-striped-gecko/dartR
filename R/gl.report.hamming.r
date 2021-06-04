@@ -14,11 +14,10 @@
 #'@param rs Number of bases in the restriction enzyme recognition sequence [default 5]
 #'@param threshold Minimum acceptable base pair difference for display on the boxplot and histogram [default 3 bp]
 #'@param taglength Typical length of the sequence tags [default 69]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
-#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
 #'@param probar If TRUE, then a progress bar is displayed on long loops [default TRUE]
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
 #'@details The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
 #'is less than a specified percentage
@@ -34,28 +33,15 @@
 #' \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 #' as implemented in utils.hamming.r
 #' 
-#' This function reports the
-#'  number of missing values for each of several quantiles. Quantiles are
-#'  partitions of a finite set of values into q subsets of (nearly) equal sizes.
-#'  In this function q = 20. Quantiles are useful measures because they are less
-#'  susceptible to long-tailed distributions and outliers.
-#'  
-#' The minimum, maximum, mean and a tabulation of call rate quantiles against
-#'  thresholds rate are provided. Output also includes a boxplot and a
-#'  histogram.
-#'
-#'  \strong{Plots and table are saved to the temporal directory (tempdir) and
-#'  can be accessed with the function \code{\link{gl.access.report}}. Note that
-#'  they can be accessed only in the current R session because tempdir is
-#'  cleared each time that an R session is closed.}
+#'\strong{ Function's output }
+#'  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
 #'
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #' 
-#'@return Returns a genlight object with the file names of plots and table that
-#'  were saved in the tempdir stored in the slot other$history
+#'@return Returns unaltered genlight object
 #'
 #'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
@@ -64,12 +50,13 @@
 #' gl.report.hamming(testset.gs)
 #'
 #'@importFrom stats sd
-#' @import crayon
 #' @import patchwork
 #'
 #'@export 
 #'
-#'#' @seealso \code{\link{gl.filter.hamming}}, \code{\link{gl.access.report}}
+#'@seealso \code{\link{gl.filter.hamming}},\code{\link{gl.list.reports}},
+#'  \code{\link{gl.print.reports}}
+#'  
 
 gl.report.hamming <- function(x, 
                               rs = 5, 
@@ -86,8 +73,22 @@ gl.report.hamming <- function(x,
 
 # GENERAL ERROR CHECKING
 
-    datatype <- utils.check.gl(x)
-    verbose <- utils.check.verbosity(verbose)
+    x <- utils.check.gl(x)
+    verbose <- gl.check.verbosity(verbose)
+    
+    
+    #### SETTING DATA TYPE ####
+    if (all(x@ploidy == 1)){
+      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
+      datatype <- "SilicoDArT"
+    } else if (all(x@ploidy == 2)){
+      cat(report("  Processing a SNP dataset\n"))
+      datatype <- "SNP"
+    } else {
+      stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
+    }
+    
+
     
 # FLAG SCRIPT START
     
@@ -180,7 +181,7 @@ gl.report.hamming <- function(x,
 
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
-    cat("    Miniumum Hamming distance: ", round(min(d), 2), "\n")
+    cat("    Minimum Hamming distance: ", round(min(d), 2), "\n")
     cat("    Maximum Hamming distance: ", round(max(d), 2), "\n")
     cat(paste0("    Mean Hamming Distance ", round(mean(d), 2), "+/-", round(sd(d), 3), " SD\n\n"))
     n.outliers <- sum(d <= (threshold/(taglength - rs)))
@@ -209,16 +210,15 @@ gl.report.hamming <- function(x,
     print(df)
     
     # creating temp file names
-    temp_plot <- tempfile(pattern = "plot_")
-    temp_table <- tempfile(pattern = "table_")
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     
     # saving to tempdir
-    setwd(tempdir())
     saveRDS(p3, file = temp_plot)
     if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
     saveRDS(df, file = temp_table)
     if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
-    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.access.report()\n"))}
+    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
     
     # FLAG SCRIPT END
     

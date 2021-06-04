@@ -132,7 +132,7 @@
 #'  (“homology”) searching. Current protocols in bioinformatics, 42(1), 3-1.
 #'  }
 #'
-#'@seealso \code{\link{gl.access.report}}, \code{\link{gl.print.history}}
+#'@seealso \code{\link{gl.print.history}}
 #'
 #'@family reference genomes
 #'

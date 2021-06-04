@@ -9,6 +9,8 @@ utils.read.dart(
   nas = "-",
   topskip = NULL,
   lastmetric = "RepAvg",
+  service_row = 1,
+  plate_row = 3,
   verbose = 2
 )
 }
@@ -20,6 +22,10 @@ utils.read.dart(
 \item{topskip}{a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.}
 
 \item{lastmetric}{specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.}
+
+\item{service_row}{the row number in which the information of the DArT service is contained [1]}
+
+\item{plate_row}{the row number in which the information of the plate location is contained [3]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }

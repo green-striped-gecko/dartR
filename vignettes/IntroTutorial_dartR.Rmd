@@ -69,6 +69,7 @@ install.packages("BiocManager")
 BiocManager::install(c("SNPRelate", "qvalue"))
 install_github("green-striped-gecko/dartR")
 library(dartR)
+
 ```
 
 
@@ -428,7 +429,7 @@ platy.gl@other$loc.metrics <- df.loc
 The last line of code stores the loci metadata in the right location and we can use our filter and report function now on the genlight object as before.
 
 ```{r}
-gl.report.callrate(platy.gl)
+gl.report.callrate(testset.gl)
 gl2 <- gl.filter.reproducibility(platy.gl, t=0.5)
 ```
 

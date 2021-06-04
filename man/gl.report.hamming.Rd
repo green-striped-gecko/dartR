@@ -7,34 +7,33 @@
 gl.report.hamming(
   x,
   rs = 5,
-  boxplot = "adjusted",
-  range = 1.5,
   threshold = 3,
   taglength = 69,
+  plot_theme = theme_dartR(),
+  plot_colours = two_colors,
   probar = FALSE,
-  verbose = 2
+  verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required]}
 
-\item{rs}{-- number of bases in the restriction enzyme recognition sequence [default 5]}
+\item{rs}{Number of bases in the restriction enzyme recognition sequence [default 5]}
 
-\item{boxplot}{-- if 'standard', plots a standard box and whisker plot; 
-if 'adjusted', plots a boxplot adjusted for skewed distributions [default 'adjusted']}
+\item{threshold}{Minimum acceptable base pair difference for display on the boxplot and histogram [default 3 bp]}
 
-\item{range}{-- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
+\item{taglength}{Typical length of the sequence tags [default 69]}
 
-\item{threshold}{minimum acceptable base pair difference for display on the whisker plot and histogram [default 3 bp]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{taglength}{-- typical length of the sequence tags [default 69]}
+\item{plot_colours}{List of two color names for the borders and fill of the plots [default two_colors].}
 
-\item{probar}{-- if TRUE, then a progress bar is desplayed on long loops [default TRUE]}
+\item{probar}{If TRUE, then a progress bar is displayed on long loops [default TRUE]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-Tabulation of loc that will be lost on filtering, against values of the threshold
+Returns unaltered genlight object
 }
 \description{
 Hamming distance is calculated as the number of base differences between two 
@@ -46,6 +45,9 @@ two trimmed sequences starting from immediately after the common recognition
 sequence and terminating at the last base of the shorter sequence.
 }
 \details{
+The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
+is less than a specified percentage
+
 Hamming distance can be computed by exploiting the fact that the dot product 
 of two binary vectors x and (1-y) counts the corresponding elements that are 
 different between x and y. This approach can also be used for vectors that 
@@ -55,13 +57,24 @@ If a pair of DNA sequences are of differing length, the longer is truncated.
 
 The algorithm is that of Johann de Jong 
 \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
-as implimented in utils.hamming.r
+as implemented in utils.hamming.r
 
-A histogram and whiskerplot can be requested. Both display a user specified value
-for the minumum acceptable Hamming distance.
+\strong{ Function's output }
+ Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+
+ Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
-out <- gl.report.hamming(testset.gl)
+gl.report.hamming(testset.gl)
+gl.report.hamming(testset.gs)
+
+}
+\seealso{
+\code{\link{gl.filter.hamming}},\code{\link{gl.list.reports}},
+ \code{\link{gl.print.reports}}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -1,9 +1,4 @@
-#' Startup function
-#'
-#' setting up all starting values
-
 # SET VERSION
-
 build <- "Jacob"
 
 # SET VERBOSITY
@@ -11,8 +6,8 @@ build <- "Jacob"
 # dartR functions have a verbosity parameter that sets the level of reporting during the execution of the function. The verbosity level,
 # set by parameter 'verbose' can be one of verbose 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary;
 # 5, full report.
-verbose <- 2
 
+#options("dartR_verbose"=2)
 # SET MESSAGES COLORS
 
 # - For fatal errors use “error” which will print the message in red. Example usage: stop(error(“Fatal error”))
@@ -25,6 +20,8 @@ warn <- crayon::yellow
 report <- crayon::green
 important <- crayon::blue 
 code <- crayon::cyan
+
+
 
 # SET PLOTS COLORS
 
@@ -181,13 +178,17 @@ theme_dartR <- function(base_size = 11, base_family = "",
 
 # WELCOME MESSAGE
 .onAttach <- function(...) {
+  
   packageStartupMessage(important("**** Welcome to dartR ****\n"))
   packageStartupMessage(report("Be aware that owing to CRAN requirements and compatibility reasons not all functions of the packages may run yet, as some dependencies could be missing. Hence for a most enjoyable experience we recommend to run the function "))
   packageStartupMessage(code("gl.install.vanilla.dartR()"))                 
   
   packageStartupMessage(report("This installs all missing and required packages for your version of dartR. \nFor citation information please use:"))
   packageStartupMessage(code("citation('dartR')"))
-
+  
+  options("dartR_verbose"=2)
+  packageStartupMessage(report("Global verbosity is set to: 2\n"))
+  
   packageStartupMessage(important("\n**** Have fun using dartR! ****"))
 }
 

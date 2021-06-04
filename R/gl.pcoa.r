@@ -146,6 +146,7 @@ gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, pa
     } else if (class(x) == "fd") {
         if (verbose >= 2) {
             cat(report("  Processing a genlight object after a fixed difference analysis, x$fd \n\n"))
+          x <- x$gl
         }
         data.type <- "SNP"
     } else {
@@ -154,7 +155,7 @@ gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, pa
 
     # SCRIPT SPECIFIC ERROR CHECKING
 
-    if (rm.monomorphs == TRUE) {
+    if (rm.monomorphs == TRUE & (data.type=="SNP" | data.type=="SilicoDArT")) {
         x <- gl.filter.monomorphs(x,verbose=0)
     }
 
@@ -301,10 +302,10 @@ gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, pa
       # PLOT THE DIAGNOSTICS
     
     # Plot Scree plot
-
-    m <- cbind(seq(1:length(eig.top.pc)), eig.top.pc)
-    df <- data.frame(m)
-    colnames(df) <- c("eigenvalue", "percent")
+    #avoid no visible binding probl
+    eigenvalue <- percent <-NULL
+    
+    df <- data.frame(eigenvalue=seq(1:length(eig.top.pc)), percent=eig.top.pc)
     if (data.type == "SNP") {
         xlab <- paste("PCA Axis")
     } else {

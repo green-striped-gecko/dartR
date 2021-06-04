@@ -11,9 +11,6 @@ gl.report.overshoot(x, verbose = NULL)
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
-\value{
-returns names of the recalcitrant loci
-}
 \description{
 This function checks the position of the SNP within the trimmed sequence tag and identifies those for which the SNP position is outside
 the trimmed sequence tag. This can happen, rarely, when the sequence containing the SNP resembles the adaptor.
@@ -23,7 +20,12 @@ The SNP genotype can still be used in most analyses, but functions like gl2fasta
 the sequence tag.
 }
 \examples{
-out <- gl.report.overshoot(testset.gl)
+gl.report.overshoot(testset.gl)
+
+}
+\seealso{
+\code{\link{gl.filter.overshoot}},\code{\link{gl.list.reports}},
+ \code{\link{gl.print.reports}}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
