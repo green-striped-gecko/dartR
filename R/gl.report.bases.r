@@ -54,21 +54,9 @@ gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(),
 
     # ERROR CHECKING
 
-    x <- utils.check.gl(x)
+    datatype <- utils.check.gl(x)
     verbose <- gl.check.verbosity(verbose)
 
-    #### SETTING DATA TYPE ####
-    if (all(x@ploidy == 1)){
-      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
-      datatype <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
-      cat(report("  Processing a SNP dataset\n"))
-      datatype <- "SNP"
-    } else {
-      stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
-    }
-    
-    
     # FUNCTION SPECIFIC ERROR CHECKING
 
     if (!any(names(x@other$loc.metrics) == "TrimmedSequence")) {
@@ -204,7 +192,7 @@ gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(),
         }
     }
 
-    # Create return matrix
+    # Create return list
     if (verbose >= 2) {
         cat(report("  Returning a list containing \n
          [[1]] $freq -- the table of base frequencies and transition/transversion ratios;\n
@@ -220,8 +208,10 @@ gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(),
     if (verbose >= 1) {
       cat(report("\n\nCompleted:", funname, "\n\n"))
     }
-    if (datatype=="SNP") 
-    invisible(list(freq = out, plotbases = p1, plottstv = p2)) else invisible(list(freq = out, plotbases = p1))
-
+    if (datatype=="SNP") {
+      invisible(list(freq = out, plotbases = p1, plottstv = p2))
+    } else {
+      invisible(list(freq = out, plotbases = p1))
+    }
 }
 
