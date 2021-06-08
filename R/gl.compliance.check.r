@@ -44,7 +44,7 @@ verbose <- gl.check.verbosity(verbose)
 
  # STANDARD ERROR CHECKING
   
-   utils.check.gl(x,env = env=environment())
+   utils.check.gl(x,env = environment())
 
 # DO THE JOB
   
