@@ -32,7 +32,7 @@ utils.check.gl <- function(x=NULL,verbose=options()$dartR_verbose,env) {
   }
   
   # Work around a bug in adegenet if genlight object is created by subsetting
-  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+  x@other$loc.metrics <- as.data.frame(x@other$loc.metrics)
   
   
 }
