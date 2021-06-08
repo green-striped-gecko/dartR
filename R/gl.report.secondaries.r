@@ -57,6 +57,8 @@
 #'  \code{\link{gl.print.reports}},\code{\link{gl.report.heterozygosity}}
 #'  
 #' @family filters and filter reports
+#' 
+#' @importFrom stats dpois
 #'
 #' @import patchwork
 #'
@@ -124,6 +126,8 @@ gl.report.secondaries <- function(x,
     names(secondaries_plot_2)<- seq(1:(length(secondaries_plot_2)))-1
     secondaries_plot_2 <- as.data.frame(secondaries_plot_2)
     colnames(secondaries_plot_2) <- c("freq","count")
+    
+    freq <- NULL
     
     p2 <- ggplot(secondaries_plot_2,aes(x=freq,y=count)) + 
       geom_col(color = plot_colours[1],fill = plot_colours[2]) + 

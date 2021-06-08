@@ -39,7 +39,7 @@
 #' unacceptable loss of loci. Reproducibility is stored in the slot 
 #' @@other$loc.metrics$RepAvg and is defined as the proportion of technical replicate 
 #' assay pairs for which the marker score is consistent. You can examine the distribution
-#' of reproducibility with the function \code{\link{gl.report.RepAvg}}.
+#' of reproducibility with the function \code{\link{gl.report.reproducibility}}.
 #' 
 #' Note that the null expectation is not well defined, and the power reduced, if the
 #' population from which the putative parent-offspring pairs are drawn contains 
@@ -64,7 +64,7 @@
 #' out <- gl.report.parent.offspring(testset.gl)
 #'
 #' @seealso \code{\link{gl.list.reports}}, \code{\link{gl.report.rdepth}} ,
-#'  \code{\link{gl.print.reports}},\code{\link{gl.report.RepAvg}}
+#'  \code{\link{gl.print.reports}},\code{\link{gl.report.reproducibility}}
 #'  
 #' @family reporting functions
 #'

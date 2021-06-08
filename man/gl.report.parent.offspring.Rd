@@ -66,7 +66,7 @@ out <- gl.report.parent.offspring(testset.gl)
 }
 \seealso{
 \code{\link{gl.list.reports}}, \code{\link{gl.report.rdepth}} ,
- \code{\link{gl.print.reports}},\code{\link{gl.report.RepAvg}}
+ \code{\link{gl.print.reports}},\code{\link{gl.report.reproducibility}}
 
 Other reporting functions: 
 \code{\link{gl.report.bases}()},
