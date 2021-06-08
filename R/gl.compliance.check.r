@@ -50,7 +50,7 @@ verbose <- gl.check.verbosity(verbose)
   
   # Check that the data exist, and that they are restricted to the appropriate values
   
-  if (data.type == "SNP"){
+  if (datatype == "SNP"){
     mat <- as.matrix(x)
     scores <- c(0,1,2,NA)
     if (verbose >= 2){cat("  Checking coding of SNPs\n")}
