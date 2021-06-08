@@ -1,19 +1,19 @@
-#'@name gl.report.maf
+#' @name gl.report.maf
 #'
-#'@title Report minor allele frequency (MAF) for each locus in a SNP dataset
+#' @title Report minor allele frequency (MAF) for each locus in a SNP dataset
 #'
-#'@description This script provides summary histograms of MAF for each population in the dataset and an overall histogram to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.maf}}
+#' @description This script provides summary histograms of MAF for each population in the dataset and an overall histogram to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.maf}}
 #'
-#'@param x Name of the genlight object containing the SNP data [required]
-#'@param maf.limit Show histograms MAF range <= maf.limit [default 0.5]
-#'@param ind.limit Show histograms only for populations of size greater than ind.limit [default 5]
-#'@param loc.limit Show histograms only for populations with more than loc.limit polymorphic loci [default 30]
-#'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
-#'@param plot_colours_pop A color palette for population plots [default discrete_palette]
-#'@param plot_colours_all List of two color names for the borders and fill of the overall plot [default two_colors]
-#'@param verbose verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param maf.limit Show histograms MAF range <= maf.limit [default 0.5].
+#' @param ind.limit Show histograms only for populations of size greater than ind.limit [default 5].
+#' @param loc.limit Show histograms only for populations with more than loc.limit polymorphic loci [default 30].
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
+#' @param plot_colours_pop A color palette for population plots [default discrete_palette].
+#' @param plot_colours_all List of two color names for the borders and fill of the overall plot [default two_colors].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].
 #'
-#'@details 
+#' @details 
 #'The function \code{\link{gl.filter.maf}} will filter out the
 #'  loci with MAF below a specified threshold.
 #'  
@@ -29,39 +29,45 @@
 #'  In this function q = 20. Quantiles are useful measures because they are less
 #'  susceptible to long-tailed distributions and outliers.
 #'
-#'  Plots and table were saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+#'  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
 #'
 #' Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#'@return Returns an unchanged genlight object
+#' @return An unaltered genlight object
 #'
-#'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
-#'@examples
+#' @examples
 #' gl <- gl.report.maf(testset.gl)
 #'
-#'@seealso \code{\link{gl.filter.maf}}, \code{\link{gl.list.reports}},
+#' @seealso \code{\link{gl.filter.maf}}, \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #'  
-#'@family filters and filter reports
+#' @family filters and filter reports
 #'
-#'@export 
+#' @export 
 #'
 
-gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plot_theme = theme_dartR(), plot_colours_pop = discrete_palette, 
-    plot_colours_all = two_colors, verbose = 2) {
+gl.report.maf <- function(x, 
+                          maf.limit = 0.5, 
+                          ind.limit = 5, 
+                          loc.limit = 30, 
+                          plot_theme = theme_dartR(), 
+                          plot_colours_pop = discrete_palette,
+                          plot_colours_all = two_colors, 
+                          verbose = options()$dartR_verbose) {
 
     # TRAP COMMAND
 
     funname <- match.call()[[1]]
-
-    # GENERAL ERROR CHECKING
-
-    x <- utils.check.gl(x)
-    verbose <- gl.check.verbosity(verbose)
+    
+    # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
+    
+    datatype <- NULL
+    utils.check.gl(x,env=environment())
     
     # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -195,26 +201,36 @@ gl.report.maf <- function(x, maf.limit = 0.5, ind.limit = 5, loc.limit = 30, plo
           xlab("Minor Allele Frequency") + ylab("Count") + xlim(0, maf.limit) + plot_theme + ggtitle(title.str)
     }
     
-    # printing outputs
+    # PRINTING OUTPUTS
+    # using package patchwork
     suppressWarnings(print(p3))
     print(df)
-
+    
+    # SAVE INTERMEDIATES TO TEMPDIR             
     # creating temp file names
-    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-
+    
     # saving to tempdir
     saveRDS(p3, file = temp_plot)
-    if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
+    if(verbose>=2){
+        cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
+    }
     saveRDS(df, file = temp_table)
-    if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
-    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
+    if(verbose>=2){
+        cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))
+    }
+    if(verbose>=2){
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+    }
 
     # FLAG SCRIPT END
 
     if (verbose >= 1) {
         cat(report("\n\nCompleted:", funname, "\n\n"))
     }
+    
+    # RETURN
 
     invisible(x)
 }

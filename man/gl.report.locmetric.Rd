@@ -9,22 +9,22 @@ gl.report.locmetric(
   metric,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
-  verbose = NULL
+  verbose = options()$dartR_verbose
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required]}
+\item{x}{Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required].}
 
-\item{metric}{Name of the metric to be used for filtering [required]}
+\item{metric}{Name of the metric to be used for filtering [required].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{List of two color names for the borders and fill of the plots [default two_colors].}
 
-\item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-Returns an unchanged genlight object
+An unaltered genlight object
 }
 \description{
 This script uses any field with numeric values stored in $other$loc.metrics to produce summary statistics (mean, minimum, average, quantiles), histograms and boxplots to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.locmetric}}.
@@ -90,7 +90,13 @@ out <- gl.report.locmetric(test.gs,metric='test')
 
 Other filters and filter reports: 
 \code{\link{gl.report.callrate}()},
-\code{\link{gl.report.maf}()}
+\code{\link{gl.report.hamming}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()}
 }
 \author{
 Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -4,12 +4,15 @@
 \alias{gl.report.monomorphs}
 \title{Report monomorphic loci}
 \usage{
-gl.report.monomorphs(x, verbose = NULL)
+gl.report.monomorphs(x, verbose = options()$dartR_verbose)
 }
 \arguments{
-\item{x}{-- name of the input genlight object [required]}
+\item{x}{Name of the input genlight object [required].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].}
+}
+\value{
+An unaltered genlight object
 }
 \description{
 This script reports the number of monomorphic loci and those with all NAs in a genlight \{adegenet\} object
@@ -31,7 +34,18 @@ Note that for SNP data, NAs likely represent null alleles; in tag presence/absen
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}}
+
+Other filters and filter reports: 
+\code{\link{gl.report.callrate}()},
+\code{\link{gl.report.hamming}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
+\concept{filters and filter reports}
