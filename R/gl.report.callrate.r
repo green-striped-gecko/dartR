@@ -42,7 +42,7 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#' @return An unaltered genlight object
+#' @return Returns unaltered genlight object
 #'
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
@@ -253,13 +253,14 @@ gl.report.callrate <- function(x,
     cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
     }
   saveRDS(df, file = temp_table)
+
   if(verbose>=2){
     cat(report("  Saving the report to the tempfile as",temp_table,"using saveRDS\n"))
     }
   if(verbose>=2){
     cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
     }
-  
+
 # FLAG SCRIPT END
   
   if (verbose >= 1) {

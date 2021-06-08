@@ -202,7 +202,7 @@ gl.report.bases <- function(x, plot = TRUE,
         }
     }
 
-    # Create return matrix
+    # Create return list
     if (verbose >= 2) {
         cat(report("  Returning a list containing \n
          [[1]] $freq -- the table of base frequencies and transition/transversion ratios;\n

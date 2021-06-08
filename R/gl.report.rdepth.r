@@ -52,7 +52,7 @@
 #'
 #' @examples 
 #' # SNP data
-#' out <- gl.report.rdepth(testset.gl)
+#' df <- gl.report.rdepth(testset.gl)
 #'
 #' @seealso \code{\link{gl.filter.rdepth}}, \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
