@@ -4,7 +4,7 @@
 \alias{utils.check.gl}
 \title{A utility function to check that the object passed to the function is a genlight object.}
 \usage{
-utils.check.gl(x = NULL, verbose = NULL)
+utils.check.gl(x = NULL, verbose = options()$dartR_verbose, env)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]}
@@ -19,5 +19,5 @@ Most functions require access to a genlight object, and this function checks tha
 whether it is a SNP dataset or a SilicoDArT object, and reports back if verbosity is >=2
 }
 \examples{
-utils.check.gl(testset.gs)
+utils.check.gl(testset.gl,env=environment())
 }

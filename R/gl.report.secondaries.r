@@ -74,6 +74,7 @@ gl.report.secondaries <- function(x,
     
     # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
     
+    datatype <- NULL
     utils.check.gl(x,env=environment())
     
     # FUNCTION SPECIFIC ERROR CHECKING

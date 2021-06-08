@@ -12,28 +12,28 @@ gl.report.maf(
   plot_theme = theme_dartR(),
   plot_colours_pop = discrete_palette,
   plot_colours_all = two_colors,
-  verbose = 2
+  verbose = options()$dartR_verbose
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{maf.limit}{Show histograms MAF range <= maf.limit [default 0.5]}
+\item{maf.limit}{Show histograms MAF range <= maf.limit [default 0.5].}
 
-\item{ind.limit}{Show histograms only for populations of size greater than ind.limit [default 5]}
+\item{ind.limit}{Show histograms only for populations of size greater than ind.limit [default 5].}
 
-\item{loc.limit}{Show histograms only for populations with more than loc.limit polymorphic loci [default 30]}
+\item{loc.limit}{Show histograms only for populations with more than loc.limit polymorphic loci [default 30].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours_pop}{A color palette for population plots [default discrete_palette]}
+\item{plot_colours_pop}{A color palette for population plots [default discrete_palette].}
 
-\item{plot_colours_all}{List of two color names for the borders and fill of the overall plot [default two_colors]}
+\item{plot_colours_all}{List of two color names for the borders and fill of the overall plot [default two_colors].}
 
-\item{verbose}{verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-Returns an unchanged genlight object
+An unaltered genlight object
 }
 \description{
 This script provides summary histograms of MAF for each population in the dataset and an overall histogram to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.maf}}
@@ -54,7 +54,7 @@ The function \code{\link{gl.filter.maf}} will filter out the
  In this function q = 20. Quantiles are useful measures because they are less
  susceptible to long-tailed distributions and outliers.
 
- Plots and table were saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+ Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
 
 Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -71,7 +71,13 @@ gl <- gl.report.maf(testset.gl)
 
 Other filters and filter reports: 
 \code{\link{gl.report.callrate}()},
-\code{\link{gl.report.locmetric}()}
+\code{\link{gl.report.hamming}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

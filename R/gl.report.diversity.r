@@ -58,6 +58,7 @@ gl.report.diversity <- function(x,
     
     # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
     
+    datatype <- NULL
     utils.check.gl(x,env=environment())
     
     # FLAG SCRIPT START

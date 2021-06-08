@@ -9,7 +9,9 @@ gl.report.parent.offspring(
   min.rdepth = 12,
   min.reproducibility = 1,
   range = 1.5,
-  verbose = NULL
+  plot_theme = theme_dartR(),
+  plot_colours = two_colors,
+  verbose = options()$dartR_verbose
 )
 }
 \arguments{
@@ -19,24 +21,29 @@ gl.report.parent.offspring(
 
 \item{min.reproducibility}{Minimum reproducibility to include in analysis [default = 1]}
 
-\item{range}{-- specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]}
+\item{range}{Specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+
+\item{plot_colours}{List of two color names for the borders and fill of the
+plots [default two_colors].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-A set of individuals in parent-offspring relationship
+A set of individuals in parent-offspring relationship. NULL if no parent-offspring relationships were found.
 }
 \description{
 This script examines the frequency of pedigree inconsistent loci, that is,
 those loci that are homozygotes in the parent for the reference allele, and
 homozygous in the offspring for the alternate allele. This condition is not
-consistent with any pedigree, regardless of the (unkonwn) genotype of the other
+consistent with any pedigree, regardless of the (unknown) genotype of the other
 parent. The pedigree inconsistent loci are counted as an indication of whether
 or not it is reasonable to propose the two individuals are in a parent-offspring
 relationship.
 }
 \details{
-Obviously, if the two individuals are in a parent offspring relationship, the true
+If two individuals are in a parent offspring relationship, the true
 number of pedigree inconsistent loci should be zero, but SNP calling is not 
 infallible. Some loci will be mis-called. The problem thus becomes one of determining
 if the two focal individuals have a count of pedigree inconsistent loci less than
@@ -47,14 +54,27 @@ use a simple outlier comparison.
 To reduce the frequency of mis-calls, and so emphasise the difference between true
 parent-offspring pairs and unrelated pairs, the data can be filtered on read depth.
 Typically minimum read depth is set to 5x, but you can examine the distribution
-of read depths with gl.report.rdepth() and push this up with an acceptable loss
+of read depths with the function \code{\link{gl.report.rdepth}} and push this up 
+with an acceptable loss
 of loci. 12x might be a good minimum for this particular analysis. It is sensible
 also to push the minimum reproducibility up to 1, if that does not result in an
-unacceptable loss of loci.
-
-Note that the null expectation is not well defined, and the power reduced, if the
-population from which the putative parent-offspring pairs are drawn contains 
-many sibs. Note also that if an individual has been genotyped twice in the dataset, 
-the replicate pair will be assessed by this script as being in a parent-offspring 
-relationship.
+unacceptable loss of loci. Reproducibility is stored in the slot
 }
+\examples{
+out <- gl.report.parent.offspring(testset.gl)
+
+}
+\seealso{
+\code{\link{gl.list.reports}}, \code{\link{gl.report.rdepth}} ,
+ \code{\link{gl.print.reports}},\code{\link{gl.report.RepAvg}}
+
+Other reporting functions: 
+\code{\link{gl.report.bases}()},
+\code{\link{gl.report.diversity}()},
+\code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.pa}()}
+}
+\author{
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+}
+\concept{reporting functions}

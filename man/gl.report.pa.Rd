@@ -4,17 +4,17 @@
 \alias{gl.report.pa}
 \title{Report private alleles (and fixed alleles) per pair of populations}
 \usage{
-gl.report.pa(gl1, gl2 = NULL, verbose = NULL)
+gl.report.pa(x, x2 = NULL, verbose = options()$dartR_verbose)
 }
 \arguments{
-\item{gl1}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{gl2}{-- if two seperate genlight objects are to be compared this can be provided here [default NULL]}
+\item{x2}{If two separate genlight objects are to be compared this can be provided here [default NULL].}
 
-\item{verbose}{-- verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-returns a data.frame. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequendy difference between loci (mdf).
+A data.frame. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequency difference between loci (mdf).
 }
 \description{
 This function reports private alleles in one population compared with a second population, for all populations
@@ -22,26 +22,26 @@ taken pairwise. It also reports a count of fixed allelic differences and the mea
 differences between pairs of populations.
 }
 \details{
-Note that the number of paired alleles between to populations is not a symmetric dissimilarity measure.
+Note that the number of paired alleles between two populations is not a symmetric dissimilarity measure.
 
-
-if no gl2 is provided, the function uses the pop(gl) hierachy to determine pairs of population, otherwise it runs a single comparison between gl1 and gl2. 
+If no x2 is provided, the function uses the pop(gl) hierarchy to determine pairs of population, otherwise it runs a single comparison between gl1 and gl2. 
 Hint: in case you want to run comparison between individuals you can simply redefine your pop(gl) via indNames(gl) [Assuming individual names are unique]
  
-Definition of fixed and private alleles
+\strong{ Definition of fixed and private alleles }
 
-The table shows a cross table of possible cases of allele frequencies between two populations 
-(0=homozygote for Allele 1,x= both Alleles are present, 1=homozygote for Allele 2)
+The below is table showing the possible cases of allele frequencies between two populations 
+(0 = homozygote for Allele 1, x = both Alleles are present, 1 = homozygote for Allele 2).
 
-p: cases where there is a private allele in pop1 compared to pop2 (but not vice versa)
-
-f: cases where there is a fixed allele in pop1 (and pop2, as those cases are symmetric)
+\itemize{
+\item p: cases where there is a private allele in pop1 compared to pop2 (but not vice versa)
+\item f: cases where there is a fixed allele in pop1 (and pop2, as those cases are symmetric)
+} 
 
 \tabular{ccccc}{ 
-\tab\tab \tab \emph{pop1}\tab\cr
-\tab\tab \strong{0} \tab   \strong{x}  \tab  \strong{1}\cr
+\tab \tab \tab \emph{pop1} \tab \cr
+\tab \tab \strong{0} \tab   \strong{x}  \tab  \strong{1}\cr
 \tab     \strong{0}\tab -  \tab  p \tab  p,f\cr
- \emph{pop2} \tab \strong{x}\tab -  \tab- \tab -\cr
+\emph{pop2} \tab \strong{x}\tab -  \tab- \tab -\cr
 \tab \strong{1} \tab p,f\tab p \tab   -\cr
 }
 }
@@ -49,6 +49,17 @@ f: cases where there is a fixed allele in pop1 (and pop2, as those cases are sym
 out <- gl.report.pa(testset.gl[1:20,])
 
 }
+\seealso{
+\code{\link{gl.list.reports}},
+ \code{\link{gl.print.reports}}
+
+Other reporting functions: 
+\code{\link{gl.report.bases}()},
+\code{\link{gl.report.diversity}()},
+\code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.parent.offspring}()}
+}
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }
+\concept{reporting functions}

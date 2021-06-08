@@ -8,7 +8,7 @@
 #' @return datatype, "SNP" for SNP data or  "SilicoDArT" for P/A data
 #' @export
 #' @examples
-#' utils.check.gl(testset.gs)
+#' utils.check.gl(testset.gl,env=environment())
 
 utils.check.gl <- function(x=NULL,verbose=options()$dartR_verbose,env) {
   
