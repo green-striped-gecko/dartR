@@ -1,51 +1,65 @@
-#' Calculate diversity indexes for SNPs
+#' @name gl.report.diversity
+#' 
+#' @title Calculate diversity indexes for SNPs
 #'
+#' @description 
 #'This script takes a genlight object and calculates alpha and beta diversity for q = 0:2. Formulas are taken from Sherwin et al. 2017. The paper describes nicely the relationship between the different q levels and how they relate to population genetic processes such as dispersal and selection.
-#'@param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required].
-#'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#'@param plot_colours A color palette [default discrete_palette].
-#'@param pbar Report on progress. Silent if set to FALSE. [default TRUE]
-#'@param table Prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table. [default "DH"]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
-#'@details For all indexes, the entropies (H) and corresponding effective numbers, i.e. Hill numbers (D), which reflect the number of needed entities to get the observed values, are calculated. In a nutshell, the alpha indexes between the different q-values should be similar if there is no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index, this links to a process causing it, such as dispersal, selection or strong drift. For a detailed explanation of all the indexes, we recommend resorting to the literature provided below. Confidence intervals are +/- 1 standard deviation.
+#' @param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required].
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
+#' @param plot_colours A color palette [default discrete_palette].
+#' @param pbar Report on progress. Silent if set to FALSE [default TRUE]. 
+#' @param table Prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table. [default "DH"]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#'
+#' @details For all indexes, the entropies (H) and corresponding effective numbers, i.e. Hill numbers (D), which reflect the number of needed entities to get the observed values, are calculated. In a nutshell, the alpha indexes between the different q-values should be similar if there is no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index, this links to a process causing it, such as dispersal, selection or strong drift. For a detailed explanation of all the indexes, we recommend resorting to the literature provided below. Confidence intervals are +/- 1 standard deviation.
+#' 
+#'\strong{ Function's output }
+#'
+#'  Plots are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
 #'
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
+#' @return A list of entropy indexes for each level of q and equivalent numbers for alpha and beta diversity.
 #'
-#'@return returns a list of entropy indexes for each level of q and equivalent numbers for alpha and beta diversity.
+#' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella 
 #'
-#'@author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella 
-#'
-#'@examples
+#' @examples
 #' div <- gl.report.diversity(bandicoot.gl, table = FALSE, pbar=FALSE)
 #' div$zero_H_alpha
 #' div$two_H_beta
 #' names(div)
 #'
-#'@references 
+#' @family reporting functions
+#'
+#' @references 
 #'Sherwin, W.B., Chao, A., Johst, L., Smouse, P.E. (2017). Information Theory Broadens the Spectrum of Molecular Ecology and Evolution. TREE 32(12) 948-963. doi:10.1016/j.tree.2017.09.12
 #'
-#'@import reshape2
+#' @import reshape2
 #'
-#'@export 
+#' @export 
 #'
 
 ### To be done: adjust calculation of betas for population sizes (switch) 
 
-gl.report.diversity <- function(x, pbar = TRUE, table = "DH", plot_theme = theme_dartR(),plot_colours = discrete_palette, verbose=NULL) {
+gl.report.diversity <- function(x,
+                                pbar = TRUE, 
+                                table = "DH", 
+                                plot_theme = theme_dartR(),
+                                plot_colours = discrete_palette, 
+                                verbose = options()$dartR_verbose) {
 
-    # TRAP COMMAND, SET VERSION
+    # TRAP COMMAND
    
     funname <- match.call()[[1]]
     
-    # GENERAL ERROR CHECKING
+    # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
     
-    x <- utils.check.gl(x)
-    verbose <- gl.check.verbosity(verbose)
+    utils.check.gl(x,env=environment())
+    
     # FLAG SCRIPT START
 
     if (verbose >= 1) {
@@ -282,7 +296,8 @@ gl.report.diversity <- function(x, pbar = TRUE, table = "DH", plot_theme = theme
         cat(report(" Done.                               "))
     }
     
-    # printing plots and reports
+    # PRINTING OUTPUTS
+    
     # spectrumplot
 
             fs <- cbind(zero_D_alpha, one_D_alpha, two_D_alpha)
@@ -364,11 +379,27 @@ gl.report.diversity <- function(x, pbar = TRUE, table = "DH", plot_theme = theme
         two_D_alpha_sd = two_D_alpha_sd)
         }
 
+ # SAVE INTERMEDIATES TO TEMPDIR            
+             
+  # creating temp file names
+  temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+
+  # saving to tempdir
+  saveRDS(p1, file = temp_plot)
+  if(verbose>=2){
+  cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
+  }
+  if(verbose>=2){
+  cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+  }        
+
     # FLAG SCRIPT END
 
     if (verbose >= 1) {
         cat(report("Completed:", funname, "\n"))
     }
+  
+  # RETURN
 
     invisible(out)
 }

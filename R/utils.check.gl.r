@@ -10,11 +10,10 @@
 #' @examples
 #' utils.check.gl(testset.gs)
 
-utils.check.gl <- function(x=NULL,verbose=NULL) {
+utils.check.gl <- function(x=NULL,verbose=options()$dartR_verbose,env) {
   
 #### SET VERBOSITY
-  verbose <- gl.check.verbosity(verbose)
-
+  env$verbose <- gl.check.verbosity(verbose)
 
 #### CHECK FOR GENLIGHT OBJECT ####
   if (class(x) != "genlight") {
@@ -24,14 +23,16 @@ utils.check.gl <- function(x=NULL,verbose=NULL) {
 #### CHECK AND REPORT DATA TYPE ####
   if (all(x@ploidy == 1)){
     if(verbose>=2){cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))}
-    datatype <- "SilicoDArT"
+    env$datatype <- "SilicoDArT"
   } else if (all(x@ploidy == 2)){
     if(verbose>=2){cat(report("  Processing SNP data\n"))}
-    datatype <- "SNP"
+    env$datatype <- "SNP"
   } else {
     stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
   }
   
-  invisible(x)
+  # Work around a bug in adegenet if genlight object is created by subsetting
+  x@other$loc.metrics <- x@other$loc.metrics[1:nLoc(x),]
+  
   
 }
