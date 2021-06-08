@@ -1,20 +1,20 @@
-#'@name gl.report.heterozygosity
+#' @name gl.report.heterozygosity
 #'
-#'@title Reports observed and expected heterozygosity by population or by individual from SNP data
+#' @title Reports observed and expected heterozygosity by population or by individual from SNP data
 #'
-#'@description Calculates the observed and expected heterozygosities for each population
+#' @description Calculates the observed and expected heterozygosities for each population
 #' or the observed heterozygosity for each individual in a genlight object.
 #'
-#'@param x Name of the genlight object containing the SNP [required].
-#'@param method Calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']
-#'@param n.invariant An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
+#' @param x Name of the genlight object containing the SNP [required].
+#' @param method Calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']
+#' @param n.invariant An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
+#' @param plot_colours_pop A color palette for population plots [default discrete_palette].
+#' @param plot_colours_ind List of two color names for the borders and fill of the plot by individual [default two_colors].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
 #' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
-#'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#'@param plot_colours_pop A color palette for population plots [default discrete_palette].
-#'@param plot_colours_ind List of two color names for the borders and fill of the plot by individual [default two_colors].
 #'
-#'@details Observed heterozygosity for a population takes the proportion of heterozygous
+#' @details Observed heterozygosity for a population takes the proportion of heterozygous
 #' loci for each individual then averages over the individuals in that population. 
 #' The calculations take into account missing values.
 #' 
@@ -40,27 +40,31 @@
 #'\strong{ Function's output }
 #' Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
 #' 
+#'  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+#' 
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#'@return Returns a dataframe containing population labels, heterozygosities and sample sizes
+#' @return A dataframe containing population labels, heterozygosities and sample sizes
 #'
-#'@author Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
-#'@examples
-#'df<- gl.report.heterozygosity(testset.gl)
+#' @examples
+#'df <- gl.report.heterozygosity(testset.gl)
 #'df <- gl.report.heterozygosity(testset.gl,method='ind')
-#'
-#'@references Nei, M. and R. K. Chesser (1983). 'Estimation of fixation indices and gene diversities.' Annals of human genetics 47(3): 253-259.
-#'
-#'@importFrom plyr join
-#'
-#'@export 
 #'
 #' @seealso \code{\link{gl.filter.heterozygosity}},\code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
+#'  
+#' @family reporting functions
+#'  
+#' @references Nei, M. and R. K. Chesser (1983). 'Estimation of fixation indices and gene diversities.' Annals of human genetics 47(3): 253-259.
+#'
+#' @importFrom plyr join
+#'
+#' @export 
 #'  
 
 gl.report.heterozygosity <- function(x, 
@@ -68,17 +72,17 @@ gl.report.heterozygosity <- function(x,
                                      n.invariant = 0, 
                                      plot_theme = theme_dartR(), 
                                      plot_colours_pop = discrete_palette,
-                                     plot_colours_ind=two_colors,
-                                     verbose=NULL) {
+                                     plot_colours_ind = two_colors,
+                                     verbose = options()$dartR_verbose) {
 
     # TRAP COMMAND
 
     funname <- match.call()[[1]]
 
-    # GENERAL ERROR CHECKING
-
-    x <- utils.check.gl(x)
-    verbose <- gl.check.verbosity(verbose)
+    # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
+    
+    datatype <- NULL
+    utils.check.gl(x,env=environment())
 
     # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -270,7 +274,8 @@ gl.report.heterozygosity <- function(x,
             }
 
         }
-        # printing outputs
+        
+        # PRINTING OUTPUTS
         p3 <- (p1/p2)
         print(p3)
         print(df.ordered)
@@ -345,29 +350,42 @@ gl.report.heterozygosity <- function(x,
                 cat("\n")
             }
         }
-        # printing outputs
+        
+        # PRINTING OUTPUTS
         p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
         print(p3)
         print(df)
     }
     
+    # SAVE INTERMEDIATES TO TEMPDIR   
     # creating temp file names
-    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     
     # saving to tempdir
     saveRDS(p3, file = temp_plot)
-    if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
+    if(verbose>=2){
+        cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
+    }
     saveRDS(df, file = temp_table)
-    if(verbose>=2){cat(report("  Saving the heterozygosity data to the tempfile as",temp_table,"using saveRDS\n"))}
-    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
+    if(verbose>=2){
+        cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))
+    }
+    if(verbose>=2){
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+    }
 
     # FLAG SCRIPT END
 
     if (verbose >= 1) {
         cat(report("\n\nCompleted:", funname, "\n\n"))
     }
-
-    if(verbose>=3){cat(report("  Returning a dataframe with heterozygosity values\n"))}
+    
+    # RETURN
+    
+    if(verbose>=3){
+        cat(report("  Returning a dataframe with heterozygosity values\n"))
+    }
+    
     invisible(df)
 }

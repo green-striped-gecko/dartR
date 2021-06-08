@@ -1,8 +1,8 @@
-#'@name gl.report.hamming
+#' @name gl.report.hamming
 #'
-#'@title Calculates the pairwise Hamming distance between DArT trimmed DNA sequences
+#' @title Calculates the pairwise Hamming distance between DArT trimmed DNA sequences
 #'
-#'@description Hamming distance is calculated as the number of base differences between two 
+#' @description Hamming distance is calculated as the number of base differences between two 
 #' sequences which can be expressed as a count or a proportion. Typically, it is
 #' calculated between two sequences of equal length. In the context of DArT
 #' trimmed sequences, which differ in length but which are anchored to the left
@@ -10,16 +10,16 @@
 #' two trimmed sequences starting from immediately after the common recognition
 #' sequence and terminating at the last base of the shorter sequence. 
 #'
-#'@param x Name of the genlight object containing the SNP data [required]
-#'@param rs Number of bases in the restriction enzyme recognition sequence [default 5]
-#'@param threshold Minimum acceptable base pair difference for display on the boxplot and histogram [default 3 bp]
-#'@param taglength Typical length of the sequence tags [default 69]
-#'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#'@param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
-#'@param probar If TRUE, then a progress bar is displayed on long loops [default TRUE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param rs Number of bases in the restriction enzyme recognition sequence [default 5].
+#' @param threshold Minimum acceptable base pair difference for display on the boxplot and histogram [default 3].
+#' @param taglength Typical length of the sequence tags [default 69].
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
+#' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
+#' @param probar If TRUE, then a progress bar is displayed on long loops [default TRUE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
-#'@details The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
+#' @details The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
 #'is less than a specified percentage
 #'
 #' Hamming distance can be computed by exploiting the fact that the dot product 
@@ -41,22 +41,24 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #' 
-#'@return Returns unaltered genlight object
+#' @return Returns unaltered genlight object
 #'
-#'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
-#'@examples
+#' @examples
 #' gl.report.hamming(testset.gl)
 #' gl.report.hamming(testset.gs)
-#'
-#'@importFrom stats sd
-#' @import patchwork
-#'
-#'@export 
-#'
-#'@seealso \code{\link{gl.filter.hamming}},\code{\link{gl.list.reports}},
+#' 
+#' @seealso \code{\link{gl.filter.hamming}},\code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #'  
+#' @family filters and filter reports
+#'
+#' @importFrom stats sd
+#' @import patchwork
+#'
+#' @export 
+#'
 
 gl.report.hamming <- function(x, 
                               rs = 5, 
@@ -65,30 +67,16 @@ gl.report.hamming <- function(x,
                               plot_theme = theme_dartR(), 
                               plot_colours = two_colors, 
                               probar = FALSE,
-                              verbose=NULL) {
+                              verbose=options()$dartR_verbose) {
 
 # TRAP COMMAND, SET VERSION
 
     funname <- match.call()[[1]]
 
-# GENERAL ERROR CHECKING
-
-    x <- utils.check.gl(x)
-    verbose <- gl.check.verbosity(verbose)
+# GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
     
-    
-    #### SETTING DATA TYPE ####
-    if (all(x@ploidy == 1)){
-      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
-      datatype <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
-      cat(report("  Processing a SNP dataset\n"))
-      datatype <- "SNP"
-    } else {
-      stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
-    }
-    
-
+    datatype <- NULL
+    utils.check.gl(x,env=environment())
     
 # FLAG SCRIPT START
     
@@ -204,13 +192,14 @@ gl.report.hamming <- function(x,
     df$Quantile <- paste0(df$Quantile, "%")
     rownames(df) <- NULL
     
-    # printing outputs
+    # PRINTING OUTPUTS
     p3 <- (p1/p2) + plot_layout(heights = c(1, 4)) # using package patchwork
     print(p3)
     print(df)
     
+    # SAVE INTERMEDIATES TO TEMPDIR   
     # creating temp file names
-    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     
     # saving to tempdir
@@ -225,7 +214,8 @@ gl.report.hamming <- function(x,
     if (verbose >= 1) {
       cat(report("\n\nCompleted:", funname, "\n\n"))
     }
+    
+    # RETURN
 
-    # return unaltered genlight object
     invisible(x)
 }

@@ -1,10 +1,13 @@
 #' @name gl.report.monomorphs
-
+#' 
 #' @title Report monomorphic loci
 #'
 #' @description
 #' This script reports the number of monomorphic loci and those with all NAs in a genlight \{adegenet\} object
-#'
+#' 
+#' @param x Name of the input genlight object [required].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].
+#' 
 #' @details A DArT dataset will not have monomorphic loci, but they can arise, along with loci that are scored all NA, when populations 
 #' or individuals are deleted. Retaining monomorphic loci unnecessarily increases the size of the dataset and will 
 #' affect some calculations.
@@ -12,13 +15,12 @@
 #' Note that for SNP data, NAs likely represent null alleles; in tag presence/absence data, NAs represent missing values 
 #' (presence/absence could not be reliably scored)
 #' 
-#' @param x -- name of the input genlight object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
-#' @return NULL
+#' @return An unaltered genlight object
 #' 
 #' @rawNamespace import(adegenet, except = plot)
-#' @export
+#' 
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' 
 #' @examples
 #' # SNP data
 #'   gl.report.monomorphs(testset.gl)
@@ -26,31 +28,23 @@
 #'   gl.report.monomorphs(testset.gs)
 #'   
 #' @seealso \code{\link{gl.filter.monomorphs}}
+#' 
+#' @family filters and filter reports
+#' 
+#' @export
+#' 
 
-gl.report.monomorphs <- function (x, verbose=NULL) {
+gl.report.monomorphs <- function (x, 
+                                  verbose=options()$dartR_verbose) {
   
-# TRAP COMMAND, SET VERSION
+  # TRAP COMMAND
   
   funname <- match.call()[[1]]
-  build <- "Jacob"
   
+  # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
   
-  x <- utils.check.gl(x, verbose=verbose)
-  
-  #### SETTING DATA TYPE ####
-  if (all(x@ploidy == 1)){
-    cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
-    datatype <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    cat(report("  Processing a SNP dataset\n"))
-    datatype <- "SNP"
-  } else {
-    stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
-  }
-  
-# SET VERBOSITY
-  
-  verbose <- gl.check.verbosity(verbose)
+  datatype <- NULL
+  utils.check.gl(x,env=environment())
   
 # FLAG SCRIPT START
   
@@ -63,8 +57,6 @@ gl.report.monomorphs <- function (x, verbose=NULL) {
   }
   
 # STANDARD ERROR CHECKING
-
-  
   
 # DO THE JOB
   
@@ -108,11 +100,12 @@ gl.report.monomorphs <- function (x, verbose=NULL) {
   # Remove NAs from list of monomorphic loci and loci with all NAs
   loc.list <- loc.list[!is.na(loc.list)]
   
-  # remove monomorphic loc and loci with all NAs
+  # remove monomorphic loci and loci with all NAs
   if(length(loc.list) > 0){
     x <- gl.drop.loc(x,loc.list=loc.list,verbose=0)
   } 
   
+  # PRINTING OUTPUTS
   # Report results
     cat("\n  No. of loci:",nLoc(hold),"\n")
     cat("    Polymorphic loci:", nLoc(x),"\n")
@@ -127,7 +120,9 @@ gl.report.monomorphs <- function (x, verbose=NULL) {
       cat(report("Completed:",funname,"\n"))
     }
     
-    invisible(NULL)
+    # RETURN
+    
+    invisible(x)
 
 }
 
