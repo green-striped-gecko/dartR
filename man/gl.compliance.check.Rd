@@ -33,5 +33,5 @@ and if it does not, will rectify it.
 x <- gl.compliance.check(testset.gl)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Core Development Team (Post to \url{https://groups.google.com/d/forum/dartr})
 }

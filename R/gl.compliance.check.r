@@ -30,7 +30,7 @@ gl.compliance.check <- function (x, verbose=NULL) {
   
 # SET VERBOSITY
   
-verbose <- utils.check.verbosity(verbose)
+verbose <- gl.check.verbosity(verbose)
   
 # FLAG SCRIPT START
   
