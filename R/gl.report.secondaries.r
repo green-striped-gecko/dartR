@@ -205,6 +205,22 @@ gl.report.secondaries <- function(x,
           print(p4)
         }
         
+        # SAVE INTERMEDIATES TO TEMPDIR             
+        # creating temp file names
+        temp_plot <- tempfile(pattern=paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+        
+        # saving to tempdir
+        saveRDS(p4, file = temp_plot)
+        if(verbose>=2){
+          cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
+        }
+        if(verbose>=2){
+          cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+        }
+        if(verbose >= 2){
+          cat(report("\nReturning a genlight object containing only those loci with secondaries (multiple entries per locus)\n"))
+        }
+        
   } else {
       cat(important("  Warning: No loci with secondaries, no plot produced\n"))
   }
@@ -228,23 +244,6 @@ gl.report.secondaries <- function(x,
         }
   }  
   
-  
-  
-  # SAVE INTERMEDIATES TO TEMPDIR             
-  # creating temp file names
-  temp_plot <- tempfile(pattern=paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-
-  # saving to tempdir
-  saveRDS(p4, file = temp_plot)
-  if(verbose>=2){
-    cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
-  }
-  if(verbose>=2){
-    cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-  }
-  if(verbose >= 2){
-    cat(report("\nReturning a genlight object containing only those loci with secondaries (multiple entries per locus)\n"))
-  }
   
   # FLAG SCRIPT END
   
