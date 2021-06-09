@@ -9,7 +9,9 @@ Check status of repositories
 <!-- badges: start -->
  [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
  [![R-CMD-check-dev](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
- [![R-CMD-check-dev_bernd](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Bernd/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+ [![R-CMD-check-dev_arthur](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Arthur/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+  [![R-CMD-check-dev_bernd](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Bernd/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+[![R-CMD-check-dev_luis](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Luis/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
  <!-- badges: end -->
 
 
