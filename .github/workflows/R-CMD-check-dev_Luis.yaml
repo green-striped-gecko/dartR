@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - dev_luis
-    
-  pull_request:
-    branches:
-      - dev_luis
-   
 
 name: R-CMD-check-dev_Luis
 
