@@ -70,22 +70,9 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   funname <- match.call()[[1]]
   
 # GENERAL ERROR CHECKING
-    x <- utils.check.gl(x)
-
+    datatype <- utils.check.gl(x)
     verbose <- gl.check.verbosity(verbose)
 
-    #### SETTING DATA TYPE ####
-    if (all(x@ploidy == 1)){
-      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
-      datatype <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
-      cat(report("  Processing a SNP dataset\n"))
-      datatype <- "SNP"
-    } else {
-      stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
-    }
-
-  
 # FUNCTION SPECIFIC ERROR CHECKING
     
   # Check that call rate is up to date and recalculate if necessary
@@ -242,14 +229,9 @@ gl.report.callrate <- function(x, method = "loc", plot_theme = theme_dartR(),
   saveRDS(p3, file = temp_plot)
   if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
   saveRDS(df, file = temp_table)
-<<<<<<< HEAD
-  if(verbose>=2){cat(report("  Saving the percentile table to the tempfile as",temp_table,"using saveRDS\n"))}
-  if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.access.report()\n"))}
-=======
   if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
   if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
->>>>>>> 37fa7b53e100dcd4dd46e20c17cd49f9cedb2509
-  
+
 # FLAG SCRIPT END
   
   if (verbose >= 1) {
