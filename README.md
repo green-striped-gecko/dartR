@@ -1,7 +1,24 @@
-<!-- badges: start -->
 
-  [![R-CMD-check-dev_Bernd](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Bernd/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+<!-- badges: start -->
+Main repository: 
+  [![](https://www.r-pkg.org/badges/version/dartR?color=blue)](https://cran.r-project.org/package=dartR)
+  [![CRAN checks](https://cranchecks.info/badges/summary/dartR)](https://cran.r-project.org/web/checks/check_results_dartR.html)
+  [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+  [![](https://img.shields.io/badge/doi-10.1111/1755--0998.12745-00cccc.svg)](https://doi.org/10.1111/1755-0998.12745)
+  [![](http://cranlogs.r-pkg.org/badges/last-week/dartR?color=orange)](https://cran.r-project.org/package=dartR)
+  
   <!-- badges: end -->
+
+
+<!-- badges: start -->
+Dev repositories: 
+[![R-CMD-check-dev](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+ [![R-CMD-check-dev_arthur](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Arthur/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+  [![R-CMD-check-dev_bernd](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Bernd/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+[![R-CMD-check-dev_luis](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Luis/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+ <!-- badges: end -->
+
+
 
 ![][id]
 
