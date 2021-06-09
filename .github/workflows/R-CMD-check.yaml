@@ -3,9 +3,10 @@
 on:
   push:
     branches:
-      - dev
+      - main
+      - master
 
-name: R-CMD-check-dev
+name: R-CMD-check
 
 jobs:
   R-CMD-check:

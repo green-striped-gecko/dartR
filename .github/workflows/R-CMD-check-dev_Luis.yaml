@@ -3,14 +3,14 @@
 on:
   push:
     branches:
-      - dev_luis
+      - dev_bernd
     
   pull_request:
     branches:
-      - dev_luis
+      - dev_bernd
    
 
-name: R-CMD-check-dev_Luis
+name: R-CMD-check-dev_Bernd
 
 jobs:
   R-CMD-check:
