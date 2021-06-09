@@ -9,15 +9,13 @@ Main repository:
   
   <!-- badges: end -->
 
-
 <!-- badges: start -->
 Dev repositories: 
-[![R-CMD-check-dev](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
- [![R-CMD-check-dev_arthur](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Arthur/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
-  [![R-CMD-check-dev_bernd](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Bernd/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
-[![R-CMD-check-dev_luis](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check-dev_Luis/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+[![R-CMD-check-dev](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev.yaml/badge.svg?branch=dev)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev.yaml)
+[![R-CMD-check-dev_Arthur](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Arthur.yaml/badge.svg?branch=dev_arthur)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Arthur.yaml)
+[![R-CMD-check-dev_Bernd](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Bernd.yaml/badge.svg?branch=dev_bernd)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Bernd.yaml)
+[![R-CMD-check-dev_Luis](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Luis.yaml/badge.svg?branch=dev_luis)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Luis.yaml)
  <!-- badges: end -->
-
 
 
 ![][id]
