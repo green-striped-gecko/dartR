@@ -8,7 +8,8 @@ Main repository:
   [![](http://cranlogs.r-pkg.org/badges/last-week/dartR?color=orange)](https://cran.r-project.org/package=dartR)
   
   <!-- badges: end -->
-  
+
+
 <!-- badges: start -->
 Dev repositories: 
 [![R-CMD-check-dev](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev.yaml/badge.svg?branch=dev)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev.yaml)
@@ -39,9 +40,21 @@ The package is now on CRAN, so to install simply type:
 install.packages("dartR")
 library(dartR)
 ```
+The latest version 1.9.9.1 introduces a two tier system as CRAN is limiting the numbers of packages that can be installed with a package. So the install.packages command above, installs only the base packages that are needed for the import, filter and report functions to work. For many other advanced functions additional packages are needed. To automate this process you need to invoke the gl.install.vanilla.dartR function. 
 
-It also includes now a nice tutorial (called vignette in R terminology). Once installed type:
 
+```{r}
+gl.install.vanilla.dartR(flavour="CRAN")
+```
+You can install different flavours (repositories) as well, so for the "dev" version from github you can use: 
+
+```{r}
+gl.install.vanilla.dartR(flavour="dev")
+```
+"master" installs the master version from Github, which is 99.9% percent of the time identical with CRAN. There is a slight delay for new versions to appear on CRAN so the master version can be slightly newer than the CRAN version. Be aware the "dev" versions are not fully tested yet and function may not work as intended. You can see if a current version runs all checks successfully by checking the banners at the top of this page.
+
+
+The package also includes a nice introdcutory tutorial (called vignette in R terminology). Once installed type:
 
 ```{r}
 browseVignettes("dartR")
@@ -67,6 +80,7 @@ BiocManager::install(c("SNPRelate", "qvalue"))
 install_github("green-striped-gecko/dartR")
 library(dartR)
 ```
+You may need to install additional packages either manually or using the gl.install.vanilla() function.
 
 
 #### Manual installation of the latest version  (R<3.5)
