@@ -40,7 +40,7 @@ The package is now on CRAN, so to install simply type:
 install.packages("dartR")
 library(dartR)
 ```
-The latest version 1.9.9.1 introduces a two tier system as CRAN is limiting the numbers of packages that can be installed with a pacakge. So the install.packages command above, installs only the base packages that are needed for the import, filter and report functions to work. For many other advanced functions additional packages are needed. To automate this process you need to invoke the gl.install.vanilla.dartR function. 
+The latest version 1.9.9.1 introduces a two tier system as CRAN is limiting the numbers of packages that can be installed with a package. So the install.packages command above, installs only the base packages that are needed for the import, filter and report functions to work. For many other advanced functions additional packages are needed. To automate this process you need to invoke the gl.install.vanilla.dartR function. 
 
 
 ```{r}
