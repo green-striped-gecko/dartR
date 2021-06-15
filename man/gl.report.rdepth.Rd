@@ -64,7 +64,7 @@ In this function q = 20. Quantiles are useful measures because they are less
 }
 \examples{
 # SNP data
-out <- gl.report.rdepth(testset.gl)
+df <- gl.report.rdepth(testset.gl)
 
 }
 \seealso{
