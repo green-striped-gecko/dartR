@@ -7,7 +7,7 @@
 #' @param probar show progress bar
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return a genlight object is returned. Including all available slots are filled. loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
-#' @details the ind.metadata file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (perferable in decimal degrees WGS1984 format). Additional columns with individual metadata can be imported (e.g. age, gender).
+#' @details the ind.metadata file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (in decimal degrees WGS1984 format). Additional columns with individual metadata can be imported (e.g. age, gender).
 
 utils.dart2genlight <- function(dart,
                                 ind.metafile=NULL,
@@ -213,8 +213,8 @@ if (!is.null(ind.metafile)){
     }
   }
   if (!is.na(lat.col) & !is.na(lon.col)){
-    gout@other$latlong <- ind.cov[ord,c(lat.col, lon.col)]
-    rownames(gout@other$latlong)  <-  ind.cov[ord,id.col]
+    gout@other$latlon <- ind.cov[ord,c(lat.col, lon.col)]
+    rownames(gout@other$latlon)  <-  ind.cov[ord,id.col]
     if (verbose >= 2){
       cat("  Added latlon data\n" )
     }
