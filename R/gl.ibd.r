@@ -105,10 +105,10 @@ if (coordinates=="xy") {
 }
     
 if (class(coordinates)=="data.frame") {
-      if (colnames(coordinates)==c("lat","lon"))
+      if (length(setdiff(colnames(coordinates),c("lat","lon")))==0)
         coords <- dismo::Mercator(coordinates[,c("lon","lat")])   
       
-      if (colnames(coordinates)==c("x","y")) 
+      if (length(setdiff(colnames(coordinates),c("x","y")))==0) 
         coords <- coordinates[,c("x","y")]
       if (is.null(coords)) stop(error("No valid coordinates provided. check the provided data.frame and its format."))
     }
@@ -142,8 +142,9 @@ if (is.null(Dgeo) & typedis=="ind")
 
 #apply logarithm to distance
 
-if (logdist & sum(Dgeo==0,na.rm=T)>0 & logoffset==0) stop(error("Cannot logtransform due to zero euclidean distances. Set logoffset to different from zero!")) else  Dgeo <- log(Dgeo+logoffset) 
-
+if (logdist) {
+   if (sum(Dgeo==0,na.rm=T)>0 & logoffset==0) stop(error("Cannot log transform distances due to zero euclidean distances between pairs. Set logoffset to different from zero!")) else  Dgeo <- log(Dgeo+logoffset) 
+}
 
 if (is.null(Dgen) & distance=="Fst")
   Dgen <- as.dist(StAMPP::stamppFst(x, nboots=1))
