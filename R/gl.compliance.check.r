@@ -14,23 +14,27 @@
 #' and if it does not, will rectify it.
 #' 
 #' @param x -- name of the input genlight object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #' @return A genlight object that conforms to the expectations of dartR
 #' @export
 #' @author Core Development Team (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' x <- gl.compliance.check(testset.gl)
 
-gl.compliance.check <- function (x, verbose=NULL) {
+gl.compliance.check <- function (x,
+                                 verbose=NULL) {
 
-# TRAP COMMAND, SET VERSION
+  # TRAP COMMAND
   
   funname <- match.call()[[1]]
-  build <- "Jacob"
   
-# SET VERBOSITY
+  # SET VERBOSITY
   
-verbose <- gl.check.verbosity(verbose)
+  verbose <- gl.check.verbosity(verbose)
+  
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
   
 # FLAG SCRIPT START
   
@@ -41,10 +45,6 @@ verbose <- gl.check.verbosity(verbose)
       cat("Starting",funname,"\n")
     }
   }
-
- # STANDARD ERROR CHECKING
-  
-   utils.check.gl(x,env = environment())
 
 # DO THE JOB
   

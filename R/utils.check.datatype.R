@@ -7,7 +7,7 @@
 #' whether it is a SNP dataset or a SilicoDArT object, and reports back if verbosity is >=2
 #'
 #' @param x Name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #' 
 #' @details 
 #' This function checks whether the input object is a genlight object and sets the datatype to "SNP" or "SilicoDArT" as appropriate.  
@@ -15,7 +15,7 @@
 #' @return datatype, "SNP" for SNP data or  "SilicoDArT" for P/A data
 #' 
 #' @examples
-#' utils.check.gl(testset.gl)
+#' utils.check.datatype(testset.gl)
 #' 
 #' @export
 

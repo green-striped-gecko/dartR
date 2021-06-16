@@ -308,7 +308,7 @@ if (datatype=="SilicoDArT"){
   }
   
   if (plot)  {
-
+    fhet <- mhet <- NULL
     df$fhet <- dff$F1/(dff$F0+dff$F1)
     df$mhet <- dfm$M1/(dfm$M0+dfm$M1)
     df$xy <- indexxy
