@@ -10,7 +10,7 @@ gl.report.diversity(
   table = "DH",
   plot_theme = theme_dartR(),
   plot_colours = discrete_palette,
-  verbose = options()$dartR_verbose
+  verbose = NULL
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ gl.report.diversity(
 
 \item{plot_colours}{A color palette [default discrete_palette].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
 A list of entropy indexes for each level of q and equivalent numbers for alpha and beta diversity.
@@ -59,7 +59,8 @@ Other reporting functions:
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.heterozygosity}()},
 \code{\link{gl.report.parent.offspring}()},
-\code{\link{gl.report.pa}()}
+\code{\link{gl.report.pa}()},
+\code{\link{gl.report.sexlinked}()}
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella

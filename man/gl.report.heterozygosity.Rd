@@ -8,10 +8,11 @@ gl.report.heterozygosity(
   x,
   method = "pop",
   n.invariant = 0,
+  plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours_pop = discrete_palette,
   plot_colours_ind = two_colors,
-  verbose = options()$dartR_verbose
+  verbose = NULL
 )
 }
 \arguments{
@@ -21,14 +22,15 @@ gl.report.heterozygosity(
 
 \item{n.invariant}{An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]}
 
+\item{plot}{Whether produce a plot of the results [default TRUE].}
+
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours_pop}{A color palette for population plots [default discrete_palette].}
 
 \item{plot_colours_ind}{List of two color names for the borders and fill of the plot by individual [default two_colors].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
 A dataframe containing population labels, heterozygosities and sample sizes
@@ -87,7 +89,8 @@ Other reporting functions:
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.parent.offspring}()},
-\code{\link{gl.report.pa}()}
+\code{\link{gl.report.pa}()},
+\code{\link{gl.report.sexlinked}()}
 }
 \author{
 Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})

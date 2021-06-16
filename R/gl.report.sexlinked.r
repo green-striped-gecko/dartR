@@ -43,7 +43,7 @@
 #' @author Arthur Georges, Bernd Gruber & Floriaan Devloo-Delva (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
-#' out <- gl.sexlinkage(testset.gl)
+#' out <- gl.report.sexlinked(testset.gl)
 #'
 #' @family reporting functions
 #'

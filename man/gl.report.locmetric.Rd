@@ -9,7 +9,7 @@ gl.report.locmetric(
   metric,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
-  verbose = options()$dartR_verbose
+  verbose = NULL
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ gl.report.locmetric(
 
 \item{plot_colours}{List of two color names for the borders and fill of the plots [default two_colors].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
 An unaltered genlight object
@@ -96,7 +96,8 @@ Other filters and filter reports:
 \code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.rdepth}()},
 \code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.secondaries}()}
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
 Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
