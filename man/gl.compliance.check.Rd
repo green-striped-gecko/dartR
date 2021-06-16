@@ -9,7 +9,7 @@ gl.compliance.check(x, verbose = NULL)
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
 A genlight object that conforms to the expectations of dartR
