@@ -9,7 +9,7 @@ gl.report.bases(
   plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
-  verbose = options()$dartR_verbose
+  verbose = NULL
 )
 }
 \arguments{
@@ -22,7 +22,7 @@ gl.report.bases(
 \item{plot_colours}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
 A list containing:
@@ -66,7 +66,8 @@ Other reporting functions:
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.heterozygosity}()},
 \code{\link{gl.report.parent.offspring}()},
-\code{\link{gl.report.pa}()}
+\code{\link{gl.report.pa}()},
+\code{\link{gl.report.sexlinked}()}
 }
 \author{
 Core dartR Team (Post to \url{https://groups.google.com/d/forum/dartr})

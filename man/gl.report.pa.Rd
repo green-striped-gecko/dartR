@@ -4,7 +4,7 @@
 \alias{gl.report.pa}
 \title{Report private alleles (and fixed alleles) per pair of populations}
 \usage{
-gl.report.pa(x, x2 = NULL, verbose = options()$dartR_verbose)
+gl.report.pa(x, x2 = NULL, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
@@ -57,7 +57,8 @@ Other reporting functions:
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.heterozygosity}()},
-\code{\link{gl.report.parent.offspring}()}
+\code{\link{gl.report.parent.offspring}()},
+\code{\link{gl.report.sexlinked}()}
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

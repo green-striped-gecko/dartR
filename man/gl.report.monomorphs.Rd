@@ -4,12 +4,12 @@
 \alias{gl.report.monomorphs}
 \title{Report monomorphic loci}
 \usage{
-gl.report.monomorphs(x, verbose = options()$dartR_verbose)
+gl.report.monomorphs(x, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the input genlight object [required].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 An unaltered genlight object
@@ -43,7 +43,8 @@ Other filters and filter reports:
 \code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.rdepth}()},
 \code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.secondaries}()}
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -11,7 +11,7 @@ gl.report.parent.offspring(
   range = 1.5,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
-  verbose = options()$dartR_verbose
+  verbose = NULL
 )
 }
 \arguments{
@@ -28,7 +28,7 @@ gl.report.parent.offspring(
 \item{plot_colours}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
 A set of individuals in parent-offspring relationship. NULL if no parent-offspring relationships were found.
@@ -72,7 +72,8 @@ Other reporting functions:
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.heterozygosity}()},
-\code{\link{gl.report.pa}()}
+\code{\link{gl.report.pa}()},
+\code{\link{gl.report.sexlinked}()}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
