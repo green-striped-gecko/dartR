@@ -8,7 +8,7 @@
 #' @param metric Name of the metric to be used for filtering [required].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details 
 #'The function \code{\link{gl.filter.locmetric}} will filter out the
@@ -80,17 +80,19 @@ gl.report.locmetric <- function(x,
                                 metric, 
                                 plot_theme = theme_dartR(),
                                 plot_colours = two_colors,
-                                verbose = options()$dartR_verbose) {
-
+                                verbose = NULL) {
     # TRAP COMMAND
-
-    funname <- match.call()[[1]]
-
-    # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
     
-    datatype <- NULL
-    utils.check.gl(x,env=environment())
-
+    funname <- match.call()[[1]]
+    
+    # SET VERBOSITY
+    
+    verbose <- gl.check.verbosity(verbose)
+    
+    # CHECKS DATATYPE 
+    
+    datatype <- utils.check.datatype(x)
+    
     # FLAG SCRIPT START
 
     if (verbose >= 1) {
@@ -125,11 +127,20 @@ gl.report.locmetric <- function(x,
     metric_df <- data.frame(x$other$loc.metrics[field])
     colnames(metric_df) <- "field"
 
-    p1 <- ggplot(metric_df, aes(y = field)) + geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + coord_flip() + 
-        plot_theme + xlim(range = c(-1, 1)) + ylab(metric) + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + ggtitle(title1)
+    p1 <- ggplot(metric_df, aes(y = field)) + 
+        geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+        coord_flip() + 
+        plot_theme + 
+        xlim(range = c(-1, 1)) +
+        ylab(metric) + 
+        theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
+        ggtitle(title1)
 
-    p2 <- ggplot(metric_df, aes(x = field)) + geom_histogram(bins = 50, color = plot_colours[1], fill = plot_colours[2]) + 
-        xlab(metric) + ylab("Count") + plot_theme
+    p2 <- ggplot(metric_df, aes(x = field)) + 
+        geom_histogram(bins = 50, color = plot_colours[1], fill = plot_colours[2]) + 
+        xlab(metric) + 
+        ylab("Count") + 
+        plot_theme
 
     # Print out some statistics
     stats <- summary(metric_df)

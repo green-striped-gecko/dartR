@@ -6,7 +6,7 @@
 #' the trimmed sequence tag. This can happen, rarely, when the sequence containing the SNP resembles the adaptor.
 #' 
 #' @param x Name of the genlight object [required].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #' 
 #' @details The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
 #' the sequence tag.
@@ -29,16 +29,19 @@
 #'  
 
 gl.report.overshoot <- function(x, 
-                                verbose = options()$dartR_verbose) {
+                                verbose = NULL) {
 
   # TRAP COMMAND
   
   funname <- match.call()[[1]]
   
-  # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
+  # SET VERBOSITY
   
-  datatype <- NULL
-  utils.check.gl(x,env=environment())
+  verbose <- gl.check.verbosity(verbose)
+  
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
   
 # FLAG SCRIPT START
   

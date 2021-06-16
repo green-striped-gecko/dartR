@@ -8,11 +8,11 @@
 #' @param x Name of the genlight object containing the SNP [required].
 #' @param method Calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']
 #' @param n.invariant An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
+#' @param plot Whether produce a plot of the results [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours_pop A color palette for population plots [default discrete_palette].
 #' @param plot_colours_ind List of two color names for the borders and fill of the plot by individual [default two_colors].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
-#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details Observed heterozygosity for a population takes the proportion of heterozygous
 #' loci for each individual then averages over the individuals in that population. 
@@ -70,19 +70,23 @@
 gl.report.heterozygosity <- function(x, 
                                      method = "pop", 
                                      n.invariant = 0, 
+                                     plot = TRUE,
                                      plot_theme = theme_dartR(), 
                                      plot_colours_pop = discrete_palette,
                                      plot_colours_ind = two_colors,
-                                     verbose = options()$dartR_verbose) {
+                                     verbose = NULL) {
 
     # TRAP COMMAND
-
-    funname <- match.call()[[1]]
-
-    # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
     
-    datatype <- NULL
-    utils.check.gl(x,env=environment())
+    funname <- match.call()[[1]]
+    
+    # SET VERBOSITY
+    
+    verbose <- gl.check.verbosity(verbose)
+    
+    # CHECKS DATATYPE 
+    
+    datatype <- utils.check.datatype(x)
 
     # FUNCTION SPECIFIC ERROR CHECKING
 

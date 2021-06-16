@@ -45,5 +45,10 @@ utils.check.gl <- function(x,
   # Work around a bug in adegenet if genlight object is created by subsetting
   x@other$loc.metrics <- as.data.frame(x@other$loc.metrics)
   
+  # Work around a bug in adegenet if genlight object is created by subsetting
+  if (nLoc(x)!=nrow(x@other$loc.metrics)) {
+    stop(error("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!"))  
+    }
+  
   
 }

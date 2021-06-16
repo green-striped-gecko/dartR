@@ -52,19 +52,21 @@
 
 gl.report.pa <- function(x, 
                          x2 = NULL, 
-                         verbose = options()$dartR_verbose){
-  
+                         verbose = NULL){
   # TRAP COMMAND
   
   funname <- match.call()[[1]]
   
-  # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
+  # SET VERBOSITY
   
-  datatype <- NULL
-  utils.check.gl(x,env=environment())
+  verbose <- gl.check.verbosity(verbose)
+  
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
   
   if(!is.null(x2)){
-  utils.check.gl(x2,env=environment())
+    datatype <- utils.check.gl(x2)
   }
   
 # FLAG SCRIPT START
@@ -160,6 +162,6 @@ if (!is.null(x2)) {
   
   # RETURN
   
-  return(pall)
+  invisible(pall)
 
 }
