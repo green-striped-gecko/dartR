@@ -30,5 +30,5 @@ a genlight object is returned. Including all available slots are filled. loc.nam
 converts a dart file (read via \code{read.dart}) into an genlight object \code{\link{adegenet}}. Internal function called by gl.read.dart
 }
 \details{
-the ind.metadata file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (perferable in decimal degrees WGS1984 format). Additional columns with individual metadata can be imported (e.g. age, gender).
+the ind.metadata file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (in decimal degrees WGS1984 format). Additional columns with individual metadata can be imported (e.g. age, gender).
 }
