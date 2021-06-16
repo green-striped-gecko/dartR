@@ -6,7 +6,7 @@
 #' This script reports the number of monomorphic loci and those with all NAs in a genlight \{adegenet\} object
 #' 
 #' @param x Name of the input genlight object [required].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].
 #' 
 #' @details A DArT dataset will not have monomorphic loci, but they can arise, along with loci that are scored all NA, when populations 
 #' or individuals are deleted. Retaining monomorphic loci unnecessarily increases the size of the dataset and will 
@@ -35,16 +35,19 @@
 #' 
 
 gl.report.monomorphs <- function (x, 
-                                  verbose=options()$dartR_verbose) {
+                                  verbose = NULL) {
   
   # TRAP COMMAND
   
   funname <- match.call()[[1]]
   
-  # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
+  # SET VERBOSITY
   
-  datatype <- NULL
-  utils.check.gl(x,env=environment())
+  verbose <- gl.check.verbosity(verbose)
+  
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
   
 # FLAG SCRIPT START
   

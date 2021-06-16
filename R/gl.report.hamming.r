@@ -17,7 +17,7 @@
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
 #' @param probar If TRUE, then a progress bar is displayed on long loops [default TRUE].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
 #'is less than a specified percentage
@@ -67,16 +67,19 @@ gl.report.hamming <- function(x,
                               plot_theme = theme_dartR(), 
                               plot_colours = two_colors, 
                               probar = FALSE,
-                              verbose=options()$dartR_verbose) {
+                              verbose = NULL) {
 
-# TRAP COMMAND, SET VERSION
-
-    funname <- match.call()[[1]]
-
-# GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
-    
-    datatype <- NULL
-    utils.check.gl(x,env=environment())
+  # TRAP COMMAND
+  
+  funname <- match.call()[[1]]
+  
+  # SET VERBOSITY
+  
+  verbose <- gl.check.verbosity(verbose)
+  
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
     
 # FLAG SCRIPT START
     

@@ -10,7 +10,7 @@
 #' @param plot_colours A color palette [default discrete_palette].
 #' @param pbar Report on progress. Silent if set to FALSE [default TRUE]. 
 #' @param table Prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table. [default "DH"]
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details For all indexes, the entropies (H) and corresponding effective numbers, i.e. Hill numbers (D), which reflect the number of needed entities to get the observed values, are calculated. In a nutshell, the alpha indexes between the different q-values should be similar if there is no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index, this links to a process causing it, such as dispersal, selection or strong drift. For a detailed explanation of all the indexes, we recommend resorting to the literature provided below. Confidence intervals are +/- 1 standard deviation.
 #' 
@@ -50,16 +50,19 @@ gl.report.diversity <- function(x,
                                 table = "DH", 
                                 plot_theme = theme_dartR(),
                                 plot_colours = discrete_palette, 
-                                verbose = options()$dartR_verbose) {
-
-    # TRAP COMMAND
-   
-    funname <- match.call()[[1]]
-    
-    # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
-    
-    datatype <- NULL
-    utils.check.gl(x,env=environment())
+                                verbose = NULL) {
+  
+  # TRAP COMMAND
+  
+  funname <- match.call()[[1]]
+  
+  # SET VERBOSITY
+  
+  verbose <- gl.check.verbosity(verbose)
+  
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
     
     # FLAG SCRIPT START
 
@@ -397,8 +400,8 @@ gl.report.diversity <- function(x,
     # FLAG SCRIPT END
 
     if (verbose >= 1) {
-        cat(report("Completed:", funname, "\n"))
-    }
+    cat(report("\n\nCompleted:", funname, "\n\n"))
+  }
   
   # RETURN
 

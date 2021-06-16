@@ -11,7 +11,7 @@
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
 #' @param plot_colours List of two color names for the borders and fill of the
 #'  plots [default two_colors].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details The script checks first if trimmed sequences are included in the locus metadata (@@other$loc.metrics$TrimmedSequence), 
 #'and if so, tallies up the numbers of A, T, G and C bases. Only the reference state at the SNP locus is counted. Counts of 
@@ -56,16 +56,19 @@
 gl.report.bases <- function(x, plot = TRUE, 
                             plot_theme = theme_dartR(), 
                             plot_colours = two_colors,
-                            verbose = options()$dartR_verbose) {
+                            verbose = NULL) {
 
-    # TRAP COMMAND
+  # TRAP COMMAND
   
-    funname <- match.call()[[1]]
-
-    # GENERAL ERROR CHECKING, SETTING VERBOSITY AND DATATYPE 
-    
-    datatype <- NULL
-    utils.check.gl(x,env=environment())
+  funname <- match.call()[[1]]
+  
+  # SET VERBOSITY
+  
+  verbose <- gl.check.verbosity(verbose)
+  
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
 
     # FUNCTION SPECIFIC ERROR CHECKING
 
