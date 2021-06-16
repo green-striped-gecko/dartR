@@ -14,7 +14,7 @@ gl.ibd(
   Dgeo = NULL,
   permutations = 999,
   plot = TRUE,
-  paircols = TRUE,
+  paircols = NULL,
   plot_theme = theme_dartR(),
   verbose = NULL
 )
@@ -38,7 +38,7 @@ gl.ibd(
 
 \item{plot}{should an isolation by distance plot be returned. Default is plot=TRUE}
 
-\item{paircols}{should pairwise dots colored by population/individual pairs}
+\item{paircols}{should pairwise dots colored by "pop"ulation/"ind"ividual pairs [default: pop]. You can color pairwise individuals by pairwise population colors.}
 
 \item{plot_theme}{Theme for the plot. See details for options [default theme_dartR()].}
 
