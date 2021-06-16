@@ -18,7 +18,8 @@
 #' @param Dgeo Euclidean distance matrix if no genlight object is provided
 #' @param permutations number of permutations in the mantel test
 #' @param plot should an isolation by distance plot be returned. Default is plot=TRUE
-#' @param cols should pairwise dots colored by population/individual pairs
+#' @param paircols should pairwise dots colored by population/individual pairs
+#' @param plot_theme Theme for the plot. See details for options [default theme_dartR()].
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 
 #' @return returns a list of the following components: Dgen (the genetic distance matrix), Dgeo (the Euclidean distance matrix), mantel (the statistics of the mantel test)
@@ -43,6 +44,8 @@ gl.ibd <-  function(x=NULL,
            Dgeo=NULL,
            permutations=999, 
            plot=TRUE,
+           paircols=TRUE,
+           plot_theme = theme_dartR(),
            verbose=options()$dartR_verbose) {
     
     # CHECK IF PACKAGES ARE INSTALLED
@@ -53,22 +56,21 @@ gl.ibd <-  function(x=NULL,
     funname <- match.call()[[1]]
     
     # GENERAL ERROR CHECKING
-    x <- utils.check.gl(x)
     verbose <- gl.check.verbosity(verbose)
+    x <- utils.check.gl(x, verbose=0)
+    
     
     #### SETTING DATA TYPE ####
     if (all(x@ploidy == 1)){
-      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
+      if (verbose>0) cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
       datatype <- "SilicoDArT"
     } else if (all(x@ploidy == 2)){
-      cat(report("  Processing a SNP dataset\n"))
+      if (verbose>0) cat(report("  Processing a SNP dataset\n"))
       datatype <- "SNP"
     } else {
       stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
     }
-    
-    
- 
+
  #specific error checks       
 
     
@@ -76,13 +78,13 @@ gl.ibd <-  function(x=NULL,
 
  if (!is.null(Dgen) & !is.null(Dgeo)) 
   {
-   if (verbose>0)  cat(report("Analysis performed on provided genetic and Euclidean distance matrices. Genlight object if provided is ignored"))
+   if (verbose>0)  cat(report("Analysis performed using provided genetic and Euclidean distance matrices. If a genlight object is provided, it is ignored."))
    ta="dgendgeo"
 }
 
-if (class(x)=="genlight") 
+if (is(x,"genlight")) 
 {
-  if (verbose>0) cat(report("Standard analysis performed on the genlight object. Mantel test and plot will be Fst/1-Fst versus log(distance)\n"))
+  if (verbose>0) cat(report("SAnalysis performed on the genlight object."))
   
  ta="genlight" 
   
@@ -90,7 +92,7 @@ if (class(x)=="genlight")
   
 #check coordinates
 coords <- NULL
-if (class(coordinates) =="character") {
+if (is(coordinates,"character")) {
 if (coordinates=="latlon")  {
   if (is.null(x@other$latlon))  stop(error("Cannot find coordinates in x@other$latlon")) 
   coords <- dismo::Mercator(x@other$latlon[,c("lon","lat")]) 
@@ -104,7 +106,7 @@ if (coordinates=="xy") {
     
 }
     
-if (class(coordinates)=="data.frame") {
+if (is(coordinates,"data.frame")) {
       if (length(setdiff(colnames(coordinates),c("lat","lon")))==0)
         coords <- dismo::Mercator(coordinates[,c("lon","lat")])   
       
@@ -151,7 +153,7 @@ if (is.null(Dgen) & distance=="Fst")
 if (is.null(Dgen) & distance=="D")
   Dgen <- as.dist(StAMPP::stamppNeisD(x,pop=TRUE))
 if (is.null(Dgen) & distance=="propShared")
-  Dgen <- as.dist(gl.propShared(x))
+  Dgen <- as.dist(1-gl.propShared(x))
 if (is.null(Dgen) & distance=="euclidean")
   Dgen <- as.dist(gl.dist.ind(x, method = "Euclidean",verbose=0, plot=FALSE))
 
@@ -182,11 +184,41 @@ if (plot)
     title("Isolation by distance")
   }
   
+####### Printing outputs, using package patchwork
+res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo))
+if (!paircols) {
+  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_point()+plot_theme}    else {
+  
+  cols <- which(lower.tri(as.matrix(Dgen)),arr.ind = T)
+  c1 <- cols[,2]
+  c2 <- cols[,1]
+  res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo), col1=colnames(as.matrix(Dgen))[c1], col2=colnames(as.matrix(Dgen))[c2])
+  p1 <- ggplot(res)+geom_point(aes(Dgeo, Dgen, col=col1), size=4)+geom_point(aes(Dgeo, Dgen, col=col2), size=1.5, shape=15)+plot_theme
+  
+  }
 
+if (plot) print(p1)
+if (verbose>0) print(manteltest)
+
+# creating temp file names
+temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+
+# saving to tempdir
+saveRDS(p1, file = temp_plot)
+if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
+saveRDS(manteltest, file = temp_table)
+if(verbose>=2){cat(report("  Saving the result of the manteltest to the tempfile as",temp_table,"using saveRDS\n"))}
+if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
+
+# FLAG SCRIPT END
+
+if (verbose >= 1) {
+  cat(report("\nCompleted:", funname, "\n\n"))
+}
 
 out <- list(Dgen=Dgen, Dgeo=Dgeo, mantel=manteltest)
 return(out)
 }
 }
-
 
