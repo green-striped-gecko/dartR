@@ -179,7 +179,7 @@ res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo))
 if (is.null(paircols)) {
   p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_point()+plot_theme}    else {
   
-  
+  Legend <- col2 <- NA #ggplot bug
   cols <- which(lower.tri(as.matrix(Dgen)),arr.ind = T)
   c1 <- cols[,2]
   c2 <- cols[,1]
