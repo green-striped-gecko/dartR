@@ -15,7 +15,7 @@
 #' @param Dgen genetic distance matrix if no genlight object is provided
 #' @param Dgeo Euclidean distance matrix if no genlight object is provided
 #' @param Dgeo_trans transformation to be used on the Euclidean distances. see Dgen_trans. [Default: "log(Dgeo)"]
-#' @param Dgen_trans You can provide a formula to transform the genetic distance. For example Rousset (see below) suggests to study \code{Fst/(1-Fst)} against log transformed distances as this is the expectations of Fst versus distances in the case of a stepping stone model. The transformation can be applied as a formula using Dgen as the variable to be transformed. So for the Fst transformation of Rousset use \code{Dgen_trans = "Dgen/(1-Dgen). Any valid R expression can be used here. [Default is "Dgen", which is the identity function.]}
+#' @param Dgen_trans You can provide a formula to transform the genetic distance. For example Rousset (see below) suggests to study \code{Fst/(1-Fst)} against log transformed distances as this is the expectations of Fst versus distances in the case of a stepping stone model. The transformation can be applied as a formula using Dgen as the variable to be transformed. So for the Fst transformation of Rousset use \code{Dgen_trans = "Dgen/(1-Dgen)". Any valid R expression can be used here. [Default is "Dgen", which is the identity function.]}
 #' @param permutations number of permutations in the mantel test
 #' @param plot should an isolation by distance plot be returned. Default is plot=TRUE
 #' @param paircols should pairwise dots colored by "pop"ulation/"ind"ividual pairs [default: pop]. You can color pairwise individuals by pairwise population colors.
@@ -30,10 +30,8 @@
 #' Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
 #' @examples 
 #' ibd <- gl.ibd(bandicoot.gl)
-#' ibd <- gl.ibd(bandicoot.gl, Dgeo_trans="log(Dgeo)",Dgen_trans="Dgen/(1-Dgen)")
+#' ibd <- gl.ibd(bandicoot.gl, Dgeo_trans="log(Dgeo)" ,Dgen_trans='Dgen/(1-Dgen)')
 #' ibd <- gl.ibd(bandicoot.gl[,], distance="euclidean", paircols="pop", Dgeo_trans="Dgeo")
-#' 
-
 
 gl.ibd <-  function(x=NULL, 
            distance="Fst",
@@ -222,12 +220,18 @@ if (verbose>0) {
   print(manteltest)
 }
 
-# creating temp file names
-temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
-temp_plot <- gsub("/","_over_",temp_plot)
 
-temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-temp_table <- gsub("/","_over_",temp_table)
+# creating temp file names
+
+#check for "/" in match.call
+mc <- gsub("/", "_over_",as.character(match.call()))
+nmc <- gsub("/", "_over_",names(match.call()))
+
+temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(nmc,"_",mc,collapse = "_")))
+
+
+temp_table <- tempfile(pattern = paste0("dartR_table",paste0(nmc,"_",mc,collapse = "_"),"_"))
+
 
 # saving to tempdir
 saveRDS(p1, file = temp_plot)

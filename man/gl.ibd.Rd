@@ -8,10 +8,10 @@ gl.ibd(
   x = NULL,
   distance = "Fst",
   coordinates = "latlon",
-  logdist = TRUE,
-  logoffset = 0,
   Dgen = NULL,
   Dgeo = NULL,
+  Dgeo_trans = "log(Dgeo)",
+  Dgen_trans = "Dgen",
   permutations = 999,
   plot = TRUE,
   paircols = NULL,
@@ -26,13 +26,13 @@ gl.ibd(
 
 \item{coordinates}{Can be either "latlon", "xy" or a two column data.frame with column names "lat","lon", "x", "y")  Coordinates are provided via \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon data will be projected to meters using Mercator system [google maps] or if xy then distance is directly calculated on the coordinates.}
 
-\item{logdist}{TRUE/FALSE switch if log of distance should be used [default is set to TRUE].}
-
-\item{logoffset}{0. If you have individuals/populations with zero distances between each other log transfromation results in zero distances, hence you need to an offset to the distances.}
-
 \item{Dgen}{genetic distance matrix if no genlight object is provided}
 
 \item{Dgeo}{Euclidean distance matrix if no genlight object is provided}
+
+\item{Dgeo_trans}{transformation to be used on the Euclidean distances. see Dgen_trans. [Default: "log(Dgeo)"]}
+
+\item{Dgen_trans}{You can provide a formula to transform the genetic distance. For example Rousset (see below) suggests to study \code{Fst/(1-Fst)} against log transformed distances as this is the expectations of Fst versus distances in the case of a stepping stone model. The transformation can be applied as a formula using Dgen as the variable to be transformed. So for the Fst transformation of Rousset use \code{Dgen_trans = "Dgen/(1-Dgen)". Any valid R expression can be used here. [Default is "Dgen", which is the identity function.]}}
 
 \item{permutations}{number of permutations in the mantel test}
 
@@ -52,10 +52,9 @@ This functions performs an isolation by distance analysis based on a mantel test
 You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), using the functions  \link[vegan]{mantel} (package vegan), \link[StAMPP]{stamppFst}, \link[StAMPP]{stamppNeisD} (package StAMPP) and gl.propShared or gl.dist.ind. For transformation you need to have the dismo package installed. As a new feature you can plot pairwise relationship using double coloured points (paircols=TRUE). Pairwise relationship can be visualised via populations or individuals, depending which distance is calculated.
 }
 \examples{
-\donttest{
 ibd <- gl.ibd(bandicoot.gl)
-ibd <- gl.ibd(bandicoot.gl,plot = FALSE)
-}
+ibd <- gl.ibd(bandicoot.gl, Dgeo_trans="log(Dgeo)" ,Dgen_trans='Dgen/(1-Dgen)')
+ibd <- gl.ibd(bandicoot.gl[,], distance="euclidean", paircols="pop", Dgeo_trans="Dgeo")
 }
 \references{
 Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
