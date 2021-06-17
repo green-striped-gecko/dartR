@@ -66,7 +66,7 @@ gl.report.pa <- function(x,
   datatype <- utils.check.datatype(x)
   
   if(!is.null(x2)){
-    datatype <- utils.check.gl(x2)
+    datatype <- utils.check.datatype(x2)
   }
   
 # FLAG SCRIPT START

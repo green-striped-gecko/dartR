@@ -68,8 +68,8 @@ as implemented in utils.hamming.r
  }
 }
 \examples{
-gl.report.hamming(testset.gl)
-gl.report.hamming(testset.gs)
+gl.report.hamming(testset.gl[,1:100])
+gl.report.hamming(testset.gs[,1:100])
 
 }
 \seealso{

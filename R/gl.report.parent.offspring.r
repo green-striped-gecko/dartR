@@ -61,7 +61,7 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
-#' out <- gl.report.parent.offspring(testset.gl)
+#' out <- gl.report.parent.offspring(testset.gl[1:10])
 #'
 #' @seealso \code{\link{gl.list.reports}}, \code{\link{gl.report.rdepth}} ,
 #'  \code{\link{gl.print.reports}},\code{\link{gl.report.reproducibility}}

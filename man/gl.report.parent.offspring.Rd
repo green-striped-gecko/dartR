@@ -61,7 +61,7 @@ also to push the minimum reproducibility up to 1, if that does not result in an
 unacceptable loss of loci. Reproducibility is stored in the slot
 }
 \examples{
-out <- gl.report.parent.offspring(testset.gl)
+out <- gl.report.parent.offspring(testset.gl[1:10])
 
 }
 \seealso{
