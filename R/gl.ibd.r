@@ -12,10 +12,10 @@
 #' @param x genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed
 #' @param distance type of distance that is calculated and used for the analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared", [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].
 #' @param coordinates Can be either "latlon", "xy" or a two column data.frame with column names "lat","lon", "x", "y")  Coordinates are provided via \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon data will be projected to meters using Mercator system [google maps] or if xy then distance is directly calculated on the coordinates.
-#' @param logdist TRUE/FALSE switch if log of distance should be used [default is set to TRUE].
-#' @param logoffset 0. If you have individuals/populations with zero distances between each other log transfromation results in zero distances, hence you need to an offset to the distances.
 #' @param Dgen genetic distance matrix if no genlight object is provided
 #' @param Dgeo Euclidean distance matrix if no genlight object is provided
+#' @param Dgeo_trans transformation to be used on the Euclidean distances. see Dgen_trans. [Default: "log(Dgeo)"]
+#' @param Dgen_trans You can provide a formula to transform the genetic distance. For example Rousset (see below) suggests to study \code{Fst/(1-Fst)} against log transformed distances as this is the expectations of Fst versus distances in the case of a stepping stone model. The transformation can be applied as a formula using Dgen as the variable to be transformed. So for the Fst transformation of Rousset use \code{Dgen_trans = "Dgen/(1-Dgen). Any valid R expression can be used here. [Default is "Dgen", which is the identity function.]}
 #' @param permutations number of permutations in the mantel test
 #' @param plot should an isolation by distance plot be returned. Default is plot=TRUE
 #' @param paircols should pairwise dots colored by "pop"ulation/"ind"ividual pairs [default: pop]. You can color pairwise individuals by pairwise population colors.
@@ -29,19 +29,19 @@
 #' @references 
 #' Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
 #' @examples 
-#' \donttest{
 #' ibd <- gl.ibd(bandicoot.gl)
-#' ibd <- gl.ibd(bandicoot.gl,plot = FALSE)
-#' }
+#' ibd <- gl.ibd(bandicoot.gl, Dgeo_trans="log(Dgeo)",Dgen_trans="Dgen/(1-Dgen)")
+#' ibd <- gl.ibd(bandicoot.gl[,], distance="euclidean", paircols="pop", Dgeo_trans="Dgeo")
+#' 
 
 
 gl.ibd <-  function(x=NULL, 
            distance="Fst",
            coordinates="latlon",
-           logdist=TRUE,
-           logoffset = 0,
            Dgen=NULL,
            Dgeo=NULL,
+           Dgeo_trans = "log(Dgeo)",
+           Dgen_trans = "Dgen",
            permutations=999, 
            plot=TRUE,
            paircols=NULL,
@@ -149,9 +149,7 @@ if (is.null(Dgeo) & typedis=="ind")
 
 #apply logarithm to distance
 
-if (logdist) {
-   if (sum(Dgeo==0,na.rm=T)>0 & logoffset==0) stop(error("Cannot log transform distances due to zero euclidean distances between pairs. Set logoffset to different from zero!")) else  Dgeo <- log(Dgeo+logoffset) 
-}
+
 
 if (is.null(Dgen) & distance=="Fst")
   Dgen <- as.dist(StAMPP::stamppFst(x, nboots=1))
@@ -177,6 +175,14 @@ if (typedis=="pop"){
 Dgen <- as.dist(Dgen)
 Dgeo <- as.dist(Dgeo)
 
+#use tranformation
+Dgen <- eval(parse(text=Dgen_trans))
+
+
+Dgeo <- eval(parse(text=Dgeo_trans))
+
+if (sum(is.infinite(Dgeo))>0) {cat(warn("Some distances were zero, hence the log transformation created missing values. This affects the mantel test and also points are omitted from the plot. Consider adding an offset to your Dgeo transformation. E.g. Dgeo_trans='log(Dgeo+1)'. "))}
+
 
 if (is.null(Dgeo)) stop(error("Cannot calculate distance matrix or no distance matrix provided!"))
 if (is.null(Dgen)) stop(error("Cannot calculate genetic distance matrix or no genetic distance matrix provided!"))
@@ -185,9 +191,12 @@ if (is.null(Dgen)) stop(error("Cannot calculate genetic distance matrix or no ge
 manteltest <- vegan::mantel(Dgen, Dgeo, na.rm=TRUE, permutations = permutations)
 
 ####### Printing outputs, using package patchwork
+
+                                        
+
 res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo))
 if (is.null(paircols)) {
-  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_smooth(method="lm", se=TRUE)+geom_point()+plot_theme}    else {
+  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_smooth(method="lm", se=TRUE)+geom_point()+plot_theme+ylab(Dgen_trans)+xlab(Dgeo_trans)}    else {
   
   Legend <- col2 <- NA #ggplot bug
   cols <- which(lower.tri(as.matrix(Dgen)),arr.ind = T)
@@ -199,7 +208,7 @@ if (is.null(paircols)) {
     cn <- pop(x)
   }
   res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo), Legend=cn[c1], col2=cn[c2])
-  p1 <- ggplot(res)+geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+geom_point(aes(Dgeo, Dgen, col=Legend), size=4)+geom_point(aes(Dgeo, Dgen, col=col2), size=2)+plot_theme+guides(size = FALSE)
+  p1 <- ggplot(res)+geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+geom_point(aes(Dgeo, Dgen, col=Legend), size=4)+geom_point(aes(Dgeo, Dgen, col=col2), size=2)+plot_theme+guides(size = FALSE)+ylab(Dgen_trans)+xlab(Dgeo_trans)
   
   }
 
@@ -207,15 +216,18 @@ if (plot) suppressMessages(print(p1))
 
 if (verbose>0) {
   cat(report("  Coordinates used from:", coordstring,"\n"))
-  cat(report("  Euclidian distances log transformed:", logdist,"\n"))
-  if (logoffset>0) cat(report("  Log offset used:", logoffset,"\n"))
+  cat(report("  Transformation of Dgeo:", Dgeo_trans,"\n"))
   cat(report("  Genetic distance:",distance,"\n"))
+  cat(report("  Tranformation of Dgen: ", Dgen_trans,"\n"))
   print(manteltest)
 }
 
 # creating temp file names
 temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+temp_plot <- gsub("/","_over_",temp_plot)
+
 temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+temp_table <- gsub("/","_over_",temp_table)
 
 # saving to tempdir
 saveRDS(p1, file = temp_plot)
