@@ -46,8 +46,8 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
-#' gl.report.hamming(testset.gl)
-#' gl.report.hamming(testset.gs)
+#' gl.report.hamming(testset.gl[,1:100])
+#' gl.report.hamming(testset.gs[,1:100])
 #' 
 #' @seealso \code{\link{gl.filter.hamming}},\code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}

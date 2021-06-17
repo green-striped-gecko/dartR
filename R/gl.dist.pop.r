@@ -21,6 +21,8 @@
 #' @param p -- The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [0.5]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return An object of class 'dist' giving distances between populations
+#' @importFrom stats dist
+#' @importFrom vegan vegdist
 #' @importFrom grDevices rainbow
 #' @importFrom graphics par boxplot 
 #' @export
