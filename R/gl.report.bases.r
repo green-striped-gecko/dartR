@@ -53,7 +53,8 @@
 #' @export 
 #'
 
-gl.report.bases <- function(x, plot = TRUE, 
+gl.report.bases <- function(x, 
+                            plot = TRUE, 
                             plot_theme = theme_dartR(), 
                             plot_colours = two_colors,
                             verbose = NULL) {

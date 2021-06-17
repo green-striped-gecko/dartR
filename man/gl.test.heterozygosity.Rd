@@ -2,50 +2,66 @@
 % Please edit documentation in R/gl.test.heterozygosity.r
 \name{gl.test.heterozygosity}
 \alias{gl.test.heterozygosity}
-\title{Tests the difference in heterozyosity between populations taken pairwise.}
+\title{Tests the difference in heterozygosity between populations taken pairwise}
 \usage{
 gl.test.heterozygosity(
   x,
-  nreps = 10000,
+  nreps = 100,
   alpha1 = 0.05,
   alpha2 = 0.01,
-  plot = FALSE,
-  plot.out = FALSE,
+  plot = TRUE,
+  max_plots = 9,
+  plot_theme = theme_dartR(),
+  plot_colours = two_colors,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- a genlight object containing the SNP genotypes [Required]}
+\item{x}{A genlight object containing the SNP genotypes [required]}
 
-\item{nreps}{-- number of replications of the re-randomization [10,000]}
+\item{nreps}{Number of replications of the re-randomization [default 1,000]}
 
-\item{alpha1}{-- significance level for comparison with diff=0 on plot [0.05]}
+\item{alpha1}{First significance level for comparison with diff=0 on plot [default 0.05]}
 
-\item{alpha2}{-- second significance level for comparison with diff=0 on plot [0.01]}
+\item{alpha2}{Second significance level for comparison with diff=0 on plot [default 0.01]}
 
-\item{plot}{-- if TRUE, plots a sampling distribution of the differences for each comparison [FALSE]}
+\item{plot}{If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE]}
 
-\item{plot.out}{-- if TRUE, outputs the plots as jpeg [FALSE]}
+\item{max_plots}{Maximum number of plots to print per page [default 9]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+
+\item{plot_colours}{List of two color names for the borders and fill of the
+plots [default two_colors].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-returns a dataframe containing population labels, heterozygosities and sample sizes
+A dataframe containing population labels, heterozygosities and sample sizes
 }
 \description{
 Calculates the expected heterozygosities for each population in a genlight object,
 and uses re-randomization to test the statistical significance of differences
-in heterozyosity between populations taken pairwise.
+in heterozygosity between populations taken pairwise.
 }
 \details{
-Optionally plots the sampling distribution for the difference between each pair
+\strong{ Function's output }
+
+If plot = TRUE, plots are created showing the sampling distribution for the difference between each pair
 of heterozygosities, marked with the critical limits alpha1 and alpha2, the observed
-heterozygosity, and the zero value (if in range). Can output the plots to jpeg.
+heterozygosity, and the zero value (if in range).
+ Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+  
+ Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
-gl.report.heterozygosity(possums.gl[1:120,])
-out <- gl.test.heterozygosity(possums.gl[1:120,], nreps=10, verbose=3, plot=TRUE)
+out <- gl.test.heterozygosity(bandicoot.gl, nreps=10, verbose=3, plot=TRUE)
+
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
+\concept{Genetic variation within populations}

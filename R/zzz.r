@@ -156,7 +156,7 @@ theme_dartR <- function(base_size = 11, base_family = "",
     ),
     plot.title.position = "panel",
     plot.subtitle =      element_text( 
-      hjust = 0, vjust = 1,
+      hjust = 0.5, vjust = 1,
       margin = margin(b = half_line)
     ),
     plot.caption =       element_text(
