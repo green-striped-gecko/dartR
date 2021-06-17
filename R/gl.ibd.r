@@ -75,7 +75,7 @@ gl.ibd <-  function(x=NULL,
 
 if (is(x,"genlight")) 
 {
-  if (verbose>0) cat(report("SAnalysis performed on the genlight object."))
+  if (verbose>0) cat(report("Analysis performed on the genlight object.\n"))
   
  ta="genlight" 
   
@@ -90,22 +90,32 @@ if (coordinates=="latlon")  {
   if (is.null(x@other$latlon))  stop(error("Cannot find coordinates in x@other$latlon")) 
   coords <- dismo::Mercator(x@other$latlon[,c("lon","lat")]) 
   if (verbose>0) cat(report("Coordinates transformed to Mercator (google) projection to calculate distances in meters.\n"))
+  coordstring="x@other$latlon (Mercator transformed)"
 }
 
 if (coordinates=="xy") {
   if (is.null(x@other$xy))  stop(error("Cannot find coordinates in x@other$xy"))
   coords <- x@other$xy
+  coordstring="x@other$xy"
 }
     
 }
     
 if (is(coordinates,"data.frame")) {
       if (length(setdiff(colnames(coordinates),c("lat","lon")))==0)
+        {
         coords <- dismo::Mercator(coordinates[,c("lon","lat")])   
+        coordstring="data.frame lat/lon (Mercator transformed)"
+        }
       
       if (length(setdiff(colnames(coordinates),c("x","y")))==0) 
-        coords <- coordinates[,c("x","y")]
+      {
+      coords <- coordinates[,c("x","y")]
+      coordstring="data.frame x/y"  
+      }
+      
       if (is.null(coords)) stop(error("No valid coordinates provided. check the provided data.frame and its format."))
+     
     }
 
 if (is.null(coords)) stop(error("No valid coordinates provided!"))
@@ -177,7 +187,7 @@ manteltest <- vegan::mantel(Dgen, Dgeo, na.rm=TRUE, permutations = permutations)
 ####### Printing outputs, using package patchwork
 res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo))
 if (is.null(paircols)) {
-  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_point()+plot_theme}    else {
+  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_smooth(method="lm", se=TRUE)+geom_point()+plot_theme}    else {
   
   Legend <- col2 <- NA #ggplot bug
   cols <- which(lower.tri(as.matrix(Dgen)),arr.ind = T)
@@ -189,12 +199,19 @@ if (is.null(paircols)) {
     cn <- pop(x)
   }
   res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo), Legend=cn[c1], col2=cn[c2])
-  p1 <- ggplot(res)+geom_point(aes(Dgeo, Dgen, col=Legend), size=4)+geom_point(aes(Dgeo, Dgen, col=col2), size=1.5, shape=15)+plot_theme
+  p1 <- ggplot(res)+geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+geom_point(aes(Dgeo, Dgen, col=Legend), size=4)+geom_point(aes(Dgeo, Dgen, col=col2), size=2)+plot_theme+guides(size = FALSE)
   
   }
 
-if (plot) print(p1)
-if (verbose>0) print(manteltest)
+if (plot) suppressMessages(print(p1))
+
+if (verbose>0) {
+  cat(report("  Coordinates used from:", coordstring,"\n"))
+  cat(report("  Euclidian distances log transformed:", logdist,"\n"))
+  if (logoffset>0) cat(report("  Log offset used:", logoffset,"\n"))
+  cat(report("  Genetic distance:",distance,"\n"))
+  print(manteltest)
+}
 
 # creating temp file names
 temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
