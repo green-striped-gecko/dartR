@@ -63,8 +63,8 @@ if (is.na(dist.type))
 if (is.null(x@other$xy)) 
   
 {
-  cat("No projected coordinates in @other$xy found. Hence will use latlongs (if provided), which are not projected, hence there might be distortions if the area covered is large or close to the poles. Be aware your resistance layer and coordinates in the genlight object need to have the same coordinate system.\n")
-  x@other$xy <- x@other$latlong[,c("lon","lat")]
+  cat("No projected coordinates in @other$xy found. Hence will use latlons (if provided), which are not projected, hence there might be distortions if the area covered is large or close to the poles. Be aware your resistance layer and coordinates in the genlight object need to have the same coordinate system.\n")
+  x@other$xy <- x@other$latlon[,c("lon","lat")]
   if (is.null(x@other$xy)) step("No coordinates found in the genlight object!!\n")
 }
 

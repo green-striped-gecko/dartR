@@ -208,8 +208,8 @@ gl.read.silicodart <- function(filename,
       if (is.na(lat.col)) {cat ("Please note: there is no lat column\n") }
       if (is.na(lon.col)) {cat ("Please note: there is no lon column\n") }
       if (!is.na(lat.col) & !is.na(lon.col)){
-        glout@other$latlong <- ind.cov[ord,c(lat.col, lon.col)]
-        rownames(glout@other$latlong)  <-  ind.cov[ord,id.col]
+        glout@other$latlon <- ind.cov[ord,c(lat.col, lon.col)]
+        rownames(glout@other$latlon)  <-  ind.cov[ord,id.col]
         cat(" Added latlon data.\n" )
       }
   

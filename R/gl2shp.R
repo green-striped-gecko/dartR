@@ -1,7 +1,7 @@
 #' Convert genlight objects to ESRI shapefiles or kml files
 #'
 #' This function exports cordinates in a genlight object to a point shape file (including also individual meta data if available).
-#' Coordinates are provided under x@other$latlong and assumed to be in WGS84 coordinates, if not proj4 string is provided.
+#' Coordinates are provided under x@other$latlon and assumed to be in WGS84 coordinates, if not proj4 string is provided.
 #' @param x -- name of the genlight object containing the SNP data and location data, lat longs  [required]
 #' @param type -- type of output "kml" or "shp" [default 'shp']
 #' @param proj4 -- proj4string of data set (see spatialreference.org for projections) [default WGS84]
@@ -72,23 +72,24 @@ gl2shp <- function(x, type ="shp", proj4="+proj=longlat +ellps=WGS84 +datum=WGS8
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
-  if (is.null(x@other$latlong)){stop("Fatal Error: No coordinates provided in slot: gl@other$latlong\n")}
+  if (is.null(x@other$latlon)){stop("Fatal Error: No coordinates provided in slot: gl@other$latlon\n")}
 
-  if (nrow(x@other$latlong)!=nInd(x)){stop("Fatal Error: Number of coordinates provided is different from the number of individuals in the data set\n")}
+  if (nrow(x@other$latlon)!=nInd(x)){stop("Fatal Error: Number of coordinates provided is different from the number of individuals in the data set\n")}
 
   #check if names are given as lat long instead lat lon
-  if (sum(match(names(x@other$latlong),"long"), na.rm=T)==1) {
+  if (sum(match(names(x@other$latlon),"long"), na.rm=T)==1) {
     cat("  Warning: Names given as lat long, instead of lat lon. Rectifying\n")
-    x@other$latlong$lon <- x@other$latlong$long
+    x@other$latlon$lon <- x@other$latlon$long
+    x@other$latlon$long <- NULL
   }  
   
 # DO THE JOB
   
   glpoints <- x@other$ind.metrics
-  glpoints$lat <- x@other$latlong$lat
-  glpoints$lon <- x@other$latlong$lon
+  glpoints$lat <- x@other$latlon$lat
+  glpoints$lon <- x@other$latlon$lon
   
-  toremove <- which(!complete.cases(x@other$latlong))
+  toremove <- which(!complete.cases(x@other$latlon))
   if (verbose >= 2) {cat(paste("Removed", length(toremove),"individual(s) due to missing coordinates.\n" ))}
   if (verbose >= 2 & (length(toremove) > 0)) {cat(paste("Removed: ", indNames(x)[toremove],"\n"))}
   glpoints <- glpoints[complete.cases(glpoints),]

@@ -54,8 +54,9 @@ gl.ibd <-  function(x=NULL,
     funname <- match.call()[[1]]
     
     # GENERAL ERROR CHECKING
+    
     verbose <- gl.check.verbosity(verbose)
-    x <- utils.check.gl(x, verbose=0)
+    if (!is.null(x))  x <- utils.check.gl(x, verbose=0)
     
     
 
@@ -63,9 +64,9 @@ gl.ibd <-  function(x=NULL,
 
 
     
-    
+ 
 
- if (!is.null(Dgen) & !is.null(Dgeo)) 
+ if (!is.null(Dgen) & !is.null(Dgeo) ) 
   {
    if (verbose>0)  cat(report("Analysis performed using provided genetic and Euclidean distance matrices. If a genlight object is provided, it is ignored."))
    ta="dgendgeo"
@@ -81,7 +82,8 @@ if (is(x,"genlight"))
 
 
   
-#check coordinates
+#check coordinates (if no Dgen and Dgeo is provided)
+if (ta=="genlight"){
 coords <- NULL
 if (is(coordinates,"character")) {
 if (coordinates=="latlon")  {
@@ -121,13 +123,15 @@ if (is.null(coords)) stop(error("No valid coordinates provided!"))
 #make sure coordinates have the correct length
 if (nrow(coords)!=nInd(x) &  ta=="genlight") stop(error("Cannot find coordinates for each individual in slot @other$latlon"))
 
+
+   
 typedis=NULL
 if (distance=="Fst" | distance=="D") typedis="pop"
 if (distance=="propShared" | distance=="euclidean") typedis="ind"
 
-#population based distances
 
-if (typedis=="pop" & nPop(x)<2) stop(error("You specified a population based distance, but there either no population or a single population specified within your genlight object. Check via table(pop(genlight))."))
+
+  if (typedis=="pop" & nPop(x)<2) stop(error("You specified a population based distance, but there is either no population or only a single population specified within your genlight object. Check via table(pop(genlight))."))
 
 if (is.null(Dgeo) & typedis=="pop")
 {
@@ -167,16 +171,20 @@ if (typedis=="pop"){
   oo <- order(colnames(as.matrix(Dgeo)))
   Dgeo <- as.dist(as.matrix(Dgeo)[oo, oo])
 }
-
+} 
+} else { #end of ta=="genlight"
+  #ta="dgendgeo
+  coordstring ="Dgeo provided."
+  distance="Dgen provided"
+  typedis="ind"
+}
 #make sure both matrices are distance objects
 #if provided via Dgen and Dgeo directly
 Dgen <- as.dist(Dgen)
 Dgeo <- as.dist(Dgeo)
 
-#use tranformation
+#use tranformations
 Dgen <- eval(parse(text=Dgen_trans))
-
-
 Dgeo <- eval(parse(text=Dgeo_trans))
 
 if (sum(is.infinite(Dgeo))>0) {cat(warn("Some distances were zero, hence the log transformation created missing values. This affects the mantel test and also points are omitted from the plot. Consider adding an offset to your Dgeo transformation. E.g. Dgeo_trans='log(Dgeo+1)'. "))}
@@ -188,13 +196,25 @@ if (is.null(Dgen)) stop(error("Cannot calculate genetic distance matrix or no ge
 
 manteltest <- vegan::mantel(Dgen, Dgeo, na.rm=TRUE, permutations = permutations)
 
+
+lm_eqn <- function(df,r=manteltest$statistic,pp=manteltest$signif){
+  m <- lm(Dgen ~ Dgeo, df);
+  eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(R)^2~"="~r2*","~~italic(p)~"="~pp, 
+  list(a = format(unname(coef(m)[1]), digits = 2),
+       b = format(unname(coef(m)[2]), digits = 2),
+       r2 = format(summary(m)$r.squared, digits = 3),
+       pp  = format(pp,digits = 3)))
+  as.character(as.expression(eq));
+}
+
+
 ####### Printing outputs, using package patchwork
 
                                         
 
 res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo))
 if (is.null(paircols)) {
-  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_smooth(method="lm", se=TRUE)+geom_point()+plot_theme+ylab(Dgen_trans)+xlab(Dgeo_trans)}    else {
+  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_point()+geom_smooth(method="lm", se=TRUE)+ylab(Dgen_trans)+xlab(Dgeo_trans)+geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+plot_theme}    else {
   
   Legend <- col2 <- NA #ggplot bug
   cols <- which(lower.tri(as.matrix(Dgen)),arr.ind = T)
@@ -203,10 +223,10 @@ if (is.null(paircols)) {
   cn <- colnames(as.matrix(Dgen))
   #if someone wants to color pairwise individuals by pairwise colors
   if (typedis=="ind" & paircols=="pop") {
-    cn <- pop(x)
+    if (is(x, "genlight")) cn <- pop(x) else cn = rownames(as.matrix(Dgen))
   }
   res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo), Legend=cn[c1], col2=cn[c2])
-  p1 <- ggplot(res)+geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+geom_point(aes(Dgeo, Dgen, col=Legend), size=4)+geom_point(aes(Dgeo, Dgen, col=col2), size=2)+plot_theme+guides(size = FALSE)+ylab(Dgen_trans)+xlab(Dgeo_trans)
+  p1 <- ggplot(res)+geom_point(aes(Dgeo, Dgen, col=Legend), size=5)+geom_point(aes(Dgeo, Dgen, col=col2), size=2)+geom_point(aes(Dgeo, Dgen), size=2, shape=1)+guides(size = FALSE)+geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+ylab(Dgen_trans)+geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+xlab(Dgeo_trans)+plot_theme
   
   }
 
@@ -225,7 +245,9 @@ if (verbose>0) {
 
 #check for "/" in match.call
 mc <- gsub("/", "_over_",as.character(match.call()))
+mc <- gsub("\\*", "x",mc)
 nmc <- gsub("/", "_over_",names(match.call()))
+nmc <- gsub("\\*", "x",nmc)
 
 temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(nmc,"_",mc,collapse = "_")))
 
@@ -250,6 +272,6 @@ out <- list(Dgen=Dgen, Dgeo=Dgeo, mantel=manteltest)
 return(out)
 }
 }
-}
+
 
 
