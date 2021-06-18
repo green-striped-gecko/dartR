@@ -37,7 +37,7 @@
 #' of loci. 12x might be a good minimum for this particular analysis. It is sensible
 #' also to push the minimum reproducibility up to 1, if that does not result in an
 #' unacceptable loss of loci. Reproducibility is stored in the slot 
-#' @@other$loc.metrics$RepAvg and is defined as the proportion of technical replicate 
+#' \code{@other$loc.metrics$RepAvg} and is defined as the proportion of technical replicate 
 #' assay pairs for which the marker score is consistent. You can examine the distribution
 #' of reproducibility with the function \code{\link{gl.report.reproducibility}}.
 #' 

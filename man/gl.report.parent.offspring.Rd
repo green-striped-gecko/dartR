@@ -58,7 +58,25 @@ of read depths with the function \code{\link{gl.report.rdepth}} and push this up
 with an acceptable loss
 of loci. 12x might be a good minimum for this particular analysis. It is sensible
 also to push the minimum reproducibility up to 1, if that does not result in an
-unacceptable loss of loci. Reproducibility is stored in the slot
+unacceptable loss of loci. Reproducibility is stored in the slot 
+\code{@other$loc.metrics$RepAvg} and is defined as the proportion of technical replicate 
+assay pairs for which the marker score is consistent. You can examine the distribution
+of reproducibility with the function \code{\link{gl.report.reproducibility}}.
+
+Note that the null expectation is not well defined, and the power reduced, if the
+population from which the putative parent-offspring pairs are drawn contains 
+many sibs. Note also that if an individual has been genotyped twice in the dataset, 
+the replicate pair will be assessed by this script as being in a parent-offspring 
+relationship.
+
+\strong{ Function's output }
+
+ Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+  
+ Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
 out <- gl.report.parent.offspring(testset.gl[1:10])
