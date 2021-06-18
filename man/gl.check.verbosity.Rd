@@ -4,7 +4,7 @@
 \alias{gl.check.verbosity}
 \title{A function to check the current global verbosity}
 \usage{
-gl.check.verbosity(x = verbose)
+gl.check.verbosity(x = NULL)
 }
 \arguments{
 \item{x}{-- user requested level of verbosity}

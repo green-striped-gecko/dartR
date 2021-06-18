@@ -9,7 +9,7 @@
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 
-gl.check.verbosity <- function(x=verbose) {
+gl.check.verbosity <- function(x=NULL) {
   
 # SET VERBOSITY or GET it from global
   if (is.null(x)){
