@@ -28,7 +28,7 @@ gl2shp(
 }
 \description{
 This function exports cordinates in a genlight object to a point shape file (including also individual meta data if available).
-Coordinates are provided under x@other$latlong and assumed to be in WGS84 coordinates, if not proj4 string is provided.
+Coordinates are provided under x@other$latlon and assumed to be in WGS84 coordinates, if not proj4 string is provided.
 }
 \examples{
 gl2shp(testset.gl)

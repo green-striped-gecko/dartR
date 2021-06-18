@@ -9,7 +9,7 @@ gl.costdistances(landscape, locs, method, NN)
 \arguments{
 \item{landscape}{a raster object coding the resistance of the landscape}
 
-\item{locs}{coordinates of the subpopulations. If a genlight object is provided coordinates are taken from @other$latlong and centers for population (pop(gl)) are calculated. In case you want to calculate costdistances between individuals redefine pop(gl) via: \code{pop(gl)<- indNames(gl)}.}
+\item{locs}{coordinates of the subpopulations. If a genlight object is provided coordinates are taken from @other$latlon and centers for population (pop(gl)) are calculated. In case you want to calculate costdistances between individuals redefine pop(gl) via: \code{pop(gl)<- indNames(gl)}.}
 
 \item{method}{defines the type of cost distance, types are "least-cost", "rSPDistance" or "commute (Circuitscape type)"}
 

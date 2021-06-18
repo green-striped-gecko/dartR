@@ -101,7 +101,7 @@ gl.join <- function(x1, x2, verbose=NULL) {
   }
   if (!is.null(x1@other$latlon)){
     if (!identical(x1@other$latlon,x1@other$latlon)){
-      stop("  Fatal Error: the two genlight objects do not have latlong data for the same individuals\n")
+      stop("  Fatal Error: the two genlight objects do not have latlon data for the same individuals\n")
     }
   }
   
@@ -144,14 +144,14 @@ gl.join <- function(x1, x2, verbose=NULL) {
   
 # Add the lat lon metrics, assuming they are the same in both genlight objects  
   if (verbose >= 2){
-    cat("  Adding the latlongs if they exist\n")
+    cat("  Adding the latlons if they exist\n")
   }
   if (!is.null(x1@other$latlon)){
     x@other$latlon <- x1@other$latlon
   } else if (!is.null(x2@other$latlon)){
     x@other$latlon <- x2@other$latlon
   } else {
-    cat("    Warning: Input genlight objects and/or output genlight object lacks latlong data\n")
+    cat("    Warning: Input genlight objects and/or output genlight object lacks latlon data\n")
   }  
   
 # Add the loc metrics flags, set to 1 only if 1 in both genlight objects  

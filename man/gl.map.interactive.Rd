@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.map.interactive.r
 \name{gl.map.interactive}
 \alias{gl.map.interactive}
-\title{Creates an interactive map (based on latlong) from a genlight object}
+\title{Creates an interactive map (based on latlon) from a genlight object}
 \usage{
 gl.map.interactive(
   x,
@@ -16,7 +16,7 @@ gl.map.interactive(
 )
 }
 \arguments{
-\item{x}{-- a genlight object [including coordinates within the latlong slot]}
+\item{x}{-- a genlight object [including coordinates within the latlon slot]}
 
 \item{matrix}{-- a distance matrix between populations or individuals. The matrix is visualised as lines between individuals/populations. If matrix is asymmetric two lines with arrows are plotted.}
 
@@ -36,7 +36,7 @@ gl.map.interactive(
 plots a map
 }
 \description{
-Creates an interactive map (based on latlong) from a genlight object
+Creates an interactive map (based on latlon) from a genlight object
 }
 \details{
 A wrapper around the \pkg{leaflet} package. For possible background maps check as specified via the provider: \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
