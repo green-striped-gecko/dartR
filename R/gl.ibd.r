@@ -9,6 +9,7 @@
 #' @importFrom graphics abline title points
 #' @importFrom stats as.dist lm
 #' @importFrom StAMPP stamppFst stamppNeisD
+#' @importFrom stats coef
 #' @param x genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed
 #' @param distance type of distance that is calculated and used for the analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared", [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].
 #' @param coordinates Can be either "latlon", "xy" or a two column data.frame with column names "lat","lon", "x", "y")  Coordinates are provided via \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon data will be projected to meters using Mercator system [google maps] or if xy then distance is directly calculated on the coordinates.
@@ -56,7 +57,7 @@ gl.ibd <-  function(x=NULL,
     # GENERAL ERROR CHECKING
     
     verbose <- gl.check.verbosity(verbose)
-    if (!is.null(x))  x <- utils.check.gl(x, verbose=0)
+    if (!is.null(x))  dt <- utils.check.datatype(x, verbose=0)
     
     
 
