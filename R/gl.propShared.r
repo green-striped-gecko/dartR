@@ -34,5 +34,6 @@ gl.propShared <- function(x) {
   res <- glpropSharedC(xx)
   res <- as.matrix(as.dist(res))
   diag(res)<- 1
+  colnames(res)<- rownames(res)<- indNames(x)
   res
 }

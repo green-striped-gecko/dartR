@@ -5,7 +5,7 @@
 #' 
 #' (a) The SNP genotypes or Tag Presence/Absence data (SilicoDArT);
 #' (b) An associated dataframe (gl@other$loc.metrics) containing the locus metrics (e.g. Call Rate, Repeatability, etc);
-#' (c) An associated dataframe (gl@other$ind.metrics) containing the individual/sample metrics (e.g. sex, latitude, longitude, etc);
+#' (c) An associated dataframe (gl@other$ind.metrics) containing the individual/sample metrics (e.g. sex, latitude (=lat), longitude(=lon), etc);
 #' (d) A specimen identity field (indNames(gl)) with the unique labels applied to each individual/sample;
 #' (e) A population assignment (popNames) for each individual/specimen;
 #' (f) Flags that indicate whether or not calculable locus metrics have been updated.
@@ -121,15 +121,15 @@ gl.compliance.check <- function (x,
   }
   
   #check if coordinates are in the right place and not mispelt 
-  if (!is.null(x@other$latlon)) x@other$latlong <- x@other$latlon
+  if (!is.null(x@other$latlong)) x@other$latlon <- x@other$latlong
   
-  if (!is.null(x@other$latlong)) { 
-    if (!is.null(x@other$latlong$long)) x@other$latlong$lon <- x@other$latlong$long
+  if (!is.null(x@other$latlon)) { 
+    if (!is.null(x@other$latlon$long)) x@other$latlon$lon <- x@other$latlon$long
     }
   #remove misspelt columns if they exist...
-  x@other$latlon <- NULL
-  x@other$latlong$long <- NULL
-  if (verbose>=2) cat("Spelling of coordinates checked and changed if necessary\n")
+  x@other$latlong <- NULL
+  x@other$latlon$long <- NULL
+  if (verbose>=2) cat("Spelling of coordinates checked and changed if necessary to lat/lon\n")
   
   
   # ADD TO HISTORY

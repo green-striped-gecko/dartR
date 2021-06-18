@@ -1,6 +1,6 @@
-#' Creates an interactive map (based on latlong) from a genlight object
+#' Creates an interactive map (based on latlon) from a genlight object
 #' 
-#' @param x -- a genlight object [including coordinates within the latlong slot]
+#' @param x -- a genlight object [including coordinates within the latlon slot]
 #' @param matrix -- a distance matrix between populations or individuals. The matrix is visualised as lines between individuals/populations. If matrix is asymmetric two lines with arrows are plotted.
 #' @param standard -- if a matrix is provided line width will be standardised to be between 1 to 10, if set to true, otherwise taken as given.
 #' @param symmetric -- if a symmetric matrix is provided only one line is drawn based on the lower triangle of the matrix. If set to false arrows indicating the direction are used instead.
@@ -32,9 +32,9 @@ gl.map.interactive <- function(x, matrix=NULL, standard=TRUE,symmetric=TRUE, ind
 if (!is(x, "genlight"))   stop("Not a valid genlight object provided!!!")
 
 
-if (is.null(x@other$latlong)) stop("No valid coordinates are supplied at gl@other$latlong")
+if (is.null(x@other$latlon)) stop("No valid coordinates are supplied at gl@other$latlon")
 
-if (sum(colnames(x@other$latlong) %in% c("lat","lon"))!=2) stop("Coordinates under gl@other$latlong are not named 'lat' and 'lon'.")
+if (sum(colnames(x@other$latlon) %in% c("lat","lon"))!=2) stop("Coordinates under gl@other$latlon are not named 'lat' and 'lon'.")
   
   
 if (!is.null(matrix))
@@ -44,7 +44,7 @@ if (nrow(matrix) != nInd(x) & nrow(matrix)!= nPop(x)) stop("The dimension of the
   
 cols <- rainbow(nPop(x))
 cols <- substr(cols, 1,7)
-df <- x@other$latlong
+df <- x@other$latlon
 centers <- apply(df, 2, function(xx) tapply(xx, pop(x), mean, na.rm=TRUE))
 # Add default OpenStreetMap map tiles
 m <- leaflet::leaflet() %>%
