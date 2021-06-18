@@ -14,34 +14,27 @@
 #' and if it does not, will rectify it.
 #' 
 #' @param x -- name of the input genlight object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #' @return A genlight object that conforms to the expectations of dartR
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Core Development Team (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' x <- gl.compliance.check(testset.gl)
 
-gl.compliance.check <- function (x, verbose=NULL) {
+gl.compliance.check <- function (x,
+                                 verbose=NULL) {
 
-# TRAP COMMAND, SET VERSION
+  # TRAP COMMAND
   
   funname <- match.call()[[1]]
-  build <- "Jacob"
   
-# SET VERBOSITY
+  # SET VERBOSITY
   
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
+  verbose <- gl.check.verbosity(verbose)
   
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
   
 # FLAG SCRIPT START
   
@@ -53,27 +46,11 @@ gl.compliance.check <- function (x, verbose=NULL) {
     }
   }
 
- # STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("  Fatal Error: genlight object required!\n")
-  }
- 
-    if (all(x@ploidy == 1)){
-      if (verbose >= 2) cat("  Processing Presence/Absence (SilicoDArT) data\n")
-      data.type <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
-      if (verbose >= 2) cat("  Processing a SNP dataset\n")
-      data.type <- "SNP"
-    } else {
-      stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-    }
-
 # DO THE JOB
   
   # Check that the data exist, and that they are restricted to the appropriate values
   
-  if (data.type == "SNP"){
+  if (datatype == "SNP"){
     mat <- as.matrix(x)
     scores <- c(0,1,2,NA)
     if (verbose >= 2){cat("  Checking coding of SNPs\n")}

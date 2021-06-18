@@ -9,6 +9,7 @@
 #' @importFrom graphics abline title points
 #' @importFrom stats as.dist lm
 #' @importFrom StAMPP stamppFst stamppNeisD
+#' @importFrom stats coef
 #' @param x genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed
 #' @param distance type of distance that is calculated and used for the analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared", [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].
 #' @param coordinates Can be either "latlon", "xy" or a two column data.frame with column names "lat","lon", "x", "y")  Coordinates are provided via \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon data will be projected to meters using Mercator system [google maps] or if xy then distance is directly calculated on the coordinates.
@@ -30,8 +31,10 @@
 #' Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
 #' @examples 
 #' ibd <- gl.ibd(bandicoot.gl)
-#' ibd <- gl.ibd(bandicoot.gl, Dgeo_trans="log(Dgeo)" ,Dgen_trans='Dgen/(1-Dgen)')
-#' ibd <- gl.ibd(bandicoot.gl[,], distance="euclidean", paircols="pop", Dgeo_trans="Dgeo")
+#' #because of speed only the first 100 loci
+#' ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans="log(Dgeo)" ,Dgen_trans='Dgen/(1-Dgen)')
+#' #because of speed only the first 10 individuals)
+#' ibd <- gl.ibd(bandicoot.gl[1:10,], distance="euclidean", paircols="pop", Dgeo_trans="Dgeo")
 
 gl.ibd <-  function(x=NULL, 
            distance="Fst",
@@ -56,7 +59,7 @@ gl.ibd <-  function(x=NULL,
     # GENERAL ERROR CHECKING
     
     verbose <- gl.check.verbosity(verbose)
-    if (!is.null(x))  x <- utils.check.gl(x, verbose=0)
+    if (!is.null(x))  dt <- utils.check.datatype(x, verbose=0)
     
     
 
@@ -226,7 +229,7 @@ if (is.null(paircols)) {
     if (is(x, "genlight")) cn <- pop(x) else cn = rownames(as.matrix(Dgen))
   }
   res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo), Legend=cn[c1], col2=cn[c2])
-  p1 <- ggplot(res)+geom_point(aes(Dgeo, Dgen, col=Legend), size=5)+geom_point(aes(Dgeo, Dgen, col=col2), size=2)+geom_point(aes(Dgeo, Dgen), size=2, shape=1)+guides(size = FALSE)+geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+ylab(Dgen_trans)+geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+xlab(Dgeo_trans)+plot_theme
+  p1 <- ggplot(res)+geom_point(aes(Dgeo, Dgen, col=Legend), size=5)+geom_point(aes(Dgeo, Dgen, col=col2), size=2)+geom_point(aes(Dgeo, Dgen), size=2, shape=1)+guides(size = "none")+geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+ylab(Dgen_trans)+geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+xlab(Dgeo_trans)+plot_theme
   
   }
 

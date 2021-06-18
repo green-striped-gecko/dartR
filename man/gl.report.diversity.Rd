@@ -16,7 +16,7 @@ gl.report.diversity(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required].}
 
-\item{pbar}{Report on progress. Silent if set to FALSE. [default TRUE]}
+\item{pbar}{Report on progress. Silent if set to FALSE [default TRUE].}
 
 \item{table}{Prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table. [default "DH"]}
 
@@ -24,16 +24,20 @@ gl.report.diversity(
 
 \item{plot_colours}{A color palette [default discrete_palette].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-returns a list of entropy indexes for each level of q and equivalent numbers for alpha and beta diversity.
+A list of entropy indexes for each level of q and equivalent numbers for alpha and beta diversity.
 }
 \description{
 This script takes a genlight object and calculates alpha and beta diversity for q = 0:2. Formulas are taken from Sherwin et al. 2017. The paper describes nicely the relationship between the different q levels and how they relate to population genetic processes such as dispersal and selection.
 }
 \details{
 For all indexes, the entropies (H) and corresponding effective numbers, i.e. Hill numbers (D), which reflect the number of needed entities to get the observed values, are calculated. In a nutshell, the alpha indexes between the different q-values should be similar if there is no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index, this links to a process causing it, such as dispersal, selection or strong drift. For a detailed explanation of all the indexes, we recommend resorting to the literature provided below. Confidence intervals are +/- 1 standard deviation.
+
+\strong{ Function's output }
+
+ Plots are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
 
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -50,6 +54,15 @@ names(div)
 \references{
 Sherwin, W.B., Chao, A., Johst, L., Smouse, P.E. (2017). Information Theory Broadens the Spectrum of Molecular Ecology and Evolution. TREE 32(12) 948-963. doi:10.1016/j.tree.2017.09.12
 }
+\seealso{
+Other reporting functions: 
+\code{\link{gl.report.bases}()},
+\code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.parent.offspring}()},
+\code{\link{gl.report.pa}()},
+\code{\link{gl.report.sexlinked}()}
+}
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}), Contributors: William B. Sherwin, Alexander Sentinella
 }
+\concept{reporting functions}

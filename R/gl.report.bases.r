@@ -1,17 +1,19 @@
-#'@name gl.report.bases
+#' @name gl.report.bases
 #'
-#'@title Report summary of base pair frequencies
+#' @title Report summary of base pair frequencies
 #'
-#'@description This script calculates the frequencies of the four DNA nucleotide bases: adenine (A), cytosine (C), 
+#' @description 
+#' This script calculates the frequencies of the four DNA nucleotide bases: adenine (A), cytosine (C), 
 #'guanine (G) and thymine (T), and the frequency of transitions (Ts) and transversions (Tv) in a DArT genlight object.
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required]
 #' @param plot If TRUE, histograms of base composition are produced [default TRUE]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
-#' @param plot_colours Two color names for borders and fill of the plots [default two_colors]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
+#' @param plot_colours List of two color names for the borders and fill of the
+#'  plots [default two_colors].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
-#'@details The script checks first if trimmed sequences are included in the locus metadata (@@other$loc.metrics$TrimmedSequence), 
+#' @details The script checks first if trimmed sequences are included in the locus metadata (@@other$loc.metrics$TrimmedSequence), 
 #'and if so, tallies up the numbers of A, T, G and C bases. Only the reference state at the SNP locus is counted. Counts of 
 #'transitions (Ts) and transversions (Tv) assume that there is no directionality, that is C->T is the same as T->C, because
 #'the reference state is arbitrary.
@@ -24,13 +26,16 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#' @return A list containing 
-#'         [[1]] $freq -- the table of base frequencies and transition/transversion ratios;
-#'         [[2]] $plotbases -- ggplot bargraph of base frequencies;
-#'         [[3]] $plottstv -- ggplot bargraph of transitions and transversions.
-#'@author Core dartR Team (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @return A list containing:
+#' \enumerate{
+#'         \item $freq -- the table of base frequencies and transition/transversion ratios;
+#'         \item $plotbases -- ggplot bargraph of base frequencies;
+#'         \item $plottstv -- ggplot bargraph of transitions and transversions.
+#'         }
+#'         
+#' @author Core dartR Team (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
-#'@examples
+#' @examples
 #' # SNP data
 #'   out <- gl.report.bases(testset.gl)
 #'   out$freq
@@ -39,36 +44,33 @@
 #' # Tag P/A data
 #'   out <- gl.report.bases(testset.gs)
 #'   out
+#'   
+#' @family reporting functions
 #'
-#'@import stringr
-#'@import patchwork
+#' @import stringr
+#' @import patchwork
 #'
-#'@export 
+#' @export 
 #'
 
-gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(), 
-                            plot_colours=two_colors,verbose=NULL) {
+gl.report.bases <- function(x, 
+                            plot = TRUE, 
+                            plot_theme = theme_dartR(), 
+                            plot_colours = two_colors,
+                            verbose = NULL) {
 
-    # TRAP COMMAND, SET VERSION
-    funname <- match.call()[[1]]
+  # TRAP COMMAND
+  
+  funname <- match.call()[[1]]
+  
+  # SET VERBOSITY
+  
+  verbose <- gl.check.verbosity(verbose)
+  
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
 
-    # ERROR CHECKING
-
-    x <- utils.check.gl(x)
-    verbose <- gl.check.verbosity(verbose)
-
-    #### SETTING DATA TYPE ####
-    if (all(x@ploidy == 1)){
-      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
-      datatype <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
-      cat(report("  Processing a SNP dataset\n"))
-      datatype <- "SNP"
-    } else {
-      stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
-    }
-    
-    
     # FUNCTION SPECIFIC ERROR CHECKING
 
     if (!any(names(x@other$loc.metrics) == "TrimmedSequence")) {
@@ -144,7 +146,7 @@ gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(),
         ratio <- ts/tv
     }
 
-    # printing plots and reports
+    # PRINTING OUTPUTS
     cat(paste("  Average trimmed sequence length:", round(mn, digits = 1), "(", mi, "to", mx, ")"), "\n")
     cat(paste("  Total number of trimmed sequences:", length(x@other$loc.metrics$TrimmedSequence)), "\n")
     cat("  Base frequencies (%)\n")
@@ -204,7 +206,7 @@ gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(),
         }
     }
 
-    # Create return matrix
+    # Create return list
     if (verbose >= 2) {
         cat(report("  Returning a list containing \n
          [[1]] $freq -- the table of base frequencies and transition/transversion ratios;\n
@@ -220,8 +222,14 @@ gl.report.bases <- function(x, plot=TRUE, plot_theme=theme_dartR(),
     if (verbose >= 1) {
       cat(report("\n\nCompleted:", funname, "\n\n"))
     }
-    if (datatype=="SNP") 
-    invisible(list(freq = out, plotbases = p1, plottstv = p2)) else invisible(list(freq = out, plotbases = p1))
+    
+    # RETURN
+    
+    if (datatype=="SNP"){
+      invisible(list(freq = out, plotbases = p1, plottstv = p2))  
+    }else{
+      invisible(list(freq = out, plotbases = p1))
+    } 
 
 }
 

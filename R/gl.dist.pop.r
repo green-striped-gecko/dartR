@@ -23,6 +23,8 @@
 #' @return An object of class 'dist' giving distances between populations
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
+#' @importFrom grDevices rainbow
+#' @importFrom graphics par boxplot 
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples

@@ -1,16 +1,16 @@
-#'@name gl.report.locmetric
+#' @name gl.report.locmetric
 #'
-#'@title Report summary of the slot $other$loc.metrics
+#' @title Report summary of the slot $other$loc.metrics
 #'
-#'@description This script uses any field with numeric values stored in $other$loc.metrics to produce summary statistics (mean, minimum, average, quantiles), histograms and boxplots to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.locmetric}}.
+#' @description This script uses any field with numeric values stored in $other$loc.metrics to produce summary statistics (mean, minimum, average, quantiles), histograms and boxplots to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.locmetric}}.
 #'
-#'@param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required]
-#'@param metric Name of the metric to be used for filtering [required]
-#'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
-#'@param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
-#'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required].
+#' @param metric Name of the metric to be used for filtering [required].
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
+#' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
-#'@details 
+#' @details 
 #'The function \code{\link{gl.filter.locmetric}} will filter out the
 #'  loci with a locmetric value below a specified threshold.
 #'  
@@ -51,11 +51,11 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#'@return Returns an unchanged genlight object
+#' @return An unaltered genlight object
 #'
-#'@author Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
-#'@examples
+#' @examples
 #' # adding dummy data
 #' test <- testset.gl
 #' test$other$loc.metrics$test <- 1:nLoc(test)
@@ -68,25 +68,31 @@
 #' # Tag P/A data
 #' out <- gl.report.locmetric(test.gs,metric='test')
 #' 
-#'@seealso \code{\link{gl.filter.locmetric}}, \code{\link{gl.list.reports}},
+#' @seealso \code{\link{gl.filter.locmetric}}, \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #'  
-#'@family filters and filter reports
+#' @family filters and filter reports
 #'
-#'@export
+#' @export
 #'
 
-gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colours = two_colors,verbose=NULL) {
-
-    # TRAP COMMAND, SET VERSION
-
+gl.report.locmetric <- function(x, 
+                                metric, 
+                                plot_theme = theme_dartR(),
+                                plot_colours = two_colors,
+                                verbose = NULL) {
+    # TRAP COMMAND
+    
     funname <- match.call()[[1]]
-
-    # GENERAL ERROR CHECKING
-
-    x <- utils.check.gl(x)
+    
+    # SET VERBOSITY
+    
     verbose <- gl.check.verbosity(verbose)
-
+    
+    # CHECKS DATATYPE 
+    
+    datatype <- utils.check.datatype(x)
+    
     # FLAG SCRIPT START
 
     if (verbose >= 1) {
@@ -121,11 +127,20 @@ gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colo
     metric_df <- data.frame(x$other$loc.metrics[field])
     colnames(metric_df) <- "field"
 
-    p1 <- ggplot(metric_df, aes(y = field)) + geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + coord_flip() + 
-        plot_theme + xlim(range = c(-1, 1)) + ylab(metric) + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + ggtitle(title1)
+    p1 <- ggplot(metric_df, aes(y = field)) + 
+        geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+        coord_flip() + 
+        plot_theme + 
+        xlim(range = c(-1, 1)) +
+        ylab(metric) + 
+        theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
+        ggtitle(title1)
 
-    p2 <- ggplot(metric_df, aes(x = field)) + geom_histogram(bins = 50, color = plot_colours[1], fill = plot_colours[2]) + 
-        xlab(metric) + ylab("Count") + plot_theme
+    p2 <- ggplot(metric_df, aes(x = field)) + 
+        geom_histogram(bins = 50, color = plot_colours[1], fill = plot_colours[2]) + 
+        xlab(metric) + 
+        ylab("Count") + 
+        plot_theme
 
     # Print out some statistics
     stats <- summary(metric_df)
@@ -160,27 +175,37 @@ gl.report.locmetric <- function(x, metric, plot_theme = theme_dartR(), plot_colo
     df$Quantile <- paste0(df$Quantile, "%")
     rownames(df) <- NULL
     
-    # printing outputs
+    # PRINTING OUTPUTS
+    # using package patchwork
     p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
     print(p3)
     print(df)
-
+    
+    # SAVE INTERMEDIATES TO TEMPDIR    
     # creating temp file names
-    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     
     # saving to tempdir
     saveRDS(p3, file = temp_plot)
-    if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
+    if(verbose>=2){
+        cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
+    }
     saveRDS(df, file = temp_table)
-    if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
-    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
-
+    if(verbose>=2){
+        cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))
+    }
+    if(verbose>=2){
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+    }
+    
     # FLAG SCRIPT END
 
     if (verbose >= 1) {
         cat(report("\n\nCompleted:", funname, "\n\n"))
     }
+    
+    # RETURN
 
     invisible(x)
 
