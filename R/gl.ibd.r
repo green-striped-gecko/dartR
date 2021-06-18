@@ -59,8 +59,9 @@ gl.ibd <-  function(x=NULL,
     # GENERAL ERROR CHECKING
     
     verbose <- gl.check.verbosity(verbose)
+
     if (!is.null(x))  dt <- utils.check.datatype(x, verbose=0)
-    
+
     
 
  #specific error checks       
