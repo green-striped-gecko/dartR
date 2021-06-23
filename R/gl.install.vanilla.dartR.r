@@ -24,6 +24,7 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
   pkg <- "crayon"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop("Package ",pkg," needed for this function to work. Please install it.") }   
+
   err <- NULL 
   if (!is.null(flavour))
   {
