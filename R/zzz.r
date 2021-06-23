@@ -1,3 +1,13 @@
+#' Setting up the package
+#' 
+#' Setting theme, colors and verbosity
+#' @importFrom graphics axis barplot box image lines text
+#' @importFrom methods new
+#' @importFrom stats dist nobs optimize pchisq variable.names optim quantile pgamma
+
+
+zzz <- NULL  #to create a useful named help page
+
 # SET VERSION
 build <- "Jacob"
 
@@ -7,7 +17,6 @@ build <- "Jacob"
 # set by parameter 'verbose' can be one of verbose 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary;
 # 5, full report.
 
-#options("dartR_verbose"=2)
 # SET MESSAGES COLORS
 
 # - For fatal errors use “error” which will print the message in red. Example usage: stop(error(“Fatal error”))
