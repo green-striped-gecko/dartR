@@ -7,9 +7,12 @@
 gl.report.overshoot(x, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object [required]}
+\item{x}{Name of the genlight object [required].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+}
+\value{
+An unaltered genlight object
 }
 \description{
 This function checks the position of the SNP within the trimmed sequence tag and identifies those for which the SNP position is outside
@@ -18,6 +21,8 @@ the trimmed sequence tag. This can happen, rarely, when the sequence containing 
 \details{
 The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
 the sequence tag.
+ 
+ Report table is saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
 }
 \examples{
 gl.report.overshoot(testset.gl)
@@ -26,7 +31,19 @@ gl.report.overshoot(testset.gl)
 \seealso{
 \code{\link{gl.filter.overshoot}},\code{\link{gl.list.reports}},
  \code{\link{gl.print.reports}}
+
+Other filters and filter reports: 
+\code{\link{gl.report.callrate}()},
+\code{\link{gl.report.hamming}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
+\concept{filters and filter reports}

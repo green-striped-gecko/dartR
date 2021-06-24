@@ -19,15 +19,18 @@ gl.report.bases(
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
 
-\item{plot_colours}{Two color names for borders and fill of the plots [default two_colors]}
+\item{plot_colours}{List of two color names for the borders and fill of the
+plots [default two_colors].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-A list containing 
-        [[1]] $freq -- the table of base frequencies and transition/transversion ratios;
-        [[2]] $plotbases -- ggplot bargraph of base frequencies;
-        [[3]] $plottstv -- ggplot bargraph of transitions and transversions.
+A list containing:
+\enumerate{
+        \item $freq -- the table of base frequencies and transition/transversion ratios;
+        \item $plotbases -- ggplot bargraph of base frequencies;
+        \item $plottstv -- ggplot bargraph of transitions and transversions.
+        }
 }
 \description{
 This script calculates the frequencies of the four DNA nucleotide bases: adenine (A), cytosine (C), 
@@ -56,8 +59,17 @@ Examples of other themes that can be used can be consulted in \itemize{
 # Tag P/A data
   out <- gl.report.bases(testset.gs)
   out
-
+  
+}
+\seealso{
+Other reporting functions: 
+\code{\link{gl.report.diversity}()},
+\code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.parent.offspring}()},
+\code{\link{gl.report.pa}()},
+\code{\link{gl.report.sexlinked}()}
 }
 \author{
 Core dartR Team (Post to \url{https://groups.google.com/d/forum/dartr})
 }
+\concept{reporting functions}

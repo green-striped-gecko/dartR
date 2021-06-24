@@ -5,7 +5,7 @@
 #' 
 #' (a) The SNP genotypes or Tag Presence/Absence data (SilicoDArT);
 #' (b) An associated dataframe (gl@other$loc.metrics) containing the locus metrics (e.g. Call Rate, Repeatability, etc);
-#' (c) An associated dataframe (gl@other$ind.metrics) containing the individual/sample metrics (e.g. sex, latitude, longitude, etc);
+#' (c) An associated dataframe (gl@other$ind.metrics) containing the individual/sample metrics (e.g. sex, latitude (=lat), longitude(=lon), etc);
 #' (d) A specimen identity field (indNames(gl)) with the unique labels applied to each individual/sample;
 #' (e) A population assignment (popNames) for each individual/specimen;
 #' (f) Flags that indicate whether or not calculable locus metrics have been updated.
@@ -14,23 +14,27 @@
 #' and if it does not, will rectify it.
 #' 
 #' @param x -- name of the input genlight object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #' @return A genlight object that conforms to the expectations of dartR
 #' @export
 #' @author Core Development Team (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' x <- gl.compliance.check(testset.gl)
 
-gl.compliance.check <- function (x, verbose=NULL) {
+gl.compliance.check <- function (x,
+                                 verbose=NULL) {
 
-# TRAP COMMAND, SET VERSION
+  # TRAP COMMAND
   
   funname <- match.call()[[1]]
-  build <- "Jacob"
   
-# SET VERBOSITY
+  # SET VERBOSITY
   
-verbose <- utils.check.verbosity(verbose)
+  verbose <- gl.check.verbosity(verbose)
+  
+  # CHECKS DATATYPE 
+  
+  datatype <- utils.check.datatype(x)
   
 # FLAG SCRIPT START
   
@@ -42,15 +46,11 @@ verbose <- utils.check.verbosity(verbose)
     }
   }
 
- # STANDARD ERROR CHECKING
-  
-   utils.check.gl(x)
-
 # DO THE JOB
   
   # Check that the data exist, and that they are restricted to the appropriate values
   
-  if (data.type == "SNP"){
+  if (datatype == "SNP"){
     mat <- as.matrix(x)
     scores <- c(0,1,2,NA)
     if (verbose >= 2){cat("  Checking coding of SNPs\n")}
@@ -121,15 +121,15 @@ verbose <- utils.check.verbosity(verbose)
   }
   
   #check if coordinates are in the right place and not mispelt 
-  if (!is.null(x@other$latlon)) x@other$latlong <- x@other$latlon
+  if (!is.null(x@other$latlong)) x@other$latlon <- x@other$latlong
   
-  if (!is.null(x@other$latlong)) { 
-    if (!is.null(x@other$latlong$long)) x@other$latlong$lon <- x@other$latlong$long
+  if (!is.null(x@other$latlon)) { 
+    if (!is.null(x@other$latlon$long)) x@other$latlon$lon <- x@other$latlon$long
     }
   #remove misspelt columns if they exist...
-  x@other$latlon <- NULL
-  x@other$latlong$long <- NULL
-  if (verbose>=2) cat("Spelling of coordinates checked and changed if necessary\n")
+  x@other$latlong <- NULL
+  x@other$latlon$long <- NULL
+  if (verbose>=2) cat("Spelling of coordinates checked and changed if necessary to lat/lon\n")
   
   
   # ADD TO HISTORY

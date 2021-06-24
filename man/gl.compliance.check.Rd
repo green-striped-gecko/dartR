@@ -9,7 +9,7 @@ gl.compliance.check(x, verbose = NULL)
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
 A genlight object that conforms to the expectations of dartR
@@ -21,7 +21,7 @@ correctly. The genlight object comprises
 \details{
 (a) The SNP genotypes or Tag Presence/Absence data (SilicoDArT);
 (b) An associated dataframe (gl@other$loc.metrics) containing the locus metrics (e.g. Call Rate, Repeatability, etc);
-(c) An associated dataframe (gl@other$ind.metrics) containing the individual/sample metrics (e.g. sex, latitude, longitude, etc);
+(c) An associated dataframe (gl@other$ind.metrics) containing the individual/sample metrics (e.g. sex, latitude (=lat), longitude(=lon), etc);
 (d) A specimen identity field (indNames(gl)) with the unique labels applied to each individual/sample;
 (e) A population assignment (popNames) for each individual/specimen;
 (f) Flags that indicate whether or not calculable locus metrics have been updated.
@@ -33,5 +33,5 @@ and if it does not, will rectify it.
 x <- gl.compliance.check(testset.gl)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Core Development Team (Post to \url{https://groups.google.com/d/forum/dartr})
 }

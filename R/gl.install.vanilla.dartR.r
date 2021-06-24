@@ -24,13 +24,8 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
   pkg <- "crayon"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop("Package ",pkg," needed for this function to work. Please install it.") }   
-  err <- NULL
-  report <- crayon::green
-  warn <- crayon::red
-  note <- crayon::cyan
-  code <- crayon::blue
-  important <- crayon::cyan$bold
-  
+
+  err <- NULL 
   if (!is.null(flavour))
   {
     if (flavour=="CRAN"){
@@ -47,7 +42,7 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
     }
     if (substr(flavour,1,3)=="dev"){
       detach("package:dartR", unload=TRUE)
-      if (verbose) message(report("Installing dartR from github (dev)"))
+      if (verbose) message(important("Installing dartR from github (dev)"))
       devtools::install_github("green-striped-gecko/dartR", ref=flavour, dependencies = TRUE)
       
     }
@@ -76,7 +71,7 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
     if (verbose) message(code("update.packages()"))  
     if (verbose) message(report(paste("\nYou have installed dartR",packageVersion("dartR"))))
 
-    if (verbose) message(note("\nHave fun using Vanilla dartR!\n"))    
+    if (verbose) message(report("\nHave fun using Vanilla dartR!\n"))    
     
     
   } else  if(length(toinstall)>0)  #package installed but not available
@@ -90,7 +85,7 @@ gl.install.vanilla.dartR <- function(flavour=NULL, verbose=TRUE)
     if (verbose) message(code("update.packages()"))  
     
     if (verbose) message(report(paste("You have installed dartR:",packageVersion("dartR"))))
-    if (verbose) message(note("\nHave fun using Vanilla dartR!\n"))    
+    if (verbose) message(report("\nHave fun using Vanilla dartR!\n"))    
   }
   
   if (verbose & is.null(err) & !is.null(flavour)) {

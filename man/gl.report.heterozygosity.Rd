@@ -8,6 +8,7 @@ gl.report.heterozygosity(
   x,
   method = "pop",
   n.invariant = 0,
+  plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours_pop = discrete_palette,
   plot_colours_ind = two_colors,
@@ -21,17 +22,18 @@ gl.report.heterozygosity(
 
 \item{n.invariant}{An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]}
 
+\item{plot}{Whether produce a plot of the results [default TRUE].}
+
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours_pop}{A color palette for population plots [default discrete_palette].}
 
 \item{plot_colours_ind}{List of two color names for the borders and fill of the plot by individual [default two_colors].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-Returns a dataframe containing population labels, heterozygosities and sample sizes
+A dataframe containing population labels, heterozygosities and sample sizes
 }
 \description{
 Calculates the observed and expected heterozygosities for each population
@@ -64,13 +66,15 @@ parameter to standardize your estimates of heterozygosity.
 \strong{ Function's output }
 Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
 
+ Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
  }
 }
 \examples{
-df<- gl.report.heterozygosity(testset.gl)
+df <- gl.report.heterozygosity(testset.gl)
 df <- gl.report.heterozygosity(testset.gl,method='ind')
 
 }
@@ -80,7 +84,15 @@ Nei, M. and R. K. Chesser (1983). 'Estimation of fixation indices and gene diver
 \seealso{
 \code{\link{gl.filter.heterozygosity}},\code{\link{gl.list.reports}},
  \code{\link{gl.print.reports}}
+
+Other reporting functions: 
+\code{\link{gl.report.bases}()},
+\code{\link{gl.report.diversity}()},
+\code{\link{gl.report.parent.offspring}()},
+\code{\link{gl.report.pa}()},
+\code{\link{gl.report.sexlinked}()}
 }
 \author{
 Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
 }
+\concept{reporting functions}
