@@ -70,6 +70,7 @@ gl.report.rdepth <- function(x,
   # TRAP COMMAND
   
   funname <- match.call()[[1]]
+  build <- "Jackson"
   
   # SET VERBOSITY
   
@@ -81,13 +82,13 @@ gl.report.rdepth <- function(x,
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
-  if (all(x@ploidy == 1)){
+  if (datatype=="SilicoDArT"){
     if(!is.null(x@other$loc.metrics$AvgReadDepth)){
       rdepth <- x@other$loc.metrics$AvgReadDepth
     } else {
       stop(error("Fatal Error: Read depth not included among the locus metrics"))
     }  
-  } else if (all(x@ploidy == 2)){
+  } else if (datatype=="SNP"){
     if(!is.null(x@other$loc.metrics$rdepth)){
       rdepth <- x@other$loc.metrics$rdepth
     } else {
@@ -109,7 +110,7 @@ gl.report.rdepth <- function(x,
   # DO THE JOB
   
   # get title for plots
-  if (all(x@ploidy==2)){
+  if (datatype=="SNP"){
     title <- paste0("SNP data (DArTSeq)\nRead Depth by locus")
   } else {
     title <- paste0("Fragment P/A data (SilicoDArT)\nRead Depth by locus")
