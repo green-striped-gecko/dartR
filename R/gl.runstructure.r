@@ -35,7 +35,7 @@
 #' sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
 #' }
 #' @import patchwork
-###@importFrom strataG genind2gtypes structureRun
+#' @importFrom strataG genind2gtypes structureRun
 #'
 #' @export
 #' @seealso \link[strataG]{structureRun}
