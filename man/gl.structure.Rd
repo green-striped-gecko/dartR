@@ -48,9 +48,9 @@ To make use of this function you need to download STRUCTURE for you system
 }
 \examples{
 \dontrun{
-#only the first 300 loci
+#only the first 100 loci
 bc <- bandicoot.gl[,1:100]
-sr <- gl.runstructure(bc, k.range = 2:4, num.k.rep = 3, exec = "./structure.exe")
+sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
 }
 }
 \references{
