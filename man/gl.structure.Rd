@@ -28,21 +28,30 @@ gl.runstructure(
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-an structure.result list output. Each list entry is a single structure run output (there are k.range * num.k.rep number of runs). For example the summary output of the first run can be accessed via \code{sr[[1]]$summary} or the q-matrix of the third run via \code{sr[[3]]$q.mat}. To conveniently summarise the outputs across runs (using evanno and clumpp) you need to run gl.analysestructure on the returned sr object.
+an structure.result list output. Each list entry is a single structure
+run output (there are k.range * num.k.rep number of runs). For example the
+summary output of the first run can be accessed via \code{sr[[1]]$summary} 
+or the q-matrix of the third run via \code{sr[[3]]$q.mat}. To conveniently
+summarise the outputs across runs (using evanno and clumpp) you need to run
+gl.analysestructure on the returned sr object.
 }
 \description{
 This function takes a genlight object and runs a STRUCTURE analysis based on functions from \code{strataG}
 }
 \details{
-The function is basically a convenient wrapper around the beautiful strataG function \code{structureRun} (Archer et al. 2016). For a detailed description please refer to this package (see references below).
-To make use of this function you need to download STRUCTURE for you system (\bold{non GUI version}) from here \url{https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html}
+The function is basically a convenient wrapper around the beautiful
+strataG function \code{structureRun} (Archer et al. 2016). For a detailed
+description please refer to this package (see references below).
+To make use of this function you need to download STRUCTURE for you system
+(\bold{non GUI version}) from here 
+\href{https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
 }
 \examples{
-
+\dontrun{
 #only the first 300 loci
 bc <- bandicoot.gl[,1:100]
-sr <- gl.runstructure(bc, k.range = 2:4, num.k.rep = 3, exec = "d:/bernd/Projects/Cat_Possums/structure/structure.exe", noadmix=TRUE, burnin=100, numreps=200, file.delete=TRUE)
-
+sr <- gl.runstructure(bc, k.range = 2:4, num.k.rep = 3, exec = "./structure.exe")
+}
 }
 \references{
 Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
