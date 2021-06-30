@@ -9,6 +9,7 @@ gl.report.parent.offspring(
   min.rdepth = 12,
   min.reproducibility = 1,
   range = 1.5,
+  plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   verbose = NULL
@@ -22,6 +23,8 @@ gl.report.parent.offspring(
 \item{min.reproducibility}{Minimum reproducibility to include in analysis [default = 1]}
 
 \item{range}{Specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]}
+
+\item{plot}{Creates a plot that shows the sex linked markers [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 

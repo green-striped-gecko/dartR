@@ -121,7 +121,7 @@
    }
 
    if (threshold < 0 | threshold > 1){
-     cat(wae=rn("    Warning: threshold must be an integer between 0 and 1, set to 0.95\n"))
+     cat(warn("    Warning: threshold must be an integer between 0 and 1, set to 0.95\n"))
      threshold <- 0.95
    }
 

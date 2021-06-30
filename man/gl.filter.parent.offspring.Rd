@@ -9,6 +9,7 @@ gl.filter.parent.offspring(
   min.rdepth = 12,
   min.reproducibility = 1,
   range = 1.5,
+  method = "best",
   rm.monomorphs = FALSE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
@@ -23,6 +24,8 @@ gl.filter.parent.offspring(
 \item{min.reproducibility}{Minimum reproducibility to include in analysis [default = 1]}
 
 \item{range}{Specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]}
+
+\item{method}{Method of selecting the individual to retain from each pair of parent offspring relationship, "best" (based on CallRate) or "random" [default "best"]}
 
 \item{rm.monomorphs}{If TRUE, remove monomorphic loci after filtering individuals [default FALSE].}
 

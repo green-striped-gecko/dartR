@@ -15,6 +15,7 @@
 #' @param min.rdepth Minimum read depth to include in analysis [default = 12]
 #' @param min.reproducibility Minimum reproducibility to include in analysis [default = 1]
 #' @param range Specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]
+#' @param plot Creates a plot that shows the sex linked markers [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the
 #'  plots [default two_colors].
@@ -86,6 +87,7 @@ gl.report.parent.offspring <- function(x,
                                        min.rdepth = 12,
                                        min.reproducibility = 1,
                                        range = 1.5,
+                                       plot = TRUE,
                                        plot_theme = theme_dartR(), 
                                        plot_colours = two_colors, 
                                        verbose = NULL) {
@@ -208,7 +210,6 @@ gl.report.parent.offspring <- function(x,
   outliers <- outliers[complete.cases(outliers),]
       }
     
-
 # Extract the quantile threshold
   iqr <- stats::IQR(counts,na.rm = TRUE)
   qth <- quantile(counts,0.25,na.rm=TRUE)
