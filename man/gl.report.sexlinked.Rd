@@ -7,9 +7,9 @@
 gl.report.sexlinked(
   x,
   sex = NULL,
-  t.het = 0,
-  t.hom = 0,
-  t.pres = 0,
+  t.het = 0.25,
+  t.hom = 0.25,
+  t.pres = 0.25,
   plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = three_colors,
@@ -28,7 +28,8 @@ gl.report.sexlinked(
 
 \item{t.pres}{Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0].}
 
-\item{plot}{Whether produce a plot of the results [default TRUE].}
+\item{plot}{Creates a plot that shows the heterozygosity of males and females at each loci.
+be regarded as consistent with a sex specific marker [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
@@ -66,6 +67,7 @@ for SNP data or percentage of present/absent in the case of SilicoDArT data.
 }
 \examples{
 out <- gl.report.sexlinked(testset.gl)
+out <- gl.report.sexlinked(testset.gs)
 
 }
 \seealso{

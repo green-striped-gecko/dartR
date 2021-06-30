@@ -19,7 +19,7 @@ gl.filter.heterozygosity(x, t.upper = 0.7, t.lower = 0, verbose = NULL)
 the filtered genlight object
 }
 \description{
-Calculates the observed heterozyosity for each individual in a genlight object and filters individuals based on specified threshold values.
+Calculates the observed heterozygosity for each individual in a genlight object and filters individuals based on specified threshold values.
 Use gl.report.heterozygosity to determine the appropriate thresholds.
 }
 \examples{
