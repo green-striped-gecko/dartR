@@ -23,29 +23,35 @@
 #' @details 
 #' If two individuals are in a parent offspring relationship, the true
 #' number of pedigree inconsistent loci should be zero, but SNP calling is not 
-#' infallible. Some loci will be mis-called. The problem thus becomes one of determining
+#' infallible. Some loci will be miss-called. The problem thus becomes one of determining
 #' if the two focal individuals have a count of pedigree inconsistent loci less than
 #' would be expected of typical unrelated individuals. There are some quite sophisticated
 #' software packages available to formally apply likelihoods to the decision, but we
 #' use a simple outlier comparison.
 #' 
-#' To reduce the frequency of mis-calls, and so emphasise the difference between true
+#' To reduce the frequency of miss-calls, and so emphasize the difference between true
 #' parent-offspring pairs and unrelated pairs, the data can be filtered on read depth.
 #' Typically minimum read depth is set to 5x, but you can examine the distribution
 #' of read depths with the function \code{\link{gl.report.rdepth}} and push this up 
-#' with an acceptable loss
-#' of loci. 12x might be a good minimum for this particular analysis. It is sensible
-#' also to push the minimum reproducibility up to 1, if that does not result in an
-#' unacceptable loss of loci. Reproducibility is stored in the slot 
-#' \code{@other$loc.metrics$RepAvg} and is defined as the proportion of technical replicate 
-#' assay pairs for which the marker score is consistent. You can examine the distribution
-#' of reproducibility with the function \code{\link{gl.report.reproducibility}}.
+#' with an acceptable loss of loci. 12x might be a good minimum for this particular
+#' analysis. It is sensible also to push the minimum reproducibility up to 1, if 
+#' that does not result in an unacceptable loss of loci. Reproducibility is stored 
+#' in the slot \code{@other$loc.metrics$RepAvg} and is defined as the proportion 
+#' of technical replicate assay pairs for which the marker score is consistent. 
+#' You can examine the distribution of reproducibility with the function 
+#' \code{\link{gl.report.reproducibility}}.
 #' 
 #' Note that the null expectation is not well defined, and the power reduced, if the
 #' population from which the putative parent-offspring pairs are drawn contains 
 #' many sibs. Note also that if an individual has been genotyped twice in the dataset, 
 #' the replicate pair will be assessed by this script as being in a parent-offspring 
 #' relationship.
+#' 
+#' The function \code{\link{gl.filter.parent.offspring}} will filter out those 
+#' individuals in a parent offspring relationship.  
+#' 
+#' Note that if your dataset does not contain RepAvg or rdepth among the locus metrics,
+#' the filters for reproducibility and read depth are no used. 
 #' 
 #'\strong{ Function's output }
 #'
@@ -64,7 +70,8 @@
 #' out <- gl.report.parent.offspring(testset.gl[1:10])
 #'
 #' @seealso \code{\link{gl.list.reports}}, \code{\link{gl.report.rdepth}} ,
-#'  \code{\link{gl.print.reports}},\code{\link{gl.report.reproducibility}}
+#'  \code{\link{gl.print.reports}},\code{\link{gl.report.reproducibility}},
+#'  \code{\link{gl.filter.parent.offspring}}
 #'  
 #' @family reporting functions
 #'
@@ -112,35 +119,40 @@ gl.report.parent.offspring <- function(x,
   
 # Generate null expectation for pedigree inconsistency, and outliers
   if (verbose >= 2){
-    cat(report("  Generating null expectation for distribution of counts of pedigree incompatability\n"))
+    cat(report("  Generating null expectation for distribution of counts of pedigree incompatibility\n"))
   } 
   # Assign individuals as populations
   pop(x) <- x$ind.names
   # Filter stringently on reproducibility to minimize miscalls
+  if (is.null(x@other$loc.metrics$RepAvg)){
+      cat(warn("  Dataset does not include RepAvg among the locus metrics, therefore the reproducibility filter was not used\n"))
+    }else{
   x <- gl.filter.reproducibility(x,threshold=min.reproducibility,verbose=0)
+  } 
   # Filter stringently on read depth, to further minimize miscalls
-  x <- gl.filter.rdepth(x,lower=min.rdepth,verbose=0)
-  # Filter on call rate to reduce computation time
-  x <- gl.filter.callrate(x,threshold = 0.95,plot=FALSE,verbose=0)
+  if (is.null(x@other$loc.metrics$rdepth)){
+    cat(warn("  Dataset does not include rdepth among the locus metrics, therefore the read depth filter was not used\n"))
+  }else{
+    x <- gl.filter.rdepth(x,lower=min.rdepth,verbose=0)
+  } 
+ 
   # Preliminaries before for loops
-  nL <- nLoc(x)
-  nP <- nPop(x)
-  pN <- popNames(x)
-  count <- array(NA,dim=c(nP,nP))
-  row.names(count) <- popNames(x)
-  colnames(count) <- popNames(x)
-  # For pairs of individuals
-  for (i in 1:(nP-1)){
-  for (j in (i+1):nP){
-    pair <- gl.keep.pop(x,pop.list=c(pN[i],pN[j]),verbose=0)
-    mat <- as.matrix(pair)
-    vect <- mat[1,]*10+mat[2,]
+
+  x2 <- as.matrix(x)
+  split_vectors <- lapply(seq_len(nrow(x2)), function(i) x2[i,])
+  names(split_vectors) <-  popNames(x)
+
+  fun <- function(x,y){
+    vect <- (x*10)+y
     homalts <- sum(vect==2 | vect==20, na.rm=T)
-    count[i,j] <- homalts
-  }
-  }
-# Remove NAs
-  counts <- count[!is.na(count)]
+      }
+  
+  count <- sapply(split_vectors,function(vect1){
+    sapply(split_vectors,function(vect2){
+             fun(vect1,vect2)
+           })})
+
+  counts <- count[lower.tri(count, diag = FALSE)]
 
   # Prepare for plotting
   
@@ -188,8 +200,15 @@ gl.report.parent.offspring <- function(x,
     outliers$zscore[i] <- round(zscore,2)
     outliers$p[i] <- round(pnorm(mean=mean(count,na.rm=TRUE),sd=sd(count,na.rm=TRUE),q=outliers$zscore[i]),4)
   }
-    }
+  # ordering by number of outliers
+  outliers <- outliers[order(outliers,decreasing = T),]
+  # removing duplicated values
+  outliers <- outliers[!duplicated(outliers),]
+  # removing NAs
+  outliers <- outliers[complete.cases(outliers),]
+      }
     
+
 # Extract the quantile threshold
   iqr <- stats::IQR(counts,na.rm = TRUE)
   qth <- quantile(counts,0.25,na.rm=TRUE)
