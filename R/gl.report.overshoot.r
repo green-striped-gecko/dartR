@@ -11,7 +11,7 @@
 #' @details The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
 #' the sequence tag.
 #'  
-#'  Report table is saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+#' Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary directory.
 #' 
 #' @return An unaltered genlight object
 #' 
@@ -20,8 +20,7 @@
 #' @examples
 #' gl.report.overshoot(testset.gl)
 #' 
-#' @seealso \code{\link{gl.filter.overshoot}},\code{\link{gl.list.reports}},
-#'  \code{\link{gl.print.reports}}
+#' @seealso \code{\link{gl.filter.overshoot}}
 #'  
 #' @family filters and filter reports
 #'  
