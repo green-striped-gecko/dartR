@@ -12,7 +12,7 @@
 #' @details 
 #' This function checks whether the input object is a genlight object and sets the datatype to "SNP" or "SilicoDArT" as appropriate.  
 #' 
-#' @return datatype, "SNP" for SNP data or  "SilicoDArT" for P/A data
+#' @return datatype, "SNP" for SNP data or  "SilicoDArT" for P/A data, or class(x)[1]
 #' 
 #' @examples
 #' utils.check.datatype(testset.gl)
@@ -27,8 +27,9 @@ utils.check.datatype <- function(x,
   
   #### CHECK FOR GENLIGHT OBJECT ####
   if (!is(x, "genlight")) {
-    stop(error("Fatal Error: genlight object required!"))
-  }
+    cat(warn("  Warning: genlight object expected! Found",class(x)[1],".\n"))
+    datatype <- class(x)[1]
+  } else {
   
   #### CHECK AND REPORT DATA TYPE ####
   if (all(x@ploidy == 1)){
@@ -43,6 +44,7 @@ utils.check.datatype <- function(x,
     datatype <- "SNP"
   } else {
     stop (error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
+  }
   }
   
   invisible(datatype)
