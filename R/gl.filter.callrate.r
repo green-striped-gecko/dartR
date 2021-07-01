@@ -155,7 +155,7 @@
         title <- "Call Rate by locus\n[pre-filtering, Tag presence/absence dataset]"
       }  
       
-    
+      callrate <- NULL
       
       if (plot) {
         # prefiltering histogram 
@@ -334,6 +334,8 @@
   
       if (plot) {
         
+        callrate <- NULL
+        
         # prefiltering histogram 
         callrate_pre <- data.frame(hold2)
         colnames(callrate_pre) <- "callrate"
@@ -387,6 +389,8 @@
     }  
     
     if (plot) {
+      
+      callrate <- NULL
       
       # prefiltering histogram 
       callrate_pre <- data.frame(hold@other$loc.metrics$CallRate)
