@@ -33,11 +33,7 @@
 #'  thresholds rate are provided. Output also includes a boxplot and a
 #'  histogram to guide in the selection of a threshold for filtering on callrate.
 #'
-#'  Plots and table are saved to the temporal directory (tempdir) and can be 
-#'  accessed with the function \code{\link{gl.print.reports}} and listed with 
-#'  the function \code{\link{gl.list.reports}}. Note that they can be accessed 
-#'  only in the current R session because tempdir is cleared each time that the
-#'   R session is closed.
+#' Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary directory.
 #'   
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
