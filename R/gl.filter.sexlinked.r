@@ -14,9 +14,9 @@
 #' @param sex Factor that defines the sex of individuals. See explanation in details [default NULL].
 #' @param filter Either "keep" to keep sex linked markers only or "drop" to drop sex linked markers [required].
 #' @param read.depth Additional filter option to keep only loci above a certain read.depth. Default to 0, which means read.depth is not taken into account [default 0].
-#' @param t.het Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0.25].
-#' @param t.hom Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0.25].
-#' @param t.pres Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0.25].
+#' @param t.het Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0.1].
+#' @param t.hom Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0.1].
+#' @param t.pres Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0.1].
 #' @param plot Creates a plot that shows the heterozygosity of males and females at each loci.
 #' be regarded as consistent with a sex specific marker [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
@@ -46,8 +46,8 @@
 #' @author Arthur Georges, Bernd Gruber & Floriaan Devloo-Delva (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
-#' out <- gl.filter.sexlinked(testset.gl, filter="keep")
-#' out <- gl.filter.sexlinked(testset.gs, filter="keep")
+#' out <- gl.filter.sexlinked(testset.gl, filter="drop")
+#' out <- gl.filter.sexlinked(testset.gs, filter="drop")
 #' 
 #' @family filter functions
 #'
@@ -58,9 +58,9 @@ gl.filter.sexlinked <- function(x,
                                 sex = NULL,
                                 filter = NULL, 
                                 read.depth = 0,
-                                t.het = 0.25, 
-                                t.hom = 0.25, 
-                                t.pres = 0.25, 
+                                t.het = 0.1, 
+                                t.hom = 0.1, 
+                                t.pres = 0.1, 
                                 plot = TRUE,
                                 plot_theme = theme_dartR(), 
                                 plot_colours = three_colors, 
@@ -177,6 +177,10 @@ gl.filter.sexlinked <- function(x,
 
     if(sum(indexxy,na.rm = T)>0){
       xy <- cbind(locnr =which(indexxy==TRUE), df[indexxy,])
+      # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity is NaN. these cases are removed
+      xy$fhet <- xy$F1/(xy$F0+xy$F1)
+      xy$mhet <- xy$M1/(xy$M0+xy$M1)
+      xy <- xy[complete.cases(xy),]
     }
     
     if(sum(indexxy,na.rm = T)==0){
@@ -191,6 +195,10 @@ gl.filter.sexlinked <- function(x,
 
     if(sum(indexzw,na.rm = T)>0){
       zw <- cbind(locnr =which(indexzw==TRUE),df[indexzw,])
+      # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity is NaN. these cases are removed
+      zw$fhet <- zw$F1/(zw$F0+zw$F1)
+      zw$mhet <- zw$M1/(zw$M0+zw$M1)
+      zw <- zw[complete.cases(zw),]
     }
     
     if(sum(indexzw,na.rm = T)==0){
@@ -215,7 +223,9 @@ gl.filter.sexlinked <- function(x,
         cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
         cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
         cat("     - M1 is the number of heterozygous loci in males\n")
-        cat("     - M2 is the number of homozygous loci for the alternative allele in males\n\n")
+        cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
+        cat("     - fhet is heterozygosity in females\n")
+        cat("     - mhet is heterozygosity in males\n\n")
         print(zw)
         cat(important("  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"))
       }
@@ -234,7 +244,9 @@ gl.filter.sexlinked <- function(x,
         cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
         cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
         cat("     - M1 is the number of heterozygous loci in males\n")
-        cat("     - M2 is the number of homozygous loci for the alternative allele in males\n\n")
+        cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
+        cat("     - fhet is heterozygosity in females\n")
+        cat("     - mhet is heterozygosity in males\n\n")
         print(xy)
         cat(important("  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"))
       }
@@ -253,9 +265,9 @@ gl.filter.sexlinked <- function(x,
       
       
       gg <- ggplot()+
-        geom_rect(aes(xmin=0, xmax=t.het, ymin=1-t.het, ymax=1), fill=three_colors[3],alpha=1/2,color="black")+
+        geom_rect(aes(xmin=0, xmax=t.hom, ymin=1-t.het, ymax=1), fill=three_colors[3],alpha=1/2,color="black")+
         geom_text(x=0, y=1.03, aes(label="XX/XY"))+
-        geom_rect(aes(xmin=1, xmax=1-t.het, ymin=0, ymax=t.het), fill=three_colors[3],alpha=1/2,color="black")+
+        geom_rect(aes(xmin=1, xmax=1-t.het, ymin=0, ymax=t.hom), fill=three_colors[3],alpha=1/2,color="black")+
         geom_text(x=1, y=-0.02, aes(label="ZZ/ZW"))  +
         geom_point(data =  df_no_sex_linked, aes(x=fhet, y=mhet),alpha=1/3, size=2,color=three_colors[1] )+
         geom_point(data = df_sex_linked, aes(x=fhet, y=mhet),alpha=1/3, size=3,color=three_colors[2] )+
@@ -452,7 +464,7 @@ gl.filter.sexlinked <- function(x,
   
   # RETURN
   
-  return(x)
+  invisible(x)
 }
 
 

@@ -9,9 +9,9 @@ gl.filter.sexlinked(
   sex = NULL,
   filter = NULL,
   read.depth = 0,
-  t.het = 0.25,
-  t.hom = 0.25,
-  t.pres = 0.25,
+  t.het = 0.1,
+  t.hom = 0.1,
+  t.pres = 0.1,
   plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = three_colors,
@@ -28,11 +28,11 @@ gl.filter.sexlinked(
 
 \item{read.depth}{Additional filter option to keep only loci above a certain read.depth. Default to 0, which means read.depth is not taken into account [default 0].}
 
-\item{t.het}{Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0.25].}
+\item{t.het}{Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0.1].}
 
-\item{t.hom}{Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0.25].}
+\item{t.hom}{Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0.1].}
 
-\item{t.pres}{Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0.25].}
+\item{t.pres}{Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0.1].}
 
 \item{plot}{Creates a plot that shows the heterozygosity of males and females at each loci.
 be regarded as consistent with a sex specific marker [default TRUE].}
@@ -72,8 +72,8 @@ for SNP data or percentage of present/absent in the case of SilicoDArT data.
  }
 }
 \examples{
-out <- gl.filter.sexlinked(testset.gl, filter="keep")
-out <- gl.filter.sexlinked(testset.gs, filter="keep")
+out <- gl.filter.sexlinked(testset.gl, filter="drop")
+out <- gl.filter.sexlinked(testset.gs, filter="drop")
 
 }
 \seealso{
