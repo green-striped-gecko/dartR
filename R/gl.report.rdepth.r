@@ -33,11 +33,7 @@
 #'  thresholds rate are provided. Output also includes a boxplot and a
 #'  histogram to guide in the selection of a threshold for filtering on callrate.
 #'
-#'  Plots and table are saved to the temporal directory (tempdir) and can be 
-#'  accessed with the function \code{\link{gl.print.reports}} and listed with 
-#'  the function \code{\link{gl.list.reports}}. Note that they can be accessed 
-#'  only in the current R session because tempdir is cleared each time that the
-#'   R session is closed.
+#' Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary directory.
 #'   
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -70,6 +66,7 @@ gl.report.rdepth <- function(x,
   # TRAP COMMAND
   
   funname <- match.call()[[1]]
+  build <- "Jackson"
   
   # SET VERBOSITY
   
@@ -81,13 +78,13 @@ gl.report.rdepth <- function(x,
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
-  if (all(x@ploidy == 1)){
+  if (datatype=="SilicoDArT"){
     if(!is.null(x@other$loc.metrics$AvgReadDepth)){
       rdepth <- x@other$loc.metrics$AvgReadDepth
     } else {
       stop(error("Fatal Error: Read depth not included among the locus metrics"))
     }  
-  } else if (all(x@ploidy == 2)){
+  } else if (datatype=="SNP"){
     if(!is.null(x@other$loc.metrics$rdepth)){
       rdepth <- x@other$loc.metrics$rdepth
     } else {
@@ -109,7 +106,7 @@ gl.report.rdepth <- function(x,
   # DO THE JOB
   
   # get title for plots
-  if (all(x@ploidy==2)){
+  if (datatype=="SNP"){
     title <- paste0("SNP data (DArTSeq)\nRead Depth by locus")
   } else {
     title <- paste0("Fragment P/A data (SilicoDArT)\nRead Depth by locus")
