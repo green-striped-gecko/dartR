@@ -33,6 +33,7 @@ gl.report.overshoot(testset.gl)
  \code{\link{gl.print.reports}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.callrate}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},

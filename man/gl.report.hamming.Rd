@@ -77,6 +77,7 @@ gl.report.hamming(testset.gs[,1:100])
  \code{\link{gl.print.reports}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.callrate}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.locmetric}()},
 \code{\link{gl.report.maf}()},

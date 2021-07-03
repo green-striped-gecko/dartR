@@ -70,6 +70,6 @@ Other reporting functions:
 \code{\link{gl.report.sexlinked}()}
 }
 \author{
-Core dartR Team (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
 \concept{reporting functions}
