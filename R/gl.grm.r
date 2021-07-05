@@ -9,7 +9,7 @@
 #'@return an identity by descent matrix and a heatmap plot
 #'@export
 #'@importFrom grDevices rgb2hsv col2rgb hcl
-#'@importFrom gplots heatmap.2
+#@importFrom gplots heatmap.2
 #'@references 
 #' Endelman, J. B. (2011). Ridge regression and other kernels for genomic selection with r package rrblup. The Plant Genome 4, 250.
 #' Endelman, J. B. , Jannink, J.-L. (2012). Shrinkage estimation of the realized relationship matrix. G3: Genes, Genomics, Genetics 2, 1405.

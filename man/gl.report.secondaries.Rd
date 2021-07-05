@@ -72,6 +72,7 @@ out <- gl.report.secondaries(bandicoot.gl)
  \code{\link{gl.print.reports}},\code{\link{gl.report.heterozygosity}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.callrate}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},
