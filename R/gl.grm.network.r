@@ -5,7 +5,7 @@
 #' 
 #' The threshold for relatedness to be represented as a link in the network is specified as a quantile. Those relatedness measures above the quantile are
 #' plotted as links, those below the quantile are not. Often you are looking for relatedness outliers in comparison with the overall relatedness among individuals,
-#' so a very conservative quantile is used (e.g. 0.004), but ultimately, this decsion is made as a matter of trial and error. One way to approach this trial and error
+#' so a very conservative quantile is used (e.g. 0.004), but ultimately, this decision is made as a matter of trial and error. One way to approach this trial and error
 #' is to try to achieve a sparse set of links between unrelated 'background' individuals so that the stronger links are preferentially shown.
 #' 
 #' There are several layouts from which to choose. The most popular are given as options in this script.
@@ -37,7 +37,16 @@
 
 #layout_with_kk layout_with_fr layout_with_drl graph_from_data_frame delete_edges V
 
-gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, node.label.size=0.7, node.label.color="black", alpha=0.004, title="Network based on G-matrix of genetic relatedness", verbose=3){
+gl.grm.network <- function(G, 
+                           x,
+                           method="fr", 
+                           node.size=3, 
+                           node.label=FALSE, 
+                           node.label.size=0.7, 
+                           node.label.color="black",
+                           alpha=0.004, 
+                           title="Network based on G-matrix of genetic relatedness", 
+                           verbose=3){
 
 # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "igraph"
@@ -70,6 +79,14 @@ gl.grm.network <- function(G, x, method="fr", node.size=3, node.label=FALSE, nod
       count <- count + 1
     }
   }
+  # 
+  # G[lower.tri(G)] <- NA
+  # links <- as.data.frame(as.table(G))
+  # links <- links[which(!is.na(links$Freq)),]
+  # 
+  # links <- links[which(!is.na(links$Freq) & links$Freq <1 & links$Freq>0.55),]
+  # links <- links[order(links$Freq,decreasing = T),]
+  
   
   colnames(links) <- c("from","to","weight")
   

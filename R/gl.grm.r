@@ -9,7 +9,7 @@
 #'@return an identity by descent matrix and a heatmap plot
 #'@export
 #'@importFrom grDevices rgb2hsv col2rgb hcl
-#@importFrom gplots heatmap.2
+#'@importFrom gplots heatmap.2
 #'@references 
 #' Endelman, J. B. (2011). Ridge regression and other kernels for genomic selection with r package rrblup. The Plant Genome 4, 250.
 #' Endelman, J. B. , Jannink, J.-L. (2012). Shrinkage estimation of the realized relationship matrix. G3: Genes, Genomics, Genetics 2, 1405.
@@ -96,7 +96,7 @@ gg_color_hue <- function(n) {
 
 # calculating the realized additive relationship matrix
   
-G <- rrBLUP::A.mat(as.matrix(x)-1, ...)
+ G <- rrBLUP::A.mat(as.matrix(x)-1, ...)
 
 # creating color palette for probability of identity by descent
 cool = rainbow(50, start=rgb2hsv(col2rgb('cyan'))[1], end=rgb2hsv(col2rgb('blue'))[1])
