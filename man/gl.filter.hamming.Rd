@@ -58,7 +58,6 @@ out <- gl.filter.hamming(testset.gl[,1:100], threshold=0.25, verbose=3)
  \code{\link{gl.print.reports}}
 
 Other filter functions: 
-\code{\link{gl.filter.callrate}()},
 \code{\link{gl.filter.parent.offspring}()},
 \code{\link{gl.filter.sexlinked}()}
 }

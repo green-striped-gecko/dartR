@@ -12,7 +12,7 @@ utils.check.datatype(x, verbose = NULL)
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-datatype, "SNP" for SNP data or  "SilicoDArT" for P/A data
+datatype, "SNP" for SNP data or  "SilicoDArT" for P/A data, or class(x)[1]
 }
 \description{
 Most functions require access to a genlight object, and this function checks that a genlight object has been passed,

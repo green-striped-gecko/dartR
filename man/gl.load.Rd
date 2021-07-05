@@ -2,27 +2,29 @@
 % Please edit documentation in R/gl.load.r
 \name{gl.load}
 \alias{gl.load}
-\title{Retrieves an object in compressed binary format earlier saved using gl.save.}
+\title{Load an object from compressed binary format produced by gl.save().}
 \usage{
 gl.load(file, verbose = NULL)
 }
 \arguments{
-\item{file}{-- name of the binary file from which to retrieve the object [required]}
+\item{file}{-- name of the file to receive the binary version of the object [required]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-the retrieved object
+the loaded object
 }
 \description{
 This is a wrapper for readRDS().
 }
 \details{
-The script retrieves the object from the current workspace and returns it by assignment.
+The script loads the object from the current workspace and returns the gl object.
 }
 \examples{
-gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
-gl.reloaded <- gl.load(file.path(tempdir(),"testset.rds"))
+gl <- gl.load("testset.rds"))
+}
+\seealso{
+\code{\link{gl.save}}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
