@@ -33,7 +33,7 @@
 #'         \item $plottstv -- ggplot bargraph of transitions and transversions.
 #'         }
 #'         
-#' @author Core dartR Team (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
 #' # SNP data
@@ -62,6 +62,7 @@ gl.report.bases <- function(x,
   # TRAP COMMAND
   
   funname <- match.call()[[1]]
+  build="Jackson"
   
   # SET VERBOSITY
   
@@ -71,13 +72,13 @@ gl.report.bases <- function(x,
   
   datatype <- utils.check.datatype(x)
 
-    # FUNCTION SPECIFIC ERROR CHECKING
+  # FUNCTION SPECIFIC ERROR CHECKING
 
     if (!any(names(x@other$loc.metrics) == "TrimmedSequence")) {
         stop(error("  Fatal Error: Dataset does not include variable TrimmedSequence!\n"))
     }
 
-    # FLAG SCRIPT START
+  # FLAG SCRIPT START
 
     if (verbose >= 1) {
       if (verbose == 5) {
@@ -88,7 +89,7 @@ gl.report.bases <- function(x,
       }
     }
 
-    # DO THE JOB 
+  # DO THE JOB 
     
     # Count up the number of bases, and the number of each of ATGC, and other
     if (verbose >= 2) {
@@ -223,7 +224,7 @@ gl.report.bases <- function(x,
       cat(report("\n\nCompleted:", funname, "\n\n"))
     }
     
-    # RETURN
+  # RETURN
     
     if (datatype=="SNP"){
       invisible(list(freq = out, plotbases = p1, plottstv = p2))  

@@ -1,67 +1,39 @@
-#' Retrieves an object in compressed binary format earlier saved using gl.save.
+#' Load an object from compressed binary format produced by gl.save().
 #'
 #' This is a wrapper for readRDS().
 #'
-#' The script retrieves the object from the current workspace and returns it by assignment.
+#' The script loads the object from the current workspace and returns the gl object.
 #'
-#' @param file -- name of the binary file from which to retrieve the object [required]
+#' @param file -- name of the file to receive the binary version of the object [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
-#' @return the retrieved object
+#' @return the loaded object
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
-#' gl.reloaded <- gl.load(file.path(tempdir(),"testset.rds"))
-
+#' gl <- gl.load("testset.rds"))
+#' @seealso \code{\link{gl.save}}
+#' 
 gl.load <- function(file, verbose=NULL){
 
-# TRAP COMMAND, SET VERSION
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
-  
-  if (is.null(verbose)) verbose=0
-
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-  
-# DO THE JOB
+  utils.flag.start(f=funname,build="Jackson",v=verbose)
   
   x <- readRDS(file)
   
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    if (all(x@ploidy == 1)){
-      if (verbose >= 2){cat("  Loaded Presence/Absence (SilicoDArT) data\n")}
-      data.type <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
-      if (verbose >= 2){cat("  Loaded a SNP dataset\n")}
-      data.type <- "SNP"
-    }
-  } else {
-    if (verbose >= 2){cat("  Loaded an object of Class:",class(x),"\n")}
-    data.type <- "other"
-    }
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
+  cat(report("  Loaded object of type",datatype,"from",file,"\n\n"))
   
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
     
-  return(x)
+  invisible(x)
     
 }
