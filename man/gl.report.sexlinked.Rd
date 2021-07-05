@@ -7,9 +7,9 @@
 gl.report.sexlinked(
   x,
   sex = NULL,
-  t.het = 0,
-  t.hom = 0,
-  t.pres = 0,
+  t.het = 0.1,
+  t.hom = 0.1,
+  t.pres = 0.1,
   plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = three_colors,
@@ -22,13 +22,14 @@ gl.report.sexlinked(
 
 \item{sex}{Factor that defines the sex of individuals. See explanation in details [default NULL].}
 
-\item{t.het}{Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0].}
+\item{t.het}{Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0.1].}
 
-\item{t.hom}{Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0].}
+\item{t.hom}{Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0.1].}
 
-\item{t.pres}{Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0].}
+\item{t.pres}{Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0.1].}
 
-\item{plot}{Whether produce a plot of the results [default TRUE].}
+\item{plot}{Creates a plot that shows the heterozygosity of males and females at each loci.
+be regarded as consistent with a sex specific marker [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
@@ -66,6 +67,7 @@ for SNP data or percentage of present/absent in the case of SilicoDArT data.
 }
 \examples{
 out <- gl.report.sexlinked(testset.gl)
+out <- gl.report.sexlinked(testset.gs)
 
 }
 \seealso{

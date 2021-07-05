@@ -230,7 +230,16 @@ if (is.null(paircols)) {
     if (is(x, "genlight")) cn <- pop(x) else cn = rownames(as.matrix(Dgen))
   }
   res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo), Legend=cn[c1], col2=cn[c2])
-  p1 <- ggplot(res)+geom_point(aes(Dgeo, Dgen, col=Legend), size=5)+geom_point(aes(Dgeo, Dgen, col=col2), size=2)+geom_point(aes(Dgeo, Dgen), size=2, shape=1)+guides(size = "none")+geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+ylab(Dgen_trans)+geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+xlab(Dgeo_trans)+plot_theme
+  p1 <- ggplot(res)+
+    geom_point(aes(Dgeo, Dgen, col=Legend), size=5)+
+    geom_point(aes(Dgeo, Dgen, col=col2), size=2)+
+    geom_point(aes(Dgeo, Dgen), size=2, shape=1)+
+    guides(size = "none",color=guide_legend(title="Populations"))+
+    geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+
+    ylab(Dgen_trans)+
+    geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+
+    xlab(Dgeo_trans)+
+    plot_theme
   
   }
 

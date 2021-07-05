@@ -5,7 +5,6 @@
 #' @importFrom methods new
 #' @importFrom stats dist nobs optimize pchisq variable.names optim quantile pgamma
 
-
 zzz <- NULL  #to create a useful named help page
 
 # SET VERSION
@@ -199,4 +198,3 @@ theme_dartR <- function(base_size = 11, base_family = "",
   
   packageStartupMessage(important("\n**** Have fun using dartR! ****"))
 }
-

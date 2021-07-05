@@ -101,6 +101,7 @@
     }
    
   # Suppress plotting on verbose == 0
+
    if(verbose==0){plot=FALSE}
 
    # Method
@@ -116,6 +117,7 @@
    }
 
 # DO THE JOB
+
    hold <- x
   
 # FOR METHOD BASED ON LOCUS    
@@ -177,8 +179,8 @@
       }
   }
   
-# FOR METHOD BASED ON INDIVIDUALS    
-      
+   ########### FOR METHOD BASED ON INDIVIDUAL
+   
   if ( method == "ind" ) {
     
     # Determine starting number of loci and individuals
@@ -201,7 +203,7 @@
       x2 <- x[ind.call.rate >= threshold,]
 
     # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus filtering
-   
+
     # Report individuals that are excluded on call rate
       if (any(ind.call.rate <= threshold)) {
         x3 <- x[ind.call.rate <= threshold,]
@@ -240,24 +242,29 @@
     } else { # If recursive
       
       # Recursively remove individuals
-      cat("Recursively removing individuals with call rate <",threshold,", recalculating Call Rate after deleting monomorphs, and repeating until final Call Rate is >=",threshold,"\n")
+      cat(report("Recursively removing individuals with call rate <",threshold,", recalculating Call Rate after deleting monomorphs, and repeating until final Call Rate is >=",threshold,"\n"))
       for (i in 1:10) {
         # Recalculate the callrate
         ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)
         # Extract those individuals with a call rate greater or equal to the threshold
         x2 <- x[ind.call.rate >= threshold,]
-        if (nInd(x2) == nInd(x)) {break}
+        
+        if (nInd(x2) == nInd(x)){
+          break
+          }
         
         # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus filtering
-        if (verbose > 2) {cat ("ITERATION",i,"\n  No. of individuals deleted =", (n0-nInd(x2)), "\n  No. of individuals retained =", nInd(x2),"\n")}
+        if (verbose > 2){
+          cat(report("ITERATION",i,"\n  No. of individuals deleted =", (n0-nInd(x2)), "\n  No. of individuals retained =", nInd(x2),"\n"))
+          }
         
         # Report individuals that are excluded on call rate
         if (any(ind.call.rate <= threshold)) {
           x3 <- x[ind.call.rate <= threshold,]
           if (length(x3) > 0) {
             if (verbose >= 3) {
-              cat("  List of individuals deleted (CallRate <= ",threshold,":\n")
-              cat(paste0(indNames(x3),"[",as.character(pop(x3)),"],"))
+              cat(report("  List of individuals deleted (CallRate <= ",threshold,":\n"))
+              cat(report(paste0(indNames(x3),"[",as.character(pop(x3)),"],")))
               cat("\n")
             }  
             if (mono.rm) {
@@ -311,13 +318,15 @@
         plot_theme
   }
   
-# FOR METHOD BASE ON POPULATIONS
-  
+   ########### FOR METHOD BASED ON POPULATIONS
+   
   if (method == 'pop'){
     
     if (verbose >= 2) {
+
       cat(report("  Removing loci based on Call Rate by population\n    Call Rate must be equal to or exceed threshold =",threshold,"in all populations\n"))
     }
+    
     pops <- seppop(x) 
     ll <- lapply(pops, function(x) locNames(gl.filter.callrate(x, method="loc", threshold=threshold, verbose=0)))
     locall <- Reduce(intersect, ll)
@@ -325,7 +334,8 @@
     x <- x[ , locall]
     x@other$loc.metrics <- x@other$loc.metrics[locall,]
     
-    x <- utils.recalc.callrate(x,verbose=0)
+    x <- utils.recalc.callrate(x,verbose = 0)
+
 
     # Plot a histogram of Call Rate
     
@@ -415,6 +425,25 @@
        }   
      }
    }
+   
+   # PRINTING OUTPUTS
+   # using package patchwork
+   p3 <- (p1/p2) 
+   print(p3)
+
+   # SAVE INTERMEDIATES TO TEMPDIR             
+   # creating temp file names
+   temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+
+   # saving to tempdir
+   saveRDS(p3, file = temp_plot)
+   if(verbose>=2){
+     cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
+   }
+
+   if(verbose>=2){
+     cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+   }
 
   # Recalculate Call Rate to be safe
       x <- utils.recalc.callrate(x,verbose=0)
@@ -435,11 +464,13 @@
    nh <- length(x2@other$history)
    x2@other$history[[nh + 1]] <- match.call()      
    
+
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat(report("\nCompleted:",funname,"\n"))
   }
+
 
    invisible(x2)
  }

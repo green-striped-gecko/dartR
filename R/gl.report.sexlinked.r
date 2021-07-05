@@ -12,10 +12,11 @@
 #' @param x Name of the genlight object containing the SNP or presence/absence
 #'  (SilicoDArT) data [required].
 #' @param sex Factor that defines the sex of individuals. See explanation in details [default NULL].
-#' @param t.het Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0].
-#' @param t.hom Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0].
-#' @param t.pres Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0].
-#' @param plot Whether produce a plot of the results [default TRUE].
+#' @param t.het Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0.1].
+#' @param t.hom Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0.1].
+#' @param t.pres Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0.1].
+#' @param plot Creates a plot that shows the heterozygosity of males and females at each loci.
+#' be regarded as consistent with a sex specific marker [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of three color names for the not sex-linked loci, for the sex-linked loci and for the area in which sex-linked loci appear [default three_colors].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].
@@ -44,6 +45,7 @@
 #'
 #' @examples
 #' out <- gl.report.sexlinked(testset.gl)
+#' out <- gl.report.sexlinked(testset.gs)
 #'
 #' @family reporting functions
 #'
@@ -52,9 +54,9 @@
 
 gl.report.sexlinked <- function(x,
                                 sex = NULL, 
-                                t.het = 0, 
-                                t.hom = 0,
-                                t.pres = 0,
+                                t.het = 0.1, 
+                                t.hom = 0.1,
+                                t.pres = 0.1,
                                 plot = TRUE,
                                 plot_theme = theme_dartR(), 
                                 plot_colours = three_colors, 
@@ -134,6 +136,7 @@ gl.report.sexlinked <- function(x,
     }
     dff <- data.frame(f)
     row.names(dff) <- locNames(x)
+    # genotypes 0 for homozygous for reference allele is in F0, 1 for heterozygous is in F1 and 2 for homozygous for alternative allele is in F2
     colnames(dff) <- c("F0","F1","F2")
 
 # Extract the data for the males
@@ -149,6 +152,7 @@ gl.report.sexlinked <- function(x,
   }
   dfm <- data.frame(m)
   row.names(dfm) <- locNames(x)
+  # genotypes 0 for homozygous for reference allele is in M0, 1 for heterozygous is in M1 and 2 for homozygous for alternative allele is in M2
   colnames(dfm) <- c("M0","M1","M2")
 
 # Combine the two files
@@ -163,12 +167,40 @@ gl.report.sexlinked <- function(x,
   
   # Pull loci that are 100% homozygous for females and 100% heterozygous for males
   indexxy <- ((df$F0/(sumf)>=(1-t.hom) | df$F2/(sumf)>=(1-t.hom)) & df$M1/(summ)>=(1-t.het))
-  xy <- cbind(locnr =which(indexxy==TRUE), df[indexxy,])
+  # when all loci are homozygous for the reference allele e.g. df$F0/(sumf), the 
+  # division is NaN. So, all the NaN's are set as TRUE
+  indexxy[is.na(indexxy)] <- TRUE
+
+  if(sum(indexxy,na.rm = T)>0){
+    xy <- cbind(locnr =which(indexxy==TRUE), df[indexxy,])
+    # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity is NaN. these cases are removed
+    xy$fhet <- xy$F1/(xy$F0+xy$F1)
+    xy$mhet <- xy$M1/(xy$M0+xy$M1)
+    xy <- xy[complete.cases(xy),]
+  }
+  
+  if(sum(indexxy,na.rm = T)==0){
+    xy <- data.frame()
+  }
  
   # Pull loci that are 100% homozygous for males and 100% heterozygous for females
   indexzw <- ((df$M0/(summ)>=(1-t.hom) | df$M2/(summ)>=(1-t.hom)) & df$F1/(sumf)>=(1-t.het))
-  zw <- cbind(locnr =which(indexzw==TRUE),df[indexzw,])
- 
+  # when all loci are homozygous for the reference allele e.g. df$M0/(summ),
+  # the division is NaN. So all the NAN's are set as TRUE
+  indexzw[is.na(indexzw)] <- TRUE
+
+  if(sum(indexzw,na.rm = T)>0){
+    zw <- cbind(locnr =which(indexzw==TRUE),df[indexzw,])
+    # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity is NaN. these cases are removed
+    zw$fhet <- zw$F1/(zw$F0+zw$F1)
+    zw$mhet <- zw$M1/(zw$M0+zw$M1)
+    zw <- zw[complete.cases(zw),]
+  }
+  
+  if(sum(indexzw,na.rm = T)==0){
+    zw <- data.frame()
+  }
+
   if(verbose>0) {
     cat("Number of females:",sum(sex=="F"),"\n")
     cat("Number of males:",sum(sex=="M"),"\n")
@@ -178,12 +210,20 @@ gl.report.sexlinked <- function(x,
     cat(important("  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n"))
       } else {
   if(verbose>0){
-    cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n")
-    cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n"))
-    cat(paste("    for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
-    cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternative\n\n")
+    cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n\n")
+    cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (ZW) is",t.hom,"\n"))
+    cat(paste("    Threshold proportion for heterozygotes in the homozygotic sex (ZZ) is",t.het,"\n\n"))
+    cat("     - locnr is the location of the locus in the input genlight object\n")
+    cat("     - F0 is the number of homozygous loci for the reference allele in females\n")
+    cat("     - F1 is the number of heterozygous loci in females\n")
+    cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
+    cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
+    cat("     - M1 is the number of heterozygous loci in males\n")
+    cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
+    cat("     - fhet is heterozygosity in females\n")
+    cat("     - mhet is heterozygosity in males\n\n")
     print(zw)
-    cat(important("  Note: The most reliable putative markers will have read depth of 10 or more.\n\n"))
+    cat(important("  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"))
   } 
 }
   
@@ -191,13 +231,21 @@ if (nrow(xy) == 0 & verbose>0 ){
   cat(important("  No sex linked markers consistent with male heterogamety (XX/XY)\n"))
 } else {
   if(verbose>0){
-    cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n")
-    cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,"\n"))
-    cat(paste("    for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
-    cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternative\n\n")
+    cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n\n")
+    cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (XY) is",t.hom,"\n"))
+    cat(paste("    Threshold proportion for heterozygotes in the homozygotic sex (XX) is",t.het,"\n\n"))
+    cat("     - locnr is the location of the locus in the input genlight object\n")
+    cat("     - F0 is the number of homozygous loci for the reference allele in females\n")
+    cat("     - F1 is the number of heterozygous loci in females\n")
+    cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
+    cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
+    cat("     - M1 is the number of heterozygous loci in males\n")
+    cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
+    cat("     - fhet is heterozygosity in females\n")
+    cat("     - mhet is heterozygosity in males\n\n")
     print(xy)
-    cat(important("  Note: The most reliable putative markers will have read depth for Ref or Snp 10 or more, one ca half the other\n\n"))
-  }
+    cat(important("  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"))
+    }
   }
 
   if (plot){
@@ -207,17 +255,17 @@ if (nrow(xy) == 0 & verbose>0 ){
     df$xy <- indexxy
     df$zw <- indexzw
     df$test <-  df$xy + df$zw 
-    df_sex_linked <- df[which(df$test==1),]
+    df_sex_linked <- df[which(df$test>0),]
     df_no_sex_linked <- df[which(df$test==0),]
     
     
     gg <- ggplot()+
-      geom_rect(aes(xmin=0, xmax=t.het, ymin=1-t.het, ymax=1), fill=three_colors[3],alpha=1/2)+
+      geom_rect(aes(xmin=0, xmax=t.hom, ymin=1-t.het, ymax=1), fill=three_colors[3],alpha=1/2,color="black")+
       geom_text(x=0, y=1.03, aes(label="XX/XY"))+
-      geom_rect(aes(xmin=1, xmax=1-t.het, ymin=0, ymax=t.het), fill=three_colors[3],alpha=1/2)+
+      geom_rect(aes(xmin=1, xmax=1-t.het, ymin=0, ymax=t.hom), fill=three_colors[3],alpha=1/2,color="black")+
       geom_text(x=1, y=-0.02, aes(label="ZZ/ZW"))  +
       geom_point(data =  df_no_sex_linked, aes(x=fhet, y=mhet),alpha=1/3, size=2,color=three_colors[1] )+
-      geom_point(data = df_sex_linked, aes(x=fhet, y=mhet),alpha=1/2, size=3,color=three_colors[2] )+
+      geom_point(data = df_sex_linked, aes(x=fhet, y=mhet),alpha=1/3, size=3,color=three_colors[2] )+
       xlab("Female Heterozygosity")+ 
       ylab("Male Heterozygosity")+
       xlim(0,1)+
@@ -276,34 +324,59 @@ if (datatype=="SilicoDArT"){
   
   # Pull loci that are 100% present in  females and 0% in males
   indexzw <- (df$F1/(sumf)>=(1-t.pres)  & df$M0/(summ)>=(1-t.pres))
-  zw <- cbind(locnr =which(indexzw==TRUE), df[indexzw,])
+  # when all loci are homozygous for the reference allele e.g. df$M0/(summ),
+  # the division is NaN. So all the NAN's are set as TRUE
+  indexzw[is.na(indexzw)] <- TRUE
+
+    if(sum(indexzw,na.rm = T)>0){
+    zw <- cbind(locnr =which(indexzw==TRUE),df[indexzw,])
+  }
+  
+  if(sum(indexzw,na.rm = T)==0){
+    zw <- data.frame()
+  }
   
   # Pull loci that are 100% present in males and 0% in females
-  indexxy <- (df$M1/(summ)>=(1-t.pres)  & df$F0/(sumf)>=(1-t.pres))
-  xy <- cbind(locnr =which(indexxy==TRUE),df[indexxy,])
+  indexxy <- (df$M1/(summ)>=(1-t.pres)  & df$F0/(sumf)>=(1-t.pres))  # when all loci are homozygous for the reference allele e.g. df$F0/(sumf), the 
+  # division is NaN. So, all the NaN's are set as TRUE
+  indexxy[is.na(indexxy)] <- TRUE
+
+  if(sum(indexxy,na.rm = T)>0){
+    xy <- cbind(locnr =which(indexxy==TRUE), df[indexxy,])
+  }
+  
+  if(sum(indexxy,na.rm = T)==0){
+    xy <- data.frame()
+  }
   
   if (nrow(zw) == 0 & verbose>0){
     cat(important("  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n"))
   } else {
     if(verbose>0){
-      cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n")
-      cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (ZW)",t.hom,";\n"))
-      cat(paste("    for heterozygotes in the homozygotic sex (ZZ)",t.het,"\n"))
-      cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternative\n\n")
+      cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n\n")
+      cat(paste("    Threshold proportion for presence/absence is",t.pres,"\n\n"))
+      cat("     - locnr is the location of the locus in the input genlight object\n")
+      cat("     - F0 is the number of loci absent in females\n")
+      cat("     - F1 is the number of loci present in females\n")
+      cat("     - M0 is the number of loci absent in males\n")
+      cat("     - M1 is the number of loci present in males\n\n")
       print(zw)
-      cat(important("  Note: The most reliable putative markers will have read depth of 10 or more.\n\n"))
+      cat(important("  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"))
     } 
   }
   if (nrow(xy) == 0){
     if(verbose>0) cat(important("  No sex linked markers consistent with male heterogamety (XX/XY)\n"))
   } else {
     if(verbose>0){
-      cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n")
-      cat(paste("    Threshold proportion for homozygotes in the heterozygotic sex (XY)",t.hom,"\n"))
-      cat(paste("    for heterozygotes in the homozygotic sex (XX)",t.het,"\n"))
-      cat("    0 = homozygous reference; 1 = heterozygous; 2 = homozygous alternative\n\n")
+      cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n\n")
+      cat(paste("    Threshold proportion for presence/absence is",t.pres,"\n\n"))
+      cat("     - locnr is the location of the locus in the input genlight object\n")
+      cat("     - F0 is the number of loci absent in females\n")
+      cat("     - F1 is the number of loci present in females\n")
+      cat("     - M0 is the number of loci absent in males\n")
+      cat("     - M1 is the number of loci present in males\n\n")
       print(xy)
-      cat(important( "  Note: The most reliable putative markers will have read depth for Ref or Snp 10 or more, one ca half the other\n\n"))
+      cat(important("  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"))      
     } 
   }
   
@@ -314,16 +387,16 @@ if (datatype=="SilicoDArT"){
     df$xy <- indexxy
     df$zw <- indexzw
     df$test <-  df$xy + df$zw 
-    df_sex_linked <- df[which(df$test==1),]
+    df_sex_linked <- df[which(df$test>0),]
     df_no_sex_linked <- df[which(df$test==0),]
     
     gg <- ggplot()+
-      geom_rect(aes(xmin=0, xmax=t.pres, ymin=1-t.pres, ymax=1), fill=three_colors[3],alpha=1/2)+
+      geom_rect(aes(xmin=0, xmax=t.pres, ymin=1-t.pres, ymax=1), fill=three_colors[3],alpha=1/2,color="black")+
       geom_text(x=0, y=1.03, aes(label="XX/XY"))+
-      geom_rect(aes(xmin=1, xmax=1-t.pres, ymin=0, ymax=t.pres), fill=three_colors[3],alpha=1/2)+
+      geom_rect(aes(xmin=1, xmax=1-t.pres, ymin=0, ymax=t.pres), fill=three_colors[3],alpha=1/2,color="black")+
       geom_text(x=1, y=-0.02, aes(label="ZZ/ZW"))  +
       geom_point(data =  df_no_sex_linked, aes(x=fhet, y=mhet),alpha=1/3, size=2,color=three_colors[1] )+
-      geom_point(data = df_sex_linked, aes(x=fhet, y=mhet),alpha=1/2, size=3,color=three_colors[2] )+
+      geom_point(data = df_sex_linked, aes(x=fhet, y=mhet),alpha=1/3, size=3,color=three_colors[2] )+
       xlab("% present in females")+ 
       ylab("% present in males")+
       xlim(0,1)+

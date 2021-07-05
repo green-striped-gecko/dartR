@@ -31,7 +31,7 @@
 #'
 #' The algorithm is that of Johann de Jong 
 #' \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
-#' as implemented in utils.hamming.r
+#' as implemented in \code{\link{utils.hamming}}
 #' 
 #'\strong{ Function's output }
 #'  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.

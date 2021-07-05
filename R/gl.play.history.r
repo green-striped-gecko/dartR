@@ -9,6 +9,7 @@
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @details This function basically allows to create a "template history" (=set of filters) and apply them to any other genlight object. Histories can also be saved and loaded (see. gl.save.history and gl.load.history).
 #' @examples 
+#'\dontrun{
 #' dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
 #' metadata <- system.file("extdata","testset_metadata.csv", package="dartR")
 #' gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=FALSE) 
@@ -18,6 +19,7 @@
 #' bc.fil <- gl.play.history(gl.compliance.check(bandicoot.gl), 
 #' history=gl3@other$history[c(2,3)], verbose=1)
 #' gl.print.history(bc.fil)
+#' }
 
 
 gl.play.history <- function(x, history=NULL, verbose=0)

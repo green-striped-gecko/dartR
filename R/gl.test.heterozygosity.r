@@ -262,7 +262,7 @@ gl.test.heterozygosity <- function(x,
             geom_vline(xintercept=l2quantile,colour="firebrick1",size=1)+
             scale_color_manual(name = "Values" ,values=c( Zero_value="blue",Observed="green",alpha1="firebrick4",alpha2="firebrick1"),labels=c(paste("Sig. ",alpha1),paste("Sig. ",alpha2),"Observed","Zero value"))+
             guides(color = guide_legend(override.aes = list(size = 5),ncol = 2))+
-            theme(legend.position="bottom",legend.key=element_rect(fill='transparent'),legend.title = element_text(face = "bold"))
+            theme(legend.position="bottom",legend.title = element_text(face = "bold"))
            
           p_list[[count]] <- p_temp
         }
