@@ -10,7 +10,9 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#' \dontrun{
 #' gl <- gl.load("testset.rds")
+#' }
 #' @seealso \code{\link{gl.save}}
 #' 
 gl.load <- function(file, verbose=NULL){
