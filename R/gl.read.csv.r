@@ -39,27 +39,15 @@ gl.read.csv <- function(filename,
                         loc.metafile=NULL, 
                         verbose=NULL){
   
-  # TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-  
-  # GENERAL verbose checking
-  
+
+  # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
-  
   # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(f=funname,build="Jackson",v=verbose)
   
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-  
-  # STANDARD ERROR CHECKING
+  # FUNCTION SPECIFIC ERROR CHECKING
   
   if (is.null(loc.metafile) & verbose>0){
     cat("Warning: Locus metafile not provided, locus metrics will be 
@@ -69,8 +57,6 @@ gl.read.csv <- function(filename,
   if (is.null(ind.metafile) & verbose>0){
     cat("Warning: Individual metafile not provided, pop set to 'A' for all individuals\n")
   }
-  
-  # FUNCTION SPECIFIC ERROR CHECKING
   
   # DO THE JOB
   
@@ -166,13 +152,13 @@ gl.read.csv <- function(filename,
       data[,i] <- gsub(het2,"1",data[,i])
       data[,i] <- gsub(missing,NA,data[,i])
     }
-    cat( "  SNP coding converted to 0,1,2,NA\n")
+    cat(report("  SNP coding converted to 0,1,2,NA\n"))
     
     data <- apply(data, 2, as.numeric)
     
   } else {
     if (verbose >= 2) {
-      cat("Numeric data detected, assume genotypes are 0 = homozygous reference, 1 = heterozygous, 2 = homozygous alternate\n")
+      cat(report("  Numeric data detected, assume genotypes are 0 = homozygous reference, 1 = heterozygous, 2 = homozygous alternate\n"))
     }
     # Check that this is true
     data <-  apply(data, 2, as.numeric)
@@ -181,7 +167,7 @@ gl.read.csv <- function(filename,
     tmp <- table(s2)
     if (!(names(tmp) == "0" || names(tmp) == "1" || names(tmp) == "2" || 
           names(tmp) == "NA")){
-      cat("Fatal Error: Genotypes must be defined by the numbers 0, 1, 2 or missing NA\n")
+      cat(error("Fatal Error: Genotypes must be defined by the numbers 0, 1, 2 or missing NA\n"))
       stop()
     }
   }   
@@ -199,13 +185,12 @@ gl.read.csv <- function(filename,
   
   if(!is.null(loc.metafile)) {
     loc.metrics <- read.csv(file=loc.metafile,header=TRUE,stringsAsFactors = TRUE)
-    if (!("AlleleID" %in% names(loc.metrics))) {cat("Fatal Error: mandatory AlleleID column absent 
-                                               from the locus metrics file\n")}
+    if (!("AlleleID" %in% names(loc.metrics))) {cat(error("Fatal Error: mandatory AlleleID column absent 
+                                               from the locus metrics file\n"))}
     for (i in 1:nLoc(gl)) {
       if (loc.metrics[i,1] != gl@other$loc.metrics$AlleleID[i]){
-        cat("Fatal Error: AlleleID in the locus metrics file does not correspond with",
-            "AlleleID in the input data file, or they are not in the same order\n")
-        stop()
+        stop(error("Fatal Error: AlleleID in the locus metrics file does not correspond with",
+            "AlleleID in the input data file, or they are not in the same order\n"))
       }
     }
     gl@other$loc.metrics <- loc.metrics
@@ -221,13 +206,13 @@ gl.read.csv <- function(filename,
     if (!("id" %in% names(ind.metrics))) cat("Fatal Error: mandatory id column absent from the individual metadata file\n")
     for (i in 1:nInd(gl)){
       if (ind.metrics[i,1] != gl@other$ind.metrics$id[i]){
-        cat("Fatal Error: id in the individual metrics file does not correspond with",
-            "id in the input data file, or they are not in the same order\n")
+        cat(error(  "Fatal Error: id in the individual metrics file does not correspond with",
+            "id in the input data file, or they are not in the same order\n"))
         stop()
       }
     }
     if (!("pop" %in% names(ind.metrics))) {
-      cat("  Warning: pop column absent from the individual metadata file, setting to 'A'\n")
+      cat(warn("  Warning: pop column absent from the individual metadata file, setting to 'A'\n"))
       
       gl@other$ind.metrics <- ind.metrics
       gl@other$ind.metrics$id <- individuals   
@@ -244,11 +229,11 @@ gl.read.csv <- function(filename,
   }
   
     # MAKE COMPLIANT
-  gl <- gl.compliance.check(gl, verbose=verbose)
+    gl <- gl.compliance.check(gl, verbose=verbose)
 
     # ADD TO HISTORY (add the first entry)
-  gl@other$history <- list()
-  gl@other$history[[1]] <- match.call()    
+    gl@other$history <- list()
+    gl@other$history[[1]] <- match.call()    
 
     # FLAG SCRIPT END
   
