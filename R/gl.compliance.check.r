@@ -32,7 +32,7 @@ gl.compliance.check <- function (x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(f=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
 
 # DO THE JOB
   

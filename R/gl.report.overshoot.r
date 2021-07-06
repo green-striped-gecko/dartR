@@ -30,28 +30,15 @@
 gl.report.overshoot <- function(x, 
                                 verbose = NULL) {
 
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  build="Jackson"
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  datatype <- utils.check.datatype(x)
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat(report("Starting",funname,"[ Build =",build,"]\n"))
-    } else {
-      cat(report("Starting",funname,"\n"))
-    }
-  }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=0)
   
 # SCRIPT SPECIFIC ERROR CHECKING
   

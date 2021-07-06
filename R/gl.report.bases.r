@@ -59,34 +59,20 @@ gl.report.bases <- function(x,
                             plot_colours = two_colors,
                             verbose = NULL) {
 
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  build="Jackson"
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  datatype <- utils.check.datatype(x)
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=0)
 
   # FUNCTION SPECIFIC ERROR CHECKING
 
     if (!any(names(x@other$loc.metrics) == "TrimmedSequence")) {
         stop(error("  Fatal Error: Dataset does not include variable TrimmedSequence!\n"))
-    }
-
-  # FLAG SCRIPT START
-
-    if (verbose >= 1) {
-      if (verbose == 5) {
-        cat(report("\nStarting", funname, "[ Build =", 
-                   build, "]\n\n"))
-      } else {
-        cat(report("\nStarting", funname, "\n\n"))
-      }
     }
 
   # DO THE JOB 

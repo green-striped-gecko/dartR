@@ -10,7 +10,7 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl <- gl.load("testset.rds"))
+#' gl <- gl.load("testset.rds")
 #' @seealso \code{\link{gl.save}}
 #' 
 gl.load <- function(file, verbose=NULL){
@@ -20,7 +20,7 @@ gl.load <- function(file, verbose=NULL){
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(f=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   x <- readRDS(file)
   

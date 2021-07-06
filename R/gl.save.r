@@ -20,7 +20,7 @@ gl.save <- function(x, file, verbose=NULL){
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(f=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=0)

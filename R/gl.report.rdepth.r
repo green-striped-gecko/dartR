@@ -63,18 +63,15 @@ gl.report.rdepth <- function(x,
                              plot_colours = two_colors,  
                              verbose = NULL){
   
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  build <- "Jackson"
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  datatype <- utils.check.datatype(x)
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=0)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
@@ -91,17 +88,6 @@ gl.report.rdepth <- function(x,
       stop(error("Fatal Error: Read depth not included among the locus metrics"))
     }  
   } 
-  
-  # FLAG SCRIPT START
-  
-  if (verbose >= 1) {
-    if (verbose == 5) {
-      cat(report("\n\nStarting", funname, "[ Build =", 
-                 build, "]\n\n"))
-    } else {
-      cat(report("\n\nStarting", funname, "\n\n"))
-    }
-  }
   
   # DO THE JOB
   
