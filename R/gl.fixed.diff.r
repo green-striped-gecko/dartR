@@ -1,8 +1,11 @@
-#' Generate a matrix of fixed differences and associated statistics for populations taken pairwise
+#' @name gl.fixed.diff
+#' @title Generate a matrix of fixed differences and associated statistics for populations taken pairwise
 #'
+#' @description
 #' This script takes SNP data or sequence tag P/A data grouped into populations in a genlight object (DArTSeq)
 #' and generates a matrix of fixed differences between populations taken pairwise
 #'
+#' @details
 #' A fixed difference at a locus occurs when two populations share no alleles or where all members 
 #' of one population has a sequence tag scored, and all members of the other population has 
 #' the sequence tag absent. The challenge with this approach is that when sample sizes are finite, 
@@ -20,7 +23,8 @@
 #' if they arise from true allele frequencies of less than 1-delta in one or both populations.  The parameter
 #' delta is typically set to be small (e.g. delta = 0.02).
 #' 
-#' NOTE: The above test will only be calculated if tloc=0, that is, for analyses of absolute fixed differences.
+#' NOTE: The above test will only be calculated if tloc=0, that is, for analyses of absolute fixed differences. The
+#' test applies in comparisons of allopatric populations only. For sympatric populations, use gl.pval.sympatry().
 #'
 #' An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
 #' level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
@@ -57,7 +61,7 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
-#' fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=2 )
+#' fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=3 )
 #' fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, verbose=1 )
 #' }
 #' @seealso \code{\link{is.fixed}}
@@ -72,85 +76,60 @@ gl.fixed.diff <- function(x,
                           pb=TRUE, 
                           verbose=NULL) {
 
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-  
 # SET VERBOSITY
-  if (class(x) != "fd"){
-    if (is.null(verbose)){ 
-      if(!is.null(x@other$verbose)){ 
-        verbose <- x@other$verbose
-      } else { 
-        verbose <- 2
-      }
-    }
-  } else {
-    if (is.null(verbose)) {
-      verbose <- 2
-    }
-  }
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  verbose <- gl.check.verbosity(verbose)
   
 # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(f=funname,build="Jackson",v=verbose)
   
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=0)
+  if (datatype=="fd"){
+    x <- x$gl
+    datatype <- utils.check.datatype(x,verbose=0)
+    if (verbose >=2){cat("  fd object detected\n")}
   }
   
 # STANDARD ERROR CHECKING
-  
-  if (class(x)=="fd"){
-      x <- x$gl
-      if (verbose >=2){cat("  fd object detected\n")}
-  }
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight or fd object required!\n")
+ 
+  if(datatype!="SNP" & datatype!="SilicoDArT" & datatype!="fd") {
+    stop(error("Fatal Error: genlight or fd object required!\n"))
   }
   
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
+  if (datatype== "SilicoDArT"){
+    if (verbose >= 2){cat(report("  Processing  Presence/Absence (SilicoDArT) data\n"))}
+  } else if (datatype=="SNP"){
+    if (verbose >= 2){cat(report("  Processing a SNP dataset\n"))}
   } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+    stop(error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
   }
   
 # FUNCTION SPECIFIC ERROR CHECKING
   
   if (tloc > 0.5 || tloc < 0 ) {
-    stop("Fatal Error: Parameter tloc should be positive in the range 0 to 0.5\n")
+    stop(error("Fatal Error: Parameter tloc should be positive in the range 0 to 0.5\n"))
   }  
   if(!(tloc == 0) & test==TRUE){
-    cat("  Warning: false positives can only be simulated for tloc=0, setting tloc to zero\n")
+    cat(warn("  Warning: false positives can only be simulated for tloc=0, setting tloc to zero\n"))
+    tloc <- 0
   }
   
   if ( verbose >= 2){
-    if (tloc > 0) {cat("  Comparing populations for fixed differences with tolerance",tloc,"\n")}
-    if (tloc == 0) {cat("  Comparing populations for absolute fixed differences\n")}
+    if (tloc > 0) {cat(report("  Comparing populations for fixed differences with tolerance",tloc,"\n"))}
+    if (tloc == 0) {cat(report("  Comparing populations for absolute fixed differences\n"))}
   }
   
   # Checking count of populations
     if(nPop(x) < 2) {
-      stop("Fatal Error: Distance calculation requires at least two populations, one or none present\n")
+      stop(error("Fatal Error: Distance calculation requires at least two populations, one or none present\n"))
     }
 
   # Checking for and removing monomorphic loci
     if(!x@other$loc.metrics.flags$monomorphs){
-      if (verbose >= 2) {cat("Warning: Monomorphic loci retained, used in calculations\n")}
+      if (verbose >= 2) {cat(warn("  Warning: Monomorphic loci retained, used in calculations\n"))}
     } else {  
-      if (verbose >= 2) {cat("  Monomorphic loci removed\n")}
+      if (verbose >= 2) {cat(report("  Monomorphic loci removed\n"))}
       x <- gl.filter.monomorphs(x,verbose=0)
     }  
 #define dist2list function
@@ -158,7 +137,7 @@ gl.fixed.diff <- function(x,
 dist2list <- function (dist) 
 {
   if (!class(dist) == "dist") {
-    stop("the input data must be a dist object.")
+    stop(error("the input data must be a dist object."))
   }
   dat <- as.data.frame(as.matrix(dist))
   if (is.null(names(dat))) {
@@ -171,25 +150,23 @@ dist2list <- function (dist)
   res <- data.frame(namecol, value)
   return(res)
 }
-  
-  
 
 # DO THE JOB      
 
   # Calculate percent allele frequencies
-    ftable <- gl.percent.freq(x, verbose=verbose)
+    ftable <- gl.percent.freq(x, verbose=0)
 
   # GENERATE A MATRIX OF PAIRWISE FIXED DIFFERENCES
     
   # Report samples sizes for each population
     if (verbose >= 3){
-      cat("Populations, aggregations and sample sizes")
+      cat("  Populations, aggregations and sample sizes")
       print(table(pop(x)))
     }
     if (min(table(pop(x))) < 10 && verbose >= 3 ){
-        cat("Warning: Fixed differences can arise through sampling error if sample sizes are small\n")
-        cat("  Some sample sizes are small (N < 10, minimum in dataset =",min(table(pop(x))),")\n")
-        if (!test) {cat("  Recommend manually amalgamating populations or setting test=TRUE to allow evaluation of statistical significance\n")}
+        cat(warn("  Warning: Fixed differences can arise through sampling error if sample sizes are small\n"))
+        cat(warn("    Some sample sizes are small (N < 10, minimum in dataset =",min(table(pop(x))),")\n"))
+        if (!test) {cat(warn("    Recommend manually amalgamating populations or setting test=TRUE to allow evaluation of statistical significance\n"))}
     }
 
   # Establish an array to hold the fixed differences and sample sizes
@@ -212,7 +189,7 @@ dist2list <- function (dist)
     
     # Cycle through the data to sum the fixed differences into a square matrix
     if (verbose >= 2) {
-      cat("Comparing populations pairwise -- this may take time. Please be patient\n")
+      cat(report("  Comparing populations pairwise -- this may take time. Please be patient\n"))
     }
     for (popi in 1:(npops-1)){      # For each population
       for (popj in (popi+1):npops) { # For each other population
@@ -253,11 +230,11 @@ dist2list <- function (dist)
         # Calculate the probability that the observed differences are false positives
             if (test) {
             if(tloc != 0){
-              cat("  Setting tloc to zero\n")
+              cat(report("  Setting tloc to zero\n"))
               tloc.hold <- tloc
               tloc <- 0
             }
-            outlist <- gl.utils.fdsim(x,c(levels(pop(x))[popi],levels(pop(x))[popj]),obs=fixed.matrix[popi,popj],delta=delta,reps=reps,verbose=0)
+            outlist <- gl.fdsim(x,c(levels(pop(x))[popi],levels(pop(x))[popj]),obs=fixed.matrix[popi,popj],delta=delta,reps=reps,verbose=0)
             p.false.pos.matrix[popi,popj] <- round(outlist$prob,4)
             exp.matrix[popi,popj] <- round(outlist$mnexpected,1)
             sd.matrix[popi,popj] <- round(outlist$sdexpected,4)
@@ -290,8 +267,7 @@ dist2list <- function (dist)
  
   # Return the extreme low distances -- candidates for lack of significance
     if (verbose >= 3) {
-      cat("\nDisplaying a list of 5% of pairs with smallest non-zero differences\n")
-      
+      cat(report("\nDisplaying a list of 5% of pairs with smallest non-zero differences\n"))
       
       df <- dist2list(as.dist(fixed.matrix))
       
@@ -307,7 +283,7 @@ dist2list <- function (dist)
   # Return the matricies
     if (verbose >= 4) {
       if(pb){cat("\n")}
-      cat("Returning a list containing the gl object and square matricies, as follows:\n",
+      cat(report("Returning a list containing the gl object and square matricies, as follows:\n",
       "         [[1]] $gl -- input genlight object;\n",
       "         [[2]] $fd -- raw fixed differences;\n",
       "         [[3]] $pcfd -- percent fixed differences;\n",
@@ -315,7 +291,7 @@ dist2list <- function (dist)
       "         [[5]] $nloc -- total number of loci used in each comparison;\n",
       "         [[6]] $expfpos -- if test=TRUE, the expected count of false positives for each comparison [by simulation]\n",
       "         [[7]] $sdfpos -- if test=TRUE, the expected count of false positives for each comparison [by simulation]\n",
-      "         [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n\n")
+      "         [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation]\n"))
     }
 
     fixed.matrix <- as.dist(fixed.matrix)
