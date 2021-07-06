@@ -12,6 +12,7 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
+#' @seealso \code{\link{gl.load}}
 
 gl.save <- function(x, file, verbose=NULL){
 
