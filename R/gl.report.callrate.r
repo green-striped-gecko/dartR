@@ -237,7 +237,7 @@ gl.report.callrate <- function(x,
 # FLAG SCRIPT END
   
   if (verbose >= 1) {
-    cat(report("\nCompleted:", funname, "\n\n"))
+    cat(report("Completed:", funname, "\n\n"))
   }
 
 # RETURN

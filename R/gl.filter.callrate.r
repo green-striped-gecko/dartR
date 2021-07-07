@@ -438,7 +438,7 @@
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat(report("\nCompleted:",funname,"\n"))
+    cat(report("Completed:",funname,"\n"))
   }
 
    invisible(x2)

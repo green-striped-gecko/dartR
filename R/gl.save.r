@@ -29,7 +29,7 @@ gl.save <- function(x, file, verbose=NULL){
 # DO THE JOB
 
   saveRDS(x,file)
-  cat(report("  Saved object of type",datatype,"to",file,"\n\n"))
+  cat(report("  Saved object of type",datatype,"to",file,"\n"))
   
 # FLAG SCRIPT END
 

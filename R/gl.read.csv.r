@@ -31,8 +31,6 @@
 #' @export
 #' @author Arthur Georges, Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
-# Last amended 3-Feb-19
-
 gl.read.csv <- function(filename, 
                         transpose=FALSE,
                         ind.metafile=NULL, 

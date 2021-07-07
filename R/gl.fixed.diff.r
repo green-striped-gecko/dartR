@@ -73,7 +73,7 @@ gl.fixed.diff <- function(x,
                           alpha=0.05,
                           reps=1000, 
                           mono.rm=TRUE, 
-                          pb=TRUE, 
+                          pb=FALSE, 
                           verbose=NULL) {
 
 # SET VERBOSITY
@@ -302,7 +302,7 @@ dist2list <- function (dist)
     # FLAG SCRIPT END
     
     if (verbose > 0) {
-      cat("Completed:",funname,"\n")
+      cat(report("Completed:",funname,"\n"))
     }
     
     return(l)

@@ -122,7 +122,7 @@ gl.report.rdepth <- function(x,
   
   # Print out some statistics
   stats <- summary(rdepth)
-  cat("  Reporting Read Depth by Locus\n")
+  cat(report("  Reporting Read Depth by Locus\n"))
   cat("  No. of loci =", nLoc(x), "\n")
   cat("  No. of individuals =", nInd(x), "\n")
   cat("    Minimum      : ", stats[1], "\n")
@@ -169,20 +169,20 @@ gl.report.rdepth <- function(x,
   # saving to tempdir
   saveRDS(p3, file = temp_plot)
   if(verbose>=2){
-    cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
+    cat(report("  Saving the plot in ggplot format to the session tempfile\n"))
   }
   saveRDS(df, file = temp_table)
   if(verbose>=2){
-    cat(report("  Saving the report to the tempfile as",temp_table,"using saveRDS\n"))
+    cat(report("  Saving the report to the session tempfile\n"))
   }
-  if(verbose>=2){
-    cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-  }
+  # if(verbose>=2){
+  #   cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+  # }
   
   # FLAG SCRIPT END
   
   if (verbose >= 1) {
-    cat(report("\n\nCompleted:", funname, "\n\n"))
+    cat(report("\nCompleted:", funname, "\n\n"))
   }
   
   # RETURN

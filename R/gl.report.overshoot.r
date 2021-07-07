@@ -82,16 +82,16 @@ gl.report.overshoot <- function(x,
     # saving to tempdir
     saveRDS(data.frame(locNames=locNames(xx)), file = temp_table)
     if(verbose>=2){
-      cat(report("  Saving the overshot loci to the tempfile as",temp_table,"using saveRDS\n"))
-      }
-    if(verbose>=2){
-      cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-      }
+      cat(report("  Saving the overshot loci to the current session tempfile\n"))
+    }
+    # if(verbose>=2){
+    #   cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+    #   }
 
     # FLAG SCRIPT END
     
     if (verbose >= 1) {
-      cat(report("\n\nCompleted:", funname, "\n\n"))
+      cat(report("Completed:", funname, "\n\n"))
     }
     
     # RETURN
