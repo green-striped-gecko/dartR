@@ -100,7 +100,7 @@ gl.runstructure    <- function(x,
   
   sr <- strataG::structureRun(gg, exec=exec,...)
   
-  ev <- evanno(sr)
+  ev <- strataG::evanno(sr)
   pa <- ((ev$plots$mean.ln.k+ev$plots$mean.ln.k)/(ev$plots$ln.ppk+ev$plots$delta.k))+plot_theme
   # PRINTING OUTPUTS
   if (plot) {
