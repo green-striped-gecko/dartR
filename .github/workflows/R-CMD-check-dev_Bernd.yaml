@@ -64,6 +64,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          remotes::install_github('r-spatial/sf')
           remotes::install_github('EricArcher/strataG')
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
