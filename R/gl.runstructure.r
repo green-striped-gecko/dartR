@@ -30,12 +30,13 @@
 #'
 #' @examples
 #' \dontrun{
+#' #STRUCTURE needs to be installed to be able to run the example
 #' #only the first 100 loci
-#' bc <- bandicoot.gl[,1:100]
-#' sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#' #bc <- bandicoot.gl[,1:100]
+#' #sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
 #' }
 #' @import patchwork
-#' @importFrom strataG genind2gtypes structureRun
+###@importFrom strataG genind2gtypes structureRun
 #'
 #' @export
 #' @seealso \link[strataG]{structureRun}
@@ -64,7 +65,7 @@ gl.runstructure    <- function(x,
     devtools::install_github('EricArcher/strataG')
   
   }
-  }
+  } else {
   
   #check that structure is installed 
     structure <-  file.exists(exec) 
@@ -135,5 +136,5 @@ gl.runstructure    <- function(x,
   # RETURN
 
   return(sr)
-
+}
 }
