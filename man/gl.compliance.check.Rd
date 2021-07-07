@@ -15,10 +15,12 @@ gl.compliance.check(x, verbose = NULL)
 A genlight object that conforms to the expectations of dartR
 }
 \description{
-A genlight object used by dartR has a number of requirements that allow functions within the package to operate
-correctly. The genlight object comprises
+Checks a gl object to see if it complies with dartR expectations, and amends to comply if necessary
 }
 \details{
+A genlight object used by dartR has a number of requirements that allow functions within the package to operate
+correctly. The genlight object comprises
+
 (a) The SNP genotypes or Tag Presence/Absence data (SilicoDArT);
 (b) An associated dataframe (gl@other$loc.metrics) containing the locus metrics (e.g. Call Rate, Repeatability, etc);
 (c) An associated dataframe (gl@other$ind.metrics) containing the individual/sample metrics (e.g. sex, latitude (=lat), longitude(=lon), etc);

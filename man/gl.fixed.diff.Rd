@@ -12,7 +12,7 @@ gl.fixed.diff(
   alpha = 0.05,
   reps = 1000,
   mono.rm = TRUE,
-  pb = TRUE,
+  pb = FALSE,
   verbose = NULL
 )
 }
