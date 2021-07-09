@@ -73,11 +73,23 @@ setwd(owd)
 
 qq <- q.mat[,4:(k+3)]
 
+if (is.null(sort)) {
 ll <- data.frame(cbind(as.numeric(factor(q.mat$orig.pop)), qq[,]))
 zz <- do.call(order,  unname(as.list(ll)))
 
 bb <- t(qq[zz,])
+colnames(bb)<- q.mat$id
+narg <- paste(q.mat$id,q.mat$orig.pop[zz], sep="_")
 
-bbpp <- barplot(bb, col = 1:k,las = 2, main = paste0("K=",k), border=1:k, space = 0, names.arg=q.mat$orig.pop[zz])
+} else {
+  bb <- t(qq[sort,])
+  colnames(bb)<- q.mat$id[sort]
+  narg <- q.mat$id[sort]
+  }
 
+#bgg <- reshape2::melt(bb)
+#bgg <- transform(bgg, Var1=factor(Var1, rownames(bb)), Var2=factor(Var2, colnames(bb)))
+
+bbpp <- barplot(bb, col = 1:k,las = 2, main = paste0("K=",k), border=1:k, space = 0, names.arg=narg)
+#ggplot(bgg, aes(x=Var2, y=value, fill=Var1), )+geom_bar(stat="identity", width = 1)
 }
