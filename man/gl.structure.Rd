@@ -28,12 +28,12 @@ gl.runstructure(
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-an structure.result list output. Each list entry is a single structure
+an sr object (structure.result list output). Each list entry is a single structure
 run output (there are k.range * num.k.rep number of runs). For example the
 summary output of the first run can be accessed via \code{sr[[1]]$summary} 
 or the q-matrix of the third run via \code{sr[[3]]$q.mat}. To conveniently
-summarise the outputs across runs (using evanno and clumpp) you need to run
-gl.analysestructure on the returned sr object.
+summarise the outputs across runs (clumpp) you need to run
+gl.plotstructure on the returned sr object. For evanno plots run gl.evanno on your sr object.
 }
 \description{
 This function takes a genlight object and runs a STRUCTURE analysis based on functions from \code{strataG}
@@ -48,9 +48,10 @@ To make use of this function you need to download STRUCTURE for you system
 }
 \examples{
 \dontrun{
+#STRUCTURE needs to be installed to be able to run the example
 #only the first 100 loci
-bc <- bandicoot.gl[,1:100]
-sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#bc <- bandicoot.gl[,1:100]
+#sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
 }
 }
 \references{

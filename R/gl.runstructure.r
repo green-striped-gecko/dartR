@@ -19,12 +19,12 @@
 #' (\bold{non GUI version}) from here 
 #' \href{https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
 #'
-#' @return an structure.result list output. Each list entry is a single structure
+#' @return an sr object (structure.result list output). Each list entry is a single structure
 #'run output (there are k.range * num.k.rep number of runs). For example the
 #' summary output of the first run can be accessed via \code{sr[[1]]$summary} 
 #' or the q-matrix of the third run via \code{sr[[3]]$q.mat}. To conveniently
-#' summarise the outputs across runs (using evanno and clumpp) you need to run
-#' gl.analysestructure on the returned sr object.
+#' summarise the outputs across runs (clumpp) you need to run
+#' gl.plotstructure on the returned sr object. For evanno plots run gl.evanno on your sr object.
 #'
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
