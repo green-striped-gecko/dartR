@@ -9,6 +9,7 @@ gl.report.bases(
   plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -20,17 +21,14 @@ gl.report.bases(
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
 
 \item{plot_colours}{List of two color names for the borders and fill of the
-plots [default two_colors].}
+plots [default two_colors]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-A list containing:
-\enumerate{
-        \item $freq -- the table of base frequencies and transition/transversion ratios;
-        \item $plotbases -- ggplot bargraph of base frequencies;
-        \item $plottstv -- ggplot bargraph of transitions and transversions.
-        }
+the unchanged genlight object
 }
 \description{
 This script calculates the frequencies of the four DNA nucleotide bases: adenine (A), cytosine (C), 

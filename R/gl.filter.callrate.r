@@ -41,6 +41,7 @@
 #' @param plot_theme User specified theme for the plot [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
 #' @param bins -- number of bins to display in histograms [default 25]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' 
 #' @return The reduced genlight or genind object, plus a summary
@@ -71,6 +72,7 @@
                                 plot_theme = theme_dartR(), 
                                 plot_colours = two_colors,
                                 bins=25, 
+                                save2tmp=FALSE,
                                 verbose=NULL) {
   
 # SET VERBOSITY
@@ -126,13 +128,14 @@
     n0 <- nLoc(x)
 
     # Remove loci with NA count <= 1-threshold
-      index <- colMeans(is.na(as.matrix(x))) < threshold
+      #index <- colMeans(is.na(as.matrix(x))) < threshold
+      index <- x@other$loc.metrics$CallRate >= threshold
       x2 <- x[ ,index]
       x2@other$loc.metrics <- x@other$loc.metrics[index,]
 
     # Plot a histogram of Call Rate
-        callrate <- hold@other$loc.metrics$CallRate
-        min <- min(callrate)
+        callrate <- x@other$loc.metrics$CallRate
+        min <- min(callrate, threshold)
         min <- trunc(min*100)/100
         if(datatype=="SNP"){
           xlabel <- "Pre-filter SNP Call Rate [Loci]" 
@@ -148,6 +151,13 @@
           plot_theme
         
         callrate <- x2@other$loc.metrics$CallRate
+        min <- min(callrate, threshold)
+        min <- trunc(min*100)/100
+        if(datatype=="SNP"){
+          xlabel <- "Post-filter SNP Call Rate [Loci]" 
+        } else {
+          xlabel <- "Post-filter P/A Call Rate [Loci]"
+        }
         p2 <- ggplot(data.frame(callrate), aes(x = callrate)) + 
           geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
           coord_cartesian(xlim = c(min,1)) + 
@@ -287,7 +297,7 @@
       
       # Plot a histogram of Call Rate
 
-      min <- min(hold2)
+      min <- min(hold2,threshold)
       min <- trunc(min*100)/100
       if(datatype=="SNP"){
         xlabel <- "Pre-filter SNP Call Rate [Individuals]" 
@@ -302,6 +312,13 @@
         ylab("Count") + 
         plot_theme
       
+      min <- min(ind.call.rate,threshold)
+      min <- trunc(min*100)/100
+      if(datatype=="SNP"){
+        xlabel <- "Post-filter SNP Call Rate [Individuals]" 
+      } else {
+        xlabel <- "Post-filter P/A Call Rate [Individuals]"
+      }
       p2 <- ggplot(data.frame(ind.call.rate), aes(x = ind.call.rate)) + 
         geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
         coord_cartesian(xlim = c(min,1)) + 
@@ -330,7 +347,7 @@
     # Plot a histogram of Call Rate
     
     tmp <- hold@other$loc.metrics$CallRate
-    min <- min(tmp)
+    min <- min(tmp,threshold)
     min <- trunc(min*100)/100
     if(datatype=="SNP"){
       xlabel <- "Pre-filter SNP Call Rate [by population]" 
@@ -346,6 +363,13 @@
       plot_theme
     
     tmp <- x@other$loc.metrics$CallRate
+    min <- min(tmp,threshold)
+    min <- trunc(min*100)/100
+    if(datatype=="SNP"){
+      xlabel <- "Post-filter SNP Call Rate [by population]" 
+    } else {
+      xlabel <- "Post-filter P/A Call Rate [by population]"
+    }
     p2 <- ggplot(data.frame(tmp), aes(x = tmp)) + 
       geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
       coord_cartesian(xlim = c(min,1)) + 
@@ -419,15 +443,17 @@
   # Recalculate Call Rate to be safe
       x <- utils.recalc.callrate(x,verbose=0)
       
-# SAVE INTERMEDIATES TO TEMPDIR             
-      # creating temp file names
-      temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-#      temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+# SAVE INTERMEDIATES TO TEMPDIR   
+      if(save2tmp){
+        # creating temp file names
+        temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+#        temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
       
-      # saving to tempdir
-      saveRDS(p3, file = temp_plot)
-      if(verbose>=2){
-        cat(report("  Saving the ggplot to session tempfile\n"))
+        # saving to tempdir
+        saveRDS(p3, file = temp_plot)
+        if(verbose>=2){
+          cat(report("  Saving the ggplot to session tempfile\n"))
+        }
       }
       
 # ADD TO HISTORY

@@ -9,16 +9,17 @@
 #' number of missing values as quantiles. 
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence
-#'  (SilicoDArT) data [required].
+#'  (SilicoDArT) data [required]
 #' @param method Specify the type of report by locus (method='loc') or individual
-#'  (method='ind') [default method='loc'].
-#' @param plot_theme User specified theme [default theme_dartR()].
-#' @param plot_colours Vector with two colour names for the borders and fill [default two_colors].
+#'  (method='ind') [default method='loc']
+#' @param plot specify if plot of call rate is to be produced [default TRUE]
+#' @param plot_theme User specified theme [default theme_dartR()]
+#' @param plot_colours Vector with two colour names for the borders and fill [default two_colors]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details 
-#' This function expects a genlight object, and will interrogate it to determine if 
-#' it contains SNP data or SilicoDArT (=presence/absence data).
+#' This function expects a genlight object, containing either SNP data or SilicoDArT (=presence/absence data).
 #' 
 #' Callrate is summarized by locus or by individual to allow sensible decisions on thresholds
 #' for filtering taking into consideration consequential loss of data. The summary is in the form 
@@ -49,8 +50,10 @@
 
 gl.report.callrate <- function(x, 
                                method = "loc", 
+                               plot=TRUE,
                                plot_theme = theme_dartR(), 
                                plot_colours = two_colors, 
+                               save2tmp=FALSE,
                                verbose = NULL) {
   
 # SET VERBOSITY
@@ -74,7 +77,8 @@ gl.report.callrate <- function(x,
 # DO THE JOB
   
 ########### FOR METHOD BASED ON LOCUS
-  
+  if(method=="loc"){
+  if(plot){  
   # get title for plots
   if (method == "loc") {
     if (datatype=="SNP") {
@@ -107,6 +111,7 @@ gl.report.callrate <- function(x,
       xlab("Call rate") + 
       ylab("Count") + 
       plot_theme
+  }
     
     # Print out some statistics
     stats <- summary(x@other$loc.metrics$CallRate)
@@ -140,20 +145,20 @@ gl.report.callrate <- function(x,
     df$Quantile <- paste0(df$Quantile, "%")
     rownames(df) <- NULL
   }
+  }
   
 ########### FOR METHOD BASED ON INDIVIDUAL
-  
+  # Calculate the call rate by individual
+  if(method=="ind"){
+  ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)    
+  if(plot){
   # get title for plots
-  if (method == "ind") {
-    if (datatype == 2) {
+  if (datatype=="SNP") {
       title1 <- "SNP data - Call Rate by Individual"
     } else {
       title1 <- "Fragment P/A data - Call Rate by Individual"
     }
-    
-    # Calculate the call rate by individual
-    ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)
- 
+
     # Calculate minimum and maximum graph cutoffs for callrate
     min <- min(ind.call.rate)
     min <- trunc(min*100)/100 
@@ -176,7 +181,7 @@ gl.report.callrate <- function(x,
       xlab("Call rate") + 
       ylab("Count") + 
       plot_theme
-    
+  }
     # Print out some statistics
     stats <- summary(ind.call.rate)
     cat("  Reporting Call Rate by Individual\n")
@@ -211,27 +216,31 @@ gl.report.callrate <- function(x,
     df$Quantile <- paste0(df$Quantile, "%")
     rownames(df) <- NULL
   }
-  
+
 # PRINTING OUTPUTS
-  # using package patchwork
-  p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
-  print(p3)
+  if(plot){
+    # using package patchwork
+    p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
+    print(p3)
+  }
   print(df)
   
 # SAVE INTERMEDIATES TO TEMPDIR             
-  # creating temp file names
-  temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-  temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+  if(save2tmp){
+    # creating temp file names
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
   
-  # saving to tempdir
-  saveRDS(p3, file = temp_plot)
-  if(verbose>=2){
-    cat(report("  Saving the ggplot to session tempfile\n"))
-  }
+    # saving to tempdir
+    saveRDS(p3, file = temp_plot)
+    if(verbose>=2){
+      cat(report("  Saving the ggplot to session tempfile\n"))
+    }
   
-  saveRDS(df, file = temp_table)
-  if(verbose>=2){
-    cat(report("  Saving tabulation to session tempfile\n"))
+    saveRDS(df, file = temp_table)
+    if(verbose>=2){
+      cat(report("  Saving tabulation to session tempfile\n"))
+    }
   }
 
 # FLAG SCRIPT END

@@ -15,6 +15,7 @@ gl.filter.callrate(
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   bins = 25,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -39,6 +40,8 @@ to remove loci that fail to meet the specified threshold in any one population [
 \item{plot_colours}{List of two color names for the borders and fill of the plots [default two_colors].}
 
 \item{bins}{-- number of bins to display in histograms [default 25]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
@@ -90,6 +93,8 @@ Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary 
 \code{\link{gl.report.callrate}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},

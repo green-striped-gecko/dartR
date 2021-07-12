@@ -1,5 +1,4 @@
 #' @name gl.report.hamming
-#'
 #' @title Calculates the pairwise Hamming distance between DArT trimmed DNA sequences
 #'
 #' @description Hamming distance is calculated as the number of base differences between two 
@@ -14,9 +13,11 @@
 #' @param rs Number of bases in the restriction enzyme recognition sequence [default 5].
 #' @param threshold Minimum acceptable base pair difference for display on the boxplot and histogram [default 3].
 #' @param taglength Typical length of the sequence tags [default 69].
+#' @param plot specify if plot is to be produced [default TRUE]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
 #' @param probar If TRUE, then a progress bar is displayed on long loops [default TRUE].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
@@ -33,8 +34,7 @@
 #' \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 #' as implemented in utils.hamming.r
 #' 
-#'\strong{ Function's output }
-#'  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+#'  Plots and table are saved to the session's temporary directory (tempdir) 
 #'
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -42,54 +42,39 @@
 #'  }
 #' 
 #' @return Returns unaltered genlight object
-#'
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
 #' gl.report.hamming(testset.gl[,1:100])
 #' gl.report.hamming(testset.gs[,1:100])
 #' 
-#' @seealso \code{\link{gl.filter.hamming}},\code{\link{gl.list.reports}},
-#'  \code{\link{gl.print.reports}}
+#' @seealso \code{\link{gl.filter.hamming}}}
 #'  
 #' @family filters and filter reports
-#'
 #' @importFrom stats sd
 #' @import patchwork
-#'
 #' @export 
-#'
 
 gl.report.hamming <- function(x, 
                               rs = 5, 
                               threshold = 3, 
                               taglength = 69, 
+                              plot=TRUE,
                               plot_theme = theme_dartR(), 
                               plot_colours = two_colors, 
                               probar = FALSE,
+                              save2tmp=FALSE,
                               verbose = NULL) {
 
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  datatype <- utils.check.datatype(x)
-    
-# FLAG SCRIPT START
-    
-    if (verbose >= 1) {
-      if (verbose == 5) {
-        cat(report("Starting", funname, "[ Build =", build, "]\n"))
-      } else {
-        cat(report("Starting", funname, "\n"))
-      }
-    }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -145,7 +130,9 @@ gl.report.hamming <- function(x,
     }
     
     if (verbose >= 2) {
-            cat("  Plotting boxplot and histogram of Hamming distance, showing a threshold of", threshold, "bp [HD", round(tld, 2), "]\n\n")
+      if(plot){
+            cat(report("  Plotting boxplot and histogram of Hamming distance, showing a threshold of", threshold, "bp [HD", round(tld, 2), "]\n"))
+      }
     }
     
     # Boxplot
@@ -170,13 +157,13 @@ gl.report.hamming <- function(x,
                label = paste("Threshold of\n", threshold, "bp [HD", round(tld, 2), "]")) +
       plot_theme
 
-    cat("  No. of loci =", nLoc(x), "\n")
-    cat("  No. of individuals =", nInd(x), "\n")
+    cat("    No. of loci =", nLoc(x), "\n")
+    cat("    No. of individuals =", nInd(x), "\n")
     cat("    Minimum Hamming distance: ", round(min(d), 2), "\n")
     cat("    Maximum Hamming distance: ", round(max(d), 2), "\n")
-    cat(paste0("    Mean Hamming Distance ", round(mean(d), 2), "+/-", round(sd(d), 3), " SD\n\n"))
+    cat(paste0("    Mean Hamming Distance ", round(mean(d), 2), "+/-", round(sd(d), 3), " SD\n"))
     n.outliers <- sum(d <= (threshold/(taglength - rs)))
-    cat("  No. of pairs with Hamming Distance less than or equal to", threshold, "base pairs:", n.outliers, "\n\n")
+    cat("    No. of pairs with Hamming Distance less than or equal to", threshold, "base pairs:", n.outliers, "\n\n")
     
     # Determine the loss of loci for a given threshold
     # using quantiles
@@ -201,24 +188,26 @@ gl.report.hamming <- function(x,
     print(df)
     
     # SAVE INTERMEDIATES TO TEMPDIR   
-    # creating temp file names
+    if(save2tmp){
     temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     
     # saving to tempdir
     saveRDS(p3, file = temp_plot)
-    if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
+    if(verbose>=2){
+      cat(report("  Saving the plot in ggplot format to the session tempfile\n"))
+    }
     saveRDS(df, file = temp_table)
-    if(verbose>=2){cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))}
-    if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
+    if(verbose>=2){
+      cat(report("  Saving the report to the session tempfile\n"))
+    }
+    }
     
     # FLAG SCRIPT END
-    
     if (verbose >= 1) {
-      cat(report("\n\nCompleted:", funname, "\n\n"))
+      cat(report("Completed:", funname, "\n"))
     }
     
     # RETURN
-
     invisible(x)
 }

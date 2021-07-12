@@ -4,7 +4,14 @@
 \alias{gl.filter.hamming}
 \title{Filters loci based on pairwise Hamming distance between sequence tags}
 \usage{
-gl.filter.hamming(x, threshold = 0.2, rs = 5, pb = FALSE, verbose = NULL)
+gl.filter.hamming(
+  x,
+  threshold = 0.2,
+  rs = 5,
+  pb = FALSE,
+  save2tmp = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -14,6 +21,8 @@ gl.filter.hamming(x, threshold = 0.2, rs = 5, pb = FALSE, verbose = NULL)
 \item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 4]}
 
 \item{pb}{-- switch to output progress bar [default FALSE]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }

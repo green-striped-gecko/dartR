@@ -90,6 +90,8 @@ out <- gl.report.locmetric(test.gs,metric='test')
 
 Other filters and filter reports: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.maf}()},

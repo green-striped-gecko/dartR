@@ -9,9 +9,11 @@ gl.report.hamming(
   rs = 5,
   threshold = 3,
   taglength = 69,
+  plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   probar = FALSE,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -24,11 +26,15 @@ gl.report.hamming(
 
 \item{taglength}{Typical length of the sequence tags [default 69].}
 
+\item{plot}{specify if plot is to be produced [default TRUE]}
+
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{List of two color names for the borders and fill of the plots [default two_colors].}
 
 \item{probar}{If TRUE, then a progress bar is displayed on long loops [default TRUE].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
@@ -59,8 +65,7 @@ The algorithm is that of Johann de Jong
 \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 as implemented in utils.hamming.r
 
-\strong{ Function's output }
- Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+ Plots and table are saved to the session's temporary directory (tempdir) 
 
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -73,11 +78,12 @@ gl.report.hamming(testset.gs[,1:100])
 
 }
 \seealso{
-\code{\link{gl.filter.hamming}},\code{\link{gl.list.reports}},
- \code{\link{gl.print.reports}}
+
 
 Other filters and filter reports: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.locmetric}()},
 \code{\link{gl.report.maf}()},
