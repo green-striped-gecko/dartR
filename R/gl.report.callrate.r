@@ -29,7 +29,7 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#' Resultant ggplots and the tablulation are saved to the session's temporary directory.
+#' Resultant ggplots and the tabulation are saved to the session's temporary directory.
 #' 
 #' @return Returns unaltered genlight object
 #' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}

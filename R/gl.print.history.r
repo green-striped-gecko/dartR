@@ -7,6 +7,7 @@
 #' @importFrom gridExtra grid.table ttheme_default
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples 
+#' \donttest{
 #' dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
 #' metadata <- system.file("extdata","testset_metadata.csv", package="dartR")
 #' gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=FALSE) 
@@ -16,6 +17,7 @@
 #' bc.fil <- gl.play.history(gl.compliance.check(bandicoot.gl), 
 #' history=gl3@other$history[c(2,3)], verbose=1)
 #' gl.print.history(bc.fil)
+#' }
 
 
 
