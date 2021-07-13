@@ -135,7 +135,7 @@
 
     # Plot a histogram of Call Rate
         callrate <- x@other$loc.metrics$CallRate
-        min <- min(callrate, threshold)
+        min <- min(callrate, threshold,na.rm=TRUE)
         min <- trunc(min*100)/100
         if(datatype=="SNP"){
           xlabel <- "Pre-filter SNP Call Rate [Loci]" 
@@ -151,7 +151,7 @@
           plot_theme
         
         callrate <- x2@other$loc.metrics$CallRate
-        min <- min(callrate, threshold)
+        min <- min(callrate, threshold,na.rm=TRUE)
         min <- trunc(min*100)/100
         if(datatype=="SNP"){
           xlabel <- "Post-filter SNP Call Rate [Loci]" 
@@ -297,7 +297,7 @@
       
       # Plot a histogram of Call Rate
 
-      min <- min(hold2,threshold)
+      min <- min(hold2,threshold,na.rm=TRUE)
       min <- trunc(min*100)/100
       if(datatype=="SNP"){
         xlabel <- "Pre-filter SNP Call Rate [Individuals]" 
@@ -312,7 +312,7 @@
         ylab("Count") + 
         plot_theme
       
-      min <- min(ind.call.rate,threshold)
+      min <- min(ind.call.rate,threshold,na.rm=TRUE)
       min <- trunc(min*100)/100
       if(datatype=="SNP"){
         xlabel <- "Post-filter SNP Call Rate [Individuals]" 
@@ -347,7 +347,7 @@
     # Plot a histogram of Call Rate
     
     tmp <- hold@other$loc.metrics$CallRate
-    min <- min(tmp,threshold)
+    min <- min(tmp,threshold,na.rm=TRUE)
     min <- trunc(min*100)/100
     if(datatype=="SNP"){
       xlabel <- "Pre-filter SNP Call Rate [by population]" 
@@ -363,7 +363,7 @@
       plot_theme
     
     tmp <- x@other$loc.metrics$CallRate
-    min <- min(tmp,threshold)
+    min <- min(tmp,threshold,na.rm=TRUE)
     min <- trunc(min*100)/100
     if(datatype=="SNP"){
       xlabel <- "Post-filter SNP Call Rate [by population]" 
@@ -444,7 +444,7 @@
       x <- utils.recalc.callrate(x,verbose=0)
       
 # SAVE INTERMEDIATES TO TEMPDIR   
-      if(save2tmp){
+      if(save2tmp & plot){
         # creating temp file names
         temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
 #        temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))

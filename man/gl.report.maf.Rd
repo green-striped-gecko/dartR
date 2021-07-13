@@ -71,6 +71,8 @@ gl <- gl.report.maf(testset.gl)
 
 Other filters and filter reports: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},

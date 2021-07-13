@@ -19,7 +19,7 @@
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' 
-#'  @details
+#' @details
 #'  For examples of themes, see  \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
@@ -34,7 +34,7 @@
 #' # Tag P/A data
 #'   result <- gl.filter.rdepth(testset.gs, lower=8, upper=50, verbose=3)
 #'   
-#'  @seealso \code{\link{gl.filter.rdepth}}
+#' @seealso \code{\link{gl.filter.rdepth}}
 #'  
 #' @family filters and filter reports
 #' @import patchwork
@@ -96,7 +96,7 @@ gl.filter.rdepth <- function(x,
     plotvar <- rdepth
     # min <- min(plotvar,lower)
     # min <- trunc(min*100)/100
-    max <- max(plotvar,upper)
+    max <- max(plotvar,upper,na.rm=TRUE)
     max <- ceiling(max/10)*10
     if(datatype=="SNP"){
       xlabel <- "Pre-filter SNP read depth" 
@@ -120,7 +120,7 @@ gl.filter.rdepth <- function(x,
     plotvar <- rdepth
     # min <- min(plotvar,lower)
     # min <- trunc(min*100)/100
-    max <- max(plotvar,upper)
+    max <- max(plotvar,upper,na.rm=TRUE)
     max <- ceiling(max/10)*10
         if(datatype=="SNP"){
       xlabel <- "Post-filter SNP read depth" 
@@ -152,7 +152,7 @@ gl.filter.rdepth <- function(x,
   }  
   
   # SAVE INTERMEDIATES TO TEMPDIR             
-  if(save2tmp){
+  if(save2tmp & plot){
     temp_plot <- tempfile(pattern = paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     #temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     
@@ -172,11 +172,9 @@ gl.filter.rdepth <- function(x,
     x2@other$history[[nh + 1]] <- match.call()  
     
 # FLAG SCRIPT END
-
   if (verbose > 0) {
     cat(report("Completed:",funname,"\n"))
   }
 
   return(x2)
-  
 }

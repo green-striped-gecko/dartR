@@ -90,7 +90,7 @@ gl.report.callrate <- function(x,
     callrate <- x@other$loc.metrics$CallRate
 
     # Calculate minimum and maximum graph cutoffs for callrate
-      min <- min(callrate)
+      min <- min(callrate,na.rm=TRUE)
       min <- trunc(min*100)/100
     
     # Boxplot

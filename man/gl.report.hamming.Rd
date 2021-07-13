@@ -18,21 +18,21 @@ gl.report.hamming(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required].}
+\item{x}{Name of the genlight object containing the SNP data [required]}
 
-\item{rs}{Number of bases in the restriction enzyme recognition sequence [default 5].}
+\item{rs}{Number of bases in the restriction enzyme recognition sequence [default 5]}
 
-\item{threshold}{Minimum acceptable base pair difference for display on the boxplot and histogram [default 3].}
+\item{threshold}{Minimum acceptable base pair difference for display on the boxplot and histogram [default 3]}
 
-\item{taglength}{Typical length of the sequence tags [default 69].}
+\item{taglength}{Typical length of the sequence tags [default 69]}
 
 \item{plot}{specify if plot is to be produced [default TRUE]}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
 
-\item{plot_colours}{List of two color names for the borders and fill of the plots [default two_colors].}
+\item{plot_colours}{List of two color names for the borders and fill of the plots [default two_colors]}
 
-\item{probar}{If TRUE, then a progress bar is displayed on long loops [default TRUE].}
+\item{probar}{If TRUE, then a progress bar is displayed on long loops [default TRUE]}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
@@ -78,10 +78,12 @@ gl.report.hamming(testset.gs[,1:100])
 
 }
 \seealso{
-
+\code{\link{gl.filter.hamming}}
 
 Other filters and filter reports: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},

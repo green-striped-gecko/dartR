@@ -145,9 +145,11 @@ gl.report.reproducibility <- function(x,
   temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
   
   # saving to tempdir
+  if(plot){
   saveRDS(p3, file = temp_plot)
   if(verbose>=2){
     cat(report("  Saving ggplot(s) to the session tempfile\n"))
+  }
   }
   saveRDS(df, file = temp_table)
   if(verbose>=2){

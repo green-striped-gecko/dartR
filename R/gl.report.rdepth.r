@@ -89,7 +89,7 @@ gl.report.rdepth <- function(x,
   }  
     
   # Calculate maximum graph cutoffs 
-    max <- max(rdepth)
+    max <- max(rdepth,na.rm=TRUE)
     max <- ceiling(max/10)*10
 
   # Boxplot
@@ -161,9 +161,11 @@ gl.report.rdepth <- function(x,
     temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
   
   # saving to tempdir
+    if(plot){
     saveRDS(p3, file = temp_plot)
     if(verbose>=2){
       cat(report("  Saving the plot in ggplot format to the session tempfile\n"))
+    }
     }
     saveRDS(df, file = temp_table)
     if(verbose>=2){

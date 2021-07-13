@@ -8,6 +8,10 @@ gl.filter.hamming(
   x,
   threshold = 0.2,
   rs = 5,
+  taglength = 69,
+  plot = TRUE,
+  plot_theme = theme_dartR(),
+  plot_colours = two_colors,
   pb = FALSE,
   save2tmp = FALSE,
   verbose = NULL
@@ -19,6 +23,15 @@ gl.filter.hamming(
 \item{threshold}{-- a threshold Hamming distance for filtering loci [default threshold <= 0.2]}
 
 \item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 4]}
+
+\item{taglength}{Typical length of the sequence tags [default 69]}
+
+\item{plot}{specify if plot is to be produced [default TRUE]}
+
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
+
+\item{plot_colours}{List of two color names for the borders and fill of the
+plots [default two_colors]}
 
 \item{pb}{-- switch to output progress bar [default FALSE]}
 
@@ -57,7 +70,28 @@ percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 \examples{
 # SNP data
   result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
+
+}
+\seealso{
+\code{\link{gl.filter.hamming}}
+
+Other filters and filter reports: 
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.report.callrate}()},
+\code{\link{gl.report.hamming}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{filters and filter reports}

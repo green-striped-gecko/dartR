@@ -125,7 +125,7 @@ gl.filter.reproducibility <- function(x,
   
   # PLOT HISTOGRAMS, BEFORE AFTER
   if(plot){
-  min <- min(repeatability,threshold)
+  min <- min(repeatability,threshold,na.rm=TRUE)
   min <- trunc(min*100)/100
   if(datatype=="SNP"){
     xlabel <- "Pre-filter SNP repeatability" 
@@ -151,7 +151,7 @@ gl.filter.reproducibility <- function(x,
   } else {
     xlabel <- "Post-filter P/A repeatability"
   }
-  min <- min(repeatability,threshold)
+  min <- min(repeatability,threshold,na.rm=TRUE)
   min <- trunc(min*100)/100
   p2 <- ggplot(data.frame(repeatability), aes(x = repeatability)) + 
     geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
@@ -177,7 +177,7 @@ gl.filter.reproducibility <- function(x,
   }  
   
 # SAVE INTERMEDIATES TO TEMPDIR 
-  if(save2tmp){
+  if(save2tmp & plot){
     # creating temp file names
     temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     

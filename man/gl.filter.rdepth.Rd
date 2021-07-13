@@ -57,12 +57,14 @@ or loci with exceptionally high counts.
 # Tag P/A data
   result <- gl.filter.rdepth(testset.gs, lower=8, upper=50, verbose=3)
   
- @seealso \code{\link{gl.filter.rdepth}}
- 
 }
 \seealso{
+\code{\link{gl.filter.rdepth}}
+
 Other filters and filter reports: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},

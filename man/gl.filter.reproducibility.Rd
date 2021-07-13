@@ -54,6 +54,8 @@ replicate dataset.
 
 Other filters and filter reports: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},

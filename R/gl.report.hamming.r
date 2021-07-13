@@ -9,14 +9,14 @@
 #' two trimmed sequences starting from immediately after the common recognition
 #' sequence and terminating at the last base of the shorter sequence. 
 #'
-#' @param x Name of the genlight object containing the SNP data [required].
-#' @param rs Number of bases in the restriction enzyme recognition sequence [default 5].
-#' @param threshold Minimum acceptable base pair difference for display on the boxplot and histogram [default 3].
-#' @param taglength Typical length of the sequence tags [default 69].
+#' @param x Name of the genlight object containing the SNP data [required]
+#' @param rs Number of bases in the restriction enzyme recognition sequence [default 5]
+#' @param threshold Minimum acceptable base pair difference for display on the boxplot and histogram [default 3]
+#' @param taglength Typical length of the sequence tags [default 69]
 #' @param plot specify if plot is to be produced [default TRUE]
-#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
-#' @param probar If TRUE, then a progress bar is displayed on long loops [default TRUE].
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
+#' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors]
+#' @param probar If TRUE, then a progress bar is displayed on long loops [default TRUE]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
@@ -48,7 +48,7 @@
 #' gl.report.hamming(testset.gl[,1:100])
 #' gl.report.hamming(testset.gs[,1:100])
 #' 
-#' @seealso \code{\link{gl.filter.hamming}}}
+#' @seealso \code{\link{gl.filter.hamming}}
 #'  
 #' @family filters and filter reports
 #' @importFrom stats sd
@@ -193,9 +193,11 @@ gl.report.hamming <- function(x,
     temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     
     # saving to tempdir
+    if(plot){
     saveRDS(p3, file = temp_plot)
     if(verbose>=2){
       cat(report("  Saving the plot in ggplot format to the session tempfile\n"))
+    }
     }
     saveRDS(df, file = temp_table)
     if(verbose>=2){
