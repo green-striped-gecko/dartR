@@ -62,6 +62,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          install.packages("rgdal", repos = "http://cran.us.r-project.org", type = "source")
           remotes::install_github("r-spatial/sf")
           remotes::install_github('EricArcher/strataG')
           remotes::install_deps(dependencies = TRUE)
