@@ -17,23 +17,23 @@ gl.pcoa(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required]}
+\item{x}{Name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required].}
 
-\item{nfactors}{Number of axes to retain in the output of factor scores.}
+\item{nfactors}{Number of axes to retain in the output of factor scores [default 5].}
 
-\item{correction}{Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL]}
+\item{correction}{Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL].}
 
-\item{rm.monomorphs}{If TRUE, remove monomorphic loci [default TRUE]}
+\item{rm.monomorphs}{If TRUE, remove monomorphic loci [default TRUE].}
 
-\item{parallel}{TRUE if parallel processing is required (does fail under Windows) [default FALSE]}
+\item{parallel}{TRUE if parallel processing is required (does fail under Windows) [default FALSE].}
 
-\item{n.cores}{Number of cores to use if parallel processing is requested [default 16]}
+\item{n.cores}{Number of cores to use if parallel processing is requested [default 16].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{List of two color names for the borders and fill of the plot [default two_colors].}
 
-\item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 An object of class pcoa containing the eigenvalues and factor scores
