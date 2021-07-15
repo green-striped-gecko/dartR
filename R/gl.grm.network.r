@@ -58,7 +58,7 @@
 #' nPop(gl_test)
 #' # color list for population colors 
 #' pop_colours <- c("deepskyblue","green","gray","orange","deeppink")
-#' G_out <- gl.grm(gl_test,plotheatmap=F)
+#' G_out <- gl.grm(gl_test,plotheatmap=FALSE)
 #' gl.grm.network(G_out, gl_test, palette_discrete = pop_colours, relatedness_factor = 0.25)  
 #'@references 
 #'\itemize{

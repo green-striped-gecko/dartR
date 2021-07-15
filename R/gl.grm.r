@@ -9,11 +9,11 @@
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param plotheatmap A switch if a heatmap should be shown [default TRUE].
-#' @param palette_discrete A discrete palette for the color of the populations
-#'  [default discrete_palette].
 #' @param palette_discrete A discrete palette for the color of populations or a 
 #' list with as many colors as there are populations in the dataset
 #'  [default discrete_palette].
+#' @param palette_convergent A convergent palette for the IBD values
+#'  [default convergent_palette].
 #' @param ... Parameters passed to function A.mat from package rrBLUP
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #'  progress log ; 3, progress and results summary; 5, full report 
