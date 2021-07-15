@@ -16,17 +16,15 @@ gl.grm(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{plotheatmap}{A switch if a heatmap should be shown [default TRUE]}
+\item{plotheatmap}{A switch if a heatmap should be shown [default TRUE].}
 
-\item{palette_discrete}{A discrete palette for the color of the populations
-[default discrete_palette]}
-
-\item{palette_convergent}{A convergent palette for the color of the heatmap 
-[default convergent_palette]}
+\item{palette_discrete}{A discrete palette for the color of populations or a 
+list with as many colors as there are populations in the dataset
+ [default discrete_palette].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report 
-[default 2 or as specified using gl.set.verbosity]}
+[default 2 or as specified using gl.set.verbosity].}
 
 \item{...}{Parameters passed to function A.mat from package rrBLUP}
 }
@@ -70,10 +68,10 @@ gl.grm(bandicoot.gl[1:20,])
 \seealso{
 \code{\link{gl.grm.network}}
 
-Other inbreeding functions: 
+Other inbreeding and relatedness functions: 
 \code{\link{gl.grm.network}()}
 }
 \author{
 Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{inbreeding functions}
+\concept{inbreeding and relatedness functions}

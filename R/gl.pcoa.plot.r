@@ -81,7 +81,7 @@
 #' # five populations in gl_test
 #' nPop(gl_test)
 #' # color list for population colors 
-#' pop_colours <- c("blue","green","black","orange","deeppink")
+#' pop_colours <- c("deepskyblue","green","gray","orange","deeppink")
 #' # Ordination applied to genotypes
 #' pca <- gl.pcoa(gl_test)
 #' # interactive plot to examine labels

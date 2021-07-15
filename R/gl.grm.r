@@ -8,15 +8,16 @@
 #'   \link[rrBLUP]{A.mat} (package rrBLUP). 
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
-#' @param plotheatmap A switch if a heatmap should be shown [default TRUE] 
+#' @param plotheatmap A switch if a heatmap should be shown [default TRUE].
 #' @param palette_discrete A discrete palette for the color of the populations
-#'  [default discrete_palette]
-#' @param palette_convergent A convergent palette for the color of the heatmap 
-#' [default convergent_palette]
+#'  [default discrete_palette].
+#' @param palette_discrete A discrete palette for the color of populations or a 
+#' list with as many colors as there are populations in the dataset
+#'  [default discrete_palette].
 #' @param ... Parameters passed to function A.mat from package rrBLUP
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #'  progress log ; 3, progress and results summary; 5, full report 
-#'  [default 2 or as specified using gl.set.verbosity]
+#'  [default 2 or as specified using gl.set.verbosity].
 #'
 #' @details 
 #' Two or more alleles are identical by descent (IBD) if they are identical 
@@ -45,7 +46,7 @@
 #' gl.grm(bandicoot.gl[1:20,])  
 #'
 #' @seealso \code{\link{gl.grm.network}}
-#' @family inbreeding functions
+#' @family inbreeding and relatedness functions
 #' @importFrom rrBLUP A.mat
 #' @importFrom gplots heatmap.2
 #' @export
@@ -77,32 +78,45 @@ gl.grm <- function(x,
     }
     
 # DO THE JOB    
+  
+  # assigning colors to populations
+  if(class(palette_discrete)=="function"){
+    colours_pops <- palette_discrete(length(levels(pop(x))))
+  }
+  
+  if(class(palette_discrete)!="function"){
+    colours_pops <- palette_discrete
+  }
+  
+  names(colours_pops) <- as.character(levels(x$pop))
     
-# assigning colors to populations
-    colors_pop_temp <- palette_discrete(length(levels(pop(x))))
-    names(colors_pop_temp) <- as.character(levels(x$pop))
-    cols_pops <- as.data.frame(cbind(names(colors_pop_temp),colors_pop_temp))
-    colnames(cols_pops) <- c("pop","colour")
-    df_pops <- as.data.frame(x$pop)
-    colnames(df_pops) <- c("pop")
-    cols_pops <- merge(df_pops,cols_pops,by="pop")
-
 # calculating the realized additive relationship matrix
   
  G <- rrBLUP::A.mat(as.matrix(x)-1, ...)
+ 
+df_colours_temp_1 <- as.data.frame(cbind(indNames(x),as.character(pop(x)),1:nInd(x)))
+colnames(df_colours_temp_1) <- c("ind","pop","order")
+df_colours_temp_2 <- as.data.frame(cbind(names(colours_pops),colours_pops))
+colnames(df_colours_temp_2) <- c("pop","colour")
+df_colours <- merge(df_colours_temp_1,df_colours_temp_2,by= "pop")
+df_colours$order <- as.numeric(df_colours$order)
+df_colours <- df_colours[order(df_colours$order),]
+
+df_colours_2 <- df_colours[,c("pop","colour")]
+df_colours_2 <- unique(df_colours_2)
 
 if(plotheatmap==T){
 # plotting heatmap 
 gplots::heatmap.2(G,
                   col = palette_convergent(255),
                   dendrogram = "column",
-                  ColSideColors = as.character(cols_pops$colour),
-                  RowSideColors = as.character(cols_pops$colour), 
+                  ColSideColors = df_colours$colour,
+                  RowSideColors = df_colours$colour, 
                   trace = "none", 
                   density.info = "none",
                   scale = "none",
                   main = "Probability of identity by descent")
-legend(0,0.9,legend=unique(cols_pops$pop),fill=unique(cols_pops$colour),cex=0.75,title="Populations")
+legend(0,0.8,legend=df_colours_2$pop,fill=df_colours_2$colour,cex=0.75,title="Populations")
 }
  
  # FLAG SCRIPT END
