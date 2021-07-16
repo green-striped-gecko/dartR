@@ -67,8 +67,7 @@
 #'  }
 #' @seealso \code{\link{gl.grm}}
 #' @family inbreeding and relatedness functions
-#' @importFrom grDevices rgb
-#' @importFrom graphics legend plot
+#' @import igraph
 #' @export
 
 gl.grm.network <- function(G, 
