@@ -69,7 +69,8 @@ jobs:
         run: |
           # conflicts with gfortran from r-lib/actions when linking gcc
           rm '/usr/local/bin/gfortran'
-          brew install pkg-config gdal proj geos
+          brew reinstall pkg-config gdal proj geos
+          
       - name: "[Stage] [macOS] Install libgit2"
         if: runner.os == 'macOS'
         run: brew install libgit2

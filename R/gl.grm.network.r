@@ -141,22 +141,22 @@ gl.grm.network <- function(G,
   
   if (method=="fr"){
     layout.name <- "Fruchterman-Reingold layout"
-    plotcord <- data.frame(layout_with_fr(network.FS))
+    plotcord <- data.frame(igraph::layout_with_fr(network.FS))
   }
   
   if (method=="kk"){
     layout.name <- "Kamada-Kawai layout"
-    plotcord <- data.frame(layout_with_kk(network.FS))
+    plotcord <- data.frame(igraph::layout_with_kk(network.FS))
   }
   
   if (method=="gh"){
     layout.name <- "Graphopt layout"
-    plotcord <- data.frame(layout_with_graphopt(network.FS))
+    plotcord <- data.frame(igraph::layout_with_graphopt(network.FS))
   }
 
   if (method=="mds"){
     layout.name <- "Multidimensional scaling layout"
-    plotcord <- data.frame(layout_with_mds(network.FS))
+    plotcord <- data.frame(igraph::layout_with_mds(network.FS))
   }
   
   #get edges, which are pairs of node IDs
