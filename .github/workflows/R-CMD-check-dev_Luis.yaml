@@ -62,8 +62,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages("rgdal", type="binary", configure.args = c("--with-proj-lib=/usr/local/lib/", "--with-proj-include=/usr/local/include/"))
-          install.packages("sf", type="binary", configure.args = "--with-proj-lib=/usr/local/lib/")
+          sudo apt-get install gdal-bin proj-bin libgdal-dev libproj-dev
+          install.packages("rgdal", configure.args = c("--with-proj-lib=/usr/local/lib/", "--with-proj-include=/usr/local/include/"))
+          install.packages("sf", configure.args = "--with-proj-lib=/usr/local/lib/")
           remotes::install_github("r-spatial/sf")
           remotes::install_github('EricArcher/strataG')
           remotes::install_deps(dependencies = TRUE)

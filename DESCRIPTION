@@ -29,11 +29,11 @@ biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, 
         vegan, SNPRelate, StAMPP, sp, PopGenReport, hierfstat, 
         gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools, 
-        patchwork, reshape2, robustbase
+        patchwork, reshape2, robustbase,rrBLUP,gplots
 Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
         pca3d, dismo, pegas, directlabels, rgdal,
         leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp, igraph,
-        qvalue, gdistance, seqinr, pheatmap, RColorBrewer, gplots,
+        qvalue, gdistance, seqinr, pheatmap, RColorBrewer, 
         vcfR, mmod, plotly, ggthemes, ggrepel, raster
 License: GPL-2
 LazyData: true
