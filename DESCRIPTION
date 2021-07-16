@@ -29,7 +29,7 @@ biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, 
         vegan, SNPRelate, StAMPP, sp, PopGenReport, hierfstat, 
         gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools, 
-        patchwork, reshape2, robustbase, gplots, rrBLUP
+        patchwork, reshape2, robustbase
 Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
         pca3d, dismo, pegas, directlabels, rgdal,
         leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp, igraph,

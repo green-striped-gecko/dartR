@@ -126,7 +126,7 @@ gl.grm.network <- function(G,
   # using the average inbreeding coefficient (1-f)
   # of the diagonal elements as the reference value
   MS <- mean(diag(G)-1)
-
+  
   links$kinship <- (links$weight/2) - MS
 
   nodes <- data.frame(cbind(x$ind.names, as.character(pop(x))))

@@ -22,6 +22,9 @@ gl.grm(
 list with as many colors as there are populations in the dataset
  [default discrete_palette].}
 
+\item{palette_convergent}{A convergent palette for the IBD values
+[default convergent_palette].}
+
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report 
 [default 2 or as specified using gl.set.verbosity].}
