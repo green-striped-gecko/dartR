@@ -18,7 +18,9 @@ an evanno plot is created and a list of all four plots is returned.
 This function takes a genlight object and runs a STRUCTURE analysis based on functions from \code{strataG}
 }
 \details{
-
+The function is basically a convenient wrapper around the beautiful
+strataG function \link[strataG]{evanno} (Archer et al. 2016). For a detailed
+description please refer to this package (see references below).
 }
 \examples{
 \dontrun{
@@ -37,7 +39,7 @@ Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package f
 Evanno, G., Regnaut, S., and J. Goudet. 2005. Detecting the number of clusters of individuals using the software STRUCTURE: a simulation study. Molecular Ecology 14:2611-2620.
 }
 \seealso{
-\code{\link{gl.runstructure}}, \link[strataG]{structureRun}, \link[strataG]{clumpp},
+\code{\link{gl.runstructure}},  \link[strataG]{clumpp},
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -39,7 +39,7 @@
 ###@importFrom strataG genind2gtypes structureRun
 #'
 #' @export
-#' @seealso \link[strataG]{structureRun}
+###@seealso \code{structureRun}
 #' @references 
 #' Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
 #' 

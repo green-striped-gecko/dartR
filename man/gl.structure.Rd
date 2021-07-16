@@ -59,9 +59,6 @@ Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population struc
 
 Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package for manipulating, summarizing and analysing population genetic data. Mol Ecol Resour. doi:10.1111/1755-0998.12559
 }
-\seealso{
-\link[strataG]{structureRun}
-}
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

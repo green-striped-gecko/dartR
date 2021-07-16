@@ -58,7 +58,7 @@ Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package f
 Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster matching and permutation program for dealing with label switching and multimodality in analysis of population structure. Bioinformatics 23(14):1801-1806. Available at \href{http://web.stanford.edu/group/rosenberglab/clumppDownload.html}{clumpp}
 }
 \seealso{
-\code{\link{gl.runstructure}}, \link[strataG]{structureRun}, \link[strataG]{clumpp}
+\code{\link{gl.runstructure}}, \link[strataG]{clumpp}
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

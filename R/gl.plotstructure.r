@@ -43,7 +43,7 @@
 ###@importFrom strataG genind2gtypes structureRun
 #'
 #' @export
-#' @seealso \code{\link{gl.runstructure}}, \link[strataG]{structureRun}, \link[strataG]{clumpp}
+#' @seealso \code{\link{gl.runstructure}}, \link[strataG]{clumpp}
 #' @references 
 #' Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
 #' Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package for manipulating, summarizing and analysing population genetic data. Mol Ecol Resour. doi:10.1111/1755-0998.12559

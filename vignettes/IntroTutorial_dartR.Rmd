@@ -529,7 +529,7 @@ gl2 <- gl.filter.monomorphs(gl, v=0)
 6.	Filter out loci with trimmed sequence tags that are too similar (possible paralogues). Only works if TrimmedSequence is available in the loci metadata, therefore we use another test data set here.
 
 ```{r}
-gl2 <- gl.filter.hamming(testset.gl, t=0.25, pb = F)
+gl2 <- gl.filter.hamming(testset.gl, treshold=0.25, pb = F)
 ```
 Note: This filter and its accompanying report function is slow when there are many loci. Recommended that it be applied after all other filtering, and only if less than 20,000 loci remain. May require an overnight run.
 
