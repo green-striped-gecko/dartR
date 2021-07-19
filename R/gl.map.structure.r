@@ -30,7 +30,11 @@
 #' Evanno, G., Regnaut, S., and J. Goudet. 2005. Detecting the number of clusters of individuals using the software STRUCTURE: a simulation study. Molecular Ecology 14:2611-2620.
 
 
+<<<<<<< HEAD
 gl.map.structure <- function(sr, k ) {}
+=======
+gl.map.structure <- function(sr, k, )
+>>>>>>> c28fc647279a33381e49af89d02bdef951e0c66f
 
 # cex =1.5
 # 
