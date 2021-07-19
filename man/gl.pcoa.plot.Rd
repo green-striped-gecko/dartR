@@ -132,7 +132,7 @@ pca_interact <- gl.pcoa.plot(pca, gl_test, ellipse = TRUE, labels = "ind", inter
 # 3D interactive plot
 pca_3D_interact <- gl.pcoa.plot(pca, gl_test, three_D_plot = TRUE, palette_discrete = pop_colours)
 # using sex as population 
-names(gl$other$ind.metrics)
+# names(gl$other$ind.metrics)
 pca_sex <- gl.pcoa.plot(glPca=pca, gl_test, as.pop = "assigned.sex", palette_discrete = pop_colours)
 
 }

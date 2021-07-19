@@ -140,6 +140,7 @@ import(adegenet, except = plot)
 
 import(crayon, except = c(chr, '%+%'))
 import(foreach)
+import(ggplot2)
 import(igraph)
 import(patchwork)
 import(reshape2)
