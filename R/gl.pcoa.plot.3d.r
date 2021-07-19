@@ -37,7 +37,8 @@ gl.pcoa.plot.3d <- function(glPca,
   pkg <- "plotly"
   if (!(requireNamespace(pkg, quietly = TRUE))){
     stop("Package ",pkg," needed for this function to work. Please install it.")
-  }else{
+  }
+  else{
 
   
   # TRAP COMMAND, SET VERSION

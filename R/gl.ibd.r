@@ -263,10 +263,7 @@ nmc <- gsub("/", "_over_",names(match.call()))
 nmc <- gsub("\\*", "x",nmc)
 
 temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(nmc,"_",mc,collapse = "_")))
-
-
 temp_table <- tempfile(pattern = paste0("dartR_table",paste0(nmc,"_",mc,collapse = "_"),"_"))
-
 
 # saving to tempdir
 saveRDS(p1, file = temp_plot)
