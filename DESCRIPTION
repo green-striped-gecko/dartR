@@ -29,12 +29,12 @@ biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, 
         vegan, SNPRelate, StAMPP, sp, PopGenReport, hierfstat, 
         gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools, 
-        patchwork, reshape2, robustbase,gplots, igraph
+        patchwork, reshape2
 Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
         pca3d, dismo, pegas, directlabels, rgdal,
         leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp,
         qvalue, gdistance, seqinr, pheatmap, RColorBrewer, 
-        vcfR, mmod, plotly, ggthemes, ggrepel, raster
+        vcfR, mmod, plotly, ggthemes, ggrepel, raster, robustbase,gplots, igraph
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1
