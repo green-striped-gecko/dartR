@@ -34,7 +34,8 @@ Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
         pca3d, dismo, pegas, directlabels, rgdal,
         leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp,
         qvalue, gdistance, seqinr, pheatmap, RColorBrewer, 
-        vcfR, mmod, plotly, ggthemes, ggrepel, raster,  igraph, gplots
+        vcfR, mmod, plotly, ggthemes, ggrepel, raster,  igraph, gplots,
+        strataG
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1

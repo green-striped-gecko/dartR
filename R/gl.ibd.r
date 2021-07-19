@@ -257,9 +257,9 @@ if (verbose>0) {
 # creating temp file names
 
 #check for "/" in match.call
-mc <- gsub("/", "_over_",as.character(match.call()))
+mc <- gsub("/", "_over_",as.character(funname))
 mc <- gsub("\\*", "x",mc)
-nmc <- gsub("/", "_over_",names(match.call()))
+nmc <- gsub("/", "_over_",names(funname))
 nmc <- gsub("\\*", "x",nmc)
 
 temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(nmc,"_",mc,collapse = "_")))
