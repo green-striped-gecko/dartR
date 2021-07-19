@@ -5,7 +5,8 @@
 #'@importFrom gridExtra grid.table ttheme_default
 #'@author Bernd Gruber & Luis Mijangos (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #'@examples 
-#' reports <- gl.list.reports()
+#' gl.report.callrate(testset.gl)
+#' gl.list.reports()
 
 gl.list.reports <- function(){
   
@@ -30,7 +31,7 @@ gl.list.reports <- function(){
     tt <- ttheme_default()
     tt$rowhead$fg_params$x=0
     tt$core$fg_params$fontsize=11
-    # tt$core$fg_params$hjust=1
+    tt$core$fg_params$hjust=0.1
     tt$core$fg_params$x=c(rep(0.5, nh),0.2, rep(0.01, nh+1))
     tt$core$fg_params$fontfamily="mono"
     tt$core$fg_params$fontface="bold"
