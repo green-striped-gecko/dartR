@@ -1,6 +1,7 @@
-#' Checks a gl object to see if it complies with dartR expectations, and amends to comply if necessary
+#' @name gl.compliance.check
+#' @title Checks a gl object to see if it complies with dartR expectations, and amends to comply if necessary
 #'
-#' A genlight object used by dartR has a number of requirements that allow functions within the package to operate
+#' @details A genlight object used by dartR has a number of requirements that allow functions within the package to operate
 #' correctly. The genlight object comprises
 #' 
 #' (a) The SNP genotypes or Tag Presence/Absence data (SilicoDArT);
@@ -24,27 +25,15 @@
 gl.compliance.check <- function (x,
                                  verbose=NULL) {
 
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  
   # CHECKS DATATYPE 
-  
   datatype <- utils.check.datatype(x)
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
 
 # DO THE JOB
   
@@ -53,20 +42,20 @@ gl.compliance.check <- function (x,
   if (datatype == "SNP"){
     mat <- as.matrix(x)
     scores <- c(0,1,2,NA)
-    if (verbose >= 2){cat("  Checking coding of SNPs\n")}
+    if (verbose >= 2){cat(report("  Checking coding of SNPs\n"))}
     if (max(mat) %in% scores){
       if (verbose >= 1){cat("    SNP data scored NA, 0, 1 or 2 confirmed\n")}
     } else {
-      if (verbose >= 1){cat("    Error: SNP data must be scored NA, 0 or 1 or 2, revisit data input\n")}
+      if (verbose >= 1){cat(error("    Error: SNP data must be scored NA, 0 or 1 or 2, revisit data input\n"))}
     }
   } else {
     mat <- as.matrix(x)
     scores <- c(0,1,NA)
-    if (verbose >= 2){cat("  Checking coding of Tag P/A data\n")}
+    if (verbose >= 2){cat(report("  Checking coding of Tag P/A data\n"))}
     if (max(mat) %in% scores){
       if (verbose >= 1){cat("    Tag P/A data (SilicoDArT) scored 1, 0 (present or absent) confirmed\n")}
     } else {
-      if (verbose >= 1){cat("    Error: Tag P/A data (SilicoDArT) must be scored NA for missing, 0 for absent or 1 for present, revisit data input\n")}
+      if (verbose >= 1){cat(error("    Error: Tag P/A data (SilicoDArT) must be scored NA for missing, 0 for absent or 1 for present, revisit data input\n"))}
     }
   }
   
@@ -74,16 +63,16 @@ gl.compliance.check <- function (x,
   # Check for the locus metrics flags, and create if they do not exist.
   # Check for the verbosity flag, and create if it does not exist.
   
-  if (verbose >= 2){cat("  Checking locus metrics and flags\n")}
+  if (verbose >= 2){cat(report("  Checking locus metrics and flags\n"))}
     x <- utils.reset.flags(x,set=FALSE,verbose=0)
 
   # Calculate locus metrics
   
-  if (verbose >= 2){cat("  Recalculating locus metrics\n")}
+  if (verbose >= 2){cat(report("  Recalculating locus metrics\n"))}
   x <- gl.recalc.metrics(x,verbose=0)
   
   # Check for monomorphic loci
-  if (verbose >= 2){cat("  Checking for monomorphic loci\n")}
+  if (verbose >= 2){cat(report("  Checking for monomorphic loci\n"))}
   x2 <- gl.filter.monomorphs(x,verbose=0)
   if(nLoc(x2)==nLoc(x)){
     if (verbose >= 1){cat("    No monomorphic loci detected\n")}
@@ -101,9 +90,9 @@ gl.compliance.check <- function (x,
   
   # Check that the individual metrics exist, and if not, create the df
   
-  if (verbose >= 2){cat("  Checking for individual metrics\n")}
+  if (verbose >= 2){cat(report("  Checking for individual metrics\n"))}
   if(is.null(x@other$loc.metrics)){
-    if (verbose >= 1){cat("    Creating a slot for individual metrics\n")}
+    if (verbose >= 1){cat(warn("  Warning: Creating a slot for individual metrics\n"))}
     x@other$ind.metrics$id <- indNames(x)
   } else {
     if (verbose >= 1){cat("    Individual metrics confirmed\n")}
@@ -111,13 +100,13 @@ gl.compliance.check <- function (x,
   
   # Check that the population variable exists, and if it does not, create it with a single population 'pop1'
   
-  if (verbose >= 2){cat("  Checking for population assignments\n")}
+  if (verbose >= 2){cat(report("  Checking for population assignments\n"))}
   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-    if (verbose >= 1){cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+    if (verbose >= 1){cat(warn("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n"))}
     pop(x) <- array("pop1",dim = nInd(x))
     pop(x) <- as.factor(pop(x))
   } else {
-    if (verbose >= 1){cat("  Population assignments confirmed\n")}
+    if (verbose >= 1){cat("    Population assignments confirmed\n")}
   }
   
   #check if coordinates are in the right place and not mispelt 
@@ -129,9 +118,8 @@ gl.compliance.check <- function (x,
   #remove misspelt columns if they exist...
   x@other$latlong <- NULL
   x@other$latlon$long <- NULL
-  if (verbose>=2) cat("Spelling of coordinates checked and changed if necessary to lat/lon\n")
-  
-  
+  if (verbose>=2) cat(report("  Spelling of coordinates checked and changed if necessary to lat/lon\n"))
+ 
   # ADD TO HISTORY
   nh <- length(x@other$history)
   x@other$history[[nh + 1]] <- match.call()  
@@ -139,7 +127,7 @@ gl.compliance.check <- function (x,
 # FLAG SCRIPT END
   
   if (verbose > 0) {
-    cat("Completed:", funname, "\n")
+    cat(report("Completed:", funname, "\n"))
   }
 
    return(x)

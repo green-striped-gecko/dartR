@@ -24,91 +24,57 @@
 
 gl.join <- function(x1, x2, verbose=NULL) {
 
-# TRAP COMMAND, SET VERSION
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Juliette"
-
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x1@other$verbose)){ 
-      verbose <- x1@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
 # STANDARD ERROR CHECKING
   
-  if(class(x1)!="genlight" | class(x2)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
+# CHECK DATATYPE 
+  data.type1 <- utils.check.datatype(x1,verbose=0)
+  data.type2 <- utils.check.datatype(x2,verbose=0)
   
-    if (all(x1@ploidy == 1 )){
-      if(verbose==2){cat("  Processing Presence/Absence (SilicoDArT) data in genlight object 1,",substitute(x1),"\n")}
-      data.type1 <- "SilicoDArT"
-    } else if (all(x1@ploidy == 2)){
-      if(verbose==2){cat("  Processing SNP data in genlight object 1,",substitute(x1),"\n")}
-      data.type1 <- "SNP"
-    } else {
-      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data) in genlight object 1,",substitute(x1))
+    if((data.type1 != "SNP" && data.type1 != "SilicoDArT")|| (data.type2 != "SNP" && data.type2 != "SilicoDArT")){
+      stop (error("Fatal Error: Genlight objects must both be either SNP data or SilicoDArT data (fragment P/A data)"))
     }
 
-    if (all(x2@ploidy == 1)){
-      if(verbose==2){cat("  Processing Presence/Absence (SilicoDArT) data in genlight object 2,",substitute(x2),"\n")}
-      data.type2 <- "SilicoDArT"
-    } else if (all(x2@ploidy == 2)){
-      if(verbose==2){cat("  Processing SNP data in genlight object 2,",substitute(x2),"\n")}
-      data.type2 <- "SNP"
-    } else {
-      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data) in genlight object 2,",substitute(x2))
-    }
+    if(data.type1 != data.type2){
+      stop (error("Fatal Error: Genlight objects must both be either SNP data or SilicoDArT data (fragment P/A data), not a mixture\n"))
+    } 
+    if (data.type1 == 1 && data.type2 == 1){
+      if(verbose==2){cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))}
+    } else if (data.type1 == 2 && data.type2 == 2){
+      if(verbose==2){cat(report("  Processing SNP data \n"))}
+    } 
 
-  if (data.type1 != data.type2){
-    stop("Fatal Error: Cannot join two genlight objects, one with SNP data, the other with Tag Presence/Absence data (SilicoDArT)")
-  }
-  
   if (is.null(x1) | is.null(x2)){
-    stop("Fatal Error: Two genlight objects of the same type must be provided")
+    stop(error("Fatal Error: Two genlight objects must be provided"))
   }
   
 # SCRIPT SPECIFIC ERROR CHECKING
   
   # Check that names and ind.metadata are the same and in the same order
   if (!identical(indNames(x1),indNames(x2))){
-    stop("Fatal Error: the two genlight objects do not have data for the same individuals in the same order\n")
+    stop(error("Fatal Error: the two genlight objects do not have data for the same individuals in the same order\n"))
   }
   if (!is.null(x1@other$ind.metrics)){
     if (!identical(x1@other$ind.metrics,x1@other$ind.metrics)){
-      stop("  Fatal Error: the two genlight objects do not have identical metadata for the same individuals\n")
+      stop(error("Fatal Error: the two genlight objects do not have identical metadata for the same individuals\n"))
     }
   }
   if (!is.null(x1@other$latlon)){
     if (!identical(x1@other$latlon,x1@other$latlon)){
-      stop("  Fatal Error: the two genlight objects do not have latlon data for the same individuals\n")
+      stop(error("Fatal Error: the two genlight objects do not have latlon data for the same individuals\n"))
     }
   }
   
 # DO THE JOB
 
   if (verbose >= 2){
-    cat("  Concatenating two genlight objects,",substitute(x1),"and",substitute(x2),"\n")
+    cat(report("  Concatenating two genlight objects,",substitute(x1),"and",substitute(x2),"\n"))
   }
   
   if (verbose >=3) {
@@ -122,41 +88,41 @@ gl.join <- function(x1, x2, verbose=NULL) {
   
 # Join the locus metrics, if they exist
   if (verbose >= 2){
-    cat("  Concatenating the locus metrics\n")
+    cat(report("  Concatenating the locus metrics\n"))
   }
   if (!is.null(x1@other$loc.metrics) & !is.null(x2@other$loc.metrics)){
     x@other$loc.metrics <- rbind(x1@other$loc.metrics,x2@other$loc.metrics)
   } else {
-    cat("    Warning: Input genlight objects and/or output genlight object lacks locus metrics\n")
+    cat(warn("  Warning: Input genlight objects and/or output genlight object lacks locus metrics\n"))
   } 
   
 # Add the ind metrics, assuming they are the same in both genlight objects 
   if (verbose >= 2){
-    cat("  Adding the individual metrics\n")
+    cat(report("  Adding the individual metrics\n"))
   }
   if (!is.null(x1@other$ind.metrics)){
     x@other$ind.metrics <- x1@other$ind.metrics
   } else if (!is.null(x2@other$ind.metrics)){
       x@other$ind.metrics <- x2@other$ind.metrics
   } else {    
-    cat("    Warning: Input genlight objects and/or output genlight object lacks individual metrics\n")
+    cat(warn("  Warning: Input genlight objects and/or output genlight object lacks individual metrics\n"))
   }
   
 # Add the lat lon metrics, assuming they are the same in both genlight objects  
   if (verbose >= 2){
-    cat("  Adding the latlons if they exist\n")
+    cat(report("  Adding the latlons if they exist\n"))
   }
   if (!is.null(x1@other$latlon)){
     x@other$latlon <- x1@other$latlon
   } else if (!is.null(x2@other$latlon)){
     x@other$latlon <- x2@other$latlon
   } else {
-    cat("    Warning: Input genlight objects and/or output genlight object lacks latlon data\n")
+    cat(warn("  Warning: Input genlight objects and/or output genlight object lacks latlon data\n"))
   }  
   
 # Add the loc metrics flags, set to 1 only if 1 in both genlight objects  
   if (verbose >= 2){
-    cat("  Setting the locus metrics flags\n")
+    cat(report("  Setting the locus metrics flags\n"))
   }
   if (!is.null(x1@other$loc.metrics.flags) & !is.null(x2@other$loc.metrics.flags)){
     x@other$loc.metrics.flags$AvgPIC <- x1@other$loc.metrics.flags$AvgPIC*x2@other$loc.metrics.flags$AvgPIC
@@ -173,7 +139,7 @@ gl.join <- function(x1, x2, verbose=NULL) {
     x@other$loc.metrics.flags$OneRatio <- x1@other$loc.metrics.flags$OneRatio*x2@other$loc.metrics.flags$OneRatio
     x@other$loc.metrics.flags$PIC <- x1@other$loc.metrics.flags$PIC*x2@other$loc.metrics.flags$PIC
   } else {
-    cat("    Warning: Input genlight objects and/or output genlight object lacks metrics flags. Flags set to zero\n")
+    cat(warn("  Warning: Input genlight objects and/or output genlight object lacks metrics flags. Flags set to zero\n"))
     x@other$loc.metrics.flags$AvgPIC <- 0
     x@other$loc.metrics.flags$OneRatioRef <- 0
     x@other$loc.metrics.flags$OneRatioSnp <- 0
@@ -191,7 +157,7 @@ gl.join <- function(x1, x2, verbose=NULL) {
   
 # Create the history repository, taking the base from X1 if it exists
   if (verbose >= 2){
-    cat("  Adding the history\n")
+    cat(report("  Adding the history\n"))
   }
   if (is.null(x@other$history)) {
     x@other$history <- list(match.call())
@@ -199,22 +165,7 @@ gl.join <- function(x1, x2, verbose=NULL) {
     nh <- length(x@other$history)
     x@other$history[[nh + 1]] <- match.call()   
   }
-  
-# Create a verbosity flag, set to the max for X1 and X2 
-  if (verbose >= 2){
-    cat("  Carrying forward the verbosity\n")
-  }
-  if (!is.null(x1@other$verbose) & !is.null(x1@other$verbose)){
-    x@other$verbose <- max(x1@other$verbose,x2@other$verbose)
-  } else if (!is.null(x1@other$verbose)){
-    x@other$verbose <- x1@other$verbose
-  } else if (!is.null(x2@other$verbose)){
-    x@other$verbose <- x2@other$verbose
-  } else {  
-    cat("    Warning: Input genlight objects and output genlight object lacks verbosity setting, verbosity set to 2\n")
-    x@other$verbose <- 2
-  }
-  
+
   if (verbose >=3) {
     cat("    Number of individuals:",nInd(x1),"\n")
     cat("    Combined genlight object has",nLoc(x),"loci\n")
@@ -223,7 +174,7 @@ gl.join <- function(x1, x2, verbose=NULL) {
 # FLAG SCRIPT END
 
   if (verbose >= 1) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
     
   return(x)

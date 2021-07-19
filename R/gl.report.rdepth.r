@@ -1,5 +1,4 @@
 #' @name gl.report.rdepth
-#'
 #' @title Report summary of Read Depth for each locus
 #'
 #' @description 
@@ -11,70 +10,57 @@
 #' function reports the read depth by locus for each of several quantiles. 
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence
-#'  (SilicoDArT) data [required].
-#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
+#'  (SilicoDArT) data [required]
+#' @param plot specify if plot is to be produced [default TRUE]
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
 #' @param plot_colours List of two color names for the borders and fill of the
-#'  plots [default two_colors].
+#'  plots [default two_colors]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details 
-#' Filtering on Read Depth using the companion function \code{\link{gl.filter.rdepth}}
-#'  can be on the basis of loci with exceptionally low counts, 
-#' or loci with exceptionally high counts.
+#'  The function displays a table of minimum, maximum, mean and quantiles for read depth against
+#'  possible thresholds that might subsequently be specified in \code{\link{gl.filter.rdepth}}. 
+#'  If plot=TRUE, display also includes a boxplot and a histogram to guide in the selection of a threshold 
+#'  for filtering on read depth.
 #'
-#'  Quantiles are
-#' partitions of a finite set of values into q subsets of (nearly) equal sizes.
-#' In this function q = 20. Quantiles are useful measures because they are less
-#'  susceptible to long-tailed distributions and outliers.
-#'  
-#'\strong{ Function's output }
-#'
-#'  The minimum, maximum, mean and a tabulation of read depth quantiles against
-#'  thresholds rate are provided. Output also includes a boxplot and a
-#'  histogram to guide in the selection of a threshold for filtering on callrate.
-#'
-#' Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary directory.
+#'  If save2tmp=TRUE, ggplots and relevant tabulations are saved to the session's temp directory (tempdir) 
 #'   
-#'  Examples of other themes that can be used can be consulted in \itemize{
+#'  For examples of themes, see  \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
 #' @return An unaltered genlight object
-#'
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples 
 #' # SNP data
 #' df <- gl.report.rdepth(testset.gl)
-#'
-#' @seealso \code{\link{gl.filter.rdepth}}, \code{\link{gl.list.reports}},
-#'  \code{\link{gl.print.reports}}
+#' df <- gl.report.rdepth(testset.gs)
+#' 
+#' @seealso \code{\link{gl.filter.rdepth}}
 #'  
 #' @family filters and filter reports
-#'
 #' @import patchwork
-#'
 #' @export
-#'  
 
 gl.report.rdepth <- function(x,
+                             plot=TRUE,
                              plot_theme = theme_dartR(), 
                              plot_colours = two_colors,  
+                             save2tmp=FALSE,
                              verbose = NULL){
   
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  build <- "Jackson"
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  datatype <- utils.check.datatype(x)
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=0)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
@@ -92,58 +78,50 @@ gl.report.rdepth <- function(x,
     }  
   } 
   
-  # FLAG SCRIPT START
-  
-  if (verbose >= 1) {
-    if (verbose == 5) {
-      cat(report("\n\nStarting", funname, "[ Build =", 
-                 build, "]\n\n"))
-    } else {
-      cat(report("\n\nStarting", funname, "\n\n"))
-    }
-  }
-  
   # DO THE JOB
   
   # get title for plots
+  if(plot){
   if (datatype=="SNP"){
     title <- paste0("SNP data (DArTSeq)\nRead Depth by locus")
   } else {
     title <- paste0("Fragment P/A data (SilicoDArT)\nRead Depth by locus")
   }  
-  
-  rdepth_plot <- data.frame(rdepth)
-  colnames(rdepth_plot) <- "rdepth"
-  
+    
+  # Calculate maximum graph cutoffs 
+    max <- max(rdepth,na.rm=TRUE)
+    max <- ceiling(max/10)*10
+
   # Boxplot
-  p1 <- ggplot(rdepth_plot, aes(y = rdepth)) + 
+  p1 <- ggplot(data.frame(rdepth), aes(y = rdepth)) + 
     geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
     coord_flip() + 
     plot_theme + 
     xlim(range = c(-1, 1)) + 
-    ylim(c(min(rdepth), max(rdepth))) + 
+    ylim(c(0, max)) + 
     ylab(" ") + 
     theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
     ggtitle(title)
   
   # Histogram
-  p2 <- ggplot(rdepth_plot, aes(x = rdepth)) + 
-    geom_histogram(bins = 50, color = plot_colours[1],fill = plot_colours[2]) + 
-    xlim(c(min(rdepth), max(rdepth))) + 
+  p2 <- ggplot(data.frame(rdepth), aes(x = rdepth)) + 
+    geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+    xlim(c(0, max)) + 
     xlab("Read Depth") + 
     ylab("Count") + 
     plot_theme
+  }
   
   # Print out some statistics
   stats <- summary(rdepth)
-  cat("  Reporting Read Depth by Locus\n")
+  cat(report("  Reporting Read Depth by Locus\n"))
   cat("  No. of loci =", nLoc(x), "\n")
   cat("  No. of individuals =", nInd(x), "\n")
   cat("    Minimum      : ", stats[1], "\n")
-  cat("    1st quantile : ", stats[2], "\n")
+  cat("    1st quartile : ", stats[2], "\n")
   cat("    Median       : ", stats[3], "\n")
   cat("    Mean         : ", stats[4], "\n")
-  cat("    3r quantile  : ", stats[5], "\n")
+  cat("    3r quartile  : ", stats[5], "\n")
   cat("    Maximum      : ", stats[6], "\n")
   cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                       nInd(x)), 2), "\n\n")
@@ -171,36 +149,35 @@ gl.report.rdepth <- function(x,
 
   # PRINTING OUTPUTS
   # using package patchwork
-  p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
-  print(p3)
+  if(plot){
+    p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
+    print(p3)
+  }
   print(df)
   
   # SAVE INTERMEDIATES TO TEMPDIR             
-  # creating temp file names
-  temp_plot <- tempfile(pattern = paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-  temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+  if(save2tmp){
+    temp_plot <- tempfile(pattern = paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
   
   # saving to tempdir
-  saveRDS(p3, file = temp_plot)
-  if(verbose>=2){
-    cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
+    if(plot){
+    saveRDS(p3, file = temp_plot)
+    if(verbose>=2){
+      cat(report("  Saving the plot in ggplot format to the session tempfile\n"))
+    }
+    }
+    saveRDS(df, file = temp_table)
+    if(verbose>=2){
+      cat(report("  Saving the report to the session tempfile\n"))
+    }
   }
-  saveRDS(df, file = temp_table)
-  if(verbose>=2){
-    cat(report("  Saving the report to the tempfile as",temp_table,"using saveRDS\n"))
-  }
-  if(verbose>=2){
-    cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-  }
-  
+
   # FLAG SCRIPT END
-  
   if (verbose >= 1) {
-    cat(report("\n\nCompleted:", funname, "\n\n"))
+    cat(report("\nCompleted:", funname, "\n\n"))
   }
   
   # RETURN
-  
   invisible(x)
-  
 }

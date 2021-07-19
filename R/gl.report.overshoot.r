@@ -1,57 +1,43 @@
 #' @name gl.report.overshoot
-#' 
 #' @title Reports loci for which the SNP has been trimmed from the sequence tag along with the adaptor 
 #'
-#' @description This function checks the position of the SNP within the trimmed sequence tag and identifies those for which the SNP position is outside
+#' @description
+#' This function checks the position of the SNP within the trimmed sequence tag and identifies those for which the SNP position is outside
 #' the trimmed sequence tag. This can happen, rarely, when the sequence containing the SNP resembles the adaptor.
 #' 
-#' @param x Name of the genlight object [required].
+#' @param x Name of the genlight object [required]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #' 
-#' @details The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
+#' @details
+#' The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
 #' the sequence tag.
 #'  
 #' Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary directory.
 #' 
 #' @return An unaltered genlight object
-#' 
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' 
 #' @examples
 #' gl.report.overshoot(testset.gl)
 #' 
 #' @seealso \code{\link{gl.filter.overshoot}}
-#'  
 #' @family filters and filter reports
-#'  
 #' @export
-#'  
 
 gl.report.overshoot <- function(x, 
+                                save2tmp=FALSE,
                                 verbose = NULL) {
 
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  build="Jackson"
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  datatype <- utils.check.datatype(x)
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat(report("Starting",funname,"[ Build =",build,"]\n"))
-    } else {
-      cat(report("Starting",funname,"\n"))
-    }
-  }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=0)
   
 # SCRIPT SPECIFIC ERROR CHECKING
   
@@ -86,30 +72,27 @@ gl.report.overshoot <- function(x,
   # PRINTING OUTPUTS
   # Report the number of such loci
     cat("  No. of loci with SNP falling outside the trimmed sequence:",nLoc(xx),"\n")
-    if(nLoc(xx) > 0){cat("\n",paste(locNames(xx),"\n"))}
+    if(nLoc(xx) > 0){
+      cat(paste0(locNames(xx),sep=","))
+      cat("\n")
+    }
     
-    # SAVE INTERMEDIATES TO TEMPDIR    
+    # SAVE INTERMEDIATES TO TEMPDIR
     # creating temp file names
-    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+    if(save2tmp){
+      temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+      saveRDS(data.frame(locNames=locNames(xx)), file = temp_table)
+      if(verbose>=2){
+        cat(report("  Saving the overshot loci to the current session tempfile\n"))
+      }
+    }
     
-    # saving to tempdir
-    saveRDS(data.frame(locNames=locNames(xx)), file = temp_table)
-    if(verbose>=2){
-      cat(report("  Saving the overshot loci to the tempfile as",temp_table,"using saveRDS\n"))
-      }
-    if(verbose>=2){
-      cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-      }
-
     # FLAG SCRIPT END
-    
     if (verbose >= 1) {
-      cat(report("\n\nCompleted:", funname, "\n\n"))
+      cat(report("Completed:", funname, "\n\n"))
     }
     
     # RETURN
-    
     invisible(x)
-    
 }
 
