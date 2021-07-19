@@ -38,5 +38,19 @@
 
 gl.evanno <- function(sr, plot=TRUE)
 {
+  if (!requireNamespace("strataG", quietly = TRUE)) #not already installed?
+  {
+    ap <- available.packages()  #check CRAN
+    
+    oncran <- match("strataG", ap)
+    if (is.na(oncran)) {
+      warning("package strataG needs to be installed. It is currently not on CRAN, hence I try to install it manually via Github using devtools:\n  devtools::install_github('EricArcher/strataG'")
+      devtools::install_github('EricArcher/strataG')
+      
+    }
+  } else {
+  
+  
 evno <- strataG::evanno(sr, plot=plot)
+  }
 }

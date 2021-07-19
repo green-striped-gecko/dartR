@@ -55,8 +55,8 @@ gl.runstructure    <- function(x,
                                verbose = NULL) {
   
   #check for strataG (currently not on CRAN)
-  if (!require("strataG")) #not already installed?
-  {
+  if (!requireNamespace("strataG", quietly = TRUE)) #not already installed?
+      {
   ap <- available.packages()  #check CRAN
   
   oncran <- match("strataG", ap)

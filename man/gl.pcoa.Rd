@@ -105,9 +105,9 @@ best modern reference is Legendre & Legendre (1998).
 \examples{
 fd <- gl.fixed.diff(testset.gl)
 fd <- gl.collapse(fd)
-pca <- gl.pcoa(fd)
+names(fd)
+#pca <- gl.pcoa(fd)
 #gl.pcoa.plot(pca,fd)
-
 }
 \references{
 \itemize{ 

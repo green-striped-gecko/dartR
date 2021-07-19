@@ -81,9 +81,9 @@
 #'@examples
 #' fd <- gl.fixed.diff(testset.gl)
 #' fd <- gl.collapse(fd)
-#' pca <- gl.pcoa(fd)
+#' names(fd)
+#' #pca <- gl.pcoa(fd)
 #' #gl.pcoa.plot(pca,fd)
-#'
 #'@references
 #'\itemize{ 
 #'\item Cailliez, F. (1983) The analytical solution of the additive constant problem. Psychometrika, 48, 305-308.

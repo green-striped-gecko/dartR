@@ -54,7 +54,19 @@
 
 gl.plotstructure <- function(sr, k, sort=NULL, CLUMPP="./" ,... , plot_theme,verbose ){
   
-
+#IS strataG INSTALLED?
+  
+  if (!requireNamespace("strataG", quietly = TRUE)) #not already installed?
+  {
+    ap <- available.packages()  #check CRAN
+    
+    oncran <- match("strataG", ap)
+    if (is.na(oncran)) {
+      warning("package strataG needs to be installed. It is currently not on CRAN, hence I try to install it manually via Github using devtools:\n  devtools::install_github('EricArcher/strataG'")
+      devtools::install_github('EricArcher/strataG')
+      
+    }
+  } else {
 # DO THE JOB
 #run clump
   
@@ -92,4 +104,5 @@ narg <- paste(q.mat$id,q.mat$orig.pop[zz], sep="_")
 
 bbpp <- barplot(bb, col = 1:k,las = 2, main = paste0("K=",k), border=1:k, space = 0, names.arg=narg)
 #ggplot(bgg, aes(x=Var2, y=value, fill=Var1), )+geom_bar(stat="identity", width = 1)
+  }
 }
