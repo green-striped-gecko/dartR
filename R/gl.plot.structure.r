@@ -1,13 +1,13 @@
-#' @name gl.plotstructure
+#' @name gl.plot.structure
 #'
 #' @title Plot a STRUCTURE analysis using a genlight object
 #'
 #' @description 
 #' This function takes a structure run object (output from
-#'  \code{\link{gl.runstructure}}) and plots the typical strcture bar
+#'  \code{\link{gl.run.structure}}) and plots the typical strcture bar
 #'   plot that visiualise the q matrix of a structure run. 
 #'
-#' @param sr structure run object from \code{\link{gl.runstructure}} [required].
+#' @param sr structure run object from \code{\link{gl.run.structure}} [required].
 #' @param k the number for k the q matrix should be based on. Needs to
 #'  be within you simulated range of k's in your sr structure run object.
 #' @param sort how q matrix is sorted (by population, group proportion etc.)
@@ -37,13 +37,13 @@
 #' #CLUMPP needs to be installed to be able to run the example
 #' #only the first 100 loci
 #' #bc <- bandicoot.gl[,1:100]
-#' #sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
 #' }
 #' @import patchwork
 ###@importFrom strataG genind2gtypes structureRun
 #'
 #' @export
-#' @seealso \code{\link{gl.runstructure}}, \link[strataG]{clumpp}
+#' @seealso \code{\link{gl.run.structure}}, \link[strataG]{clumpp}
 #' @references 
 #' Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
 #' Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package for manipulating, summarizing and analysing population genetic data. Mol Ecol Resour. doi:10.1111/1755-0998.12559
@@ -52,7 +52,7 @@
 
 
 
-gl.plotstructure <- function(sr, k, sort=NULL, CLUMPP="./" ,... , plot_theme,verbose ){
+gl.plot.structure <- function(sr, k, sort=NULL, CLUMPP="./" ,... , plot_theme,verbose ){
   
 #IS strataG INSTALLED?
   
@@ -70,7 +70,7 @@ gl.plotstructure <- function(sr, k, sort=NULL, CLUMPP="./" ,... , plot_theme,ver
 # DO THE JOB
 #run clump
   
-if (!is(sr,"structure.result")) stop("sr is not a structure result object returned from gl.runstructure.")
+if (!is(sr,"structure.result")) stop("sr is not a structure result object returned from gl.run.structure.")
 
 #change range of simulated ks in structure object
 ks <- range((lapply(sr, function(x) x$summary[1])))

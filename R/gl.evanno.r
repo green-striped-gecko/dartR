@@ -5,7 +5,7 @@
 #' @description 
 #' This function takes a genlight object and runs a STRUCTURE analysis based on functions from \code{strataG}
 #'
-#' @param sr structure run object from \code{\link{gl.runstructure}} [required].
+#' @param sr structure run object from \code{\link{gl.run.structure}} [required].
 #' @param plot TRUE: all four plots are shown. FALSE: all four plots are returned by not shown.
 #' @details The function is basically a convenient wrapper around the beautiful
 #' strataG function \link[strataG]{evanno} (Archer et al. 2016). For a detailed
@@ -19,14 +19,14 @@
 #' #STRUCTURE needs to be installed to be able to run the example
 #' #only the first 100 loci
 #' #bc <- bandicoot.gl[,1:100]
-#' #sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
 #' #gl.evanno(sr)
 #' }
 #' @import patchwork
 ###@importFrom strataG genind2gtypes structureRun
 #'
 #' @export
-#' @seealso \code{\link{gl.runstructure}},  \link[strataG]{clumpp},
+#' @seealso \code{\link{gl.run.structure}},  \link[strataG]{clumpp},
 #' @references 
 #' Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
 #' 
