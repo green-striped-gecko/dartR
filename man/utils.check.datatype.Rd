@@ -4,12 +4,25 @@
 \alias{utils.check.datatype}
 \title{Utility function to check that the object passed to the function is a genlight object.}
 \usage{
-utils.check.datatype(x, strict = TRUE, verbose = NULL)
+utils.check.datatype(
+  x,
+  gl.check = TRUE,
+  fd.check = FALSE,
+  dist.check = FALSE,
+  mat.check = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]}
 
-\item{strict}{If TRUE, a fatal error occurs if the passed object is not a genlight object [default TRUE]}
+\item{gl.check}{If TRUE, accepts a genlight object [default TRUE]}
+
+\item{fd.check}{If TRUE, accepts a fixed difference object, class fd [default FALSE]}
+
+\item{dist.check}{If TRUE, accepts a distance matrix, class dist [default FALSE]}
+
+\item{mat.check}{If TRUE, accepts a square matrix, class matrix [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
@@ -21,7 +34,7 @@ Most functions require access to a genlight object, and this function checks tha
 whether it is a SNP dataset or a SilicoDArT object, and reports back if verbosity is >=2
 }
 \details{
-This function checks whether the input object is a genlight object and sets the datatype to "SNP" or "SilicoDArT" as appropriate.
+This function checks the class of passed object sets the datatype to "SNP", "SilicoDArT" or class[1](x) as appropriate.
 }
 \examples{
 datatype <- utils.check.datatype(testset.gl)
