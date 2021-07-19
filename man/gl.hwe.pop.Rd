@@ -73,7 +73,7 @@ Plot themes can be obtained from \itemize{
 Resultant ggplots and the tabulation are saved to the session's temporary directory.
 }
 \examples{
-out <- gl.hwe.pop(bandicoot.gl[,1:33], pvalue=0.05, plot=TRUE, HWformat=FALSE)
+out <- gl.hwe.pop(bandicoot.gl[,1:33], pvalue=0.05, plot.out=TRUE, HWformat=FALSE)
 
 }
 \author{

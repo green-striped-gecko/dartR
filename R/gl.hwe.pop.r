@@ -51,7 +51,7 @@
 #'  }
 #' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' out <- gl.hwe.pop(bandicoot.gl[,1:33], pvalue=0.05, plot=TRUE, HWformat=FALSE)
+#' out <- gl.hwe.pop(bandicoot.gl[,1:33], pvalue=0.05, plot.out=TRUE, HWformat=FALSE)
 #'
 #' @export
 #'  
