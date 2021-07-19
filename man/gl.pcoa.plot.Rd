@@ -128,12 +128,12 @@ pop_colours <- c("deepskyblue","green","gray","orange","deeppink")
 # Ordination applied to genotypes
 pca <- gl.pcoa(gl_test)
 # interactive plot to examine labels
-pca_plot_interactive <- gl.pcoa.plot(pca, gl_test, ellipse = TRUE, labels = "ind", interactive_plot = T,palette_discrete = pop_colours)
+pca_plot_interactive <- gl.pcoa.plot(pca, gl_test, ellipse = TRUE, labels = "ind", interactive_plot = TRUE, palette_discrete = pop_colours)
 # 3D interactive plot
-pca_plot_3D_interactive <- gl.pcoa.plot(pca, gl_test, three_D_plot = TRUE, palette_discrete=pop_colours)
+pca_plot_3D_interactive <- gl.pcoa.plot(pca, gl_test, three_D_plot = TRUE, palette_discrete = pop_colours)
 # using sex as population 
 names(gl$other$ind.metrics)
-pca_plot_sex <- gl.pcoa.plot(glPca=pca, gl_test, as.pop ="assigned.sex", palette_discrete=pop_colours)
+pca_plot_sex <- gl.pcoa.plot(glPca=pca, gl_test, as.pop = "assigned.sex", palette_discrete = pop_colours)
 
 }
 \seealso{

@@ -214,19 +214,17 @@ gl.grm.network <- function(G,
   
   # SAVE INTERMEDIATES TO TEMPDIR             
   # creating temp file names
-    temp_plot <- tempfile(pattern = paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-
+  temp_plot <- tempfile(pattern = "dartR_plot_")
+  match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
   # saving to tempdir
-    saveRDS(p1, file = temp_plot)
-    if(verbose>=2){
-      cat(report("  Saving the ggplot to session tempfile\n"))
-    }
-
-  # FLAG SCRIPT END
-  
-  if (verbose >= 1) {
-    cat(report("\nCompleted:", funname, "\n\n"))
+  saveRDS(list(match_call,p1), file = temp_plot)
+  if(verbose>=2){
+    cat(report("  Saving the ggplot to session tempfile\n"))
   }
+
+  if(verbose>=2){
+    cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+  } 
   
   # RETURN
 

@@ -18,6 +18,6 @@ gl.print.reports <- function(print_report){
     cat(warn("The report requested is not in the current tempdir.") )
   } else {
     report_to_print <- readRDS(paste0(tempdir(),"/", files_tempdir[print_report]))
-    suppressWarnings(print(report_to_print))
+    suppressWarnings(print(report_to_print[[2]]))
   }
 }

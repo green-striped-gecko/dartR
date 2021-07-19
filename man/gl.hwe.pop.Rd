@@ -2,25 +2,80 @@
 % Please edit documentation in R/gl.hwe.pop.r
 \name{gl.hwe.pop}
 \alias{gl.hwe.pop}
-\title{Function to run Hardy-Weinberg tests over each loci and population}
+\title{Hardy-Weinberg tests over loci and populations}
 \usage{
-gl.hwe.pop(x, pvalue = 0.05, plot = TRUE, HWformat = FALSE)
+gl.hwe.pop(
+  x,
+  pvalue = 0.05,
+  plot.out = TRUE,
+  plot_theme = theme_dartR(),
+  plot_colours = c("gray90", "deeppink"),
+  HWformat = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{a genlight object with a population defined [pop(x) does not return NULL]}
 
 \item{pvalue}{the p-value for the HWE test.}
 
-\item{plot}{a switch if a barplot is returned.}
+\item{plot.out}{If TRUE, returns a plot object compatible with ggplot, 
+otherwise returns a dataframe [default TRUE].}
+
+\item{plot_theme}{User specified theme [default theme_dartR()].}
+
+\item{plot_colours}{Vector with two colour names for the borders and fill [default two_colors].
+[default discrete_palette].}
 
 \item{HWformat}{switch if data should be returned in HWformat (counts of Genotypes to be used in package \code{HardyWeinberg})}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report 
+[default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
-This functions performs a HWE test for every population (rows) and loci (columns) and returns a true false matrix. True is reported if the p-value of an HWE-test for a particular loci and population was below the specified threshold (pvalue, default=0.05). The thinking behind this approach is that loci that are not in HWE in several populations have most likely to be treated (e.g. filtered if loci under selection are of interest). If plot=TRUE a barplot on the on the loci and the sum of deviation over all population is returned. Loci that deviate in the majority of populations can be identified via colSums on the resulting matrix. The function returns a list with up to three components: 'HWE' is the matrix over loci and populations, 'plot' is a matrixplot (ggplot) which shows the significant results for population and loci (can be amended further using ggplot syntax), and finally if 'HWEformat=TRUE' the 'HWformat' entails SNP data for each population in 'HardyWeinberg'-format to be used with other functions of the package (e.g \code{\link[HardyWeinberg]{HWPerm}} or \code{\link[HardyWeinberg]{HWExactPrevious}}).
+The function returns a list with up to three components:
+\itemize{
+ \item 'HWE' is the matrix over loci and populations
+ \item 'plot' is a matrixplot (ggplot) which shows the significant results 
+ for population and loci (can be amended further using ggplot syntax)
+ \item 'HWEformat=TRUE' the 'HWformat' entails SNP data for each population 
+ in 'HardyWeinberg'-format to be used with other functions of the package 
+ (e.g \code{\link[HardyWeinberg]{HWPerm}} or \code{\link[HardyWeinberg]{HWExactPrevious}}).
+ }
 }
 \description{
-Does a Hardy-Weinberg-Test for each loci in each of the populations as defined by the pop slot in a genlight object. The function is completely rewritten as the previous function was based on package SNPassoc, which no longer is supported by CRAN. It now employs the \code{HardyWeinberg} package, which needs to be installed.  The function that is used is \code{\link[HardyWeinberg]{HWExactStats}}, but there are several other great function implemented in the package regarding HWE. Therefore you can return the data in the format the HWE package expects, via \code{HWformat=TRUE} and then use this to run other functions of the package.
+Hardy-Weinberg tests are performed for each loci in each of the populations 
+as defined by the pop slot in a genlight object.
+}
+\details{
+This function employs the \code{HardyWeinberg} package, which needs to be 
+installed. The function that is used is \code{\link[HardyWeinberg]{HWExactStats}}, 
+but there are several other great functions implemented in the package regarding HWE.
+Therefore, this function can return the data in the format expected by the HWE 
+package expects, via \code{HWformat=TRUE} and then use this to run other 
+functions of the package.
+This functions performs a HWE test for every population (rows) and loci 
+(columns) and returns a true false matrix. True is reported if the p-value of 
+an HWE-test for a particular loci and population was below the specified 
+threshold (pvalue, default=0.05). The thinking behind this approach is that 
+loci that are not in HWE in several populations have most likely to be treated 
+(e.g. filtered if loci under selection are of interest). If plot=TRUE a barplot
+on the loci and the sum of deviation over all population is returned. 
+Loci that deviate in the majority of populations can be identified via colSums 
+on the resulting matrix.
+
+Plot themes can be obtained from \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
+
+Resultant ggplots and the tabulation are saved to the session's temporary directory.
 }
 \examples{
 out <- gl.hwe.pop(bandicoot.gl[,1:33], pvalue=0.05, plot=TRUE, HWformat=FALSE)
+
+}
+\author{
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

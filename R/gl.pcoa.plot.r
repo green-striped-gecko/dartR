@@ -85,12 +85,12 @@
 #' # Ordination applied to genotypes
 #' pca <- gl.pcoa(gl_test)
 #' # interactive plot to examine labels
-#' pca_plot_interactive <- gl.pcoa.plot(pca, gl_test, ellipse = TRUE, labels = "ind", interactive_plot = T,palette_discrete = pop_colours)
+#' pca_plot_interactive <- gl.pcoa.plot(pca, gl_test, ellipse = TRUE, labels = "ind", interactive_plot = TRUE, palette_discrete = pop_colours)
 #' # 3D interactive plot
-#' pca_plot_3D_interactive <- gl.pcoa.plot(pca, gl_test, three_D_plot = TRUE, palette_discrete=pop_colours)
+#' pca_plot_3D_interactive <- gl.pcoa.plot(pca, gl_test, three_D_plot = TRUE, palette_discrete = pop_colours)
 #' # using sex as population 
 #' names(gl$other$ind.metrics)
-#' pca_plot_sex <- gl.pcoa.plot(glPca=pca, gl_test, as.pop ="assigned.sex", palette_discrete=pop_colours)
+#' pca_plot_sex <- gl.pcoa.plot(glPca=pca, gl_test, as.pop = "assigned.sex", palette_discrete = pop_colours)
 #'
 #' @seealso \code{\link{gl.pcoa}}
 #' @family Exploration and visualisation functions
@@ -198,16 +198,16 @@ gl.pcoa.plot <- function(glPca,
     as.pop <- NULL
   }
   
-  # DO THE JOB matrices
-  
   # Set a population if none is specified (such as if the genlight object has been generated manually)
   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
     if (verbose >= 2){ 
       cat(important("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n"))
-      }
+    }
     pop(x) <- array("pop1",dim = nLoc(x))
     pop(x) <- as.factor(pop(x))
   }
+  
+  # DO THE JOB 
   
   # Assign the new population list if as.pop is specified
   if (class(x) == "genlight"){
@@ -376,23 +376,28 @@ gl.pcoa.plot <- function(glPca,
     if(plot.out == T){
       suppressWarnings(print(p1))
     }
+    
+    if(verbose>=2){
+      cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+    } 
 
-    # SAVE INTERMEDIATES TO TEMPDIR             
+    # SAVE INTERMEDIATES TO TEMPDIR    
+    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
     # creating temp file names
     if(plot.out == T){
-    temp_plot <- tempfile(pattern = paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+      temp_plot <- tempfile(pattern = "dartR_plot_")
     }
-    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+    temp_table <- tempfile(pattern = "dartR_table_")
     
     # saving to tempdir
     if(plot.out == T){
-    saveRDS(p1, file = temp_plot)
-    if(verbose>=2){
+      saveRDS(list(match_call,p1), file = temp_plot)
+      if(verbose>=2){
       cat(report("  Saving the ggplot to session tempfile\n"))
     }
     }
     
-    saveRDS(df, file = temp_table)
+    saveRDS(list(match_call,df), file = temp_table)
     if(verbose>=2){
       cat(report("  Saving tabulation to session tempfile\n"))
     }

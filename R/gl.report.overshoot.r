@@ -88,19 +88,22 @@ gl.report.overshoot <- function(x,
     cat("  No. of loci with SNP falling outside the trimmed sequence:",nLoc(xx),"\n")
     if(nLoc(xx) > 0){cat("\n",paste(locNames(xx),"\n"))}
     
-    # SAVE INTERMEDIATES TO TEMPDIR    
-    # creating temp file names
-    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+    df <- data.frame(locNames=locNames(xx))
     
+    # SAVE INTERMEDIATES TO TEMPDIR             
+    # creating temp file names
+    temp_table <- tempfile(pattern = "dartR_table_")
+    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
     # saving to tempdir
-    saveRDS(data.frame(locNames=locNames(xx)), file = temp_table)
+    saveRDS(list(match_call,df), file = temp_table)
     if(verbose>=2){
       cat(report("  Saving the overshot loci to the tempfile as",temp_table,"using saveRDS\n"))
-      }
+    }
+    
     if(verbose>=2){
       cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-      }
-
+    } 
+    
     # FLAG SCRIPT END
     
     if (verbose >= 1) {
