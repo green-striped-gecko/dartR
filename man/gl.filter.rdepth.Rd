@@ -31,13 +31,7 @@ plots [default two_colors]}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
-
- @details
- For examples of themes, see  \itemize{
- \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
- \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
- }}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 Returns a genlight object retaining loci with a Read Depth in the range specified by the lower and upper threshold.
@@ -49,6 +43,12 @@ Standard Deviation of Read Depth as stanard columns in their report.
 
 Filtering on Read Depth using the companion script gl.filter.rdepth can be on the basis of loci with exceptionally low counts, 
 or loci with exceptionally high counts.
+}
+\details{
+For examples of themes, see  \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
 # SNP data
