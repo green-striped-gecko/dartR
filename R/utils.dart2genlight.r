@@ -170,8 +170,7 @@ if (!is.null(ind.metafile)){
 
     ord <- match(names(sdata), ind.cov[,id.col])
     ord <- ord[!is.na(ord)]
-
-  
+    
     if (length(ord)>1 & length(ord)<=nind ){ 
       if (verbose >= 2){
         cat (paste("  Ids for individual metadata (at least a subset of) are matching!\n"))
@@ -179,15 +178,12 @@ if (!is.null(ind.metafile)){
       }
       ord2 <- match(ind.cov[ord,id.col], indNames(gout))
       gout <- gout[ord2,]
-      service <- service[ord2]
-      plate_location <- plate_location[ord2]
-    } else{
+      } else{
       stop("Fatal Error: Individual ids are not matching!!!!\n")
     }
   }
 
- ind.cov$service <- service
- ind.cov$plate_location <- plate_location
+ 
  pop.col = match( "pop", names(ind.cov))
 
  if (is.na(pop.col)) {
@@ -233,8 +229,10 @@ if (!is.null(ind.metafile)){
   }
 }
 
-gout@other$ind.metrics$service <- service
-gout@other$ind.metrics$plate_location <- plate_location
+ord3 <-  match(indNames(gout), names(sdata)) 
+
+gout@other$ind.metrics$service <- service[ord3]
+gout@other$ind.metrics$plate_location <- plate_location[ord3]
 
 # FLAG SCRIPT END
 

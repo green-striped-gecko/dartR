@@ -2,8 +2,10 @@
 #' 
 #' Setting theme, colors and verbosity
 #' @importFrom graphics axis barplot box image lines text
+#' @importFrom grDevices hcl
 #' @importFrom methods new
 #' @importFrom stats dist nobs optimize pchisq variable.names optim quantile pgamma
+#' @import ggplot2
 
 
 zzz <- NULL  #to create a useful named help page
@@ -63,10 +65,8 @@ three_colors <- c("#3B9AB2","deeppink","lemonchiffon")
 #' @param base_line_size base size for line elements
 #' @param base_rect_size base size for rect elements
 #' @examples
-#' 
-#' ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
-#'  geom_histogram() +
-#'  theme_dartR()
+#' #ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
+#' #geom_histogram(binwidth=0.1) + theme_dartR()
 #'
 
 # The half-line (base-fontsize / 2) sets up the basic vertical
@@ -113,18 +113,18 @@ theme_dartR <- function(base_size = 11, base_family = "",
     axis.title.x.top = element_text(margin = margin(b = half_line / 2),vjust = 0),
     axis.title.y = element_text(angle = 90,margin = margin(r = half_line / 2),vjust = 1,face="bold"),
     axis.title.y.right = element_text(angle = -90,margin = margin(l = half_line / 2),vjust = 0),
-    legend.background =  element_rect(colour = NA),
+    legend.background =  element_rect(colour = "transparent"),
     legend.spacing =     unit(2 * half_line, "pt"),
     legend.spacing.x =    NULL,
     legend.spacing.y =    NULL,
     legend.margin =      margin(half_line, half_line, half_line, half_line),
-    legend.key =         element_rect(fill = "black", colour = NA),
+    legend.key =         element_rect(fill = "white", colour = NA),
     legend.key.size =    unit(1.2, "lines"),
     legend.key.height =  NULL,
     legend.key.width =   NULL,
-    legend.text =        element_text(size = rel(0.8)),
+    legend.text =        element_text(size = rel(1.2),face="bold"),
     legend.text.align =  NULL,
-    legend.title =       element_text(hjust = 0),
+    legend.title =       element_text(size = rel(1),face="bold",hjust = 0),
     legend.title.align = NULL,
     legend.position =    "right",
     legend.direction =   NULL,
@@ -187,8 +187,8 @@ theme_dartR <- function(base_size = 11, base_family = "",
 # WELCOME MESSAGE
 .onAttach <- function(...) {
   
-  packageStartupMessage(important("**** Welcome to dartR ****\n"))
-  packageStartupMessage(report("Be aware that owing to CRAN requirements and compatibility reasons not all functions of the packages may run yet, as some dependencies could be missing. Hence for a most enjoyable experience we recommend to run the function "))
+  packageStartupMessage(important(paste("**** Welcome to dartR [Version",packageVersion("dartR"),"] ****\n")))
+  packageStartupMessage(report("Be aware that owing to CRAN requirements and compatibility reasons not all functions of the package may run after the basic installation, as some packages could still be missing. Hence for a most enjoyable experience we recommend to run the function "))
   packageStartupMessage(code("gl.install.vanilla.dartR()"))                 
   
   packageStartupMessage(report("This installs all missing and required packages for your version of dartR. \nFor citation information please use:"))
@@ -199,4 +199,3 @@ theme_dartR <- function(base_size = 11, base_family = "",
   
   packageStartupMessage(important("\n**** Have fun using dartR! ****"))
 }
-

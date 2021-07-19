@@ -1,5 +1,7 @@
-#' Filters loci based on pairwise Hamming distance between sequence tags
-#'
+#' @name gl.filter.hamming
+#' @title Filters loci based on pairwise Hamming distance between sequence tags
+#' 
+#' @description
 #' Hamming distance is calculated as the number of base differences between two 
 #' sequences which can be expressed as a count or a proportion. Typically, it is
 #' calculated between two sequences of equal length. In the context of DArT
@@ -7,7 +9,7 @@
 #' by the restriction enzyme recognition sequence, it is sensible to compare the
 #' two trimmed sequences starting from immediately after the common recognition
 #' sequence and terminating at the last base of the shorter sequence. 
-#'
+#'@details
 #' Hamming distance can be computed 
 #' by exploiting the fact that the dot product of two binary vectors x and (1-y)
 #' counts the corresponding elements that are different between x and y.
@@ -18,7 +20,7 @@
 #'
 #' The algorithm is that of Johann de Jong 
 #' \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
-#' as implimented in utils.hamming.r
+#' as implemented in \code{\link{utils.hamming}}.
 #' 
 #' Only one of two loci are retained if their Hamming distance is less that a specified
 #' percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
@@ -26,79 +28,78 @@
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param threshold -- a threshold Hamming distance for filtering loci [default threshold <= 0.2]
 #' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
+#' @param taglength Typical length of the sequence tags [default 69]
+#' @param plot specify if plot is to be produced [default TRUE]
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
+#' @param plot_colours List of two color names for the borders and fill of the
+#'  plots [default two_colors]
 #' @param pb -- switch to output progress bar [default FALSE]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
+#' 
 #' @return a genlight object filtered on Hamming distance.
-#' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' 
 #' @examples
 #' # SNP data
 #'   result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
+#' 
+#' @seealso \code{\link{gl.filter.hamming}}
+#'  
+#' @family filters and filter reports
+#' @importFrom stats sd
+#' @import patchwork
+#' @export 
 
-
-gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=NULL) {
+gl.filter.hamming <- function(x, 
+                              threshold=0.2, 
+                              rs=5, 
+                              taglength=69,
+                              plot=TRUE,
+                              plot_theme = theme_dartR(), 
+                              plot_colours = two_colors,  
+                              pb=FALSE, 
+                              save2tmp=FALSE,
+                              verbose=NULL) {
   
-  n0 <- nLoc(x)
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
-# TRAP COMMAND, SET VERSION
-  
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
   # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    cat("  Processing Presence/Absence (SilicoDArT) data\n")
-  } else if (all(x@ploidy == 2)){
-    cat("  Processing a SNP dataset\n")
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!")
-  }
-
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if(length(x@other$loc.metrics$TrimmedSequence) == 0) {
-    stop("Fatal Error: Data must include Trimmed Sequences\n")
+    stop(error("Fatal Error: Data must include Trimmed Sequences\n"))
   }
   if(threshold < 0 || threshold > 1){
-    cat("  Warning: Parameter 'threshold' must be an integer between 0 and 1, set to 0.2\n")
+    cat(warn("  Warning: Parameter 'threshold' must be an integer between 0 and 1, set to 0.2\n"))
     threshold = 0.2
   }
 
+  if (length(x@other$loc.metrics$TrimmedSequence) == 0) {
+    stop(error("Fatal Error: Data must include Trimmed Sequences\n"))
+  }
+  
+  if (nLoc(x) == 1) {
+    stop(error("Fatal Error: Data must include more than one locus\n"))
+  }
+  
+
 # DO THE JOB
   
+  n0 <- nLoc(x)
+  
   if (verbose >= 3) {
-    cat("  Note: Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n")
-    cat("  Note: Calculating pairwise Hamming distances between trimmed reference sequence tags\n")
+    cat(report("  Note: Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n"))
+    cat(report("  Note: Calculating pairwise Hamming distances between trimmed reference sequence tags\n"))
   }
   
   x@other$loc.metrics$TrimmedSequence <- as.character(x@other$loc.metrics$TrimmedSequence)
@@ -106,55 +107,124 @@ gl.filter.hamming <- function(x, threshold=0.2, rs=5, pb=FALSE, verbose=NULL) {
   count=0
   nL <- nLoc(x)
   index <- rep(TRUE,(nL-1))
+  d <- rep(NA, (((nL - 1) * nL)/2))
   if (pb) {
     pbar <- txtProgressBar(min=0, max=1, style=3, initial=0, label="Working ....")
     getTxtProgressBar(pbar)
   }
   if (verbose >= 2) {
-    cat("  Calculating Hamming distances between sequence tags\n")
-    cat("  Filtering loci with Hamming Distance is less than",threshold,"\n")
+    #cat(report("  Calculating Hamming distances between sequence tags\n"))
+    cat(report("  Filtering loci with Hamming Distance is less than",threshold,"\n"))
   }
   for (i in 1:(nL-1)){
     s1 <- x@other$loc.metrics$TrimmedSequence[i]
     for (j in ((i+1):nL)){
       count <- count + 1
       s2 <- x@other$loc.metrics$TrimmedSequence[j]
-      if(utils.hamming(s1,s2,r=rs) <= threshold) {
+      d[count] <- utils.hamming(s1,s2,r=rs)
+      if(d[count] <= threshold) {
         index[i] <- FALSE
-        if (verbose >= 3){cat(" Deleting:",locNames(x)[i],locNames(x)[j],"\n")}
+        if (verbose >= 3){
+          cat(report(" Deleting:",locNames(x)[i],locNames(x)[j],"\n"))
+          }
         break
       }
     }
-    if (pb)  setTxtProgressBar(pbar, i/(nL-1))
+    if (pb){
+      setTxtProgressBar(pbar, i/(nL-1))
+    }
   }
+  d <- d[!is.na(d)]
   
   x <- x[,(index)]
+  
   # That pesky genlight bug
   x@other$loc.metrics <- x@other$loc.metrics[(index),]
   
+  # PLOT HISTOGRAMS, BEFORE AFTER
+  if(plot){
+    plotvar <- d
+    # min <- min(plotvar,threshold,na.rm=TRUE)
+    # min <- trunc(min*100)/100
+    max <- max(plotvar,threshold,na.rm=TRUE)
+    max <- ceiling(max*10)/10
+    if(datatype=="SNP"){
+      xlabel <- "Pre-filter SNP Hamming Distance" 
+    } else {
+      xlabel <- "Pre-filter P/A Hamming Distance"
+    }
+    p1 <- ggplot(data.frame(plotvar), aes(x = plotvar)) + 
+      geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+      coord_cartesian(xlim = c(0,max)) + 
+      geom_vline(xintercept=threshold,color="red",size=1) +
+      xlab(xlabel) + 
+      ylab("Count") + 
+      plot_theme
+    
+    # if (datatype=="SilicoDArT"){
+    #   rdepth <- x2@other$loc.metrics$AvgReadDepth
+    # } else if (datatype=="SNP"){
+    #   rdepth <- x2@other$loc.metrics$rdepth
+    # }     
+    plotvar <- d[d>=threshold]
+    # min <- min(plotvar,threshold)
+    # min <- trunc(min*100)/100
+    # max <- max(plotvar,threshold,na.rm=TRUE)
+    # max <- ceiling(max*10)/10
+    if(datatype=="SNP"){
+      xlabel <- "Post-filter SNP Hamming Distance" 
+    } else {
+      xlabel <- "Post-filter P/A Hamming Distance"
+    }
+    p2 <- ggplot(data.frame(plotvar), aes(x = plotvar)) + 
+      geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+      coord_cartesian(xlim = c(0,max)) + 
+      geom_vline(xintercept=threshold,color="red",size=1) +
+      xlab(xlabel) + 
+      ylab("Count") + 
+      plot_theme
+    
+    p3 <- (p1/p2) + plot_layout(heights = c(1,1))
+    print(p3)
+  }
   
   # REPORT A SUMMARY
   if (verbose >= 3){
-    cat("\n  Summary of filtered dataset\n")
+    cat("  Summary of filtered dataset\n")
     cat(paste("    Initial No. of loci:",n0,"\n"))
-    cat(paste("    Hamming d >",threshold,"\n"))
+    cat(paste("    Hamming d >",threshold,"=",round(threshold*taglength,0),"bp\n"))
     cat(paste("    Loci deleted",(n0-nLoc(x)),"\n"))
     cat(paste("    Final No. of loci:",nLoc(x),"\n"))
     cat(paste("    No. of individuals:", nInd(x),"\n"))
-    cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n\n"))
+    cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n"))
+  }
+  
+  # SAVE INTERMEDIATES TO TEMPDIR
+  if(save2tmp & plot){
+    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+    # temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+
+    # saving to tempdir
+    saveRDS(p3, file = temp_plot)
+    if(verbose>=2){
+      cat(report("  Saving the plot in ggplot format to the session tempfile\n"))
+    }
+    # saveRDS(df, file = temp_table)
+    # if(verbose>=2){
+    #   cat(report("  Saving the report to the session tempfile\n"))
+    # }
   }
   
 # ADD TO HISTORY
-  
   nh <- length(x@other$history)
   x@other$history[[nh + 1]] <- match.call()      
   
 # FLAG SCRIPT END
-
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
   
-  return(x)
+  # RETURN
   
+  return(x)
 }

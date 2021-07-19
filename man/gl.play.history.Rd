@@ -23,15 +23,17 @@ Replays the history and applies it to a genlight object
 This function basically allows to create a "template history" (=set of filters) and apply them to any other genlight object. Histories can also be saved and loaded (see. gl.save.history and gl.load.history).
 }
 \examples{
+\dontrun{
 dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
 metadata <- system.file("extdata","testset_metadata.csv", package="dartR")
 gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=FALSE) 
-gl2 <- gl.filter.callrate(gl, method="loci", threshold=0.9)
+gl2 <- gl.filter.callrate(gl, method="loc", threshold=0.9)
 gl3 <- gl.filter.callrate(gl2, method="ind", threshold=0.95)
 #Now "replay" part of the history "onto" another genlight object
-bc.fil <- gl.play.history(gl.compliance.check(bandicoot.gl), 
-history=gl3@other$history[c(2,3)], verbose=1)
-gl.print.history(bc.fil)
+#bc.fil <- gl.play.history(gl.compliance.check(bandicoot.gl), 
+#history=gl3@other$history[c(2,3)], verbose=1)
+#gl.print.history(bc.fil)
+}
 }
 \author{
 Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})

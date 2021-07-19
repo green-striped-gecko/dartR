@@ -10,7 +10,8 @@
 #' @param plot If TRUE, histograms of base composition are produced [default TRUE]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
 #' @param plot_colours List of two color names for the borders and fill of the
-#'  plots [default two_colors].
+#'  plots [default two_colors]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details The script checks first if trimmed sequences are included in the locus metadata (@@other$loc.metrics$TrimmedSequence), 
@@ -26,69 +27,44 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#' @return A list containing:
-#' \enumerate{
-#'         \item $freq -- the table of base frequencies and transition/transversion ratios;
-#'         \item $plotbases -- ggplot bargraph of base frequencies;
-#'         \item $plottstv -- ggplot bargraph of transitions and transversions.
-#'         }
-#'         
-#' @author Core dartR Team (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @return the unchanged genlight object
+#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
 #' # SNP data
 #'   out <- gl.report.bases(testset.gl)
-#'   out$freq
-#'   out$plotbases
-#'   out$plottvts
-#' # Tag P/A data
+#'   #' # Tag P/A data
 #'   out <- gl.report.bases(testset.gs)
-#'   out
 #'   
 #' @family reporting functions
-#'
 #' @import stringr
 #' @import patchwork
-#'
 #' @export 
-#'
 
 gl.report.bases <- function(x, 
                             plot = TRUE, 
                             plot_theme = theme_dartR(), 
                             plot_colours = two_colors,
+                            save2tmp=FALSE,
                             verbose = NULL) {
 
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  datatype <- utils.check.datatype(x)
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=0)
 
-    # FUNCTION SPECIFIC ERROR CHECKING
+  # FUNCTION SPECIFIC ERROR CHECKING
 
     if (!any(names(x@other$loc.metrics) == "TrimmedSequence")) {
         stop(error("  Fatal Error: Dataset does not include variable TrimmedSequence!\n"))
     }
 
-    # FLAG SCRIPT START
-
-    if (verbose >= 1) {
-      if (verbose == 5) {
-        cat(report("\nStarting", funname, "[ Build =", 
-                   build, "]\n\n"))
-      } else {
-        cat(report("\nStarting", funname, "\n\n"))
-      }
-    }
-
-    # DO THE JOB 
+  # DO THE JOB 
     
     # Count up the number of bases, and the number of each of ATGC, and other
     if (verbose >= 2) {
@@ -208,7 +184,7 @@ gl.report.bases <- function(x,
 
     # Create return list
     if (verbose >= 2) {
-        cat(report("  Returning a list containing \n
+        cat(report("  Returning a list containing\n
          [[1]] $freq -- the table of base frequencies and transition/transversion ratios;\n
          [[2]] $plotbases -- ggplot bargraph of base frequencies;\n
          [[3]] $plottstv -- ggplot bargraph of transitions and transversions.\n"))
@@ -217,19 +193,25 @@ gl.report.bases <- function(x,
     out <- c(round(A, 2), round(G, 2), round(T, 2), round(C, 2), round(tv, 2), round(ts, 2))
     names(out) <- c("A", "G", "T", "C", "tv", "ts")
 
-    # FLAG SCRIPT END
+    # SAVE INTERMEDIATES TO TEMPDIR             
+    if(save2tmp){
+      # creating temp file names
+      temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+
+      # saving to tempdir
+      saveRDS(p3, file = temp_plot)
+      if(verbose>=2){
+        cat(report("  Saving the ggplot to session tempfile\n"))
+      }
+    }
+      
+ # FLAG SCRIPT END
 
     if (verbose >= 1) {
-      cat(report("\n\nCompleted:", funname, "\n\n"))
+      cat(report("\nCompleted:", funname, "\n\n"))
     }
     
-    # RETURN
-    
-    if (datatype=="SNP"){
-      invisible(list(freq = out, plotbases = p1, plottstv = p2))  
-    }else{
-      invisible(list(freq = out, plotbases = p1))
-    } 
-
+  # RETURN
+    invisible(x)
 }
 

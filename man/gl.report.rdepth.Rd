@@ -6,19 +6,25 @@
 \usage{
 gl.report.rdepth(
   x,
+  plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP or presence/absence
-(SilicoDArT) data [required].}
+(SilicoDArT) data [required]}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot}{specify if plot is to be produced [default TRUE]}
+
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
 
 \item{plot_colours}{List of two color names for the borders and fill of the
-plots [default two_colors].}
+plots [default two_colors]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
@@ -34,28 +40,14 @@ Standard Deviation of Read Depth as standard columns in their report. This
 function reports the read depth by locus for each of several quantiles.
 }
 \details{
-Filtering on Read Depth using the companion function \code{\link{gl.filter.rdepth}}
- can be on the basis of loci with exceptionally low counts, 
-or loci with exceptionally high counts.
+The function displays a table of minimum, maximum, mean and quantiles for read depth against
+ possible thresholds that might subsequently be specified in \code{\link{gl.filter.rdepth}}. 
+ If plot=TRUE, display also includes a boxplot and a histogram to guide in the selection of a threshold 
+ for filtering on read depth.
 
- Quantiles are
-partitions of a finite set of values into q subsets of (nearly) equal sizes.
-In this function q = 20. Quantiles are useful measures because they are less
- susceptible to long-tailed distributions and outliers.
- 
-\strong{ Function's output }
-
- The minimum, maximum, mean and a tabulation of read depth quantiles against
- thresholds rate are provided. Output also includes a boxplot and a
- histogram to guide in the selection of a threshold for filtering on callrate.
-
- Plots and table are saved to the temporal directory (tempdir) and can be 
- accessed with the function \code{\link{gl.print.reports}} and listed with 
- the function \code{\link{gl.list.reports}}. Note that they can be accessed 
- only in the current R session because tempdir is cleared each time that the
-  R session is closed.
+ If save2tmp=TRUE, ggplots and relevant tabulations are saved to the session's temp directory (tempdir) 
   
- Examples of other themes that can be used can be consulted in \itemize{
+ For examples of themes, see  \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
  }
@@ -63,13 +55,18 @@ In this function q = 20. Quantiles are useful measures because they are less
 \examples{
 # SNP data
 df <- gl.report.rdepth(testset.gl)
+df <- gl.report.rdepth(testset.gs)
 
 }
 \seealso{
-\code{\link{gl.filter.rdepth}}, \code{\link{gl.list.reports}},
- \code{\link{gl.print.reports}}
+\code{\link{gl.filter.rdepth}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},

@@ -59,8 +59,9 @@ gl.ibd <-  function(x=NULL,
     # GENERAL ERROR CHECKING
     
     verbose <- gl.check.verbosity(verbose)
+
     if (!is.null(x))  dt <- utils.check.datatype(x, verbose=0)
-    
+
     
 
  #specific error checks       
@@ -229,7 +230,16 @@ if (is.null(paircols)) {
     if (is(x, "genlight")) cn <- pop(x) else cn = rownames(as.matrix(Dgen))
   }
   res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo), Legend=cn[c1], col2=cn[c2])
-  p1 <- ggplot(res)+geom_point(aes(Dgeo, Dgen, col=Legend), size=5)+geom_point(aes(Dgeo, Dgen, col=col2), size=2)+geom_point(aes(Dgeo, Dgen), size=2, shape=1)+guides(size = "none")+geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+ylab(Dgen_trans)+geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+xlab(Dgeo_trans)+plot_theme
+  p1 <- ggplot(res)+
+    geom_point(aes(Dgeo, Dgen, col=Legend), size=5)+
+    geom_point(aes(Dgeo, Dgen, col=col2), size=2)+
+    geom_point(aes(Dgeo, Dgen), size=2, shape=1)+
+    guides(size = "none",color=guide_legend(title="Populations"))+
+    geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+
+    ylab(Dgen_trans)+
+    geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+
+    xlab(Dgeo_trans)+
+    plot_theme
   
   }
 
@@ -253,10 +263,7 @@ nmc <- gsub("/", "_over_",names(funname))
 nmc <- gsub("\\*", "x",nmc)
 
 temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(nmc,"_",mc,collapse = "_")))
-
-
 temp_table <- tempfile(pattern = paste0("dartR_table",paste0(nmc,"_",mc,collapse = "_"),"_"))
-
 
 # saving to tempdir
 saveRDS(p1, file = temp_plot)

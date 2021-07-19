@@ -4,10 +4,12 @@
 \alias{gl.report.overshoot}
 \title{Reports loci for which the SNP has been trimmed from the sequence tag along with the adaptor}
 \usage{
-gl.report.overshoot(x, verbose = NULL)
+gl.report.overshoot(x, save2tmp = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object [required].}
+\item{x}{Name of the genlight object [required]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
@@ -22,17 +24,21 @@ the trimmed sequence tag. This can happen, rarely, when the sequence containing 
 The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
 the sequence tag.
  
- Report table is saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary directory.
 }
 \examples{
 gl.report.overshoot(testset.gl)
 
 }
 \seealso{
-\code{\link{gl.filter.overshoot}},\code{\link{gl.list.reports}},
- \code{\link{gl.print.reports}}
+\code{\link{gl.filter.overshoot}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},
@@ -44,6 +50,6 @@ Other filters and filter reports:
 \code{\link{gl.report.taglength}()}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters and filter reports}

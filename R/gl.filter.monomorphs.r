@@ -1,5 +1,7 @@
-#' Remove monomorphic loci, including those with all NAs
-#'
+#' @name gl.filter.monomorphs
+#' @title Remove monomorphic loci, including those with all NAs
+#' 
+#' @description
 #' This script deletes monomorphic loci from a genlight \{adegenet\} object
 #'
 #' A DArT dataset will not have monomorphic loci, but they can arise, along with loci that are scored all NA, when populations or individuals are deleted.
@@ -10,79 +12,51 @@
 #' 
 #' @param x -- name of the input genlight object [required]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
-#' @return A genlight object with monomorphic ( and all NA) loci removed
-#' @import utils
-#' @importFrom plyr count
-#' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @return A genlight object with monomorphic (and all NA) loci removed
+#' 
+#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # SNP data
 #'   result <- gl.filter.monomorphs(testset.gl, verbose=3)
 #' # Tag P/A data
 #'   result <- gl.filter.monomorphs(testset.gs, verbose=3)
+#'  
+#' @family filters and filter reports
+#' @import utils patchwork
+#' @importFrom plyr count
+#' @export
 
-gl.filter.monomorphs <- function (x, verbose=NULL) {
+gl.filter.monomorphs <- function (x, 
+                                  verbose=NULL) {
 
-# TRAP COMMAND, SET VERSION
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
 # STANDARD ERROR CHECKING
   
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
+  if(class(x)[1]!="genlight") {
+    stop(error("Fatal Error: genlight object required!"))
   }
   
 # DO THE JOB
-  
-  # mml <- !( colMeans(as.matrix(x), na.rm=TRUE)%%2 == 0) ; Code for readability
 
   hold <- x
   na.counter <- 0
   loc.list <- array(NA,nLoc(x))
 
   if (verbose >= 2){
-    cat("Identifying monomorphic loci\n")
+    cat(report("  Identifying monomorphic loci\n"))
   }  
   
   # Tag presence/absence data
-  if (data.type=="SilicoDArT"){
+  if (datatype=="SilicoDArT"){
     nL <- nLoc(x)
     matrix <- as.matrix(x)
     l.names <- locNames(x)
@@ -98,7 +72,7 @@ gl.filter.monomorphs <- function (x, verbose=NULL) {
   } 
   
   # SNP data
-  if (data.type=="SNP"){
+  if (datatype=="SNP"){
     nL <- nLoc(x)
     matrix <- as.matrix(x)
     lN <- locNames(x)
@@ -119,21 +93,21 @@ gl.filter.monomorphs <- function (x, verbose=NULL) {
   # remove monomorphic loc and loci with all NAs
   
   if(length(loc.list > 0)){
-    if (verbose >= 2){    cat("  Removing monomorphic loci\n")} 
+    if (verbose >= 2){    cat(report("  Removing monomorphic loci\n"))} 
     x <- gl.drop.loc(x,loc.list=loc.list,verbose=0)
   } else {
-    if (verbose >= 2){cat("  No monomorphic loci to remove\n")}
+    if (verbose >= 2){cat(report("  No monomorphic loci to remove\n"))}
   }
   
   # Report results
   if (verbose >= 3) {
-    cat("  Original No. of loci:",nLoc(hold),"\n")
-    cat("  Monomorphic loci:", nLoc(hold)-nLoc(x)-na.counter,"\n")
-    cat("  Loci scored all NA:",na.counter,"\n")
-    cat("  No. of loci deleted:",nLoc(hold)-nLoc(x),"\n")
-    cat("  No. of loci retained:",nLoc(x),"\n")
-    cat("  No. of individuals:",nInd(x),"\n")
-    cat("  No. of populations:",nPop(x),"\n")
+    cat("    Original No. of loci:",nLoc(hold),"\n")
+    cat("    Monomorphic loci:", nLoc(hold)-nLoc(x)-na.counter,"\n")
+    cat("    Loci scored all NA:",na.counter,"\n")
+    cat("    No. of loci deleted:",nLoc(hold)-nLoc(x),"\n")
+    cat("    No. of loci retained:",nLoc(x),"\n")
+    cat("    No. of individuals:",nInd(x),"\n")
+    cat("    No. of populations:",nPop(x),"\n")
   }
   
 # RESET THE FLAG
@@ -145,11 +119,9 @@ gl.filter.monomorphs <- function (x, verbose=NULL) {
   x@other$history[[nh + 1]] <- match.call()
   
 # FLAG SCRIPT END
-
   if (verbose >= 1){
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }  
   
 return (x)
-  
 }

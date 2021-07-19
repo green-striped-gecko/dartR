@@ -292,16 +292,21 @@ gl.blast <- function(x, ref_genome, task = "megablast",
     cat(report(paste(nrow(one_hit), " sequences were aligned after filtering")))
   }
   
+  match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+  
   # creating file names
-  temp_blast_unfiltered <- tempfile(pattern =paste0("dartR_blast_unfiltered",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
-  temp_blast_filtered <- tempfile(pattern =paste0("dartR_blast_filtered",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
-
-  temp_one_hit <- tempfile(pattern =paste0("dartR_one_hit",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
+  temp_blast_unfiltered <- tempfile(pattern ="dartR_blast_unfiltered_")
+  temp_blast_filtered <- tempfile(pattern ="dartR_blast_filtered_")
+  temp_one_hit <- tempfile(pattern ="dartR_one_hit_")
     
   # saving to tempdir
-  saveRDS(blast_res_unfiltered, file = temp_blast_unfiltered)
-  saveRDS(blast_res_filtered, file = temp_blast_filtered)
-  saveRDS(one_hit, file = temp_one_hit)
+  saveRDS(list(match_call,blast_res_unfiltered), file = temp_blast_unfiltered)
+  saveRDS(list(match_call,blast_res_filtered), file = temp_blast_filtered)
+  saveRDS(list(match_call,one_hit), file = temp_one_hit)
+  
+  if(verbose>=2){
+    cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+  } 
   
   # ADD TO HISTORY
   if (class(x)[1] == "genlight") {

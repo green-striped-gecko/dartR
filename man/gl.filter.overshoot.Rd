@@ -4,10 +4,12 @@
 \alias{gl.filter.overshoot}
 \title{Filters loci for which the SNP has been trimmed from the sequence tag along with the adaptor}
 \usage{
-gl.filter.overshoot(x, verbose = NULL)
+gl.filter.overshoot(x, save2tmp = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object [required]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }

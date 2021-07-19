@@ -12,69 +12,31 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
-#' gl.reloaded <- gl.load(file.path(tempdir(),"testset.rds"))
+#' @seealso \code{\link{gl.load}}
 
 gl.save <- function(x, file, verbose=NULL){
 
-# TRAP COMMAND, SET VERSION
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(class(x)=="genlight" && !is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    if (all(x@ploidy == 1)){
-      if (verbose >= 2){cat("  Saving Presence/Absence (SilicoDArT) data\n")}
-      data.type <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
-      if (verbose >= 2){cat("  Saving a SNP dataset\n")}
-      data.type <- "SNP"
-    }
-  } else {
-    if (verbose >= 2){cat("  Saving an object of Class:",class(x),"\n")}
-    data.type <- "other"
-    }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=0)
   
 # DO THE JOB
 
   saveRDS(x,file)
+  cat(report("  Saved object of type",datatype,"to",file,"\n"))
   
-# ADD TO HISTORY
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()  
-
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
     
-  return(invisible(2))
+  invisible(x)
     
 }

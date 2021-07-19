@@ -262,7 +262,7 @@ gl.test.heterozygosity <- function(x,
             geom_vline(xintercept=l2quantile,colour="firebrick1",size=1)+
             scale_color_manual(name = "Values" ,values=c( Zero_value="blue",Observed="green",alpha1="firebrick4",alpha2="firebrick1"),labels=c(paste("Sig. ",alpha1),paste("Sig. ",alpha2),"Observed","Zero value"))+
             guides(color = guide_legend(override.aes = list(size = 5),ncol = 2))+
-            theme(legend.position="bottom",legend.key=element_rect(fill='transparent'),legend.title = element_text(face = "bold"))
+            theme(legend.position="bottom",legend.title = element_text(face = "bold"))
            
           p_list[[count]] <- p_temp
         }
@@ -272,6 +272,7 @@ gl.test.heterozygosity <- function(x,
     }
     
     # PRINTING OUTPUTS
+    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
     # using package patchwork
     for (i in 1:ceiling((length(p_list)/max_plots))) {
       seq_1 <- seq(1,length(p_list),max_plots)
@@ -284,25 +285,31 @@ gl.test.heterozygosity <- function(x,
       print(p_final)
       # SAVE INTERMEDIATES TO TEMPDIR             
       # creating temp file names
-      temp_plot <- tempfile(pattern =paste0("dartR_plot_",seq_1[i],"_to_",seq_2[i],paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+      temp_plot <- tempfile(pattern =paste0("dartR_plot_",seq_1[i],"_to_",seq_2[i]))
       # saving to tempdir
-      saveRDS(p_final, file = temp_plot)
+      saveRDS(list(match_call,p_final), file = temp_plot)
     }
-    
+    if(verbose>=2){
+      cat(report("  Saving the ggplot to session tempfile\n"))
+    }
   }
 
   print(df)
+  
   # SAVE INTERMEDIATES TO TEMPDIR             
   # creating temp file names
-  temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+  temp_table <- tempfile(pattern = "dartR_table_")
+  match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
   # saving to tempdir
-  saveRDS(df, file = temp_table)
+  saveRDS(list(match_call,df), file = temp_table)
+  if(verbose>=2){
+    cat(report("  Saving tabulation to session tempfile\n"))
+  }
   
   if(verbose>=2){
     cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-  }
-
-
+  } 
+  
   # FLAG SCRIPT END
   
   if (verbose >= 1) {

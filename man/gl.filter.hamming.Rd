@@ -4,7 +4,18 @@
 \alias{gl.filter.hamming}
 \title{Filters loci based on pairwise Hamming distance between sequence tags}
 \usage{
-gl.filter.hamming(x, threshold = 0.2, rs = 5, pb = FALSE, verbose = NULL)
+gl.filter.hamming(
+  x,
+  threshold = 0.2,
+  rs = 5,
+  taglength = 69,
+  plot = TRUE,
+  plot_theme = theme_dartR(),
+  plot_colours = two_colors,
+  pb = FALSE,
+  save2tmp = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
@@ -13,7 +24,18 @@ gl.filter.hamming(x, threshold = 0.2, rs = 5, pb = FALSE, verbose = NULL)
 
 \item{rs}{-- number of bases in the restriction enzyme recognition sequence [default = 4]}
 
+\item{taglength}{Typical length of the sequence tags [default 69]}
+
+\item{plot}{specify if plot is to be produced [default TRUE]}
+
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
+
+\item{plot_colours}{List of two color names for the borders and fill of the
+plots [default two_colors]}
+
 \item{pb}{-- switch to output progress bar [default FALSE]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
@@ -40,7 +62,7 @@ If a pair of DNA sequences are of differing length, the longer is truncated.
 
 The algorithm is that of Johann de Jong 
 \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
-as implimented in utils.hamming.r
+as implemented in \code{\link{utils.hamming}}.
 
 Only one of two loci are retained if their Hamming distance is less that a specified
 percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
@@ -48,7 +70,28 @@ percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 \examples{
 # SNP data
   result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
+
+}
+\seealso{
+\code{\link{gl.filter.hamming}}
+
+Other filters and filter reports: 
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.report.callrate}()},
+\code{\link{gl.report.hamming}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{filters and filter reports}
