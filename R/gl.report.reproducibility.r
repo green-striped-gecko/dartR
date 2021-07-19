@@ -141,21 +141,24 @@ gl.report.reproducibility <- function(x,
   # SAVE INTERMEDIATES TO TEMPDIR 
   if(save2tmp){
   # creating temp file names
-  temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-  temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-  
+  temp_plot <- tempfile(pattern = "dartR_plot_")
+  temp_table <- tempfile(pattern = "dartR_table_")
+  match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
   # saving to tempdir
-  if(plot){
-  saveRDS(p3, file = temp_plot)
+
+  saveRDS(list(match_call,p3), file = temp_plot)
   if(verbose>=2){
-    cat(report("  Saving ggplot(s) to the session tempfile\n"))
+    cat(report("  Saving the ggplot to session tempfile\n"))
+
   }
-  }
-  saveRDS(df, file = temp_table)
+  
+  saveRDS(list(match_call,df), file = temp_table)
   if(verbose>=2){
+
     cat(report("  Saving tabulation to the session tempfile\n"))
   }
   }
+
   
   # FLAG SCRIPT END
   if (verbose >= 1) {

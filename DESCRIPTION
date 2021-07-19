@@ -32,9 +32,9 @@ Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape,
         patchwork, reshape2, robustbase
 Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
         pca3d, dismo, pegas, directlabels, rgdal,
-        leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp, igraph,
-        qvalue, gdistance, seqinr, pheatmap, RColorBrewer, gplots,
-        vcfR, mmod, plotly, ggthemes, ggrepel, raster
+        leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp,
+        qvalue, gdistance, seqinr, pheatmap, RColorBrewer, 
+        vcfR, mmod, plotly, ggthemes, ggrepel, raster,  igraph, gplots
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1

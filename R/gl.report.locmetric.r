@@ -181,23 +181,25 @@ gl.report.locmetric <- function(x,
     print(p3)
     print(df)
     
-    # SAVE INTERMEDIATES TO TEMPDIR    
+    # SAVE INTERMEDIATES TO TEMPDIR             
     # creating temp file names
-    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-    
+    temp_plot <- tempfile(pattern = "dartR_plot_")
+    temp_table <- tempfile(pattern = "dartR_table_")
+    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
     # saving to tempdir
-    saveRDS(p3, file = temp_plot)
+    saveRDS(list(match_call,p3), file = temp_plot)
     if(verbose>=2){
-        cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
+        cat(report("  Saving the ggplot to session tempfile\n"))
     }
-    saveRDS(df, file = temp_table)
+    
+    saveRDS(list(match_call,df), file = temp_table)
     if(verbose>=2){
-        cat(report("  Saving the outlier loci to the tempfile as",temp_table,"using saveRDS\n"))
+        cat(report("  Saving tabulation to session tempfile\n"))
     }
+    
     if(verbose>=2){
         cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-    }
+    } 
     
     # FLAG SCRIPT END
 

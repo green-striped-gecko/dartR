@@ -6,15 +6,15 @@
 #' data; it undertakes a Gower Principal Coordinate analysis (PCoA) if supplied with a distance matrix. Technically, any distance matrix can 
 #' be represented in an ordinated space using PCoA.
 #'
-#'@param x Name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required]
-#'@param nfactors Number of axes to retain in the output of factor scores.
-#'@param correction Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL]
-#'@param rm.monomorphs If TRUE, remove monomorphic loci [default TRUE]
-#'@param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE]
-#'@param n.cores Number of cores to use if parallel processing is requested [default 16]
+#'@param x Name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required].
+#'@param nfactors Number of axes to retain in the output of factor scores [default 5].
+#'@param correction Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL].
+#'@param rm.monomorphs If TRUE, remove monomorphic loci [default TRUE].
+#'@param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE].
+#'@param n.cores Number of cores to use if parallel processing is requested [default 16].
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #'@param plot_colours List of two color names for the borders and fill of the plot [default two_colors].
-#'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].
 #'
 #'@details The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\} with default settings apart from those specified as parameters in this 
 #' function.
@@ -82,7 +82,7 @@
 #' fd <- gl.fixed.diff(testset.gl)
 #' fd <- gl.collapse(fd)
 #' pca <- gl.pcoa(fd)
-#' gl.pcoa.plot(pca,fd)
+#' #gl.pcoa.plot(pca,fd)
 #'
 #'@references
 #'\itemize{ 
@@ -105,7 +105,15 @@
 #'@export 
 #'
 
-gl.pcoa <- function(x, nfactors = 5, correction = NULL, rm.monomorphs = TRUE, parallel = FALSE, n.cores = 16, plot_theme = theme_dartR(),plot_colours = two_colors, verbose = 2) {
+gl.pcoa <- function(x, 
+                    nfactors = 5, 
+                    correction = NULL, 
+                    rm.monomorphs = TRUE, 
+                    parallel = FALSE, 
+                    n.cores = 16, 
+                    plot_theme = theme_dartR(),
+                    plot_colours = two_colors, 
+                    verbose = 2) {
 
     # TRAP COMMAND, SET VERSION
 

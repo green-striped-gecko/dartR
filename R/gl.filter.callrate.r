@@ -52,10 +52,10 @@
 #'   result <- gl.filter.callrate(testset.gl, method="loc", threshold=0.8, verbose=3)
 #'   result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8, verbose=3)
 #'   result <- gl.filter.callrate(testset.gl, method="pop", threshold=0.8, verbose=3)
-#' # Tag P/A data
+#' # Tag P/A data (please uncomment)
 #'   result <- gl.filter.callrate(testset.gs, method="loc", threshold=0.95, verbose=3)
-#'   result <- gl.filter.callrate(testset.gs, method="ind", threshold=0.8, verbose=3)
-#'   result <- gl.filter.callrate(testset.gs, method="pop", threshold=0.8, verbose=3)
+#'   #result <- gl.filter.callrate(testset.gs, method="ind", threshold=0.8, verbose=3)
+#'   #result <- gl.filter.callrate(testset.gs, method="pop", threshold=0.8, verbose=3)
 #'      
 #' @seealso \code{\link{gl.report.callrate}}
 #' @family filters and filter reports
@@ -449,54 +449,33 @@
        }   
      }
    }
-   
-   # PRINTING OUTPUTS
-   # using package patchwork
-   p3 <- (p1/p2) 
-   print(p3)
-
-   # SAVE INTERMEDIATES TO TEMPDIR             
-   # creating temp file names
-   temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-
-   # saving to tempdir
-   saveRDS(p3, file = temp_plot)
-   if(verbose>=2){
-     cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))
-   }
-
-   if(verbose>=2){
-     cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-   }
 
   # Recalculate Call Rate to be safe
       x <- utils.recalc.callrate(x,verbose=0)
-      
-# SAVE INTERMEDIATES TO TEMPDIR   
-      if(save2tmp & plot){
-        # creating temp file names
-        temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-#        temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-      
-        # saving to tempdir
-        saveRDS(p3, file = temp_plot)
-        if(verbose>=2){
-          cat(report("  Saving the ggplot to session tempfile\n"))
-        }
+      # SAVE INTERMEDIATES TO TEMPDIR             
+      # creating temp file names
+      temp_plot <- tempfile(pattern = "dartR_plot_")
+      match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+      # saving to tempdir
+      saveRDS(list(match_call,p3), file = temp_plot)
+      if(verbose>=2){
+        cat(report("  Saving the ggplot to session tempfile\n"))
       }
       
+      if(verbose>=2){
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+      } 
+
 # ADD TO HISTORY
       
    nh <- length(x2@other$history)
    x2@other$history[[nh + 1]] <- match.call()      
    
-
 # FLAG SCRIPT END
 
   if (verbose > 0) {
     cat(report("Completed:",funname,"\n"))
   }
-
 
    invisible(x2)
  }

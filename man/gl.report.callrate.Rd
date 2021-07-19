@@ -54,7 +54,7 @@ Plot themes can be obtained from \itemize{
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
  }
 
-Resultant ggplots and the tablulation are saved to the session's temporary directory.
+Resultant ggplots and the tabulation are saved to the session's temporary directory.
 }
 \examples{
 # SNP data

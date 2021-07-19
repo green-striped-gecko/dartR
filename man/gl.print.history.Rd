@@ -18,6 +18,7 @@ prints a table with all history records. Currently the style cannot be changed.
 Prints history of a genlight object
 }
 \examples{
+\donttest{
 dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
 metadata <- system.file("extdata","testset_metadata.csv", package="dartR")
 gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=FALSE) 
@@ -27,6 +28,7 @@ gl3 <- gl.filter.callrate(gl2, method="ind", threshold=0.95)
 #bc.fil <- gl.play.history(gl.compliance.check(bandicoot.gl), 
 #history=gl3@other$history[c(2,3)], verbose=1)
 #gl.print.history(bc.fil)
+}
 }
 \author{
 Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
