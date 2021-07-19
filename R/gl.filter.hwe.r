@@ -24,7 +24,11 @@
 #' @examples
 #' result <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE, verbose=3)
 
-gl.filter.hwe <- function(x, alpha=0.05, basis="any", bon=TRUE, verbose=NULL) {
+gl.filter.hwe <- function(x, 
+                          alpha=0.05, 
+                          basis="any", 
+                          bon=TRUE, 
+                          verbose=NULL) {
   
 # TRAP COMMAND, SET VERSION
   

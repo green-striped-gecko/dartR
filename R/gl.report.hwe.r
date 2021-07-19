@@ -36,7 +36,13 @@
 #' gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE, verbose=3)
 #' gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
 
-gl.report.hwe <- function(x, subset="each", plot=FALSE, method="ChiSquare", alpha=0.05, bonf=TRUE, verbose=NULL) {
+gl.report.hwe <- function(x, 
+                          subset="each", 
+                          plot=FALSE,
+                          method="ChiSquare", 
+                          alpha=0.05,
+                          bonf=TRUE,
+                          verbose=NULL) {
 
 # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "HardyWeinberg"
