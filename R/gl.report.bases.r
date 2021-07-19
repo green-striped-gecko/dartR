@@ -33,12 +33,8 @@
 #' @examples
 #' # SNP data
 #'   out <- gl.report.bases(testset.gl)
-#'   out$freq
-#'   out$plotbases
-#'   out$plottvts
-#' # Tag P/A data
+#'   #' # Tag P/A data
 #'   out <- gl.report.bases(testset.gs)
-#'   out
 #'   
 #' @family reporting functions
 #' @import stringr

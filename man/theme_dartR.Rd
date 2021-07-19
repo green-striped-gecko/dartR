@@ -25,9 +25,7 @@ This is the theme used as default for dartR plots.
 This function controls all non-data display elements in the plots.
 }
 \examples{
-
-ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
- geom_histogram() +
- theme_dartR()
+#ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
+#geom_histogram(binwidth=0.1) + theme_dartR()
 
 }

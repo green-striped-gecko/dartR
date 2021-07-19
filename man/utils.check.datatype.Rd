@@ -4,10 +4,12 @@
 \alias{utils.check.datatype}
 \title{Utility function to check that the object passed to the function is a genlight object.}
 \usage{
-utils.check.datatype(x, verbose = NULL)
+utils.check.datatype(x, strict = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]}
+
+\item{strict}{If TRUE, a fatal error occurs if the passed object is not a genlight object [default TRUE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
@@ -22,6 +24,5 @@ whether it is a SNP dataset or a SilicoDArT object, and reports back if verbosit
 This function checks whether the input object is a genlight object and sets the datatype to "SNP" or "SilicoDArT" as appropriate.
 }
 \examples{
-utils.check.datatype(testset.gl)
-
+datatype <- utils.check.datatype(testset.gl)
 }

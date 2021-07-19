@@ -12,7 +12,7 @@ gl.fixed.diff(
   alpha = 0.05,
   reps = 1000,
   mono.rm = TRUE,
-  pb = TRUE,
+  pb = FALSE,
   verbose = NULL
 )
 }
@@ -75,7 +75,8 @@ fixed for practical purposes. That is, fixed differences in the sample set will 
 if they arise from true allele frequencies of less than 1-delta in one or both populations.  The parameter
 delta is typically set to be small (e.g. delta = 0.02).
 
-NOTE: The above test will only be calculated if tloc=0, that is, for analyses of absolute fixed differences.
+NOTE: The above test will only be calculated if tloc=0, that is, for analyses of absolute fixed differences. The
+test applies in comparisons of allopatric populations only. For sympatric populations, use gl.pval.sympatry().
 
 An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
 level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
@@ -84,7 +85,7 @@ This adjustment can be done with the tloc parameter. For example, tloc=0.05 mean
 }
 \examples{
 \donttest{
-fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=2 )
+fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=3 )
 fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, verbose=1 )
 }
 }

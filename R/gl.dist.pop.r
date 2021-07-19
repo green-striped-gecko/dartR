@@ -24,7 +24,7 @@
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
 #' @importFrom grDevices rainbow
-#' @importFrom graphics par boxplot 
+#' @importFrom graphics par boxplot hist
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples

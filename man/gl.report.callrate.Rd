@@ -7,21 +7,27 @@
 gl.report.callrate(
   x,
   method = "loc",
+  plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP or presence/absence
-(SilicoDArT) data [required].}
+(SilicoDArT) data [required]}
 
 \item{method}{Specify the type of report by locus (method='loc') or individual
-(method='ind') [default method='loc'].}
+(method='ind') [default method='loc']}
 
-\item{plot_theme}{User specified theme [default theme_dartR()].}
+\item{plot}{specify if plot of call rate is to be produced [default TRUE]}
 
-\item{plot_colours}{Vector with two colour names for the borders and fill [default two_colors].}
+\item{plot_theme}{User specified theme [default theme_dartR()]}
+
+\item{plot_colours}{Vector with two colour names for the borders and fill [default two_colors]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
@@ -37,8 +43,7 @@ whether a sequence tag was amplified or not. This function tabulates the
 number of missing values as quantiles.
 }
 \details{
-This function expects a genlight object, and will interrogate it to determine if 
-it contains SNP data or SilicoDArT (=presence/absence data).
+This function expects a genlight object, containing either SNP data or SilicoDArT (=presence/absence data).
 
 Callrate is summarized by locus or by individual to allow sensible decisions on thresholds
 for filtering taking into consideration consequential loss of data. The summary is in the form 
@@ -65,6 +70,10 @@ Resultant ggplots and the tablulation are saved to the session's temporary direc
 
 Other filters and filter reports: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},
 \code{\link{gl.report.maf}()},

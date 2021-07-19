@@ -62,10 +62,8 @@ three_colors <- c("#3B9AB2","deeppink","lemonchiffon")
 #' @param base_line_size base size for line elements
 #' @param base_rect_size base size for rect elements
 #' @examples
-#' 
-#' ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
-#'  geom_histogram() +
-#'  theme_dartR()
+#' #ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
+#' #geom_histogram(binwidth=0.1) + theme_dartR()
 #'
 
 # The half-line (base-fontsize / 2) sets up the basic vertical
@@ -186,8 +184,8 @@ theme_dartR <- function(base_size = 11, base_family = "",
 # WELCOME MESSAGE
 .onAttach <- function(...) {
   
-  packageStartupMessage(important("**** Welcome to dartR ****\n"))
-  packageStartupMessage(report("Be aware that owing to CRAN requirements and compatibility reasons not all functions of the packages may run yet, as some dependencies could be missing. Hence for a most enjoyable experience we recommend to run the function "))
+  packageStartupMessage(important(paste("**** Welcome to dartR [Version",packageVersion("dartR"),"] ****\n")))
+  packageStartupMessage(report("Be aware that owing to CRAN requirements and compatibility reasons not all functions of the package may run after the basic installation, as some packages could still be missing. Hence for a most enjoyable experience we recommend to run the function "))
   packageStartupMessage(code("gl.install.vanilla.dartR()"))                 
   
   packageStartupMessage(report("This installs all missing and required packages for your version of dartR. \nFor citation information please use:"))

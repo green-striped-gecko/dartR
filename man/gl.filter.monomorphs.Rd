@@ -12,12 +12,11 @@ gl.filter.monomorphs(x, verbose = NULL)
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
-A genlight object with monomorphic ( and all NA) loci removed
+A genlight object with monomorphic (and all NA) loci removed
 }
 \description{
 This script deletes monomorphic loci from a genlight \{adegenet\} object
-}
-\details{
+
 A DArT dataset will not have monomorphic loci, but they can arise, along with loci that are scored all NA, when populations or individuals are deleted.
 Retaining monomorphic loci unnecessarily increases the size of the dataset and will affect some calculations.
 
@@ -29,7 +28,26 @@ be reliably scored)
   result <- gl.filter.monomorphs(testset.gl, verbose=3)
 # Tag P/A data
   result <- gl.filter.monomorphs(testset.gs, verbose=3)
+ 
+}
+\seealso{
+Other filters and filter reports: 
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.report.callrate}()},
+\code{\link{gl.report.hamming}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{filters and filter reports}
