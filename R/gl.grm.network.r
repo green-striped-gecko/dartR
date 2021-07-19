@@ -158,7 +158,7 @@ gl.grm.network <- function(G,
   }
   
   #get edges, which are pairs of node IDs
-  edgelist <- get.edgelist(network.FS,names = F)
+  edgelist <- igraph::get.edgelist(network.FS,names = F)
   #convert to a four column edge data frame with source and destination coordinates
   edges <- data.frame(plotcord[edgelist[,1],], plotcord[edgelist[,2],])
   #using kinship for the size of the edges
