@@ -13,8 +13,10 @@ Prints a table with all reports saved in tempdir. Currently the style cannot be 
 Prints dartR reports saved in tempdir
 }
 \examples{
+\dontrun{
 gl.report.callrate(testset.gl)
 gl.list.reports()
+}
 }
 \author{
 Bernd Gruber & Luis Mijangos (bugs? Post to \url{https://groups.google.com/d/forum/dartr})

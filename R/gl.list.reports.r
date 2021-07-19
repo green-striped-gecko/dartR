@@ -5,8 +5,11 @@
 #'@importFrom gridExtra grid.table ttheme_default
 #'@author Bernd Gruber & Luis Mijangos (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #'@examples 
+#' \dontrun{
 #' gl.report.callrate(testset.gl)
 #' gl.list.reports()
+#' }
+
 
 gl.list.reports <- function(){
   
