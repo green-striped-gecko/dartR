@@ -20,6 +20,16 @@ This function takes the output of plotstructure (the q matrix) and maps the q-ma
  \code{\link{gl.run.structure}}) and plots the typical structure bar
   plots on a spatial map, providing a barplot for each subpopulation. Therefore it requires coordinates from a genlight object. This kind of plots should support the interpretation of the spatial structure of a population, but in principle is not different from \code{\link{gl.plot.structure}}
 }
+\examples{
+\dontrun{
+#CLUMPP needs to be installed to be able to run the example
+#only the first 100 loci
+#bc <- bandicoot.gl[,1:100]
+#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
+}
+}
 \references{
 Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
 
@@ -33,14 +43,4 @@ Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster matching and pe
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
-
-#@examples
-\dontrun{
-#CLUMPP needs to be installed to be able to run the example
-#only the first 100 loci
-#bc <- bandicoot.gl[,1:100]
-#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
-#qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
-#gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
-}
 }

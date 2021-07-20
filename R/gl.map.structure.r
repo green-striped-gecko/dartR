@@ -14,7 +14,7 @@
 #'
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
-#' #@examples
+#' @examples
 #' \dontrun{
 #' #CLUMPP needs to be installed to be able to run the example
 #' #only the first 100 loci
