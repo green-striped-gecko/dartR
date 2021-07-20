@@ -24,7 +24,6 @@
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }
 #' @export
-#' @importFrom leaflet addRectangles
 #' @seealso \code{\link{gl.run.structure}},  \link[strataG]{clumpp}, \code{\link{gl.plot.structure}}
 #' @references 
 #' Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
@@ -70,7 +69,7 @@ gl.map.structure <- function(qmat, x, scalex =1, scaley=1) {
    for ( i in 1:(ncol(qmi1)-1)) {
      oo <- (ii-nrow(qmi)/2)*sx
    
-     m1 <- m1   %>% addRectangles(cx[p]+oo, cy[p]+qmi1[ii,i]*sy, cx[p]+oo+sx, cy[p]+qmi1[ii,i+1]*sy, opacity = 0, color =  rainbow(ncol(ff))[i], fillOpacity = 0.8)
+     m1 <- m1   %>% leaflet::addRectangles(cx[p]+oo, cy[p]+qmi1[ii,i]*sy, cx[p]+oo+sx, cy[p]+qmi1[ii,i+1]*sy, opacity = 0, color =  rainbow(ncol(ff))[i], fillOpacity = 0.8)
      
    }
  }
