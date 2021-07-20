@@ -12,7 +12,8 @@ gl.plot.structure(sr, k, sort = NULL, CLUMPP = "./", ..., plot_theme, verbose)
 \arguments{
 \item{qmat}{q-matrix from a structure run followed by a clumpp run object [from \code{\link{gl.run.structure}} and \code{\link{gl.plot.structure}}] [required].
 @param x name of the genlight object containing the coordinates in the \code{\@other$latlon} slot to calculate the population centers [required]
-@param scale scaling factor to determine the size of the bars (in x and y direction)}
+@param scalex scaling factor to determine the size of the bars in x direction
+@param scaley scaling factor to determine the size of the bars in y direction}
 
 \item{sr}{structure run object from \code{\link{gl.run.structure}} [required].}
 

@@ -8,7 +8,8 @@
 #'   plots on a spatial map, providing a barplot for each subpopulation. Therefore it requires coordinates from a genlight object. This kind of plots should support the interpretation of the spatial structure of a population, but in principle is not different from \code{\link{gl.plot.structure}}
 #' @param qmat q-matrix from a structure run followed by a clumpp run object [from \code{\link{gl.run.structure}} and \code{\link{gl.plot.structure}}] [required].
 #'  @param x name of the genlight object containing the coordinates in the \code{\@other$latlon} slot to calculate the population centers [required]
-#'  @param scale scaling factor to determine the size of the bars (in x and y direction)
+#'  @param scalex scaling factor to determine the size of the bars in x direction
+#'  @param scaley scaling factor to determine the size of the bars in y direction
 #' @return an interactive map that shows the structure plots broken down by population
 #'
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -23,6 +24,7 @@
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }
 #' @export
+#' @importFrom leaflet addRectangles
 #' @seealso \code{\link{gl.run.structure}},  \link[strataG]{clumpp}, \code{\link{gl.plot.structure}}
 #' @references 
 #' Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.

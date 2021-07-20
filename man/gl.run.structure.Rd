@@ -22,7 +22,9 @@ gl.run.structure(
 
 \item{plot}{create an Evanno plot once finished. Be aware k.range needs to be at least three different k steps.}
 
-\item{plot_theme}{Theme for the plot. See details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See details for options [default theme_dartR()]}
+
+\item{verbose}{set verbosity for this function (though structure output cannot be switched off currently).}
 }
 \value{
 an sr object (structure.result list output). Each list entry is a single structure

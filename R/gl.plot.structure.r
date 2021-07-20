@@ -41,7 +41,7 @@
 #' #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }
-###@importFrom strataG genind2gtypes structureRun
+#" ##@importFrom strataG genind2gtypes structureRun
 #'
 #' @export
 #' @seealso \code{\link{gl.run.structure}}, \link[strataG]{clumpp}
