@@ -1,4 +1,4 @@
-#' @name gl.plot.structure
+#' @name gl.map.structure
 #'
 #' @title Map a STRUCTURE plot using a genlight object
 #'
@@ -31,6 +31,7 @@
 #' Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package for manipulating, summarizing and analysing population genetic data. Mol Ecol Resour. doi:10.1111/1755-0998.12559
 #' 
 #' Evanno, G., Regnaut, S., and J. Goudet. 2005. Detecting the number of clusters of individuals using the software STRUCTURE: a simulation study. Molecular Ecology 14:2611-2620.
+#' Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster matching and permutation program for dealing with label switching and multimodality in analysis of population structure. Bioinformatics 23(14):1801-1806. Available at \href{http://web.stanford.edu/group/rosenberglab/clumppDownload.html}{clumpp}
 
 
 gl.map.structure <- function(qmat, x, scalex =1, scaley=1) {
