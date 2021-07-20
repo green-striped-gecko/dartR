@@ -6,10 +6,11 @@
 #' This function takes the output of plotstructure (the q matrix) and maps the q-matrix across using the population centers from the genlight object that was used to run the structure analysis via
 #'  \code{\link{gl.run.structure}}) and plots the typical structure bar
 #'   plots on a spatial map, providing a barplot for each subpopulation. Therefore it requires coordinates from a genlight object. This kind of plots should support the interpretation of the spatial structure of a population, but in principle is not different from \code{\link{gl.plot.structure}}
+#'   
 #' @param qmat q-matrix from a structure run followed by a clumpp run object [from \code{\link{gl.run.structure}} and \code{\link{gl.plot.structure}}] [required].
-#'  @param x name of the genlight object containing the coordinates in the \code{\@other$latlon} slot to calculate the population centers [required]
-#'  @param scalex scaling factor to determine the size of the bars in x direction
-#'  @param scaley scaling factor to determine the size of the bars in y direction
+#' @param x name of the genlight object containing the coordinates in the \code{\@other$latlon} slot to calculate the population centers [required]
+#' @param scalex scaling factor to determine the size of the bars in x direction
+#' @param scaley scaling factor to determine the size of the bars in y direction
 #' @return an interactive map that shows the structure plots broken down by population
 #'
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
