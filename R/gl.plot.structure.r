@@ -41,7 +41,6 @@
 #' #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }
-#" ##@importFrom strataG genind2gtypes structureRun
 #'
 #' @export
 #' @seealso \code{\link{gl.run.structure}}, \link[strataG]{clumpp}
@@ -51,7 +50,7 @@
 #' 
 #' Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster matching and permutation program for dealing with label switching and multimodality in analysis of population structure. Bioinformatics 23(14):1801-1806. Available at \href{http://web.stanford.edu/group/rosenberglab/clumppDownload.html}{clumpp}
 
-
+###@importFrom strataG genind2gtypes structureRun
 
 gl.plot.structure <- function(sr, k, sort=NULL, CLUMPP="./" ,... , plot_theme,verbose ){
   

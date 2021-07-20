@@ -47,10 +47,11 @@
 #'
 #' @seealso \code{\link{gl.grm.network}}
 #' @family inbreeding, relatedness
-#' #@importFrom rrBLUP A.mat
-#' #@importFrom gplots heatmap.2
+#' 
 #' @export
 
+##@importFrom rrBLUP A.mat
+##@importFrom gplots heatmap.2
 gl.grm <- function(x,
                    plotheatmap = TRUE, 
                    palette_discrete = discrete_palette,

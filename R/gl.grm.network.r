@@ -67,9 +67,11 @@
 #'  }
 #' @seealso \code{\link{gl.grm}}
 #' @family inbreeding, relatedness
-#' #@import igraph
+#' 
+
 #' @export
 
+##@import igraph
 gl.grm.network <- function(G, 
                            x,
                            method = "fr", 
