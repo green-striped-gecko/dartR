@@ -3,13 +3,17 @@
 \name{gl.plot.structure}
 \alias{gl.plot.structure}
 \alias{gl.map.structure}
-\title{Plot a STRUCTURE analysis using a genlight object}
+\title{Map a STRUCTURE plot using a genlight object}
 \usage{
-gl.map.structure(sr, k, x)
+gl.map.structure(qmat, x, scalex = 1, scaley = 1)
 
 gl.plot.structure(sr, k, sort = NULL, CLUMPP = "./", ..., plot_theme, verbose)
 }
 \arguments{
+\item{qmat}{q-matrix from a structure run followed by a clumpp run object [from \code{\link{gl.run.structure}} and \code{\link{gl.plot.structure}}] [required].
+@param x name of the genlight object containing the coordinates in the \code{\@other$latlon} slot to calculate the population centers [required]
+@param scale scaling factor to determine the size of the bars (in x and y direction)}
+
 \item{sr}{structure run object from \code{\link{gl.run.structure}} [required].}
 
 \item{k}{the number for k the q matrix should be based on. Needs to
@@ -34,18 +38,13 @@ progress log ; 3, progress and results summary; 5, full report [default
  NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-an sr object (structure.result list output). Each list entry is a single structure
-run output (there are k.range * num.k.rep number of runs). For example the
-summary output of the first run can be accessed via \code{sr[[1]]$summary} 
-or the q-matrix of the third run via \code{sr[[3]]$q.mat}. To conveniently
-summarise the outputs across runs (clumpp) you need to run
-gl.plotstructure on the returned sr object. For evanno plots run gl.evanno on your sr object.
+an interactive map that shows the structure plots broken down by population
 
 a barplot in ggplot format
 }
 \description{
-This function takes a structure run object (output from
- \code{\link{gl.runstructure}}) and plots the typical structure bar
+This function takes the output of plotstructure (the q matrix) and maps the q-matrix across using the population centers from the genlight object that was used to run the structure analysis via
+ \code{\link{gl.run.structure}}) and plots the typical structure bar
   plots on a spatial map, providing a barplot for each subpopulation. Therefore it requires coordinates from a genlight object. This kind of plots should support the interpretation of the spatial structure of a population, but in principle is not different from \code{\link{gl.plot.structure}}
 
 This function takes a structure run object (output from
@@ -63,7 +62,10 @@ The function outputs a barplot which is the typical output of
 #only the first 100 loci
 #bc <- bandicoot.gl[,1:100]
 #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 }
+
 }
 \references{
 Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
@@ -78,7 +80,7 @@ Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package f
 Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster matching and permutation program for dealing with label switching and multimodality in analysis of population structure. Bioinformatics 23(14):1801-1806. Available at \href{http://web.stanford.edu/group/rosenberglab/clumppDownload.html}{clumpp}
 }
 \seealso{
-\code{\link{gl.run.structure}},  \link[strataG]{clumpp},
+\code{\link{gl.run.structure}},  \link[strataG]{clumpp}, \code{\link{gl.plot.structure}}
 
 \code{\link{gl.run.structure}}, \link[strataG]{clumpp}
 }
@@ -86,6 +88,14 @@ Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster matching and pe
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 #@examples
+\dontrun{
+#CLUMPP needs to be installed to be able to run the example
+#only the first 100 loci
+#bc <- bandicoot.gl[,1:100]
+#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
+}
 
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

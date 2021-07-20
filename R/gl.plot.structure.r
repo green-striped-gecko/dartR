@@ -38,8 +38,9 @@
 #' #only the first 100 loci
 #' #bc <- bandicoot.gl[,1:100]
 #' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#' #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }
-#' @import patchwork
 ###@importFrom strataG genind2gtypes structureRun
 #'
 #' @export
@@ -105,4 +106,5 @@ narg <- paste(q.mat$id,q.mat$orig.pop[zz], sep="_")
 bbpp <- barplot(bb, col = 1:k,las = 2, main = paste0("K=",k), border=1:k, space = 0, names.arg=narg)
 #ggplot(bgg, aes(x=Var2, y=value, fill=Var1), )+geom_bar(stat="identity", width = 1)
   }
+return(q.mat)
 }
