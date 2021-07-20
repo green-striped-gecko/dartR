@@ -7,7 +7,7 @@
 gl.evanno(sr, plot = TRUE)
 }
 \arguments{
-\item{sr}{structure run object from \code{\link{gl.runstructure}} [required].}
+\item{sr}{structure run object from \code{\link{gl.run.structure}} [required].}
 
 \item{plot}{TRUE: all four plots are shown. FALSE: all four plots are returned by not shown.}
 }
@@ -27,7 +27,7 @@ description please refer to this package (see references below).
 #STRUCTURE needs to be installed to be able to run the example
 #only the first 100 loci
 #bc <- bandicoot.gl[,1:100]
-#sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
 #gl.evanno(sr)
 }
 }
@@ -39,7 +39,7 @@ Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package f
 Evanno, G., Regnaut, S., and J. Goudet. 2005. Detecting the number of clusters of individuals using the software STRUCTURE: a simulation study. Molecular Ecology 14:2611-2620.
 }
 \seealso{
-\code{\link{gl.runstructure}},  \link[strataG]{clumpp},
+\code{\link{gl.run.structure}},  \link[strataG]{clumpp},
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
