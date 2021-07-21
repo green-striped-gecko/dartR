@@ -4,12 +4,20 @@
 \alias{gl.map.structure}
 \title{Map a STRUCTURE plot using a genlight object}
 \usage{
-gl.map.structure(qmat, x, scalex = 1, scaley = 1)
+gl.map.structure(
+  qmat,
+  x,
+  provider = "Esri.NatGeoWorldMap",
+  scalex = 1,
+  scaley = 1
+)
 }
 \arguments{
 \item{qmat}{q-matrix from a structure run followed by a clumpp run object [from \code{\link{gl.run.structure}} and \code{\link{gl.plot.structure}}] [required].}
 
 \item{x}{name of the genlight object containing the coordinates in the \code{\@other$latlon} slot to calculate the population centers [required]}
+
+\item{provider}{provider    passed to leaflet. Check \link[leaflet]{providers} for a list of possible backgrounds.}
 
 \item{scalex}{scaling factor to determine the size of the bars in x direction}
 
@@ -17,19 +25,26 @@ gl.map.structure(qmat, x, scalex = 1, scaley = 1)
 }
 \value{
 an interactive map that shows the structure plots broken down by population
+
+returns the map and a list of the qmat split into sorted matrices per population. This can be used to create your own map.
 }
 \description{
 This function takes the output of plotstructure (the q matrix) and maps the q-matrix across using the population centers from the genlight object that was used to run the structure analysis via
  \code{\link{gl.run.structure}}) and plots the typical structure bar
   plots on a spatial map, providing a barplot for each subpopulation. Therefore it requires coordinates from a genlight object. This kind of plots should support the interpretation of the spatial structure of a population, but in principle is not different from \code{\link{gl.plot.structure}}
 }
+\details{
+Creates a mapped version of structure plots. For possible background maps check as specified via the provider: \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}. You may need to adjust scalex and scaley values [default 1], as the size depends on the scale of the map and the position of the populations.
+}
 \examples{
 \dontrun{
 #CLUMPP needs to be installed to be able to run the example
-#only the first 100 loci
 #bc <- bandicoot.gl[,1:100]
 #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#ev <- gl.evanno(sr)
+#ev
 #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#head(qmat)
 #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 }
 }

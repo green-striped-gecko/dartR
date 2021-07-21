@@ -35,10 +35,12 @@
 #' @examples
 #' \dontrun{
 #' #CLUMPP needs to be installed to be able to run the example
-#' #only the first 100 loci
 #' #bc <- bandicoot.gl[,1:100]
 #' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#' #ev <- gl.evanno(sr)
+#' #ev
 #' #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#' #head(qmat)
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }
 #' @export

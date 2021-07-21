@@ -9,19 +9,23 @@
 #'   
 #' @param qmat q-matrix from a structure run followed by a clumpp run object [from \code{\link{gl.run.structure}} and \code{\link{gl.plot.structure}}] [required].
 #' @param x name of the genlight object containing the coordinates in the \code{\@other$latlon} slot to calculate the population centers [required]
+#' @param provider provider	passed to leaflet. Check \link[leaflet]{providers} for a list of possible backgrounds.
 #' @param scalex scaling factor to determine the size of the bars in x direction
 #' @param scaley scaling factor to determine the size of the bars in y direction
 #' @return an interactive map that shows the structure plots broken down by population
 #'
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
-#'
+#' @details Creates a mapped version of structure plots. For possible background maps check as specified via the provider: \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}. You may need to adjust scalex and scaley values [default 1], as the size depends on the scale of the map and the position of the populations.
+#' @return returns the map and a list of the qmat split into sorted matrices per population. This can be used to create your own map. 
 #' @examples
 #' \dontrun{
 #' #CLUMPP needs to be installed to be able to run the example
-#' #only the first 100 loci
 #' #bc <- bandicoot.gl[,1:100]
 #' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#' #ev <- gl.evanno(sr)
+#' #ev
 #' #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#' #head(qmat)
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }
 #' @export
@@ -35,7 +39,7 @@
 #' Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster matching and permutation program for dealing with label switching and multimodality in analysis of population structure. Bioinformatics 23(14):1801-1806. Available at \href{http://web.stanford.edu/group/rosenberglab/clumppDownload.html}{clumpp}
 
 
-gl.map.structure <- function(qmat, x, scalex =1, scaley=1) {
+gl.map.structure <- function(qmat, x, provider="Esri.NatGeoWorldMap",scalex =1, scaley=1) {
 
 
   ff <-qmat[,4:(ncol(qmat))]
@@ -57,12 +61,13 @@ gl.map.structure <- function(qmat, x, scalex =1, scaley=1) {
    bb$orig.pop <- factor(bb$orig.pop)
    ff <-bb[,4:(ncol(bb))]
    
-   
-   m1 <- leaflet::leaflet() %>% leaflet::addTiles()
+   out<- list()
+   m1 <- leaflet::leaflet()  %>% leaflet::addProviderTiles(provider = provider) 
   for (p in 1:npops)
   {
   qmi <- ff[bb$orig.pop==levels(bb$orig.pop)[p],]
-  
+  out[[p]]<- bb[bb$orig.pop==levels(bb$orig.pop)[p],]
+  names(out)[p] <- levels(bb$orig.pop)[p]
   qmi1 <- cbind(rep(0,nrow(qmi)),qmi)
   for (xx in 1:nrow(qmi1)) qmi1[xx,] <- cumsum(as.numeric(qmi1[xx,]))
   
@@ -79,8 +84,8 @@ gl.map.structure <- function(qmat, x, scalex =1, scaley=1) {
 }
 
 
- m1 %>% leaflet::addProviderTiles("Esri.WorldImagery")
- 
+ print(m1)
+ return(out)
  #%>% addLegend(labels=paste("Group",1:ncol(ff)), colors=rainbow(ncol(ff)),position ="topright" )
  
 }

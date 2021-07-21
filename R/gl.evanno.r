@@ -16,11 +16,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' #STRUCTURE needs to be installed to be able to run the example
-#' #only the first 100 loci
+#' #CLUMPP needs to be installed to be able to run the example
 #' #bc <- bandicoot.gl[,1:100]
 #' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
-#' #gl.evanno(sr)
+#' #ev <- gl.evanno(sr)
+#' #ev
+#' #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#' #head(qmat)
+#' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }
 #' @import patchwork
 ###@importFrom strataG genind2gtypes structureRun
