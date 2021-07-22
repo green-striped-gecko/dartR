@@ -41,35 +41,19 @@ gl.collapse <- function(fd,
                         pb=FALSE,
                         verbose=NULL) {
   
-# TRAP COMMAND, SET VERSION
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-      verbose <- 2
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
 # STANDARD ERROR CHECKING
   
-  if (class(fd) != "fd") {
+  if (datatype != "fd") {
     stop("Fatal Error: fd must be a list of class 'fd' produced by gl.fixed.diff or gl.collapse\n")
   }
   
@@ -86,11 +70,11 @@ gl.collapse <- function(fd,
 # DO THE JOB
   
   if ( verbose >= 2){
-    if (tloc > 0) {cat("  Comparing populations for fixed differences with tolerance",tloc,"\n")}
-    if (tloc == 0) {cat("  Comparing populations for absolute fixed differences\n")}
-    if (tpop == 1) {cat("  Amalgamating populations with corrobrated fixed differences, tpop =",tpop,"\n")}
-    if (tpop > 1) {cat("  Amalgamating populations with fixed differences <= ",tpop,"\n")}
-    if (tpop == 0) {cat("  Amalgamating populations with zero fixed differences\n")}
+    if (tloc > 0) {cat(report("  Comparing populations for fixed differences with tolerance",tloc,"\n"))}
+    if (tloc == 0) {cat(report("  Comparing populations for absolute fixed differences\n"))}
+    if (tpop == 1) {cat(report("  Amalgamating populations with corrobrated fixed differences, tpop =",tpop,"\n"))}
+    if (tpop > 1) {cat(report("  Amalgamating populations with fixed differences <= ",tpop,"\n"))}
+    if (tpop == 0) {cat(report("  Amalgamating populations with zero fixed differences\n"))}
   }
 
 # Convert fd$fd from a distance matrix to a square matrix
@@ -138,8 +122,8 @@ gl.collapse <- function(fd,
   
 # Print out the results of the aggregations 
   if(verbose >= 3) {
-    cat("\nInitial Populations\n",pops,"\n")
-    cat("\nNew population groups\n")
+    cat("Initial Populations\n",pops,"\n")
+    cat("New population groups\n")
   }
   
   x <- fd$gl
@@ -163,7 +147,7 @@ gl.collapse <- function(fd,
   }
     
 # Recalculate matricies
-    fd2 <- gl.fixed.diff(x,tloc=tloc,pb=pb,verbose=2)
+    fd2 <- gl.fixed.diff(x,tloc=tloc,pb=pb,verbose=0)
 
   if(setequal(nPop(x),nPop(fd$gl))) { 
     if (verbose >= 2) {
@@ -192,9 +176,9 @@ gl.collapse <- function(fd,
 
   
   # Explanatory bumpf
-    if (verbose >= 4) {
+    if (verbose >= 3) {
       if(pb){cat("\n")}
-      cat("Returning a list of class 'fd' containing the new genlight object and square matricies, as follows:\n",
+      cat(report("Returning a list of class 'fd' containing the new genlight object and square matricies, as follows:\n",
           "         [[1]] $gl -- input genlight object;\n",
           "         [[2]] $fd -- raw fixed differences;\n",
           "         [[3]] $pcfd -- percent fixed differences;\n",
@@ -202,13 +186,13 @@ gl.collapse <- function(fd,
           "         [[5]] $nloc -- total number of loci used in each comparison;\n",
           "         [[6]] $expfpos -- NAs, populated by gl.fixed.diff [by simulation];\n",
           "         [[7]] $sdfpos -- NAs, populated by gl.fixed.diff [by simulation];\n",
-          "         [[8]] $prob -- NAs, populated by gl.fixed.diff [by simulation].\n")
+          "         [[8]] $prob -- NAs, populated by gl.fixed.diff [by simulation].\n"))
     }  
     
 # FLAG SCRIPT END
   
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
   
   return(l)
