@@ -12,6 +12,8 @@ utils.flag.start(func = NULL, build = NULL, v = 2)
 \item{build}{name of the build [NULL].}
 
 \item{v}{verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+
+\item{f}{name of the function that is starting [obtained from match.call].}
 }
 \value{
 calling function name

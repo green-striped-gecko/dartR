@@ -68,6 +68,17 @@ gl.grm <- function(x,
   datatype <- utils.check.datatype(x)
   
   # FUNCTION SPECIFIC ERROR CHECKING
+  
+  # check if package is installed
+  pkg <- "rrBLUP"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop(error("Package",pkg," needed for this function to work. Please install it.")) 
+  }
+  pkg <- "gplots"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop(error("Package",pkg," needed for this function to work. Please install it.")) 
+  }
+  
      # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
       if (verbose >= 2){ 

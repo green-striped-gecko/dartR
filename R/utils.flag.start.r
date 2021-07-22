@@ -7,6 +7,7 @@
 #' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 
 utils.flag.start <- function(func=NULL, build=NULL, v=2) {
+
   
  if(is.null(func)){
    stop(error("Fatal Error: The calling function must be specified.\n"))
@@ -20,6 +21,7 @@ utils.flag.start <- function(func=NULL, build=NULL, v=2) {
       }  
     } else {
       cat(report("\n\nStarting", func, "\n"))
+
     }
   }
   
