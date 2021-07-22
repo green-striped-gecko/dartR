@@ -47,8 +47,6 @@
 #'
 #' @seealso \code{\link{gl.grm.network}}
 #' @family inbreeding functions
-#' #@importFrom rrBLUP A.mat
-#' #@importFrom gplots heatmap.2
 #' @export
 
 gl.grm <- function(x,

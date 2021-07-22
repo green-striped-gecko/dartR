@@ -70,6 +70,9 @@
 #'
 #' @seealso \code{\link{gl.filter.hwe}}
 #' @family filters/filter reports
+#'
+#' @importFrom graphics polygon
+#' @importFrom stats qchisq
 #' @export
 #'  
 
@@ -87,7 +90,7 @@ gl.report.hwe <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(f=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x)

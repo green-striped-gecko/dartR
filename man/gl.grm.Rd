@@ -70,10 +70,11 @@ gl.grm(bandicoot.gl[1:20,])
 }
 \seealso{
 \code{\link{gl.grm.network}}
+
+Other inbreeding functions: 
+\code{\link{gl.grm.network}()}
 }
 \author{
 Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{inbreeding functions
-#@importFrom rrBLUP A.mat
-#@importFrom gplots heatmap.2}
+\concept{inbreeding functions}
