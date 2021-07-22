@@ -76,6 +76,4 @@ Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{inbreeding and relatedness functions
 #@importFrom rrBLUP A.mat
-#@importFrom gplots heatmap.2
-        }
-
+#@importFrom gplots heatmap.2}

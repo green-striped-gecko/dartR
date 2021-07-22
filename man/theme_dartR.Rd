@@ -28,5 +28,4 @@ This function controls all non-data display elements in the plots.
 #ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
 #geom_histogram(binwidth=0.1) + theme_dartR()
 
-
 }

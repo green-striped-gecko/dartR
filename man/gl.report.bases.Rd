@@ -52,7 +52,6 @@ Examples of other themes that can be used can be consulted in \itemize{
 # SNP data
   out <- gl.report.bases(testset.gl)
   #' # Tag P/A data
-
   out <- gl.report.bases(testset.gs)
   
 }

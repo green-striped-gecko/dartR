@@ -33,7 +33,7 @@ Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
         reshape2, pca3d, dismo, pegas, directlabels, rgdal,
         leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp, igraph,
         qvalue, gdistance, seqinr, pheatmap, RColorBrewer, gplots,
-        vcfR, mmod, plotly, ggthemes, ggrepel, raster
+        vcfR, mmod, plotly, ggthemes, ggrepel, raster,patchwork
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1
