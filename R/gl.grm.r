@@ -46,7 +46,7 @@
 #' gl.grm(bandicoot.gl[1:20,])  
 #'
 #' @seealso \code{\link{gl.grm.network}}
-#' @family inbreeding and relatedness functions
+#' @family inbreeding functions
 #' #@importFrom rrBLUP A.mat
 #' #@importFrom gplots heatmap.2
 #' @export

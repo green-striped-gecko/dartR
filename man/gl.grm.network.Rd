@@ -102,5 +102,5 @@ Molecular Ecology, 27(20), 4121-4135.
 \author{
 Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{inbreeding and relatedness functions
+\concept{inbreeding functions
 #@import igraph}
