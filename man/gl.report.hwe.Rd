@@ -80,11 +80,7 @@ p.adjust.methods
 colour the marker points automatically according to the result of a significance test (green markers non-significant, red markers significant).
 }
 \examples{
-list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"),
-plot=TRUE,bonf=FALSE)
-gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE, verbose=3)
-gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE, verbose=3)
-gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
+gl.report.hwe(x = bandicoot.gl,plot.out = FALSE)
 }
 \references{
 \itemize{

@@ -57,11 +57,7 @@
 #' H-W equilibrium, and per locus significance with and without Bonferroni correction.
 #' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"),
-#' plot=TRUE,bonf=FALSE)
-#' gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE, verbose=3)
-#' gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE, verbose=3)
-#' gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
+#' gl.report.hwe(x = bandicoot.gl,plot.out = FALSE)
 #' @references 
 #' \itemize{
 #' \item Wigginton, J.E., Cutler, D.J., & Abecasis, G.R. (2005). A Note on Exact 

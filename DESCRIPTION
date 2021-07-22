@@ -31,7 +31,7 @@ Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools,reshape2,
         patchwork
 Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
-        reshape2, pca3d, dismo, pegas, directlabels, rgdal,
+        pca3d, dismo, pegas, directlabels, rgdal,
         leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp, igraph,
         qvalue, gdistance, seqinr, pheatmap, RColorBrewer, gplots,
         vcfR, mmod, plotly, ggthemes, ggrepel, raster
