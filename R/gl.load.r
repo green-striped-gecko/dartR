@@ -10,9 +10,8 @@
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \dontrun{
-#' gl <- gl.load("testset.rds")
-#' }
+#' gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
+#' gl <- gl.load(file.path(tempdir(),"testset.rds"))
 #' @seealso \code{\link{gl.save}}
 #' 
 gl.load <- function(file, verbose=NULL){
@@ -22,13 +21,13 @@ gl.load <- function(file, verbose=NULL){
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(f=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   x <- readRDS(file)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
-  cat(report("  Loaded object of type",datatype,"from",file,"\n\n"))
+  cat(report("  Loaded object of type",datatype,"from",file,"\n"))
   
 # FLAG SCRIPT END
 

@@ -102,7 +102,6 @@ out <- gl.filter.parent.offspring(testset.gl[1:10])
  \code{\link{gl.report.parent.offspring}}
 
 Other filter functions: 
-\code{\link{gl.filter.hamming}()},
 \code{\link{gl.filter.sexlinked}()}
 }
 \author{

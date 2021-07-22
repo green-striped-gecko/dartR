@@ -60,6 +60,9 @@ silicodartfile <- system.file("extdata","testset_SilicoDArT.csv", package="dartR
 metadata <- system.file("extdata",ind.metafile ="testset_metadata_silicodart.csv", package="dartR")
 testset.gs <- gl.read.silicodart(filename = silicodartfile, ind.metafile = metadata)
 }
+\seealso{
+\code{\link{gl.read.dart}}
+}
 \author{
 Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

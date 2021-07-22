@@ -74,4 +74,8 @@ gl.grm(bandicoot.gl[1:20,])
 \author{
 Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{inbreeding/relatedness functions}
+\concept{inbreeding and relatedness functions
+#@importFrom rrBLUP A.mat
+#@importFrom gplots heatmap.2
+        }
+

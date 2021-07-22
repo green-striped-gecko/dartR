@@ -4,10 +4,12 @@
 \alias{gl.report.overshoot}
 \title{Reports loci for which the SNP has been trimmed from the sequence tag along with the adaptor}
 \usage{
-gl.report.overshoot(x, verbose = NULL)
+gl.report.overshoot(x, save2tmp = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object [required].}
+\item{x}{Name of the genlight object [required]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
@@ -33,6 +35,10 @@ gl.report.overshoot(testset.gl)
 
 Other filters and filter reports: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},
@@ -44,6 +50,6 @@ Other filters and filter reports:
 \code{\link{gl.report.taglength}()}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters and filter reports}

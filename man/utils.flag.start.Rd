@@ -4,9 +4,11 @@
 \alias{utils.flag.start}
 \title{A utility script to flag the start of a script}
 \usage{
-utils.flag.start(func = funname, build = NULL, v = verbose)
+utils.flag.start(func = NULL, build = NULL, v = 2)
 }
 \arguments{
+\item{func}{name of the function that is starting [required].}
+
 \item{build}{name of the build [NULL].}
 
 \item{v}{verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
@@ -14,14 +16,11 @@ utils.flag.start(func = funname, build = NULL, v = verbose)
 \item{f}{name of the function that is starting [obtained from match.call].}
 }
 \value{
-function name
+calling function name
 }
 \description{
 A utility script to flag the start of a script
 }
-\examples{
-#out <- utils.function.start()
-}
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

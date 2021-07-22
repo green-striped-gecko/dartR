@@ -15,6 +15,7 @@ gl.filter.callrate(
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   bins = 25,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -39,6 +40,8 @@ to remove loci that fail to meet the specified threshold in any one population [
 \item{plot_colours}{List of two color names for the borders and fill of the plots [default two_colors].}
 
 \item{bins}{-- number of bins to display in histograms [default 25]}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
@@ -80,16 +83,20 @@ Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary 
   result <- gl.filter.callrate(testset.gl, method="loc", threshold=0.8, verbose=3)
   result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8, verbose=3)
   result <- gl.filter.callrate(testset.gl, method="pop", threshold=0.8, verbose=3)
-# Tag P/A data
+# Tag P/A data (please uncomment)
   result <- gl.filter.callrate(testset.gs, method="loc", threshold=0.95, verbose=3)
-  result <- gl.filter.callrate(testset.gs, method="ind", threshold=0.8, verbose=3)
-  result <- gl.filter.callrate(testset.gs, method="pop", threshold=0.8, verbose=3)
+  #result <- gl.filter.callrate(testset.gs, method="ind", threshold=0.8, verbose=3)
+  #result <- gl.filter.callrate(testset.gs, method="pop", threshold=0.8, verbose=3)
      
 }
 \seealso{
 \code{\link{gl.report.callrate}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.hamming}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},

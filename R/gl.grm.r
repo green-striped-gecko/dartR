@@ -46,7 +46,9 @@
 #' gl.grm(bandicoot.gl[1:20,])  
 #'
 #' @seealso \code{\link{gl.grm.network}}
-#' @family inbreeding/relatedness functions
+#' @family inbreeding and relatedness functions
+#' #@importFrom rrBLUP A.mat
+#' #@importFrom gplots heatmap.2
 #' @export
 
 gl.grm <- function(x,
@@ -60,7 +62,7 @@ gl.grm <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(f=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x)

@@ -67,6 +67,7 @@
 #'  }
 #' @seealso \code{\link{gl.grm}}
 #' @family inbreeding and relatedness functions
+#' #@import igraph
 #' @export
 
 gl.grm.network <- function(G, 
@@ -87,7 +88,7 @@ gl.grm.network <- function(G,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(f=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x)
@@ -163,6 +164,7 @@ gl.grm.network <- function(G,
   edges <- data.frame(plotcord[edgelist[,1],], plotcord[edgelist[,2],])
   #using kinship for the size of the edges
   edges$size <- links[links$kinship > q, "kinship"]
+  X1 <- X2 <- Y1<- Y2 <- label.node <- NA
   colnames(edges) <- c("X1","Y1","X2","Y2","size")
   
   # node labels 

@@ -21,9 +21,8 @@ This is a wrapper for readRDS().
 The script loads the object from the current workspace and returns the gl object.
 }
 \examples{
-\dontrun{
-gl <- gl.load("testset.rds")
-}
+gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
+gl <- gl.load(file.path(tempdir(),"testset.rds"))
 }
 \seealso{
 \code{\link{gl.save}}
