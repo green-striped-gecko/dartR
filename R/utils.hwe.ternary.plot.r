@@ -30,8 +30,8 @@
   fA <- NULL
   for (i in 1:nrow(X)) {
     fA <- c(fA,(2*X[i,1]+X[i,2])/(2*n))
-    Ds <- c(Ds,HWChisq(X[i,],verbose =FALSE)$D)
-    pval <- c(pval,HWExact(X[i,],alternative="two.sided",pvaluetype=pvaluetype,verbose =FALSE)$pval)
+    Ds <- c(Ds,HardyWeinberg::HWChisq(X[i,],verbose =FALSE)$D)
+    pval <- c(pval,HardyWeinberg::HWExact(X[i,],alternative="two.sided",pvaluetype=pvaluetype,verbose =FALSE)$pval)
   }
   
   Y <- data.frame(X[,1],X[,2],X[,3],fA,Ds,pval)
@@ -350,7 +350,7 @@
       if (nrow(X) == 1) 
         Xcom <- X/sum(X)
       else {
-        Xcom <- HWClo(X)
+        Xcom <- HardyWeinberg::HWClo(X)
       }
     }
   }
@@ -364,7 +364,7 @@
       if (nrow(X) == 1) 
         Xcom <- X/sum(X)
       else {
-        Xcom <- HWClo(X)
+        Xcom <- HardyWeinberg::HWClo(X)
       }
     }
   }

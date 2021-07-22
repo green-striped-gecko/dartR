@@ -26,18 +26,16 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2
 biocViews:
-Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, 
-        vegan, SNPRelate, StAMPP, sp, PopGenReport, hierfstat, 
-        gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools, 
-        patchwork, reshape2, robustbase
-
+Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
+        SNPRelate, StAMPP, sp, PopGenReport, hierfstat, robustbase,
+        gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools,reshape2,
+        patchwork
 Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
         pca3d, dismo, pegas, directlabels, rgdal,
-        leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp,
-        qvalue, gdistance, seqinr, pheatmap, RColorBrewer, 
-        vcfR, mmod, plotly, ggthemes, ggrepel, raster,  igraph, gplots,
-        strataG
-
+        leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp, igraph,
+        qvalue, gdistance, seqinr, pheatmap, RColorBrewer, gplots,
+        vcfR, mmod, plotly, ggthemes, ggrepel, raster,strataG
+Additional_repositories: https://github.com/EricArcher/strataG
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1
