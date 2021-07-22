@@ -183,14 +183,16 @@ gl.pcoa.plot <- function(glPca,
     xaxis <- 1
   }
   
-  if (xaxis < 1 | xaxis > ncol(glPca$scores)){
+  if (yaxis < 1 | yaxis > ncol(glPca$scores)){
     cat(warn("  Warning: Y-axis must be specified to lie between 1 and the number of retained dimensions of the ordination",ncol(glPca$scores),"; set to 2\n"))
     yaxis <- 2
   }
   
-  if (xaxis < 1 | xaxis > ncol(glPca$scores)){
+  if(ncol(glPca$scores)>=3){
+  if (zaxis < 1 | zaxis > ncol(glPca$scores)){
     cat(warn("  Warning: Z-axis must be specified to lie between 1 and the number of retained dimensions of the ordination",ncol(glPca$scores),"; set to 3\n"))
     zaxis <- 3
+  }
   }
   
   if (class(glPca) == "dist" && !is.null(as.pop)){
@@ -224,7 +226,13 @@ gl.pcoa.plot <- function(glPca,
   }
   
   # Create a dataframe to hold the required scores
+  if(ncol(glPca$scores)>=3){
   df <- as.data.frame(cbind(glPca$scores[,xaxis],glPca$scores[,yaxis],glPca$scores[,zaxis]))
+  }
+  
+  if(ncol(glPca$scores)<3){
+    df <- as.data.frame(cbind(glPca$scores[,xaxis],glPca$scores[,yaxis]))
+  }
   
   # Convert the eigenvalues to percentages
     s <- sum(glPca$eig[glPca$eig >= 0])
@@ -244,7 +252,14 @@ gl.pcoa.plot <- function(glPca,
     ylab <- paste("PCA Axis", yaxis, "(",e[yaxis],"%)")
     zlab <- paste("PCA Axis", zaxis, "(",e[zaxis],"%)")
     df <- cbind(df,ind,pop_name)
-    colnames(df) <- c("PCoAx","PCoAy","PCoAz","ind","pop")
+    
+    if(ncol(glPca$scores)>=3){
+      colnames(df) <- c("PCoAx","PCoAy","PCoAz","ind","pop")
+    }
+    
+    if(ncol(glPca$scores)<3){
+      colnames(df) <- c("PCoAx","PCoAy","ind","pop")
+    }
     
     # assigning colors to populations
     if(class(palette_discrete)=="function"){
@@ -357,6 +372,7 @@ gl.pcoa.plot <- function(glPca,
     }
     
     ########### for three_D_plot
+    if(ncol(glPca$scores)>=3){
     if(three_D_plot == T & plot.out == T){
       if (verbose>=2){
         cat(report("  Displaying a three dimensional plot, mouse over for details for each point\n"))
@@ -371,7 +387,8 @@ gl.pcoa.plot <- function(glPca,
                                       zaxis = list(title = zlab,titlefont = list(size = 16))))
       )
     }
-
+    }
+    
     # PRINTING OUTPUTS
     if(plot.out == T){
       suppressWarnings(print(p1))

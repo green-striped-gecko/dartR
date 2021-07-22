@@ -63,9 +63,9 @@ three_colors <- c("#3B9AB2","deeppink","lemonchiffon")
 #' @param base_rect_size base size for rect elements
 #' @examples
 #' 
-#' ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
-#'  geom_histogram() +
-#'  theme_dartR()
+#' #ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
+#' #geom_histogram() +
+#' #theme_dartR()
 #'
 
 # The half-line (base-fontsize / 2) sets up the basic vertical

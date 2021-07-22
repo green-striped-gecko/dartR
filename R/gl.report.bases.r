@@ -38,7 +38,6 @@
 #' @examples
 #' # SNP data
 #'   out <- gl.report.bases(testset.gl)
-#'   out$freq
 #'   out$plotbases
 #'   out$plottvts
 #' # Tag P/A data

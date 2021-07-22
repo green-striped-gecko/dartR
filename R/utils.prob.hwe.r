@@ -4,6 +4,8 @@
 #' as described in Wigginton, JE, Cutler, DJ, and Abecasis, GR (2005) A Note on Exact Tests of 
 #' Hardy-Weinberg Equilibrium. American Journal of Human Genetics. 76:887-893.
 #' 
+#' Source code available from http://csg.sph.umich.edu/abecasis/Exact/r_instruct.html
+#' 
 #' Note: return code of -1.0 signals an error condition; return code of NA signals that 
 #' all alleles are NA for a locus
 #' 
@@ -49,7 +51,7 @@ utils.prob.hwe <- function(obs_hets, obs_hom1, obs_hom2) {
   probs[mid + 1] <- 1.0
   mysum <- 1.0
   
-  # Calculate probablities from midpoint down 
+  # Calculate probabilities from midpoint down 
   curr_hets <- mid
   curr_homr <- (rare - mid) / 2
   curr_homc <- N - curr_hets - curr_homr
@@ -73,7 +75,7 @@ utils.prob.hwe <- function(obs_hets, obs_hom1, obs_hom2) {
     probs[curr_hets + 3] <- probs[curr_hets + 1] * 4.0 * curr_homr * curr_homc / ((curr_hets + 2.0) * (curr_hets + 1.0))
     mysum <- mysum + probs[curr_hets + 3]
     
-    # add 2 heterozygotes -> subtract 1 rare homozygtote, 1 common homozygote
+    # add 2 heterozygotes -> subtract 1 rare homozygote, 1 common homozygote
     curr_hets <- curr_hets + 2
     curr_homr <- curr_homr - 1
     curr_homc <- curr_homc - 1

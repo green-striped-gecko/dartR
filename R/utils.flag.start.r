@@ -8,20 +8,20 @@
 #' @examples
 #' #out <- utils.function.start()
 
-utils.flag.start <- function(f=funname, build=NULL, v=verbose) {
+utils.flag.start <- function(func=funname, build=NULL, v=verbose) {
   
   if (v >= 1) {
     if (v == 5){
       if (!is.null(build)){
-        cat(report("\n\nStarting", f, "\n[dartR vers.",packageVersion("dartR"),"Build =",build,"]\n\n"))
+        cat(report("\n\nStarting", func, "\n[dartR vers.",packageVersion("dartR"),"Build =",build,"]\n\n"))
       } else {
-        cat(report("\n\nStarting", f, "\n\n"))
+        cat(report("\n\nStarting", func, "\n\n"))
       }  
     } else {
-      cat(report("\n\nStarting", f, "\n\n"))
+      cat(report("\n\nStarting", func, "\n\n"))
     }
   }
   
-  invisible(f)
+  invisible(func)
   
 }

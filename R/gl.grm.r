@@ -46,7 +46,7 @@
 #' gl.grm(bandicoot.gl[1:20,])  
 #'
 #' @seealso \code{\link{gl.grm.network}}
-#' @family inbreeding and relatedness functions
+#' @family inbreeding/relatedness functions
 #' @export
 
 gl.grm <- function(x,

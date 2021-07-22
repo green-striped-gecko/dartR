@@ -53,7 +53,6 @@ Examples of other themes that can be used can be consulted in \itemize{
 \examples{
 # SNP data
   out <- gl.report.bases(testset.gl)
-  out$freq
   out$plotbases
   out$plottvts
 # Tag P/A data
