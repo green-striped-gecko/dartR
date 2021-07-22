@@ -4,25 +4,10 @@
 \alias{utils.check.datatype}
 \title{Utility function to check that the object passed to the function is a genlight object.}
 \usage{
-utils.check.datatype(
-  x,
-  gl.check = FALSE,
-  fd.check = FALSE,
-  dist.check = FALSE,
-  mat.check = FALSE,
-  verbose = NULL
-)
+utils.check.datatype(x, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]}
-
-\item{gl.check}{If TRUE, accepts a genlight object [default TRUE]}
-
-\item{fd.check}{If TRUE, accepts a fixed difference object, class fd [default FALSE]}
-
-\item{dist.check}{If TRUE, accepts a distance matrix, class dist [default FALSE]}
-
-\item{mat.check}{If TRUE, accepts a square matrix, class matrix [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
@@ -42,5 +27,7 @@ Note: One and only one of gl.check, fd.check, dist.check or mat.check can be TRU
 }
 \examples{
 datatype <- utils.check.datatype(testset.gl)
-datatype <- utils.check.datatype(as.matrix(testset.gl),mat.check=TRUE)
+datatype <- utils.check.datatype(as.matrix(testset.gl))
+fd <- gl.fixed.diff(testset.gl)
+datatype <- utils.check.datatype(fd)
 }
