@@ -485,11 +485,22 @@
   if(region==7) { # For Haldane's Exact test
     
     Crit <- CritSam(n,alphalimit=alpha,pvaluetype=pvaluetype)$Xn
-    Critcar <- Crit%*%M        # cartesian coordinates
+    if(length(Crit)==0){
+      Critcar <- NULL
+    }
+    if(length(Crit)>0){
+      Critcar <- Crit%*%M        # cartesian coordinates
+    }
+    
     points(Critcar[,1],Critcar[,2],pch=pch,col=curvecols[5],cex=cex,type="l",lty=curtyp)
     
     Crit <- CritSam(n,Dpos=FALSE,alphalimit=alpha,pvaluetype=pvaluetype)$Xn
-    Critcar <- Crit%*%M        # cartesian coordinates
+    if(length(Crit)==0){
+      Critcar <- NULL
+    }
+    if(length(Crit)>0){
+      Critcar <- Crit%*%M        # cartesian coordinates
+    }
     points(Critcar[,1],Critcar[,2],pch=pch,col=curvecols[5],cex=cex,type="l",lty=curtyp)
     
   }

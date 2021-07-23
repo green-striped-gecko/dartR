@@ -17,6 +17,7 @@
 #' One of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none" 
 #' (see details) [default "bonferroni"]
 #' @param alpha_val Level of significance for testing [default 0.05].
+#' @sample_size = 5
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
 #' [default NULL, unless specified using gl.set.verbosity]
@@ -44,7 +45,7 @@
 #' HWTernaryPlot is a routine that draws a ternary plot for three-way genotypic compositions (AA,AB,BB), and represents the acceptance region for different tests for Hardy-Weinberg equilibrium (HWE) in the plot.
 #' 
 #' say the monomorphic loci are filtered
-#' populations with less than 5 loci cannot be assesed tests for this in all cases
+#' populations with less than 5 loci cannot be assessed tests for this in all cases
 #' 
 #' p.adjust {stats}
 #' 
@@ -83,6 +84,7 @@ gl.report.hwe <- function(x,
                           multi_comp_method = "bonferroni",
                           method_sig = "ChiSquare", 
                           alpha_val = 0.05,
+                          sample_size = 5,
                           verbose = NULL) {
   
   # SET VERBOSITY
@@ -101,6 +103,7 @@ gl.report.hwe <- function(x,
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop(error("Package",pkg," needed for this function to work. Please install it."))
   }
+  
   if (datatype == "SilicoDArT"){
     cat(error("  Detected Presence/Absence (SilicoDArT) data\n"))
     stop(error("Cannot calculate HWE from fragment presence/absence data. Please provide a SNP dataset.\n"))
@@ -111,73 +114,22 @@ gl.report.hwe <- function(x,
   #### Interpret options
    ########### for subset all
    if (subset[1] == "all") {
-    #if there are more than one population
-    if(nPop(x) > 1) {
-      # merging all populations together
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
-      if(verbose >= 2){
-        cat(report("  Pooling all populations for HWE calculations\n"))
-      }
-      if(verbose >= 3){
-        cat(warn("  Warning: Significance of tests may indicate heterogeneity among populations\n\n"))
-      }
-    }
-    #if there is one population
-    if(nPop(x) == 1) {
-      if(verbose >= 2){
-        cat(report("  Calculating HWE for population",popNames(x)))
-      }
-    }
-    # filtering monomorphs
-     x <- gl.filter.monomorphs(x,verbose=0)
-    # there is one population
-    flag <- 1
+     if(verbose >= 2){
+       cat(report("  Pooling all populations for HWE calculations\n"))
+     }
+     if(verbose >= 3){
+       cat(warn("  Warning: Significance of tests may indicate heterogeneity among populations\n\n"))
+     }
+      # assigning the same population to all individuals
+     pop(x) <- array("pop",dim = nInd(x))
+     pop(x) <- as.factor(pop(x))
    }
+  
   ########### for subset each
   if (subset[1] == "each") {
-    #if there is one population
-    if (nPop(x) == 1){
-      if(verbose >= 2){
-        cat(report("  Calculating HWE for population",popNames(x)))
-      }
-      # filtering monomorphs
-      x <- gl.filter.monomorphs(x,verbose=0)
-      # there is one population
-      flag <- 1
-    }
-    #if there are more than one population
-    if (nPop(x) > 1){
       if(verbose >= 2){
         cat(report("  Analysing each population separately\n"))
         }
-      poplist_temp <- seppop(x)
-      # filtering monomorphs
-      poplist <- lapply(poplist_temp,gl.filter.monomorphs,verbose=0)
-      # testing whether populations have heteromorphic loci 
-      monomorphic_pops_temp <- unlist(lapply(poplist, nLoc))
-      monomorphic_pops <- monomorphic_pops_temp[which(monomorphic_pops_temp==0)]
-      
-      if(length(monomorphic_pops)>0){
-        if(verbose >= 2){
-          cat(warn("  Warning: No heteromorphic loci in population",names(monomorphic_pops),"... skipped\n"))
-          # removing pops that do not have heteromorphic loci 
-          pops_to_remove <- which(names(poplist) %in% names(monomorphic_pops))
-          poplist <- poplist[-pops_to_remove]
-        }
-      }
-      
-      # if just one population remain
-      if(length(poplist)<2){
-        # there is one population
-        flag <- 1
-      }
-      # if there are more than 1 populations
-      if(length(poplist)>=2){
-        # there are more than one population
-        flag <- 0
-      }
-    }
   }
   
   ########### for subset selected populations
@@ -189,107 +141,54 @@ gl.report.hwe <- function(x,
      if(pops_hwe == 0){
        stop(error("Fatal Error: subset parameter must be \"each\", \"all\", or a list of populations existing in the dataset\n"))
      }
-     # if the populations are in the dataset
-     if(pops_hwe > 0){
-     #if there is one population 
-     if(length(subset) == 1){
-       if(verbose >= 2){
-         cat(report("  Calculating HWE for population",popNames(x)))
-       }
-       # filtering monomorphs
-       x <- gl.filter.monomorphs(x,verbose=0)
-       # there is one population
-       flag <- 1
-     }
-       # if there are more than one populations
-       if(length(subset) > 1){
          # subsetting the populations
          x <- x[pop(x) %in% subset]
-         # merging all populations together
-         pop(x) <- array("pop1",dim = nInd(x))
+         # assigning the same population to all individuals
+         pop(x) <- array("pop",dim = nInd(x))
          pop(x) <- as.factor(pop(x))
-         # filtering monomorphs
-         x <- gl.filter.monomorphs(x,verbose=0)
-         # there is just one population
-         flag <- 1
          if(verbose >= 2){
            cat(report(paste("  Pooling populations", paste(subset,collapse = " "),"together for HWE calculations\n")))
          }
          if(verbose >= 3){
            cat(warn("  Warning: Significance of tests may indicate heterogeneity among populations\n\n"))
          }
-       }
-     }
    }
   
-  #### if there are just one population 
-  if(flag == 1){
-    mat_HWE_temp <- t(as.matrix(x))
-    mat_HWE <- matrix(nrow = nLoc(x),ncol = 3)
-    colnames(mat_HWE) <- c("AA", "AB", "BB")
-    mat_HWE[,"AA"] <- apply(mat_HWE_temp,1,function(y){length(y[which(y==0)])})
-    mat_HWE[,"AB"] <- apply(mat_HWE_temp,1,function(y){length(y[which(y==1)])})
-    mat_HWE[,"BB"] <- apply(mat_HWE_temp,1,function(y){length(y[which(y==2)])})
-    
-    if(method_sig == "ChiSquare"){
-      p.values <- HardyWeinberg::HWChisqStats(mat_HWE)
-    }
-    if(method_sig == "Exact"){
-      p.values <- HardyWeinberg::HWExactStats(mat_HWE)
-    }
-
-    total <- rowSums(mat_HWE,na.rm = T)
-    sig2 <- p.values
-    
-    sig2[sig2 < 0] <- NA
-    sig2[sig2 > alpha_val] <- "no_sig"
-    sig2[sig2 <= alpha_val] <- "sig"
-    
-    p.values_adj <- NA
-    bonsig2 <- NA
-    
-    if(multi_comp == TRUE){
-      p.values_adj <- stats::p.adjust(p.values, method = multi_comp_method)
-      bonsig2 <- p.values_adj
-      bonsig2[bonsig2 < 0] <- NA
-      bonsig2[bonsig2 > alpha_val] <- "no_sig"
-      bonsig2[bonsig2 <= alpha_val] <- "sig"
-    }
-    
-    # Assemble results into a dataframe
-    result <- data.frame(cbind(locNames(x),mat_HWE, total, p.values, sig2, p.values_adj , bonsig2))
-    names(result) <- c("Locus", "Hom_1", "Het", "Hom_2", "N", "Prob", "Sig", "Prob.adj", "Sig.adj")
-    result$Hom_1 <- as.numeric(result$Hom_1)
-    result$Het <- as.numeric(result$Het)
-    result$Hom_2 <- as.numeric(result$Hom_2)
-    result$N <- as.numeric(result$N)
-    result$Prob <- as.numeric(result$Prob)
-    result$Prob.adj <- as.numeric(result$Prob.adj)
-    
-    if(plot.out){
-      # Plot a single ternary plot
-      if(verbose >= 2){
-        cat(report("  Plotting one ternary plot\n"))
-        graphics::layout(mat = matrix(1,1,1, byrow=FALSE))
-        }
-      
-      xlabel <- paste0("\n",method_sig,"\n(alpha = ",alpha_val,")")
-      mat_genotypes <- as.matrix(result[,c("Hom_1" ,"Het", "Hom_2" )])
-      colnames(mat_genotypes) <- c("AA","AB","BB")
-      
-      if (method_sig == "Exact"){
-        res <- HardyWeinberg::HWTernaryPlot(mat_genotypes, region = 7, vertex.cex = 1.25, alpha=alpha_val, axislab=xlabel, multi_comp = multi_comp, multi_comp_method=multi_comp_method)
-      } 
-      if (method_sig == "ChiSquare"){
-        res <- HardyWeinberg::HWTernaryPlot(mat_genotypes, region = 2, vertex.cex = 1.25, alpha=alpha_val, axislab=xlabel, multi_comp = multi_comp, multi_comp_method=multi_comp_method)
-        }
+  poplist_temp <- seppop(x)
+  # filtering monomorphs
+  poplist <- lapply(poplist_temp,gl.filter.monomorphs,verbose=0)
+  
+  # testing whether populations have heteromorphic loci 
+  monomorphic_pops_temp <- unlist(lapply(poplist, nLoc))
+  monomorphic_pops <- monomorphic_pops_temp[which(monomorphic_pops_temp==0)]
+  
+  if(length(monomorphic_pops)>0){
+    if(verbose >= 2){
+      cat(warn(" Warning: No heteromorphic loci in population",names(monomorphic_pops),"... skipped\n"))
+      # removing pops that do not have heteromorphic loci 
+      pops_to_remove <- which(names(poplist) %in% names(monomorphic_pops))
+      poplist <- poplist[-pops_to_remove]
     }
   }
   
-  #### if there are more than one population 
-  if (flag == 0){
-    
-    result <- as.data.frame(matrix(nrow =1 ,ncol = 10))
+  # testing whether populations have small sample size 
+  n_ind_pops_temp <- unlist(lapply(poplist, nInd))
+  n_ind_pops <- n_ind_pops_temp[which(n_ind_pops_temp<=sample_size)]
+  
+  if(length(n_ind_pops)>0){
+    if(verbose >= 2){
+      cat(warn(" Warning: population",names(n_ind_pops),"has less than",sample_size,"individuals... skipped\n"))
+      # removing pops that have low sample size 
+      pops_to_remove_2 <- which(names(poplist) %in% names(n_ind_pops))
+      poplist <- poplist[-pops_to_remove_2]
+    }
+  }
+  
+  if(length(poplist)<1){
+    stop(error("No populations left after removing populations with low sample size and populations with monomorphic loci"))
+  }
+
+    result <- as.data.frame(matrix(nrow = 1, ncol = 10))
     colnames(result) <- c("Population","Locus", "Hom_1", "Het", "Hom_2", "N", "Prob", "Sig", "Prob.adj", "Sig.adj")
 
     for (i in poplist) {
@@ -309,7 +208,7 @@ gl.report.hwe <- function(x,
       }
       
       total <- rowSums(mat_HWE,na.rm = T)
-      p.values <- signif(p.values,4)
+      p.values <- signif(p.values,5)
       sig2 <- p.values
       
       sig2[sig2 < 0] <- NA
@@ -334,10 +233,9 @@ gl.report.hwe <- function(x,
       result_temp$Het <- as.numeric(result_temp$Het)
       result_temp$Hom_2 <- as.numeric(result_temp$Hom_2)
       result_temp$N <- as.numeric(result_temp$N)
-      result_temp$Prob <- as.numeric(result_temp$Prob)
-      result_temp$Prob.adj <- as.numeric(result_temp$Prob.adj)
-      # result_temp$Population <- popNames(i)
-      
+      result_temp$Prob <- signif(as.numeric(result_temp$Prob),5)
+      result_temp$Prob.adj <- signif(as.numeric(result_temp$Prob.adj),5)
+
       result <- rbind(result,result_temp)
     }
     result <- result[-1,]
@@ -351,22 +249,13 @@ gl.report.hwe <- function(x,
         if(verbose >= 2){
           cat(report("  Plotting two ternary plots on one page\n\n"))
         }
-      } else if (npops2plot == 3) {
+      }
+      if (npops2plot > 2) {
         graphics::layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
         if(verbose >= 2){
-          cat(report("  Plotting three ternary plots on one page\n\n"))
+          cat(report("  Plotting up to four plots on one page\n\n"))
         }
-      } else if (npops2plot == 4) {
-        graphics::layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
-        if(verbose >= 2){
-          cat(report("  Plotting four ternary plots on one page\n\n"))
-        }
-      } else {
-        graphics::layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE),widths=c(0.5,0.5), heights=c(0.5,0.5))
-        if(verbose >= 2){
-          cat(report("  Plotting four ternary plots per page\n\n"))
-        }
-      }
+      } 
       
       # Plot the tertiary plots
       for (z in poplist) {
@@ -385,7 +274,6 @@ gl.report.hwe <- function(x,
         }
       }
     }
-  }
   
   #### Report the results
   if(multi_comp==F){

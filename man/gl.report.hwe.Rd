@@ -12,6 +12,7 @@ gl.report.hwe(
   multi_comp_method = "bonferroni",
   method_sig = "ChiSquare",
   alpha_val = 0.05,
+  sample_size = 5,
   verbose = NULL
 )
 }
@@ -72,7 +73,7 @@ more expensive, but applies a Fisher Exact Test of departure from HWE
 HWTernaryPlot is a routine that draws a ternary plot for three-way genotypic compositions (AA,AB,BB), and represents the acceptance region for different tests for Hardy-Weinberg equilibrium (HWE) in the plot.
 
 say the monomorphic loci are filtered
-populations with less than 5 loci cannot be assesed tests for this in all cases
+populations with less than 5 loci cannot be assessed tests for this in all cases
 
 p.adjust {stats}
 
