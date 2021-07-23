@@ -12,6 +12,9 @@
 #' @param provider provider	passed to leaflet. Check \link[leaflet]{providers} for a list of possible backgrounds.
 #' @param scalex scaling factor to determine the size of the bars in x direction
 #' @param scaley scaling factor to determine the size of the bars in y direction
+#' @param movepops a twodimensional data frame that allows to move the center of the barplots manually in case they overlap. Often if populations are horizontally close to each other. This needs to be a data.frame of the dimensions [rows=number of populations, columns = 2 (lon/lat)]. For each population you have to specify the x and y (lon and lat) units you want to move the center of the plot. [see example for details]
+#' @param pop.labels switch for population labels below the parplots [defaultTRUE].
+#' @param pop.labels.cex size of population labels [default 12].
 #' @return an interactive map that shows the structure plots broken down by population
 #'
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -27,6 +30,10 @@
 #' #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
 #' #head(qmat)
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
+#' #move population 4 (out of 5) 0.5 degrees to the right and populations 1, 0.3 degree to the top of the map.
+#' #mp <- data.frame(lon=c(0,0,0,0.5,0), lat=c(-0.3,0,0,0,0))
+#' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5, movepops=mp)
+#' 
 #' }
 #' @export
 #' @seealso \code{\link{gl.run.structure}},  \link[strataG]{clumpp}, \code{\link{gl.plot.structure}}
@@ -39,7 +46,7 @@
 #' Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster matching and permutation program for dealing with label switching and multimodality in analysis of population structure. Bioinformatics 23(14):1801-1806. Available at \href{http://web.stanford.edu/group/rosenberglab/clumppDownload.html}{clumpp}
 
 
-gl.map.structure <- function(qmat, x, provider="Esri.NatGeoWorldMap",scalex =1, scaley=1) {
+gl.map.structure <- function(qmat, x, provider="Esri.NatGeoWorldMap",scalex =1, scaley=1, movepops=NULL,pop.labels=TRUE, pop.labels.cex=12) {
 
 
   ff <-qmat[,4:(ncol(qmat))]
@@ -48,6 +55,18 @@ gl.map.structure <- function(qmat, x, provider="Esri.NatGeoWorldMap",scalex =1, 
   
   df <- x@other$latlon
   centers <- apply(df, 2, function(xx) tapply(xx, pop(x), mean, na.rm=TRUE))
+  
+  if (!is.null(movepops)) {
+    if (nrow(movepops)!=nrow(centers)) stop(error("The provided movepops data.frame has not the corret number of rows, please check. It needs to have the same numbers of rows as the number populations in your genlight object."))
+    centers[,1] <-centers[,1]+movepops[,1]
+    centers[,2] <-centers[,2]+movepops[,2]
+    
+  }
+  
+  
+  sc <- match(rownames(centers), levels(factor(qmat$orig.pop)))
+  if (any(is.na(sc))) cat(error("Population names (coordinates) in the genlight object do not match population in your q-matrix. Please check both."))
+  centers <- centers[sc,]
   cx <- centers[,"lon"]
   cy <- centers[,"lat"]
   sx <- abs(diff(range(centers[,"lon"])))/(100)*scalex
@@ -82,7 +101,8 @@ gl.map.structure <- function(qmat, x, provider="Esri.NatGeoWorldMap",scalex =1, 
  }
 
 }
-
+   if (pop.labels)   m1 <- m1 %>% leaflet::addLabelOnlyMarkers(lng=centers[,"lon"], lat=centers[,"lat"]-sy*0.1, label = rownames(centers),labelOptions = leaflet::labelOptions(noHide = T, direction = 'center', textOnly = T, textsize = paste0(pop.labels.cex,"px")))
+   
 
  print(m1)
  return(out)

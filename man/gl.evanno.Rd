@@ -9,7 +9,7 @@ gl.evanno(sr, plot = TRUE)
 \arguments{
 \item{sr}{structure run object from \code{\link{gl.run.structure}} [required].}
 
-\item{plot}{TRUE: all four plots are shown. FALSE: all four plots are returned by not shown.}
+\item{plot}{TRUE: all four plots are shown. FALSE: all four plots are returned as a ggplot but not shown.}
 }
 \value{
 an evanno plot is created and a list of all four plots is returned.
@@ -24,7 +24,7 @@ description please refer to this package (see references below).
 }
 \examples{
 \dontrun{
-#CLUMPP needs to be installed to be able to run the example
+#CLUMPP and STRUCTURE need to be installed to be able to run the example
 #bc <- bandicoot.gl[,1:100]
 #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
 #ev <- gl.evanno(sr)

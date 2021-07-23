@@ -9,7 +9,10 @@ gl.map.structure(
   x,
   provider = "Esri.NatGeoWorldMap",
   scalex = 1,
-  scaley = 1
+  scaley = 1,
+  movepops = NULL,
+  pop.labels = TRUE,
+  pop.labels.cex = 12
 )
 }
 \arguments{
@@ -22,6 +25,12 @@ gl.map.structure(
 \item{scalex}{scaling factor to determine the size of the bars in x direction}
 
 \item{scaley}{scaling factor to determine the size of the bars in y direction}
+
+\item{movepops}{a twodimensional data frame that allows to move the center of the barplots manually in case they overlap. Often if populations are horizontally close to each other. This needs to be a data.frame of the dimensions [rows=number of populations, columns = 2 (lon/lat)]. For each population you have to specify the x and y (lon and lat) units you want to move the center of the plot. [see example for details]}
+
+\item{pop.labels}{switch for population labels below the parplots [defaultTRUE].}
+
+\item{pop.labels.cex}{size of population labels [default 12].}
 }
 \value{
 an interactive map that shows the structure plots broken down by population
@@ -46,6 +55,10 @@ Creates a mapped version of structure plots. For possible background maps check 
 #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
 #head(qmat)
 #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
+#move population 4 (out of 5) 0.5 degrees to the right and populations 1, 0.3 degree to the top of the map.
+#mp <- data.frame(lon=c(0,0,0,0.5,0), lat=c(-0.3,0,0,0,0))
+#gl.map.structure(qmat, bc, scalex=1, scaley=0.5, movepops=mp)
+
 }
 }
 \references{

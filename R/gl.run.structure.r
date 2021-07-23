@@ -64,8 +64,13 @@ gl.run.structure    <- function(x,
   
   oncran <- match("strataG", ap)
   if (is.na(oncran)) {
-    warning("package strataG needs to be installed. It is currently not on CRAN, hence I try to install it manually via Github using devtools:\n  devtools::install_github('EricArcher/strataG'")
+    warning("package strataG needs to be installed. It is currently not on CRAN, hence you need to install it manually via Github using devtools:\n  devtools::install_github('EricArcher/strataG')\n. Do you want to install strataG from github now? (Y/N)+Enter\n" )
+    line <- readline()
+    if (substr(line,1,1)=="Y") {
+    cat(report("\nInstalling strataG from Github...\n"))
+      flush.console()
     devtools::install_github('EricArcher/strataG')
+    } else stop("Package strataG is necessary to run structure. Check the help page for references ?gl.run.structure. Aborting now.")
   
   }
   } else {
