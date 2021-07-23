@@ -55,7 +55,8 @@ Creates a mapped version of structure plots. For possible background maps check 
 #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
 #head(qmat)
 #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
-#move population 4 (out of 5) 0.5 degrees to the right and populations 1, 0.3 degree to the top of the map.
+#move population 4 (out of 5) 0.5 degrees to the right and populations 1
+#0.3 degree to the top of the map.
 #mp <- data.frame(lon=c(0,0,0,0.5,0), lat=c(-0.3,0,0,0,0))
 #gl.map.structure(qmat, bc, scalex=1, scaley=0.5, movepops=mp)
 

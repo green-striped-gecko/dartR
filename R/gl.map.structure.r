@@ -30,7 +30,8 @@
 #' #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
 #' #head(qmat)
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
-#' #move population 4 (out of 5) 0.5 degrees to the right and populations 1, 0.3 degree to the top of the map.
+#' #move population 4 (out of 5) 0.5 degrees to the right and populations 1
+#' #0.3 degree to the top of the map.
 #' #mp <- data.frame(lon=c(0,0,0,0.5,0), lat=c(-0.3,0,0,0,0))
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5, movepops=mp)
 #' 
@@ -105,8 +106,12 @@ gl.map.structure <- function(qmat, x, provider="Esri.NatGeoWorldMap",scalex =1, 
    
 
  print(m1)
+ mapshot(m1, file="./Rplot.png", remove_controls = TRUE)
  return(out)
  #%>% addLegend(labels=paste("Group",1:ncol(ff)), colors=rainbow(ncol(ff)),position ="topright" )
+ 
+ #if (save) mapshot(m1, file="./Rplot.png", remove_controls = TRUE)
+ 
  
 }
 
