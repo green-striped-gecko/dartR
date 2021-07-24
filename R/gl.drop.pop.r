@@ -1,5 +1,6 @@
-#' Remove specified populations from a genelight \{adegenet\} object
-#'
+#' @name gl.drop.pop
+#' @title Remove specified populations from a genelight \{adegenet\} object
+#' @description
 #' Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart() or gs.read.dart(). 
 #'
 #' The script, having deleted populations, optionally identifies resultant monomorphic loci or loci
@@ -10,36 +11,40 @@
 #'
 #' @param x -- name of the genlight object containing SNP genotypes or Tag P/A data (SilicoDArT) [required]
 #' @param pop.list -- a list of populations to be removed [required]
-#' @param as.pop -- temporarily assign another metric to represent population for the purposes
-#' of deletions [default NULL]
+#' @param as.pop -- temporarily assign another metric to represent population for the purposes of deletions [default NULL]
 #' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
 #' @param mono.rm -- Remove monomorphic loci [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
-#' @export
+
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'  # SNP data
-#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),
-#'    mono.rm=TRUE,recalc=TRUE)
+#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),verbose=3)
+#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
 #'    gl2 <- gl.drop.pop(testset.gl, pop.list=c("Male","Unknown"),as.pop="sex")
 #'  # Tag P/A data  
 #'    gs2 <- gl.drop.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 #'
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
+#' @export
 
-gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
+gl.drop.pop <- function(x, 
+                        pop.list, 
+                        as.pop=NULL, 
+                        recalc=FALSE, 
+                        mono.rm=FALSE, 
+                        verbose=NULL){
 
-  # SET VERBOSITY
+# SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   funname <- match.call()[[1]]
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  # CHECK DATATYPE 
+# CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
   
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -58,7 +63,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     if(as.pop %in% names(x@other$ind.metrics)){
       pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
       if (verbose >= 2) {
-        cat(report("  Temporarily setting population assignments to",as.pop,"as specified by the as.pop parameter\n"))
+        cat(report("  Temporarily assigning",as.pop,"as population\n"))
       }
     } else {
       stop(error("Fatal Error: individual metric assigned to 'pop' does not exist. Check names(gl@other$loc.metrics) and select again\n"))
@@ -83,7 +88,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
   # Remove populations
   
   if (verbose >= 2) {
-    cat("  Deleting populations", pop.list, "\n")
+    cat("  Deleting populations", paste(pop.list,collapse=", "),"\n")
   }
 
   # Delete listed populations, recalculate relevant locus metadata and remove monomorphic loci
@@ -114,7 +119,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
       if(verbose >= 2){cat(report("  Recalculating locus metrics\n"))}
     } else {
       if(verbose >= 2){
-        cat("    Locus metrics not recalculated\n")
+        cat(warn("  Locus metrics not recalculated\n"))
         x <- utils.reset.flags(x,verbose=0)
       }
     }
@@ -140,7 +145,7 @@ gl.drop.pop <- function(x, pop.list, as.pop=NULL, recalc=FALSE, mono.rm=FALSE, v
     
   if (!is.null(as.pop)){
     pop(x) <- pop.hold
-    if (verbose >= 3) {cat(report("  Resetting population assignments to initial state\n"))}
+    if (verbose >= 2) {cat(report("  Restoring population assignments to initial state\n"))}
   }
 
 # ADD TO HISTORY
