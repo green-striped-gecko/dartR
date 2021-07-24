@@ -1,11 +1,13 @@
 #' @name utils.check.datatype
-#' @title Utility function to check that the object passed to the function is a genlight object.
+#' @title Utility function to check the class of an object passed to afunction.
 #'
 #' @description 
-#' Most functions require access to a genlight object, and this function checks that a genlight object has been passed,
-#' whether it is a SNP dataset or a SilicoDArT object, and reports back if verbosity is >=2
+#' Most functions require access to a genlight object, dist matrix, data matrix or fixed difference list (fd), 
+#' and this function checks that a genlight object has been passed, whether it is a SNP dataset or a SilicoDArT object, 
+#' and reports back if verbosity is >=2
 #'
-#' @param x Name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]
+#' @param x Name of the genlight object, dist matrix, data matrix or fixed difference list (fd) [required]
+#' @param accept Vector containing the classes of objects that are to be accepted [default c("genlight","SNP","SilicoDArT"]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #' 
 #' @details 
@@ -18,17 +20,19 @@
 #' "mat" for a data matrix or class(x)[1]
 #' @examples
 #' datatype <- utils.check.datatype(testset.gl)
-#' datatype <- utils.check.datatype(as.matrix(testset.gl))
+#' datatype <- utils.check.datatype(as.matrix(testset.gl),accept="matrix")
 #' fd <- gl.fixed.diff(testset.gl)
-#' datatype <- utils.check.datatype(fd)
+#' datatype <- utils.check.datatype(fd,accept="fd")
 #' @export
 
-utils.check.datatype <- function(x,verbose=NULL) {
+utils.check.datatype <- function(x,
+                                 accept=c("genlight","SNP","SilicoDArT"),
+                                 verbose=NULL) {
   
 #### SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
 
-#### CHECK OBJECT ####
+#### CHECK THE TYPE OF OBJECT ####
   
   if(is(x,"genlight")){
     if(verbose>=2){cat(report("  Processing genlight object"))}
@@ -72,6 +76,12 @@ utils.check.datatype <- function(x,verbose=NULL) {
   } else {
       cat(warn("  Warning: Found object of class",class(x)[1],"\n"))
       datatype <- class(x)[1]
+  }
+  
+  #### CHECK WHETHER TO THROW AN ERROR ####
+  
+  if(!(datatype %in% accept)){
+    stop(error("Fatal Error: inappropriate object passed to function, found",datatype,"expecting",paste(accept,collapse=" or ")))
   }
   
   invisible(datatype)
