@@ -1,10 +1,11 @@
-#' Create or edit a individual (=specimen) names, create an recode_ind file amd apply the changes to a genlight object.
-#' 
+#' @name gl.edit.recode.ind
+#' @title Create or edit a individual (=specimen) names, create an recode_ind file amd apply the changes to a genlight object.
+#' @description
 #' A script to edit individual names in a genlight object, or to 
 #' create a reassignment table taking the individual labels
 #' from a genlight object, or to edit existing individual labels in
 #' an existing recode_ind file.
-#' 
+#' @details 
 #' Renaming individuals may be required when there have been errors in labelling arising
 #' in the process from sample to DArT files. There may be occasions where renaming
 #' individuals is required for preparation of figures. Caution needs to be exercised
@@ -38,59 +39,26 @@
 #' \dontrun{
 #' gl <- gl.edit.recode.ind(testset.gl)
 #' gl <- gl.edit.recode.ind(testset.gl, out.recode.file="ind.recode.table.csv")
-#' gl <- gl.edit.recode.ind(testset.gl, out.recode.file="ind.recode.table.csv")
 #' }
 
-gl.edit.recode.ind <- function(x, out.recode.file=NULL, outpath=tempdir(), recalc=FALSE, mono.rm=FALSE, verbose=NULL){
+gl.edit.recode.ind <- function(x, 
+                               out.recode.file=NULL, 
+                               outpath=tempdir(), 
+                               recalc=FALSE, 
+                               mono.rm=FALSE, 
+                               verbose=NULL){
 
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-  if (!is.null(out.recode.file)){
-    outfilespec <- file.path(outpath, out.recode.file)
-  }
-  
 # SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  verbose <- gl.check.verbosity(verbose)
   
 # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-  }
+  outfilespec <- file.path(outpath, out.recode.file)
   
 # DO THE JOB
   
@@ -101,7 +69,7 @@ gl.edit.recode.ind <- function(x, out.recode.file=NULL, outpath=tempdir(), recal
   
 # Take assignments from x
 
-  if(verbose >= 2){cat("Extracting current individual labels from the x object\n")}
+  if(verbose >= 2){cat(report("  Extracting current individual labels from the x object\n"))}
   recode.table <- cbind(indNames(x),indNames(x))
 
 # Create recode table for editting, and bring up the editor
@@ -110,9 +78,9 @@ gl.edit.recode.ind <- function(x, out.recode.file=NULL, outpath=tempdir(), recal
 
 # Write out the recode table, if requested
   if (is.null(out.recode.file)) {
-    if(verbose >= 2){cat("No output table specified, recode table not written to disk\n")}
+    if(verbose >= 2){cat(warn("  Warning: No output table specified, recode table not written to disk\n"))}
   } else {
-    if(verbose >= 2){cat(paste("Writing individual recode table to: ",out.recode.file,"\n"))}
+    if(verbose >= 2){cat(report(paste("  Writing individual recode table to: ",out.recode.file,"\n")))}
     write.table(new, file=out.recode.file, sep=",", row.names=FALSE, col.names=FALSE)    
   }
 
@@ -125,39 +93,52 @@ gl.edit.recode.ind <- function(x, out.recode.file=NULL, outpath=tempdir(), recal
     }
   }
   # Assigning new populations to x
-  if(verbose >= 2){cat("Assigning new individual (=specimen) names\n")}
+  if(verbose >= 2){cat(report("  Assigning new individual (=specimen) names\n"))}
   indNames(x) <- ind.list
   
   # If there are populations to be deleted, then recalculate relevant locus metadata and remove monomorphic loci
   
   if ("delete" %in% indNames(x) | "Delete" %in% indNames(x)) {
     # Remove populations flagged for deletion
-    if (verbose >= 2){cat("Deleting individuals/samples flagged for deletion (Flagged 'Delete' or 'delete')\n")}
+    if (verbose >= 2){cat(report("  Deleting individuals/samples flagged for deletion (Flagged 'Delete' or 'delete')\n"))}
     x <- gl.drop.ind(x,ind.list=c('Delete','delete'),verbose=0)
   }
 
+  # Remove monomorphic loci
+  if(mono.rm){
+    if(verbose >= 2){cat(report("  Deleting monomorphic loc\n"))}
+    x <- gl.filter.monomorphs(x,verbose=0)
+  } 
+  # Check monomorphs have been removed
+  if (x@other$loc.metrics.flags$monomorphs == FALSE){
+    if (verbose >= 2){
+      cat(warn("  Warning: Resultant dataset may contain monomorphic loci\n"))
+    }  
+  }
+  
   # Recalculate statistics
   if (recalc) {
     x <- gl.recalc.metrics(x,verbose=0)
-  } 
-  
-  #  Remove monomorphic loci
-  if (mono.rm) {
-    x <- gl.filter.monomorphs(x,verbose=0)
+    if(verbose >= 2){cat(report("  Recalculating locus metrics\n"))}
+  } else {
+    if(verbose >= 2){
+      cat(warn("  Locus metrics not recalculated\n"))
+      x <- utils.reset.flags(x,verbose=0)
+    }
   }
   
 # REPORT A SUMMARY
 
   if (verbose>=2) {
-    cat("\n  Summary of recoded dataset\n")
+    cat("  Summary of recoded dataset\n")
     cat(paste("  Original No. of loci:",hold.nLoc,"\n"))
     cat(paste("    New No. of loci:",nLoc(x),"\n"))
     cat(paste("  Original No. of individuals:", hold.nInd,"\n"))
     cat(paste("    New No. of individuals:", nInd(x),"\n"))
     cat(paste("  Original No. of populations:", hold.nPop,"\n"))
-    cat(paste("    New No. of populations:", nPop(x),"\n\n"))
-    if (!recalc) {cat("Note: Locus metrics not recalculated\n")}
-    if (!mono.rm) {cat("Note: Resultant monomorphic loci not deleted\n")}
+    cat(paste("    New No. of populations:", nPop(x),"\n"))
+    if (!recalc) {cat(report("  Note: Locus metrics not recalculated\n"))}
+    if (!mono.rm) {cat(report("  Note: Resultant monomorphic loci not deleted\n"))}
   }
  
 # ADD TO HISTORY 
@@ -167,9 +148,8 @@ gl.edit.recode.ind <- function(x, out.recode.file=NULL, outpath=tempdir(), recal
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
     
 return(x)
-  
 }

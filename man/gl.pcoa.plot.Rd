@@ -2,22 +2,27 @@
 % Please edit documentation in R/gl.pcoa.plot.beta.r, R/gl.pcoa.plot.r
 \name{gl.pcoa.plot}
 \alias{gl.pcoa.plot}
+\alias{gl.pcoa.plot.beta}
 \title{Plots of the results of an ordination generated using gl.pcoa()}
 \usage{
-gl.pcoa.plot(
+gl.pcoa.plot.beta(
   glPca,
   x,
   scale = FALSE,
   ellipse = FALSE,
   p = 0.95,
   labels = "pop",
-  theme_plot = 4,
   as.pop = NULL,
-  hadjust = 1.5,
-  vadjust = 1,
+  overlaps = 3,
+  interactive_plot = FALSE,
+  three_D_plot = FALSE,
   xaxis = 1,
   yaxis = 2,
+  zaxis = 3,
+  radius = 3,
   plot.out = TRUE,
+  plot_theme = theme_dartR(),
+  palette_discrete = discrete_palette,
   verbose = NULL
 )
 
@@ -53,21 +58,7 @@ the Distance Matrix used to generate the ordination [required]}
 
 \item{labels}{Flag to specify the labels are to be added to the plot. ["none"|"ind"|"pop"|"interactive"|"legend", default = "pop"]}
 
-\item{theme_plot}{Theme for the plot. See Details for options [default 4]}
-
 \item{as.pop}{-- assign another metric to represent populations for the plot [default NULL]}
-
-\item{hadjust}{Horizontal adjustment of label position [default 1.5]}
-
-\item{vadjust}{Vertical adjustment of label position [default 1]}
-
-\item{xaxis}{Identify the x axis from those available in the ordination (xaxis <= nfactors)}
-
-\item{yaxis}{Identify the y axis from those available in the ordination (yaxis <= nfactors)}
-
-\item{plot.out}{If TRUE, returns a plot object compatable with ggplot, otherwise returns a dataframe [default TRUE]}
-
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 
 \item{overlaps}{Factor to exclude overlapping labels, higher values allow to 
 overlap more labels [default 3].}
@@ -78,16 +69,30 @@ using the package plotly [default FALSE].}
 \item{three_D_plot}{3D interactive plot of the results of a PCoA ordination
 using the package plotly [default FALSE].}
 
+\item{xaxis}{Identify the x axis from those available in the ordination (xaxis <= nfactors)}
+
+\item{yaxis}{Identify the y axis from those available in the ordination (yaxis <= nfactors)}
+
 \item{zaxis}{Identify the z axis from those available in the ordination, 
 only used for three_D_plot = TRUE [default 3].}
 
 \item{radius}{Size of the points [default 3].}
+
+\item{plot.out}{If TRUE, returns a plot object compatable with ggplot, otherwise returns a dataframe [default TRUE]}
 
 \item{plot_theme}{User specified theme [default theme_dartR()].}
 
 \item{palette_discrete}{A discrete palette for the color of populations or a 
 list with as many colors as there are populations in the dataset
  [default discrete_palette].}
+
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+
+\item{theme_plot}{Theme for the plot. See Details for options [default 4]}
+
+\item{hadjust}{Horizontal adjustment of label position [default 1.5]}
+
+\item{vadjust}{Vertical adjustment of label position [default 1]}
 }
 \value{
 A plot of the ordination [plot.out = TRUE] or a dataframe [plot.out = FALSE]

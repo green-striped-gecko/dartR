@@ -59,7 +59,6 @@ The script returns a genlight object with the new individual labels and the reca
 \dontrun{
 gl <- gl.edit.recode.ind(testset.gl)
 gl <- gl.edit.recode.ind(testset.gl, out.recode.file="ind.recode.table.csv")
-gl <- gl.edit.recode.ind(testset.gl, out.recode.file="ind.recode.table.csv")
 }
 }
 \author{
