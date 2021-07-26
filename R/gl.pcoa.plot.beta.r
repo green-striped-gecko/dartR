@@ -98,7 +98,7 @@
 #' @export
 #'  
 
-gl.pcoa.plot <- function(glPca, 
+gl.pcoa.plot.beta <- function(glPca, 
                          x, 
                          scale = FALSE, 
                          ellipse = FALSE, 
