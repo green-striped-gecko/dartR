@@ -12,6 +12,7 @@ gl.report.heterozygosity(
   plot_theme = theme_dartR(),
   plot_colours_pop = discrete_palette,
   plot_colours_ind = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -29,6 +30,8 @@ gl.report.heterozygosity(
 \item{plot_colours_pop}{A color palette for population plots [default discrete_palette].}
 
 \item{plot_colours_ind}{List of two color names for the borders and fill of the plot by individual [default two_colors].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
@@ -66,8 +69,8 @@ parameter to standardize your estimates of heterozygosity.
 \strong{ Function's output }
 Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
 
- Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
-
+ Plots and table are saved to the session temporary directory (tempdir) 
+ 
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
@@ -76,14 +79,14 @@ Output for method='ind' is a histogram and a boxplot of heterozygosity across in
 \examples{
 df <- gl.report.heterozygosity(testset.gl)
 df <- gl.report.heterozygosity(testset.gl,method='ind')
+df <- gl.report.heterozygosity(testset.gl,plot=FALSE)
 
 }
 \references{
-Nei, M. and R. K. Chesser (1983). 'Estimation of fixation indices and gene diversities.' Annals of human genetics 47(3): 253-259.
+Nei, M. and R. K. Chesser (1983). Estimation of fixation indices and gene diversities. Annals of Human Genetics 47:253-259.
 }
 \seealso{
-\code{\link{gl.filter.heterozygosity}},\code{\link{gl.list.reports}},
- \code{\link{gl.print.reports}}
+\code{\link{gl.filter.heterozygosity}}
 
 Other reporting functions: 
 \code{\link{gl.report.bases}()},

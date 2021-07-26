@@ -1,5 +1,6 @@
-#' Merge two or more populations in a genelight \{adegenet\} object into one population
-#'
+#' @name gl.merge.pop
+#' @title Merge two or more populations in a genelight \{adegenet\} object into one population
+#' @description 
 #' Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart(). 
 #'
 #' This script assigns individuals from two nominated populations into a new single population. It can also be used
@@ -17,16 +18,19 @@
 #' @examples
 #'    gl <- gl.merge.pop(testset.gl, old=c("EmsubRopeMata","EmvicVictJasp"), new="Outgroup")
 
-gl.merge.pop <- function(x, old=NULL, new=NULL, verbose=NULL) {
+gl.merge.pop <- function(x, 
+                         old=NULL, 
+                         new=NULL, 
+                         verbose=NULL) {
 
-  # SET VERBOSITY
+# SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   funname <- match.call()[[1]]
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  # CHECK DATATYPE 
+# CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
   
   if (verbose >= 1) {

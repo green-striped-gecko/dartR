@@ -184,10 +184,10 @@ gl.report.bases <- function(x,
 
     # Create return list
     if (verbose >= 2) {
-        cat(report("  Returning a list containing\n
-         [[1]] $freq -- the table of base frequencies and transition/transversion ratios;\n
+        cat(report("  Returning a list containing
+         [[1]] $freq -- the table of base frequencies and transition/transversion ratios;
          [[2]] $plotbases -- ggplot bargraph of base frequencies;\n
-         [[3]] $plottstv -- ggplot bargraph of transitions and transversions.\n"))
+         [[3]] $plottstv -- ggplot bargraph of transitions and transversions."))
     }
 
     out <- c(round(A, 2), round(G, 2), round(T, 2), round(C, 2), round(tv, 2), round(ts, 2))
@@ -208,7 +208,7 @@ gl.report.bases <- function(x,
  # FLAG SCRIPT END
 
     if (verbose >= 1) {
-      cat(report("\nCompleted:", funname, "\n\n"))
+      cat(report("Completed:", funname, "\n"))
     }
     
   # RETURN

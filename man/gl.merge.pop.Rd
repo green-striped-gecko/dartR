@@ -19,9 +19,8 @@ gl.merge.pop(x, old = NULL, new = NULL, verbose = NULL)
 A genlight object with the new population assignments
 }
 \description{
-Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart().
-}
-\details{
+Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart(). 
+
 This script assigns individuals from two nominated populations into a new single population. It can also be used
 to rename populations.
 
