@@ -2,7 +2,7 @@
 #' 
 #'@return Prints a table with all reports saved in tempdir. Currently the style cannot be changed.
 #'@export
-#'#@importFrom gridExtra grid.table ttheme_default
+
 #'@author Bernd Gruber & Luis Mijangos (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #'@examples 
 #'\dontrun{
@@ -10,6 +10,7 @@
 #' gl.list.reports()
 #'}
 
+##@importFrom gridExtra grid.table ttheme_default
 gl.list.reports <- function(){
   
   files_tempdir <- list.files(tempdir())
@@ -25,9 +26,18 @@ gl.list.reports <- function(){
         for (i in 1:length(files_tempdir)) {
           dd$function_call[i] <- readRDS(paste0(tempdir(),"/", files_tempdir[i]))[[1]]
         }
-      dd$function_call  <-substr(dd$function_call,2,999)
-    colnames(dd) <- c("Report number","Report","Function call") 
-    print(knitr::kable(dd, align = c("c","l","l")))
+    dd$function_call  <-substr(dd$function_call,2,999)
+    
+    dd$nr <- crayon::green(dd$nr)
+    dd$reports <- crayon::blue(dd$reports)
+    dd$function_call <- crayon::yellow(dd$function_call)
+    
+      
+    #colnames(dd) <- c("Report number","Report","Function call") 
+    colnames(dd)<- crayon::bold(colnames(dd))
+    print(knitr::kable(dd, align = c("c","l","l"), format="simple",width=80))
+
+    
     #  if (max(nchar(dd$function_call))>30) 
     #   dd$function_call  <-gsub('(.{1,30})', '\\1\n',dd$function_call)
      
