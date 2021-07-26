@@ -106,7 +106,7 @@ gl.map.structure <- function(qmat, x, provider="Esri.NatGeoWorldMap",scalex =1, 
    
 
  print(m1)
- mapshot(m1, file="./Rplot.png", remove_controls = TRUE)
+ #mapshot(m1, file="./Rplot.png", remove_controls = TRUE)
  return(out)
  #%>% addLegend(labels=paste("Group",1:ncol(ff)), colors=rainbow(ncol(ff)),position ="topright" )
  

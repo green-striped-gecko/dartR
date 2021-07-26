@@ -25,20 +25,24 @@ gl.list.reports <- function(){
         for (i in 1:length(files_tempdir)) {
           dd$function_call[i] <- readRDS(paste0(tempdir(),"/", files_tempdir[i]))[[1]]
         }
+
       
-      dd$function_call <- strwrap( dd$function_call ,width =80)
+      #dd[,3] <- substr(dd[,3],1,30)
+      print(kable(dd, align = c("c","l","l")))
+      if (max(nchar(dd$function_call))>30) 
+        dd$function_call  <-gsub('(.{1,30})', '\\1\n',dd$function_call)
       colnames(dd) <- c("Report number","Report","Function call")
-    
     #set table theme
     tt <- ttheme_default()
     tt$rowhead$fg_params$x=0
     tt$core$fg_params$fontsize=11
-    tt$core$fg_params$hjust=0.1
-    tt$core$fg_params$x=c(rep(0.5, nh),0.2, rep(0.01, nh+1))
+    tt$core$fg_params$hjust=0.0
+    tt$core$fg_params$x=c(rep(0.9, nh),rep(0.01,2*nh))
     tt$core$fg_params$fontfamily="mono"
     tt$core$fg_params$fontface="bold"
     plot(0, type="n", xlab="", ylab="", axes=F)
     grid.table(dd, theme=tt)
+    
   }
 }
 
