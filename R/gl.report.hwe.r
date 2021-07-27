@@ -3,45 +3,70 @@
 #' @description 
 #' Calculates the probabilities of agreement with H-W equilibrium based on observed
 #' frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
-#' Uses the exact calculations contained in function \code{\link{utils.prob.hwe}}
-#' as developed by Wigginton et al. (2005).
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param subset Either a vector with population names, "each", "all" (see details)
 #' [default "each"].
 #' @param plot.out If TRUE, will produce a Ternary Plot(s) [default FALSE].
-#' @param method_sig Method for determining the statistical significance in the 
-#' ternary plot: ChiSquare (with continuity correction) | Exact (description) [default "ChiSquare"].
+#' @param method_sig Method for determining statistical significance: "ChiSquare" 
+#' or "Exact" [default "Exact"].
 #' @param multi_comp Whether to adjust p-values for multiple comparisons [default TRUE].
-#' @param multi_comp_method Method to adjust p-values for multiple comparisons. 
-#' One of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none" 
-#' (see details) [default "bonferroni"]
+#' @param multi_comp_method Method to adjust p-values for multiple comparisons: 
+#' "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr"
+#' (see details) [default "bonferroni"]]
 #' @param alpha_val Level of significance for testing [default 0.05].
-#' @sample_size = 5
+#' @param sample_size = 5
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
 #' [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details 
+#' Factors that can cause deviations from Hardy-Weinberg proportions include: 
+#' mutation, finite population size, selection, population structure, age 
+#' structure, assortative mating, sex linkage, nonrandom sampling and genotyping
+#'  errors. Testing for Hardy-Weinberg proportions should be a process that involves
+#'  a careful evaluation of the results.  
+#'  
 #' This function applies HWE tests to each locus in three ways:
 #' \itemize{
 #' \item across all populations together using: subset="all"
 #' \item within each population separately using: subset="each"
 #' \item within selected populations using for example: subset=c("pop1","pop2")
 #' }
+#' 
+#' This function tests for deviations from Hardy Weinberg proportions using two 
+#' different methods:
+#' \itemize{
+#' \item "ChiSquare"   \code{\link[HardyWeinberg]{HWChisqStats}}
+#' \item "Exact"  Uses the exact calculations contained in the function 
+#' \code{\link[HardyWeinberg]{HWExactStats}} as developed by Wigginton 
+#' et al. (2005). The C++ code was generously shared by Christopher Chang, and the same code is 
+#' used in the program PLINK (2.0).
+#' }
+#' 
+#' This function uses correction for multiple tests using the following methods
+#' \code{\link[stats]{p.adjust}}:
+#' \itemize{
+#' \item "holm", 
+#' \item "hochberg", 
+#' \item "hommel", 
+#' \item "bonferroni", 
+#' \item "BH", 
+#' \item "BY", 
+#' \item "fdr"
+#' }
+#'  
 #' Tests for HWE are only valid if there is no population substructure (assuming
 #' random mating), and the tests have sufficient power only when there is 
 #' sufficient sample size (say, n individuals > 20). Note also that correction 
 #' for multiple comparisons is probably required if you wish to place particular
 #' importance on one or a few significant departures.
 #' 
-#' A Ternary Plot is optionally produced -- see Graffelman et al.(2008) for 
+#' A Ternary Plot is optionally produced (plot.out = TRUE) -- see Graffelman et al.(2008) for 
 #' further details. Implementation of the Ternary Plot is via package {HardyWeinberg} 
 #' (Graffelman (2015). The plot labels loci that depart significantly from HWE 
 #' as red, and those not showing significant departure as green. 
-#' Two methods are used to determine significance. ChiSquare (with correction) 
-#' is traditional but involves approximations; Fisher is computationally 
-#' more expensive, but applies a Fisher Exact Test of departure from HWE
+#       
 #' HWTernaryPlot is a routine that draws a ternary plot for three-way genotypic compositions (AA,AB,BB), and represents the acceptance region for different tests for Hardy-Weinberg equilibrium (HWE) in the plot.
 #' 
 #' say the monomorphic loci are filtered
@@ -52,7 +77,10 @@
 #' p.adjust.methods
 # c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY",
 #   "fdr", "none")
-#' colour the marker points automatically according to the result of a significance test (green markers non-significant, red markers significant).
+#' colour the marker points automatically according to the result of a 
+#' significance test (green markers non-significant, red markers significant).
+#' #' Uses the exact calculations contained in function \code{\link{utils.prob.hwe}}
+#' as developed by Wigginton et al. (2005).
 #' @return returns a dataframe containing loci, counts of reference SNP homozygotes,
 #' heterozygotes and alternate SNP homozygotes; probability of departure from 
 #' H-W equilibrium, and per locus significance with and without Bonferroni correction.
@@ -67,6 +95,8 @@
 #' Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
 #' \item Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The Hardy 
 #' Weinberg Package. Journal of Statistical Software 64:1-23.
+#' \item Waples, R. S. (2015). Testing for Hardy–Weinberg proportions: have we 
+#' lost the plot?. Journal of heredity, 106(1), 1-19.
 #' }
 #'
 #' @seealso \code{\link{gl.filter.hwe}}
@@ -82,7 +112,7 @@ gl.report.hwe <- function(x,
                           plot.out = FALSE,
                           multi_comp = TRUE, 
                           multi_comp_method = "bonferroni",
-                          method_sig = "ChiSquare", 
+                          method_sig = "Exact", 
                           alpha_val = 0.05,
                           sample_size = 5,
                           verbose = NULL) {
@@ -107,6 +137,11 @@ gl.report.hwe <- function(x,
   if (datatype == "SilicoDArT"){
     cat(error("  Detected Presence/Absence (SilicoDArT) data\n"))
     stop(error("Cannot calculate HWE from fragment presence/absence data. Please provide a SNP dataset.\n"))
+  }
+  
+  if (alpha_val < 0 | alpha_val > 1){
+    cat(warn("    Warning: level of significance per locus alpha must be an integer between 0 and 1, set to 0.05\n"))
+    alpha_val <- 0.05
   }
   
   # DO THE JOB
@@ -208,37 +243,27 @@ gl.report.hwe <- function(x,
       }
       
       total <- rowSums(mat_HWE,na.rm = T)
-      p.values <- signif(p.values,5)
-      sig2 <- p.values
       
-      sig2[sig2 < 0] <- NA
-      sig2[sig2 > alpha_val] <- "no_sig"
-      sig2[sig2 <= alpha_val] <- "sig"
-      
-      p.values_adj <- NA
-      bonsig2 <- NA
+      sig2 <- rep(NA,length(p.values))
+      p.values_adj <- rep(NA,length(p.values))
+      bonsig2 <- rep(NA,length(p.values))
       
       if(multi_comp == TRUE){
         p.values_adj <- stats::p.adjust(p.values, method = multi_comp_method)
-        bonsig2 <- p.values_adj
-        bonsig2[bonsig2 < 0] <- NA
-        bonsig2[bonsig2 > alpha_val] <- "no_sig"
-        bonsig2[bonsig2 <= alpha_val] <- "sig"
       }
       
       # Assemble results into a dataframe
-      result_temp <- data.frame(cbind(popNames(i),locNames(i),mat_HWE, total, p.values, sig2, p.values_adj , bonsig2))
+      result_temp <- cbind.data.frame(popNames(i),locNames(i),mat_HWE, total, p.values, sig2, p.values_adj , bonsig2, stringsAsFactors = FALSE)
       names(result_temp) <- c("Population","Locus", "Hom_1", "Het", "Hom_2", "N", "Prob", "Sig", "Prob.adj", "Sig.adj")
-      result_temp$Hom_1 <- as.numeric(result_temp$Hom_1)
-      result_temp$Het <- as.numeric(result_temp$Het)
-      result_temp$Hom_2 <- as.numeric(result_temp$Hom_2)
-      result_temp$N <- as.numeric(result_temp$N)
-      result_temp$Prob <- signif(as.numeric(result_temp$Prob),5)
-      result_temp$Prob.adj <- signif(as.numeric(result_temp$Prob.adj),5)
 
-      result <- rbind(result,result_temp)
+      result <- rbind.data.frame(result,result_temp, stringsAsFactors = FALSE)
     }
     result <- result[-1,]
+    
+    result[which(result$Prob < alpha_val),"Sig"] <- "sig" 
+    result[which(result$Prob > alpha_val),"Sig"] <- "no_sig" 
+    result[which(result$Prob.adj < alpha_val),"Sig.adj"] <- "sig" 
+    result[which(result$Prob.adj > alpha_val),"Sig.adj"] <- "no_sig" 
     
     if(plot.out){
       # Determine the page layout for plots based on the number of populations to plot
@@ -253,14 +278,14 @@ gl.report.hwe <- function(x,
       if (npops2plot > 2) {
         graphics::layout(matrix(c(1,2,3,4), 2, 2, byrow = TRUE))
         if(verbose >= 2){
-          cat(report("  Plotting up to four plots on one page\n\n"))
+          cat(report("  Plotting up to four ternary plots on one page\n\n"))
         }
       } 
       
       # Plot the tertiary plots
       for (z in poplist) {
         pop_name <- popNames(z)
-        xlabel <- paste0("\n\n\nPopulation: ",pop_name,"\n",method_sig,"\n(alpha = ",alpha_val,")")
+        xlabel <- paste0("\n\n\nPopulation: ",pop_name,"\n",method_sig," method\nalpha = ",alpha_val,"")
         result_pop <- result[which(result$Population==pop_name),]
         mat_genotypes <- as.matrix(result_pop[,c("Hom_1" ,"Het", "Hom_2" )])
         colnames(mat_genotypes) <- c("AA","AB","BB")
@@ -277,10 +302,10 @@ gl.report.hwe <- function(x,
   
   #### Report the results
   if(multi_comp==F){
-    result <- result[which(result$Prob<=alpha_val),]
+    result <- result[which(result$Prob <= alpha_val),]
   }
   if(multi_comp==T){
-    result <- result[which(result$Prob.adj<=alpha_val),]
+    result <- result[which(result$Prob.adj <= alpha_val),]
   }
   result <- result[order(result$Locus),]
   cat("    Reporting significant departures from Hardy-Weinberg Equilibrium\n")
@@ -288,7 +313,7 @@ gl.report.hwe <- function(x,
     cat("    No significant departures\n")
   } else {
     cat("    NB: Departures significant at the alpha level of",alpha_val,"are listed\n")
-      cat(important("    Adjustment of p-values for multiple comparisons vary with sample size\n\n"))
+      cat(important("    Adjustment of p-values for multiple comparisons vary with sample size\n"))
       print(result, row.names=FALSE)
   }
   

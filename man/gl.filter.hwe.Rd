@@ -4,40 +4,96 @@
 \alias{gl.filter.hwe}
 \title{Filters loci that show significant departure from Hardy-Weinberg Equilibrium}
 \usage{
-gl.filter.hwe(x, alpha = 0.05, basis = "any", bon = TRUE, verbose = NULL)
+gl.filter.hwe(
+  x,
+  subset = "each",
+  multi_comp = TRUE,
+  multi_comp_method = "bonferroni",
+  method_sig = "Exact",
+  alpha_val = 0.05,
+  sample_size = 5,
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{-- a genlight object containing the SNP genotypes [Required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{alpha}{-- level of significance (per locus) [Default 0.05]}
+\item{subset}{Either a vector with population names, "each", "all" (see details)
+[default "each"].}
 
-\item{basis}{-- basis for filtering out loci (any, HWE departure in any one population) [default basis="any"]}
+\item{multi_comp}{Whether to adjust p-values for multiple comparisons [default TRUE].}
 
-\item{bon}{-- apply bonferroni correction to significance levels for filtering [default TRUE]}
+\item{multi_comp_method}{Method to adjust p-values for multiple comparisons: 
+"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr"
+(see details) [default "bonferroni"]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{method_sig}{Method for determining statistical significance: "ChiSquare" 
+or "Exact" [default "Exact"].}
+
+\item{alpha_val}{Level of significance for testing [default 0.05].}
+
+\item{sample_size}{Minimum sample size per population required to test for 
+Hardy-Weinberg proportions [default 5]}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report 
+[default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-a genlight object with the loci departing significantly from HWE removed
+A genlight object with the loci departing significantly from HWE removed
 }
 \description{
 Calculates the probabilities of agreement with H-W equilibrium based on observed
 frequencies of reference homozygotes, heterozygotes and alternate homozygotes.
- 
-Uses the exact calculations contained in function prob.hwe() as developed by
-Wigginton, JE, Cutler, DJ, and Abecasis, GR.
 }
 \details{
-Input is a genlight {adegenet} object containing SNP genotypes (0 homozygous for reference SNP, 
-1 heterozygous, 2 homozygous for alternate SNP).
+This function filters out loci departing from Hardy-Weinberg proportions in three ways:
+\itemize{
+\item across all populations together using: subset="all"
+\item within each population separately using: subset="each"
+\item within selected populations using for example: subset=c("pop1","pop2")
+}
 
-Loci are filtered if they show HWE departure in any one population.
-Note that power to detect departures from HWE is affected by sample size and that
-effective filtering may require substantial sample sizes (n > 20).
+Loci are filtered out if they show HWE departure in any one population.
+
+Tests for HWE are only valid if there is no population substructure (assuming
+random mating), and the tests have sufficient power only when there is 
+sufficient sample size (say, n individuals > 20). Note also that correction 
+for multiple comparisons is probably required if you wish to place particular
+importance on one or a few significant departures.
+
+
+\code{\link[stats]{p.adjust}}
+
+p.adjust.methods
+ \code{\link[HardyWeinberg]{HWChisqStats}}
+Uses the exact calculations contained in the function 
+\code{\link[HardyWeinberg]{HWExactStats}} as developed by Wigginton 
+et al. (2005).
+
+The C++ code was generously shared by Christopher Chang, and the same code is 
+used in the program PLINK (2.0).
 }
 \examples{
-result <- gl.filter.hwe(testset.gl, 0.05, bon=TRUE, verbose=3)
+result <- gl.filter.hwe(x = bandicoot.gl)
+}
+\references{
+\itemize{
+\item Wigginton, J.E., Cutler, D.J., & Abecasis, G.R. (2005). A Note on Exact 
+Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics 76:887-893.
+\item Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for 
+Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
+\item Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The Hardy 
+Weinberg Package. Journal of Statistical Software 64:1-23.
+}
+}
+\seealso{
+\code{\link{gl.filter.hwe}}
+
+Other filters/filter reports: 
+\code{\link{gl.report.hwe}()}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{filters/filter reports}

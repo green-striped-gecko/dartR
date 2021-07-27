@@ -430,7 +430,7 @@ The last line of code stores the loci metadata in the right location and we can 
 
 ```{r}
 gl.report.callrate(testset.gl)
-gl2 <- gl.filter.reproducibility(platy.gl, threshold=0.5)
+gl2 <- gl.filter.reproducibility(platy.gl, t=0.5)
 ```
 
 Some of the functions require additional meta data, e.g. the gl2fasta need sequence data (TrimmedSequnce), the position of the SNP in the sequence for each loci ```@position``` and the type of allelels for each loci ```@loc.all```. If such data is available the information needs to be stored in the correct slots to work with the function. The code below exports our genlight object to a fasta format (again we create random meta data via the code below).
