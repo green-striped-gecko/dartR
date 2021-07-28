@@ -24,8 +24,7 @@ A genlight object with the reduced data
 The script, having deleted individuals, optionally identifies resultant monomorphic loci or loci
 with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
 recalculates statistics made redundant by the deletion of individuals from the dataset.
-}
-\details{
+
 The script returns a genlight object with the individuals deleted and, optionally, the recalculated locus metadata.
 }
 \examples{

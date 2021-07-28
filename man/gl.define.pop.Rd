@@ -20,12 +20,12 @@ A genlight object with the redefined population structure
 }
 \description{
 The script reassigns existing individuals to a new population and removes their existing population assignment
-}
-\details{
+
 The script returns a genlight object with the new population assignment.
 }
 \examples{
    gl <- gl.define.pop(testset.gl, ind.list=c("AA019073","AA004859"), new="newguys")
+   
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

@@ -29,6 +29,11 @@ The script returns a genlight object with the all but the specified loci deleted
 # Tag P/A data
   gs2 <- gl.keep.loc(testset.gs, loc.list=c("20134188","19249144"))
 }
+\seealso{
+\code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
+
+\code{\link{gl.drop.loc}} to drop rather than keep specified loci
+}
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

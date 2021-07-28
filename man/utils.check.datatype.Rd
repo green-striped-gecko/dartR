@@ -2,27 +2,39 @@
 % Please edit documentation in R/utils.check.datatype.R
 \name{utils.check.datatype}
 \alias{utils.check.datatype}
-\title{Utility function to check that the object passed to the function is a genlight object.}
+\title{Utility function to check the class of an object passed to afunction.}
 \usage{
-utils.check.datatype(x, strict = TRUE, verbose = NULL)
+utils.check.datatype(
+  x,
+  accept = c("genlight", "SNP", "SilicoDArT"),
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data or tag presence/absence data (SilicoDArT) [required]}
+\item{x}{Name of the genlight object, dist matrix, data matrix or fixed difference list (fd) [required]}
 
-\item{strict}{If TRUE, a fatal error occurs if the passed object is not a genlight object [default TRUE]}
+\item{accept}{Vector containing the classes of objects that are to be accepted [default c("genlight","SNP","SilicoDArT"]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-datatype, "SNP" for SNP data or  "SilicoDArT" for P/A data, or class(x)[1]
+datatype, "SNP" for SNP data, "SilicoDArT" for P/A data, "dist" for a distance matrix, 
+"mat" for a data matrix or class(x)[1]
 }
 \description{
-Most functions require access to a genlight object, and this function checks that a genlight object has been passed,
-whether it is a SNP dataset or a SilicoDArT object, and reports back if verbosity is >=2
+Most functions require access to a genlight object, dist matrix, data matrix or fixed difference list (fd), 
+and this function checks that a genlight object has been passed, whether it is a SNP dataset or a SilicoDArT object, 
+and reports back if verbosity is >=2
 }
 \details{
-This function checks whether the input object is a genlight object and sets the datatype to "SNP" or "SilicoDArT" as appropriate.
+This function checks the class of passed object and sets the datatype to "SNP", "SilicoDArT", "dist", "mat",
+or class[1](x) as appropriate.
+
+Note: One and only one of gl.check, fd.check, dist.check or mat.check can be TRUE.
 }
 \examples{
 datatype <- utils.check.datatype(testset.gl)
+datatype <- utils.check.datatype(as.matrix(testset.gl),accept="matrix")
+fd <- gl.fixed.diff(testset.gl)
+datatype <- utils.check.datatype(fd,accept="fd")
 }

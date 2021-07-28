@@ -1,5 +1,6 @@
-#' Remove all but the specified loci from a genelight \{adegenet\} object
-#'
+#' @name gl.keep.loc
+#' @title Remove all but the specified loci from a genelight \{adegenet\} object
+#' @description 
 #' The script returns a genlight object with the all but the specified loci deleted.
 #'
 #' @param x -- name of the genlight object containing SNP genotypes or presence/absence data [required]
@@ -8,86 +9,58 @@
 #' @param last -- last of a range of loci to be kept [if not specified, last locus in the dataset]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
-#' @export
+
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # SNP data
 #'   gl2 <- gl.keep.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
 #' # Tag P/A data
 #'   gs2 <- gl.keep.loc(testset.gs, loc.list=c("20134188","19249144"))
+#' @seealso \code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
+#' @seealso \code{\link{gl.drop.loc}} to drop rather than keep specified loci
+#' @export
 
-gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
+gl.keep.loc <- function(x, 
+                        loc.list=NULL, 
+                        first=NULL, 
+                        last=NULL, 
+                        verbose=NULL){
 
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-  hold <- x
-  
 # SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  verbose <- gl.check.verbosity(verbose)
   
 # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-
-# STANDARD ERROR CHECKING
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
-  if(class(x)!="genlight") {
-    stop("  Fatal Error: genlight object required!\n")
-  }
-  
-    if (all(x@ploidy == 1)){
-      cat("  Processing Presence/Absence (SilicoDArT) data\n")
-    } else if (all(x@ploidy == 2)){
-      cat("  Processing a SNP dataset\n")
-    } else {
-      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-    }
-
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if (!is.null(loc.list) && !is.null(first)){
     flag <- 'both'
     if (verbose >= 2){
-      cat("  Both a range of loci and a list of loci to keep has been specified\n")
+      cat(report("  Both a range of loci and a list of loci to keep has been specified\n"))
     } 
   } else if (!is.null(loc.list)){
     flag <- 'list'
     if (verbose >= 2){
-      cat("  List of loci to keep has been specified\n")
+      cat(report("  List of loci to keep has been specified\n"))
     } 
   } else if (!is.null(first)){
     flag <- 'range'
     if (verbose >= 2){
-      cat("  Range of loci to keep has been specified\n")
+      cat(report("  Range of loci to keep has been specified\n"))
     } 
   } else {
-      cat("  Warning: Need to specify either a range of loci to keep, or specific loci to keep\n")
+      cat(warn("  Warning: Need to specify either a range of loci to keep, or specific loci to keep\n"))
   }
   
   if (flag=='both' || flag=='list'){
     for (case in loc.list){
       if (!(case%in%locNames(x))){
-        cat("  Warning: Listed loci",case,"not present in the dataset -- ignored\n")
+        cat(warn("  Warning: Listed loci",case,"not present in the dataset -- ignored\n"))
         loc.list <- loc.list[!(loc.list==case)]
       }
     }
@@ -95,15 +68,15 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 
   if (flag=='range'){
     if (first <=0){
-      cat("  Warning: Lower limit to range of loci cannot be less than 1, set to 1\n)")
+      cat(warn("  Warning: Lower limit to range of loci cannot be less than 1, set to 1\n)"))
       first <- 1
     }
     if (first > nLoc(x)){
-      cat("  Warning: Upper limit to range of loci cannot be greater than the number of loci, set to",nLoc(x),"\n)")
+      cat(warn("  Warning: Upper limit to range of loci cannot be greater than the number of loci, set to",nLoc(x),"\n)"))
       last <- nLoc(x)
     }
     if (first > last){
-      cat("  Warning: Upper limit is smaller than lower limit, reversed\n")
+      cat(warn("  Warning: Upper limit is smaller than lower limit, reversed\n"))
       tmp <- first
       first <- last
       last <- tmp
@@ -113,7 +86,7 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 # DO THE JOB
 
   if (verbose >= 2) {
-    cat("    Deleting all but the specified loci\n")
+    cat(report("  Deleting all but the specified loci\n"))
   }
 
   # Remove duplicated loci if specified
@@ -125,7 +98,7 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
       loc.list <- locNames(x)[first:last]
   }
   if (length(loc.list) == 0) {
-    cat("  Warning: no loci listed to keep! Genlight object returned unchanged\n")
+    cat(warn("  Warning: no loci listed to keep! Genlight object returned unchanged\n"))
     x2 <- x
   } else {
     # Remove loci flagged for deletion
@@ -151,7 +124,7 @@ gl.keep.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 # FLAG SCRIPT END
     
   if (verbose >= 1) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
     
     return(x2)

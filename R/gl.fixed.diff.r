@@ -84,26 +84,26 @@ gl.fixed.diff <- function(x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
 # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x,verbose=0)
+  datatype <- utils.check.datatype(x,accept=c("genlight","SNP","SilicoDArT","fd"),verbose=verbose)
   if (datatype=="fd"){
     x <- x$gl
-    datatype <- utils.check.datatype(x,verbose=0)
-    if (verbose >=2){cat("  fd object detected\n")}
+    #datatype <- utils.check.datatype(x,verbose=0)
+    #if (verbose >=2){cat("  fd object detected\n")}
   }
   
 # STANDARD ERROR CHECKING
  
-  if(datatype!="SNP" & datatype!="SilicoDArT" & datatype!="fd") {
-    stop(error("Fatal Error: genlight or fd object required!\n"))
-  }
-  
-  if (datatype== "SilicoDArT"){
-    if (verbose >= 2){cat(report("  Processing  Presence/Absence (SilicoDArT) data\n"))}
-  } else if (datatype=="SNP"){
-    if (verbose >= 2){cat(report("  Processing a SNP dataset\n"))}
-  } else {
-    stop(error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
-  }
+  # if(datatype!="SNP" & datatype!="SilicoDArT" & datatype!="fd") {
+  #   stop(error("Fatal Error: genlight or fd object required!\n"))
+  # }
+  # 
+  # if (datatype== "SilicoDArT"){
+  #   if (verbose >= 2){cat(report("  Processing  Presence/Absence (SilicoDArT) data\n"))}
+  # } else if (datatype=="SNP"){
+  #   if (verbose >= 2){cat(report("  Processing a SNP dataset\n"))}
+  # } else {
+  #   stop(error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
+  # }
   
 # FUNCTION SPECIFIC ERROR CHECKING
   
@@ -238,7 +238,7 @@ dist2list <- function (dist)
             p.false.pos.matrix[popi,popj] <- round(outlist$prob,4)
             exp.matrix[popi,popj] <- round(outlist$mnexpected,1)
             sd.matrix[popi,popj] <- round(outlist$sdexpected,4)
-            if (verbose >= 2) {
+            if (verbose >= 3) {
               if (p.false.pos.matrix[popi,popj] > alpha){
               cat("    ",popNames(x)[popi],"vs",
                   popNames(x)[popj],
@@ -266,7 +266,7 @@ dist2list <- function (dist)
     }
  
   # Return the extreme low distances -- candidates for lack of significance
-    if (verbose >= 3) {
+    if (verbose >= 5) {
       cat(report("\nDisplaying a list of 5% of pairs with smallest non-zero differences\n"))
       
       df <- dist2list(as.dist(fixed.matrix))

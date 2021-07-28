@@ -38,7 +38,6 @@ Apply the recoding using gl.recode.pop().
 }
 \examples{
 result <- gl.make.recode.pop(testset.gl,out.recode.file="test.csv",outpath=tempdir(),verbose=2)
-
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

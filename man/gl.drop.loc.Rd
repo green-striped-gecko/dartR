@@ -25,9 +25,9 @@ The script returns a genlight object with specified loci deleted.
 }
 \examples{
 # SNP data
-  gl2 <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
+  gl2 <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"),verbose=3)
 # Tag P/A data
-  gs2 <- gl.drop.loc(testset.gs, loc.list=c("20134188","19249144"))
+  gs2 <- gl.drop.loc(testset.gs, loc.list=c("20134188","19249144"),verbose=3)
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

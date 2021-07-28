@@ -9,7 +9,7 @@
 #'@param x Name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required].
 #'@param nfactors Number of axes to retain in the output of factor scores [default 5].
 #'@param correction Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL].
-#'@param rm.monomorphs If TRUE, remove monomorphic loci [default TRUE].
+#'@param mono.rm If TRUE, remove monomorphic loci [default TRUE].
 #'@param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE].
 #'@param n.cores Number of cores to use if parallel processing is requested [default 16].
 #'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
@@ -75,15 +75,16 @@
 #' best modern reference is Legendre & Legendre (1998).
 #' 
 #'@return An object of class pcoa containing the eigenvalues and factor scores
-#'
 #'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples
 #' fd <- gl.fixed.diff(testset.gl)
 #' fd <- gl.collapse(fd)
-#' names(fd)
-#' #pca <- gl.pcoa(fd)
-#' #gl.pcoa.plot(pca,fd)
+
+#' pca <- gl.pcoa(fd)
+#' gl.pcoa.plot(pca,fd)
+#'
+
 #'@references
 #'\itemize{ 
 #'\item Cailliez, F. (1983) The analytical solution of the additive constant problem. Psychometrika, 48, 305-308.
@@ -97,73 +98,37 @@
 #' }
 #' 
 #'@seealso \code{\link{gl.pcoa.plot}}
-#'
 #'@family data exploration functions
-#'
 #'@importFrom ape pcoa
-#'
 #'@export 
-#'
 
 gl.pcoa <- function(x, 
                     nfactors = 5, 
                     correction = NULL, 
-                    rm.monomorphs = TRUE, 
+                    mono.rm = TRUE, 
                     parallel = FALSE, 
                     n.cores = 16, 
                     plot_theme = theme_dartR(),
                     plot_colours = two_colors, 
                     verbose = 2) {
 
-    # TRAP COMMAND, SET VERSION
+# SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
+  
+# FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
+  if(datatype=="fd"){
+    datatype <- utils.check.datatype(x$gl,verbose=0)
+    x <- x$gl
+  }
 
-    funname <- match.call()[[1]]
+# SCRIPT SPECIFIC ERROR CHECKING
 
-    # FLAG SCRIPT START
-
-    if (verbose >= 1) {
-        if (verbose == 5) {
-            cat(report("Starting", funname, "[ Build =", build, "]\n\n"))
-        } else {
-            cat(report("Starting", funname, "\n\n"))
-        }
-    }
-
-    # STANDARD ERROR CHECKING
-
-    if (class(x) == "genlight") {
-
-        if (all(x@ploidy == 1)) {
-            if (verbose >= 2) {
-                cat(report("  Processing Presence/Absence (SilicoDArT) data\n\n"))
-            }
-            data.type <- "SilicoDArT"
-        } else if (all(x@ploidy == 2)) {
-            if (verbose >= 2) {
-                cat(report("  Processing a SNP dataset\n\n"))
-            }
-            data.type <- "SNP"
-        } else {
-            stop(error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
-        }
-    } else if (class(x) == "dist") {
-        if (verbose >= 2) {
-            cat(report("  Processing a Distance Matrix, D \n\n"))
-        }
-        data.type <- "dist"
-    } else if (class(x) == "fd") {
-        if (verbose >= 2) {
-            cat(report("  Processing a genlight object after a fixed difference analysis, x$fd \n\n"))
-          x <- x$gl
-        }
-        data.type <- "SNP"
-    } else {
-        stop(error("Fatal Error: Expecting either a genlight object (SNP or SilicoDArT) or a distance matrix"))
-    }
-
-    # SCRIPT SPECIFIC ERROR CHECKING
-
-    if (rm.monomorphs == TRUE & (data.type=="SNP" | data.type=="SilicoDArT")) {
+    if (mono.rm == TRUE & (datatype=="SNP" | datatype=="SilicoDArT")) {
         x <- gl.filter.monomorphs(x,verbose=0)
     }
 
@@ -183,11 +148,10 @@ gl.pcoa <- function(x,
 
     ######## DISTANCE ANALYSIS
 
-    if (data.type == "dist") 
+    if (datatype == "dist") 
         {
-
             D <- x
-
+            
             # Calculate the pcoa
             if (verbose >= 2) {
                 if (correction == "none") {
@@ -253,14 +217,14 @@ gl.pcoa <- function(x,
 
     ######## SNP or P/A DATA, PCA
 
-    if (data.type == "SNP" || data.type == "SilicoDArT"){
+    if (datatype == "SNP" || datatype == "SilicoDArT"){
 
             if (verbose >= 2) {
-                if (data.type == "SNP") {
+                if (datatype == "SNP") {
                   cat(report("  Performing a PCA, individuals as entities, loci as attributes, SNP genotype as state\n\n"))
                   title <- "PCA on SNP Genotypes\nScree Plot (informative axes only)"
                 }
-                if (data.type == "SilicoDArT") {
+                if (datatype == "SilicoDArT") {
                   cat(report("  Performing a PCA, individuals as entities, loci as attributes, Tag P/A as state\n\n"))
                   title <- "PCA on Tag P/A Data\nScree Plot (informative axes only)"
                 }
@@ -314,7 +278,7 @@ gl.pcoa <- function(x,
     eigenvalue <- percent <-NULL
     
     df <- data.frame(eigenvalue=seq(1:length(eig.top.pc)), percent=eig.top.pc)
-    if (data.type == "SNP") {
+    if (datatype == "SNP") {
         xlab <- paste("PCA Axis")
     } else {
         xlab <- paste("PCoA Axis")

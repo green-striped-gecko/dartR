@@ -30,9 +30,8 @@ gl.keep.pop(
 A genlight object with the reduced data
 }
 \description{
-Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart().
-}
-\details{
+Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart(). 
+
 The script, having deleted the specified populations, optionally identifies resultant monomorphic loci or loci
 with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
 recalculates statistics made redundant by the deletion of individuals from the dataset.
@@ -42,8 +41,7 @@ The script returns a genlight object with the new population assignments and the
 \examples{
  # SNP data
    gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-   gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),
-   mono.rm=TRUE,recalc=TRUE)
+   gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
    gl2 <- gl.keep.pop(testset.gl, pop.list=c("Female"),as.pop="sex")
  # Tag P/A data  
    gs2 <- gl.keep.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
