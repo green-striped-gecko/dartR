@@ -2,6 +2,7 @@
 #' 
 #'@return Prints a table with all reports saved in tempdir. Currently the style cannot be changed.
 #'@export
+#'@importFrom knitr kable
 
 #'@author Bernd Gruber & Luis Mijangos (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #'@examples 
