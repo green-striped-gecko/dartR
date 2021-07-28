@@ -6,7 +6,7 @@
 \usage{
 gl.hwe.pop(
   x,
-  pvalue = 0.05,
+  alpha_val = 0.05,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = c("gray90", "deeppink"),
@@ -15,9 +15,9 @@ gl.hwe.pop(
 )
 }
 \arguments{
-\item{x}{a genlight object with a population defined [pop(x) does not return NULL]}
+\item{x}{a genlight object with a population defined [pop(x) does not return NULL].}
 
-\item{pvalue}{the p-value for the HWE test.}
+\item{alpha_val}{Level of significance for testing [default 0.05].}
 
 \item{plot.out}{If TRUE, returns a plot object compatible with ggplot, 
 otherwise returns a dataframe [default TRUE].}
@@ -27,7 +27,8 @@ otherwise returns a dataframe [default TRUE].}
 \item{plot_colours}{Vector with two colour names for the borders and fill [default two_colors].
 [default discrete_palette].}
 
-\item{HWformat}{switch if data should be returned in HWformat (counts of Genotypes to be used in package \code{HardyWeinberg})}
+\item{HWformat}{switch if data should be returned in HWformat (counts of 
+Genotypes to be used in package \code{HardyWeinberg})}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 progress log ; 3, progress and results summary; 5, full report 
@@ -37,7 +38,7 @@ progress log ; 3, progress and results summary; 5, full report
 The function returns a list with up to three components:
 \itemize{
  \item 'HWE' is the matrix over loci and populations
- \item 'plot' is a matrixplot (ggplot) which shows the significant results 
+ \item 'plot' is a plot (ggplot) which shows the significant results 
  for population and loci (can be amended further using ggplot syntax)
  \item 'HWEformat=TRUE' the 'HWformat' entails SNP data for each population 
  in 'HardyWeinberg'-format to be used with other functions of the package 
@@ -58,7 +59,7 @@ functions of the package.
 This functions performs a HWE test for every population (rows) and loci 
 (columns) and returns a true false matrix. True is reported if the p-value of 
 an HWE-test for a particular loci and population was below the specified 
-threshold (pvalue, default=0.05). The thinking behind this approach is that 
+threshold (alpha_val, default=0.05). The thinking behind this approach is that 
 loci that are not in HWE in several populations have most likely to be treated 
 (e.g. filtered if loci under selection are of interest). If plot=TRUE a barplot
 on the loci and the sum of deviation over all population is returned. 
@@ -73,7 +74,7 @@ Plot themes can be obtained from \itemize{
 Resultant ggplots and the tabulation are saved to the session's temporary directory.
 }
 \examples{
-out <- gl.hwe.pop(bandicoot.gl[,1:33], pvalue=0.05, plot.out=TRUE, HWformat=FALSE)
+out <- gl.hwe.pop(bandicoot.gl[,1:33], alpha_val=0.05, plot.out=TRUE, HWformat=FALSE)
 
 }
 \author{

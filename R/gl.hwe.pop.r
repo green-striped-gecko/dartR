@@ -4,9 +4,10 @@
 #' Hardy-Weinberg tests are performed for each loci in each of the populations 
 #' as defined by the pop slot in a genlight object.
 #'
-#' @param x a genlight object with a population defined [pop(x) does not return NULL]
-#' @param pvalue the p-value for the HWE test.
-#' @param HWformat switch if data should be returned in HWformat (counts of Genotypes to be used in package \code{HardyWeinberg})
+#' @param x a genlight object with a population defined [pop(x) does not return NULL].
+#' @param alpha_val Level of significance for testing [default 0.05].
+#' @param HWformat switch if data should be returned in HWformat (counts of 
+#' Genotypes to be used in package \code{HardyWeinberg})
 #' @param plot.out If TRUE, returns a plot object compatible with ggplot, 
 #' otherwise returns a dataframe [default TRUE].
 #' @param plot_theme User specified theme [default theme_dartR()].
@@ -26,7 +27,7 @@
 #' This functions performs a HWE test for every population (rows) and loci 
 #' (columns) and returns a true false matrix. True is reported if the p-value of 
 #' an HWE-test for a particular loci and population was below the specified 
-#' threshold (pvalue, default=0.05). The thinking behind this approach is that 
+#' threshold (alpha_val, default=0.05). The thinking behind this approach is that 
 #' loci that are not in HWE in several populations have most likely to be treated 
 #' (e.g. filtered if loci under selection are of interest). If plot=TRUE a barplot
 #' on the loci and the sum of deviation over all population is returned. 
@@ -43,7 +44,7 @@
 #' @return The function returns a list with up to three components:
 #' \itemize{
 #'  \item 'HWE' is the matrix over loci and populations
-#'  \item 'plot' is a matrixplot (ggplot) which shows the significant results 
+#'  \item 'plot' is a plot (ggplot) which shows the significant results 
 #'  for population and loci (can be amended further using ggplot syntax)
 #'  \item 'HWEformat=TRUE' the 'HWformat' entails SNP data for each population 
 #'  in 'HardyWeinberg'-format to be used with other functions of the package 
@@ -51,13 +52,13 @@
 #'  }
 #' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' out <- gl.hwe.pop(bandicoot.gl[,1:33], pvalue=0.05, plot.out=TRUE, HWformat=FALSE)
+#' out <- gl.hwe.pop(bandicoot.gl[,1:33], alpha_val=0.05, plot.out=TRUE, HWformat=FALSE)
 #'
 #' @export
 #'  
 
 gl.hwe.pop <- function(x, 
-                       pvalue = 0.05, 
+                       alpha_val = 0.05, 
                        plot.out = TRUE, 
                        plot_theme = theme_dartR(),
                        plot_colours = c("gray90","deeppink"),
@@ -97,7 +98,7 @@ gl.hwe.pop <- function(x,
   out <- lapply(pops, function(x) {
     pp <- as.matrix(x)
     xx <- data.frame(AA=colSums(pp==0, na.rm=T), AB=colSums(pp==1, na.rm=T), BB=colSums(pp==2, na.rm=T))
-    HardyWeinberg::HWExactStats(xx)<pvalue
+    HardyWeinberg::HWExactStats(xx)<alpha_val
     } 
   )
   

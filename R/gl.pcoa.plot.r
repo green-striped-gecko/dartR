@@ -40,6 +40,10 @@
 #' @param plot.out If TRUE, returns a plot object compatable with ggplot, otherwise returns a dataframe [default TRUE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A plot of the ordination [plot.out=TRUE] or a dataframe [plot.out=FALSE]
+#' @seealso \code{\link{gl.pcoa}}
+#' @family Exploration and visualisation functions
+#' @import ggplot2
+
 #' @export
 #' @import tidyr 
 #' @importFrom methods show
@@ -129,10 +133,12 @@ gl.pcoa.plot <- function(glPca,
     cat(warn("  Warning: X-axis must be specified to lie between 1 and the number of retained dimensions of the ordination",ncol(glPca$scores),"; set to 1\n"))
     xaxis <- 1
   }
+
   if (xaxis < 1 | xaxis > ncol(glPca$scores)){
     cat(warn("  Warning: Y-axis must be specified to lie between 1 and the number of retained dimensions of the ordination",ncol(glPca$scores),"; set to 2\n"))
     yaxis <- 2
   }
+
   if (class(glPca) == "dist" && !is.null(as.pop)){
     cat(warn("  Warning: Temporary reassignment of population assignment not available for distance matricies\n"))
     as.pop <- NULL
@@ -151,35 +157,6 @@ gl.pcoa.plot <- function(glPca,
     }
   }
   
-# Define themes for plotting
-  
-  theme_list <- list(
-    theme_minimal(),
-    theme_classic(),
-    theme_bw(),
-    theme_gray(),
-    theme_linedraw(),
-    theme_light(),
-    theme_dark(),
-    ggthemes::theme_economist(),
-    ggthemes::theme_economist_white(),
-    ggthemes::theme_calc(),
-    ggthemes::theme_clean(),
-    ggthemes::theme_excel(),
-    ggthemes::theme_excel_new(),
-    ggthemes::theme_few(),
-    ggthemes::theme_fivethirtyeight(),
-    ggthemes::theme_foundation(),
-    ggthemes::theme_gdocs(),
-    ggthemes::theme_hc(),
-    ggthemes::theme_igray(),
-    ggthemes::theme_solarized(),
-    ggthemes::theme_solarized_2(),
-    ggthemes::theme_solid(),
-    ggthemes::theme_stata(),
-    ggthemes::theme_tufte(),
-    ggthemes::theme_wsj()
-    )
   
 # DO THE JOB
   
@@ -281,9 +258,11 @@ gl.pcoa.plot <- function(glPca,
       if(ellipse==TRUE) {p <- p + stat_ellipse(aes(colour="black"), type="norm", level=0.95)}
     }
     
+
   # If interactive labels
 
     if (labels=="interactive" | labels=="ggplotly") {
+
       if (verbose>=2){
         if (class(x)=="genlight"){
           cat(report("  Plotting individuals in a PCA with loci as attributes\n"))
@@ -293,6 +272,7 @@ gl.pcoa.plot <- function(glPca,
         cat(report("  Displaying an interactive plot, mouseover for details for each point\n"))
         cat(report("    NOTE: Returning the ordination scores, not a ggplot2 compatable object\n"))
       }
+
       plot.out <- FALSE
 
       # Plot
@@ -315,6 +295,7 @@ gl.pcoa.plot <- function(glPca,
       if(ellipse==TRUE) {p <- p + stat_ellipse(aes(colour=pop), type="norm", level=0.95)}
        cat(report("  Ignore any warning on the number of shape categories\n"))
     }  
+
     
   # If labels = legend
 

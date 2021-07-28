@@ -22,6 +22,8 @@ as described in Wigginton, JE, Cutler, DJ, and Abecasis, GR (2005) A Note on Exa
 Hardy-Weinberg Equilibrium. American Journal of Human Genetics. 76:887-893.
 }
 \details{
+Source code available from http://csg.sph.umich.edu/abecasis/Exact/r_instruct.html
+
 Note: return code of -1.0 signals an error condition; return code of NA signals that 
 all alleles are NA for a locus
 }
