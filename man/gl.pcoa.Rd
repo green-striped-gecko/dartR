@@ -8,7 +8,7 @@ gl.pcoa(
   x,
   nfactors = 5,
   correction = NULL,
-  rm.monomorphs = TRUE,
+  mono.rm = TRUE,
   parallel = FALSE,
   n.cores = 16,
   plot_theme = theme_dartR(),
@@ -23,7 +23,7 @@ gl.pcoa(
 
 \item{correction}{Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL].}
 
-\item{rm.monomorphs}{If TRUE, remove monomorphic loci [default TRUE].}
+\item{mono.rm}{If TRUE, remove monomorphic loci [default TRUE].}
 
 \item{parallel}{TRUE if parallel processing is required (does fail under Windows) [default FALSE].}
 
@@ -105,9 +105,9 @@ best modern reference is Legendre & Legendre (1998).
 \examples{
 fd <- gl.fixed.diff(testset.gl)
 fd <- gl.collapse(fd)
-names(fd)
-#pca <- gl.pcoa(fd)
-#gl.pcoa.plot(pca,fd)
+pca <- gl.pcoa(fd)
+gl.pcoa.plot(pca,fd$gl)
+
 }
 \references{
 \itemize{ 

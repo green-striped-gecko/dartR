@@ -1,5 +1,6 @@
-#' Remove specified loci from a genelight \{adegenet\} object
-#'
+#' @name gl.drop.loc
+#' @title Remove specified loci from a genelight \{adegenet\} object
+#' @description
 #' The script returns a genlight object with specified loci deleted.
 #'
 #' @param x -- name of the genlight object containing SNP genotypes or presence/absence data [required]
@@ -12,84 +13,51 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # SNP data
-#'   gl2 <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
+#'   gl2 <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"),verbose=3)
 #' # Tag P/A data
-#'   gs2 <- gl.drop.loc(testset.gs, loc.list=c("20134188","19249144"))
+#'   gs2 <- gl.drop.loc(testset.gs, loc.list=c("20134188","19249144"),verbose=3)
 
-gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
+gl.drop.loc <- function(x, 
+                        loc.list=NULL, 
+                        first=NULL, 
+                        last=NULL, 
+                        verbose=NULL){
 
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-  hold <- x
-  
 # SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  verbose <- gl.check.verbosity(verbose)
   
 # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
 
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("  Fatal Error: genlight object required!\n")
-  }
-  
-  if (verbose >= 1){
-    if (all(x@ploidy == 1)){
-      cat("  Processing Presence/Absence (SilicoDArT) data\n")
-    } else if (all(x@ploidy == 2)){
-      cat("  Processing a SNP dataset\n")
-    } else {
-      stop ("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-    }
-  }
-  
 # FUNCTION SPECIFIC ERROR CHECKING
 
   if (!is.null(loc.list) && !is.null(first)){
     flag <- 'both'
     if (verbose >= 2){
-      cat("  Both a range of loci and a list of loci to keep has been specified\n")
+      cat(report("  Both a range of loci and a list of loci to keep has been specified\n"))
     } 
   } else if (!is.null(loc.list)){
     flag <- 'list'
     if (verbose >= 2){
-      cat("  List of loci to keep has been specified\n")
+      cat(report("  List of loci to keep has been specified\n"))
     } 
   } else if (!is.null(first)){
     flag <- 'range'
     if (verbose >= 2){
-      cat("  Range of loci to keep has been specified\n")
+      cat(report("  Range of loci to keep has been specified\n"))
     } 
   } else {
-      stop("  Fatal Error: Need to specify either a range of loci to keep, or specific loci to keep\n")
+      stop(error("Fatal Error: Need to specify either a range of loci to keep, or specific loci to keep\n"))
   }
   
   if (flag=='both' || flag=='list'){
     for (case in loc.list){
       if (!(case%in%locNames(x))){
-        cat("  Warning: Listed loci",case,"not present in the dataset -- ignored\n")
+        cat(warn("  Warning: Listed loci",case,"not present in the dataset -- ignored\n"))
         loc.list <- loc.list[!(loc.list==case)]
       }
     }
@@ -97,15 +65,15 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 
   if (flag=='range'){
     if (first <=0){
-      cat("  Warning: Lower limit to range of loci cannot be less than 1, set to 1\n)")
+      cat(warn("  Warning: Lower limit to range of loci cannot be less than 1, set to 1\n)"))
       first <- 1
     }
     if (first > nLoc(x)){
-      cat("  Warning: Upper limit to range of loci cannot be greater than the number of loci, set to",nLoc(x),"\n)")
+      cat(warn("  Warning: Upper limit to range of loci cannot be greater than the number of loci, set to",nLoc(x),"\n)"))
       last <- nLoc(x)
     }
     if (first > last){
-      cat("  Warning: Upper limit is smaller than lower limit, reversed\n")
+      cat(warn("  Warning: Upper limit is smaller than lower limit, reversed\n"))
       tmp <- first
       first <- last
       last <- tmp
@@ -113,9 +81,11 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
   }
 
 # DO THE JOB
+  
+  hold <- x
 
   if (verbose >= 2) {
-    cat("    Deleteing the specified loci\n")
+    cat(report("  Deleting the specified loci\n"))
   }
 
   # Remove duplicated loci if specified
@@ -127,7 +97,7 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
     loc.list <- locNames(x)[first:last]
   }
   if (length(loc.list) == 0) {
-    cat("  Warning: no loci listed to delete! Genlight object returned unchanged\n")
+    cat(warn("  Warning: no loci listed to delete! Genlight object returned unchanged\n"))
     x2 <- x
   } else {
     # Remove loci flagged for deletion
@@ -138,12 +108,12 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 # REPORT A SUMMARY
     
   if (verbose >= 3) {
-    cat("\n  Summary of recoded dataset\n")
+    cat("  Summary of recoded dataset\n")
     cat(paste("    Original No. of loci:",nLoc(hold),"\n"))
     cat(paste("    No. of loci deleted:",nLoc(hold)-nLoc(x2),"\n"))
     cat(paste("    No. of loci retained:",nLoc(x2),"\n"))
     cat(paste("    No. of individuals:", nInd(x2),"\n"))
-    cat(paste("    No. of populations: ", nPop(x2),"\n\n"))
+    cat(paste("    No. of populations: ", nPop(x2),"\n"))
   }
 
 # ADD TO HISTORY    
@@ -153,10 +123,9 @@ gl.drop.loc <- function(x, loc.list=NULL, first=NULL, last=NULL, verbose=NULL){
 # FLAG SCRIPT END
 
   if (verbose >= 1){  
-     cat("Completed:",funname,"\n")
+     cat(report("Completed:",funname,"\n"))
   }
     
   return(x2)
-    
 }
 

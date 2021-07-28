@@ -452,7 +452,9 @@
 
   # Recalculate Call Rate to be safe
       x <- utils.recalc.callrate(x,verbose=0)
-      # SAVE INTERMEDIATES TO TEMPDIR             
+      
+  # SAVE INTERMEDIATES TO TEMPDIR  
+      if(save2tmp){
       # creating temp file names
       temp_plot <- tempfile(pattern = "dartR_plot_")
       match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
@@ -461,9 +463,6 @@
       if(verbose>=2){
         cat(report("  Saving the ggplot to session tempfile\n"))
       }
-      
-      if(verbose>=2){
-        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
       } 
 
 # ADD TO HISTORY

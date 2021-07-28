@@ -1,5 +1,6 @@
-#' Assign a individual metric as pop in a genlight \{adegenet\} object 
-#'
+#' @name gl.reassign.pop
+#' @title Assign a individual metric as pop in a genlight \{adegenet\} object 
+#' @description
 #' Individuals are assigned to populations based on the individual/sample/specimen metrics file (csv)
 #'  used with gl.read.dart(). 
 #'
@@ -26,63 +27,25 @@
 #'    gs <- gl.reassign.pop(testset.gs, as.pop='sex',verbose=3)
 #'    popNames(gs)
 
-gl.reassign.pop <- function (x, as.pop, verbose = NULL) {
-  
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
+gl.reassign.pop <- function (x, 
+                             as.pop, 
+                             verbose = NULL) {
   
 # SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  verbose <- gl.check.verbosity(verbose)
   
 # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-  }  
-  
-# SCRIPT SPECIFIC ERROR CHECKING
-  
-  if (!(as.pop %in% names(x@other$ind.metrics))) {
-    stop("  Fatal Error: Specified individual metric", as.pop, "not present in the dataset\n")
-  }
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
 # DO THE JOB
   
   pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
   if (verbose >= 2) {
-    cat("  Setting population assignments to individual metric", as.pop,"\n")
+    cat(report("  Setting population assignments to individual metric", as.pop,"\n"))
   }
   
   if (verbose >= 3) {
@@ -99,7 +62,7 @@ gl.reassign.pop <- function (x, as.pop, verbose = NULL) {
 # FLAG SCRIPT END
   
   if (verbose >= 1) {
-    cat("Completed:", funname, "\n")
+    cat(report("Completed:", funname, "\n"))
   }
   
   return(x)

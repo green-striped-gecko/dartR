@@ -30,7 +30,8 @@
 #' @references 
 #' Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
 #' @examples 
-#' ibd <- gl.ibd(bandicoot.gl)
+#' #only first 100 loci
+#' ibd <- gl.ibd(bandicoot.gl[,1:100])
 #' #because of speed only the first 100 loci
 #' ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans="log(Dgeo)" ,Dgen_trans='Dgen/(1-Dgen)')
 #' #because of speed only the first 10 individuals)
@@ -253,24 +254,24 @@ if (verbose>0) {
   print(manteltest)
 }
 
-
+# SAVE INTERMEDIATES TO TEMPDIR             
 # creating temp file names
+temp_plot <- tempfile(pattern = "dartR_plot_")
+temp_table <- tempfile(pattern = "dartR_table_")
 
-#check for "/" in match.call
-mc <- gsub("/", "_over_",as.character(funname))
-mc <- gsub("\\*", "x",mc)
-nmc <- gsub("/", "_over_",names(funname))
-nmc <- gsub("\\*", "x",nmc)
-
-temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(nmc,"_",mc,collapse = "_")))
-temp_table <- tempfile(pattern = paste0("dartR_table",paste0(nmc,"_",mc,collapse = "_"),"_"))
-
+match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
 # saving to tempdir
-saveRDS(p1, file = temp_plot)
-if(verbose>=2){cat(report("  Saving the plot in ggplot format to the tempfile as",temp_plot,"using saveRDS\n"))}
-saveRDS(manteltest, file = temp_table)
-if(verbose>=2){cat(report("  Saving the result of the manteltest to the tempfile as",temp_table,"using saveRDS\n"))}
-if(verbose>=2){cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))}
+saveRDS(list(match_call,p1), file = temp_plot)
+if(verbose>=2){
+  cat(report("  Saving the ggplot to session tempfile\n"))
+}
+
+saveRDS(list(match_call, manteltest), file = temp_table)
+ if(verbose>=2){
+   cat(report("  Saving the report to the session tempfile\n"))
+ }
+
+
 
 # FLAG SCRIPT END
 

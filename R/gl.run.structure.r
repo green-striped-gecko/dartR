@@ -1,4 +1,4 @@
-#' @name gl.structure
+#' @name gl.run.structure
 #'
 #' @title Run a STRUCTURE analysis using a genlight object
 #'
@@ -9,9 +9,8 @@
 #' @param ... Parameters to specify the STRUCTURE run (check \code{structureRun} for more details). Parameters are passed to the \code{structureRun} function. For example you need to set the k.range and the type of model you would like to run (noadmix, locprior) etc. If those parameter names do not tell you anything, please make sure you familiarize with the STRUCTURE program (Pritchard 2000).
 #' @param exec Full path and name+extension where the structure executable is located. E.g. \code{"c:/structure/structure.exe"} under Windows. For Mac and Linux it might be something like \code{"./structure/structure"} if a the executable is in a subfolder 'structure' in your home directory.
 #' @param plot create an Evanno plot once finished. Be aware k.range needs to be at least three different k steps.
-#' @param plot_theme Theme for the plot. See details for options [default theme_dartR()].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
-#'
+#' @param plot_theme Theme for the plot. See details for options [default theme_dartR()]
+#' @param verbose set verbosity for this function (though structure output cannot be switched off currently).
 #' @details The function is basically a convenient wrapper around the beautiful
 #' strataG function \code{structureRun} (Archer et al. 2016). For a detailed
 #' description please refer to this package (see references below).
@@ -24,16 +23,20 @@
 #' summary output of the first run can be accessed via \code{sr[[1]]$summary} 
 #' or the q-matrix of the third run via \code{sr[[3]]$q.mat}. To conveniently
 #' summarise the outputs across runs (clumpp) you need to run
-#' gl.plotstructure on the returned sr object. For evanno plots run gl.evanno on your sr object.
+#' gl.plot.structure on the returned sr object. For evanno plots run gl.evanno on your sr object.
 #'
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
 #' \dontrun{
-#' #STRUCTURE needs to be installed to be able to run the example
-#' #only the first 100 loci
+#' #CLUMPP needs to be installed to be able to run the example
 #' #bc <- bandicoot.gl[,1:100]
-#' #sr <- gl.runstructure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#' #ev <- gl.evanno(sr)
+#' #ev
+#' #qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#' #head(qmat)
+#' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }
 #' @import patchwork
 ###@importFrom strataG genind2gtypes structureRun
@@ -47,7 +50,7 @@
 
 
 
-gl.runstructure    <- function(x, 
+gl.run.structure    <- function(x, 
                                ...,
                                exec=".",
                                plot=TRUE,
@@ -61,8 +64,13 @@ gl.runstructure    <- function(x,
   
   oncran <- match("strataG", ap)
   if (is.na(oncran)) {
-    warning("package strataG needs to be installed. It is currently not on CRAN, hence I try to install it manually via Github using devtools:\n  devtools::install_github('EricArcher/strataG'")
+    warning("package strataG needs to be installed. It is currently not on CRAN, hence you need to install it manually via Github using devtools:\n  devtools::install_github('EricArcher/strataG')\n. Do you want to install strataG from github now? (Y/N)+Enter\n" )
+    line <- readline()
+    if (substr(line,1,1)=="Y") {
+    cat(report("\nInstalling strataG from Github...\n"))
+      flush.console()
     devtools::install_github('EricArcher/strataG')
+    } else stop("Package strataG is necessary to run structure. Check the help page for references ?gl.run.structure. Aborting now.")
   
   }
   } else {
@@ -70,7 +78,7 @@ gl.runstructure    <- function(x,
   #check that structure is installed 
     structure <-  file.exists(exec) 
     
-    if (!structure) stop(paste("Cannot find structure executable in the exex path provided:\n",exec,"\nCheck the help page of ?gl.runstructure on how to download and the exec parameter to locate it."))
+    if (!structure) stop(paste("Cannot find structure executable in the exex path provided:\n",exec,"\nCheck the help page of ?gl.run.structure on how to download and the exec parameter to locate it."))
   
   # TRAP COMMAND
   funname <- match.call()[[1]]

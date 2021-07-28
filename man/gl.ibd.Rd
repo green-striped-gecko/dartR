@@ -52,7 +52,8 @@ This functions performs an isolation by distance analysis based on a mantel test
 You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), using the functions  \link[vegan]{mantel} (package vegan), \link[StAMPP]{stamppFst}, \link[StAMPP]{stamppNeisD} (package StAMPP) and gl.propShared or gl.dist.ind. For transformation you need to have the dismo package installed. As a new feature you can plot pairwise relationship using double coloured points (paircols=TRUE). Pairwise relationship can be visualised via populations or individuals, depending which distance is calculated.
 }
 \examples{
-ibd <- gl.ibd(bandicoot.gl)
+#only first 100 loci
+ibd <- gl.ibd(bandicoot.gl[,1:100])
 #because of speed only the first 100 loci
 ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans="log(Dgeo)" ,Dgen_trans='Dgen/(1-Dgen)')
 #because of speed only the first 10 individuals)

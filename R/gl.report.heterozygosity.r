@@ -1,7 +1,5 @@
 #' @name gl.report.heterozygosity
-#'
 #' @title Reports observed and expected heterozygosity by population or by individual from SNP data
-#'
 #' @description Calculates the observed and expected heterozygosities for each population
 #' or the observed heterozygosity for each individual in a genlight object.
 #'
@@ -12,6 +10,7 @@
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours_pop A color palette for population plots [default discrete_palette].
 #' @param plot_colours_ind List of two color names for the borders and fill of the plot by individual [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details Observed heterozygosity for a population takes the proportion of heterozygous
@@ -40,8 +39,8 @@
 #'\strong{ Function's output }
 #' Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
 #' 
-#'  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
-#' 
+#'  Plots and table are saved to the session temporary directory (tempdir) 
+#'  
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
@@ -54,18 +53,14 @@
 #' @examples
 #'df <- gl.report.heterozygosity(testset.gl)
 #'df <- gl.report.heterozygosity(testset.gl,method='ind')
+#'df <- gl.report.heterozygosity(testset.gl,plot=FALSE)
 #'
-#' @seealso \code{\link{gl.filter.heterozygosity}},\code{\link{gl.list.reports}},
-#'  \code{\link{gl.print.reports}}
+#' @seealso \code{\link{gl.filter.heterozygosity}}
 #'  
 #' @family reporting functions
-#'  
-#' @references Nei, M. and R. K. Chesser (1983). 'Estimation of fixation indices and gene diversities.' Annals of human genetics 47(3): 253-259.
-#'
+#' @references Nei, M. and R. K. Chesser (1983). Estimation of fixation indices and gene diversities. Annals of Human Genetics 47:253-259.
 #' @importFrom plyr join
-#'
 #' @export 
-#'  
 
 gl.report.heterozygosity <- function(x, 
                                      method = "pop", 
@@ -74,21 +69,20 @@ gl.report.heterozygosity <- function(x,
                                      plot_theme = theme_dartR(), 
                                      plot_colours_pop = discrete_palette,
                                      plot_colours_ind = two_colors,
+                                     save2tmp=FALSE,
                                      verbose = NULL) {
 
-    # TRAP COMMAND
-    
-    funname <- match.call()[[1]]
-    
-    # SET VERBOSITY
-    
+# SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
-    # CHECKS DATATYPE 
+# FLAG SCRIPT START
+    funname <- match.call()[[1]]
+    utils.flag.start(func=funname,build="Jackson",v=verbose)
     
-    datatype <- utils.check.datatype(x)
+# CHECK DATATYPE 
+    datatype <- utils.check.datatype(x,accept="SNP")
 
-    # FUNCTION SPECIFIC ERROR CHECKING
+# FUNCTION SPECIFIC ERROR CHECKING
 
     if (!(method == "pop" | method == "ind")) {
         cat(warn("Warning: Method must either be by population or by individual, set to method='pop'\n"))
@@ -101,17 +95,7 @@ gl.report.heterozygosity <- function(x,
         if(verbose==5){cat(report("  No. of invariant loci can be esimated using gl.report.secondaries\n"))}
     }
 
-    # FLAG SCRIPT START
-
-    if (verbose >= 1) {
-        if (verbose == 5) {
-            cat(report("Starting", funname, "[ Build =", build, "]\n\n"))
-        } else {
-            cat(report("Starting", funname, "\n\n"))
-        }
-    }
-
-    # DO THE JOB
+# DO THE JOB
 
     ########### FOR METHOD BASED ON POPULATIONS
 
@@ -185,10 +169,11 @@ gl.report.heterozygosity <- function(x,
         names(df) <- c("pop", "nInd", "nLoc", "nLoc.inv", "Ho", "Ho.adj", "He", "He.adj")
 
         # printing plots and reports
+
         if (is.null(n.invariant)) {
             df.ordered <- df[order(df$Ho), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
-            
+            if(plot){
             p1 <- ggplot(df.ordered, aes(x = pop, y = Ho, fill = pop)) + geom_bar(position = "dodge", stat = "identity", color = "black") + 
                 scale_fill_manual(values = plot_colours_pop(nPop(x))) + scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd, 
                 sep = " | ")) + plot_theme + theme(axis.ticks.x = element_blank(), axis.text.x = element_text(angle = 90, hjust = 1, 
@@ -200,10 +185,11 @@ gl.report.heterozygosity <- function(x,
                 sep = " | ")) + plot_theme + theme(axis.ticks.x = element_blank(), axis.text.x = element_text(angle = 90, hjust = 1, 
                 face = "bold", size = 12), axis.title.x = element_blank(), axis.ticks.y = element_blank(), axis.title.y = element_blank(), 
                 legend.position = "none") + labs(fill = "Population") + ggtitle("Expected Heterozygosity by Population")
+            }
         } else {
             df.ordered <- df[order(df$Ho.adj), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
-
+            if(plot){
             p1 <- ggplot(df.ordered, aes(x = pop, y = Ho.adj, fill = pop)) + geom_bar(position = "dodge", stat = "identity", 
                 color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + scale_x_discrete(labels = paste(df.ordered$pop, 
                 df.ordered$nInd, sep = " | ")) + plot_theme + theme(axis.ticks.x = element_blank(), axis.text.x = element_text(angle = 90, 
@@ -215,7 +201,7 @@ gl.report.heterozygosity <- function(x,
                 df.ordered$nInd, sep = " | ")) + plot_theme + theme(axis.ticks.x = element_blank(), axis.text.x = element_text(angle = 90, 
                 hjust = 1, face = "bold", size = 12), axis.title.x = element_blank(), axis.ticks.y = element_blank(), axis.title.y = element_blank(), 
                 legend.position = "none") + labs(fill = "Population") + ggtitle("Expected Heterozygosity by Population")
-
+            }
         }
 
         # OUTPUT REPORT
@@ -224,7 +210,6 @@ gl.report.heterozygosity <- function(x,
             cat("\n  No. of loci =", nLoc(x), "\n")
             cat("  No. of individuals =", nInd(x), "\n")
             cat("  No. of populations =", nPop(x), "\n")
-
             cat("    Minimum Observed Heterozygosity: ", round(min(df$Ho, na.rm = TRUE), 6))
             if (n.invariant > 0) {
                 cat("   [Corrected:", round(min(df$Ho.adj, na.rm = TRUE), 6), "]\n")
@@ -243,7 +228,6 @@ gl.report.heterozygosity <- function(x,
             } else {
                 cat("\n\n")
             }
-
             cat("    Miniumum Expected Heterozygosity: ", round(min(df$He, na.rm = TRUE), 6))
             if (n.invariant > 0) {
                 cat("   [Corrected:", round(min(df$He.adj, na.rm = TRUE), 6), "]\n")
@@ -279,9 +263,11 @@ gl.report.heterozygosity <- function(x,
 
         }
         
-        # PRINTING OUTPUTS
-        p3 <- (p1/p2)
-        print(p3)
+# PRINTING OUTPUTS
+        if(plot){
+            p3 <- (p1/p2)
+            print(p3)
+        }
         print(df.ordered)
 
     }
@@ -313,6 +299,7 @@ gl.report.heterozygosity <- function(x,
         names(df) <- c("ind.name", "Ho", "f.hom.ref", "f.hom.alt")
         
         # Boxplot
+        #if(plot){
         upper <- ceiling(max(df$Ho)*10)/10
         p1 <- ggplot(df, aes(y = Ho)) + 
           geom_boxplot(color = plot_colours_ind[1], 
@@ -335,7 +322,7 @@ gl.report.heterozygosity <- function(x,
         
         outliers_temp <- ggplot_build(p1)$data[[1]]$outliers[[1]]
         outliers <- data.frame(ID=as.character(df$ind.name[df$Ho %in% outliers_temp]), Ho=outliers_temp)
-        
+        #}
         
          # OUTPUT REPORT
         if (verbose >= 3) {
@@ -356,42 +343,42 @@ gl.report.heterozygosity <- function(x,
         }
         
         # PRINTING OUTPUTS
-        p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
-        print(p3)
+        if(plot){
+            p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
+            print(p3)
+        }
         print(df)
     }
     
-    # SAVE INTERMEDIATES TO TEMPDIR             
+    # SAVE INTERMEDIATES TO TEMPDIR  
+    if(save2tmp){
     # creating temp file names
-    temp_plot <- tempfile(pattern = "dartR_plot_")
+    if(plot){temp_plot <- tempfile(pattern = "dartR_plot_")}
     temp_table <- tempfile(pattern = "dartR_table_")
     match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
     # saving to tempdir
-    saveRDS(list(match_call,p3), file = temp_plot)
-    if(verbose>=2){
-        cat(report("  Saving the ggplot to session tempfile\n"))
+    if(plot){
+        saveRDS(list(match_call,p3), file = temp_plot)
+        if(verbose>=2){
+          cat(report("  Saving the ggplot to session tempfile\n"))
+        }
     }
-    
     saveRDS(list(match_call,df), file = temp_table)
     if(verbose>=2){
         cat(report("  Saving tabulation to session tempfile\n"))
     }
-    
-    if(verbose>=2){
-        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-    } 
-
-    # FLAG SCRIPT END
-
-    if (verbose >= 1) {
-        cat(report("\n\nCompleted:", funname, "\n\n"))
     }
-    
-    # RETURN
     
     if(verbose>=3){
         cat(report("  Returning a dataframe with heterozygosity values\n"))
     }
+    
+# FLAG SCRIPT END
+    if (verbose >= 1) {
+        cat(report("Completed:", funname, "\n"))
+    }
+    
+# RETURN
     
     invisible(df)
 }

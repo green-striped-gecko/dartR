@@ -119,10 +119,10 @@ gl.report.callrate <- function(x,
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
     cat("    Minimum      : ", stats[1], "\n")
-    cat("    1st quantile : ", stats[2], "\n")
+    cat("    1st quartile : ", stats[2], "\n")
     cat("    Median       : ", stats[3], "\n")
     cat("    Mean         : ", stats[4], "\n")
-    cat("    3r quantile  : ", stats[5], "\n")
+    cat("    3r quartile  : ", stats[5], "\n")
     cat("    Maximum      : ", stats[6], "\n")
     cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                         nInd(x)), 2), "\n\n")
@@ -188,10 +188,10 @@ gl.report.callrate <- function(x,
     cat("  No. of loci =", nLoc(x), "\n")
     cat("  No. of individuals =", nInd(x), "\n")
     cat("    Minimum      : ", stats[1], "\n")
-    cat("    1st quantile : ", stats[2], "\n")
+    cat("    1st quartile : ", stats[2], "\n")
     cat("    Median       : ", stats[3], "\n")
     cat("    Mean         : ", stats[4], "\n")
-    cat("    3r quantile  : ", stats[5], "\n")
+    cat("    3r quartile  : ", stats[5], "\n")
     cat("    Maximum      : ", stats[6], "\n")
     cat("    Missing Rate Overall: ", round(sum(is.na(as.matrix(x)))/(nLoc(x) * 
                                                                         nInd(x)), 2), "\n\n")
@@ -228,6 +228,7 @@ gl.report.callrate <- function(x,
 # SAVE INTERMEDIATES TO TEMPDIR             
 
   # creating temp file names
+  if(save2tmp){
   temp_plot <- tempfile(pattern = "dartR_plot_")
   temp_table <- tempfile(pattern = "dartR_table_")
   match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
@@ -241,15 +242,11 @@ gl.report.callrate <- function(x,
   if(verbose>=2){
     cat(report("  Saving tabulation to session tempfile\n"))
   }
-  
-  if(verbose>=2){
-    cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-  } 
-
+  }
 # FLAG SCRIPT END
   
   if (verbose >= 1) {
-    cat(report("Completed:", funname, "\n\n"))
+    cat(report("Completed:", funname, "\n"))
   }
 
 # RETURN

@@ -45,6 +45,8 @@ recalculates the locus metadata as appropriate.
 }
 \seealso{
 \code{\link{gl.filter.monomorphs}}
+
+\code{\link{gl.recode.pop}}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
