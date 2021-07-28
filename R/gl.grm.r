@@ -49,6 +49,8 @@
 #' @family inbreeding functions
 #' @export
 
+##@importFrom rrBLUP A.mat
+##@importFrom gplots heatmap.2
 gl.grm <- function(x,
                    plotheatmap = TRUE, 
                    palette_discrete = discrete_palette,

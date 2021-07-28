@@ -99,10 +99,14 @@ Molecular Ecology, 27(20), 4121-4135.
 \seealso{
 \code{\link{gl.grm}}
 
+
 Other inbreeding functions: 
+
 \code{\link{gl.grm}()}
 }
 \author{
 Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
+
 \concept{inbreeding functions}
+
