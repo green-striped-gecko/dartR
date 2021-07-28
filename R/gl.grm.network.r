@@ -66,9 +66,7 @@
 #'Molecular Ecology, 27(20), 4121-4135. 
 #'  }
 #' @seealso \code{\link{gl.grm}}
-#' @family inbreeding, relatedness
-#' 
-
+#' @family inbreeding functions
 #' @export
 
 ##@import igraph

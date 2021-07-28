@@ -1,5 +1,6 @@
-#' Remove specified individuals from a genelight \{adegenet\} object
-#'
+#' @name gl.drop.ind
+#' @title Remove specified individuals from a genelight \{adegenet\} object
+#' @description
 #' The script, having deleted individuals, optionally identifies resultant monomorphic loci or loci
 #' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
 #' recalculates statistics made redundant by the deletion of individuals from the dataset.
@@ -17,70 +18,40 @@
 #' @examples
 #'  # SNP data
 #'     gl2 <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"))
+#'     gl2 <- gl.drop.ind(as.matrix(testset.gl), ind.list=c("AA019073","AA004859"))
 #'  # Tag P/A data
 #'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"))
-#'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"),
-#'    mono.rm=TRUE, recalc=TRUE)
+#'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"),mono.rm=TRUE, recalc=TRUE)
 #'    
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}
 
-gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
+gl.drop.ind <- function(x,
+                        ind.list,
+                        recalc=FALSE,
+                        mono.rm=FALSE,
+                        verbose=NULL){
 
-# TRAP COMMAND, SET VERSION
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
-
-# SET VERBOSITY
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-  }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
 # FUNCTION SPECIFIC ERROR CHECKING
 
   for (case in ind.list){
     if (!(case%in%indNames(x))){
-      cat("Warning: Listed individual",case,"not present in the dataset -- ignored\n")
+      cat(warn("  Warning: Listed individual",case,"not present in the dataset -- ignored\n"))
       ind.list <- ind.list[!(ind.list==case)]
     }
   }
   if (length(ind.list) == 0) {
-    stop("Fatal Error: no individuals to drop!\n")
+    stop(error("Fatal Error: no individuals to drop!\n"))
   }
 
 # DO THE JOB
@@ -88,7 +59,7 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
 # Remobe individuals
   
   if (verbose >= 2) {
-    cat("  Deleting individuals", ind.list, "\n")
+    cat("  Deleting individuals", paste(ind.list,collapse=", "), "\n")
   }
 
 # Delete listed individuals, recalculate relevant locus metadata and remove monomorphic loci
@@ -101,23 +72,23 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
     
   # Remove monomorphic loci
     if(mono.rm){
-      if(verbose >= 2){cat("  Deleting monomorphic loc\n")}
+      if(verbose >= 2){cat(report("  Deleting monomorphic loc\n"))}
       x <- gl.filter.monomorphs(x,verbose=0)
     } 
   # Check monomorphs have been removed
     if (x@other$loc.metrics.flags$monomorphs == FALSE){
       if (verbose >= 2){
-        cat("  Warning: Resultant dataset may contain monomorphic loci\n")
+        cat(warn("  Warning: Resultant dataset may contain monomorphic loci\n"))
       }  
     }
     
   # Recalculate statistics
     if (recalc) {
       x <- gl.recalc.metrics(x,verbose=0)
-      if(verbose >= 2){cat("  Recalculating locus metrics\n")}
+      if(verbose >= 2){cat(report("  Recalculating locus metrics\n"))}
     } else {
       if(verbose >= 2){
-        cat("  Locus metrics not recalculated\n")
+        cat(warn("  Locus metrics not recalculated\n"))
         x <- utils.reset.flags(x,verbose=0)
       }
     }
@@ -138,9 +109,8 @@ gl.drop.ind <- function(x, ind.list, recalc=FALSE, mono.rm=FALSE, verbose=NULL){
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
     
   return(x)
-  
 }

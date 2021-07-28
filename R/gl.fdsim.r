@@ -96,7 +96,7 @@ gl.fdsim <- function(x, poppair, obs=NULL, sympatric=FALSE, reps=1000, delta=0.0
     fdmat <- gl.fixed.diff(pair,verbose=0)
     obs <- fdmat$fd[1]
   }
-  cat("    No. of observed fixed differences:",obs,"\n")
+  #cat("    No. of observed fixed differences:",obs,"\n")
 
   # Calculate the rate of false positives, given delta and actual sample sizes
   if (verbose > 1) {

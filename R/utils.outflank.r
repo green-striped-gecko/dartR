@@ -1,6 +1,6 @@
 #' OutFLANK:  An Fst outlier approach by Mike Whitlock and Katie Lotterhos, University of British Columbia.
 #' 
-#' This function is the original implementation of Outflank by Whitlock and Lotterhos. dartR simply provides a convinient wrapper around their functions and an easier install being an r package (for information please refer to their github repository)
+#' This function is the original implementation of Outflank by Whitlock and Lotterhos. dartR simply provides a convenient wrapper around their functions and an easier install being an r package (for information please refer to their github repository)
 
 #' This method looks for Fst outliers from a list of Fst's for different loci. It
 #'assumes that each locus has been genotyped in all populations with approximately equal coverage. 

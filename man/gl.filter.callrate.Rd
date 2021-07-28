@@ -80,14 +80,13 @@ Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary 
 }
 \examples{
 # SNP data
-  result <- gl.filter.callrate(testset.gl, method="loc", threshold=0.8, verbose=3)
-  result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8, verbose=3)
-  result <- gl.filter.callrate(testset.gl, method="pop", threshold=0.8, verbose=3)
-# Tag P/A data (please uncomment)
-  result <- gl.filter.callrate(testset.gs, method="loc", threshold=0.95, verbose=3)
-  #result <- gl.filter.callrate(testset.gs, method="ind", threshold=0.8, verbose=3)
-  #result <- gl.filter.callrate(testset.gs, method="pop", threshold=0.8, verbose=3)
-     
+  result <- gl.filter.callrate(testset.gl[1:10], method="loc", threshold=0.8, verbose=3)
+  result <- gl.filter.callrate(testset.gl[1:10], method="ind", threshold=0.8, verbose=3)
+  result <- gl.filter.callrate(testset.gl[1:10], method="pop", threshold=0.8, verbose=3)
+# Tag P/A data
+  result <- gl.filter.callrate(testset.gs[1:10], method="loc", threshold=0.95, verbose=3)
+  result <- gl.filter.callrate(testset.gs[1:10], method="ind", threshold=0.8, verbose=3)
+  result <- gl.filter.callrate(testset.gs[1:10], method="pop", threshold=0.8, verbose=3)
 }
 \seealso{
 \code{\link{gl.report.callrate}}
@@ -97,6 +96,7 @@ Other filters and filter reports:
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.filter.secondaries}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},

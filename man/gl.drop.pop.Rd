@@ -18,8 +18,7 @@ gl.drop.pop(
 
 \item{pop.list}{-- a list of populations to be removed [required]}
 
-\item{as.pop}{-- temporarily assign another metric to represent population for the purposes
-of deletions [default NULL]}
+\item{as.pop}{-- temporarily assign another metric to represent population for the purposes of deletions [default NULL]}
 
 \item{recalc}{-- Recalculate the locus metadata statistics [default FALSE]}
 
@@ -31,9 +30,8 @@ of deletions [default NULL]}
 A genlight object with the reduced data
 }
 \description{
-Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart() or gs.read.dart().
-}
-\details{
+Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart() or gs.read.dart(). 
+
 The script, having deleted populations, optionally identifies resultant monomorphic loci or loci
 with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
 recalculates statistics made redundant by the deletion of individuals from the dataset.
@@ -42,9 +40,8 @@ The script returns a genlight object with the new population assignments and the
 }
 \examples{
  # SNP data
-   gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
-   gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),
-   mono.rm=TRUE,recalc=TRUE)
+   gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),verbose=3)
+   gl2 <- gl.drop.pop(testset.gl, pop.list=c("EmsubRopeMata","EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
    gl2 <- gl.drop.pop(testset.gl, pop.list=c("Male","Unknown"),as.pop="sex")
  # Tag P/A data  
    gs2 <- gl.drop.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))

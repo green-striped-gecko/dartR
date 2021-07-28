@@ -10,8 +10,6 @@
 #' gl.report.callrate(testset.gl)
 #' gl.list.reports()
 #'}
-
-##@importFrom gridExtra grid.table ttheme_default
 gl.list.reports <- function(){
   
   files_tempdir <- list.files(tempdir())

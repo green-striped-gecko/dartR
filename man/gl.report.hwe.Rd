@@ -7,63 +7,95 @@
 gl.report.hwe(
   x,
   subset = "each",
-  plot = FALSE,
-  method = "ChiSquare",
-  alpha = 0.05,
-  bonf = TRUE,
+  plot.out = FALSE,
+  multi_comp = TRUE,
+  multi_comp_method = "bonferroni",
+  method_sig = "ChiSquare",
+  alpha_val = 0.05,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- a genlight object containing the SNP genotypes [Required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{subset}{-- either, list populations to combine in the analysis | each | all [Default "each"]}
+\item{subset}{Either a vector with population names, "each", "all" (see details)
+[default "each"].}
 
-\item{plot}{-- if TRUE,  will produce a Ternary Plot(s) [default FALSE]}
+\item{plot.out}{If TRUE, will produce a Ternary Plot(s) [default FALSE].}
 
-\item{method}{-- for determining the statistical signicance in the ternary plot: ChiSquare (with continuity correction) | Fisher [default "ChiSquare"]}
+\item{multi_comp}{Whether to adjust p-values for multiple comparisons [default TRUE].}
 
-\item{alpha}{-- level of significance for testing [default 0.05]}
+\item{multi_comp_method}{Method to adjust p-values for multiple comparisons. 
+One of "holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr", "none" 
+(see details) [default "bonferroni"]}
 
-\item{bonf}{-- if TRUE, Bonferroni correction will be applied to the level of significance [default TRUE]}
+\item{method_sig}{Method for determining the statistical significance in the 
+ternary plot: ChiSquare (with continuity correction) | Exact (description) [default "ChiSquare"].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{alpha_val}{Level of significance for testing [default 0.05].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report 
+[default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-returns a dataframe containing loci, counts of reference SNP homozygotes, heterozygotes
-and alternate SNP homozygotes; probability of departure from H-W equilibrium,
-and per locus significance with and without Bonferroni Correction.
+returns a dataframe containing loci, counts of reference SNP homozygotes,
+heterozygotes and alternate SNP homozygotes; probability of departure from 
+H-W equilibrium, and per locus significance with and without Bonferroni correction.
 }
 \description{
 Calculates the probabilities of agreement with H-W equilibrium based on observed
 frequencies of reference homozygotes, heterozygotes and alternate homozygotes. 
-Uses the exact calculations contained in function utils.prob.hwe() as developed by Wigginton et al. (2005).
+Uses the exact calculations contained in function \code{\link{utils.prob.hwe}}
+as developed by Wigginton et al. (2005).
 }
 \details{
-Tests are applied to each locus across all populations pooled (subset="all"), to each locus considered within each population treated separately
-(subset="each") or to each locus within selected populations pooled (subset=c("pop1","pop2")). Tests for HWE are
-only valid if there is no population substructure (assuming random mating), and the tests have sufficient power
-only when there is sufficient sample size (say, n individuals > 20). Note also that correction for multiple comparisons is probably required
-if you wish to place particular importance on one or a few significant departures.
+This function applies HWE tests to each locus in three ways:
+\itemize{
+\item across all populations together using: subset="all"
+\item within each population separately using: subset="each"
+\item within selected populations using for example: subset=c("pop1","pop2")
+}
+Tests for HWE are only valid if there is no population substructure (assuming
+random mating), and the tests have sufficient power only when there is 
+sufficient sample size (say, n individuals > 20). Note also that correction 
+for multiple comparisons is probably required if you wish to place particular
+importance on one or a few significant departures.
 
-A Ternary Plot is optionally produced -- see Graffelman et al.(2008) for further details. Implementation of the Ternary Plot is via package {HardyWeinberg} 
-(Graffelman (2015). The plot labels loci that depart significantly from HWE as red, and those not showing significant departure as green. 
-Two methods are used to determine significance. ChiSquare (with correction) is traditional but involves approximations; Fisher is computationally 
-more expensive, but applies a Fisher Exact Test of departure from HWE.
+A Ternary Plot is optionally produced -- see Graffelman et al.(2008) for 
+further details. Implementation of the Ternary Plot is via package {HardyWeinberg} 
+(Graffelman (2015). The plot labels loci that depart significantly from HWE 
+as red, and those not showing significant departure as green. 
+Two methods are used to determine significance. ChiSquare (with correction) 
+is traditional but involves approximations; Fisher is computationally 
+more expensive, but applies a Fisher Exact Test of departure from HWE
+HWTernaryPlot is a routine that draws a ternary plot for three-way genotypic compositions (AA,AB,BB), and represents the acceptance region for different tests for Hardy-Weinberg equilibrium (HWE) in the plot.
+
+say the monomorphic loci are filtered
+populations with less than 5 loci cannot be assesed tests for this in all cases
+
+p.adjust {stats}
+
+p.adjust.methods
+colour the marker points automatically according to the result of a significance test (green markers non-significant, red markers significant).
 }
 \examples{
-list <- gl.report.hwe(testset.gl,subset=c("EmmacMaclGeor", "EmmacCoopCully"),plot=TRUE,bonf=FALSE)
-gl.report.hwe(testset.gl,subset=c("EmmacCoopCully"), plot=TRUE, verbose=3)
-gl.report.hwe(testset.gl,subset="all", plot=TRUE, bonf=FALSE, verbose=3)
-gl.report.hwe(testset.gl, subset="each", plot=TRUE, bonf=FALSE)
+gl.report.hwe(x = bandicoot.gl,plot.out = FALSE)
 }
 \references{
-Wigginton, J.E., Cutler, D.J., & Abecasis, G.R. (2005). A Note on Exact Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics 76:887-893.
-
-Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
-
-Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The HardyWeinberg Package. Journal of Statistical Software 64:1-23.
+\itemize{
+\item Wigginton, J.E., Cutler, D.J., & Abecasis, G.R. (2005). A Note on Exact 
+Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics 76:887-893.
+\item Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for 
+Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
+\item Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The Hardy 
+Weinberg Package. Journal of Statistical Software 64:1-23.
+}
+}
+\seealso{
+\code{\link{gl.filter.hwe}}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{filters/filter reports}

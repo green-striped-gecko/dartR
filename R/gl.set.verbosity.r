@@ -13,33 +13,24 @@
 
 gl.set.verbosity <- function(value=2) {
 
-# TRAP COMMAND, SET VERSION
-  
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
-
+  utils.flag.start(func=funname,build="Jackson",v=value)
   
 # SET GLOBAL VERBOSITY
   if (!is.null(value) & is.numeric(value) & value>=0 & value<=5)  {
     options("dartR_verbose"=value)
-}
-  
-# FLAG SCRIPT START
-  verbose <- options()$dartR_verbose
-  if (verbose >= 1){
-    message(report(paste("Global verbosity set to:",verbose,"\n" )))
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
+  }
+  if(value>=2){
+    cat("  Global verbosity set to:",value,"\n")
   }
   
 # FLAG SCRIPT END
   
-  if (verbose >= 1) {
+  if (value >= 1) {
     cat("Completed:",funname,"\n")
   }
   
+  invisible(NULL)
 }
   

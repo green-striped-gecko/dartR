@@ -49,13 +49,13 @@
 #' 
 #' @examples
 #' # SNP data
-#'   result <- gl.filter.callrate(testset.gl, method="loc", threshold=0.8, verbose=3)
-#'   result <- gl.filter.callrate(testset.gl, method="ind", threshold=0.8, verbose=3)
-#'   result <- gl.filter.callrate(testset.gl, method="pop", threshold=0.8, verbose=3)
-#' # Tag P/A data (please uncomment)
-#'   result <- gl.filter.callrate(testset.gs, method="loc", threshold=0.95, verbose=3)
-#'   #result <- gl.filter.callrate(testset.gs, method="ind", threshold=0.8, verbose=3)
-#'   #result <- gl.filter.callrate(testset.gs, method="pop", threshold=0.8, verbose=3)
+#'   result <- gl.filter.callrate(testset.gl[1:10], method="loc", threshold=0.8, verbose=3)
+#'   result <- gl.filter.callrate(testset.gl[1:10], method="ind", threshold=0.8, verbose=3)
+#'   result <- gl.filter.callrate(testset.gl[1:10], method="pop", threshold=0.8, verbose=3)
+#' # Tag P/A data
+#'   result <- gl.filter.callrate(testset.gs[1:10], method="loc", threshold=0.95, verbose=3)
+#'   result <- gl.filter.callrate(testset.gs[1:10], method="ind", threshold=0.8, verbose=3)
+#'   result <- gl.filter.callrate(testset.gs[1:10], method="pop", threshold=0.8, verbose=3)
 #'      
 #' @seealso \code{\link{gl.report.callrate}}
 #' @family filters and filter reports
@@ -452,7 +452,9 @@
 
   # Recalculate Call Rate to be safe
       x <- utils.recalc.callrate(x,verbose=0)
-      # SAVE INTERMEDIATES TO TEMPDIR             
+      
+  # SAVE INTERMEDIATES TO TEMPDIR  
+      if(save2tmp){
       # creating temp file names
       temp_plot <- tempfile(pattern = "dartR_plot_")
       match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
@@ -461,9 +463,6 @@
       if(verbose>=2){
         cat(report("  Saving the ggplot to session tempfile\n"))
       }
-      
-      if(verbose>=2){
-        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
       } 
 
 # ADD TO HISTORY

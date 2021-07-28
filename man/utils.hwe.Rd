@@ -8,7 +8,7 @@ for end users.}
 utils.hwe(x, prob = 0.05, verbose = NULL)
 }
 \arguments{
-\item{x}{-- a genlight object containting the SNP profiles for a population [Required]}
+\item{x}{-- a genlight object containing the SNP profiles for a population [Required]}
 
 \item{prob}{-- level of significance [Default 0.05]}
 
