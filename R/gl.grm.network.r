@@ -69,6 +69,7 @@
 #' @family inbreeding functions
 #' @export
 
+##@import igraph
 gl.grm.network <- function(G, 
                            x,
                            method = "fr", 
