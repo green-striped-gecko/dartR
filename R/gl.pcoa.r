@@ -80,9 +80,8 @@
 #'@examples
 #' fd <- gl.fixed.diff(testset.gl)
 #' fd <- gl.collapse(fd)
-
 #' pca <- gl.pcoa(fd)
-#' gl.pcoa.plot(pca,fd)
+#' gl.pcoa.plot(pca,fd$gl)
 #'
 
 #'@references

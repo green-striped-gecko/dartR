@@ -991,19 +991,16 @@ Now moving the mouse over the point reveals its identity. The animal is AA19157,
 
 ## The Scree Plot
 
-The number of dimensions with substantive information content can be determined by examining a scree plot (Cattell, 1966).
+The number of dimensions with substantive information content can be determined by examining a scree plot (Cattell, 1966). A scree plot is no longer produced by the depracated function gl.pcoa.scree, but via the function gl.pcoa.plot (see below).
 
-```{r, fig.height=4}
-gl.pcoa.scree(pc)
-```
 
-This plot, by default, will show the percentage variation in the data explained by each axis successively where the amount of variation is substantive. By substantive, I mean explaining more than the original variables did on average. 
+A scree plot will show the percentage variation in the data explained by each axis successively where the amount of variation is substantive. By substantive, I mean explaining more than the original variables did on average. 
 As a rule of thumb, one should examine all dimensions that explain more than 10% of the variation in the data.
 
 ## 3D Plot
 
 Should you find that 2 dimensions are insufficient to capture all substantive variation, you can examine a plot of PCoA axis 2 against axis 1 and axis 3 against axis 1 and so on, taking care to note the proportion of variation explained by each axis. Alternatively, when the data cluster tightly, additional dimensions can be examined by removing all individuals from the analysis except those belonging to a single cluster and re-running the PCoA (Georges and Adams, 1992).
-If three dimensions are indicated by the scree plot, as in our current case, an interactive 3D plot can be produced
+If three dimensions are indicated by the scree plot, as in our current case, an interactive 3D plot can be produced.
 
 ```{r, eval=FALSE}
 gl.pcoa.plot.3d(pc, glnew)

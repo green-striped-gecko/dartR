@@ -210,7 +210,7 @@ gl.report.secondaries <- function(x,
             cat(report("  Saving the plot in ggplot format to the session tempfile\n"))
           }
           # saving genlight object to tempdir
-          saveRDS(list(match_call,x.secondaries), file = gl.out)
+          saveRDS(list(match_call,x.secondaries), file = glout)
           if(verbose>=2){
             cat(report("  Saving the genlight object containing the filtered loci to the session tempfile\n"))
           }

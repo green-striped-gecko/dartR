@@ -84,7 +84,7 @@ gl.keep.loc <- function(x,
   }
 
 # DO THE JOB
-
+  hold <- x 
   if (verbose >= 2) {
     cat(report("  Deleting all but the specified loci\n"))
   }
