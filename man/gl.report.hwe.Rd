@@ -77,15 +77,28 @@ used in the program PLINK (2.0).
 This function uses correction for multiple tests using the following methods
 \code{\link[stats]{p.adjust}}:
 \itemize{
-\item "holm", 
-\item "hochberg", 
-\item "hommel", 
-\item "bonferroni", 
-\item "BH", 
-\item "BY", 
-\item "fdr"
+\item "holm" is also known as the sequential Bonferroni technique (Rice, 1989). 
+This method has a greater statistical power than the standard Bonferroni test, 
+however this method becomes very stringent when many tests are performed and 
+many real deviations from the null hypothesis can go undetected (Waples 2015).
+\item "hochberg" (Hochberg, 1988) 
+\item "hommel" (Hommel 1988). This method is more powerful than Hochberg's,  
+but the difference is usually small .
+\item "bonferroni" in which p-values are multiplied by the number of tests 
+(i.e. the number of loci). This method is very stringent and therefore has 
+reduced power to detect multiple departures from the null hypothesis.
+\item "BH" (Benjamini & Hochberg, 1995).
+\item "BY" (Benjamini & Yekutieli, 2001). 
 }
- 
+
+The first four methods are designed to give strong control of the family-wise 
+error rate. The last two methods control the false discovery rate (FDR), 
+the expected proportion of false discoveries amongst the rejected hypotheses.
+The false discovery rate is a less stringent condition than the family-wise
+error rate, so these methods are more powerful than the others, especially 
+when number of tests is large.
+
+
 Tests for HWE are only valid if there is no population substructure (assuming
 random mating), and the tests have sufficient power only when there is 
 sufficient sample size (say, n individuals > 20). Note also that correction 
@@ -122,6 +135,15 @@ Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
 Weinberg Package. Journal of Statistical Software 64:1-23.
 \item Waples, R. S. (2015). Testing for Hardy–Weinberg proportions: have we 
 lost the plot?. Journal of heredity, 106(1), 1-19.
+\item Rice, W. R. (1989). Analyzing tables of statistical tests. Evolution,
+ 43(1), 223-225.
+\item Hochberg, Y. (1988). A sharper Bonferroni procedure for multiple tests
+ of significance. Biometrika, 75, 800–803.
+ \item Hommel, G. (1988). A stagewise rejective multiple test procedure based 
+ on a modified Bonferroni test. Biometrika, 75, 383–386.
+ \item Benjamini, Y., and Yekutieli, D. (2001). The control of the false 
+ discovery rate in multiple testing under dependency. Annals of Statistics, 
+ 29, 1165–1188.
 }
 }
 \seealso{

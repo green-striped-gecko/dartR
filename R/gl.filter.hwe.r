@@ -215,10 +215,6 @@ gl.filter.hwe <- function(x,
     p.values_adj <- rep(NA,length(p.values))
     bonsig2 <- rep(NA,length(p.values))
     
-    if(multi_comp == TRUE){
-      p.values_adj <- stats::p.adjust(p.values, method = multi_comp_method)
-    }
-    
     # Assemble results into a dataframe
     result_temp <- cbind.data.frame(popNames(i),locNames(i),mat_HWE, total, p.values, sig2, p.values_adj , bonsig2, stringsAsFactors = FALSE)
     names(result_temp) <- c("Population","Locus", "Hom_1", "Het", "Hom_2", "N", "Prob", "Sig", "Prob.adj", "Sig.adj")
@@ -226,6 +222,10 @@ gl.filter.hwe <- function(x,
     result <- rbind.data.frame(result,result_temp, stringsAsFactors = FALSE)
   }
   result <- result[-1,]
+  
+  if(multi_comp == TRUE){
+    result$Prob.adj <- stats::p.adjust(result$Prob, method = multi_comp_method)
+  }
   
   if(multi_comp==F){
     result <- result[which(result$Prob <= alpha_val),]
