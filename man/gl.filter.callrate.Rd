@@ -87,6 +87,7 @@ Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary 
   result <- gl.filter.callrate(testset.gs[1:10], method="loc", threshold=0.95, verbose=3)
   result <- gl.filter.callrate(testset.gs[1:10], method="ind", threshold=0.8, verbose=3)
   result <- gl.filter.callrate(testset.gs[1:10], method="pop", threshold=0.8, verbose=3)
+     
 }
 \seealso{
 \code{\link{gl.report.callrate}}

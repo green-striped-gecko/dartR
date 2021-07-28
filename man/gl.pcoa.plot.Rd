@@ -188,6 +188,8 @@ gl.pcoa.plot(pca, gl, labels="interactive")
 }
 \seealso{
 \code{\link{gl.pcoa}}
+
+\code{\link{gl.pcoa}}
 }
 \author{
 Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
