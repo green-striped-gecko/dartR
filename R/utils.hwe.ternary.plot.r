@@ -305,9 +305,9 @@
     
     if(verbose) cat("Roots upper curve\n")
     
-    ql <- CheckRoots(uroots,verbose=verbose)
+    ql <- CheckRoots(roots=uroots,verbose=verbose)
     
-    DposUL <- ql
+    DposUL <- ql 
     
     if (!is.null(ql)) {
       q <- seq(ql,1-ql,by=0.005)
@@ -318,6 +318,39 @@
     }
     return(DposUL=DposUL)
   }
+
+###########################################################
+######################### CritSam_Chi #######################
+###########################################################
+`CritSam_Chi` <- function(n=5,Dpos=TRUE,alphalimit=0.05,cc = 0.5) {
+  X <- GenerateSamples(n)
+  ncomp <- nrow(X)
+  Res <- NULL
+  Ds <- NULL
+  pval <- NULL
+  fA <- NULL
+  for (i in 1:nrow(X)) {
+    fA <- c(fA,(2*X[i,1]+X[i,2])/(2*n))
+    Ds <- c(Ds,HardyWeinberg::HWChisq(X[i,],verbose =FALSE)$D)
+    pval <- c(pval,HardyWeinberg::HWChisq(X[i,],cc=cc,verbose =FALSE)$pval)
+  }
+  
+  Y <- data.frame(X[,1],X[,2],X[,3],fA,Ds,pval)
+  colnames(Y) <- c("AA","AB","BB","fA","Ds","pval")
+  if(Dpos) Y <- Y[Y$Ds>0,] else Y <- Y[Y$Ds<0,]
+  Y <- Y[Y$pval<alphalimit,]
+  fre <- unique(fA)
+  for (i in 1:length(fre)) {
+    Ys <- Y[Y$fA == fre[i],]
+    if (nrow(Ys) > 0) {
+      indi <- which.max(Ys$pval)
+      Ys <- Ys[indi,]
+      Res <- rbind(Res,c(Ys$AA,Ys$AB,Ys$BB))
+    }
+  }
+  Xn <- Res/n
+  return(list(Xn=Xn,Ds=Ds,fA=fA))
+}
 
 ###########################################################
 ######################### HWTernaryPlot ####################
@@ -485,11 +518,23 @@
   if(region==7) { # For Haldane's Exact test
     
     Crit <- CritSam(n,alphalimit=alpha,pvaluetype=pvaluetype)$Xn
-    Critcar <- Crit%*%M        # cartesian coordinates
+    if(length(Crit)==0){
+      Critcar <- NULL
+    }
+    if(length(Crit)>0){
+      Critcar <- Crit%*%M        # cartesian coordinates
+    }
+    
     points(Critcar[,1],Critcar[,2],pch=pch,col=curvecols[5],cex=cex,type="l",lty=curtyp)
     
     Crit <- CritSam(n,Dpos=FALSE,alphalimit=alpha,pvaluetype=pvaluetype)$Xn
-    Critcar <- Crit%*%M        # cartesian coordinates
+    if(length(Crit)==0){
+      Critcar <- NULL
+    }
+    if(length(Crit)>0){
+      Critcar <- Crit%*%M  
+      M%/%Critcar# cartesian coordinates
+    }
     points(Critcar[,1],Critcar[,2],pch=pch,col=curvecols[5],cex=cex,type="l",lty=curtyp)
     
   }

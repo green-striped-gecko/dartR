@@ -52,6 +52,7 @@ utils.check.datatype <- function(x,
   }
   else if(is(x,"fd")){
       if(is(x$gl,"genlight")){
+        accept <- "fd"
         type <- utils.check.datatype(x$gl,verbose=0)
       } else {  
         stop(error("Fatal Error: Fixed Difference object expected! Check format of object\n"))

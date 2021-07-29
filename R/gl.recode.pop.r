@@ -30,7 +30,7 @@
 #'   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=3)
 #'  }
 #' @seealso \code{\link{gl.filter.monomorphs}}
-#' @seealso \code{\link{gl.gl.recode.pop}}
+#' @seealso \code{\link{gl.recode.pop}}
 
 gl.recode.pop <- function(x, 
                           pop.recode, 

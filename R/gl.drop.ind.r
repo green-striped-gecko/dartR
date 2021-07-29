@@ -17,11 +17,15 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'  # SNP data
-#'     gl2 <- gl.drop.ind(testset.gl, ind.list=c("AA019073","AA004859"))
-#'     gl2 <- gl.drop.ind(as.matrix(testset.gl), ind.list=c("AA019073","AA004859"))
+#'    gl2 <- gl.drop.ind(testset.gl, 
+#'    ind.list=c("AA019073","AA004859"))
+#'    gl2 <- gl.drop.ind(testset.gl, 
+#'    ind.list=c("AA019073","AA004859"))
 #'  # Tag P/A data
-#'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"))
-#'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"),mono.rm=TRUE, recalc=TRUE)
+#'    gs2 <- gl.drop.ind(testset.gs, 
+#'    ind.list=c("AA020656","AA19077","AA004859"))
+#'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656"
+#'    ,"AA19077","AA004859"),mono.rm=TRUE, recalc=TRUE)
 #'    
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recalc.metrics}}

@@ -106,7 +106,7 @@ best modern reference is Legendre & Legendre (1998).
 fd <- gl.fixed.diff(testset.gl)
 fd <- gl.collapse(fd)
 pca <- gl.pcoa(fd)
-gl.pcoa.plot(pca,fd)
+gl.pcoa.plot(pca,fd$gl)
 
 }
 \references{
