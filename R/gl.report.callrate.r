@@ -9,21 +9,21 @@
 #' number of missing values as quantiles. 
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence
-#'  (SilicoDArT) data [required]
+#'  (SilicoDArT) data [required].
 #' @param method Specify the type of report by locus (method='loc') or individual
-#'  (method='ind') [default method='loc']
-#' @param plot specify if plot of call rate is to be produced [default TRUE]
-#' @param plot_theme User specified theme [default theme_dartR()]
-#' @param plot_colours Vector with two colour names for the borders and fill [default two_colors]
-#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
+#'  (method='ind') [default method='loc'].
+#' @param plot.out specify if plot of call rate is to be produced [default TRUE].
+#' @param plot_theme User specified theme [default theme_dartR()].
+#' @param plot_colours Vector with two colour names for the borders and fill [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].
 #'
 #' @details 
 #' This function expects a genlight object, containing either SNP data or SilicoDArT (=presence/absence data).
 #' 
 #' Callrate is summarized by locus or by individual to allow sensible decisions on thresholds
 #' for filtering taking into consideration consequential loss of data. The summary is in the form 
-#' of a tablulation and plots.
+#' of a tabulation and plots.
 #' 
 #' Plot themes can be obtained from \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -50,7 +50,7 @@
 
 gl.report.callrate <- function(x, 
                                method = "loc", 
-                               plot=TRUE,
+                               plot.out = TRUE,
                                plot_theme = theme_dartR(), 
                                plot_colours = two_colors, 
                                save2tmp=FALSE,
@@ -78,7 +78,7 @@ gl.report.callrate <- function(x,
   
 ########### FOR METHOD BASED ON LOCUS
   if(method=="loc"){
-  if(plot){  
+  if(plot.out){  
   # get title for plots
   if (method == "loc") {
     if (datatype=="SNP") {
@@ -151,7 +151,7 @@ gl.report.callrate <- function(x,
   # Calculate the call rate by individual
   if(method=="ind"){
   ind.call.rate <- 1 - rowSums(is.na(as.matrix(x)))/nLoc(x)    
-  if(plot){
+  if(plot.out){
   # get title for plots
   if (datatype=="SNP") {
       title1 <- "SNP data - Call Rate by Individual"
@@ -218,7 +218,7 @@ gl.report.callrate <- function(x,
   }
 
 # PRINTING OUTPUTS
-  if(plot){
+  if(plot.out){
     # using package patchwork
     p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
     print(p3)

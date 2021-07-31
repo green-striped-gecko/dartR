@@ -219,7 +219,9 @@ lm_eqn <- function(df,r=manteltest$statistic,pp=manteltest$signif){
 
 res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo))
 if (is.null(paircols)) {
-  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_point()+geom_smooth(method="lm", se=TRUE)+ylab(Dgen_trans)+xlab(Dgeo_trans)+geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+plot_theme}    else {
+  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_point()+geom_smooth(method="lm", se=TRUE)+ylab(Dgen_trans)+xlab(Dgeo_trans)+
+    # geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+
+    plot_theme}    else {
   
   Legend <- col2 <- NA #ggplot bug
   cols <- which(lower.tri(as.matrix(Dgen)),arr.ind = T)
@@ -238,7 +240,7 @@ if (is.null(paircols)) {
     guides(size = "none",color=guide_legend(title="Populations"))+
     geom_smooth(aes(x=Dgeo, y=Dgen),method="lm", se=TRUE)+
     ylab(Dgen_trans)+
-    geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+
+    # geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+
     xlab(Dgeo_trans)+
     plot_theme
   

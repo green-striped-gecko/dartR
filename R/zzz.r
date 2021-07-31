@@ -51,6 +51,7 @@ viridis_palette <- colorRampPalette(c("#440154FF", "#482173FF", "#433E85FF", "#3
                                       "#2D708EFF", "#25858EFF", "#1E9B8AFF", "#2BB07FFF",
                                       "#51C56AFF", "#85D54AFF", "#C2DF23FF", "#FDE725FF"))
 two_colors <- c("#3B9AB2" ,"#78B7C5" )
+two_colors_contrast <- c("deeppink","chartreuse3")
 three_colors <- c("#3B9AB2","deeppink","lemonchiffon")
 
 # SET THEME FOR PLOTS
