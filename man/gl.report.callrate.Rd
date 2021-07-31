@@ -7,7 +7,7 @@
 gl.report.callrate(
   x,
   method = "loc",
-  plot = TRUE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   save2tmp = FALSE,
@@ -16,20 +16,20 @@ gl.report.callrate(
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP or presence/absence
-(SilicoDArT) data [required]}
+(SilicoDArT) data [required].}
 
 \item{method}{Specify the type of report by locus (method='loc') or individual
-(method='ind') [default method='loc']}
+(method='ind') [default method='loc'].}
 
-\item{plot}{specify if plot of call rate is to be produced [default TRUE]}
+\item{plot.out}{specify if plot of call rate is to be produced [default TRUE].}
 
-\item{plot_theme}{User specified theme [default theme_dartR()]}
+\item{plot_theme}{User specified theme [default theme_dartR()].}
 
-\item{plot_colours}{Vector with two colour names for the borders and fill [default two_colors]}
+\item{plot_colours}{Vector with two colour names for the borders and fill [default two_colors].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 Returns unaltered genlight object
@@ -47,7 +47,7 @@ This function expects a genlight object, containing either SNP data or SilicoDAr
 
 Callrate is summarized by locus or by individual to allow sensible decisions on thresholds
 for filtering taking into consideration consequential loss of data. The summary is in the form 
-of a tablulation and plots.
+of a tabulation and plots.
 
 Plot themes can be obtained from \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
