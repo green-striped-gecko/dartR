@@ -268,7 +268,6 @@ gl.report.hwe <- function(x,
     colnames(result) <- c("Population","Locus", "Hom_1", "Het", "Hom_2", "N", "Prob", "Sig", "Prob.adj", "Sig.adj")
 
     for (i in poplist) {
-AA <- AB <- BB <- V1 <- V2 < V3 <- NA
       mat_HWE_temp <- t(as.matrix(i))
       mat_HWE <- matrix(nrow = nLoc(i),ncol = 3)
       colnames(mat_HWE) <- c("AA", "AB", "BB")
@@ -317,7 +316,6 @@ AA <- AB <- BB <- V1 <- V2 < V3 <- NA
     result_test <- result[which(result$Population=="WA"),] 
       
     if(plot.out){
-      AA <- AB <- BB <- V1 <- V2 < V3 <- NA
       count <- 0
             # count how many plots are going to be created
       total_number_plots <- length(poplist)
@@ -351,6 +349,8 @@ AA <- AB <- BB <- V1 <- V2 < V3 <- NA
   
         # plot label
         subtitle_plot <- paste0(pop_name,"\n",method_sig," method\nalpha = ",alpha_val,"")
+        AA <- AB <- BB <- V1 <- V2 <- V3 <- NA
+        
 
         p_temp <- ggtern::ggtern() + 
           geom_point(data=mat_genotypes,aes(x=AA,y=AB,z=BB),color=mat_genotypes$color,alpha=1/3,size=2)+
