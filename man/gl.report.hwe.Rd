@@ -143,7 +143,7 @@ Ternary plots can be used to visualise patterns of H-W proportions (plot.out
 = TRUE). P-values and the statistical (non)significance of a large number of
 bi- allelic markers can be inferred from their position in a ternary plot.
 See Graffelman & Morales-Camarena (2008) for further details. Ternary plots 
-are based on the function  \code{\link[HWTernaryPlot]{HardyWeinberg.}} from 
+are based on the function  \code{\link[HardyWeinberg]{HWTernaryPlot}} from 
 the package HardyWeinberg. Loci that depart significantly from H-W proportions 
 are shown in red, and those not showing significant departure are shown in green. 
 

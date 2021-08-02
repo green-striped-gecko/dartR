@@ -72,8 +72,6 @@ Populations can be defined in three ways:
 \item Within selected populations using for example: subset = c("pop1","pop2").
 }
 
-\strong{Statistical methods}
-
 Two different statistical methods to test for deviations from Hardy Weinberg
 proportions:
 \itemize{
