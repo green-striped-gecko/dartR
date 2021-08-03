@@ -229,8 +229,8 @@ gl.report.callrate <- function(x,
 
   # creating temp file names
   if(save2tmp){
-  temp_plot <- tempfile(pattern = "dartR_plot_")
-  temp_table <- tempfile(pattern = "dartR_table_")
+  temp_plot <- tempfile(pattern = "Plot_")
+  temp_table <- tempfile(pattern = "Table_")
   match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
   # saving to tempdir
   saveRDS(list(match_call,p3), file = temp_plot)

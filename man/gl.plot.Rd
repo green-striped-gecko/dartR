@@ -2,47 +2,58 @@
 % Please edit documentation in R/gl.plot.r
 \name{gl.plot}
 \alias{gl.plot}
-\title{Plotting genlight object as a smear plot (loci by individuals color coded for scores of 0, 1, 2 and NA)}
+\title{Plotting genlight object as a smear plot (loci by individuals color 
+coded for scores of 0, 1, 2 and NA)}
 \usage{
 gl.plot(
   x,
-  labels = FALSE,
-  indlabels = indNames(x),
-  col = NULL,
-  legend = TRUE,
-  posi = "bottomleft",
-  bg = rgb(1, 1, 1, 0.5),
-  verbose = NULL,
-  ...
+  group_pop = FALSE,
+  labels_plot = FALSE,
+  ind_labels = indNames(x),
+  plot_colours = four_colors,
+  posi = "bottom",
+  save2tmp = FALSE,
+  verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- a genlight object [required]}
+\item{x}{Name of the genlight object containing the SNP or presence/absence
+(SilicoDArT) data [required].}
 
-\item{labels}{-- if TRUE, individual labels are added}
+\item{group_pop}{Group by population [default TRUE]}
 
-\item{indlabels}{-- labels for individuals [default = first 8 letters from indNames]}
+\item{labels_plot}{If TRUE, individual labels are added [default FALSE].}
 
-\item{col}{-- optional color vector (see ?glPlot) [default NULL]}
+\item{ind_labels}{Labels for individuals [default indNames(x)].}
 
-\item{legend}{-- if TRUE, a legend will be added [default = TRUE]}
+\item{plot_colours}{Vector with four color names for homozygotes for the 
+reference allele, heterozygotes, homozygotes for the alternative allele and 
+for missing values (NA) [default four_colors].}
 
-\item{posi}{-- position of the legend [default = "bottomleft"]}
+\item{posi}{Position of the legend: “left”, “top”, “right”, “bottom” or
+"none" [default = "bottom"].}
 
-\item{bg}{-- background color of the legend [default transparent white]}
+\item{save2tmp}{If TRUE, saves plot to the session temporary directory 
+(tempdir) [default FALSE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]}
-
-\item{...}{--- additional arguments passed to glPlot function.}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report [default NULL].}
+}
+\value{
+Returns unaltered genlight object
 }
 \description{
-This function is based on the glPlot function from adegenet. It adds the option to put labels on the individuals and scales them accordingly.
-If there are too many individuals, it is best to use labels=FALSE.
- 
-For arguments please refer to the original adegenet function ?glPlot.
+It adds the option to put labels on the individuals and grouping by populations. 
+If there are too many individuals, it is best to use labels_plot=FALSE.
 }
 \examples{
-gl.plot(bandicoot.gl[1:30,])
-gl.plot(bandicoot.gl[1:30,])
 gl.plot(bandicoot.gl[1:10,],labels=TRUE)
+
 }
+\seealso{
+\code{\link{gl.filter.callrate}}
+}
+\author{
+Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+}
+\concept{Exploration/visualisation functions}
