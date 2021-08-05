@@ -147,8 +147,7 @@ gl.pcoa <- function(x,
 
     ######## DISTANCE ANALYSIS
 
-    if (datatype == "dist") 
-        {
+    if (datatype == "dist"){
             D <- x
             
             # Calculate the pcoa
@@ -235,7 +234,7 @@ gl.pcoa <- function(x,
 
             eig.raw.pos <- eig.raw[eig.raw >= 0]
             eig.raw.pos.pc <- eig.raw.pos * 100/sum(eig.raw.pos)
-            eig.top <- eig.raw.pos[eig.raw.pos > mean(eig.raw.pos)]
+            eig.top <- eig.raw.pos[eig.raw.pos >= mean(eig.raw.pos)]
             eig.top.pc <- round(eig.top * 100/sum(eig.raw.pos), 1)
             eig.raw.noise <- eig.raw[eig.raw <= mean(eig.raw)]
 
