@@ -6,7 +6,7 @@
 \usage{
 gl.report.bases(
   x,
-  plot = TRUE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   save2tmp = FALSE,
@@ -16,7 +16,7 @@ gl.report.bases(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required]}
 
-\item{plot}{If TRUE, histograms of base composition are produced [default TRUE]}
+\item{plot.out}{If TRUE, histograms of base composition are produced [default TRUE]}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
 

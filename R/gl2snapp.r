@@ -14,7 +14,10 @@
 #' @examples
 #' gl2snapp(testset.gl)
 
-gl2snapp <- function(x, outfile="snapp.nex", outpath=tempdir(), verbose=NULL) {
+gl2snapp <- function(x, 
+                     outfile = "snapp.nex", 
+                     outpath = tempdir(), 
+                     verbose = NULL) {
   
 # TRAP COMMAND, SET VERSION
   

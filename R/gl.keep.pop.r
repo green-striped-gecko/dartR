@@ -36,10 +36,10 @@
 
 gl.keep.pop <- function(x, 
                         pop.list, 
-                        as.pop=NULL, 
-                        recalc=FALSE, 
-                        mono.rm=FALSE, 
-                        verbose=NULL){
+                        as.pop = NULL, 
+                        recalc = FALSE, 
+                        mono.rm = FALSE, 
+                        verbose = NULL){
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

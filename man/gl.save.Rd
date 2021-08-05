@@ -2,25 +2,29 @@
 % Please edit documentation in R/gl.save.r
 \name{gl.save}
 \alias{gl.save}
-\title{Save an object in compressed binary format for later rapid retrieval.}
+\title{Save an object in compressed binary format for later rapid retrieval}
 \usage{
 gl.save(x, file, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes [required]}
+\item{x}{Name of the genlight object containing SNP genotypes [required].}
 
-\item{file}{-- name of the file to receive the binary version of the object [required]}
+\item{file}{Name of the file to receive the binary version of the object 
+[required].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report 
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-the input object
+The input object
 }
 \description{
 This is a wrapper for saveRDS().
 }
 \details{
-The script saves the object to the current workspace and returns the input gl object.
+The script saves the object to the current workspace and returns the input gl
+ object.
 }
 \examples{
 gl.save(testset.gl,file.path(tempdir(),"testset.rds"))

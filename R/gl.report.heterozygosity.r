@@ -6,7 +6,7 @@
 #' @param x Name of the genlight object containing the SNP [required].
 #' @param method Calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']
 #' @param n.invariant An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
-#' @param plot Whether produce a plot of the results [default TRUE].
+#' @param plot.out Whether produce a plot of the results [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours_pop A color palette for population plots [default discrete_palette].
 #' @param plot_colours_ind List of two color names for the borders and fill of the plot by individual [default two_colors].
@@ -53,7 +53,7 @@
 #' @examples
 #'df <- gl.report.heterozygosity(testset.gl)
 #'df <- gl.report.heterozygosity(testset.gl,method='ind')
-#'df <- gl.report.heterozygosity(testset.gl,plot=FALSE)
+#'df <- gl.report.heterozygosity(testset.gl,plot.out=FALSE)
 #'
 #' @seealso \code{\link{gl.filter.heterozygosity}}
 #'  
@@ -65,11 +65,11 @@
 gl.report.heterozygosity <- function(x, 
                                      method = "pop", 
                                      n.invariant = 0, 
-                                     plot = TRUE,
+                                     plot.out = TRUE,
                                      plot_theme = theme_dartR(), 
                                      plot_colours_pop = discrete_palette,
                                      plot_colours_ind = two_colors,
-                                     save2tmp=FALSE,
+                                     save2tmp = FALSE,
                                      verbose = NULL) {
 
 # SET VERBOSITY
@@ -80,7 +80,7 @@ gl.report.heterozygosity <- function(x,
     utils.flag.start(func=funname,build="Jackson",v=verbose)
     
 # CHECK DATATYPE 
-    datatype <- utils.check.datatype(x,accept="SNP")
+    datatype <- utils.check.datatype(x,accept="SNP", verbose=verbose)
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -173,34 +173,67 @@ gl.report.heterozygosity <- function(x,
         if (is.null(n.invariant)) {
             df.ordered <- df[order(df$Ho), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
-            if(plot){
-            p1 <- ggplot(df.ordered, aes(x = pop, y = Ho, fill = pop)) + geom_bar(position = "dodge", stat = "identity", color = "black") + 
-                scale_fill_manual(values = plot_colours_pop(nPop(x))) + scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd, 
-                sep = " | ")) + plot_theme + theme(axis.ticks.x = element_blank(), axis.text.x = element_text(angle = 90, hjust = 1, 
-                face = "bold", size = 12), axis.title.x = element_blank(), axis.ticks.y = element_blank(), axis.title.y = element_blank(), 
-                legend.position = "none") + labs(fill = "Population") + ggtitle("Observed Heterozygosity by Population")
+            if(plot.out){
+            p1 <- ggplot(df.ordered, aes(x = pop, y = Ho, fill = pop)) + 
+                geom_bar(position = "dodge", stat = "identity", color = "black") + 
+                scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
+                scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd,sep = " | ")) + 
+                plot_theme + 
+                theme(axis.ticks.x = element_blank(), 
+                      axis.text.x = element_text(angle = 90,hjust = 1,face = "bold", size = 12), 
+                      axis.title.x = element_blank(), 
+                      axis.ticks.y = element_blank(), 
+                      axis.title.y = element_blank(),
+                      legend.position = "none") +
+                labs(fill = "Population") +
+                ggtitle("Observed Heterozygosity by Population")
 
-            p2 <- ggplot(df.ordered, aes(x = pop, y = He, fill = pop)) + geom_bar(position = "dodge", stat = "identity", color = "black") + 
-                scale_fill_manual(values = plot_colours_pop(nPop(x))) + scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd, 
-                sep = " | ")) + plot_theme + theme(axis.ticks.x = element_blank(), axis.text.x = element_text(angle = 90, hjust = 1, 
-                face = "bold", size = 12), axis.title.x = element_blank(), axis.ticks.y = element_blank(), axis.title.y = element_blank(), 
-                legend.position = "none") + labs(fill = "Population") + ggtitle("Expected Heterozygosity by Population")
+            p2 <- ggplot(df.ordered, aes(x = pop, y = He, fill = pop)) + 
+                geom_bar(position = "dodge", stat = "identity", color = "black") + 
+                scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
+                scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd,sep = " | ")) +
+                plot_theme + 
+                theme(axis.ticks.x = element_blank(), 
+                      axis.text.x = element_text(angle = 90, hjust = 1, face = "bold", size = 12), 
+                      axis.title.x = element_blank(),
+                      axis.ticks.y = element_blank(), 
+                      axis.title.y = element_blank(),
+                      legend.position = "none") + 
+                labs(fill = "Population") + 
+                ggtitle("Expected Heterozygosity by Population")
             }
         } else {
             df.ordered <- df[order(df$Ho.adj), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
-            if(plot){
-            p1 <- ggplot(df.ordered, aes(x = pop, y = Ho.adj, fill = pop)) + geom_bar(position = "dodge", stat = "identity", 
-                color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + scale_x_discrete(labels = paste(df.ordered$pop, 
-                df.ordered$nInd, sep = " | ")) + plot_theme + theme(axis.ticks.x = element_blank(), axis.text.x = element_text(angle = 90, 
-                hjust = 1, face = "bold", size = 12), axis.title.x = element_blank(), axis.ticks.y = element_blank(), axis.title.y = element_blank(), 
-                legend.position = "none") + labs(fill = "Population") + ggtitle("Observed Heterozygosity by Population")
+            if(plot.out){
+            p1 <- ggplot(df.ordered, aes(x = pop, y = Ho.adj, fill = pop)) + 
+                geom_bar(position = "dodge", stat = "identity", 
+                color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
+                scale_x_discrete(labels = paste(df.ordered$pop, 
+                df.ordered$nInd, sep = " | ")) + 
+                plot_theme + 
+                theme(axis.ticks.x = element_blank(),
+                      axis.text.x = element_text(angle = 90, hjust = 1, face = "bold", size = 12), 
+                      axis.title.x = element_blank(), 
+                      axis.ticks.y = element_blank(), 
+                      axis.title.y = element_blank(), 
+                      legend.position = "none") + 
+                labs(fill = "Population") + 
+                ggtitle("Observed Heterozygosity by Population")
 
-            p2 <- ggplot(df.ordered, aes(x = pop, y = He.adj, fill = pop)) + geom_bar(position = "dodge", stat = "identity", 
-                color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + scale_x_discrete(labels = paste(df.ordered$pop, 
-                df.ordered$nInd, sep = " | ")) + plot_theme + theme(axis.ticks.x = element_blank(), axis.text.x = element_text(angle = 90, 
-                hjust = 1, face = "bold", size = 12), axis.title.x = element_blank(), axis.ticks.y = element_blank(), axis.title.y = element_blank(), 
-                legend.position = "none") + labs(fill = "Population") + ggtitle("Expected Heterozygosity by Population")
+            p2 <- ggplot(df.ordered, aes(x = pop, y = He.adj, fill = pop)) + 
+                geom_bar(position = "dodge", stat = "identity", 
+                color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
+                scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd, sep = " | ")) + 
+                plot_theme + 
+                theme(axis.ticks.x = element_blank(),
+                      axis.text.x = element_text(angle = 90, hjust = 1, face = "bold", size = 12), 
+                      axis.title.x = element_blank(),
+                      axis.ticks.y = element_blank(), 
+                      axis.title.y = element_blank(),
+                      legend.position = "none") + 
+                labs(fill = "Population") + 
+                ggtitle("Expected Heterozygosity by Population")
             }
         }
 
@@ -264,12 +297,11 @@ gl.report.heterozygosity <- function(x,
         }
         
 # PRINTING OUTPUTS
-        if(plot){
+        if(plot.out){
             p3 <- (p1/p2)
             print(p3)
         }
         print(df.ordered)
-
     }
 
     ########### FOR METHOD BASED ON INDIVIDUAL
@@ -299,7 +331,7 @@ gl.report.heterozygosity <- function(x,
         names(df) <- c("ind.name", "Ho", "f.hom.ref", "f.hom.alt")
         
         # Boxplot
-        #if(plot){
+        #if(plot.out){
         upper <- ceiling(max(df$Ho)*10)/10
         p1 <- ggplot(df, aes(y = Ho)) + 
           geom_boxplot(color = plot_colours_ind[1], 
@@ -343,7 +375,7 @@ gl.report.heterozygosity <- function(x,
         }
         
         # PRINTING OUTPUTS
-        if(plot){
+        if(plot.out){
             p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
             print(p3)
         }
@@ -353,11 +385,13 @@ gl.report.heterozygosity <- function(x,
     # SAVE INTERMEDIATES TO TEMPDIR  
     if(save2tmp){
     # creating temp file names
-    if(plot){temp_plot <- tempfile(pattern = "dartR_plot_")}
-    temp_table <- tempfile(pattern = "dartR_table_")
+    if(plot.out){
+        temp_plot <- tempfile(pattern = "Plot_")
+        }
+    temp_table <- tempfile(pattern = "Table_")
     match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
     # saving to tempdir
-    if(plot){
+    if(plot.out){
         saveRDS(list(match_call,p3), file = temp_plot)
         if(verbose>=2){
           cat(report("  Saving the ggplot to session tempfile\n"))
@@ -366,6 +400,7 @@ gl.report.heterozygosity <- function(x,
     saveRDS(list(match_call,df), file = temp_table)
     if(verbose>=2){
         cat(report("  Saving tabulation to session tempfile\n"))
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
     }
     }
     

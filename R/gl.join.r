@@ -34,8 +34,8 @@ gl.join <- function(x1, x2, verbose=NULL) {
 # STANDARD ERROR CHECKING
   
 # CHECK DATATYPE 
-  data.type1 <- utils.check.datatype(x1,verbose=0)
-  data.type2 <- utils.check.datatype(x2,verbose=0)
+  data.type1 <- utils.check.datatype(x1, verbose=verbose)
+  data.type2 <- utils.check.datatype(x2, verbose=verbose)
   
     if((data.type1 != "SNP" && data.type1 != "SilicoDArT")|| (data.type2 != "SNP" && data.type2 != "SilicoDArT")){
       stop (error("Fatal Error: Genlight objects must both be either SNP data or SilicoDArT data (fragment P/A data)"))

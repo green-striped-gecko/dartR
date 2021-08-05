@@ -64,18 +64,18 @@
 
 gl.pcoa.plot <- function(glPca, 
                          x, 
-                         scale=FALSE, 
-                         ellipse=FALSE, 
-                         p=0.95, 
-                         labels="pop",
-                         theme_plot=4,
-                         as.pop=NULL,
-                         hadjust=1.5, 
-                         vadjust=1, 
-                         xaxis=1, 
-                         yaxis=2, 
-                         plot.out=TRUE, 
-                         verbose=NULL) {
+                         scale = FALSE, 
+                         ellipse = FALSE, 
+                         p = 0.95, 
+                         labels = "pop",
+                         theme_plot = 4,
+                         as.pop = NULL,
+                         hadjust = 1.5, 
+                         vadjust = 1, 
+                         xaxis = 1, 
+                         yaxis = 2, 
+                         plot.out = TRUE, 
+                         verbose = NULL) {
   pkg <- "plotly"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop(error("Package ",pkg," needed for this function to work. Please install it.")) }

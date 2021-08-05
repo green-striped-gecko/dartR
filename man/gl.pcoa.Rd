@@ -13,6 +13,7 @@ gl.pcoa(
   n.cores = 16,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
+  save2tmp = FALSE,
   verbose = 2
 )
 }
@@ -33,6 +34,8 @@ gl.pcoa(
 
 \item{plot_colours}{List of two color names for the borders and fill of the plot [default two_colors].}
 
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
+
 \item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
@@ -44,8 +47,8 @@ data; it undertakes a Gower Principal Coordinate analysis (PCoA) if supplied wit
 be represented in an ordinated space using PCoA.
 }
 \details{
-The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\} with default settings apart from those specified as parameters in this 
-function.
+The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\} 
+with default settings apart from those specified as parameters in this function.
 \strong{ Sources of stress in the visual representation }
 
 While, technically, any distance matrix can be represented in an ordinated space, the representation will not typically be exact.There are three 

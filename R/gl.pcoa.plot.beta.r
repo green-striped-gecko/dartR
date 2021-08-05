@@ -38,6 +38,8 @@
 #' @param palette_discrete A discrete palette for the color of populations or a 
 #' list with as many colors as there are populations in the dataset
 #'  [default discrete_palette].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session 
+#' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
 #' [default NULL, unless specified using gl.set.verbosity].
@@ -96,7 +98,7 @@
 #' as.pop = "assigned.sex", palette_discrete = pop_colours)
 #'
 #' @seealso \code{\link{gl.pcoa}}
-#' @family Exploration and visualisation functions
+#' @family Exploration/visualisation functions
 #' 
 #' @export
 #'  
@@ -118,6 +120,7 @@ gl.pcoa.plot.beta <- function(glPca,
                          plot.out = TRUE, 
                          plot_theme = theme_dartR(),
                          palette_discrete = discrete_palette,
+                         save2tmp = FALSE,
                          verbose = NULL) {
 
   # SET VERBOSITY
@@ -128,7 +131,7 @@ gl.pcoa.plot.beta <- function(glPca,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
@@ -228,6 +231,13 @@ gl.pcoa.plot.beta <- function(glPca,
   
   # Create a dataframe to hold the required scores
   df <- as.data.frame(cbind(glPca$scores[,xaxis],glPca$scores[,yaxis],glPca$scores[,zaxis]))
+  
+  # if(class(x)=="dist"){
+  #   df <- data.frame(id=labels(x),glPca$scores)
+  # } else {
+  #   df <- data.frame(id=indNames(x), pop=as.character(pop(x)), glPca$scores)
+  #   row.names(df) <- NULL
+  # }
   
   # Convert the eigenvalues to percentages
     s <- sum(glPca$eig[glPca$eig >= 0])
@@ -380,36 +390,23 @@ gl.pcoa.plot.beta <- function(glPca,
       suppressWarnings(print(p1))
     }
     
-    if(verbose>=2){
-      cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-    } 
-
-    # SAVE INTERMEDIATES TO TEMPDIR    
-    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
     # creating temp file names
-    if(plot.out == T){
-      temp_plot <- tempfile(pattern = "dartR_plot_")
-    }
-    temp_table <- tempfile(pattern = "dartR_table_")
-    
-    # saving to tempdir
-    if(plot.out == T){
-      saveRDS(list(match_call,p1), file = temp_plot)
+    if(save2tmp){
+      if(plot.out){
+        temp_plot <- tempfile(pattern = "Plot_")
+        match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+        # saving to tempdir
+        saveRDS(list(match_call,p1), file = temp_plot)
+        if(verbose>=2){
+          cat(report("  Saving the ggplot to session tempfile\n"))
+        }
+      }
+      temp_table <- tempfile(pattern = "Table_")
+      saveRDS(list(match_call,df), file = temp_table)
       if(verbose>=2){
-      cat(report("  Saving the ggplot to session tempfile\n"))
-    }
-    }
-    
-    saveRDS(list(match_call,df), file = temp_table)
-    if(verbose>=2){
-      cat(report("  Saving tabulation to session tempfile\n"))
-    }
-    
-    if(class(x)=="dist"){
-      df <- data.frame(id=labels(x),glPca$scores)
-    } else {
-      df <- data.frame(id=indNames(x), pop=as.character(pop(x)), glPca$scores)
-      row.names(df) <- NULL
+        cat(report("  Saving tabulation to session tempfile\n"))
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+      }
     }
     
     # FLAG SCRIPT END

@@ -9,7 +9,7 @@ gl.report.hamming(
   rs = 5,
   threshold = 3,
   taglength = 69,
-  plot = TRUE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   probar = FALSE,
@@ -18,41 +18,46 @@ gl.report.hamming(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{rs}{Number of bases in the restriction enzyme recognition sequence [default 5]}
+\item{rs}{Number of bases in the restriction enzyme recognition sequence [default 5].}
 
-\item{threshold}{Minimum acceptable base pair difference for display on the boxplot and histogram [default 3]}
+\item{threshold}{Minimum acceptable base pair difference for display on the 
+boxplot and histogram [default 3].}
 
-\item{taglength}{Typical length of the sequence tags [default 69]}
+\item{taglength}{Typical length of the sequence tags [default 69].}
 
-\item{plot}{specify if plot is to be produced [default TRUE]}
+\item{plot.out}{specify if plot is to be produced [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the plots [default two_colors]}
+\item{plot_colours}{List of two color names for the borders and fill of the 
+plots [default two_colors].}
 
-\item{probar}{If TRUE, then a progress bar is displayed on long loops [default TRUE]}
+\item{probar}{If TRUE, then a progress bar is displayed on long loops [default TRUE].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 Returns unaltered genlight object
 }
 \description{
-Hamming distance is calculated as the number of base differences between two 
-sequences which can be expressed as a count or a proportion. Typically, it is
-calculated between two sequences of equal length. In the context of DArT
-trimmed sequences, which differ in length but which are anchored to the left
-by the restriction enzyme recognition sequence, it is sensible to compare the
-two trimmed sequences starting from immediately after the common recognition
-sequence and terminating at the last base of the shorter sequence.
+Hamming distance is calculated as the number of base differences
+between two sequences which can be expressed as a count or a proportion. 
+Typically, it is calculated between two sequences of equal length. In the 
+context of DArT trimmed sequences, which differ in length but which are 
+anchored to the left by the restriction enzyme recognition sequence, it is 
+sensible to compare the two trimmed sequences starting from immediately after 
+the common recognition sequence and terminating at the last base of the 
+shorter sequence.
 }
 \details{
-The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
-is less than a specified percentage
+The function \code{\link{gl.filter.hamming}} will filter out one of 
+two loci if their Hamming distance is less than a specified percentage
 
 Hamming distance can be computed by exploiting the fact that the dot product 
 of two binary vectors x and (1-y) counts the corresponding elements that are 
@@ -81,20 +86,15 @@ gl.report.hamming(testset.gs[,1:100])
 \code{\link{gl.filter.hamming}}
 
 Other filters and filter reports: 
-\code{\link{gl.filter.callrate}()},
-\code{\link{gl.filter.hamming}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.filter.secondaries}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.locmetric}()},
-\code{\link{gl.report.maf}()},
 \code{\link{gl.report.monomorphs}()},
-\code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.rdepth}()},
 \code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.secondaries}()},
 \code{\link{gl.report.taglength}()}
 }
 \author{

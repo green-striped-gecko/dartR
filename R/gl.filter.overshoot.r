@@ -8,9 +8,12 @@
 #' 
 #' Not fatal, but should apply this filter before gl.filter.secondaries, for obvious reasons.
 #' 
-#' @param x -- name of the genlight object [required]
-#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
+#' @param x -- name of the genlight object [required].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session
+#'  temporary directory (tempdir) [default FALSE].
+#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#' progress log ; 3, progress and results summary; 5, full report 
+#' [default 2, unless specified using gl.set.verbosity].
 #' @return A new genlight object with the recalcitrant loci deleted
 #' @export
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -18,8 +21,8 @@
 #' result <- gl.filter.overshoot(testset.gl, verbose=3)
 
 gl.filter.overshoot <- function(x, 
-                                save2tmp=FALSE,
-                                verbose=NULL) {
+                                save2tmp = FALSE,
+                                verbose = NULL) {
 
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -29,7 +32,7 @@ gl.filter.overshoot <- function(x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x,verbose=0)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
 # STANDARD ERROR CHECKING
   
@@ -48,7 +51,9 @@ gl.filter.overshoot <- function(x,
   
 # DO THE JOB
 
-  if (verbose >=2) {cat(report("  Identifying loci for which the SNP has been trimmed with the adaptor\n"))}
+  if (verbose >=2){
+    cat(report("  Identifying loci for which the SNP has been trimmed with the adaptor\n"))
+    }
 
   trimmed <- as.character(x@other$loc.metrics$TrimmedSequence)
   snpos <- x@other$loc.metrics$SnpPosition
@@ -77,10 +82,13 @@ gl.filter.overshoot <- function(x,
   
   # SAVE INTERMEDIATES TO TEMPDIR
   if(save2tmp){
-    temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
+    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+    
+    temp_table <- tempfile(pattern = paste0("Table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
     saveRDS(data.frame(locNames=locNames(xx)), file = temp_table)
     if(verbose>=2){
       cat(report("  Saving the overshot loci to the current session tempfile\n"))
+      cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
     }
   }
  

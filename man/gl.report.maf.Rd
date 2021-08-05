@@ -9,9 +9,11 @@ gl.report.maf(
   maf.limit = 0.5,
   ind.limit = 5,
   loc.limit = 30,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours_pop = discrete_palette,
   plot_colours_all = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -20,23 +22,37 @@ gl.report.maf(
 
 \item{maf.limit}{Show histograms MAF range <= maf.limit [default 0.5].}
 
-\item{ind.limit}{Show histograms only for populations of size greater than ind.limit [default 5].}
+\item{ind.limit}{Show histograms only for populations of size greater than 
+ind.limit [default 5].}
 
-\item{loc.limit}{Show histograms only for populations with more than loc.limit polymorphic loci [default 30].}
+\item{loc.limit}{Show histograms only for populations with more than 
+loc.limit polymorphic loci [default 30].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
-\item{plot_colours_pop}{A color palette for population plots [default discrete_palette].}
+\item{plot_theme}{Theme for the plot. See Details for options 
+[default theme_dartR()].}
 
-\item{plot_colours_all}{List of two color names for the borders and fill of the overall plot [default two_colors].}
+\item{plot_colours_pop}{A color palette for population plots 
+[default discrete_palette].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+\item{plot_colours_all}{List of two color names for the borders and fill of 
+the overall plot [default two_colors].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report 
+[default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 An unaltered genlight object
 }
 \description{
-This script provides summary histograms of MAF for each population in the dataset and an overall histogram to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.maf}}
+This script provides summary histograms of MAF for each 
+population in the dataset and an overall histogram to assist the decision of 
+choosing thresholds for the filter function \code{\link{gl.filter.maf}}
 }
 \details{
 The function \code{\link{gl.filter.maf}} will filter out the
@@ -54,7 +70,11 @@ The function \code{\link{gl.filter.maf}} will filter out the
  In this function q = 20. Quantiles are useful measures because they are less
  susceptible to long-tailed distributions and outliers.
 
- Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+ Plots and table are saved to the temporal directory (tempdir) and can be 
+ accessed with the function \code{\link{gl.print.reports}} and listed with 
+ the function \code{\link{gl.list.reports}}. Note that they can be accessed 
+ only in the current R session because tempdir is cleared each time that the
+  R session is closed.
 
 Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -63,30 +83,12 @@ Examples of other themes that can be used can be consulted in \itemize{
 }
 \examples{
 gl <- gl.report.maf(testset.gl)
-
 }
 \seealso{
 \code{\link{gl.filter.maf}}, \code{\link{gl.list.reports}},
  \code{\link{gl.print.reports}}
-
-Other filters and filter reports: 
-\code{\link{gl.filter.callrate}()},
-\code{\link{gl.filter.hamming}()},
-\code{\link{gl.filter.monomorphs}()},
-\code{\link{gl.filter.rdepth}()},
-\code{\link{gl.filter.reproducibility}()},
-\code{\link{gl.filter.secondaries}()},
-\code{\link{gl.report.callrate}()},
-\code{\link{gl.report.hamming}()},
-\code{\link{gl.report.locmetric}()},
-\code{\link{gl.report.monomorphs}()},
-\code{\link{gl.report.overshoot}()},
-\code{\link{gl.report.rdepth}()},
-\code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.secondaries}()},
-\code{\link{gl.report.taglength}()}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
-\concept{filters and filter reports}
+\concept{filter reports functions}

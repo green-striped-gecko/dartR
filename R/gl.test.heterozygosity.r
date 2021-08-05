@@ -7,16 +7,17 @@
 #' and uses re-randomization to test the statistical significance of differences
 #' in heterozygosity between populations taken pairwise.
 #' 
-#' @param x A genlight object containing the SNP genotypes [required]
-#' @param nreps Number of replications of the re-randomization [default 1,000]
-#' @param alpha1 First significance level for comparison with diff=0 on plot [default 0.05]
-#' @param alpha2 Second significance level for comparison with diff=0 on plot [default 0.01]
-#' @param plot.out If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE]
-#' @param max_plots Maximum number of plots to print per page [default 9]
+#' @param x A genlight object containing the SNP genotypes [required].
+#' @param nreps Number of replications of the re-randomization [default 1,000].
+#' @param alpha1 First significance level for comparison with diff=0 on plot [default 0.05].
+#' @param alpha2 Second significance level for comparison with diff=0 on plot [default 0.01].
+#' @param plot.out If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE].
+#' @param max_plots Maximum number of plots to print per page [default 9].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the
 #'  plots [default two_colors].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].
 #'
 #' @details 
 #'  
@@ -54,6 +55,7 @@ gl.test.heterozygosity <- function(x,
                                    max_plots = 6,
                                    plot_theme = theme_dartR(), 
                                    plot_colours = two_colors, 
+                                   save2tmp = FALSE,
                                    verbose = NULL) { 
   
   
@@ -67,7 +69,7 @@ gl.test.heterozygosity <- function(x,
   
   # CHECKS DATATYPE 
   
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
 
   # SCRIPT SPECIFIC ERROR CHECKING
   
@@ -286,20 +288,23 @@ gl.test.heterozygosity <- function(x,
       p_final <- suppressWarnings(wrap_plots(p_list[seq_1[i]:seq_2[i]],ncol = 2))
   
       suppressWarnings(print(p_final))
-      # SAVE INTERMEDIATES TO TEMPDIR             
+      # SAVE INTERMEDIATES TO TEMPDIR            
+      if(save2tmp){
       # creating temp file names
       temp_plot <- tempfile(pattern =paste0("Plot_",seq_1[i],"_to_",seq_2[i]))
       # saving to tempdir
       suppressWarnings(saveRDS(list(match_call,p_final), file = temp_plot))
-    }
-    if(verbose>=2){
-      cat(report("  Saving the ggplot to session tempfile\n"))
+      if(verbose>=2){
+        cat(report("  Saving the ggplot to session tempfile\n"))
+      }
+      }
     }
   }
 
   print(df)
   
   # SAVE INTERMEDIATES TO TEMPDIR             
+  if(save2tmp){
   # creating temp file names
   temp_table <- tempfile(pattern = "Table_")
   match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
@@ -307,11 +312,9 @@ gl.test.heterozygosity <- function(x,
   saveRDS(list(match_call,df), file = temp_table)
   if(verbose>=2){
     cat(report("  Saving tabulation to session tempfile\n"))
-  }
-  
-  if(verbose>=2){
     cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-  } 
+  }
+  }
   
   # FLAG SCRIPT END
   

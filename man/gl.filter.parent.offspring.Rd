@@ -11,53 +11,68 @@ gl.filter.parent.offspring(
   range = 1.5,
   method = "best",
   rm.monomorphs = FALSE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP genotypes [required]}
+\item{x}{Name of the genlight object containing the SNP genotypes [required].}
 
-\item{min.rdepth}{Minimum read depth to include in analysis [default = 12]}
+\item{min.rdepth}{Minimum read depth to include in analysis [default 12].}
 
-\item{min.reproducibility}{Minimum reproducibility to include in analysis [default = 1]}
+\item{min.reproducibility}{Minimum reproducibility to include in analysis [default 1].}
 
-\item{range}{Specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]}
+\item{range}{Specifies the range to extend beyond the interquartile range for
+delimiting outliers [default 1.5 interquartile ranges].}
 
-\item{method}{Method of selecting the individual to retain from each pair of parent offspring relationship, "best" (based on CallRate) or "random" [default "best"]}
+\item{method}{Method of selecting the individual to retain from each pair of 
+parent offspring relationship, "best" (based on CallRate) or "random" 
+[default "best"].}
 
-\item{rm.monomorphs}{If TRUE, remove monomorphic loci after filtering individuals [default FALSE].}
+\item{rm.monomorphs}{If TRUE, remove monomorphic loci after filtering 
+individuals [default FALSE].}
+
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report 
+[default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
-the filtered genlight object without A set of individuals in parent-offspring relationship. NULL if no parent-offspring relationships were found.
+the filtered genlight object without A set of individuals in 
+parent-offspring relationship. NULL if no parent-offspring relationships were 
+found.
 }
 \description{
 This script removes individuals suspected of being related as parent-offspring,
 using the output of the function \code{\link{gl.report.parent.offspring}}, which
-examines the frequency of pedigree inconsistent loci, that is,
-those loci that are homozygotes in the parent for the reference allele, and
-homozygous in the offspring for the alternate allele. This condition is not
-consistent with any pedigree, regardless of the (unknown) genotype of the other
-parent. The pedigree inconsistent loci are counted as an indication of whether
-or not it is reasonable to propose the two individuals are in a parent-offspring
+examines the frequency of pedigree inconsistent loci, that is, those loci 
+that are homozygotes in the parent for the reference allele, and homozygous
+in the offspring for the alternate allele. This condition is not consistent 
+with any pedigree, regardless of the (unknown) genotype of the other parent.
+The pedigree inconsistent loci are counted as an indication of whether or not
+it is reasonable to propose the two individuals are in a parent-offspring
 relationship.
 }
 \details{
-If two individuals are in a parent offspring relationship, the true
-number of pedigree inconsistent loci should be zero, but SNP calling is not 
-infallible. Some loci will be miss-called. The problem thus becomes one of determining
-if the two focal individuals have a count of pedigree inconsistent loci less than
-would be expected of typical unrelated individuals. There are some quite sophisticated
-software packages available to formally apply likelihoods to the decision, but we
-use a simple outlier comparison.
+If two individuals are in a parent offspring relationship, the true number of
+pedigree inconsistent loci should be zero, but SNP calling is not infallible.
+Some loci will be miss-called. The problem thus becomes one of determining if
+the two focal individuals have a count of pedigree inconsistent loci less than
+would be expected of typical unrelated individuals. There are some quite 
+sophisticated software packages available to formally apply likelihoods to 
+the decision, but we use a simple outlier comparison.
 
 To reduce the frequency of miss-calls, and so emphasize the difference between true
 parent-offspring pairs and unrelated pairs, the data can be filtered on read depth.
@@ -77,15 +92,20 @@ many sibs. Note also that if an individual has been genotyped twice in the datas
 the replicate pair will be assessed by this script as being in a parent-offspring 
 relationship.
 
-You should run \code{\link{gl.report.parent.offspring}} before filtering. Use this report to 
-decide min.rdepth and min.reproducibility and assess impact on your dataset.
+You should run \code{\link{gl.report.parent.offspring}} before filtering. Use 
+this report to decide min.rdepth and min.reproducibility and assess impact on 
+your dataset.
 
 Note that if your dataset does not contain RepAvg or rdepth among the locus metrics,
 the filters for reproducibility and read depth are no used. 
 
 \strong{ Function's output }
 
- Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+ Plots and table are saved to the temporal directory (tempdir) and can be 
+ accessed with the function \code{\link{gl.print.reports}} and listed with 
+ the function \code{\link{gl.list.reports}}. Note that they can be accessed 
+ only in the current R session because tempdir is cleared each time that the
+  R session is closed.
   
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -102,6 +122,7 @@ out <- gl.filter.parent.offspring(testset.gl[1:10])
  \code{\link{gl.report.parent.offspring}}
 
 Other filter functions: 
+\code{\link{gl.filter.callrate}()},
 \code{\link{gl.filter.sexlinked}()}
 }
 \author{

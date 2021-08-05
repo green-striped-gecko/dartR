@@ -13,28 +13,31 @@ gl.test.heterozygosity(
   max_plots = 6,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{A genlight object containing the SNP genotypes [required]}
+\item{x}{A genlight object containing the SNP genotypes [required].}
 
-\item{nreps}{Number of replications of the re-randomization [default 1,000]}
+\item{nreps}{Number of replications of the re-randomization [default 1,000].}
 
-\item{alpha1}{First significance level for comparison with diff=0 on plot [default 0.05]}
+\item{alpha1}{First significance level for comparison with diff=0 on plot [default 0.05].}
 
-\item{alpha2}{Second significance level for comparison with diff=0 on plot [default 0.01]}
+\item{alpha2}{Second significance level for comparison with diff=0 on plot [default 0.01].}
 
-\item{plot.out}{If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE]}
+\item{plot.out}{If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE].}
 
-\item{max_plots}{Maximum number of plots to print per page [default 9]}
+\item{max_plots}{Maximum number of plots to print per page [default 9].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 A dataframe containing population labels, heterozygosities and sample sizes

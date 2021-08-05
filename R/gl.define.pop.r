@@ -20,7 +20,7 @@
 gl.define.pop <- function(x, 
                           ind.list, 
                           new, 
-                          verbose=NULL){
+                          verbose = NULL){
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

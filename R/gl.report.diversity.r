@@ -10,6 +10,7 @@
 #' @param plot_colours A color palette [default discrete_palette].
 #' @param pbar Report on progress. Silent if set to FALSE [default TRUE]. 
 #' @param table Prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table. [default "DH"]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details For all indexes, the entropies (H) and corresponding effective numbers, i.e. Hill numbers (D), which reflect the number of needed entities to get the observed values, are calculated. In a nutshell, the alpha indexes between the different q-values should be similar if there is no deviation from expected allele frequencies and occurrences (e.g. all loci in HWE & equilibrium). If there is a deviation of an index, this links to a process causing it, such as dispersal, selection or strong drift. For a detailed explanation of all the indexes, we recommend resorting to the literature provided below. Confidence intervals are +/- 1 standard deviation.
@@ -50,6 +51,7 @@ gl.report.diversity <- function(x,
                                 table = "DH", 
                                 plot_theme = theme_dartR(),
                                 plot_colours = discrete_palette, 
+                                save2tmp = FALSE,
                                 verbose = NULL) {
   
   # TRAP COMMAND
@@ -62,7 +64,7 @@ gl.report.diversity <- function(x,
   
   # CHECKS DATATYPE 
   
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
     
     # FLAG SCRIPT START
 
@@ -320,7 +322,7 @@ gl.report.diversity <- function(x,
             fs_final <- as.data.frame(cbind(fs_plot,fs_plot_up[,3],fs_plot_low[,3]))
             colnames(fs_final) <- c("pop","q","value","up","low")
             
-             p1 <- 
+             p3 <- 
               ggplot(fs_final, aes(x=pop ,y=value,fill=pop)) +
               geom_bar(position = "dodge",stat="identity",color="black") + 
               geom_errorbar(aes(ymin = low , ymax =up), width = 0.2)+
@@ -336,7 +338,7 @@ gl.report.diversity <- function(x,
               labs(fill = "Population") +
               ggtitle("q-profile")
              
-             print(p1)
+             print(p3)
             
       if (!is.na(match(table, c("H", "DH", "HD")))) {
         tt <- data.frame(nloci = unlist(nlocpop), m_0Ha = zero_H_alpha, sd_0Ha = zero_H_alpha_sd, m_1Ha = one_H_alpha, 
@@ -383,22 +385,18 @@ gl.report.diversity <- function(x,
         two_D_alpha_sd = two_D_alpha_sd)
         }
 
-             # SAVE INTERMEDIATES TO TEMPDIR             
-             
-             # creating temp file names
-             temp_plot <- tempfile(pattern = "dartR_plot_")
-             match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
-             
-             # saving to tempdir
-             saveRDS(list(match_call,p1), file = temp_plot)
-             if(verbose>=2){
-               cat(report("  Saving the ggplot to session tempfile\n"))
+             # SAVE INTERMEDIATES TO TEMPDIR 
+             if(save2tmp){
+               # creating temp file names
+               temp_plot <- tempfile(pattern = "Plot_")
+               match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+               # saving to tempdir
+               saveRDS(list(match_call,p3), file = temp_plot)
+               if(verbose>=2){
+                 cat(report("  Saving ggplot(s) to the session tempfile\n"))
+                 cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+               }
              }
-             
-             if(verbose>=2){
-               cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-             } 
-             
 
     # FLAG SCRIPT END
 

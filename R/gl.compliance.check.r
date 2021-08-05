@@ -33,7 +33,7 @@ gl.compliance.check <- function (x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECKS DATATYPE 
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
 
 # DO THE JOB
   

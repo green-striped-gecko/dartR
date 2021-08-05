@@ -8,7 +8,7 @@ gl.report.heterozygosity(
   x,
   method = "pop",
   n.invariant = 0,
-  plot = TRUE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours_pop = discrete_palette,
   plot_colours_ind = two_colors,
@@ -23,7 +23,7 @@ gl.report.heterozygosity(
 
 \item{n.invariant}{An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]}
 
-\item{plot}{Whether produce a plot of the results [default TRUE].}
+\item{plot.out}{Whether produce a plot of the results [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
@@ -79,7 +79,7 @@ Output for method='ind' is a histogram and a boxplot of heterozygosity across in
 \examples{
 df <- gl.report.heterozygosity(testset.gl)
 df <- gl.report.heterozygosity(testset.gl,method='ind')
-df <- gl.report.heterozygosity(testset.gl,plot=FALSE)
+df <- gl.report.heterozygosity(testset.gl,plot.out=FALSE)
 
 }
 \references{

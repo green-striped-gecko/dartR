@@ -18,10 +18,10 @@
 #'   gs2 <- gl.drop.loc(testset.gs, loc.list=c("20134188","19249144"),verbose=3)
 
 gl.drop.loc <- function(x, 
-                        loc.list=NULL, 
-                        first=NULL, 
-                        last=NULL, 
-                        verbose=NULL){
+                        loc.list = NULL, 
+                        first = NULL, 
+                        last = NULL, 
+                        verbose = NULL){
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

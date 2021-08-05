@@ -2,49 +2,71 @@
 #'
 #' @title Report summary of the slot $other$loc.metrics
 #'
-#' @description This script uses any field with numeric values stored in $other$loc.metrics to produce summary statistics (mean, minimum, average, quantiles), histograms and boxplots to assist the decision of choosing thresholds for the filter function \code{\link{gl.filter.locmetric}}.
+#' @description 
+#' This script uses any field with numeric values stored in $other$loc.metrics 
+#' to produce summary statistics (mean, minimum, average, quantiles), histograms 
+#' and boxplots to assist the decision of choosing thresholds for the filter 
+#' function \code{\link{gl.filter.locmetric}}.
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required].
 #' @param metric Name of the metric to be used for filtering [required].
+#' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session 
+#' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #'
 #' @details 
 #'The function \code{\link{gl.filter.locmetric}} will filter out the
 #'  loci with a locmetric value below a specified threshold.
 #'  
-#'The fields that are included in dartR, and a short description, are found below. Optionally, the user can also set his/her own field by adding a vector into $other$loc.metrics as shown in the example. You can check the names of all available loc.metrics via: names(gl$other$loc.metrics).
+#'The fields that are included in dartR, and a short description, are found 
+#'below. Optionally, the user can also set his/her own field by adding a vector
+#' into $other$loc.metrics as shown in the example. You can check the names of 
+#' all available loc.metrics via: names(gl$other$loc.metrics).
 #'
 #'\itemize{ 
-#'\item SnpPosition - position (zero is position 1) in the sequence tag of the defined SNP variant base 
-#'\item CallRate - proportion of samples for which the genotype call is non- missing (that is, not '-' ) 
-#'\item OneRatioRef - proportion of samples for which the genotype score is 0 
-#'\item OneRatioSnp - proportion of samples for which the genotype score is 2 
-#'\item FreqHomRef - proportion of samples homozygous for the Reference allele 
-#'\item FreqHomSnp - proportion of samples homozygous for the Alternate (SNP) allele 
-#'\item FreqHets - proportion of samples which score as heterozygous, that is, scored as 1 
-#'\item PICRef - polymorphism information content (PIC) for the Reference allele 
-#'\item PICSnp - polymorphism information content (PIC) for the SNP 
-#'\item AvgPIC - average of the polymorphism information content (PIC) of the Reference and SNP alleles 
-#'\item AvgCountRef - sum of the tag read counts for all samples, divided by the number of samples with non-zero tag read counts, for the Reference allele row 
-#'\item AvgCountSnp - sum of the tag read counts for all samples, divided by the number of samples with non-zero tag read counts, for the Alternate (SNP) allele row 
-#'\item RepAvg - proportion of technical replicate assay pairs for which the marker score is consistent 
-#'\item rdepth - read depth
+#'\item SnpPosition - position (zero is position 1) in the sequence tag of the 
+#'defined SNP variant base.
+#'\item CallRate - proportion of samples for which the genotype call is 
+#'non-missing (that is, not '-' ).
+#'\item OneRatioRef - proportion of samples for which the genotype score is 0.
+#'\item OneRatioSnp - proportion of samples for which the genotype score is 2.
+#'\item FreqHomRef - proportion of samples homozygous for the Reference allele. 
+#'\item FreqHomSnp - proportion of samples homozygous for the Alternate (SNP) 
+#'allele.
+#'\item FreqHets - proportion of samples which score as heterozygous, that is, 
+#'scored as 1.
+#'\item PICRef - polymorphism information content (PIC) for the Reference allele.
+#'\item PICSnp - polymorphism information content (PIC) for the SNP.
+#'\item AvgPIC - average of the polymorphism information content (PIC) of the
+#' reference and SNP alleles.
+#'\item AvgCountRef - sum of the tag read counts for all samples, divided by the
+#' number of samples with non-zero tag read counts, for the Reference allele row.
+#'\item AvgCountSnp - sum of the tag read counts for all samples, divided by the 
+#'number of samples with non-zero tag read counts, for the Alternate (SNP) allele
+#' row. 
+#'\item RepAvg - proportion of technical replicate assay pairs for which the 
+#'marker score is consistent.
+#'\item rdepth - read depth.
 #'}
 #'
 #'\strong{ Function's output }
 #'
-#' The minimum, maximum, mean and a tabulation of quantiles of the locmetric values against
-#'  thresholds rate are provided. Output also includes a boxplot and a
-#'  histogram.
+#' The minimum, maximum, mean and a tabulation of quantiles of the locmetric 
+#' values against thresholds rate are provided. Output also includes a boxplot 
+#' and a histogram.
 #'  
-#'  Quantiles are
-#'  partitions of a finite set of values into q subsets of (nearly) equal sizes.
-#'  In this function q = 20. Quantiles are useful measures because they are less
-#'  susceptible to long-tailed distributions and outliers.
+#'  Quantiles are partitions of a finite set of values into q subsets of (nearly)
+#'   equal sizes. In this function q = 20. Quantiles are useful measures because 
+#'   they are less susceptible to long-tailed distributions and outliers.
 #'  
-#'  Plots and table were saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+#'  Plots and table were saved to the temporal directory (tempdir) and can be 
+#'  accessed with the function \code{\link{gl.print.reports}} and listed with 
+#'  the function \code{\link{gl.list.reports}}. Note that they can be accessed 
+#'  only in the current R session because tempdir is cleared each time that the 
+#'  R session is closed.
 #'
 #'  Examples of other themes that can be used can be consulted in \itemize{
 #'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -78,8 +100,10 @@
 
 gl.report.locmetric <- function(x, 
                                 metric, 
+                                plot.out = TRUE,
                                 plot_theme = theme_dartR(),
                                 plot_colours = two_colors,
+                                save2tmp = FALSE,
                                 verbose = NULL) {
     # TRAP COMMAND
     
@@ -91,7 +115,7 @@ gl.report.locmetric <- function(x,
     
     # CHECKS DATATYPE 
     
-    datatype <- utils.check.datatype(x)
+    datatype <- utils.check.datatype(x, verbose=verbose)
     
     # FLAG SCRIPT START
 
@@ -176,39 +200,41 @@ gl.report.locmetric <- function(x,
     rownames(df) <- NULL
     
     # PRINTING OUTPUTS
-    # using package patchwork
-    p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
-    print(p3)
+    if(plot.out){
+        # using package patchwork
+        p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
+        print(p3)
+    }
     print(df)
     
     # SAVE INTERMEDIATES TO TEMPDIR             
+    
     # creating temp file names
-    temp_plot <- tempfile(pattern = "dartR_plot_")
-    temp_table <- tempfile(pattern = "dartR_table_")
-    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
-    # saving to tempdir
-    saveRDS(list(match_call,p3), file = temp_plot)
-    if(verbose>=2){
-        cat(report("  Saving the ggplot to session tempfile\n"))
+    if(save2tmp){
+        if(plot.out){
+            temp_plot <- tempfile(pattern = "Plot_")
+            match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+            # saving to tempdir
+            saveRDS(list(match_call,p3), file = temp_plot)
+            if(verbose>=2){
+                cat(report("  Saving the ggplot to session tempfile\n"))
+            }
+        }
+        temp_table <- tempfile(pattern = "Table_")
+        saveRDS(list(match_call,df), file = temp_table)
+        if(verbose>=2){
+            cat(report("  Saving tabulation to session tempfile\n"))
+            cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+        }
     }
-    
-    saveRDS(list(match_call,df), file = temp_table)
-    if(verbose>=2){
-        cat(report("  Saving tabulation to session tempfile\n"))
-    }
-    
-    if(verbose>=2){
-        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-    } 
     
     # FLAG SCRIPT END
-
+    
     if (verbose >= 1) {
-        cat(report("\n\nCompleted:", funname, "\n\n"))
+        cat(report("Completed:", funname, "\n"))
     }
     
     # RETURN
-
     invisible(x)
-
+    
 }

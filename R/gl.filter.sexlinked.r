@@ -17,7 +17,7 @@
 #' @param t.het Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0.1].
 #' @param t.hom Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0.1].
 #' @param t.pres Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0.1].
-#' @param plot Creates a plot that shows the heterozygosity of males and females at each loci.
+#' @param plot.out Creates a plot that shows the heterozygosity of males and females at each loci.
 #' be regarded as consistent with a sex specific marker [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of three color names for the not sex-linked loci, for the sex-linked loci and for the area in which sex-linked loci appear [default three_colors].
@@ -61,7 +61,7 @@ gl.filter.sexlinked <- function(x,
                                 t.het = 0.1, 
                                 t.hom = 0.1, 
                                 t.pres = 0.1, 
-                                plot = TRUE,
+                                plot.out = TRUE,
                                 plot_theme = theme_dartR(), 
                                 plot_colours = three_colors, 
                                 verbose = NULL) {
@@ -76,7 +76,7 @@ gl.filter.sexlinked <- function(x,
   
   # CHECKS DATATYPE 
   
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
@@ -252,7 +252,7 @@ gl.filter.sexlinked <- function(x,
       }
     }
     
-    if (plot){
+    if (plot.out){
       
       df$fhet <- dff$F1/(dff$F0+dff$F1+dff$F2)
       df$mhet <- dfm$M1/(dfm$M0+dfm$M1+dfm$M2)
@@ -384,7 +384,7 @@ gl.filter.sexlinked <- function(x,
       } 
     }
     
-    if (plot)  {
+    if (plot.out)  {
       fhet <- mhet <- NULL
       df$fhet <- dff$F1/(dff$F0+dff$F1)
       df$mhet <- dfm$M1/(dfm$M0+dfm$M1)

@@ -17,6 +17,7 @@ gl.report.hwe(
   plot.out = TRUE,
   plot_colours = two_colors_contrast,
   max_plots = 4,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -51,6 +52,9 @@ perform H-W tests [default 5].}
 not-significant loci [default two_colors_contrast].}
 
 \item{max_plots}{Maximum number of plots to print per page [default 4].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 progress log ; 3, progress and results summary; 5, full report 
@@ -147,8 +151,7 @@ are based on the function  \code{\link[HardyWeinberg]{HWTernaryPlot}} from
 the package HardyWeinberg. Loci that depart significantly from H-W proportions 
 are shown in red, and those not showing significant departure are shown in green. 
 
-For these plots to work it is necessary to install the package ggtern and 
-load it before running the function, i.e. library(ggtern).
+For these plots to work it is necessary to install the package ggtern.
 }
 \examples{
 gl.report.hwe(x = bandicoot.gl)

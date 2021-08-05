@@ -94,9 +94,6 @@ hadjust=1.5,vadjust=1)
 }
 \seealso{
 \code{\link{gl.pcoa}}
-
-Other Exploration and visualisation functions: 
-\code{\link{gl.pcoa.plot.beta}()}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

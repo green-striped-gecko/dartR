@@ -23,6 +23,8 @@
 #' @param plot_colours Vector with two colour names for the significant and 
 #' not-significant loci [default two_colors_contrast].
 #' @param max_plots Maximum number of plots to print per page [default 4].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session 
+#' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
 #' [default NULL, unless specified using gl.set.verbosity].
@@ -107,8 +109,7 @@
 #' the package HardyWeinberg. Loci that depart significantly from H-W proportions 
 #' are shown in red, and those not showing significant departure are shown in green. 
 #' 
-#' For these plots to work it is necessary to install the package ggtern and 
-#' load it before running the function, i.e. library(ggtern).
+#' For these plots to work it is necessary to install the package ggtern.
 #' @return A dataframe containing loci, counts of reference SNP homozygotes,
 #' heterozygotes and alternate SNP homozygotes; probability of departure from 
 #' H-W proportions, and per locus significance with and without correction for 
@@ -156,6 +157,7 @@ gl.report.hwe <- function(x,
                           plot.out = TRUE,
                           plot_colours = two_colors_contrast, 
                           max_plots = 4,
+                          save2tmp = FALSE,
                           verbose = NULL) {
   
   # SET VERBOSITY
@@ -166,7 +168,7 @@ gl.report.hwe <- function(x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   # check if packages are installed
@@ -363,7 +365,7 @@ gl.report.hwe <- function(x,
           geom_line(data=HW,aes(x=AA,y=AB,z=BB),size=1,color="dodgerblue3") +
           geom_line(data=Crit_upper,aes(x=V1,y=V2,z=V3),size=1,color="darkgreen")+
           geom_line(data=Crit_lower,aes(x=V1,y=V2,z=V3),size=1,color="darkgreen")+
-          theme_void() +
+          ggtern::theme_void() +
           theme(plot.subtitle = element_text(hjust = 0.5, vjust = 1),
                 tern.axis.line= element_line(color='black',size=1))+
           ggtern::theme_hidelabels()+
@@ -382,15 +384,18 @@ gl.report.hwe <- function(x,
       seq_2 <- c(seq_2,length(p_list))
       for (i in 1:ceiling((length(p_list)/max_plots))) {
         p_final <- ggtern::grid.arrange(grobs =p_list[seq_1[i]:seq_2[i]],ncol = 2)
-        # SAVE INTERMEDIATES TO TEMPDIR             
+        # SAVE INTERMEDIATES TO TEMPDIR      
+        if(save2tmp){
         # creating temp file names
         temp_plot <- tempfile(pattern =paste0("Plot_",seq_1[i],"_to_",seq_2[i]))
         # saving to tempdir
         saveRDS(list(match_call,p_final), file = temp_plot)
+        if(verbose>=2){
+          cat(report("  Saving the ggplot to session tempfile\n"))
+        }
+        }
       }
-      if(verbose>=2){
-        cat(report("  Saving the ggplot to session tempfile\n"))
-      }
+    
       
     }
   #removing column with colour name
@@ -412,20 +417,18 @@ gl.report.hwe <- function(x,
       print(df, row.names=FALSE)
   }
   
-
-  # SAVE INTERMEDIATES TO TEMPDIR             
-  # creating temp file names
-  temp_table <- tempfile(pattern = "Table_")
-  match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+  # SAVE INTERMEDIATES TO TEMPDIR    
+  if(save2tmp){
+  # creating temp file names  
+    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+    temp_table <- tempfile(pattern = "Table_")
   # saving to tempdir
   saveRDS(list(match_call,df), file = temp_table)
   if(verbose>=2){
     cat(report("  Saving tabulation to session tempfile\n"))
-  }
-  
-  if(verbose>=2){
     cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-  } 
+  }
+  }
   
   # FLAG SCRIPT END
   
