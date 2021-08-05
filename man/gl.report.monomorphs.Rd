@@ -36,8 +36,6 @@ Note that for SNP data, NAs likely represent null alleles; in tag presence/absen
 \code{\link{gl.filter.monomorphs}}
 
 Other filters and filter reports: 
-\code{\link{gl.filter.callrate}()},
-\code{\link{gl.filter.hamming}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
@@ -45,11 +43,8 @@ Other filters and filter reports:
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},
-\code{\link{gl.report.maf}()},
-\code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.rdepth}()},
 \code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.secondaries}()},
 \code{\link{gl.report.taglength}()}
 }
 \author{

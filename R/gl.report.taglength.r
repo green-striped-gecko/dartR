@@ -7,18 +7,23 @@
 #' from 20 to 69 base pairs. This function reports summary statistics of the tag lengths.
 #'
 #' @param x Name of the genlight object containing the SNP [required].
+#' @param plot.out If TRUE, displays a plot to guide the decision on a filter 
+#' threshold [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the
 #'  plots [default two_colors].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session 
+#' temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#' progress log ; 3, progress and results summary; 5, full report [default NULL,
+#'  unless specified using gl.set.verbosity]
 #'
 #' @details The function \code{\link{gl.filter.taglength}} will filter out the
 #'  loci with a tag length below a specified threshold.
 #'
-#'  Quantiles are
-#' partitions of a finite set of values into q subsets of (nearly) equal sizes.
-#' In this function q = 20. Quantiles are useful measures because they are less
-#'  susceptible to long-tailed distributions and outliers.
+#'  Quantiles are partitions of a finite set of values into q subsets of (nearly) 
+#'  equal sizes. In this function q = 20. Quantiles are useful measures because 
+#'  they are less susceptible to long-tailed distributions and outliers.
 #'  
 #'\strong{ Function's output }
 #'
@@ -51,8 +56,10 @@
 #'  
 
 gl.report.taglength <- function(x, 
+                                plot.out = TRUE,
                                 plot_theme = theme_dartR(), 
                                 plot_colours = two_colors, 
+                                save2tmp = FALSE,
                                 verbose = NULL) {
 
   # TRAP COMMAND
@@ -147,39 +154,41 @@ gl.report.taglength <- function(x,
   rownames(df) <- NULL
   
   # PRINTING OUTPUTS
-  # using package patchwork
-  p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
-  print(p3)
+  if(plot.out){
+    # using package patchwork
+    p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
+    print(p3)
+  }
   print(df)
   
   # SAVE INTERMEDIATES TO TEMPDIR             
+  
   # creating temp file names
-  temp_plot <- tempfile(pattern = "dartR_plot_")
-  temp_table <- tempfile(pattern = "dartR_table_")
-  match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
-  # saving to tempdir
-  saveRDS(list(match_call,p3), file = temp_plot)
-  if(verbose>=2){
-    cat(report("  Saving the ggplot to session tempfile\n"))
+  if(save2tmp){
+    if(plot.out){
+      temp_plot <- tempfile(pattern = "Plot_")
+      match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+      # saving to tempdir
+      saveRDS(list(match_call,p3), file = temp_plot)
+      if(verbose>=2){
+        cat(report("  Saving the ggplot to session tempfile\n"))
+      }
+    }
+    temp_table <- tempfile(pattern = "Table_")
+    saveRDS(list(match_call,df), file = temp_table)
+    if(verbose>=2){
+      cat(report("  Saving tabulation to session tempfile\n"))
+      cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+    }
   }
-  
-  saveRDS(list(match_call,df), file = temp_table)
-  if(verbose>=2){
-    cat(report("  Saving tabulation to session tempfile\n"))
-  }
-  
-  if(verbose>=2){
-    cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-  } 
   
   # FLAG SCRIPT END
   
   if (verbose >= 1) {
-    cat(report("\n\nCompleted:", funname, "\n\n"))
+    cat(report("Completed:", funname, "\n"))
   }
   
   # RETURN
-  
   invisible(x)
   
 }

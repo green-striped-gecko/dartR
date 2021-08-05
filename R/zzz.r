@@ -7,7 +7,6 @@
 #' @importFrom stats dist nobs optimize pchisq variable.names optim quantile pgamma
 #' @import ggplot2
 
-
 zzz <- NULL  #to create a useful named help page
 
 # SET VERSION
@@ -53,6 +52,7 @@ viridis_palette <- colorRampPalette(c("#440154FF", "#482173FF", "#433E85FF", "#3
 two_colors <- c("#3B9AB2" ,"#78B7C5" )
 two_colors_contrast <- c("deeppink","chartreuse3")
 three_colors <- c("#3B9AB2","deeppink","lemonchiffon")
+four_colors <-  c( "lemonchiffon" ,"deeppink", "dodgerblue" ,"chartreuse3")
 
 # SET THEME FOR PLOTS
 
@@ -184,6 +184,25 @@ theme_dartR <- function(base_size = 11, base_family = "",
     complete = TRUE
   )
 }
+
+## plot method
+setMethod("plot", signature(x="genlight"), function(x,
+                                                    group_pop = FALSE,
+                                                    labels_plot = FALSE, 
+                                                    ind_labels = indNames(x), 
+                                                    plot_colours = four_colors, 
+                                                    posi = "bottom", 
+                                                    save2tmp = FALSE,
+                                                    verbose = NULL) {
+  gl.plot(x, 
+          group_pop = group_pop,
+          labels_plot = labels_plot, 
+          ind_labels = ind_labels, 
+          plot_colours = plot_colours, 
+          posi = posi, 
+          save2tmp = save2tmp,
+          verbose = verbose)
+})
 
 # WELCOME MESSAGE
 .onAttach <- function(...) {

@@ -65,7 +65,7 @@ gl.grm <- function(x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   

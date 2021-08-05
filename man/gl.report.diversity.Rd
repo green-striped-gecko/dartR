@@ -10,6 +10,7 @@ gl.report.diversity(
   table = "DH",
   plot_theme = theme_dartR(),
   plot_colours = discrete_palette,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -23,6 +24,8 @@ gl.report.diversity(
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{A color palette [default discrete_palette].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
 }

@@ -1,106 +1,122 @@
-#' Plotting genlight object as a smear plot (loci by individuals color coded for scores of 0, 1, 2 and NA)
+#' @name gl.plot
+#' @title Plotting genlight object as a smear plot (loci by individuals color 
+#' coded for scores of 0, 1, 2 and NA)
+#' @description 
+#' It adds the option to put labels on the individuals and grouping by populations. 
+#' If there are too many individuals, it is best to use labels_plot=FALSE.
+#'
+#' @param x Name of the genlight object containing the SNP or presence/absence
+#'  (SilicoDArT) data [required].
+#' @param group_pop Group by population [default TRUE]
+#' @param labels_plot If TRUE, individual labels are added [default FALSE].
+#' @param ind_labels Labels for individuals [default indNames(x)].
+#' @param plot_colours Vector with four color names for homozygotes for the 
+#' reference allele, heterozygotes, homozygotes for the alternative allele and 
+#' for missing values (NA) [default four_colors].
+#' @param posi Position of the legend: “left”, “top”, “right”, “bottom” or
+#'  "none" [default = "bottom"].
+#' @param save2tmp If TRUE, saves plot to the session temporary directory 
+#' (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#' progress log ; 3, progress and results summary; 5, full report [default NULL].
 #' 
-#' This function is based on the glPlot function from adegenet. It adds the option to put labels on the individuals and scales them accordingly.
-#' If there are too many individuals, it is best to use labels=FALSE.
-#'  
-#' For arguments please refer to the original adegenet function ?glPlot. 
-#' 
-#' @param x -- a genlight object [required]
-#' @param labels -- if TRUE, individual labels are added
-#' @param indlabels -- labels for individuals [default = first 8 letters from indNames]
-#' @param col -- optional color vector (see ?glPlot) [default NULL]
-#' @param legend -- if TRUE, a legend will be added [default = TRUE]
-#' @param posi -- position of the legend [default = "bottomleft"]
-#' @param bg -- background color of the legend [default transparent white]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
-#' @param ... --- additional arguments passed to glPlot function.
+#' @return Returns unaltered genlight object
+#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @examples
+#' gl.plot(bandicoot.gl[1:10,],labels=TRUE)
+#'
+#' @seealso \code{\link{gl.filter.callrate}}
+#' @family Exploration/visualisation functions
 #' @export
-#'@examples 
-#'gl.plot(bandicoot.gl[1:30,])
-#'gl.plot(bandicoot.gl[1:30,])
-#'gl.plot(bandicoot.gl[1:10,],labels=TRUE)
+#'  
 
-gl.plot <- function (x, labels=FALSE, indlabels=indNames(x), col=NULL, legend=TRUE, posi="bottomleft", bg=rgb(1,1,1,.5), verbose=NULL,...)
-{
+gl.plot <- function (x,
+                     group_pop = FALSE,
+                     labels_plot = FALSE, 
+                     ind_labels = indNames(x), 
+                     plot_colours = four_colors, 
+                     posi = "bottom", 
+                     save2tmp = FALSE,
+                     verbose = NULL) {
   
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-  
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
+  # CHECK IF PACKAGES ARE INSTALLED
+  pkg <- "reshape2"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop(error("Package ",pkg," needed for this function to work. Please install it.")) 
   } 
   
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
-# FLAG SCRIPT START
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-
-# STANDARD ERROR CHECKING
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x)
   
-  if(class(x)!="genlight") {
-    cat("  Fatal Error: genlight object required!\n"); stop("Execution terminated\n")
-  }
-
   # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
-      pop(x) <- array("pop1",dim = nInd(x))
-      pop(x) <- as.factor(pop(x))
+  if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
+    if (verbose >= 2) {
+      cat(warn("  No population assignments detected, 
+                             individuals assigned to a single population labelled 'pop1'\n"))
+    }
+    pop(x) <- array("pop1", dim = nInd(x))
+    pop(x) <- as.factor(pop(x))
+  }
+
+  # DO THE JOB
+
+  X_temp <- as.data.frame(as.matrix(x))
+  colnames(X_temp) <- 1:nLoc(x)
+  X_temp$pop <- pop(x)
+  X_temp$id <- ind_labels
+  X <- reshape2::melt(X_temp,id.vars = c("pop","id"))
+  X$value <- as.character(X$value)
+
+  colnames(X) <- c("pop","id","locus","genotype")
+  
+  loc_labels <- pretty(1:nLoc(x),5)
+  
+  locus <- id <- genotype <- NA
+
+    p3 <- ggplot(X,aes(x=locus,y=id,fill=genotype))+
+      geom_raster() +
+      scale_fill_discrete(type = four_colors,na.value=four_colors[4],name="Genotype",labels=c("0","1","2")) +
+      theme_dartR() +
+      theme(legend.position=posi)+
+      scale_x_discrete(breaks= loc_labels, labels= as.character(loc_labels),name="Loci") +
+    ylab("Individuals")
+    
+    if(group_pop == TRUE){
+      p3 <- p3 + facet_wrap(~pop, ncol=1,dir="v",scales="free_y")
     }
 
-  # Check for monomorphic loci
-    tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+    if(labels_plot==F){
+      p3 <- p3 + theme(axis.text.y=element_blank())
+    }
+    
+  # PRINTING OUTPUTS
+    print(p3)
 
-# DO THE JOB
-  
-  if (!labels){
-    adegenet::glPlot(x)
-  } else {
-    X <- t(as.matrix(x))
-    X <- X[, ncol(X):1]
-  
-    if (is.null(indlabels)) indlabes <- pretty(1:nInd(x),5)
-    if (is.null(col)) {
-      myCol <- colorRampPalette(c("royalblue3", "firebrick1"))(max(X, 
-                                                                 na.rm = TRUE) + 1)
+  # creating temp file names
+  if(save2tmp){
+    temp_plot <- tempfile(pattern = "Plot_")
+    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+    # saving to tempdir
+    saveRDS(list(match_call,p3), file = temp_plot)
+    if(verbose>=2){
+      cat(report("  Saving the ggplot to session tempfile\n"))
     }
-    else {
-      myCol <- col
-    }
-    image(x = 1:nLoc(x), y = 1:nInd(x), z = X, xlab = "SNP index", yaxt = "n", col = myCol, ylab="",...)
-    axis(side = 2, at = nInd(x):1 , labels = indlabels, las=2)
-    if (legend) {
-      legend(posi, fill = myCol, legend = 0:max(X, na.rm = TRUE), 
-           horiz = TRUE, bg = bg, title = "Number of 2nd allele")
-    }
-  }  
-  
-# FLAG SCRIPT END
+  }
 
-  if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+  # FLAG SCRIPT END
+  
+  if (verbose >= 1) {
+    cat(report("Completed:", funname, "\n"))
   }
   
-  return(invisible())
+  # RETURN
+  
+  invisible(x)
 }
-
-

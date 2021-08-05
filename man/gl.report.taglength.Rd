@@ -6,20 +6,30 @@
 \usage{
 gl.report.taglength(
   x,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP [required].}
 
+\item{plot.out}{If TRUE, displays a plot to guide the decision on a filter 
+threshold [default TRUE].}
+
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report [default NULL,
+ unless specified using gl.set.verbosity]}
 }
 \value{
 Returns unaltered genlight object
@@ -32,10 +42,9 @@ from 20 to 69 base pairs. This function reports summary statistics of the tag le
 The function \code{\link{gl.filter.taglength}} will filter out the
  loci with a tag length below a specified threshold.
 
- Quantiles are
-partitions of a finite set of values into q subsets of (nearly) equal sizes.
-In this function q = 20. Quantiles are useful measures because they are less
- susceptible to long-tailed distributions and outliers.
+ Quantiles are partitions of a finite set of values into q subsets of (nearly) 
+ equal sizes. In this function q = 20. Quantiles are useful measures because 
+ they are less susceptible to long-tailed distributions and outliers.
  
 \strong{ Function's output }
 
@@ -59,8 +68,6 @@ out <- gl.report.taglength(testset.gl)
  \code{\link{gl.print.reports}}
 
 Other filters and filter reports: 
-\code{\link{gl.filter.callrate}()},
-\code{\link{gl.filter.hamming}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
@@ -68,12 +75,9 @@ Other filters and filter reports:
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},
-\code{\link{gl.report.maf}()},
 \code{\link{gl.report.monomorphs}()},
-\code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.rdepth}()},
-\code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.secondaries}()}
+\code{\link{gl.report.reproducibility}()}
 }
 \author{
 Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})

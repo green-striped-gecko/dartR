@@ -22,6 +22,7 @@ gl.pcoa.plot.beta(
   plot.out = TRUE,
   plot_theme = theme_dartR(),
   palette_discrete = discrete_palette,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -76,6 +77,9 @@ otherwise returns a dataframe [default TRUE].}
 \item{palette_discrete}{A discrete palette for the color of populations or a 
 list with as many colors as there are populations in the dataset
  [default discrete_palette].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 progress log ; 3, progress and results summary; 5, full report 
@@ -142,10 +146,10 @@ as.pop = "assigned.sex", palette_discrete = pop_colours)
 \seealso{
 \code{\link{gl.pcoa}}
 
-Other Exploration and visualisation functions: 
-\code{\link{gl.pcoa.plot}()}
+Other Exploration/visualisation functions: 
+\code{\link{gl.plot}()}
 }
 \author{
 Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{Exploration and visualisation functions}
+\concept{Exploration/visualisation functions}

@@ -7,11 +7,14 @@
 gl.filter.overshoot(x, save2tmp = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object [required]}
+\item{x}{-- name of the genlight object [required].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report 
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 A new genlight object with the recalcitrant loci deleted

@@ -7,7 +7,7 @@ each locus) or reproducibility (repeatability of the scores for fragment presenc
 \usage{
 gl.report.reproducibility(
   x,
-  plot = TRUE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   save2tmp = FALSE,
@@ -18,7 +18,7 @@ gl.report.reproducibility(
 \item{x}{Name of the genlight object containing the SNP or presence/absence
 (SilicoDArT) data [required].}
 
-\item{plot}{If TRUE, displays a plot to guide the decision on a filter threshold [default TRUE]}
+\item{plot.out}{If TRUE, displays a plot to guide the decision on a filter threshold [default TRUE]}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
 
@@ -42,7 +42,7 @@ the percentage of scores that are repeated in the technical replicate dataset.
 \details{
 The function displays a table of minimum, maximum, mean and quantiles for repeatbility against
  possible thresholds that might subsequently be specified in \code{\link{gl.filter.reproducibility}}. 
- If plot=TRUE, display also includes a boxplot and a histogram to guide in the selection of a threshold 
+ If plot.out=TRUE, display also includes a boxplot and a histogram to guide in the selection of a threshold 
  for filtering on repeatability.
 
  If save2tmp=TRUE, ggplots and relevant tabulations are saved to the session's temp directory (tempdir) 
@@ -63,8 +63,6 @@ The function displays a table of minimum, maximum, mean and quantiles for repeat
 \code{\link{gl.filter.reproducibility}}
 
 Other filters and filter reports: 
-\code{\link{gl.filter.callrate}()},
-\code{\link{gl.filter.hamming}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
@@ -72,11 +70,8 @@ Other filters and filter reports:
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},
-\code{\link{gl.report.maf}()},
 \code{\link{gl.report.monomorphs}()},
-\code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.rdepth}()},
-\code{\link{gl.report.secondaries}()},
 \code{\link{gl.report.taglength}()}
 }
 \author{

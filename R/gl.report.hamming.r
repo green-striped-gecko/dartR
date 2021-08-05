@@ -1,27 +1,32 @@
 #' @name gl.report.hamming
 #' @title Calculates the pairwise Hamming distance between DArT trimmed DNA sequences
 #'
-#' @description Hamming distance is calculated as the number of base differences between two 
-#' sequences which can be expressed as a count or a proportion. Typically, it is
-#' calculated between two sequences of equal length. In the context of DArT
-#' trimmed sequences, which differ in length but which are anchored to the left
-#' by the restriction enzyme recognition sequence, it is sensible to compare the
-#' two trimmed sequences starting from immediately after the common recognition
-#' sequence and terminating at the last base of the shorter sequence. 
+#' @description Hamming distance is calculated as the number of base differences
+#' between two sequences which can be expressed as a count or a proportion. 
+#' Typically, it is calculated between two sequences of equal length. In the 
+#' context of DArT trimmed sequences, which differ in length but which are 
+#' anchored to the left by the restriction enzyme recognition sequence, it is 
+#' sensible to compare the two trimmed sequences starting from immediately after 
+#' the common recognition sequence and terminating at the last base of the 
+#' shorter sequence. 
 #'
-#' @param x Name of the genlight object containing the SNP data [required]
-#' @param rs Number of bases in the restriction enzyme recognition sequence [default 5]
-#' @param threshold Minimum acceptable base pair difference for display on the boxplot and histogram [default 3]
-#' @param taglength Typical length of the sequence tags [default 69]
-#' @param plot specify if plot is to be produced [default TRUE]
-#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
-#' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors]
-#' @param probar If TRUE, then a progress bar is displayed on long loops [default TRUE]
-#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param rs Number of bases in the restriction enzyme recognition sequence [default 5].
+#' @param threshold Minimum acceptable base pair difference for display on the 
+#' boxplot and histogram [default 3].
+#' @param taglength Typical length of the sequence tags [default 69].
+#' @param plot.out specify if plot is to be produced [default TRUE].
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
+#' @param plot_colours List of two color names for the borders and fill of the 
+#' plots [default two_colors].
+#' @param probar If TRUE, then a progress bar is displayed on long loops [default TRUE].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session 
+#' temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#' progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].
 #'
-#' @details The function \code{\link{gl.filter.hamming}} will filter out one of two loci if their Hamming distance 
-#'is less than a specified percentage
+#' @details The function \code{\link{gl.filter.hamming}} will filter out one of 
+#' two loci if their Hamming distance is less than a specified percentage
 #'
 #' Hamming distance can be computed by exploiting the fact that the dot product 
 #' of two binary vectors x and (1-y) counts the corresponding elements that are 
@@ -59,11 +64,11 @@ gl.report.hamming <- function(x,
                               rs = 5, 
                               threshold = 3, 
                               taglength = 69, 
-                              plot=TRUE,
+                              plot.out = TRUE,
                               plot_theme = theme_dartR(), 
                               plot_colours = two_colors, 
                               probar = FALSE,
-                              save2tmp=FALSE,
+                              save2tmp = FALSE,
                               verbose = NULL) {
 
   # SET VERBOSITY
@@ -130,7 +135,7 @@ gl.report.hamming <- function(x,
     }
     
     if (verbose >= 2) {
-      if(plot){
+      if(plot.out){
             cat(report("  Plotting boxplot and histogram of Hamming distance, showing a threshold of", threshold, "bp [HD", round(tld, 2), "]\n"))
       }
     }
@@ -183,35 +188,41 @@ gl.report.hamming <- function(x,
     rownames(df) <- NULL
     
     # PRINTING OUTPUTS
-    p3 <- (p1/p2) + plot_layout(heights = c(1, 4)) # using package patchwork
-    print(p3)
+    if(plot.out){
+      # using package patchwork
+      p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
+      print(p3)
+    }
     print(df)
     
     # SAVE INTERMEDIATES TO TEMPDIR             
+    
     # creating temp file names
-    temp_plot <- tempfile(pattern = "dartR_plot_")
-    temp_table <- tempfile(pattern = "dartR_table_")
-    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
-    # saving to tempdir
-    saveRDS(list(match_call,p3), file = temp_plot)
-    if(verbose>=2){
-      cat(report("  Saving the ggplot to session tempfile\n"))
+    if(save2tmp){
+      if(plot.out){
+        temp_plot <- tempfile(pattern = "Plot_")
+        match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+        # saving to tempdir
+        saveRDS(list(match_call,p3), file = temp_plot)
+        if(verbose>=2){
+          cat(report("  Saving the ggplot to session tempfile\n"))
+        }
+      }
+      temp_table <- tempfile(pattern = "Table_")
+      saveRDS(list(match_call,df), file = temp_table)
+      if(verbose>=2){
+        cat(report("  Saving tabulation to session tempfile\n"))
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+      }
     }
     
-    saveRDS(list(match_call,df), file = temp_table)
-    if(verbose>=2){
-      cat(report("  Saving tabulation to session tempfile\n"))
-    }
-    
-    if(verbose>=2){
-      cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-    } 
-
     # FLAG SCRIPT END
+    
     if (verbose >= 1) {
       cat(report("Completed:", funname, "\n"))
     }
     
     # RETURN
     invisible(x)
+    
 }

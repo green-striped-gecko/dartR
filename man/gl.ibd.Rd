@@ -13,36 +13,40 @@ gl.ibd(
   Dgeo_trans = "log(Dgeo)",
   Dgen_trans = "Dgen",
   permutations = 999,
-  plot = TRUE,
+  plot.out = TRUE,
   paircols = NULL,
   plot_theme = theme_dartR(),
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed}
+\item{x}{Genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed}
 
-\item{distance}{type of distance that is calculated and used for the analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared", [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].}
+\item{distance}{Type of distance that is calculated and used for the analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared", [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].}
 
 \item{coordinates}{Can be either "latlon", "xy" or a two column data.frame with column names "lat","lon", "x", "y")  Coordinates are provided via \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon data will be projected to meters using Mercator system [google maps] or if xy then distance is directly calculated on the coordinates.}
 
-\item{Dgen}{genetic distance matrix if no genlight object is provided}
+\item{Dgen}{Genetic distance matrix if no genlight object is provided}
 
 \item{Dgeo}{Euclidean distance matrix if no genlight object is provided}
 
-\item{Dgeo_trans}{transformation to be used on the Euclidean distances. see Dgen_trans. [Default: "log(Dgeo)"]}
+\item{Dgeo_trans}{Transformation to be used on the Euclidean distances. see Dgen_trans. [Default: "log(Dgeo)"]}
 
 \item{Dgen_trans}{You can provide a formula to transform the genetic distance. For example Rousset (see below) suggests to study \code{Fst/(1-Fst)} against log transformed distances as this is the expectations of Fst versus distances in the case of a stepping stone model. The transformation can be applied as a formula using Dgen as the variable to be transformed. So for the Fst transformation of Rousset use \code{Dgen_trans = "Dgen/(1-Dgen)". Any valid R expression can be used here. [Default is "Dgen", which is the identity function.]}}
 
-\item{permutations}{number of permutations in the mantel test}
+\item{permutations}{Number of permutations in the mantel test}
 
-\item{plot}{should an isolation by distance plot be returned. Default is plot=TRUE}
+\item{plot.out}{Should an isolation by distance plot be returned [default TRUE].}
 
-\item{paircols}{should pairwise dots colored by "pop"ulation/"ind"ividual pairs [default: pop]. You can color pairwise individuals by pairwise population colors.}
+\item{paircols}{Should pairwise dots colored by "pop"ulation/"ind"ividual pairs [default: pop]. You can color pairwise individuals by pairwise population colors.}
 
 \item{plot_theme}{Theme for the plot. See details for options [default theme_dartR()].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 returns a list of the following components: Dgen (the genetic distance matrix), Dgeo (the Euclidean distance matrix), mantel (the statistics of the mantel test)
