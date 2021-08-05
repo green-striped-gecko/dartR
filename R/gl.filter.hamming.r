@@ -34,8 +34,11 @@
 #' @param plot_colours List of two color names for the borders and fill of the
 #'  plots [default two_colors].
 #' @param pb Switch to output progress bar [default FALSE].
-#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default TRUE].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session 
+#' temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#'  progress log ; 3, progress and results summary; 5, full report
+#'   [default 2, unless specified using gl.set.verbosity].
 #' 
 #' @return A genlight object filtered on Hamming distance.
 #' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
@@ -58,7 +61,7 @@ gl.filter.hamming <- function(x,
                               plot_theme = theme_dartR(), 
                               plot_colours = two_colors,  
                               pb = FALSE, 
-                              save2tmp = TRUE,
+                              save2tmp = FALSE,
                               verbose = NULL) {
   
   # SET VERBOSITY

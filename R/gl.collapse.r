@@ -38,10 +38,10 @@
 #' fd3
 
 gl.collapse <- function(fd, 
-                        tpop=0, 
-                        tloc=0, 
-                        pb=FALSE,
-                        verbose=NULL) {
+                        tpop = 0, 
+                        tloc = 0, 
+                        pb = FALSE,
+                        verbose = NULL) {
   
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

@@ -26,8 +26,8 @@
 #' @export
 
 gl.filter.secondaries <- function(x, 
-                                  method="random", 
-                                  verbose=NULL) {
+                                  method = "random", 
+                                  verbose = NULL) {
 
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

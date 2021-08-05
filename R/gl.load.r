@@ -14,7 +14,8 @@
 #' gl <- gl.load(file.path(tempdir(),"testset.rds"))
 #' @seealso \code{\link{gl.save}}
 #' 
-gl.load <- function(file, verbose=NULL){
+gl.load <- function(file,
+                    verbose=NULL){
 
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

@@ -45,7 +45,7 @@ gl.report.bases <- function(x,
                             plot.out = TRUE, 
                             plot_theme = theme_dartR(), 
                             plot_colours = two_colors,
-                            save2tmp=FALSE,
+                            save2tmp = FALSE,
                             verbose = NULL) {
 
   # SET VERBOSITY
@@ -56,7 +56,7 @@ gl.report.bases <- function(x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x,verbose=0)
+  datatype <- utils.check.datatype(x, verbose=verbose)
 
   # FUNCTION SPECIFIC ERROR CHECKING
 

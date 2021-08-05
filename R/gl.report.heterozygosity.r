@@ -80,7 +80,7 @@ gl.report.heterozygosity <- function(x,
     utils.flag.start(func=funname,build="Jackson",v=verbose)
     
 # CHECK DATATYPE 
-    datatype <- utils.check.datatype(x,accept="SNP")
+    datatype <- utils.check.datatype(x,accept="SNP", verbose=verbose)
 
 # FUNCTION SPECIFIC ERROR CHECKING
 

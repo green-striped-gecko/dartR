@@ -12,7 +12,7 @@ gl.filter.sexlinked(
   t.het = 0.1,
   t.hom = 0.1,
   t.pres = 0.1,
-  plot = TRUE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = three_colors,
   verbose = NULL
@@ -34,7 +34,7 @@ gl.filter.sexlinked(
 
 \item{t.pres}{Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0.1].}
 
-\item{plot}{Creates a plot that shows the heterozygosity of males and females at each loci.
+\item{plot.out}{Creates a plot that shows the heterozygosity of males and females at each loci.
 be regarded as consistent with a sex specific marker [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}

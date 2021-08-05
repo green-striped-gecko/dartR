@@ -53,7 +53,7 @@ gl.plot <- function (x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
   # Set a population if none is specified (such as if the genlight object has been generated manually)
   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {

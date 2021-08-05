@@ -42,11 +42,11 @@
 #' }
 
 gl.edit.recode.ind <- function(x, 
-                               out.recode.file=NULL, 
-                               outpath=tempdir(), 
-                               recalc=FALSE, 
-                               mono.rm=FALSE, 
-                               verbose=NULL){
+                               out.recode.file = NULL, 
+                               outpath = tempdir(), 
+                               recalc = FALSE, 
+                               mono.rm = FALSE, 
+                               verbose = NULL){
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

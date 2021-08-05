@@ -43,12 +43,12 @@
 #' }
 
 gl.edit.recode.pop <- function(x, 
-                               pop.recode=NULL, 
-                               out.recode.file=NULL, 
-                               outpath=tempdir(), 
-                               recalc=FALSE, 
-                               mono.rm=FALSE, 
-                               verbose=NULL) {
+                               pop.recode = NULL, 
+                               out.recode.file = NULL, 
+                               outpath = tempdir(), 
+                               recalc = FALSE, 
+                               mono.rm = FALSE, 
+                               verbose = NULL) {
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

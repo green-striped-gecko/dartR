@@ -27,9 +27,9 @@
 #' result <- gl.make.recode.ind(testset.gl, out.recode.file ="Emmac_recode_ind.csv",outpath=tempdir())
 
  gl.make.recode.ind <- function(x, 
-                                out.recode.file="default_recode_ind.csv", 
-                                outpath=tempdir(), 
-                                verbose=NULL) {
+                                out.recode.file = "default_recode_ind.csv", 
+                                outpath = tempdir(), 
+                                verbose = NULL) {
 
 # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)

@@ -19,9 +19,9 @@
 #'    gl <- gl.merge.pop(testset.gl, old=c("EmsubRopeMata","EmvicVictJasp"), new="Outgroup")
 
 gl.merge.pop <- function(x, 
-                         old=NULL, 
-                         new=NULL, 
-                         verbose=NULL) {
+                         old = NULL, 
+                         new = NULL, 
+                         verbose = NULL) {
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

@@ -67,14 +67,14 @@
 #' @seealso \code{\link{is.fixed}}
 
 gl.fixed.diff <- function(x, 
-                          tloc=0, 
-                          test=FALSE, 
-                          delta=0.02, 
-                          alpha=0.05,
-                          reps=1000, 
-                          mono.rm=TRUE, 
-                          pb=FALSE, 
-                          verbose=NULL) {
+                          tloc = 0, 
+                          test = FALSE, 
+                          delta = 0.02, 
+                          alpha = 0.05,
+                          reps = 1000, 
+                          mono.rm = TRUE, 
+                          pb = FALSE, 
+                          verbose = NULL) {
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

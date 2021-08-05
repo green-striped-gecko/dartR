@@ -59,7 +59,7 @@
 #' plots [default two_colors].
 #' @param bins Number of bins to display in histograms [default 25].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
-#'  temporary directory (tempdir) [default TRUE].
+#'  temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
 #' [default 2, unless specified using gl.set.verbosity].
@@ -92,7 +92,7 @@
                                 plot_theme = theme_dartR(), 
                                 plot_colours = two_colors,
                                 bins = 25, 
-                                save2tmp = TRUE,
+                                save2tmp = FALSE,
                                 verbose = NULL) {
   
 # SET VERBOSITY
@@ -103,7 +103,7 @@
    utils.flag.start(func=funname,build="Jackson",v=verbose)
    
 # CHECK DATATYPE 
-   datatype <- utils.check.datatype(x,verbose=0)
+   datatype <- utils.check.datatype(x, verbose=verbose)
   
 # FUNCTION SPECIFIC ERROR CHECKING
   

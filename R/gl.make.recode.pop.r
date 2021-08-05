@@ -23,9 +23,9 @@
 #' result <- gl.make.recode.pop(testset.gl,out.recode.file="test.csv",outpath=tempdir(),verbose=2)
 
  gl.make.recode.pop <- function(x, 
-                                out.recode.file="recode_pop_table.csv", 
-                                outpath=tempdir(), 
-                                verbose=NULL) {
+                                out.recode.file = "recode_pop_table.csv", 
+                                outpath = tempdir(), 
+                                verbose = NULL) {
 
 # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)

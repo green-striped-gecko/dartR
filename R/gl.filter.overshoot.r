@@ -32,7 +32,7 @@ gl.filter.overshoot <- function(x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x,verbose=0)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
 # STANDARD ERROR CHECKING
   
