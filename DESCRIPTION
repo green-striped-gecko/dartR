@@ -25,6 +25,7 @@ Description: Functions are provided that facilitate the import and analysis of
 VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2
+biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         SNPRelate, StAMPP, sp, PopGenReport, hierfstat, robustbase,
         gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools,reshape2,
