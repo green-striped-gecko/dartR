@@ -119,7 +119,7 @@ gl.pcoa <- function(x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
 # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x,verbose=verbose)
+  datatype <- utils.check.datatype(x,accept=c("SNP", "SilicoDArT", "dist", "fd"),verbose=verbose)
   if(datatype=="fd"){
     datatype <- utils.check.datatype(x$gl,verbose=0)
     x <- x$gl

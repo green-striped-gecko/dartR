@@ -35,7 +35,6 @@ Suggests: knitr, rmarkdown, rgl, parallel, doParallel, data.table,
         leaflet.minicharts, leaflet, rrBLUP, poppr, Rcpp, igraph,
         qvalue, gdistance, seqinr, pheatmap, RColorBrewer, gplots,
         vcfR, mmod, plotly, ggthemes, ggrepel, raster,strataG
-Additional_repositories: https://github.com/EricArcher/strataG
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.1
