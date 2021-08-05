@@ -123,6 +123,7 @@ gl.pcoa <- function(x,
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,accept=c("SNP", "SilicoDArT", "dist", "fd"), verbose=verbose)
+  
   if(datatype=="fd"){
     datatype <- utils.check.datatype(x$gl, verbose=verbose)
     x <- x$gl
