@@ -11,7 +11,7 @@
 #' @param nreps Number of replications of the re-randomization [default 1,000]
 #' @param alpha1 First significance level for comparison with diff=0 on plot [default 0.05]
 #' @param alpha2 Second significance level for comparison with diff=0 on plot [default 0.01]
-#' @param plot If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE]
+#' @param plot.out If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE]
 #' @param max_plots Maximum number of plots to print per page [default 9]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the
@@ -22,7 +22,7 @@
 #'  
 #'\strong{ Function's output }
 #'
-#' If plot = TRUE, plots are created showing the sampling distribution for the difference between each pair
+#' If plot.out = TRUE, plots are created showing the sampling distribution for the difference between each pair
 #' of heterozygosities, marked with the critical limits alpha1 and alpha2, the observed
 #' heterozygosity, and the zero value (if in range).
 #'  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
@@ -37,7 +37,7 @@
 #' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
-#' out <- gl.test.heterozygosity(bandicoot.gl, nreps=10, verbose=3, plot=TRUE)
+#' out <- gl.test.heterozygosity(bandicoot.gl, nreps=10, verbose=3, plot.out=TRUE)
 #'
 #' @family Genetic variation within populations
 #'
@@ -50,8 +50,8 @@ gl.test.heterozygosity <- function(x,
                                    nreps = 100,
                                    alpha1 = 0.05,
                                    alpha2 = 0.01,
-                                   plot = TRUE,
-                                   max_plots = 9,
+                                   plot.out = TRUE,
+                                   max_plots = 6,
                                    plot_theme = theme_dartR(), 
                                    plot_colours = two_colors, 
                                    verbose = NULL) { 
@@ -153,7 +153,7 @@ gl.test.heterozygosity <- function(x,
   
   count <- 0
   
-  if (plot){
+  if (plot.out){
     if (verbose >= 2){
       cat(report("  Cycling through the",(nPop(x)*nPop(x)-nPop(x))/2,"pairs of populations\n"))
     }
@@ -170,52 +170,52 @@ gl.test.heterozygosity <- function(x,
     # create list to contain plots
     p_list <- list()
     
-    for (first in 1:(nPop(x)-1)){
-      for (second in (first+1):nPop(x)) {
+    for (y in 1:(nPop(x)-1)){
+      for (z in (y+1):nPop(x)) {
         count <- count + 1 
         
         # Prepare the parameters for the plot
         
         # Observed He
-        obs <- D[first,second]
+        obs <- D[y,z]
         
         # Upper and lower significance limits
-        u1quantile <- as.numeric(quantile(mat[first,second,],upper1))
-        u2quantile <- as.numeric(quantile(mat[first,second,],upper2))
-        l1quantile <- as.numeric(quantile(mat[first,second,],lower1))
-        l2quantile <- as.numeric(quantile(mat[first,second,],lower2))
+        u1quantile <- as.numeric(quantile(mat[y,z,],upper1))
+        u2quantile <- as.numeric(quantile(mat[y,z,],upper2))
+        l1quantile <- as.numeric(quantile(mat[y,z,],lower1))
+        l2quantile <- as.numeric(quantile(mat[y,z,],lower2))
         
         # Is zero within the range specified by the upper and lower limits
         if (0 < u2quantile && 0 > l2quantile){
-          signif <- paste0("non-sig @",lower2)
+          signif_res <- paste0("non-sig @",lower2)
         }
         if (0 < u1quantile && 0 > l1quantile){
-          signif <- paste0("non-sig @",lower1)
+          signif_res <- paste0("non-sig @",lower1)
         }
         if (0 > u1quantile || 0 < l1quantile){
-          signif <- paste0("sig @",lower1)
+          signif_res <- paste0("sig @",lower1)
         }
         if (0 > u2quantile || 0 < l2quantile){
-          signif <- paste0("sig @",lower2)
+          signif_res <- paste0("sig @",lower2)
         }
         
         # p value for zero
-        values <- mat[first,second,]
+        values <- mat[y,z,]
         p <- min(length(values[values>0]),length(values[values<=0]))/length(abs(values))
-        p <- round(p,4)
+        p <- signif(p,digits=6)
         
         # Store results in a df  
-        df$pop1[count] <- popNames(x)[first]
-        df$pop2[count] <- popNames(x)[second]
+        df$pop1[count] <- popNames(x)[y]
+        df$pop2[count] <- popNames(x)[z]
         df$diff[count] <- obs
-        df$significance[count] <- signif
+        df$significance[count] <- signif_res
         df$pval[count] <- p
         
         # Plot the histogram of pairwise differences
         
         # Construct the label
-        title <- paste0(popNames(x)[first]," vs ",popNames(x)[second])
-        subtitle <- paste0(signif," (p=",p,")")
+        title <- paste0(popNames(x)[y]," vs ",popNames(x)[z])
+        subtitle <- paste0(signif_res," (p=",p,")")
         
         plot_values <- as.data.frame(values)
         colnames(plot_values) <- "values"
@@ -223,29 +223,32 @@ gl.test.heterozygosity <- function(x,
         # these plots do not contain legends
         if(count < total_number_plots | count != max_plots ){
         
+        suppressWarnings(
         p_temp <- ggplot(plot_values, aes(x = values)) + 
           geom_histogram(bins = 50, color = plot_colours[1],fill = plot_colours[2]) + 
-           coord_cartesian(xlim = x_axis_limits_lots) + 
+          # Add lines for the observed value of He, Zero, upper and lower levels of significance
+          geom_vline(xintercept=u1quantile,colour="firebrick4",size=1)+
+          geom_vline(xintercept=u2quantile,colour="firebrick1",size=1)+
+          geom_vline(xintercept=l1quantile,colour="firebrick4",size=1)+
+          geom_vline(xintercept=l2quantile,colour="firebrick1",size=1)+
+          geom_vline(xintercept=D[y,z],colour="green",size=2)+
+          geom_vline(xintercept = 0,colour= "blue",size=1) +
+          coord_cartesian(xlim = x_axis_limits_lots) + 
           xlab("Difference") + 
           ylab("Count") + 
           plot_theme +
           theme(plot.title = element_text(size = 12))+
-          labs(title=title,subtitle = subtitle) + 
-          # Add lines for the observed value of He, Zero, upper and lower levels of significance
-          geom_vline(xintercept = 0,colour= "blue",size=1) +
-          geom_vline(xintercept=D[first,second],colour="green",size=1)+
-          geom_vline(xintercept=u1quantile,colour="firebrick4",size=1)+
-          geom_vline(xintercept=u2quantile,colour="firebrick1",size=1)+
-          geom_vline(xintercept=l1quantile,colour="firebrick4",size=1)+
-          geom_vline(xintercept=l2quantile,colour="firebrick1",size=1)
-        
+          labs(title=title,subtitle = subtitle)
+        )
+      
         p_list[[count]] <- p_temp
         
         }
         
         # this plot contains the plot legends. it is just created every max_plots and in the last plot
         if(count == total_number_plots | (count %% max_plots) == 0 ){
-          
+
+          suppressWarnings(          
           p_temp <- ggplot(plot_values, aes(x = values)) + 
             geom_histogram(bins = 50, color = plot_colours[1],fill = plot_colours[2]) + 
             coord_cartesian(xlim = x_axis_limits_lots) + 
@@ -254,17 +257,18 @@ gl.test.heterozygosity <- function(x,
             plot_theme +
             theme(plot.title = element_text(size = 12))+
             labs(title=title,subtitle = subtitle)+
-            geom_vline(aes(xintercept = 0,colour= "Zero_value"),size=1) +
-            geom_vline(aes(xintercept=D[first,second],colour="Observed"),size=1)+
             geom_vline(aes(xintercept=u1quantile,colour="alpha1"),size=1)+
             geom_vline(aes(xintercept=u2quantile,colour="alpha2"),size=1)+
             geom_vline(xintercept=l1quantile,colour="firebrick4",size=1)+
             geom_vline(xintercept=l2quantile,colour="firebrick1",size=1)+
-            scale_color_manual(name = "Values" ,values=c( Zero_value="blue",Observed="green",alpha1="firebrick4",alpha2="firebrick1"),labels=c(paste("Sig. ",alpha1),paste("Sig. ",alpha2),"Observed","Zero value"))+
+            geom_vline(aes(xintercept=D[y,z],colour="Observed"),size=2)+
+            geom_vline(aes(xintercept = 0,colour= "Zero_value"),size=1) +
+            scale_color_manual(name = "Values" ,values=c( Zero_value="blue",Observed="green",alpha1="firebrick4",alpha2="firebrick1"),labels=c("Zero value","Observed",paste("Sig. ",alpha1),paste("Sig. ",alpha2)))+
             guides(color = guide_legend(override.aes = list(size = 5),ncol = 2))+
-            theme(legend.position="bottom",legend.title = element_text(face = "bold"))
+            theme(legend.position="bottom",legend.title = element_text(face = "bold"),legend.text=element_text(size=10))
+          )
            
-          p_list[[count]] <- p_temp
+          p_list[[count]] <- suppressWarnings(p_temp)
         }
 
       }
@@ -274,20 +278,19 @@ gl.test.heterozygosity <- function(x,
     # PRINTING OUTPUTS
     match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
     # using package patchwork
+    seq_1 <- seq(1,length(p_list),max_plots)
+    seq_2 <- seq(1,length(p_list),max_plots)-1
+    seq_2 <- seq_2[-1]
+    seq_2 <- c(seq_2,length(p_list))
     for (i in 1:ceiling((length(p_list)/max_plots))) {
-      seq_1 <- seq(1,length(p_list),max_plots)
-      seq_2 <- seq(1,length(p_list),max_plots)-1
-      seq_2 <- seq_2[-1]
-      seq_2 <- c(seq_2,seq_1[length(seq_1)])
-      
-      p_final <- wrap_plots(p_list[seq_1[i]:seq_2[i]],ncol = 3)
+      p_final <- suppressWarnings(wrap_plots(p_list[seq_1[i]:seq_2[i]],ncol = 2))
   
-      print(p_final)
+      suppressWarnings(print(p_final))
       # SAVE INTERMEDIATES TO TEMPDIR             
       # creating temp file names
-      temp_plot <- tempfile(pattern =paste0("dartR_plot_",seq_1[i],"_to_",seq_2[i]))
+      temp_plot <- tempfile(pattern =paste0("Plot_",seq_1[i],"_to_",seq_2[i]))
       # saving to tempdir
-      saveRDS(list(match_call,p_final), file = temp_plot)
+      suppressWarnings(saveRDS(list(match_call,p_final), file = temp_plot))
     }
     if(verbose>=2){
       cat(report("  Saving the ggplot to session tempfile\n"))
@@ -298,7 +301,7 @@ gl.test.heterozygosity <- function(x,
   
   # SAVE INTERMEDIATES TO TEMPDIR             
   # creating temp file names
-  temp_table <- tempfile(pattern = "dartR_table_")
+  temp_table <- tempfile(pattern = "Table_")
   match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
   # saving to tempdir
   saveRDS(list(match_call,df), file = temp_table)
@@ -313,7 +316,7 @@ gl.test.heterozygosity <- function(x,
   # FLAG SCRIPT END
   
   if (verbose >= 1) {
-    cat(report("\n\nCompleted:", funname, "\n\n"))
+    cat(report("Completed:", funname, "\n"))
   }
   
   # RETURN

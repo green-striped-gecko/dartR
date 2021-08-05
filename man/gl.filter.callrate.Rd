@@ -59,7 +59,7 @@ sequence tag can be called at a particular locus.
 \details{
 Because this filter operates on call rate, this function recalculates Call Rate, if necessary, before filtering.
 If individuals are removed using method='ind', then the call rate stored in the genlight object is, optionally, 
-recalcuated after filtering.
+recalculated after filtering.
 
 Note that when filtering individuals on call rate, the initial call rate is calculated and compared against 
 the threshold. After filtering, if mono.rm=TRUE, the removal of monomorphic loci will alter the call rates. 
@@ -69,14 +69,14 @@ will resolve the issue. This is done by setting mono.rm=TRUE and recursive=TRUE,
 
  Callrate is summarized by locus or by individual to allow sensible decisions on thresholds
 for filtering taking into consideration consequential loss of data. The summary is in the form 
-of a tablulation and plots.
+of a tabulation and plots.
 
 Plot themes can be obtained from \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
  }
 
-Resultant ggplot(s) and the tablulation(s) are saved to the session's temporary directory.
+Resultant ggplot(s) and the tabulation(s) are saved to the session's temporary directory.
 }
 \examples{
 # SNP data

@@ -2,148 +2,179 @@
 % Please edit documentation in R/gl.report.hwe.r
 \name{gl.report.hwe}
 \alias{gl.report.hwe}
-\title{Reports departure from Hardy-Weinberg Equilibrium}
+\title{Reports departure from Hardy-Weinberg proportions}
 \usage{
 gl.report.hwe(
   x,
   subset = "each",
-  plot.out = FALSE,
-  multi_comp = TRUE,
-  multi_comp_method = "bonferroni",
   method_sig = "Exact",
+  multi_comp = FALSE,
+  multi_comp_method = "BY",
   alpha_val = 0.05,
-  sample_size = 5,
+  pvalue_type = "midp",
+  cc_val = 0.5,
+  min_sample_size = 5,
+  plot.out = TRUE,
+  plot_colours = two_colors_contrast,
+  max_plots = 4,
   verbose = NULL
 )
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{subset}{Either a vector with population names, "each", "all" (see details)
-[default "each"].}
-
-\item{plot.out}{If TRUE, will produce a Ternary Plot(s) [default FALSE].}
-
-\item{multi_comp}{Whether to adjust p-values for multiple comparisons [default TRUE].}
-
-\item{multi_comp_method}{Method to adjust p-values for multiple comparisons: 
-"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr"
-(see details) [default "bonferroni"]]}
+\item{subset}{Way to group individuals to perform H-W tests. Either a vector 
+with population names, "each", "all" (see details) [default "each"].}
 
 \item{method_sig}{Method for determining statistical significance: "ChiSquare" 
 or "Exact" [default "Exact"].}
 
+\item{multi_comp}{Whether to adjust p-values for multiple comparisons [default FALSE].}
+
+\item{multi_comp_method}{Method to adjust p-values for multiple comparisons: 
+"holm", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr"
+(see details) [default "fdr"].}
+
 \item{alpha_val}{Level of significance for testing [default 0.05].}
 
-\item{sample_size}{= 5}
+\item{pvalue_type}{Type of p-value to be used in the Exact method. 
+Either "dost","selome","midp" (see details) [default "midp"].}
+
+\item{cc_val}{The continuity correction applied to the ChiSquare test [default 0.5].}
+
+\item{min_sample_size}{Minimum number of individuals per population in which 
+perform H-W tests [default 5].}
+
+\item{plot.out}{If TRUE, will produce Ternary Plot(s) [default TRUE].}
+
+\item{plot_colours}{Vector with two colour names for the significant and 
+not-significant loci [default two_colors_contrast].}
+
+\item{max_plots}{Maximum number of plots to print per page [default 4].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 progress log ; 3, progress and results summary; 5, full report 
-[default NULL, unless specified using gl.set.verbosity]}
+[default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
-returns a dataframe containing loci, counts of reference SNP homozygotes,
+A dataframe containing loci, counts of reference SNP homozygotes,
 heterozygotes and alternate SNP homozygotes; probability of departure from 
-H-W equilibrium, and per locus significance with and without Bonferroni correction.
+H-W proportions, and per locus significance with and without correction for 
+multiple comparisons.
 }
 \description{
-Calculates the probabilities of agreement with H-W equilibrium based on observed
+Calculates the probabilities of agreement with H-W proportions based on observed
 frequencies of reference homozygotes, heterozygotes and alternate homozygotes.
 }
 \details{
-Factors that can cause deviations from Hardy-Weinberg proportions include: 
-mutation, finite population size, selection, population structure, age 
+There are several factors that can cause deviations from Hardy-Weinberg proportions
+including: mutation, finite population size, selection, population structure, age 
 structure, assortative mating, sex linkage, nonrandom sampling and genotyping
- errors. Testing for Hardy-Weinberg proportions should be a process that involves
- a careful evaluation of the results.  
+ errors. Therefore, testing for Hardy-Weinberg proportions should be a process that involves
+ a careful evaluation of the results, a good place to start is Waples (2015).
+ Note that tests for H-W proportions are only valid if there is no population substructure
+ (assuming random mating) and have sufficient power only when there is sufficient 
+ sample size (n individuals > 15). 
  
-This function applies HWE tests to each locus in three ways:
+Populations can be defined in three ways:
 \itemize{
-\item across all populations together using: subset="all"
-\item within each population separately using: subset="each"
-\item within selected populations using for example: subset=c("pop1","pop2")
+\item Merging all populations in the dataset using subset = "all".
+\item Within each population separately using: subset = "each".
+\item Within selected populations using for example: subset = c("pop1","pop2").
 }
 
-This function tests for deviations from Hardy Weinberg proportions using two 
-different methods:
+Two different statistical methods to test for deviations from Hardy Weinberg
+proportions:
 \itemize{
-\item "ChiSquare"   \code{\link[HardyWeinberg]{HWChisqStats}}
-\item "Exact"  Uses the exact calculations contained in the function 
-\code{\link[HardyWeinberg]{HWExactStats}} as developed by Wigginton 
-et al. (2005). The C++ code was generously shared by Christopher Chang, and the same code is 
-used in the program PLINK (2.0).
+\item The classical chi-square test (method_sig="ChiSquare") based on the 
+function \code{\link[HardyWeinberg]{HWChisq}} of the R package HardyWeinberg.
+By default a continuity correction is applied (cc_val=0.5). The 
+continuity correction can be turned off (by specifying cc_val=0), for example 
+in cases of extreme allele frequencies in which the continuity correction can 
+lead to excessive type 1 error rates. 
+\item The exact test (method_sig="Exact") based on the exact calculations 
+contained in the function \code{\link[HardyWeinberg]{HWExactStats}} of the R 
+package HardyWeinberg, and described in Wigginton  et al. (2005). The exact test
+is recommended in most cases (Wigginton  et al., 2005). 
+Three different methods to estimate p-values (pvalue_type) in the Exact testc
+can be used:
+\itemize{
+\item "dost" p-value is computed as twice the tail area of a one-sided test. 
+\item "selome" p-value is computed as the sum of the probabilities of all samples 
+less or equally likely as the current sample. 
+\item "midp", p-value is computed as half the probability of the current sample + 
+the probabilities of all samples that are more extreme.
+}
+The standard exact p-value is overly conservative, in particular 
+for small minor allele frequencies. The mid p-value ameliorates this problem 
+by bringing the rejection rate closer to the nominal level, at the price of 
+occasionally exceeding the nominal level (Graffelman & Moreno, 2013).
 }
 
-This function uses correction for multiple tests using the following methods
-\code{\link[stats]{p.adjust}}:
+Correction for multiple tests can be applied using the following methods 
+based on the function \code{\link[stats]{p.adjust}}:
 \itemize{
 \item "holm" is also known as the sequential Bonferroni technique (Rice, 1989). 
 This method has a greater statistical power than the standard Bonferroni test, 
 however this method becomes very stringent when many tests are performed and 
-many real deviations from the null hypothesis can go undetected (Waples 2015).
-\item "hochberg" (Hochberg, 1988) 
-\item "hommel" (Hommel 1988). This method is more powerful than Hochberg's,  
-but the difference is usually small .
-\item "bonferroni" in which p-values are multiplied by the number of tests 
-(i.e. the number of loci). This method is very stringent and therefore has 
-reduced power to detect multiple departures from the null hypothesis.
-\item "BH" (Benjamini & Hochberg, 1995).
-\item "BY" (Benjamini & Yekutieli, 2001). 
+many real deviations from the null hypothesis can go undetected (Waples, 2015).
+\item "hochberg" based on Hochberg, 1988.
+\item "hommel" based on Hommel, 1988. This method is more powerful than Hochberg's,  
+but the difference is usually small.
+\item "bonferroni" in which p-values are multiplied by the number of tests. 
+This method is very stringent and therefore has reduced power to detect 
+multiple departures from the null hypothesis.
+\item "BH" based on Benjamini & Hochberg, 1995.
+\item "BY" based on Benjamini & Yekutieli, 2001. 
 }
 
 The first four methods are designed to give strong control of the family-wise 
 error rate. The last two methods control the false discovery rate (FDR), 
-the expected proportion of false discoveries amongst the rejected hypotheses.
+the expected proportion of false discoveries among the rejected hypotheses.
 The false discovery rate is a less stringent condition than the family-wise
 error rate, so these methods are more powerful than the others, especially 
 when number of tests is large.
+The number of tests on which the adjustment for multiple comparisons is  
+the number of populations times the number of loci. 
 
+\strong{Ternary plots}
 
-Tests for HWE are only valid if there is no population substructure (assuming
-random mating), and the tests have sufficient power only when there is 
-sufficient sample size (say, n individuals > 20). Note also that correction 
-for multiple comparisons is probably required if you wish to place particular
-importance on one or a few significant departures.
+Ternary plots can be used to visualise patterns of H-W proportions (plot.out 
+= TRUE). P-values and the statistical (non)significance of a large number of
+bi- allelic markers can be inferred from their position in a ternary plot.
+See Graffelman & Morales-Camarena (2008) for further details. Ternary plots 
+are based on the function  \code{\link[HardyWeinberg]{HWTernaryPlot}} from 
+the package HardyWeinberg. Loci that depart significantly from H-W proportions 
+are shown in red, and those not showing significant departure are shown in green. 
 
-A Ternary Plot is optionally produced (plot.out = TRUE) -- see Graffelman et al.(2008) for 
-further details. Implementation of the Ternary Plot is via package {HardyWeinberg} 
-(Graffelman (2015). The plot labels loci that depart significantly from HWE 
-as red, and those not showing significant departure as green. 
-HWTernaryPlot is a routine that draws a ternary plot for three-way genotypic compositions (AA,AB,BB), and represents the acceptance region for different tests for Hardy-Weinberg equilibrium (HWE) in the plot.
-
-say the monomorphic loci are filtered
-populations with less than 5 loci cannot be assessed tests for this in all cases
-
-p.adjust {stats}
-
-p.adjust.methods
-colour the marker points automatically according to the result of a 
-significance test (green markers non-significant, red markers significant).
-#' Uses the exact calculations contained in function \code{\link{utils.prob.hwe}}
-as developed by Wigginton et al. (2005).
+For these plots to work it is necessary to install the package ggtern and 
+load it before running the function, i.e. library(ggtern).
 }
 \examples{
-gl.report.hwe(x = bandicoot.gl,plot.out = FALSE)
+gl.report.hwe(x = bandicoot.gl)
 }
 \references{
 \itemize{
-\item Wigginton, J.E., Cutler, D.J., & Abecasis, G.R. (2005). A Note on Exact 
-Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics 76:887-893.
-\item Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for 
-Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
-\item Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The Hardy 
-Weinberg Package. Journal of Statistical Software 64:1-23.
-\item Waples, R. S. (2015). Testing for Hardy–Weinberg proportions: have we 
-lost the plot?. Journal of heredity, 106(1), 1-19.
-\item Rice, W. R. (1989). Analyzing tables of statistical tests. Evolution,
- 43(1), 223-225.
-\item Hochberg, Y. (1988). A sharper Bonferroni procedure for multiple tests
- of significance. Biometrika, 75, 800–803.
- \item Hommel, G. (1988). A stagewise rejective multiple test procedure based 
- on a modified Bonferroni test. Biometrika, 75, 383–386.
  \item Benjamini, Y., and Yekutieli, D. (2001). The control of the false 
  discovery rate in multiple testing under dependency. Annals of Statistics, 
  29, 1165–1188.
+\item Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The Hardy 
+Weinberg Package. Journal of Statistical Software 64:1-23.
+\item Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for 
+Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
+\item Graffelman, J., & Moreno, V. (2013). The mid p-value in exact tests for 
+Hardy-Weinberg equilibrium. Statistical applications in genetics and molecular 
+biology, 12(4), 433-448.
+\item Hochberg, Y. (1988). A sharper Bonferroni procedure for multiple tests
+ of significance. Biometrika, 75, 800–803.
+\item Hommel, G. (1988). A stagewise rejective multiple test procedure based 
+ on a modified Bonferroni test. Biometrika, 75, 383–386.
+\item Rice, W. R. (1989). Analyzing tables of statistical tests. Evolution,
+ 43(1), 223-225.
+\item Waples, R. S. (2015). Testing for Hardy–Weinberg proportions: have we 
+lost the plot?. Journal of heredity, 106(1), 1-19.
+\item Wigginton, J.E., Cutler, D.J., & Abecasis, G.R. (2005). A Note on Exact 
+Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics 76:887-893.
 }
 }
 \seealso{

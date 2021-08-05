@@ -9,8 +9,8 @@ gl.test.heterozygosity(
   nreps = 100,
   alpha1 = 0.05,
   alpha2 = 0.01,
-  plot = TRUE,
-  max_plots = 9,
+  plot.out = TRUE,
+  max_plots = 6,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   verbose = NULL
@@ -25,7 +25,7 @@ gl.test.heterozygosity(
 
 \item{alpha2}{Second significance level for comparison with diff=0 on plot [default 0.01]}
 
-\item{plot}{If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE]}
+\item{plot.out}{If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE]}
 
 \item{max_plots}{Maximum number of plots to print per page [default 9]}
 
@@ -47,7 +47,7 @@ in heterozygosity between populations taken pairwise.
 \details{
 \strong{ Function's output }
 
-If plot = TRUE, plots are created showing the sampling distribution for the difference between each pair
+If plot.out = TRUE, plots are created showing the sampling distribution for the difference between each pair
 of heterozygosities, marked with the critical limits alpha1 and alpha2, the observed
 heterozygosity, and the zero value (if in range).
  Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
@@ -58,7 +58,7 @@ heterozygosity, and the zero value (if in range).
  }
 }
 \examples{
-out <- gl.test.heterozygosity(bandicoot.gl, nreps=10, verbose=3, plot=TRUE)
+out <- gl.test.heterozygosity(bandicoot.gl, nreps=10, verbose=3, plot.out=TRUE)
 
 }
 \author{
