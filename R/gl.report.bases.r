@@ -7,7 +7,7 @@
 #'guanine (G) and thymine (T), and the frequency of transitions (Ts) and transversions (Tv) in a DArT genlight object.
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required]
-#' @param plot If TRUE, histograms of base composition are produced [default TRUE]
+#' @param plot.out If TRUE, histograms of base composition are produced [default TRUE]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
 #' @param plot_colours List of two color names for the borders and fill of the
 #'  plots [default two_colors]
@@ -42,7 +42,7 @@
 #' @export 
 
 gl.report.bases <- function(x, 
-                            plot = TRUE, 
+                            plot.out = TRUE, 
                             plot_theme = theme_dartR(), 
                             plot_colours = two_colors,
                             save2tmp=FALSE,
@@ -143,7 +143,7 @@ gl.report.bases <- function(x,
         cat(paste("  tv/ts ratio:", round(ratio, 4), "\n\n"))
     }
     
-    if (plot) {
+    if (plot.out) {
         if (datatype == "SNP") {
             title <- paste0("SNP: Base Frequencies")
         } else {
@@ -176,12 +176,12 @@ gl.report.bases <- function(x,
               plot_theme
             
             p3 <- (p1/p2) # Using package patchwork
-            print(p3)
         } else {
-            print(p1)
+          p3 <- p1
         }
+        print(p3)
     }
-
+    
     # Create return list
     if (verbose >= 2) {
         cat(report("  Returning a list containing
@@ -193,18 +193,18 @@ gl.report.bases <- function(x,
     out <- c(round(A, 2), round(G, 2), round(T, 2), round(C, 2), round(tv, 2), round(ts, 2))
     names(out) <- c("A", "G", "T", "C", "tv", "ts")
 
-    # SAVE INTERMEDIATES TO TEMPDIR             
-    if(save2tmp){
+    # SAVE INTERMEDIATES TO TEMPDIR 
+    if(save2tmp & plot.out){
       # creating temp file names
-      temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-
+      temp_plot <- tempfile(pattern = "Plot_")
+      match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
       # saving to tempdir
-      saveRDS(p3, file = temp_plot)
+      saveRDS(list(match_call,p3), file = temp_plot)
       if(verbose>=2){
-        cat(report("  Saving the ggplot to session tempfile\n"))
+        cat(report("  Saving ggplot(s) to the session tempfile\n"))
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
       }
     }
-      
  # FLAG SCRIPT END
 
     if (verbose >= 1) {

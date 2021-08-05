@@ -11,7 +11,7 @@
 #' 
 #' @param x Name of the genlight object containing the SNP or presence/absence
 #'  (SilicoDArT) data [required].
-#' @param plot If TRUE, displays a plot to guide the decision on a filter threshold [default TRUE]
+#' @param plot.out If TRUE, displays a plot to guide the decision on a filter threshold [default TRUE]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
 #' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
@@ -20,7 +20,7 @@
 #' @details 
 #'  The function displays a table of minimum, maximum, mean and quantiles for repeatbility against
 #'  possible thresholds that might subsequently be specified in \code{\link{gl.filter.reproducibility}}. 
-#'  If plot=TRUE, display also includes a boxplot and a histogram to guide in the selection of a threshold 
+#'  If plot.out=TRUE, display also includes a boxplot and a histogram to guide in the selection of a threshold 
 #'  for filtering on repeatability.
 #'
 #'  If save2tmp=TRUE, ggplots and relevant tabulations are saved to the session's temp directory (tempdir) 
@@ -45,10 +45,10 @@
 #' @export
 
 gl.report.reproducibility <- function(x, 
-                                      plot=TRUE,
+                                      plot.out = TRUE,
                                       plot_theme = theme_dartR(),  
                                       plot_colours = two_colors, 
-                                      save2tmp=FALSE,
+                                      save2tmp = FALSE,
                                       verbose = NULL) {
   
   # SET VERBOSITY
@@ -82,7 +82,7 @@ gl.report.reproducibility <- function(x,
   colnames(repeatability_plot) <- "repeatability"
   
   # Boxplot
-  if(plot){
+  if(plot.out){
   p1 <- ggplot(repeatability_plot, aes(y = repeatability)) + 
     geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
     coord_flip() + 
@@ -131,40 +131,41 @@ gl.report.reproducibility <- function(x,
   rownames(df) <- NULL
   
   # PRINTING OUTPUTS
-  # using package patchwork
-  if(plot){
-    p3 <- (p1/p2) + plot_layout(heights = c(1,4))
+  if(plot.out){
+    # using package patchwork
+    p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
     print(p3)
   }
   print(df)
   
-  # SAVE INTERMEDIATES TO TEMPDIR 
-  if(save2tmp){
-  # creating temp file names
-  temp_plot <- tempfile(pattern = "dartR_plot_")
-  temp_table <- tempfile(pattern = "dartR_table_")
-  match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
-  # saving to tempdir
-
-  saveRDS(list(match_call,p3), file = temp_plot)
-  if(verbose>=2){
-    cat(report("  Saving the ggplot to session tempfile\n"))
-
-  }
+  # SAVE INTERMEDIATES TO TEMPDIR             
   
-  saveRDS(list(match_call,df), file = temp_table)
-  if(verbose>=2){
-
-    cat(report("  Saving tabulation to the session tempfile\n"))
+  # creating temp file names
+  if(save2tmp){
+    if(plot.out){
+      temp_plot <- tempfile(pattern = "Plot_")
+      match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+      # saving to tempdir
+      saveRDS(list(match_call,p3), file = temp_plot)
+      if(verbose>=2){
+        cat(report("  Saving the ggplot to session tempfile\n"))
+      }
+    }
+    temp_table <- tempfile(pattern = "Table_")
+    saveRDS(list(match_call,df), file = temp_table)
+    if(verbose>=2){
+      cat(report("  Saving tabulation to session tempfile\n"))
+      cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+    }
   }
-  }
-
   
   # FLAG SCRIPT END
+  
   if (verbose >= 1) {
     cat(report("Completed:", funname, "\n"))
   }
   
   # RETURN
   invisible(x)
+  
 }

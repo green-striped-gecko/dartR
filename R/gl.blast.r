@@ -295,9 +295,9 @@ gl.blast <- function(x, ref_genome, task = "megablast",
   match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
   
   # creating file names
-  temp_blast_unfiltered <- tempfile(pattern ="dartR_blast_unfiltered_")
-  temp_blast_filtered <- tempfile(pattern ="dartR_blast_filtered_")
-  temp_one_hit <- tempfile(pattern ="dartR_one_hit_")
+  temp_blast_unfiltered <- tempfile(pattern ="Blast_unfiltered_")
+  temp_blast_filtered <- tempfile(pattern ="Blast_filtered_")
+  temp_one_hit <- tempfile(pattern ="Blast_one_hit_")
     
   # saving to tempdir
   saveRDS(list(match_call,blast_res_unfiltered), file = temp_blast_unfiltered)

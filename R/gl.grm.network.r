@@ -19,6 +19,8 @@
 #' @param palette_discrete A discrete palette for the color of populations or a 
 #' list with as many colors as there are populations in the dataset
 #'  [default discrete_palette].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session 
+#' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #'  progress log ; 3, progress and results summary; 5, full report 
 #'  [default 2 or as specified using gl.set.verbosity].
@@ -81,6 +83,7 @@ gl.grm.network <- function(G,
                            # alpha = 0.004, 
                            title = "Network based on a genomic relationship matrix", 
                            palette_discrete = discrete_palette,
+                           save2tmp = FALSE,
                            verbose = NULL){
   
   # SET VERBOSITY
@@ -91,7 +94,7 @@ gl.grm.network <- function(G,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   # Set a population if none is specified (such as if the genlight object has been generated manually)
@@ -187,45 +190,34 @@ gl.grm.network <- function(G,
   
   names(colours_pops) <- as.character(levels(x$pop))
 
-  if(node.label==T){
   p1 <- ggplot() + 
     geom_segment(data = edges, aes(x = X1, y = Y1, xend = X2, yend = Y2),size=1.5)+    
     geom_point(data=plotcord,aes(x=X1, y=X2,colour=pop),size=node.size) +
-    geom_text(data=plotcord,aes(x=X1, y=X2,label = label.node),size=node.label.size,show.legend=FALSE,colour=node.label.color) +
     coord_fixed(ratio = 1) +
     theme_void()+
     ggtitle(paste(title,"\n[",layout.name,"]")) +
     theme(legend.position="bottom",plot.title = element_text(hjust = 0.5 ,face="bold", size=14))+
     scale_color_manual(name = "Populations", values = colours_pops)
-  }
   
-  if(node.label==F){
-    p1 <- ggplot() + 
-      geom_segment(data = edges, aes(x = X1, y = Y1, xend = X2, yend = Y2),size=1.5)+
-      geom_point(data=plotcord,aes(x=X1, y=X2,colour=pop),size=node.size) +
-      coord_fixed(ratio = 1) +
-      theme_void()+
-      ggtitle(paste(title,"\n[",layout.name,"]")) +
-      theme(legend.position="bottom",plot.title = element_text(hjust = 0.5 ,face="bold", size=14))+
-      scale_color_manual(name = "Populations", values = colours_pops)
+  if(node.label==T){
+    p1 <- p1 + geom_text(data=plotcord,aes(x=X1, y=X2,label = label.node),size=node.label.size,show.legend=FALSE,colour=node.label.color) 
   }
   
   # PRINTING OUTPUTS
   print(p1)
   
-  # SAVE INTERMEDIATES TO TEMPDIR             
+  # SAVE INTERMEDIATES TO TEMPDIR         
+  if(save2tmp){
   # creating temp file names
-  temp_plot <- tempfile(pattern = "dartR_plot_")
+  temp_plot <- tempfile(pattern = "Plot_")
   match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
   # saving to tempdir
   saveRDS(list(match_call,p1), file = temp_plot)
   if(verbose>=2){
     cat(report("  Saving the ggplot to session tempfile\n"))
-  }
-
-  if(verbose>=2){
     cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
-  } 
+  }
+  }
   
   # RETURN
 

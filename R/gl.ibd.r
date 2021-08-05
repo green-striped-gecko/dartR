@@ -10,18 +10,20 @@
 #' @importFrom stats as.dist lm
 #' @importFrom StAMPP stamppFst stamppNeisD
 #' @importFrom stats coef
-#' @param x genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed
-#' @param distance type of distance that is calculated and used for the analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared", [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].
+#' @param x Genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed
+#' @param distance Type of distance that is calculated and used for the analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared", [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].
 #' @param coordinates Can be either "latlon", "xy" or a two column data.frame with column names "lat","lon", "x", "y")  Coordinates are provided via \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon data will be projected to meters using Mercator system [google maps] or if xy then distance is directly calculated on the coordinates.
-#' @param Dgen genetic distance matrix if no genlight object is provided
+#' @param Dgen Genetic distance matrix if no genlight object is provided
 #' @param Dgeo Euclidean distance matrix if no genlight object is provided
-#' @param Dgeo_trans transformation to be used on the Euclidean distances. see Dgen_trans. [Default: "log(Dgeo)"]
+#' @param Dgeo_trans Transformation to be used on the Euclidean distances. see Dgen_trans. [Default: "log(Dgeo)"]
 #' @param Dgen_trans You can provide a formula to transform the genetic distance. For example Rousset (see below) suggests to study \code{Fst/(1-Fst)} against log transformed distances as this is the expectations of Fst versus distances in the case of a stepping stone model. The transformation can be applied as a formula using Dgen as the variable to be transformed. So for the Fst transformation of Rousset use \code{Dgen_trans = "Dgen/(1-Dgen)". Any valid R expression can be used here. [Default is "Dgen", which is the identity function.]}
-#' @param permutations number of permutations in the mantel test
-#' @param plot should an isolation by distance plot be returned. Default is plot=TRUE
-#' @param paircols should pairwise dots colored by "pop"ulation/"ind"ividual pairs [default: pop]. You can color pairwise individuals by pairwise population colors.
+#' @param permutations Number of permutations in the mantel test
+#' @param plot.out Should an isolation by distance plot be returned [default TRUE].
+#' @param paircols Should pairwise dots colored by "pop"ulation/"ind"ividual pairs [default: pop]. You can color pairwise individuals by pairwise population colors.
 #' @param plot_theme Theme for the plot. See details for options [default theme_dartR()].
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session 
+#' temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 
 #' @return returns a list of the following components: Dgen (the genetic distance matrix), Dgeo (the Euclidean distance matrix), mantel (the statistics of the mantel test)
 #' @export
@@ -37,18 +39,19 @@
 #' #because of speed only the first 10 individuals)
 #' ibd <- gl.ibd(bandicoot.gl[1:10,], distance="euclidean", paircols="pop", Dgeo_trans="Dgeo")
 
-gl.ibd <-  function(x=NULL, 
-           distance="Fst",
-           coordinates="latlon",
-           Dgen=NULL,
-           Dgeo=NULL,
+gl.ibd <-  function(x = NULL, 
+           distance = "Fst",
+           coordinates = "latlon",
+           Dgen = NULL,
+           Dgeo = NULL,
            Dgeo_trans = "log(Dgeo)",
            Dgen_trans = "Dgen",
-           permutations=999, 
-           plot=TRUE,
-           paircols=NULL,
+           permutations = 999, 
+           plot.out = TRUE,
+           paircols = NULL,
            plot_theme = theme_dartR(),
-           verbose=NULL) {
+           save2tmp = FALSE,
+           verbose = NULL) {
     
     # CHECK IF PACKAGES ARE INSTALLED
     if (!(requireNamespace("dismo", quietly = TRUE))) {
@@ -85,8 +88,6 @@ if (is(x,"genlight"))
   
 }
 
-
-  
 #check coordinates (if no Dgen and Dgeo is provided)
 if (ta=="genlight"){
 coords <- NULL
@@ -94,7 +95,9 @@ if (is(coordinates,"character")) {
 if (coordinates=="latlon")  {
   if (is.null(x@other$latlon))  stop(error("Cannot find coordinates in x@other$latlon")) 
   coords <- dismo::Mercator(x@other$latlon[,c("lon","lat")]) 
-  if (verbose>0) cat(report("Coordinates transformed to Mercator (google) projection to calculate distances in meters.\n"))
+  if (verbose>0){
+    cat(report("Coordinates transformed to Mercator (google) projection to calculate distances in meters.\n"))
+    }
   coordstring="x@other$latlon (Mercator transformed)"
 }
 
@@ -219,7 +222,7 @@ lm_eqn <- function(df,r=manteltest$statistic,pp=manteltest$signif){
 
 res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo))
 if (is.null(paircols)) {
-  p1 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_point()+geom_smooth(method="lm", se=TRUE)+ylab(Dgen_trans)+xlab(Dgeo_trans)+
+  p3 <- ggplot(res, aes(x=Dgeo, y=Dgen))+geom_point()+geom_smooth(method="lm", se=TRUE)+ylab(Dgen_trans)+xlab(Dgeo_trans)+
     # geom_text(data=data.frame(), aes( label=lm_eqn(res),x=Inf, y=-Inf), parse=TRUE, hjust=1.05, vjust=0)+
     plot_theme}    else {
   
@@ -233,7 +236,7 @@ if (is.null(paircols)) {
     if (is(x, "genlight")) cn <- pop(x) else cn = rownames(as.matrix(Dgen))
   }
   res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo), Legend=cn[c1], col2=cn[c2])
-  p1 <- ggplot(res)+
+  p3 <- ggplot(res)+
     geom_point(aes(Dgeo, Dgen, col=Legend), size=5)+
     geom_point(aes(Dgeo, Dgen, col=col2), size=2)+
     geom_point(aes(Dgeo, Dgen), size=2, shape=1)+
@@ -246,7 +249,9 @@ if (is.null(paircols)) {
   
   }
 
-if (plot) suppressMessages(print(p1))
+if (plot.out){
+  suppressMessages(print(p3))
+}
 
 if (verbose>0) {
   cat(report("  Coordinates used from:", coordstring,"\n"))
@@ -256,24 +261,26 @@ if (verbose>0) {
   print(manteltest)
 }
 
-# SAVE INTERMEDIATES TO TEMPDIR             
+# SAVE INTERMEDIATES TO TEMPDIR       
+if(save2tmp & plot.out){
 # creating temp file names
-temp_plot <- tempfile(pattern = "dartR_plot_")
-temp_table <- tempfile(pattern = "dartR_table_")
+  match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+  temp_plot <- tempfile(pattern = "Plot_")
 
-match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
 # saving to tempdir
-saveRDS(list(match_call,p1), file = temp_plot)
+saveRDS(list(match_call,p3), file = temp_plot)
 if(verbose>=2){
   cat(report("  Saving the ggplot to session tempfile\n"))
 }
+}
 
-saveRDS(list(match_call, manteltest), file = temp_table)
+if(save2tmp){
+  temp_table <- tempfile(pattern = "Table_")
+ saveRDS(list(match_call, manteltest), file = temp_table)
  if(verbose>=2){
    cat(report("  Saving the report to the session tempfile\n"))
  }
-
-
+}
 
 # FLAG SCRIPT END
 

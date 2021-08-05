@@ -25,19 +25,19 @@
 #' Only one of two loci are retained if their Hamming distance is less that a specified
 #' percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 #'
-#' @param x -- name of the genlight object containing the SNP data [required]
-#' @param threshold -- a threshold Hamming distance for filtering loci [default threshold <= 0.2]
-#' @param rs -- number of bases in the restriction enzyme recognition sequence [default = 4]
-#' @param taglength Typical length of the sequence tags [default 69]
-#' @param plot specify if plot is to be produced [default TRUE]
-#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param threshold A threshold Hamming distance for filtering loci [default threshold 0.2].
+#' @param rs Number of bases in the restriction enzyme recognition sequence [default 5].
+#' @param taglength Typical length of the sequence tags [default 69].
+#' @param plot.out Specify if plot is to be produced [default TRUE].
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
 #' @param plot_colours List of two color names for the borders and fill of the
-#'  plots [default two_colors]
-#' @param pb -- switch to output progress bar [default FALSE]
-#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
+#'  plots [default two_colors].
+#' @param pb Switch to output progress bar [default FALSE].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default TRUE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity].
 #' 
-#' @return a genlight object filtered on Hamming distance.
+#' @return A genlight object filtered on Hamming distance.
 #' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' 
 #' @examples
@@ -46,21 +46,20 @@
 #' 
 #' @seealso \code{\link{gl.filter.hamming}}
 #'  
-#' @family filters and filter reports
-#' @importFrom stats sd
+#' @family filters functions
 #' @import patchwork
 #' @export 
 
 gl.filter.hamming <- function(x, 
-                              threshold=0.2, 
-                              rs=5, 
-                              taglength=69,
-                              plot=TRUE,
+                              threshold = 0.2, 
+                              rs = 5, 
+                              taglength = 69,
+                              plot.out = TRUE,
                               plot_theme = theme_dartR(), 
                               plot_colours = two_colors,  
-                              pb=FALSE, 
-                              save2tmp=FALSE,
-                              verbose=NULL) {
+                              pb = FALSE, 
+                              save2tmp = TRUE,
+                              verbose = NULL) {
   
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -81,7 +80,7 @@ gl.filter.hamming <- function(x,
   }
   if(threshold < 0 || threshold > 1){
     cat(warn("  Warning: Parameter 'threshold' must be an integer between 0 and 1, set to 0.2\n"))
-    threshold = 0.2
+    threshold <- 0.2
   }
 
   if (length(x@other$loc.metrics$TrimmedSequence) == 0) {
@@ -104,7 +103,7 @@ gl.filter.hamming <- function(x,
   
   x@other$loc.metrics$TrimmedSequence <- as.character(x@other$loc.metrics$TrimmedSequence)
 
-  count=0
+  count <- 0
   nL <- nLoc(x)
   index <- rep(TRUE,(nL-1))
   d <- rep(NA, (((nL - 1) * nL)/2))
@@ -113,7 +112,6 @@ gl.filter.hamming <- function(x,
     getTxtProgressBar(pbar)
   }
   if (verbose >= 2) {
-    #cat(report("  Calculating Hamming distances between sequence tags\n"))
     cat(report("  Filtering loci with Hamming Distance is less than",threshold,"\n"))
   }
   for (i in 1:(nL-1)){
@@ -142,7 +140,7 @@ gl.filter.hamming <- function(x,
   x@other$loc.metrics <- x@other$loc.metrics[(index),]
   
   # PLOT HISTOGRAMS, BEFORE AFTER
-  if(plot){
+  if(plot.out){
     plotvar <- d
     # min <- min(plotvar,threshold,na.rm=TRUE)
     # min <- trunc(min*100)/100
@@ -199,20 +197,17 @@ gl.filter.hamming <- function(x,
     cat(paste("    No. of populations: ", length(levels(factor(pop(x)))),"\n"))
   }
   
-  # SAVE INTERMEDIATES TO TEMPDIR
-  if(save2tmp & plot){
-    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-    # temp_table <- tempfile(pattern = paste0("dartR_table",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_"),"_"))
-
+  # SAVE INTERMEDIATES TO TEMPDIR 
+  if(save2tmp & plot.out){
+    # creating temp file names
+    temp_plot <- tempfile(pattern = "Plot_")
+    match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
     # saving to tempdir
-    saveRDS(p3, file = temp_plot)
+    saveRDS(list(match_call,p3), file = temp_plot)
     if(verbose>=2){
-      cat(report("  Saving the plot in ggplot format to the session tempfile\n"))
+      cat(report("  Saving ggplot(s) to the session tempfile\n"))
+      cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
     }
-    # saveRDS(df, file = temp_table)
-    # if(verbose>=2){
-    #   cat(report("  Saving the report to the session tempfile\n"))
-    # }
   }
   
 # ADD TO HISTORY

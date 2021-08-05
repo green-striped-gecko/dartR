@@ -6,18 +6,20 @@
 #' data; it undertakes a Gower Principal Coordinate analysis (PCoA) if supplied with a distance matrix. Technically, any distance matrix can 
 #' be represented in an ordinated space using PCoA.
 #'
-#'@param x Name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required].
-#'@param nfactors Number of axes to retain in the output of factor scores [default 5].
-#'@param correction Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL].
-#'@param mono.rm If TRUE, remove monomorphic loci [default TRUE].
-#'@param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE].
-#'@param n.cores Number of cores to use if parallel processing is requested [default 16].
-#'@param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#'@param plot_colours List of two color names for the borders and fill of the plot [default two_colors].
-#'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].
+#' @param x Name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required].
+#' @param nfactors Number of axes to retain in the output of factor scores [default 5].
+#' @param correction Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL].
+#' @param mono.rm If TRUE, remove monomorphic loci [default TRUE].
+#' @param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE].
+#' @param n.cores Number of cores to use if parallel processing is requested [default 16].
+#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
+#' @param plot_colours List of two color names for the borders and fill of the plot [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
+#' @param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].
 #'
-#'@details The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\} with default settings apart from those specified as parameters in this 
-#' function.
+#'@details 
+#'The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\} 
+#'with default settings apart from those specified as parameters in this function.
 #'\strong{ Sources of stress in the visual representation }
 #'
 #' While, technically, any distance matrix can be represented in an ordinated space, the representation will not typically be exact.There are three 
@@ -109,6 +111,7 @@ gl.pcoa <- function(x,
                     n.cores = 16, 
                     plot_theme = theme_dartR(),
                     plot_colours = two_colors, 
+                    save2tmp = FALSE,
                     verbose = 2) {
 
 # SET VERBOSITY
@@ -310,11 +313,18 @@ gl.pcoa <- function(x,
     p3 <- (p1/p2)
     print(p3)
 
-    # creating temp file names
-    temp_plot <- tempfile(pattern =paste0("dartR_plot",paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")))
-
-    # saving to tempdir
-    saveRDS(p3, file = temp_plot)
+    # SAVE INTERMEDIATES TO TEMPDIR 
+    if(save2tmp){
+      # creating temp file names
+      temp_plot <- tempfile(pattern = "Plot_")
+      match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+      # saving to tempdir
+      saveRDS(list(match_call,p3), file = temp_plot)
+      if(verbose>=2){
+        cat(report("  Saving ggplot(s) to the session tempfile\n"))
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+      }
+    }
 
     # FLAG SCRIPT END
 

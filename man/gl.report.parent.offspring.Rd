@@ -9,32 +9,39 @@ gl.report.parent.offspring(
   min.rdepth = 12,
   min.reproducibility = 1,
   range = 1.5,
-  plot = TRUE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP genotypes [required]}
+\item{x}{Name of the genlight object containing the SNP genotypes [required].}
 
-\item{min.rdepth}{Minimum read depth to include in analysis [default = 12]}
+\item{min.rdepth}{Minimum read depth to include in analysis [default 12].}
 
-\item{min.reproducibility}{Minimum reproducibility to include in analysis [default = 1]}
+\item{min.reproducibility}{Minimum reproducibility to include in analysis [default 1].}
 
-\item{range}{Specifies the range to extend beyond the interquartile range for delimiting outliers [default = 1.5 interquartile ranges]}
+\item{range}{Specifies the range to extend beyond the interquartile range for 
+delimiting outliers [default 1.5 interquartile ranges].}
 
-\item{plot}{Creates a plot that shows the sex linked markers [default TRUE].}
+\item{plot.out}{Creates a plot that shows the sex linked markers [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
-A set of individuals in parent-offspring relationship. NULL if no parent-offspring relationships were found.
+A set of individuals in parent-offspring relationship. NULL if no 
+parent-offspring relationships were found.
 }
 \description{
 This script examines the frequency of pedigree inconsistent loci, that is,
@@ -75,12 +82,16 @@ relationship.
 The function \code{\link{gl.filter.parent.offspring}} will filter out those 
 individuals in a parent offspring relationship.  
 
-Note that if your dataset does not contain RepAvg or rdepth among the locus metrics,
-the filters for reproducibility and read depth are no used. 
+Note that if your dataset does not contain RepAvg or rdepth among the locus 
+metrics, the filters for reproducibility and read depth are no used. 
 
 \strong{ Function's output }
 
- Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+ Plots and table are saved to the temporal directory (tempdir) and can be 
+ accessed with the function \code{\link{gl.print.reports}} and listed with 
+ the function \code{\link{gl.list.reports}}. Note that they can be accessed 
+ only in the current R session because tempdir is cleared each time that the
+  R session is closed.
   
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item

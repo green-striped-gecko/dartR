@@ -8,34 +8,50 @@ gl.run.structure(
   x,
   ...,
   exec = ".",
-  plot = TRUE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{...}{Parameters to specify the STRUCTURE run (check \code{structureRun} for more details). Parameters are passed to the \code{structureRun} function. For example you need to set the k.range and the type of model you would like to run (noadmix, locprior) etc. If those parameter names do not tell you anything, please make sure you familiarize with the STRUCTURE program (Pritchard 2000).}
+\item{...}{Parameters to specify the STRUCTURE run (check \code{structureRun} 
+for more details). Parameters are passed to the \code{structureRun} function. 
+For example you need to set the k.range and the type of model you would like 
+to run (noadmix, locprior) etc. If those parameter names do not tell you 
+anything, please make sure you familiarize with the STRUCTURE program 
+(Pritchard 2000).}
 
-\item{exec}{Full path and name+extension where the structure executable is located. E.g. \code{"c:/structure/structure.exe"} under Windows. For Mac and Linux it might be something like \code{"./structure/structure"} if a the executable is in a subfolder 'structure' in your home directory.}
+\item{exec}{Full path and name+extension where the structure executable is 
+located. E.g. \code{"c:/structure/structure.exe"} under Windows. For Mac and 
+Linux it might be something like \code{"./structure/structure"} if the 
+executable is in a subfolder 'structure' in your home directory.}
 
-\item{plot}{create an Evanno plot once finished. Be aware k.range needs to be at least three different k steps.}
+\item{plot.out}{Create an Evanno plot once finished. Be aware k.range needs 
+to be at least three different k steps [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See details for options [default theme_dartR()]}
+\item{plot_theme}{Theme for the plot. See details for options [default theme_dartR()].}
 
-\item{verbose}{set verbosity for this function (though structure output cannot be switched off currently).}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE]}
+
+\item{verbose}{set verbosity for this function (though structure output 
+cannot be switched off currently).}
 }
 \value{
-an sr object (structure.result list output). Each list entry is a single structure
-run output (there are k.range * num.k.rep number of runs). For example the
-summary output of the first run can be accessed via \code{sr[[1]]$summary} 
-or the q-matrix of the third run via \code{sr[[3]]$q.mat}. To conveniently
-summarise the outputs across runs (clumpp) you need to run
-gl.plot.structure on the returned sr object. For evanno plots run gl.evanno on your sr object.
+An sr object (structure.result list output). Each list entry is a
+single structurerun output (there are k.range * num.k.rep number of runs). 
+For example the summary output of the first run can be accessed via
+\code{sr[[1]]$summary} or the q-matrix of the third run via 
+\code{sr[[3]]$q.mat}. To conveniently summarise the outputs across runs 
+(clumpp) you need to run gl.plot.structure on the returned sr object. For 
+Evanno plots run gl.evanno on your sr object.
 }
 \description{
-This function takes a genlight object and runs a STRUCTURE analysis based on functions from \code{strataG}
+This function takes a genlight object and runs a STRUCTURE analysis based on 
+functions from \code{strataG}
 }
 \details{
 The function is basically a convenient wrapper around the beautiful
@@ -58,9 +74,10 @@ To make use of this function you need to download STRUCTURE for you system
 }
 }
 \references{
-Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
-
-Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package for manipulating, summarizing and analysing population genetic data. Mol Ecol Resour. doi:10.1111/1755-0998.12559
+\itemize{
+\item Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
+\item Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package for manipulating, summarizing and analysing population genetic data. Mol Ecol Resour. doi:10.1111/1755-0998.12559
+}
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

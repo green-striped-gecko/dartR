@@ -7,7 +7,6 @@
 #' @importFrom stats dist nobs optimize pchisq variable.names optim quantile pgamma
 #' @import ggplot2
 
-
 zzz <- NULL  #to create a useful named help page
 
 # SET VERSION

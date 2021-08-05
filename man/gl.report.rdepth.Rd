@@ -6,7 +6,7 @@
 \usage{
 gl.report.rdepth(
   x,
-  plot = TRUE,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   save2tmp = FALSE,
@@ -15,18 +15,20 @@ gl.report.rdepth(
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP or presence/absence
-(SilicoDArT) data [required]}
+(SilicoDArT) data [required].}
 
-\item{plot}{specify if plot is to be produced [default TRUE]}
+\item{plot.out}{specify if plot is to be produced [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()]}
+\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
 \item{plot_colours}{List of two color names for the borders and fill of the
-plots [default two_colors]}
+plots [default two_colors].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 An unaltered genlight object
@@ -42,7 +44,7 @@ function reports the read depth by locus for each of several quantiles.
 \details{
 The function displays a table of minimum, maximum, mean and quantiles for read depth against
  possible thresholds that might subsequently be specified in \code{\link{gl.filter.rdepth}}. 
- If plot=TRUE, display also includes a boxplot and a histogram to guide in the selection of a threshold 
+ If plot.out=TRUE, display also includes a boxplot and a histogram to guide in the selection of a threshold 
  for filtering on read depth.
 
  If save2tmp=TRUE, ggplots and relevant tabulations are saved to the session's temp directory (tempdir) 
@@ -62,8 +64,6 @@ df <- gl.report.rdepth(testset.gs)
 \code{\link{gl.filter.rdepth}}
 
 Other filters and filter reports: 
-\code{\link{gl.filter.callrate}()},
-\code{\link{gl.filter.hamming}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
@@ -71,11 +71,8 @@ Other filters and filter reports:
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.hamming}()},
 \code{\link{gl.report.locmetric}()},
-\code{\link{gl.report.maf}()},
 \code{\link{gl.report.monomorphs}()},
-\code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.secondaries}()},
 \code{\link{gl.report.taglength}()}
 }
 \author{
