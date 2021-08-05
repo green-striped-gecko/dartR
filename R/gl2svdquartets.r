@@ -26,7 +26,11 @@
 #' gg@other$loc.metrics <- gg@other$loc.metrics[1:100,]
 #' gl2svdquartets(gg)
 
-gl2svdquartets <- function(x, outfile="svd.nex", outpath=tempdir(), method=2, verbose=NULL) {
+gl2svdquartets <- function(x, 
+                           outfile = "svd.nex", 
+                           outpath = tempdir(),
+                           method = 2, 
+                           verbose = NULL) {
 
 # TRAP COMMAND, SET VERSION
   

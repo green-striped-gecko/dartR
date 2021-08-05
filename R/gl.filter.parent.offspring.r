@@ -123,7 +123,7 @@ gl.filter.parent.offspring <- function(x,
   
   # CHECKS DATATYPE 
   
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   

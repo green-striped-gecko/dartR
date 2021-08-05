@@ -27,9 +27,9 @@
 
 gl.keep.ind <- function(x, 
                         ind.list, 
-                        recalc=FALSE, 
-                        mono.rm=FALSE, 
-                        verbose=NULL){
+                        recalc = FALSE, 
+                        mono.rm = FALSE, 
+                        verbose = NULL){
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

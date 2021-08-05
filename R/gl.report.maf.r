@@ -18,7 +18,7 @@
 #' @param plot_colours_all List of two color names for the borders and fill of 
 #' the overall plot [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
-#' temporary directory (tempdir) [default TRUE].
+#' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
 #' [default NULL, unless specified using gl.set.verbosity].
@@ -65,7 +65,7 @@ gl.report.maf <- function(x,
                           plot_theme = theme_dartR(), 
                           plot_colours_pop = discrete_palette,
                           plot_colours_all = two_colors, 
-                          save2tmp = TRUE,
+                          save2tmp = FALSE,
                           verbose = NULL) {
     
     # TRAP COMMAND
@@ -78,7 +78,7 @@ gl.report.maf <- function(x,
     
     # CHECKS DATATYPE 
     
-    datatype <- utils.check.datatype(x)
+    datatype <- utils.check.datatype(x, verbose=verbose)
     
     # FUNCTION SPECIFIC ERROR CHECKING
 

@@ -14,8 +14,8 @@
 #' 
 
 utils.hwe <- function (x, 
-                       prob=0.05, 
-                       verbose=NULL) {
+                       prob = 0.05, 
+                       verbose = NULL) {
   
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -25,7 +25,7 @@ utils.hwe <- function (x,
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   # Check monomorphs have been removed up to date

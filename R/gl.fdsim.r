@@ -30,7 +30,13 @@
 #' @examples 
 #' fd <- gl.fdsim(testset.gl,poppair=c("EmsubRopeMata","EmmacBurnBara"),sympatric=TRUE,verbose=3)
 
-gl.fdsim <- function(x, poppair, obs=NULL, sympatric=FALSE, reps=1000, delta=0.02, verbose=NULL) {
+gl.fdsim <- function(x, 
+                     poppair,
+                     obs = NULL,
+                     sympatric = FALSE, 
+                     reps = 1000, 
+                     delta = 0.02, 
+                     verbose = NULL) {
   
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -40,7 +46,7 @@ gl.fdsim <- function(x, poppair, obs=NULL, sympatric=FALSE, reps=1000, delta=0.0
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
 # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x,verbose=0)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
 # SCRIPT SPECIFIC CHECKS  
   

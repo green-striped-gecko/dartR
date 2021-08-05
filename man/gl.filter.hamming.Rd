@@ -13,7 +13,7 @@ gl.filter.hamming(
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   pb = FALSE,
-  save2tmp = TRUE,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -35,9 +35,12 @@ plots [default two_colors].}
 
 \item{pb}{Switch to output progress bar [default FALSE].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default TRUE].}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
+ [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 A genlight object filtered on Hamming distance.

@@ -13,7 +13,7 @@ gl.report.maf(
   plot_theme = theme_dartR(),
   plot_colours_pop = discrete_palette,
   plot_colours_all = two_colors,
-  save2tmp = TRUE,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
@@ -40,7 +40,7 @@ loc.limit polymorphic loci [default 30].}
 the overall plot [default two_colors].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
-temporary directory (tempdir) [default TRUE].}
+temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 progress log ; 3, progress and results summary; 5, full report 

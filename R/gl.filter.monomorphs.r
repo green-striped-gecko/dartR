@@ -27,7 +27,7 @@
 #' @export
 
 gl.filter.monomorphs <- function (x, 
-                                  verbose=NULL) {
+                                  verbose = NULL) {
 
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

@@ -63,7 +63,7 @@ gl.report.pa <- function(x,
   
   # CHECKS DATATYPE 
   
-  datatype <- utils.check.datatype(x)
+  datatype <- utils.check.datatype(x, verbose=verbose)
   
   if(!is.null(x2)){
     datatype <- utils.check.datatype(x2)

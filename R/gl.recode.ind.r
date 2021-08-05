@@ -33,9 +33,9 @@
 
 gl.recode.ind <- function(x, 
                           ind.recode, 
-                          recalc=FALSE, 
-                          mono.rm=FALSE, 
-                          verbose=NULL){
+                          recalc = FALSE, 
+                          mono.rm = FALSE, 
+                          verbose = NULL){
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
