@@ -64,6 +64,9 @@ The script returns a genlight object with the new population assignments and the
 gl <- gl.edit.recode.pop(testset.gl)
 }
 }
+\seealso{
+\code{\link{gl.recode.pop}}, \code{\link{gl.drop.pop}}, \code{\link{gl.keep.pop}}, \code{\link{gl.merge.pop}}, \code{\link{gl.reassign.pop}}
+}
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges --Post to \url{https://groups.google.com/d/forum/dartr}
 }
