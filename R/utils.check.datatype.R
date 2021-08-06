@@ -6,7 +6,7 @@
 #' and this function checks that a genlight object has been passed, whether it is a SNP dataset or a SilicoDArT object, 
 #' and reports back if verbosity is >=2
 #'
-#' @param x Name of the genlight object, dist matrix, data matrix or fixed difference list (fd) [required]
+#' @param x Name of the genlight object, dist matrix, data matrix, glPCA, or fixed difference list (fd) [required]
 #' @param accept Vector containing the classes of objects that are to be accepted [default c("genlight","SNP","SilicoDArT"]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #' 
@@ -17,7 +17,9 @@
 #' Note: One and only one of gl.check, fd.check, dist.check or mat.check can be TRUE.
 #' 
 #' @return datatype, "SNP" for SNP data, "SilicoDArT" for P/A data, "dist" for a distance matrix, 
-#' "mat" for a data matrix or class(x)[1]
+#' "mat" for a data matrix, "glPCA" for an ordination file, or class(x)[1]
+#' 
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' datatype <- utils.check.datatype(testset.gl)
 #' datatype <- utils.check.datatype(as.matrix(testset.gl),accept="matrix")
@@ -74,6 +76,11 @@ utils.check.datatype <- function(x,
       cat(report("  Processing a data matrix\n"))
     }
     datatype <- "matrix"
+  } else if (is(x,"glPca")){
+    if(verbose>=2){
+      cat(report("  Processing an ordination file (glPca)\n"))
+    }
+    datatype <- "glPca"
   } else {
       cat(warn("  Warning: Found object of class",class(x)[1],"\n"))
       datatype <- class(x)[1]
