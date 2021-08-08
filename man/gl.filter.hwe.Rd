@@ -160,6 +160,6 @@ Other filters/filter reports:
 \code{\link{gl.report.hwe}()}
 }
 \author{
-Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters/filter reports}

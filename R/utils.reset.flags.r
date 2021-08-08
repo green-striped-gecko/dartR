@@ -14,7 +14,7 @@
 #' @param value -- set the default verbosity for all functions, where verbosity is not specified
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL]
 #' @return The modified genlight object
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @seealso \code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,
 #' \code{utils.recalc.freqhomref} for recalculating frequency of homozygous reference, \code{utils.recalc.freqhomsnp} for recalculating frequency of homozygous alternate,
 #' \code{utils.recalc.freqhet} for recalculating frequency of heterozygotes, \code{gl.recalc.maf} for recalculating minor allele frequency,

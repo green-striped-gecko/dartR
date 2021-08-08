@@ -34,5 +34,5 @@ alternate homozygous, 1 = heterozyous, and NA = missing SNP assignment.
   gl.write.csv(testset.gs, outfile="PA_1row.csv")
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

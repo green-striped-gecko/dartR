@@ -31,7 +31,7 @@
 #'  }
 #' @return Returns a genlight object retaining loci with a Read Depth in the 
 #' range specified by the lower and upper threshold.
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # SNP data
 #'   gl.report.rdepth(testset.gl)

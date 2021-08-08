@@ -30,7 +30,7 @@
 #'@importFrom grDevices rgb
 #'@importFrom graphics legend
 #'@export
-#'@author Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
+#'@author Custodian: Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 #'  
 #'@examples
 #'  D <- gl.grm(bandicoot.gl)

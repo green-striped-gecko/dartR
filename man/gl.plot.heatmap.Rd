@@ -24,5 +24,5 @@ The script plots a heat map to represent the distances in the distance or dissim
    gl.plot.heatmap(D3)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr}) as a wrapper for pheatmap by Raivo Kolde.
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr}) as a wrapper for pheatmap by Raivo Kolde.
 }

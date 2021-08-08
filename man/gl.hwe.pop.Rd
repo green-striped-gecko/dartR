@@ -78,5 +78,5 @@ out <- gl.hwe.pop(bandicoot.gl[,1:33], alpha_val=0.05, plot.out=TRUE, HWformat=F
 
 }
 \author{
-Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

@@ -27,7 +27,7 @@
 #'         [[8]] $prob -- NA's, populated by gl.fixed.diff [by simulation]
 #' @importFrom methods show       
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' fd <- gl.fixed.diff(testset.gl,tloc=0.05)
 #' fd

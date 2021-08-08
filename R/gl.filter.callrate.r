@@ -65,7 +65,7 @@
 #' [default 2, unless specified using gl.set.verbosity].
 #' 
 #' @return The reduced genlight or genind object, plus a summary
-#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' 
 #' @examples
 #' # SNP data

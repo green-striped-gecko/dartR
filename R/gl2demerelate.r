@@ -4,7 +4,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A dataframe suitable as input to package \{Demerelate\}
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' df <- gl2demerelate(testset.gl)
 

@@ -36,5 +36,5 @@ result <- gl2phylip(testset.gl, outfile="test.txt", bstrap=10)
 }
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

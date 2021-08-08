@@ -21,7 +21,7 @@
 #'
 #'@return A genlight object that contains individual metrics [if data were provided] and locus metrics [from a DArT report].
 #'
-#'@author Arthur Georges and Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
+#'@author Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples
 #' dartfile <- system.file('extdata','testset_SNPs_2Row.csv', package='dartR')

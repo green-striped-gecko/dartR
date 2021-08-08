@@ -24,5 +24,5 @@ Uses the exact calculations contained in function utils.prob.hwe() as developed 
 Wigginton, JE, Cutler, DJ, and Abecasis, GR.
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

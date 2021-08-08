@@ -16,7 +16,7 @@
 #' [default 2, unless specified using gl.set.verbosity].
 #' @return A new genlight object with the recalcitrant loci deleted
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' result <- gl.filter.overshoot(testset.gl, verbose=3)
 

@@ -128,7 +128,7 @@ gl.pcoa.plot(pca,fd$gl)
 \code{\link{gl.pcoa.plot}}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 
 Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

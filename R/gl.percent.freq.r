@@ -8,7 +8,7 @@
 #' @return A matrix with allele (SNP data) or presence/absence frequencies (Tag P/A data) broken down by population and locus
 #' @export
 #' @importFrom plyr rbind.fill
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' m <-  gl.percent.freq(testset.gl)
 #' m

@@ -77,7 +77,7 @@
 #' best modern reference is Legendre & Legendre (1998).
 #' 
 #'@return An object of class pcoa containing the eigenvalues and factor scores
-#'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#'@author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples
 #' fd <- gl.fixed.diff(testset.gl)

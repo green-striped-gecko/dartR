@@ -33,5 +33,5 @@ gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
 \code{\link{gl.load}}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

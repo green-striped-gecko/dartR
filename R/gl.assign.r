@@ -42,7 +42,7 @@
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
 #' @importFrom stats dnorm qnorm
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 #'   x <- gl.assign(testset.gl, unknown="UC_00146", nmin=10, 
@@ -50,51 +50,15 @@
 
 gl.assign <- function (x, unknown, nmin=10, dim=NULL, alpha= 0.05, threshold=0, verbose=3) {
 
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-  
 # SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  verbose <- gl.check.verbosity(verbose)
   
 # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-  }
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=0)
 
 # FUNCTION SPECIFIC ERROR CHECKING
 

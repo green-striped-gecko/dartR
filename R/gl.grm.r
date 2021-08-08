@@ -37,7 +37,7 @@
 #'  represent different populations.
 #'
 #' @return An identity by descent matrix 
-#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @references \itemize{
 #' \item Endelman, J. B. (2011). Ridge regression and other kernels for genomic selection with r package rrblup. The Plant Genome 4, 250.
 #' \item Endelman, J. B. , Jannink, J.-L. (2012). Shrinkage estimation of the realized relationship matrix. G3: Genes, Genomics, Genetics 2, 1405.

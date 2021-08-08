@@ -51,5 +51,5 @@ Note that the locus metadata will be complemented by calculable statistics corre
 to those that would be provided by Diversity Arrays Technology (e.g. CallRate)
 }
 \author{
-Arthur Georges, Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

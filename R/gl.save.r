@@ -13,7 +13,7 @@
 #' [default 2 or as specified using gl.set.verbosity].
 #' @return The input object
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
 #' @seealso \code{\link{gl.load}}

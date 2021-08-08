@@ -20,7 +20,7 @@ gl.pcoa.plot(
   yaxis = 2,
   zaxis = NULL,
   pt.size = 2,
-  lab.size = 20,
+  label.size = 20,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -57,7 +57,7 @@ the Distance Matrix used to generate the ordination [required]}
 
 \item{pt.size}{Specify the size of the dispayed points [default 2]}
 
-\item{lab.size}{Specify the size of the dispayed axis labels [default 20]}
+\item{label.size}{Specify the size of the dispayed axis labels [default 20]}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 

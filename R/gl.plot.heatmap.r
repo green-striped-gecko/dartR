@@ -6,7 +6,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return NULL
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr}) as a wrapper for pheatmap by Raivo Kolde.
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr}) as a wrapper for pheatmap by Raivo Kolde.
 #' @examples
 #'    gl <- testset.gl[1:10,]
 #'    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)

@@ -117,6 +117,6 @@ Other filter functions:
 \code{\link{gl.filter.sexlinked}()}
 }
 \author{
-Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filter functions}

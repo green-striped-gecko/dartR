@@ -36,7 +36,7 @@
 #' @param yaxis Identify the y axis from those available in the ordination (yaxis <= nfactors) [default 2]
 #' @param zaxis Identify the z axis from those available in the ordination for a 3D plot (zaxis <= nfactors) [default NULL]
 #' @param pt.size Specify the size of the dispayed points [default 2]
-#' @param lab.size Specify the size of the dispayed axis labels [default 20]
+#' @param label.size Specify the size of the dispayed axis labels [default 20]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' 
@@ -78,7 +78,7 @@ gl.pcoa.plot <- function(glPca,
                          yaxis=2, 
                          zaxis=NULL,
                          pt.size  = 2,
-                         lab.size=20,
+                         label.size=20,
                          save2tmp=FALSE,
                          verbose=NULL) {
 
@@ -227,9 +227,9 @@ gl.pcoa.plot <- function(glPca,
       plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=ind, colour=pop)) +
         geom_point(size=pt.size,aes(colour=pop)) +
         ggrepel::geom_label_repel(aes(label = ind),show.legend = FALSE, label.size = NA, min.segment.length = Inf, fill=NA, max.overlaps = max.overlaps) +
-        theme(axis.title=element_text(face="bold.italic",size=lab.size, color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
+        theme(axis.title=element_text(face="bold.italic",size=label.size, color="black"),
+              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
+              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
               legend.title = element_text(colour="black", size=18, face="bold"),
               legend.text = element_text(colour="black", size = 16, face="bold")
         ) +
@@ -257,9 +257,9 @@ gl.pcoa.plot <- function(glPca,
       plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop)) +
         geom_point(size=pt.size,aes(colour=pop)) +
         ggrepel::geom_label_repel(aes(label = pop),show.legend = FALSE, label.size = NA, min.segment.length = Inf, fill=NA, max.overlaps = max.overlaps) +
-        theme(axis.title=element_text(face="bold.italic",size=lab.size, color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
+        theme(axis.title=element_text(face="bold.italic",size=label.size, color="black"),
+              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
+              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
               legend.title = element_text(colour="black", size=18, face="bold"),
               legend.text = element_text(colour="black", size = 16, face="bold")
         ) +
@@ -283,9 +283,9 @@ gl.pcoa.plot <- function(glPca,
       # Plot
       plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,label=ind)) +
         geom_point(size=pt.size,aes(colour=pop)) +
-         theme(axis.title=element_text(face="bold.italic",size=lab.size, color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
+         theme(axis.title=element_text(face="bold.italic",size=label.size, color="black"),
+              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
+              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
               legend.title = element_text(colour="black", size=18, face="bold"),
               legend.text = element_text(colour="black", size = 16, face="bold")
         ) +
@@ -308,9 +308,9 @@ gl.pcoa.plot <- function(glPca,
       # Plot
       plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
         geom_point(size=pt.size,aes(colour=pop)) +
-        theme(axis.title=element_text(face="bold.italic",size=lab.size,color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
+        theme(axis.title=element_text(face="bold.italic",size=label.size,color="black"),
+              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
+              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
               legend.title = element_text(colour="black", size=18, face="bold"),
               legend.text = element_text(colour="black", size = 16, face="bold")
         ) +
@@ -331,9 +331,9 @@ gl.pcoa.plot <- function(glPca,
       # Plot
       plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
         geom_point(size=pt.size,aes(colour=pop)) +
-        theme(axis.title=element_text(face="bold.italic",size=lab.size,color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=lab.size),
+        theme(axis.title=element_text(face="bold.italic",size=label.size,color="black"),
+              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
+              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
               legend.title = element_text(colour="black", size=18, face="bold"),
               legend.text = element_text(colour="black", size = 16, face="bold")
         ) +
@@ -367,9 +367,9 @@ gl.pcoa.plot <- function(glPca,
                                 marker = list(size = pt.size*2), text=ind) %>% 
         plotly::add_markers(color=~pop)%>% 
         plotly::layout(legend=list(title=list(text='Populations')),
-                           scene = list(xaxis = list(title = xlab,titlefont = list(size = lab.size/2)),
-                                        yaxis = list(title = ylab,titlefont = list(size = lab.size/2)),
-                                        zaxis = list(title = zlab,titlefont = list(size = lab.size/2))))
+                           scene = list(xaxis = list(title = xlab,titlefont = list(size = label.size/2)),
+                                        yaxis = list(title = ylab,titlefont = list(size = label.size/2)),
+                                        zaxis = list(title = zlab,titlefont = list(size = label.size/2))))
       show(plott)
       if(verbose >=2){cat(warn("  May need to zoom out to place 3D plot within bounds\n"))}
     }

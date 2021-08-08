@@ -24,7 +24,7 @@
 #' @name testset.gl
 #' @format genlight object
 #' @docType data
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "testset.gl"
 
@@ -34,7 +34,7 @@
 #' @name testset.gs
 #' @format genlight object
 #' @docType data
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 "testset.gs"
 
@@ -44,7 +44,7 @@
 #' @name testset_SNPs_2Row
 #' @format csv
 #' @docType data
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 NULL
 
@@ -54,7 +54,7 @@ NULL
 #' @name testset_pop_recode
 #' @format csv
 #' @docType data
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 NULL
 
@@ -63,7 +63,7 @@ NULL
 #' @name testset_metadata
 #' @format csv
 #' @docType data
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
 NULL
 
