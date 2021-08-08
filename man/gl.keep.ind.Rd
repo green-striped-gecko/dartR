@@ -35,10 +35,8 @@ The script returns a genlight object with the individuals deleted and, optionall
    
 }
 \seealso{
-\code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
-
 \code{\link{gl.drop.ind}} to drop rather than keep specified individuals
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

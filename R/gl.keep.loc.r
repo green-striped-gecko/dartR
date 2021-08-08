@@ -9,14 +9,15 @@
 #' @param last -- last of a range of loci to be kept [if not specified, last locus in the dataset]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
-
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' 
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' 
 #' @examples
 #' # SNP data
 #'   gl2 <- gl.keep.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"))
 #' # Tag P/A data
 #'   gs2 <- gl.keep.loc(testset.gs, loc.list=c("20134188","19249144"))
-#' @seealso \code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
+#'   
 #' @seealso \code{\link{gl.drop.loc}} to drop rather than keep specified loci
 #' @export
 
@@ -85,6 +86,7 @@ gl.keep.loc <- function(x,
 
 # DO THE JOB
   hold <- x 
+  
   if (verbose >= 2) {
     cat(report("  Deleting all but the specified loci\n"))
   }
@@ -113,10 +115,10 @@ gl.keep.loc <- function(x,
     cat(paste("    Original No. of loci:",nLoc(hold),"\n"))
     cat(paste("    No. of loci deleted:",nLoc(hold)-nLoc(x2),"\n"))
     cat(paste("    No. of loci retained:",nLoc(x2),"\n"))
-    cat(paste("    No. of individuals:", nInd(x2),"\n"))
-    cat(paste("    No. of populations: ", nPop(x2),"\n"))
+    # cat(paste("    No. of individuals:", nInd(x2),"\n"))
+    # cat(paste("    No. of populations: ", nPop(x2),"\n"))
   }
-    
+  
 # ADD TO HISTORY
     nh <- length(x2@other$history)
     x2@other$history[[nh + 1]] <- match.call() 

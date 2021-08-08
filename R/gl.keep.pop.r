@@ -16,21 +16,17 @@
 #' @param mono.rm -- Remove monomorphic loci [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
-
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' 
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' 
 #' @examples
 #'  # SNP data
-#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata",
-#'    "EmvicVictJasp"))
-#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata",
-#'    "EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
-#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c("Female"),
-#'    as.pop="sex")
+#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata", "EmvicVictJasp"))
+#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata", "EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
+#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c("Female"),as.pop="sex")
 #'  # Tag P/A data  
-#'    gs2 <- gl.keep.pop(testset.gs, pop.list=c("EmsubRopeMata",
-#'    "EmvicVictJasp"))
+#'    gs2 <- gl.keep.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 #'
-#' @seealso \code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
 #' @seealso \code{\link{gl.drop.pop}} to drop rather than keep specified populations
 #' @export
 
@@ -62,6 +58,7 @@ gl.keep.pop <- function(x,
     
   # Assign the new population list if as.pop is specified
   pop.hold <- pop(x)
+  
   if (!is.null(as.pop)){    
     if(as.pop %in% names(x@other$ind.metrics)){
       pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
@@ -87,6 +84,8 @@ gl.keep.pop <- function(x,
   }
 
 # DO THE JOB
+  
+  hold <- x
 
   if (verbose >= 2) {
     cat("  Retaining only populations", paste(pop.list,collapse=", "),"\n")
@@ -133,12 +132,14 @@ gl.keep.pop <- function(x,
         cat(paste("    No. of loci:",nLoc(x),"\n"))
         cat(paste("    No. of individuals:", nInd(x),"\n"))
         cat(paste("    No. of levels of",as.pop,"remaining: ",nPop(x),"\n"))
-        cat(paste("    No. of populations: ",length(unique((pop.hold))),"\n"))
+        cat(paste("    Original no. of populations",nPop(hold),"\n"))
+        cat(paste("    No. of populations remaining: ",length(unique((pop.hold))),"\n"))
       } else {
         cat("  Summary of recoded dataset\n")
         cat(paste("    No. of loci:",nLoc(x),"\n"))
         cat(paste("    No. of individuals:", nInd(x),"\n"))
-        cat(paste("    No. of populations: ",nPop(x),"\n"))
+        cat(paste("    Original no. of populations",nPop(hold),"\n"))
+        cat(paste("    No. of populations remaining: ", nPop(x),"\n"))
       }  
     }
     

@@ -21,7 +21,7 @@
 #' progress log ; 3, progress and results summary; 5, full report [default NULL].
 #' 
 #' @return Returns unaltered genlight object
-#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' gl.plot(bandicoot.gl[1:10,],labels=TRUE)
 #'
