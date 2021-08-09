@@ -39,12 +39,6 @@ gl.filter.monomorphs <- function (x,
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
   
-# STANDARD ERROR CHECKING
-  
-  if(class(x)[1]!="genlight") {
-    stop(error("Fatal Error: genlight object required!"))
-  }
-  
 # DO THE JOB
 
   hold <- x
