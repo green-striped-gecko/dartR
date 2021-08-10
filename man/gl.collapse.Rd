@@ -48,5 +48,5 @@ fd3 <- gl.collapse(fd2,tpop=1)
 fd3
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

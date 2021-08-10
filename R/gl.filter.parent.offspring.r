@@ -84,7 +84,7 @@
 #' parent-offspring relationship. NULL if no parent-offspring relationships were 
 #' found. 
 #'
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
 #' out <- gl.filter.parent.offspring(testset.gl[1:10])

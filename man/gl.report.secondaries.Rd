@@ -79,6 +79,6 @@ out <- gl.report.secondaries(bandicoot.gl)
 \code{\link{gl.filter.secondaries}},\code{\link{gl.report.heterozygosity}}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
 \concept{Filter reports functions}

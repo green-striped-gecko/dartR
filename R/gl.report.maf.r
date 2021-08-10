@@ -49,7 +49,7 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #' @return An unaltered genlight object
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl <- gl.report.maf(testset.gl)
 #' @seealso \code{\link{gl.filter.maf}}, \code{\link{gl.list.reports}},

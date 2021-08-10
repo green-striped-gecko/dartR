@@ -58,7 +58,7 @@
 #'         [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
 #' @import utils
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
 #' fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=3 )

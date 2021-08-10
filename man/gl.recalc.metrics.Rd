@@ -36,5 +36,5 @@ The script returns a genlight object with the recalculated locus metadata.
 \code{\link{gl.filter.monomorphs}}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

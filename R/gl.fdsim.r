@@ -26,7 +26,7 @@
 #'         [[4]] probability the observed fixed differences arose by chance for each comparison.
 #' @export
 #' @importFrom stats pnorm rbinom
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples 
 #' fd <- gl.fdsim(testset.gl,poppair=c("EmsubRopeMata","EmmacBurnBara"),sympatric=TRUE,verbose=3)
 

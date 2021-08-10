@@ -68,5 +68,5 @@ gl <- gl.filter.monomorphs(gl)
 gl2fasta(gl, method=1, outfile="test.fasta",verbose=3)
 }
 \author{
-Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

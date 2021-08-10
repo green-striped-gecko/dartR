@@ -21,5 +21,5 @@ set by parameter 'verbose' can be one of verbose 0, silent or fatal errors; 1, b
 gl <- gl.set.verbosity(value=2)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

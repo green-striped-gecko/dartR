@@ -21,7 +21,7 @@
 #' temporary directory.
 #' 
 #' @return An unaltered genlight object
-#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' gl.report.overshoot(testset.gl)
 #' @seealso \code{\link{gl.filter.overshoot}}

@@ -13,8 +13,8 @@
 #' @param mono.rm -- Remove monomorphic loci [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
-#' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #'  # SNP data
 #'    gl2 <- gl.drop.ind(testset.gl, 
@@ -27,8 +27,8 @@
 #'    gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656"
 #'    ,"AA19077","AA004859"),mono.rm=TRUE, recalc=TRUE)
 #'    
-#' @seealso \code{\link{gl.filter.monomorphs}}
-#' @seealso \code{\link{gl.recalc.metrics}}
+#' @seealso \code{\link{gl.keep.ind}} to keep rather than drop specified individuals
+#' @export
 
 gl.drop.ind <- function(x,
                         ind.list,
@@ -59,6 +59,8 @@ gl.drop.ind <- function(x,
   }
 
 # DO THE JOB
+  
+  hold <- x
 
 # Remobe individuals
   
@@ -102,7 +104,9 @@ gl.drop.ind <- function(x,
   if (verbose >= 3) {
     cat("Summary of recoded dataset\n")
     cat(paste("  No. of loci:",nLoc(x),"\n"))
+    cat(paste("  Original No. of individuals:", nInd(hold),"\n"))
     cat(paste("  No. of individuals:", nInd(x),"\n"))
+    cat(paste("  Original No. of populations:", nPop(hold),"\n"))
     cat(paste("  No. of populations: ", nPop(x),"\n"))
   }
 

@@ -12,7 +12,7 @@
 #' @import utils
 #' @importFrom stats dist
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
 #' result <- gl2phylip(testset.gl, outfile="test.txt", bstrap=10)

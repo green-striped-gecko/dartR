@@ -63,6 +63,6 @@ gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=TRUE)
 \code{\link{utils.read.dart}}
 }
 \author{
-Arthur Georges and Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }
 \concept{input data}

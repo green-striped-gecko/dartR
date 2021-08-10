@@ -32,5 +32,5 @@ to subsample, random and based on information content (avgPIC).
   gl2 <- gl.subsample.loci(testset.gl, n=100, method="random")
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

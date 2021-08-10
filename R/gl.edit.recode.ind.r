@@ -34,7 +34,8 @@
 #' @return An object of class ("genlight") with the revised individual labels
 #' @import utils
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @seealso \code{\link{gl.recode.ind}}, \code{\link{gl.drop.ind}}, \code{\link{gl.keep.ind}}, \code{\link{gl.merge.ind}}, \code{\link{gl.reassign.ind}}
 #' @examples
 #' \dontrun{
 #' gl <- gl.edit.recode.ind(testset.gl)
@@ -63,10 +64,8 @@ gl.edit.recode.ind <- function(x,
 # DO THE JOB
   
 # Store variables
-  hold.nLoc <- nLoc(x)
-  hold.nInd <- nInd(x)
-  hold.nPop <- nPop(x)
-  
+  hold <- x
+
 # Take assignments from x
 
   if(verbose >= 2){cat(report("  Extracting current individual labels from the x object\n"))}
@@ -74,7 +73,7 @@ gl.edit.recode.ind <- function(x,
 
 # Create recode table for editting, and bring up the editor
     new <- as.matrix(edit(recode.table))
-    new <- new[,1:2]
+    #new <- new[,1:2]
 
 # Write out the recode table, if requested
   if (is.null(out.recode.file)) {
@@ -131,12 +130,12 @@ gl.edit.recode.ind <- function(x,
 
   if (verbose>=2) {
     cat("  Summary of recoded dataset\n")
-    cat(paste("  Original No. of loci:",hold.nLoc,"\n"))
-    cat(paste("    New No. of loci:",nLoc(x),"\n"))
-    cat(paste("  Original No. of individuals:", hold.nInd,"\n"))
+    # cat(paste("  Original No. of loci:",hold.nLoc,"\n"))
+    # cat(paste("    New No. of loci:",nLoc(x),"\n"))
+    cat(paste("  Original No. of individuals:", nInd(hold),"\n"))
     cat(paste("    New No. of individuals:", nInd(x),"\n"))
-    cat(paste("  Original No. of populations:", hold.nPop,"\n"))
-    cat(paste("    New No. of populations:", nPop(x),"\n"))
+    # cat(paste("  Original No. of populations:", hold.nPop,"\n"))
+    # cat(paste("    New No. of populations:", nPop(x),"\n"))
     if (!recalc) {cat(report("  Note: Locus metrics not recalculated\n"))}
     if (!mono.rm) {cat(report("  Note: Resultant monomorphic loci not deleted\n"))}
   }

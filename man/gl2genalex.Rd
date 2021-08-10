@@ -28,5 +28,5 @@ gl2genalex(testset.gl, outfile="testset.csv")
 }
 }
 \author{
-Katrin Hohwieler, wrapper Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos, Author: Katrin Hohwieler, wrapper Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -53,5 +53,5 @@ Distance pcfixed calculates the pair-wise count of fixed allelic differences bet
 gl.dist.pop(testset.gl, method="euclidean")
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

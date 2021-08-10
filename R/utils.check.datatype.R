@@ -33,17 +33,21 @@ utils.check.datatype <- function(x,
   
   #### SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
-  
-  #### CHECK THE TYPE OF OBJECT ####
-  
+
+#### CHECK THE TYPE OF OBJECT ####
+
+
   if(is(x,"genlight")){
+    if(is.null(ploidy(x))){
+      stop(error("Fatal Error: ploidy not set in the genlight object, run gl <- gl.compliance.check(gl)\n"))
+    }
     if(verbose>=2){cat(report("  Processing genlight object"))}
-    if (all(x@ploidy == 1)){
+    if (all(ploidy(x) == 1)){
       if(verbose>=2){
         cat(report(" with Presence/Absence (SilicoDArT) data\n"))
       }
       datatype <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
+    } else if (all(ploidy(x) == 2)){
       if(verbose>=2){
         cat(report(" with SNP data\n"))
       }
@@ -53,19 +57,32 @@ utils.check.datatype <- function(x,
     }
   }
   else if(is(x,"fd")){
-    if(is(x$gl,"genlight")){
-      accept <- "fd"
-      type <- utils.check.datatype(x$gl,verbose=0)
-    } else {  
-      stop(error("Fatal Error: Fixed Difference object expected! Check format of object\n"))
-    } 
-    datatype <- "fd"
-    if(verbose>=2 & type=="SilicoDArT"){
-      cat(report("  Processing a fixed difference (fd) object with Presence/Absence (SilicoDArT) data\n"))
-    }
-    if(verbose>=2 & type=="SNP"){
-      cat(report("  Processing a fixed difference (fd) object with SNP data\n"))
-    }
+      if(is(x$gl,"genlight")){
+        # if(is.null(ploidy(x$gl))){
+        #   stop(error("Fatal Error: ploidy not set in the genlight object, run gl <- gl.compliance.check(gl)\n"))
+        # }
+        if(verbose>=2){cat(report("  Processing a fixed difference (fd) object"))}
+        if (all(ploidy(x$gl) == 1)){
+          if(verbose>=2){
+            cat(report(" with Presence/Absence (SilicoDArT) data\n"))
+          }
+          type <- "SilicoDArT"
+        } else if (all(ploidy(x$gl) == 2)){
+          if(verbose>=2){
+            cat(report(" with SNP data\n"))
+          }
+          type <- "SNP"
+        }
+      } else {  
+        stop(error("Fatal Error: Fixed Difference object expected! Check format of object\n"))
+      } 
+      datatype <- "fd"
+      # if(verbose>=2 & type=="SilicoDArT"){
+      #   cat(report("  Processing a fixed difference (fd) object with Presence/Absence (SilicoDArT) data\n"))
+      # }
+      # if(verbose>=2 & type=="SNP"){
+      #   cat(report("  Processing a fixed difference (fd) object with SNP data\n"))
+      # }
   } else if(is(x,"dist")){
     if(verbose>=2){
       cat(report("  Processing a distance matrix\n"))

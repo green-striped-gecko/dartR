@@ -11,7 +11,7 @@
 #' @param s2 -- percentage SNP allele or sequence tag frequency for the second population [required]
 #' @param tloc -- threshold value for tolerance in when a difference is regarded as fixed [default 0]
 #' @return TRUE (fixed difference) or FALSE (alleles shared) or NA (one or both s1 or s2 missing)
-#' @author Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export 
 #' @examples
 #' is.fixed(s1=100, s2=0, tloc=0)

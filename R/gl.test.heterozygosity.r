@@ -35,7 +35,7 @@
 #'
 #' @return A dataframe containing population labels, heterozygosities and sample sizes
 #'
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
 #' out <- gl.test.heterozygosity(bandicoot.gl, nreps=10, verbose=3, plot.out=TRUE)

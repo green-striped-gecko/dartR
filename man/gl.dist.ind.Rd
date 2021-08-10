@@ -44,5 +44,5 @@ Refer to the documentation in the relevant packages listed above.
 gl.dist.pop(testset.gl, method="euclidean")
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

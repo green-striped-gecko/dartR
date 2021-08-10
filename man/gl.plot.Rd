@@ -55,9 +55,10 @@ gl.plot(bandicoot.gl[1:10,])
 \code{\link{gl.filter.callrate}}
 
 Other Exploration/visualisation functions: 
-\code{\link{gl.pcoa.plot.beta}()}
+\code{\link{gl.pcoa.plot.beta}()},
+\code{\link{gl.pcoa.plot}()}
 }
 \author{
-Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{Exploration/visualisation functions}

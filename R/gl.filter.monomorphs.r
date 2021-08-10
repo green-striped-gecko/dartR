@@ -14,7 +14,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return A genlight object with monomorphic (and all NA) loci removed
 #' 
-#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # SNP data
 #'   result <- gl.filter.monomorphs(testset.gl, verbose=3)
@@ -38,12 +38,6 @@ gl.filter.monomorphs <- function (x,
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)[1]!="genlight") {
-    stop(error("Fatal Error: genlight object required!"))
-  }
   
 # DO THE JOB
 

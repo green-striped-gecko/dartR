@@ -41,7 +41,7 @@
 #'   [default 2, unless specified using gl.set.verbosity].
 #' 
 #' @return A genlight object filtered on Hamming distance.
-#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' 
 #' @examples
 #' # SNP data

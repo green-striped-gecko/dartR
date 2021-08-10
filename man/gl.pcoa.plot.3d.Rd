@@ -47,5 +47,5 @@ pcoa <- gl.pcoa(possums.gl, nfactor=5)
 gl.pcoa.plot.3d(pcoa, possums.gl, xaxis=1, yaxis=2, zaxis=3)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
