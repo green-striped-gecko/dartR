@@ -20,7 +20,9 @@ gl.pcoa.plot(
   yaxis = 2,
   zaxis = NULL,
   pt.size = 2,
-  label.size = 20,
+  colour.palette = NULL,
+  label.size = 1,
+  axis.label.size = 1.5,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -57,7 +59,10 @@ the Distance Matrix used to generate the ordination [required]}
 
 \item{pt.size}{Specify the size of the dispayed points [default 2]}
 
-\item{label.size}{Specify the size of the dispayed axis labels [default 20]}
+\item{colour.palette}{Optionally provide a colour palette for populations or a vector of colours corresponding 
+in number to the number of populations [default NULL]}
+
+\item{axis.label.size}{Specify the size of the dispayed axis labels [default 1.5]}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
@@ -91,12 +96,13 @@ rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
 
 pca<-gl.pcoa(gl,nfactors=5)
 
-gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="pop",hadjust=1.5,vadjust=1)
-gl.pcoa.plot(pca, gl, labels="none")
-gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="legend")
-gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="pop", xaxis=1, yaxis=3, zaxis=2)
-gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="none", xaxis=1, yaxis=3, zaxis=2)
-gl.pcoa.plot(pca, gl, interactive=TRUE)  
+gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, labels="pop", axis.label.size=1, hadjust=1.5,vadjust=1)
+gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="legend", axis.label.size=1)
+gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="legend", axis.label.size=1.5,scale=TRUE)
+gl.pcoa.plot(pca, gl, ellipse=TRUE, axis.label.size=1.2, xaxis=1, yaxis=3, scale=TRUE)
+gl.pcoa.plot(pca, gl, labels="none",scale=TRUE)
+gl.pcoa.plot(pca, gl, axis.label.size=1.2, interactive=TRUE) 
+gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, xaxis=1, yaxis=2, zaxis=3)
 
 }
 \seealso{
