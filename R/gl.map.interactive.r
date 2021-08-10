@@ -17,7 +17,14 @@
 #' gl.map.interactive(bandicoot.gl)
 
 
-gl.map.interactive <- function(x, matrix=NULL, standard=TRUE,symmetric=TRUE, ind.circles=TRUE, pop.labels=TRUE, pop.labels.cex=12,  provider="Esri.NatGeoWorldMap")
+gl.map.interactive <- function(x, 
+                               matrix = NULL, 
+                               standard = TRUE,
+                               symmetric = TRUE,
+                               ind.circles = TRUE, 
+                               pop.labels = TRUE,
+                               pop.labels.cex = 12, 
+                               provider = "Esri.NatGeoWorldMap")
 {
 # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "leaflet"
@@ -27,40 +34,58 @@ gl.map.interactive <- function(x, matrix=NULL, standard=TRUE,symmetric=TRUE, ind
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop("Package",pkg," needed for this function to work. Please   install it.") } else {
   
-  
-  
-if (!is(x, "genlight"))   stop("Not a valid genlight object provided!!!")
-
-
-if (is.null(x@other$latlon)) stop("No valid coordinates are supplied at gl@other$latlon")
-
-if (sum(colnames(x@other$latlon) %in% c("lat","lon"))!=2) stop("Coordinates under gl@other$latlon are not named 'lat' and 'lon'.")
-  
-  
-if (!is.null(matrix))
-{
-if (nrow(matrix) != nInd(x) & nrow(matrix)!= nPop(x)) stop("The dimension of the provided matrix does neither match the number of individuals nor the number of populations.")
+if (!is(x, "genlight")){
+  stop(error("Not a valid genlight object provided!!!"))
 }
-  
+
+if (is.null(x@other$latlon)){
+  stop(error("No valid coordinates are supplied at gl@other$latlon"))
+}
+      
+if (sum(colnames(x@other$latlon) %in% c("lat","lon"))!=2){
+  stop(error("Coordinates under gl@other$latlon are not named 'lat' and 'lon'."))
+}
+      
+if (!is.null(matrix)){
+  if (nrow(matrix) != nInd(x) & nrow(matrix)!= nPop(x)){ 
+    stop(error("The dimension of the provided matrix does neither match the number of individuals nor the number of populations."))
+  }
+}
+      
 cols <- rainbow(nPop(x))
 cols <- substr(cols, 1,7)
 df <- x@other$latlon
 centers <- apply(df, 2, function(xx) tapply(xx, pop(x), mean, na.rm=TRUE))
+# when there is just one population the output of centers is a vector
+# the following lines fix this error
+if(nPop(x)==1){
+  centers <- data.frame(lon=centers[1],lat=centers[2])
+  row.names(centers) <- popNames(x)
+  }
 # Add default OpenStreetMap map tiles
 m <- leaflet::leaflet() %>%
   leaflet::addTiles()
-if (ind.circles) m <- m %>%  leaflet::addCircleMarkers(lng=df$lon, lat=df$lat, popup=indNames(x),  color = cols[as.numeric(pop(x))], opacity = 0.8)
 
-if (pop.labels)   m <- m %>% leaflet::addLabelOnlyMarkers(lng=centers[,"lon"], lat=centers[,"lat"], label = popNames(x),labelOptions = leaflet::labelOptions(noHide = T, direction = 'top', textOnly = T, textsize = paste0(pop.labels.cex,"px")))
+if (ind.circles){
+  m <- m %>%  leaflet::addCircleMarkers(lng=df$lon, lat=df$lat, popup=indNames(x),  color = cols[as.numeric(pop(x))], opacity = 0.8)
+}
 
+if (pop.labels){
+  m <- m %>% leaflet::addLabelOnlyMarkers(lng=centers[,"lon"], lat=centers[,"lat"], label = popNames(x),labelOptions = leaflet::labelOptions(noHide = T, direction = 'top', textOnly = T, textsize = paste0(pop.labels.cex,"px")))
+  }
 
 if (!is.null(matrix)){
+  #standardize
+  if (standard){
+    matrix[,] <- ((matrix[,]-min(matrix, na.rm = T))/(max(matrix, na.rm = T)-min(matrix, na.rm = T)))*9+1
+  }
   
-  #standarddise
-  if (standard) matrix[,] <- ((matrix[,]-min(matrix, na.rm = T))/(max(matrix, na.rm = T)-min(matrix, na.rm = T)))*9+1
+if (nrow(matrix)==nPop(x)){
+  xys <- centers
+  }else{
+    xys <- df
+}
   
-  
-if (nrow(matrix)==nPop(x)) xys <- centers else xys <- df
 if (symmetric) {
 for (ii in 1:nrow(matrix)){
   for (i in ii:nrow(matrix)){
@@ -68,11 +93,10 @@ for (ii in 1:nrow(matrix)){
   }
 }
 }
+  
 if (!symmetric) {
-  for (i in 1:nrow(matrix))
-  {
-    for (ii in 1:nrow(matrix))
-    {
+  for (i in 1:nrow(matrix)) {
+    for (ii in 1:nrow(matrix)) {
       if (abs((i-ii))!=0) {
         from <- xys[i,]
         to <- xys[ii,]
@@ -88,5 +112,6 @@ if (!symmetric) {
 }
 
 m %>% leaflet::addProviderTiles(provider)
+
   }
 }

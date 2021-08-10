@@ -31,10 +31,11 @@ utils.check.datatype <- function(x,
                                  accept=c("genlight","SNP","SilicoDArT"),
                                  verbose=NULL) {
   
-#### SET VERBOSITY
+  #### SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
 
 #### CHECK THE TYPE OF OBJECT ####
+
 
   if(is(x,"genlight")){
     if(is.null(ploidy(x))){
@@ -84,7 +85,7 @@ utils.check.datatype <- function(x,
       # }
   } else if(is(x,"dist")){
     if(verbose>=2){
-        cat(report("  Processing a distance matrix\n"))
+      cat(report("  Processing a distance matrix\n"))
     }
     datatype <- "dist"
   } else if(is(x,"matrix")){
@@ -98,8 +99,8 @@ utils.check.datatype <- function(x,
     }
     datatype <- "glPca"
   } else {
-      cat(warn("  Warning: Found object of class",class(x)[1],"\n"))
-      datatype <- class(x)[1]
+    cat(warn("  Warning: Found object of class",class(x)[1],"\n"))
+    datatype <- class(x)[1]
   }
   
   #### CHECK WHETHER TO THROW AN ERROR ####
