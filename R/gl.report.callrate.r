@@ -38,7 +38,7 @@
 #' directory.
 #' 
 #' @return Returns unaltered genlight object
-#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # SNP data
 #'   gl.report.callrate(testset.gl)

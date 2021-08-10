@@ -147,6 +147,7 @@ as.pop = "assigned.sex", palette_discrete = pop_colours)
 \code{\link{gl.pcoa}}
 
 Other Exploration/visualisation functions: 
+\code{\link{gl.pcoa.plot}()},
 \code{\link{gl.plot}()}
 }
 \author{

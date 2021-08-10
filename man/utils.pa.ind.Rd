@@ -34,5 +34,5 @@ may be heterozygous, in which case can share one but not both of its alleles wit
 #utils.pa.ind(testset.gl, unknown="UC_00146", nmin=10, threshold=1, verbose=2)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

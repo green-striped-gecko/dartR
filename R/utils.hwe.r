@@ -10,7 +10,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @param prob -- level of significance [Default 0.05]
 #' @return Locus, Hom_1, Het, Hom_2, N, Prob, Sig, BonSig)
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #' 
 
 utils.hwe <- function (x, 

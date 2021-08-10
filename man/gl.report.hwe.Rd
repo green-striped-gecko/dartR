@@ -187,6 +187,6 @@ Other filters/filter reports:
 \code{\link{gl.filter.hwe}()}
 }
 \author{
-Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters/filter reports}

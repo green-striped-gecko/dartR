@@ -77,7 +77,7 @@
 #' best modern reference is Legendre & Legendre (1998).
 #' 
 #'@return An object of class pcoa containing the eigenvalues and factor scores
-#'@author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#'@author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples
 #' fd <- gl.fixed.diff(testset.gl)
@@ -97,6 +97,8 @@
 #'\item Lingoes, J. C. (1971) Some boundary conditions for a monotone analysis of symmetric matrices. Psychometrika, 36, 195-203.
 #'\item Pearson, K. (1901). On lines and planes of closest fit to systems of points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp. 559-572.
 #' }
+#' 
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' 
 #'@seealso \code{\link{gl.pcoa.plot}}
 #'@family data exploration functions
@@ -223,11 +225,11 @@ gl.pcoa <- function(x,
 
             if (verbose >= 2) {
                 if (datatype == "SNP") {
-                  cat(report("  Performing a PCA, individuals as entities, loci as attributes, SNP genotype as state\n\n"))
+                  cat(report("  Performing a PCA, individuals as entities, loci as attributes, SNP genotype as state\n"))
                   title <- "PCA on SNP Genotypes\nScree Plot (informative axes only)"
                 }
                 if (datatype == "SilicoDArT") {
-                  cat(report("  Performing a PCA, individuals as entities, loci as attributes, Tag P/A as state\n\n"))
+                  cat(report("  Performing a PCA, individuals as entities, loci as attributes, Tag P/A as state\n"))
                   title <- "PCA on Tag P/A Data\nScree Plot (informative axes only)"
                 }
             }
@@ -330,7 +332,7 @@ gl.pcoa <- function(x,
     # FLAG SCRIPT END
 
     if (verbose > 0) {
-        cat(report("Completed:", funname, "\n\n"))
+        cat(report("Completed:", funname, "\n"))
     }
 
      class(p.object) <- "glPca"

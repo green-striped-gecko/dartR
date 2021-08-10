@@ -41,6 +41,6 @@ gl.report.overshoot(testset.gl)
 \code{\link{gl.filter.overshoot}}
 }
 \author{
-Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filter report functions}

@@ -13,7 +13,7 @@
 #' @param obs_hom1 -- count of homozygotes, reference state
 #' @param obs_hom2 -- count of homozygotes, alternate state
 #' @return Exact probability of agreement with HWE
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' hets <- 20
 #' hom_1 <- 5

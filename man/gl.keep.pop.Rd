@@ -40,22 +40,16 @@ The script returns a genlight object with the new population assignments and the
 }
 \examples{
  # SNP data
-   gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata",
-   "EmvicVictJasp"))
-   gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata",
-   "EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
-   gl2 <- gl.keep.pop(testset.gl, pop.list=c("Female"),
-   as.pop="sex")
+   gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata", "EmvicVictJasp"))
+   gl2 <- gl.keep.pop(testset.gl, pop.list=c("EmsubRopeMata", "EmvicVictJasp"),mono.rm=TRUE,recalc=TRUE)
+   gl2 <- gl.keep.pop(testset.gl, pop.list=c("Female"),as.pop="sex")
  # Tag P/A data  
-   gs2 <- gl.keep.pop(testset.gs, pop.list=c("EmsubRopeMata",
-   "EmvicVictJasp"))
+   gs2 <- gl.keep.pop(testset.gs, pop.list=c("EmsubRopeMata","EmvicVictJasp"))
 
 }
 \seealso{
-\code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
-
 \code{\link{gl.drop.pop}} to drop rather than keep specified populations
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

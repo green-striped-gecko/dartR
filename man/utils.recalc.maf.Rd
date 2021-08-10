@@ -30,5 +30,5 @@ places these recalculated values in the appropriate place in the genlight object
 \code{gl.recalc.rdepth} for recalculating average read depth
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -30,5 +30,5 @@ Note that the frequency of the homozygote reference SNPS is calculated from the 
 \code{gl.recalc.rdepth} for recalculating average read depth
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

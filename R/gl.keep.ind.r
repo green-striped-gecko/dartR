@@ -13,15 +13,15 @@
 #' @param mono.rm -- Remove monomorphic loci [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
-
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' 
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' 
 #' @examples
 #'   # SNP data
 #'     gl2 <- gl.keep.ind(testset.gl, ind.list=c("AA019073","AA004859"))
 #'   # Tag P/A data
 #'    gs2 <- gl.keep.ind(testset.gs, ind.list=c("AA020656","AA19077","AA004859"))
 #'    
-#' @seealso \code{\link{gl.filter.monomorphs}} for when mono.rm=TRUE, \code{\link{gl.recalc.metrics}} for when recalc=TRUE
 #' @seealso \code{\link{gl.drop.ind}} to drop rather than keep specified individuals
 #' @export
 
@@ -54,6 +54,8 @@ gl.keep.ind <- function(x,
   }
 
 # DO THE JOB
+  
+  hold <- x
 
   if (verbose >= 2) {
     cat("  Deleting all but the listed individuals", paste(ind.list,collapse = ", "), "\n")
@@ -92,12 +94,14 @@ gl.keep.ind <- function(x,
 
 # REPORT A SUMMARY
     
-  if (verbose >= 3) {
-    cat("  Summary of recoded dataset\n")
-    cat(paste("    No. of loci:",nLoc(x),"\n"))
-    cat(paste("    No. of individuals:", nInd(x),"\n"))
-    cat(paste("    No. of populations:", nPop(x),"\n"))
-  }
+    if (verbose >= 3) {
+      cat("Summary of recoded dataset\n")
+      cat(paste("  No. of loci:",nLoc(x),"\n"))
+      cat(paste("  Original No. of individuals:", nInd(hold),"\n"))
+      cat(paste("  No. of individuals:", nInd(x),"\n"))
+      cat(paste("  Original No. of populations:", nPop(hold),"\n"))
+      cat(paste("  No. of populations: ", nPop(x),"\n"))
+    }
     
 # ADD TO HISTORY
     nh <- length(x@other$history)

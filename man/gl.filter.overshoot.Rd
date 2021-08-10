@@ -33,5 +33,5 @@ Not fatal, but should apply this filter before gl.filter.secondaries, for obviou
 result <- gl.filter.overshoot(testset.gl, verbose=3)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

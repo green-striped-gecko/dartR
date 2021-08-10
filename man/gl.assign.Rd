@@ -72,5 +72,5 @@ Each of these approaches provides evidence, none are 100% definitive. They need 
   alpha=0.05, threshold=1)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

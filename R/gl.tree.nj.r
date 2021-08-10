@@ -13,7 +13,7 @@
 #' @importFrom stringr str_pad
 #' @importFrom ape nj root plot.phylo write.tree
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' # SNP data
 #'   gl.tree.nj(testset.gl,type="fan")

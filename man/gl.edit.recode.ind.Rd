@@ -61,6 +61,9 @@ gl <- gl.edit.recode.ind(testset.gl)
 gl <- gl.edit.recode.ind(testset.gl, out.recode.file="ind.recode.table.csv")
 }
 }
+\seealso{
+\code{\link{gl.recode.ind}}, \code{\link{gl.drop.ind}}, \code{\link{gl.keep.ind}}, \code{\link{gl.merge.ind}}, \code{\link{gl.reassign.ind}}
+}
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

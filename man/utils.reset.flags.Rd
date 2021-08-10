@@ -39,5 +39,5 @@ do not exist, then they are added to the genlight object and set to FALSE (or TR
 \code{gl.recalc.rdepth} for recalculating average read depth
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

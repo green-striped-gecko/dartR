@@ -19,7 +19,7 @@
 #' 
 #' @rawNamespace import(adegenet, except = plot)
 #' 
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' 
 #' @examples
 #' # SNP data

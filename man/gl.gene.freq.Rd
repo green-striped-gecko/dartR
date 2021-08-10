@@ -33,5 +33,5 @@ Calculate a statistic for each locus by group
 #result <- gl.gene.freq(testset.gl, method=pop(gl), stat="mean")
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
