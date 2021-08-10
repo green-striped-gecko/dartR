@@ -8,8 +8,8 @@ coded for scores of 0, 1, 2 and NA)}
 gl.plot(
   x,
   group_pop = FALSE,
-  labels_plot = FALSE,
   ind_labels = indNames(x),
+  ind_labels_size = 10,
   plot_colours = four_colors,
   posi = "bottom",
   save2tmp = FALSE,
@@ -20,11 +20,12 @@ gl.plot(
 \item{x}{Name of the genlight object containing the SNP or presence/absence
 (SilicoDArT) data [required].}
 
-\item{group_pop}{Group by population [default TRUE]}
-
-\item{labels_plot}{If TRUE, individual labels are added [default FALSE].}
+\item{group_pop}{Group by population [default TRUE].}
 
 \item{ind_labels}{Labels for individuals [default indNames(x)].}
+
+\item{ind_labels_size}{Size of the individual labels, if individual labels 
+are not required set this parameter to 0 [default 10].}
 
 \item{plot_colours}{Vector with four color names for homozygotes for the 
 reference allele, heterozygotes, homozygotes for the alternative allele and 
@@ -44,10 +45,10 @@ Returns unaltered genlight object
 }
 \description{
 It adds the option to put labels on the individuals and grouping by populations. 
-If there are too many individuals, it is best to use labels_plot=FALSE.
+If there are too many individuals, it is best to use ind_labels_size = 0.
 }
 \examples{
-gl.plot(bandicoot.gl[1:10,],labels=TRUE)
+gl.plot(bandicoot.gl[1:10,])
 
 }
 \seealso{
