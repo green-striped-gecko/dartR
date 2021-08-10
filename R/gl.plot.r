@@ -3,13 +3,14 @@
 #' coded for scores of 0, 1, 2 and NA)
 #' @description 
 #' It adds the option to put labels on the individuals and grouping by populations. 
-#' If there are too many individuals, it is best to use labels_plot=FALSE.
+#' If there are too many individuals, it is best to use ind_labels_size = 0.
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence
 #'  (SilicoDArT) data [required].
-#' @param group_pop Group by population [default TRUE]
-#' @param labels_plot If TRUE, individual labels are added [default FALSE].
+#' @param group_pop Group by population [default TRUE].
 #' @param ind_labels Labels for individuals [default indNames(x)].
+#' @param ind_labels_size Size of the individual labels, if individual labels 
+#' are not required set this parameter to 0 [default 10].
 #' @param plot_colours Vector with four color names for homozygotes for the 
 #' reference allele, heterozygotes, homozygotes for the alternative allele and 
 #' for missing values (NA) [default four_colors].
@@ -23,7 +24,7 @@
 #' @return Returns unaltered genlight object
 #' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' gl.plot(bandicoot.gl[1:10,],labels=TRUE)
+#' gl.plot(bandicoot.gl[1:10,])
 #'
 #' @seealso \code{\link{gl.filter.callrate}}
 #' @family Exploration/visualisation functions
@@ -32,8 +33,8 @@
 
 gl.plot <- function (x,
                      group_pop = FALSE,
-                     labels_plot = FALSE, 
                      ind_labels = indNames(x), 
+                     ind_labels_size = 10,
                      plot_colours = four_colors, 
                      posi = "bottom", 
                      save2tmp = FALSE,
@@ -79,22 +80,33 @@ gl.plot <- function (x,
   loc_labels <- pretty(1:nLoc(x),5)
   
   locus <- id <- genotype <- NA
-
+  
+  if(datatype=="SilicoDArT"){
+    p3 <- ggplot(X,aes(x=locus,y=id,fill=genotype))+
+      geom_raster() +
+      scale_fill_discrete(type = four_colors[c(1,3)],na.value=four_colors[4],name="Genotype",labels=c("0","1")) +
+      theme_dartR() +
+      theme(legend.position=posi,
+            axis.text.y = element_text(size = ind_labels_size ))+
+      scale_x_discrete(breaks= loc_labels, labels= as.character(loc_labels),name="Loci") +
+      ylab("Individuals")
+  }
+  
+  if(datatype=="SNP"){
     p3 <- ggplot(X,aes(x=locus,y=id,fill=genotype))+
       geom_raster() +
       scale_fill_discrete(type = four_colors,na.value=four_colors[4],name="Genotype",labels=c("0","1","2")) +
       theme_dartR() +
-      theme(legend.position=posi)+
+      theme(legend.position=posi,
+            axis.text.y = element_text(size = ind_labels_size ))+
       scale_x_discrete(breaks= loc_labels, labels= as.character(loc_labels),name="Loci") +
-    ylab("Individuals")
+      ylab("Individuals")
+  }
     
     if(group_pop == TRUE){
       p3 <- p3 + facet_wrap(~pop, ncol=1,dir="v",scales="free_y")
     }
 
-    if(labels_plot==F){
-      p3 <- p3 + theme(axis.text.y=element_blank())
-    }
     
   # PRINTING OUTPUTS
     print(p3)
