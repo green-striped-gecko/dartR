@@ -1,3 +1,9 @@
+#' Simulate emigration between populations
+#' 
+#' A simple functions that allows to exchange individuals of genlight object to be swapped between populations
+
+#' @export
+
 gl.sim.emigration <- function (x, perc.mig=NULL, emi.m=NULL, emi.table = NULL) 
 {
   if (length(x)==1) p <- seppop(x) else p <- x
