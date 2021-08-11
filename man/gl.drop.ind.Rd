@@ -41,10 +41,8 @@ The script returns a genlight object with the individuals deleted and, optionall
    
 }
 \seealso{
-\code{\link{gl.filter.monomorphs}}
-
-\code{\link{gl.recalc.metrics}}
+\code{\link{gl.keep.ind}} to keep rather than drop specified individuals
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

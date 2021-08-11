@@ -52,5 +52,5 @@ the expected number of false positives is calculated.
 fd <- gl.fdsim(testset.gl,poppair=c("EmsubRopeMata","EmmacBurnBara"),sympatric=TRUE,verbose=3)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

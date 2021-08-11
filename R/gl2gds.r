@@ -11,7 +11,7 @@
 #' @return NULL
 #' @export
 #' @importFrom SNPRelate snpgdsCreateGeno snpgdsOpen snpgdsSummary snpgdsClose
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
 #' gl2gds(testset.gl)

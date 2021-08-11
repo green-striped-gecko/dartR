@@ -114,7 +114,7 @@
 #' heterozygotes and alternate SNP homozygotes; probability of departure from 
 #' H-W proportions, and per locus significance with and without correction for 
 #' multiple comparisons.
-#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' gl.report.hwe(x = bandicoot.gl)
 #' @references 

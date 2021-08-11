@@ -35,5 +35,5 @@ gl <- gl.join(x1, x2, verbose=2)
 nLoc(gl)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

@@ -36,7 +36,8 @@
 #' @return An object of class ("genlight") with the revised population assignments
 #' @import utils
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges --Post to \url{https://groups.google.com/d/forum/dartr}
+#' @seealso \code{\link{gl.recode.pop}}, \code{\link{gl.drop.pop}}, \code{\link{gl.keep.pop}}, \code{\link{gl.merge.pop}}, \code{\link{gl.reassign.pop}}
 #' @examples
 #' \dontrun{
 #' gl <- gl.edit.recode.pop(testset.gl)
@@ -71,9 +72,7 @@ gl.edit.recode.pop <- function(x,
 # DO THE JOB
 
   # Store variables
-  hold.nLoc <- nLoc(x)
-  hold.nInd <- nInd(x)
-  hold.nPop <- nPop(x)
+  hold <- x
   
   # Take assignments from x
 
@@ -82,7 +81,7 @@ gl.edit.recode.pop <- function(x,
 
 # Create recode table for editting, and bring up the editor
     new <- as.matrix(edit(recode.table))
-    new <- new[,1:2]
+    #new <- new[,1:2]
 
 # Write out the recode table, if requested
   if (is.null(pop.recode)) {
@@ -139,11 +138,11 @@ gl.edit.recode.pop <- function(x,
   
   if (verbose>=2) {
     cat("  Summary of recoded dataset\n")
-    cat(paste("  Original No. of loci:",hold.nLoc,"\n"))
-    cat(paste("    New No. of loci:",nLoc(x),"\n"))
-    cat(paste("  Original No. of individuals:", hold.nInd,"\n"))
-    cat(paste("    New No. of individuals:", nInd(x),"\n"))
-    cat(paste("  Original No. of populations:", hold.nPop,"\n"))
+    # cat(paste("  Original No. of loci:",nLoc(hold),"\n"))
+    # cat(paste("    New No. of loci:",nLoc(x),"\n"))
+    # cat(paste("  Original No. of individuals:", nInd(hold),"\n"))
+    # cat(paste("    New No. of individuals:", nInd(x),"\n"))
+    cat(paste("  Original No. of populations:", nPop(hold),"\n"))
     cat(paste("    New No. of populations:", nPop(x),"\n"))
     if (!recalc) {cat(report("  Note: Locus metrics not recalculated\n"))}
     if (!mono.rm) {cat(report("  Note: Resultant monomorphic loci not deleted\n"))}

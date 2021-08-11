@@ -35,7 +35,7 @@
 #' @param r -- number of bases in the restriction enzyme recognition sequence [default = 4]
 #' @return Hamming distance between the two strings
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 
 utils.hamming <- function(str1, str2, r=4) {
   

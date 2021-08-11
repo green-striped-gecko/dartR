@@ -24,7 +24,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight or genind object with the recoded and reduced data
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'   file <- system.file("extdata","testset_ind_recode.csv", package="dartR")
 #'   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=3)

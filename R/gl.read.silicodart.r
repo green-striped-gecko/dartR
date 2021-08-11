@@ -31,7 +31,7 @@
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, or as set by gl.set.verbose()]
 #' @return An object of class \code{genlight} with ploidy set to 1, containing the presence/absence data, and locus and individual metadata
 #' @export
-#' @author Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' silicodartfile <- system.file("extdata","testset_SilicoDArT.csv", package="dartR")
 #' metadata <- system.file("extdata",ind.metafile ="testset_metadata_silicodart.csv", package="dartR")

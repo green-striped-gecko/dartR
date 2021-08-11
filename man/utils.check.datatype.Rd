@@ -11,7 +11,7 @@ utils.check.datatype(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object, dist matrix, data matrix or fixed difference list (fd) [required]}
+\item{x}{Name of the genlight object, dist matrix, data matrix, glPCA, or fixed difference list (fd) [required]}
 
 \item{accept}{Vector containing the classes of objects that are to be accepted [default c("genlight","SNP","SilicoDArT"]}
 
@@ -19,7 +19,7 @@ utils.check.datatype(
 }
 \value{
 datatype, "SNP" for SNP data, "SilicoDArT" for P/A data, "dist" for a distance matrix, 
-"mat" for a data matrix or class(x)[1]
+"mat" for a data matrix, "glPCA" for an ordination file, or class(x)[1]
 }
 \description{
 Most functions require access to a genlight object, dist matrix, data matrix or fixed difference list (fd), 
@@ -37,4 +37,7 @@ datatype <- utils.check.datatype(testset.gl)
 datatype <- utils.check.datatype(as.matrix(testset.gl),accept="matrix")
 fd <- gl.fixed.diff(testset.gl)
 datatype <- utils.check.datatype(fd,accept="fd")
+}
+\author{
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

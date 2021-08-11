@@ -58,7 +58,7 @@
 #' @return The reduced genlight object, if parentals are provided; output of NewHybrids is saved to disk
 #' @export
 #' @importFrom MASS write.matrix
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \dontrun{
 #' m <- gl.nhybrids(testset.gl, outfile="nhyb.txt", 

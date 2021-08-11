@@ -96,6 +96,6 @@ Other reporting functions:
 \code{\link{gl.report.sexlinked}()}
 }
 \author{
-Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }
 \concept{reporting functions}

@@ -42,7 +42,7 @@
 #' @importFrom methods new
 #' @importFrom stats dist nobs optimize pchisq variable.names
 #' @import stringr
-#' @author Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl <- gl.filter.reproducibility(testset.gl,t=1)
 #' gl <- gl.filter.overshoot(gl,verbose=3)

@@ -48,7 +48,7 @@
 #'
 #' @return A dataframe containing population labels, heterozygosities and sample sizes
 #'
-#' @author Bernd Gruber, Arthur Georges and Renee Catullo (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
 #'df <- gl.report.heterozygosity(testset.gl)

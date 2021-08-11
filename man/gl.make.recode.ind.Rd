@@ -44,5 +44,5 @@ values missing. Clean this up with gl.filter.monomorphic().
 result <- gl.make.recode.ind(testset.gl, out.recode.file ="Emmac_recode_ind.csv",outpath=tempdir())
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

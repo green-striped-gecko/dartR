@@ -89,6 +89,6 @@ gl <- gl.report.maf(testset.gl)
  \code{\link{gl.print.reports}}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }
 \concept{filter reports functions}

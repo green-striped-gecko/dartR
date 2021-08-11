@@ -47,5 +47,5 @@ and the optionally recalculated locus metadata.
 \code{\link{gl.recode.pop}} for recoding populations
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

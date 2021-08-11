@@ -64,5 +64,5 @@ testset.gs <- gl.read.silicodart(filename = silicodartfile, ind.metafile = metad
 \code{\link{gl.read.dart}}
 }
 \author{
-Bernd Gruber and Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

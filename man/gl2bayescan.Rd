@@ -25,5 +25,5 @@ gl2bayescan(testset.gl)
 Foll M and OE Gaggiotti (2008) A genome scan method to identify selected loci appropriate for both dominant and codominant markers: A Bayesian perspective. Genetics 180: 977-993.
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

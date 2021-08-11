@@ -61,5 +61,5 @@ colors of node symbols are those of the rainbow.
  gl.plot.network(D,bandicoot.gl)
 }
 \author{
-Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
+Custodian: Arthur Georges (Post to https://groups.google.com/d/forum/dartr)
 }

@@ -28,7 +28,7 @@
 #' @importFrom ape dist.gene
 #' @importFrom stats dist
 #' @export
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' gl.dist.pop(testset.gl, method="euclidean")
 

@@ -25,5 +25,5 @@ gl2gds(testset.gl)
 }
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

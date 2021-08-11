@@ -48,7 +48,7 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #' @return The original genlight object, unchanged
-#' @author Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' out <- gl.report.secondaries(bandicoot.gl)
 #' @seealso \code{\link{gl.filter.secondaries}},\code{\link{gl.report.heterozygosity}}

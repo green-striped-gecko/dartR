@@ -50,7 +50,7 @@
 #'  in 'HardyWeinberg'-format to be used with other functions of the package 
 #'  (e.g \code{\link[HardyWeinberg]{HWPerm}} or \code{\link[HardyWeinberg]{HWExactPrevious}}).
 #'  }
-#' @author Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' out <- gl.hwe.pop(bandicoot.gl[,1:33], alpha_val=0.05, plot.out=TRUE, HWformat=FALSE)
 #'

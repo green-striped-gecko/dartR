@@ -6,7 +6,7 @@
 #' and this function checks that a genlight object has been passed, whether it is a SNP dataset or a SilicoDArT object, 
 #' and reports back if verbosity is >=2
 #'
-#' @param x Name of the genlight object, dist matrix, data matrix or fixed difference list (fd) [required]
+#' @param x Name of the genlight object, dist matrix, data matrix, glPCA, or fixed difference list (fd) [required]
 #' @param accept Vector containing the classes of objects that are to be accepted [default c("genlight","SNP","SilicoDArT"]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
 #' 
@@ -17,7 +17,9 @@
 #' Note: One and only one of gl.check, fd.check, dist.check or mat.check can be TRUE.
 #' 
 #' @return datatype, "SNP" for SNP data, "SilicoDArT" for P/A data, "dist" for a distance matrix, 
-#' "mat" for a data matrix or class(x)[1]
+#' "mat" for a data matrix, "glPCA" for an ordination file, or class(x)[1]
+#' 
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' datatype <- utils.check.datatype(testset.gl)
 #' datatype <- utils.check.datatype(as.matrix(testset.gl),accept="matrix")
@@ -29,19 +31,23 @@ utils.check.datatype <- function(x,
                                  accept=c("genlight","SNP","SilicoDArT"),
                                  verbose=NULL) {
   
-#### SET VERBOSITY
+  #### SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
 
 #### CHECK THE TYPE OF OBJECT ####
-  
+
+
   if(is(x,"genlight")){
+    if(is.null(ploidy(x))){
+      stop(error("Fatal Error: ploidy not set in the genlight object, run gl <- gl.compliance.check(gl)\n"))
+    }
     if(verbose>=2){cat(report("  Processing genlight object"))}
-    if (all(x@ploidy == 1)){
+    if (all(ploidy(x) == 1)){
       if(verbose>=2){
         cat(report(" with Presence/Absence (SilicoDArT) data\n"))
       }
       datatype <- "SilicoDArT"
-    } else if (all(x@ploidy == 2)){
+    } else if (all(ploidy(x) == 2)){
       if(verbose>=2){
         cat(report(" with SNP data\n"))
       }
@@ -52,21 +58,34 @@ utils.check.datatype <- function(x,
   }
   else if(is(x,"fd")){
       if(is(x$gl,"genlight")){
-        accept <- "fd"
-        type <- utils.check.datatype(x$gl,verbose=0)
+        # if(is.null(ploidy(x$gl))){
+        #   stop(error("Fatal Error: ploidy not set in the genlight object, run gl <- gl.compliance.check(gl)\n"))
+        # }
+        if(verbose>=2){cat(report("  Processing a fixed difference (fd) object"))}
+        if (all(ploidy(x$gl) == 1)){
+          if(verbose>=2){
+            cat(report(" with Presence/Absence (SilicoDArT) data\n"))
+          }
+          type <- "SilicoDArT"
+        } else if (all(ploidy(x$gl) == 2)){
+          if(verbose>=2){
+            cat(report(" with SNP data\n"))
+          }
+          type <- "SNP"
+        }
       } else {  
         stop(error("Fatal Error: Fixed Difference object expected! Check format of object\n"))
       } 
       datatype <- "fd"
-      if(verbose>=2 & type=="SilicoDArT"){
-        cat(report("  Processing a fixed difference (fd) object with Presence/Absence (SilicoDArT) data\n"))
-      }
-      if(verbose>=2 & type=="SNP"){
-        cat(report("  Processing a fixed difference (fd) object with SNP data\n"))
-      }
+      # if(verbose>=2 & type=="SilicoDArT"){
+      #   cat(report("  Processing a fixed difference (fd) object with Presence/Absence (SilicoDArT) data\n"))
+      # }
+      # if(verbose>=2 & type=="SNP"){
+      #   cat(report("  Processing a fixed difference (fd) object with SNP data\n"))
+      # }
   } else if(is(x,"dist")){
     if(verbose>=2){
-        cat(report("  Processing a distance matrix\n"))
+      cat(report("  Processing a distance matrix\n"))
     }
     datatype <- "dist"
   } else if(is(x,"matrix")){
@@ -74,9 +93,14 @@ utils.check.datatype <- function(x,
       cat(report("  Processing a data matrix\n"))
     }
     datatype <- "matrix"
+  } else if (is(x,"glPca")){
+    if(verbose>=2){
+      cat(report("  Processing an ordination file (glPca)\n"))
+    }
+    datatype <- "glPca"
   } else {
-      cat(warn("  Warning: Found object of class",class(x)[1],"\n"))
-      datatype <- class(x)[1]
+    cat(warn("  Warning: Found object of class",class(x)[1],"\n"))
+    datatype <- class(x)[1]
   }
   
   #### CHECK WHETHER TO THROW AN ERROR ####
