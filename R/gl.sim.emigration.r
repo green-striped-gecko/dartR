@@ -1,7 +1,6 @@
 #' Simulate emigration between populations
 #' 
-#' A simple functions that allows to exchange individuals of genlight object to be swapped between populations
-
+#' A function that allows to exchange individuals of genlight object to be swapped between populations.
 #' @export
 
 gl.sim.emigration <- function (x, perc.mig=NULL, emi.m=NULL, emi.table = NULL) 
