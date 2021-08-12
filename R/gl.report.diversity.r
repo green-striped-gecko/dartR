@@ -119,12 +119,31 @@ gl.report.diversity <- function(x,
     }
     ### one_H_alpha
     one_H_alpha_es <- lapply(pops, function(x) {
-        p <- colMeans(as.matrix(x), na.rm = T)/2
-        p <- p[!is.na(p)]  #ignore loci with just missing data
-        logp <- ifelse(!is.finite(log(p)), 0, log(p))
-        log1_p <- ifelse(!is.finite(log(1 - p)), 0, log(1 - p))
-
-        dummys <- -(p * logp + (1 - p) * log1_p)
+      mat_temp <- as.matrix(x)
+      mat <- matrix(nrow = 6, ncol = nLoc(x))
+      rownames(mat) <- c("AA", "AB", "BB","A","B","shannon")
+      mat["AA",] <- apply(mat_temp,2,function(y){length(y[which(y==0)])})
+      mat["AB",] <- apply(mat_temp,2,function(y){length(y[which(y==1)])})
+      mat["BB",] <- apply(mat_temp,2,function(y){length(y[which(y==2)])})
+      mat["A",] <- 2 * mat["AA",] +  mat["AB",]
+      mat["B",] <- 2 * mat["BB",] +  mat["AB",]
+      mat_shannon <- mat[c("A","B"),]
+      
+      dummys <- apply(mat_shannon,2,shannon)
+    
+      # 
+      # p <- (2 * p + hets) / 2
+      # q <- (2 * q + hets) / 2
+      # 
+      # total <- colSums(mat,na.rm = T)
+      # 
+      # 
+      #   p <- colMeans(as.matrix(x), na.rm = T)/2
+      #   p <- p[!is.na(p)]  #ignore loci with just missing data
+      #   logp <- ifelse(!is.finite(log(p)), 0, log(p))
+      #   log1_p <- ifelse(!is.finite(log(1 - p)), 0, log(1 - p))
+      # 
+      #   dummys <- -(p * logp + (1 - p) * log1_p)
 
         return(list(estH = mean(dummys), sdH = sd(dummys), estD = mean(exp(dummys)), sdD = sd(exp(dummys)), dummys = dummys))
     })

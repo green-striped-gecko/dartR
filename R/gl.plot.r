@@ -84,7 +84,7 @@ gl.plot <- function (x,
   if(datatype=="SilicoDArT"){
     p3 <- ggplot(X,aes(x=locus,y=id,fill=genotype))+
       geom_raster() +
-      scale_fill_discrete(type = four_colors[c(1,3)],na.value=four_colors[4],name="Genotype",labels=c("0","1")) +
+      scale_fill_discrete(type = plot_colours[c(1,3)],na.value=plot_colours[4],name="Genotype",labels=c("0","1")) +
       theme_dartR() +
       theme(legend.position=posi,
             axis.text.y = element_text(size = ind_labels_size ))+
@@ -95,7 +95,7 @@ gl.plot <- function (x,
   if(datatype=="SNP"){
     p3 <- ggplot(X,aes(x=locus,y=id,fill=genotype))+
       geom_raster() +
-      scale_fill_discrete(type = four_colors,na.value=four_colors[4],name="Genotype",labels=c("0","1","2")) +
+      scale_fill_discrete(type = plot_colours,na.value=plot_colours[4],name="Genotype",labels=c("0","1","2")) +
       theme_dartR() +
       theme(legend.position=posi,
             axis.text.y = element_text(size = ind_labels_size ))+
@@ -106,7 +106,6 @@ gl.plot <- function (x,
     if(group_pop == TRUE){
       p3 <- p3 + facet_wrap(~pop, ncol=1,dir="v",scales="free_y")
     }
-
     
   # PRINTING OUTPUTS
     print(p3)
