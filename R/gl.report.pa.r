@@ -162,6 +162,6 @@ if (!is.null(x2)) {
   
   # RETURN
   
-  invisible(pall)
+  pall
 
 }

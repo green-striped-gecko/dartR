@@ -7,5 +7,5 @@
 gl.sim.emigration(x, perc.mig = NULL, emi.m = NULL, emi.table = NULL)
 }
 \description{
-A simple functions that allows to exchange individuals of genlight object to be swapped between populations
+A function that allows to exchange individuals of genlight object to be swapped between populations.
 }
