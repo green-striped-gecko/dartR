@@ -91,20 +91,6 @@ gl.fixed.diff <- function(x,
     #if (verbose >=2){cat("  fd object detected\n")}
   }
   
-# STANDARD ERROR CHECKING
- 
-  # if(datatype!="SNP" & datatype!="SilicoDArT" & datatype!="fd") {
-  #   stop(error("Fatal Error: genlight or fd object required!\n"))
-  # }
-  # 
-  # if (datatype== "SilicoDArT"){
-  #   if (verbose >= 2){cat(report("  Processing  Presence/Absence (SilicoDArT) data\n"))}
-  # } else if (datatype=="SNP"){
-  #   if (verbose >= 2){cat(report("  Processing a SNP dataset\n"))}
-  # } else {
-  #   stop(error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
-  # }
-  
 # FUNCTION SPECIFIC ERROR CHECKING
   
   if (tloc > 0.5 || tloc < 0 ) {
