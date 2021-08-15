@@ -184,5 +184,5 @@ gl.assign.pa <- function (x, unknown, nmin=10, threshold=0, verbose=3) {
     cat(report("Completed:",funname,"\n"))
   }
 
-  return(df)
+  return(gl)
 }
