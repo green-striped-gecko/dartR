@@ -114,7 +114,7 @@ gl.pcoa <- function(x,
                     plot_theme = theme_dartR(),
                     plot_colours = two_colors, 
                     save2tmp = FALSE,
-                    verbose = 2) {
+                    verbose = NULL) {
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -314,7 +314,7 @@ gl.pcoa <- function(x,
     
     # printing outputs
     p3 <- (p1/p2)
-    print(p3)
+    if(verbose >= 1) {print(p3)}
 
     # SAVE INTERMEDIATES TO TEMPDIR 
     if(save2tmp){

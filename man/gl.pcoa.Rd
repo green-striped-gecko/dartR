@@ -14,7 +14,7 @@ gl.pcoa(
   plot_theme = theme_dartR(),
   plot_colours = two_colors,
   save2tmp = FALSE,
-  verbose = 2
+  verbose = NULL
 )
 }
 \arguments{
