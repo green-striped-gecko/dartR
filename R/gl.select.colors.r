@@ -76,16 +76,15 @@ gl.select.colors <- function(x=NULL,
       ncolors <- pop(x)
       if(verbose >= 2){cat(warn("  Warning: Number of required colors not specified, set to number of pops",nPop(x),"in gl object\n"))}
     } else {
-      if(!is.null(select)){
-        ncolors <- length(select)
-        if(verbose >= 2){cat(warn("  Warning: Number of required colors not specified, set to number colours,",length(select),", selected for display\n"))}
-      } else {
+      # if(!is.null(select)){
+      #   ncolors <- length(select)
+      #   if(verbose >= 2){cat(warn("  Warning: Number of required colors not specified, set to number colours,",length(select),", selected for display\n"))}
+      # } else {
         if(verbose >= 2){cat(warn("  Warning: Number of required colors not specified, set to 9 to display the colors\n"))}
         ncolors <- 9
       }
     }  
-  }
-  
+
   if(!is.null(select)){
     if(!is.null(x)){
       if(nPop(x) != length(select)){
