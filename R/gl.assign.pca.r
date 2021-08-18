@@ -77,6 +77,9 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=0)
+  if(nPop(x) < 2){
+    stop(error("Fatal Error: Only one population, including the unknown, no putative source"))
+  }
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -89,6 +92,10 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
     cat(warn("  Warning: Value of alpha must be between 0 and 1, set to 0.05\n"));
     alpha <- 0.05
     alpha <- 1- alpha
+  }
+  
+  if(nLoc(x) < nPop(x)){
+    stop(error("Fatal Error: Number of loci less than number of populations"))
   }
 
 # DO THE JOB
@@ -118,16 +125,17 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   }
   names(result) <- c("pop","hit")
   nhits <- length(result$pop[result$hit])
+  nohits <- length(result$pop[!result$hit])
   if(verbose==3){
     if(nhits > 0){
       cat("  Putative source populations:",paste(result$pop[result$hit],collapse=", "),"\n")
     } else {
       cat("  No putative source populations identified\n")
     } 
-    if(nhits > 0){
-      cat("  Populations elimated from consideration:",paste(result$pop[!result$hit],collapse=", "),"\n")
+    if(nohits > 0 ){
+      cat("  Populations eliminated from consideration:",paste(result$pop[!result$hit],collapse=", "),"\n")
     } else {
-      cat("  No populations elimated from consideration\n")
+      cat("  No populations eliminated from consideration\n")
     }  
   }
   if(nhits > 0){
@@ -138,7 +146,7 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   
 # Re-run the pcoa on the reduced set
   hard.limit <- 8
-  pcoa <- gl.pcoa(x2,verbose=0)
+  pcoa <- gl.pcoa(x2,nfactors=hard.limit,verbose=0)
 
 # Determine the number of dimensions for confidence envelope (the ordination and dimension reduction)
   # From the eigenvalue distribution
@@ -202,7 +210,7 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
       idx <- round(index/index.boundary,2)
     # Print out the result for population i
       assign <- "no"
-      if (abs(index) <= abs(index.boundary)) {assign <- "yes"}
+      if (idx <= 1) {assign <- "yes"}
       tmp <- data.frame(levels(p)[i],index,index.boundary,idx,assign)
       if (i==1) {
         df <- tmp
