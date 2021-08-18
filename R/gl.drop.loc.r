@@ -47,15 +47,15 @@ gl.drop.loc <- function(x,
   } else if (!is.null(loc.list)){
     flag <- 'list'
     if (verbose >= 2){
-      cat(report("  List of loci to keep has been specified\n"))
+      cat(report("  List of loci to drop has been specified\n"))
     } 
   } else if (!is.null(first)){
     flag <- 'range'
     if (verbose >= 2){
-      cat(report("  Range of loci to keep has been specified\n"))
+      cat(report("  Range of loci to drop has been specified\n"))
     } 
   } else {
-      stop(error("Fatal Error: Need to specify either a range of loci to keep, or specific loci to keep\n"))
+      stop(error("Fatal Error: Need to specify either a range of loci to drop, or specific loci to drop\n"))
   }
   
   if (flag=='both' || flag=='list'){

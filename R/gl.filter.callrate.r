@@ -115,12 +115,12 @@
   }
   
   # Check call rate up to date
-    if (x@other$loc.metrics.flags$CallRate == FALSE){
+    # if (x@other$loc.metrics.flags$CallRate == FALSE){
       if (verbose >= 2){
         cat(report("  Recalculating Call Rate\n"))
       }  
       x <- utils.recalc.callrate(x,verbose=0)
-    }
+    # }
    
   # Suppress plotting on verbose == 0
    if(verbose==0){
@@ -306,6 +306,7 @@
             }  
             if (mono.rm) {
               # Remove monomorphic loci  
+              cat(report("  Removing monomorphic loci\n"))
               x2 <- gl.filter.monomorphs(x2,verbose=0)
             }
             if (recalc) {
