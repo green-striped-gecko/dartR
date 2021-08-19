@@ -4,7 +4,14 @@
 \alias{gl.assign.pa}
 \title{Eliminate populations as possible source populations for an individual of unknown provenance, using private alleles}
 \usage{
-gl.assign.pa(x, unknown, nmin = 10, threshold = 0, verbose = 3)
+gl.assign.pa(
+  x,
+  unknown,
+  nmin = 10,
+  threshold = 0,
+  bestn = NULL,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}
@@ -16,10 +23,15 @@ gl.assign.pa(x, unknown, nmin = 10, threshold = 0, verbose = 3)
 \item{threshold}{-- populations to retain for consideration; those for which the focal individual has 
 less than or equal to threshold loci with private alleles [default 0]}
 
+\item{bestn}{-- if given a value, dictates the best n=bestn populations to retain for consideration (or more if their
+are ties) based on private alleles [default NULL]}
+
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
+A genlight object containing the focal individual (assigned to population "unknown") and 
+populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal 
+to the threshold). If no such populations, the genlight object contains only data for the unknown individual.
 }
 \description{
 This script eliminates from consideration as putative source populations, those populations for which the individual
