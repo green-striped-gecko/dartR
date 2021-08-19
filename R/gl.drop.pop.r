@@ -53,7 +53,7 @@ gl.drop.pop <- function(x,
   # Population labels assigned?
   if(is.null(as.pop)){
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-        cat(warn("  Warning: Population assignments not detected, running compliance check\n"))
+        if(verbose >=2){cat(warn("  Warning: Population assignments not detected, running compliance check\n"))}
         x <- gl.compliance.check(x,verbose=0)
     }
   }
@@ -76,7 +76,7 @@ gl.drop.pop <- function(x,
   }
   for (case in pop.list){
     if (!(case%in%popNames(x))){
-      if(verbose >= 1){cat(warn("  Warning: Listed population",case,"not present in the dataset -- ignored\n"))}
+      if(verbose >= 2){cat(warn("  Warning: Listed population",case,"not present in the dataset -- ignored\n"))}
       pop.list <- pop.list[!(pop.list==case)]
     }
   }

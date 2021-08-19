@@ -16,8 +16,12 @@
 #' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
 #' @param threshold -- populations to retain for consideration; those for which the focal individual has 
 #' less than or equal to threshold loci with private alleles [default 0]
+#' @param bestn -- if given a value, dictates the best n=bestn populations to retain for consideration (or more if their
+#' are ties) based on private alleles [default NULL]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
-#' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
+#' @return A genlight object containing the focal individual (assigned to population "unknown") and 
+#' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal 
+#' to the threshold). If no such populations, the genlight object contains only data for the unknown individual.
 #' 
 #' @importFrom stats dnorm qnorm
 #' @export
@@ -29,7 +33,12 @@
 #'   
 #' @seealso \code{\link{gl.assign.pca}}, \code{\link{gl.assign.mahandist}}
 
-gl.assign.pa <- function (x, unknown, nmin=10, threshold=0, verbose=3) {
+gl.assign.pa <- function (x, 
+                          unknown, 
+                          nmin=10, 
+                          threshold=0,
+                          bestn=NULL,
+                          verbose=NULL) {
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -55,40 +64,55 @@ gl.assign.pa <- function (x, unknown, nmin=10, threshold=0, verbose=3) {
     cat(warn("  Warning: the threshold for private alleles must be non-negative, set to 0\n"))
     threshold <- 0
   }
+  
+  if (!is.null(bestn)){
+    if(bestn < 1 & verbose >= 1){
+      cat(warn("  Warning: the bestn parameter for retention of best match populations must be a positive integer, set to NULL\n"))
+      bestn <- NULL
+    }
+  }
 
 # DO THE JOB
   
   # Set a hard recommended minimum population size
   hard.min <- 10
   if (verbose >= 1 & (nmin < hard.min)){
-    cat(warn("  Warning: Minimum sample size selected is less than 10 individuals\n"))
+    cat(warn("  Warning: The specified minimum sample size is less than 10 individuals\n"))
     cat(warn("    Risk of alleles present in the unknown being missed during sampling of populations with sample sizes less than 10\n"))
   }
   
   # Assign the unknown individual to population 'unknown'
   vec <- as.vector(pop(x))
   vec[indNames(x)==unknown] <- "unknown"
-  pop(x) <- as.factor(vec)
+  pop(x) <- as.factor(vec) # Note, population containing the unknown has been reduced in size by 1
   
-  # Split the genlight object into one containing the unknown and one containing the remainding populations  
-  unknowns <- x[pop(x)=="unknown",]
-  knowns <- x[pop(x)!="unknown",]
+  # Remove loci scored as NA for the unknown
+   a <- x[pop(x)=="unknown"]
+   b <- data.frame(as.matrix(a)) # Fuck, it changed the locus names, replaced hyphens with periods
+   names(b) <- locNames(a) # Change them back
+   c <- names(b)[is.na(b)]
+   if (length(c) > 0){
+     x <- gl.drop.loc(x,loc.list=c,verbose=0)
+   }
+  
+  # Split the genlight object into one containing the unknown and one containing the remaining populations  
+   #unknowns <- x[pop(x)=="unknown",]
+   unknowns <- gl.keep.pop(x,pop.list="unknown",verbose=0)
+   #knowns <- x[pop(x)!="unknown",]
+   knowns <- gl.drop.pop(x,pop.list="unknown",verbose=0)
   
   # Remove all known populations with less than nmin individuals
   pop.keep <- levels(pop(knowns))[table(pop(knowns)) >= nmin]
-  # if (verbose >=2) {
-  #   cat(report("  Retaining",length(pop.keep),"populations with sample size >=",
-  #              nmin,":\n",paste(pop.keep,collapse=", "),"\n"))
-  # }
   pop.toss <- levels(pop(knowns))[table(pop(knowns)) < nmin]
   if (verbose >=2) {
     cat(report("  Discarding",length(pop.toss),"populations with sample size <",nmin,":\n"))
         if(verbose >=3){cat(paste(pop.toss,collapse=", "),"\n")}
   }
   
-  knowns <- knowns[pop(knowns) %in% pop.keep]
+  #knowns <- knowns[pop(knowns) %in% pop.keep]
+  knowns <- gl.keep.pop(knowns,pop.list=pop.keep,verbose=0)
   
-  # Warn of populations retained with sizes less than the hard wired miniumum    
+  # Warn of populations retained with sizes less than the hard wired minimum    
   pop.warn <- levels(pop(knowns))[table(pop(knowns)) < hard.min]
   if (length(pop.warn >= 1)) {
     if (verbose >=1) {cat(warn("  Warning: Some retained populations have sample sizes less than",hard.min,":",pop.warn,"\n"))}
@@ -105,79 +129,99 @@ gl.assign.pa <- function (x, unknown, nmin=10, threshold=0, verbose=3) {
   }
   if (verbose >=2) {cat(report("  Assigning",n,"unknown individual",unknown,"to",N,"target populations using",nLoc(x),"loci\n"))}
   
-  
   # CALCULATE NUMBER OF LOCI WITH PRIVATE ALLELES
-  
-  # For each unknown individual
-  for (i in 1:n) {
-    # Grab the genotype of the unknown individual i
-    unknown.ind <- as.matrix(unknowns[i])
-    # Compare with each population
-    count <- rep(0, N)
-    count.NA <- rep(0, N)
+
+  # Genotype of the unknown individual
+  unknown.ind <- as.matrix(unknowns)
+  # for each population
+  pop.list <- seppop(knowns)
+  count <- rep(0, length(pop.list))
+  # For each population
+  for (i in 1:length(pop.list)){
+    gen <- as.matrix(pop.list[[i]])
+    # For each locus
+    for (j in 1:nLoc(pop.list[[i]])){
+      unknown.gen <- unknown.ind[j]
+      pop.gen <- gen[,j]
+      # Where the unknown focal individual is homozygous reference allele [aa]
+      if (unknown.gen==0) {
+        # If all individuals in the target population are bb [not aa or ab] then focal individual has private allele [a]
+        if ( all(pop.gen==2, na.rm=TRUE) )  { count[i] <- count[i] + 1}
+      }
+      # Where the unknown focal individual is homozygous for the alternate allele [bb]
+      if (unknown.gen==2) {
+        # If all individuals in the target population are aa [not bb or ab] then focal individual has private allele [b]
+        if ( all(pop.gen==0, na.rm=TRUE) ) { count[i] <- count[i] + 1}
+      }
+      # Where the unknown focal individual is heterozgous [ab]
+      if (unknown.gen==1) {
+        # If all individuals in the target population are aa, then [b] is private or if bb, then [a] is private
+        if ( (all(pop.gen==0, na.rm=TRUE) ) || (all(pop.gen==2, na.rm=TRUE) ) ) { count[i] <- count[i] + 1}
+      }
+    }
+  }
+
+  # Print out results 
     
-    for (j in 1:N) {
-      # Grab the genotypes for the known population j    
-      known.pop <- as.matrix(knowns[pop(knowns)==levels(pop(knowns))[j]])
-      
-      # For each locus, count the number of non-private alleles  
-      for (k in 1:nLoc(x)) {
-        # Check to see if the unknown genotype is missing at locus k
-        if (is.na(unknown.ind[k])) {
-          count.NA[j] <- count.NA[j] + 1
-        } else {  
-          # Count the number of private alleles for each of unknown genotype 0,1,2
-          # Where the unknown focal individual is homozygous reference allele [aa]
-          if (unknown.ind[k]==0) {
-            # If all individuals in the target population are bb [not aa or ab] then focal individual has private allele [a]
-            if ( all(known.pop[,k]==2, na.rm=TRUE) )  { count[j] <- count[j] + 1}
-          }
-          # Where the unknown focal individual is homozygous for the alternate allele [bb]
-          if (unknown.ind[k]==2) {
-            # If all individuals in the target population are aa [not bb or ab] then focal individual has private allele [b]
-            if ( all(known.pop[,k]==0, na.rm=TRUE) ) { count[j] <- count[j] + 1}
-          }
-          # Where the unknown focal individual is heterozgous [ab]
-          if (unknown.ind[k]==1) {
-            # If all individuals in the target population are aa, then [b] is private or if bb, then [a] is private
-            if ( (all(known.pop[,k]==0, na.rm=TRUE) ) || (all(known.pop[,k]==2, na.rm=TRUE) ) ) { count[j] <- count[j] + 1}
-          }
+    if (verbose >=3) {
+      cat("  Table showing populations against number of loci with private alleles\n")
+    }
+      counter <- 1
+      retain <- NULL
+      for (m in levels(as.factor(count))) {
+        if (as.numeric(as.character(m)) > threshold){
+          if (verbose >=3) {cat(paste0("  >",threshold,"---"))}
+        }
+        if (verbose >=3) {cat("  ",m,levels(pop(knowns))[count==m],"\n")}
+        if(counter <= nbest){
+          retain <- c(retain,levels(pop(knowns))[count==m])
+          counter <- counter + length(levels(pop(knowns))[count==m])
+        }
+      } 
+
+  # Save the data in a new gl object
+  
+  if(is.null(bestn)){
+    # index <- ((pop(x) %in% levels(pop(knowns))[count<=threshold]) | (as.character(pop(x)) == "unknown"))
+    # gl <- x[index,]
+    gl <- gl.keep.pop(x,pop.list=c(levels(pop(knowns))[count<=threshold],"unknown"),mono.rm=TRUE,verbose=0)
+  } else {
+    gl <- gl.keep.pop(x,pop.list=c(retain,"unknown"),mono.rm=TRUE,verbose=0)
+  }
+
+# Check that there is more than one population to assign (excluding 'unknown')
+  if(is.null(bestn)){
+    if (verbose >= 2) {
+      if (nPop(gl)==1) { # Taking into account the unknown as a population
+        if(verbose >= 2){
+          cat(report("  There are no populations retained for assignment.",
+                     "  The unknown may not belong to one of the target populations.",
+                     "  Returning genlight object for the unknown individual only\n"))
+        }
+      } else {
+        if(verbose >= 2){
+          cat(report("  Identified and retained",nPop(gl)-1,"putative source populations for",unknown,"based on the specified threshold\n"))
+          cat(report("  Monomorphic loci removed\n"))
         }
       }
     }
-    
-    # Print out results 
-    
-    if (verbose >=3) {
-      # cat(report("  Unknown individual:",unknown,"\n"))
-      # cat(report("  Total number of SNP loci: ",nLoc(x),"\n"))
-      cat("  Table showing populations against number of loci with private alleles\n")
-      for (m in levels(as.factor(count))) {
-        #cat("m=",m,"\n")
-        if (as.numeric(as.character(m)) > threshold){
-          cat(paste0("  >",threshold,"---"))
-        }
-        cat("  ",m,levels(pop(knowns))[count==m],"\n")
-      } 
-      #cat("\n")
-    }
-  }    
-  # Save the data in a new gl object
-  
-  index <- ((pop(x) %in% levels(pop(knowns))[count<=threshold]) | (as.character(pop(x)) == "unknown"))
-  gl <- x[index,]
-  gl <- gl.filter.monomorphs(gl, verbose=0)
-
-# Check that there is more than one population to assign (excluding 'unknown')
-  if (verbose >= 2) {
-  if (nPop(gl)==1) {
-    if(verbose >= 2)cat(report("  There are no populations retained for assignment. Conclude that the unknown does not belong to one of the target populations or rerun with a higher threshold\n"))
-  # } else if (nPop(gl)==2) {
-  #   return(cat(report("  There are no further populations to compare for assignment.",levels(pop(gl))[1],"is the best assignment\n")))
   } else {
-    if(verbose >= 2){cat(report("  Identified and retained",nPop(gl)-1,"putative source populations for",unknown,"\n"))}
+    if (verbose >= 2) {
+      if (length(retain)==0) {
+        if(verbose >= 2){
+          cat(report("  There are no populations retained for assignment.",
+                     "  The unknown may not belong to one of the target populations.",
+                     "  Returning genlight object for the unknown individual only\n"))
+        }
+      } else {
+        if(verbose >= 2){
+          cat(report("  Identified and retained the top",length(retain),"best listed putative source populations for",unknown,"\n"))
+          cat(report("  Monomorphic loci removed\n"))
+        }
+      }
+    }
   }
-  }
+  
 # FLAG SCRIPT END
 
   if (verbose > 0) {
@@ -186,3 +230,4 @@ gl.assign.pa <- function (x, unknown, nmin=10, threshold=0, verbose=3) {
 
   return(gl)
 }
+
