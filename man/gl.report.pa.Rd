@@ -61,6 +61,6 @@ Other reporting functions:
 \code{\link{gl.report.sexlinked}()}
 }
 \author{
-Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{reporting functions}
