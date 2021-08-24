@@ -939,7 +939,7 @@ The results of the PCoA can be plotted using gl.pcoa.plot() with a limited range
 The plotting script is not intended to produce publication quality plots, but should form a basis for importing the plots to illustrator for subsequent amendment.
 The command
 ```{r, fig.height=5}
-gl.pcoa.plot(pc, gl, labels="pop", xaxis=1, yaxis=2)
+gl.pcoa.plot(pc, gl, pop.labels="pop", xaxis=1, yaxis=2)
 
 ```
 
@@ -957,7 +957,7 @@ or using R
 glnew <- testset.gl
 levels(pop(glnew)) <- c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
 rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
-gl.pcoa.plot(pc, glnew, labels="pop", xaxis=1, yaxis=2)
+gl.pcoa.plot(pc, glnew, pop.labels="pop", xaxis=1, yaxis=2)
 ```
 
 Note that we did not need to re run the PCoA analysis, only to recode the pop labels in the genlight object that we hand to the plotting routine. Much clearer plot now.
