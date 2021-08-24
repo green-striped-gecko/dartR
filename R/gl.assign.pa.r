@@ -87,7 +87,7 @@ gl.assign.pa <- function (x,
   pop(x) <- as.factor(vec) # Note, population containing the unknown has been reduced in size by 1
   
   # Remove loci scored as NA for the unknown
-   a <- x[pop(x)=="unknown"]
+   a <- x[pop(x)=="unknown",]
    b <- data.frame(as.matrix(a)) # Fuck, it changed the locus names, replaced hyphens with periods
    names(b) <- locNames(a) # Change them back
    c <- names(b)[is.na(b)]
@@ -143,11 +143,12 @@ gl.assign.pa <- function (x,
     for (j in 1:nLoc(pop.list[[i]])){
       unknown.gen <- unknown.ind[j]
       pop.gen <- gen[,j]
+      if (length(pop.gen) >= nmin){
       # Where the unknown focal individual is homozygous reference allele [aa]
       if (unknown.gen==0) {
         # If all individuals in the target population are bb [not aa or ab] then focal individual has private allele [a]
-        if ( all(pop.gen==2, na.rm=TRUE) )  { count[i] <- count[i] + 1}
-      }
+          if ( all(pop.gen==2, na.rm=TRUE) )  { count[i] <- count[i] + 1}
+       }
       # Where the unknown focal individual is homozygous for the alternate allele [bb]
       if (unknown.gen==2) {
         # If all individuals in the target population are aa [not bb or ab] then focal individual has private allele [b]
@@ -157,6 +158,7 @@ gl.assign.pa <- function (x,
       if (unknown.gen==1) {
         # If all individuals in the target population are aa, then [b] is private or if bb, then [a] is private
         if ( (all(pop.gen==0, na.rm=TRUE) ) || (all(pop.gen==2, na.rm=TRUE) ) ) { count[i] <- count[i] + 1}
+      }
       }
     }
   }
@@ -173,7 +175,7 @@ gl.assign.pa <- function (x,
           if (verbose >=3) {cat(paste0("  >",threshold,"---"))}
         }
         if (verbose >=3) {cat("  ",m,levels(pop(knowns))[count==m],"\n")}
-        if(counter <= nbest){
+        if(counter < nbest){
           retain <- c(retain,levels(pop(knowns))[count==m])
           counter <- counter + length(levels(pop(knowns))[count==m])
         }
