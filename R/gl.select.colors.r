@@ -1,30 +1,28 @@
 #' @name gl.select.colors
 #' @title Select colors from one of several palettes and output as a vector
 #' @description
-#' This script draws upon a number of specified colour libraries to extract a vector of colours for plotting, where
-#' the script that follows has a colour parameter expecting a vector of colours.
+#' This script draws upon a number of specified color libraries to extract a vector of colors for plotting, where
+#' the script that follows has a color parameter expecting a vector of colors.
 #' @details
-#' The available colour libraries include base R, RColorBrewer, gr.palette (grDevice palette) and gr.hcl (grDevice hcl).
+#' The available color libraries include base R, RColorBrewer, gr.palette (grDevice palette) and gr.hcl (grDevice hcl).
 #' Each of these libraries have a set of palettes, which will be listed if the nominated palette is not specified. A
 #' default palette will then be chosen.
 #' 
-#' The colour palette will be displayed in the graphics window for the requested number of colours (or 9 if not specified),
-#' and the vector of colours returned for later use.
+#' The color palette will be displayed in the graphics window for the requested number of colors (or 9 if not specified),
+#' and the vector of colors returned for later use.
 #' 
-#' The select parameter can be used to select colours from the specified ncolors. For example, select=c(1,1,3) will
-#' select colour 1, 1 again and 3 to retain in the final vector. This can be useful for fine-tuning colour selection, and
-#' matching colours and shapes.
+#' The select parameter can be used to select colors from the specified ncolors. For example, select=c(1,1,3) will
+#' select color 1, 1 again and 3 to retain in the final vector. This can be useful for fine-tuning color selection, and
+#' matching colors and shapes.
 #'
 #' @param x Optionally, provide a gl object from which to determine the number of populations [default NULL]
-#' @param library Name of the colour library to be used [default scales::hue_pl]
-#' @param palette Name of the colour palette to be pulled from the specified library [default is library specific] 
-#' @param ncolors number of colours to be displayed and returned [default 9]
-#' @param select select the colours to retain in the output vector [default NULL] 
+#' @param library Name of the color library to be used [default scales::hue_pl]
+#' @param palette Name of the color palette to be pulled from the specified library [default is library specific] 
+#' @param ncolors number of colors to be displayed and returned [default 9]
+#' @param select select the colors to retain in the output vector [default NULL] 
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
-#' @import scales
-#' @import RColorBrewer  
-#' @return A vector with the requried number of colours
+#' @return A vector with the required number of colors
 #' 
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' 
@@ -40,7 +38,7 @@
 #' colors <- gl.select.colors(library="baseR",palette="rainbow",ncolors=12)
 #' colors <- gl.select.colors(library="gr.hcl",palette="RdBu",ncolors=12)
 #' colors <- gl.select.colors(library="gr.palette",palette="Pastel 1",ncolors=6)
-#' # EXAMPLES -- SELECTING COLOURS
+#' # EXAMPLES -- SELECTING colorS
 #' colors <- gl.select.colors(library="baseR",palette="rainbow",ncolors=12,select=c(1,1,1,5,8))
 #' # EXAMPLES -- CROSS-CHECKING WITH A GENLIGHT OBJECT
 #' colors <- gl.select.colors(x=gl,library="baseR",palette="rainbow",ncolors=12,select=c(1,1,1,5,8))
@@ -65,6 +63,16 @@ gl.select.colors <- function(x=NULL,
   funname <- match.call()[[1]]
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
+  # CHECK PACKAGES
+  pkg <- "RColorBrewer"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop(error("Package",pkg," needed for this function to work. Please install it."))
+  }
+  pkg <- "scales"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop(error("Package",pkg," needed for this function to work. Please install it."))
+  }
+  
   # SCRIPT SPECIFIC ERROR CHECKING
 
   if(!is.null(x)){
@@ -78,7 +86,7 @@ gl.select.colors <- function(x=NULL,
     } else {
       # if(!is.null(select)){
       #   ncolors <- length(select)
-      #   if(verbose >= 2){cat(warn("  Warning: Number of required colors not specified, set to number colours,",length(select),", selected for display\n"))}
+      #   if(verbose >= 2){cat(warn("  Warning: Number of required colors not specified, set to number colors,",length(select),", selected for display\n"))}
       # } else {
         if(verbose >= 2){cat(warn("  Warning: Number of required colors not specified, set to 9 to display the colors\n"))}
         ncolors <- 9
@@ -88,9 +96,9 @@ gl.select.colors <- function(x=NULL,
   if(!is.null(select)){
     if(!is.null(x)){
       if(nPop(x) != length(select)){
-        stop(error("Fatal Error: Number of specified colours",length(select),"does not correspond to number of populations",nPop(x),"in supplied genlight object\n"))
+        stop(error("Fatal Error: Number of specified colors",length(select),"does not correspond to number of populations",nPop(x),"in supplied genlight object\n"))
       } else {
-        cat(report("  Number of specified colours",length(select),"corresponds to number of populations in supplied genlight object\n"))
+        cat(report("  Number of specified colors",length(select),"corresponds to number of populations in supplied genlight object\n"))
       }
     }
   }
@@ -100,7 +108,7 @@ gl.select.colors <- function(x=NULL,
   if(is.null(library)){
     palette=NULL
     if(verbose >= 2){
-      cat(warn("  Warning: No colour library or palette specified, set to default\n"))
+      cat(warn("  Warning: No color library or palette specified, set to default\n"))
       cat(warn("    Select one of baseR, brewer, gr.palette or gr.hcl\n"))
     }
     library <- "scales"
@@ -115,10 +123,10 @@ gl.select.colors <- function(x=NULL,
       if(verbose >= 2){cat(warn("  Warning: Palette not specified, set to Spectral\n"))}
       palette <- "Spectral"
     }
-    if(!(palette %in% row.names(brewer.pal.info))){
+    if(!(palette %in% row.names(RColorBrewer::brewer.pal.info))){
       if(verbose >= 2){
         cat (warn("  Warning: Nominated palette not available in RColorBrewer, should be one of\n"))
-        cat(warn(paste(row.names(brewer.pal.info),collapse=", "),"\n"))
+        cat(warn(paste(row.names(RColorBrewer::brewer.pal.info),collapse=", "),"\n"))
         cat(warn("  Set to Spectral\n"))
       }
       palette <- "Spectral"
@@ -206,12 +214,12 @@ gl.select.colors <- function(x=NULL,
     if(library=="gr.palette"){library <- "grDevice-palette"}
     if(!is.null(select)){
       colors <- colors[c(select)]
-      cat("  Showing and returning",length(select),"of",ncolors,"colours for library",library,": palette",palette,"\n")
+      cat("  Showing and returning",length(select),"of",ncolors,"colors for library",library,": palette",palette,"\n")
     } else {
-      cat("  Showing and returning",ncolors,"colours for library",library,": palette",palette,"\n")
+      cat("  Showing and returning",ncolors,"colors for library",library,": palette",palette,"\n")
     }
 
-    show_col(colors)
+    scales::show_col(colors)
   }
   
   # FLAG SCRIPT END

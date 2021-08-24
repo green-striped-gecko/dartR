@@ -49,7 +49,6 @@
 #'
 #' @param x -- name of the input genlight object [required]
 #' @param unknown -- identity label of the focal individual whose provenance is unknown [required]
-#' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
 #' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.05]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' 
@@ -62,8 +61,8 @@
 #' 
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#'   x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1)
-#'   x <- gl.assign.pca(x, unknown="UC_00146", alpha=0.05)
+#'   x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1,verbose=3)
+#'   x <- gl.assign.pca(x, unknown="UC_00146", alpha=0.05,verbose=3)
 
 
 gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
@@ -74,6 +73,12 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
   utils.flag.start(func=funname,build="Jackson",v=verbose)
+  
+# CHECK PACKAGES
+  pkg <- "SIBER"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop(error("Package",pkg," needed for this function to work. Please install it."))
+  }
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=0)
@@ -116,7 +121,7 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
     count <- count + 1
     A <- pcoa$scores[df$pop==i,]
     mu <- colMeans(A)
-    sigma <- cov(A)
+    sigma <- stats::cov(A)
     testset <- rbind(pcoa$scores[df$pop=="unknown",],A)
     transform <- SIBER::pointsToEllipsoid(testset, sigma, mu)
     inside.or.out <- SIBER::ellipseInOut(transform, p = alpha)
@@ -235,5 +240,5 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
     cat(report("Completed:",funname,"\n"))
   }
 
-  return(x2)
+  return(df)
 }

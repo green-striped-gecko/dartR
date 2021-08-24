@@ -14,8 +14,6 @@ gl.assign.pca(x, unknown, alpha = 0.05, verbose = 3)
 \item{alpha}{-- probability level for bounding ellipses in the PCoA plot [default 0.05]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
-
-\item{nmin}{-- minimum sample size for a target population to be included in the analysis [default 10]}
 }
 \value{
 A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
@@ -70,8 +68,8 @@ Each of these approaches provides evidence, none are 100% definitive. They need 
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-  x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1)
-  x <- gl.assign.pca(x, unknown="UC_00146", alpha=0.05)
+  x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1,verbose=3)
+  x <- gl.assign.pca(x, unknown="UC_00146", alpha=0.05,verbose=3)
 }
 \author{
 Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}

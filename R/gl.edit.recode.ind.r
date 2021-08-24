@@ -35,7 +35,7 @@
 #' @import utils
 #' @export
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
-#' @seealso \code{\link{gl.recode.ind}}, \code{\link{gl.drop.ind}}, \code{\link{gl.keep.ind}}, \code{\link{gl.merge.ind}}, \code{\link{gl.reassign.ind}}
+#' @seealso \code{\link{gl.recode.ind}}, \code{\link{gl.drop.ind}}, \code{\link{gl.keep.ind}}
 #' @examples
 #' \dontrun{
 #' gl <- gl.edit.recode.ind(testset.gl)

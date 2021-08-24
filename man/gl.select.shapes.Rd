@@ -34,9 +34,9 @@ gl <- testset.gl
 levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
 rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
 # EXAMPLES
-shapes <- gl.select.shapes() # Will select and display all available shapes
-shapes <- gl.select.shapes(select=c(1,1,1,5,8)) # Will select and display a restricted set of shapes
-shapes <- gl.select.shapes(gl=gl,select=c(1,1,1,5,8)) # Will select a restricted set of shapes and check with no. of pops.
+shapes <- gl.select.shapes() # Select and display available shapes
+shapes <- gl.select.shapes(select=c(1,1,1,5,8)) # Select and display a restricted set of shapes
+shapes <- gl.select.shapes(gl=gl,select=c(1,1,1,5,8)) # Select set of shapes and check with no. of pops.
 
 }
 \seealso{
