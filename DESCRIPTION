@@ -64,6 +64,7 @@ Suggests:
     markdown,
     RColorBrewer,
     scales,
+    SIBER,
     testthat (>= 3.0.0)
 License: GPL-2
 LazyData: true
