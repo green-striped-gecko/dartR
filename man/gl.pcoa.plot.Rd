@@ -11,7 +11,6 @@ gl.pcoa.plot(
   ellipse = FALSE,
   plevel = 0.95,
   pop.labels = "pop",
-  max.overlaps = 20,
   interactive = FALSE,
   as.pop = NULL,
   hadjust = 1.5,
@@ -62,6 +61,8 @@ the Distance Matrix used to generate the ordination [required]}
 
 \item{pt.shapes}{Optionally provide a vector of nPop shapes (run gl.select.shapes() for shape options) [default NULL]}
 
+\item{label.size}{Specify the size of the point labels [default 1]}
+
 \item{axis.label.size}{Specify the size of the dispayed axis labels [default 1.5]}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
@@ -76,8 +77,7 @@ The factor scores are taken from the output of gl.pcoa() and the population assi
 from the original data file. In the bivariate plots, the specimens are shown optionally with adjacent labels
 and enclosing ellipses. Population labels on the plot are shuffled so as not to overlap (using package \{directlabels\}).
 This can be a bit clunky, as the labels may be some distance from the points to which they refer, but it provides the
-opportunity for moving labels around using graphics software (e.g. Adobe Illustrator). A maximum number of labels to
-shuffle is given by parameter max.overlaps.
+opportunity for moving labels around using graphics software (e.g. Adobe Illustrator). 
 
 3D plotting is activated by specifying a zaxis.
 
