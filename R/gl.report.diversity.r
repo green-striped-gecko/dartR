@@ -118,6 +118,13 @@ gl.report.diversity <- function(x,
         }
     }
     ### one_H_alpha
+    shannon <- function(x) {
+      x <- x[x > 0]
+      p <- x/sum(x)
+      -sum(p * log(p))
+    }
+    
+    
     one_H_alpha_es <- lapply(pops, function(x) {
       mat_temp <- as.matrix(x)
       mat <- matrix(nrow = 6, ncol = nLoc(x))
