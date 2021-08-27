@@ -1,8 +1,10 @@
 #' @name gl.plot
-#' @title Plotting genlight object as a smear plot (loci by individuals color 
-#' coded for scores of 0, 1, 2 and NA)
+#' @title Smear plot of SNP or presence/absence (SilicoDArT) data
 #' @description 
-#' It adds the option to put labels on the individuals and grouping by populations. 
+#' Each locus is color coded for scores of 0, 1, 2 and NA for SNP data and 0, 1 
+#' and NA for presence/absence (SilicoDArT) data. Individual labels can be added 
+#' and individuals can be grouped into by population.
+#'  
 #' If there are too many individuals, it is best to use ind_labels_size = 0.
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence
@@ -11,7 +13,7 @@
 #' @param ind_labels Labels for individuals [default indNames(x)].
 #' @param ind_labels_size Size of the individual labels, if individual labels 
 #' are not required set this parameter to 0 [default 10].
-#' @param plot_colours Vector with four color names for homozygotes for the 
+#' @param plot_colors Vector with four color names for homozygotes for the 
 #' reference allele, heterozygotes, homozygotes for the alternative allele and 
 #' for missing values (NA) [default four_colors].
 #' @param posi Position of the legend: “left”, “top”, “right”, “bottom” or
@@ -24,9 +26,8 @@
 #' @return Returns unaltered genlight object
 #' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' gl.plot(bandicoot.gl[1:10,])
-#'
-#' @seealso \code{\link{gl.filter.callrate}}
+#' gl.plot(testset.gl[1:10,])
+#' gl.plot(testset.gs[1:10,]) 
 #' @family Exploration/visualisation functions
 #' @export
 #'  
@@ -35,7 +36,7 @@ gl.plot <- function (x,
                      group_pop = FALSE,
                      ind_labels = indNames(x), 
                      ind_labels_size = 10,
-                     plot_colours = four_colors, 
+                     plot_colors = four_colors, 
                      posi = "bottom", 
                      save2tmp = FALSE,
                      verbose = NULL) {
@@ -84,7 +85,7 @@ gl.plot <- function (x,
   if(datatype=="SilicoDArT"){
     p3 <- ggplot(X,aes(x=locus,y=id,fill=genotype))+
       geom_raster() +
-      scale_fill_discrete(type = plot_colours[c(1,3)],na.value=plot_colours[4],name="Genotype",labels=c("0","1")) +
+      scale_fill_discrete(type = plot_colors[c(1,3)],na.value=plot_colors[4],name="Genotype",labels=c("0","1")) +
       theme_dartR() +
       theme(legend.position=posi,
             axis.text.y = element_text(size = ind_labels_size ))+
@@ -95,7 +96,7 @@ gl.plot <- function (x,
   if(datatype=="SNP"){
     p3 <- ggplot(X,aes(x=locus,y=id,fill=genotype))+
       geom_raster() +
-      scale_fill_discrete(type = plot_colours,na.value=plot_colours[4],name="Genotype",labels=c("0","1","2")) +
+      scale_fill_discrete(type = plot_colors,na.value=plot_colors[4],name="Genotype",labels=c("0","1","2")) +
       theme_dartR() +
       theme(legend.position=posi,
             axis.text.y = element_text(size = ind_labels_size ))+
