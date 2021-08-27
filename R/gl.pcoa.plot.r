@@ -7,8 +7,7 @@
 #' from the original data file. In the bivariate plots, the specimens are shown optionally with adjacent labels
 #' and enclosing ellipses. Population labels on the plot are shuffled so as not to overlap (using package \{directlabels\}).
 #' This can be a bit clunky, as the labels may be some distance from the points to which they refer, but it provides the
-#' opportunity for moving labels around using graphics software (e.g. Adobe Illustrator). A maximum number of labels to
-#' shuffle is given by parameter max.overlaps.
+#' opportunity for moving labels around using graphics software (e.g. Adobe Illustrator). 
 #' 
 #' 3D plotting is activated by specifying a zaxis.
 #'
@@ -41,7 +40,7 @@
 #' @param pt.size Specify the size of the dispayed points [default 2]
 #' @param pt.colors Optionally provide a vector of nPop colours (run gl.select.colors() for colour options) [default NULL]
 #' @param pt.shapes Optionally provide a vector of nPop shapes (run gl.select.shapes() for shape options) [default NULL]
-#' @param axis.label.size Specify the size of the point labels [default 1]
+#' @param label.size Specify the size of the point labels [default 1]
 #' @param axis.label.size Specify the size of the dispayed axis labels [default 1.5]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
@@ -82,7 +81,6 @@ gl.pcoa.plot <- function(glPca,
                          ellipse=FALSE, 
                          plevel=0.95, 
                          pop.labels="pop",
-                         max.overlaps=20,
                          interactive=FALSE,
                          as.pop=NULL,
                          hadjust=1.5, 
@@ -161,24 +159,15 @@ gl.pcoa.plot <- function(glPca,
   }
   
   # If an fd object, pull out the genlight object
-    if(datatype2 == "fd"){
+  if(datatype2 == "fd"){
       x <- x$fd
       datatype2 <- utils.check.datatype(x,verbose=0)
-    }
-  # # assign colors to populations, if specified
-  # if(!is.null(colour.palette)){
-  # if(class(colour.palette)=="function"){
-  #   colours.pops <- colour.palette(length(levels(pop(x))))
-  # }
-  # if(class(colour.palette)!="function"){
-  #   colours.pops <- colour.palette
-  # }
-  # names(colours.pops) <- as.character(levels(x$pop))
-  # }
-  
+  }
   axis.label.size <- axis.label.size*10
   
 # DO THE JOB
+  
+  PCoAx <- PCoAy <- NULL
   
   # Create a dataframe to hold the required scores
     if(is.null(zaxis)){

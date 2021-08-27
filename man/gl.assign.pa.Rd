@@ -9,7 +9,7 @@ gl.assign.pa(
   unknown,
   nmin = 10,
   threshold = 0,
-  bestn = NULL,
+  n.best = NULL,
   verbose = NULL
 )
 }
@@ -23,7 +23,7 @@ gl.assign.pa(
 \item{threshold}{-- populations to retain for consideration; those for which the focal individual has 
 less than or equal to threshold loci with private alleles [default 0]}
 
-\item{bestn}{-- if given a value, dictates the best n=bestn populations to retain for consideration (or more if their
+\item{n.best}{-- if given a value, dictates the best n=n.best populations to retain for consideration (or more if their
 are ties) based on private alleles [default NULL]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
@@ -46,11 +46,11 @@ the sample size is adequate, say >=10).
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-  x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1)
+  x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1,verbose=3)
   
 }
 \seealso{
-\code{\link{gl.assign.pca}}, \code{\link{gl.assign.mahandist}}
+
 }
 \author{
 Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}

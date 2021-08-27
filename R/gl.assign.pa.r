@@ -16,7 +16,7 @@
 #' @param nmin -- minimum sample size for a target population to be included in the analysis [default 10]
 #' @param threshold -- populations to retain for consideration; those for which the focal individual has 
 #' less than or equal to threshold loci with private alleles [default 0]
-#' @param bestn -- if given a value, dictates the best n=bestn populations to retain for consideration (or more if their
+#' @param n.best -- if given a value, dictates the best n=n.best populations to retain for consideration (or more if their
 #' are ties) based on private alleles [default NULL]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and 
@@ -29,15 +29,15 @@
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#'   x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1)
+#'   x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1,verbose=3)
 #'   
-#' @seealso \code{\link{gl.assign.pca}}, \code{\link{gl.assign.mahandist}}
+#' @seealso \code{\link{gl.assign.pca}}}
 
 gl.assign.pa <- function (x, 
                           unknown, 
                           nmin=10, 
                           threshold=0,
-                          bestn=NULL,
+                          n.best=NULL,
                           verbose=NULL) {
 
 # SET VERBOSITY
@@ -65,10 +65,10 @@ gl.assign.pa <- function (x,
     threshold <- 0
   }
   
-  if (!is.null(bestn)){
-    if(bestn < 1 & verbose >= 1){
-      cat(warn("  Warning: the bestn parameter for retention of best match populations must be a positive integer, set to NULL\n"))
-      bestn <- NULL
+  if (!is.null(n.best)){
+    if(n.best < 1 & verbose >= 1){
+      cat(warn("  Warning: the n.best parameter for retention of best match populations must be a positive integer, set to NULL\n"))
+      n.best <- NULL
     }
   }
 
@@ -96,9 +96,7 @@ gl.assign.pa <- function (x,
    }
   
   # Split the genlight object into one containing the unknown and one containing the remaining populations  
-   #unknowns <- x[pop(x)=="unknown",]
    unknowns <- gl.keep.pop(x,pop.list="unknown",verbose=0)
-   #knowns <- x[pop(x)!="unknown",]
    knowns <- gl.drop.pop(x,pop.list="unknown",verbose=0)
   
   # Remove all known populations with less than nmin individuals
@@ -175,24 +173,24 @@ gl.assign.pa <- function (x,
           if (verbose >=3) {cat(paste0("  >",threshold,"---"))}
         }
         if (verbose >=3) {cat("  ",m,levels(pop(knowns))[count==m],"\n")}
-        if(counter < nbest){
-          retain <- c(retain,levels(pop(knowns))[count==m])
-          counter <- counter + length(levels(pop(knowns))[count==m])
-        }
+          if(!is.null(n.best)){
+            if(counter < n.best){
+              retain <- c(retain,levels(pop(knowns))[count==m])
+              counter <- counter + length(levels(pop(knowns))[count==m])
+            } 
+          }
       } 
 
   # Save the data in a new gl object
   
-  if(is.null(bestn)){
-    # index <- ((pop(x) %in% levels(pop(knowns))[count<=threshold]) | (as.character(pop(x)) == "unknown"))
-    # gl <- x[index,]
+  if(is.null(n.best)){
     gl <- gl.keep.pop(x,pop.list=c(levels(pop(knowns))[count<=threshold],"unknown"),mono.rm=TRUE,verbose=0)
   } else {
     gl <- gl.keep.pop(x,pop.list=c(retain,"unknown"),mono.rm=TRUE,verbose=0)
   }
 
 # Check that there is more than one population to assign (excluding 'unknown')
-  if(is.null(bestn)){
+  if(is.null(n.best)){
     if (verbose >= 2) {
       if (nPop(gl)==1) { # Taking into account the unknown as a population
         if(verbose >= 2){
