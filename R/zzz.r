@@ -52,6 +52,7 @@ viridis_palette <- colorRampPalette(c("#440154FF", "#482173FF", "#433E85FF", "#3
 two_colors <- c("#3B9AB2" ,"#78B7C5" )
 two_colors_contrast <- c("deeppink","chartreuse3")
 three_colors <- c("#3B9AB2","deeppink","lemonchiffon")
+# four_colors <-  c( "#DED1AD" ,"#5401E0", "#16E03D" ,"deeppink")
 four_colors <-  c( "lemonchiffon" ,"deeppink", "dodgerblue" ,"chartreuse3")
 
 # SET THEME FOR PLOTS
@@ -190,7 +191,7 @@ setMethod("plot", signature(x="genlight"), function(x,
                                                     group_pop = FALSE,
                                                     ind_labels = indNames(x), 
                                                     ind_labels_size = 10,
-                                                    plot_colours = four_colors, 
+                                                    plot_colors = four_colors, 
                                                     posi = "bottom", 
                                                     save2tmp = FALSE,
                                                     verbose = NULL) {
@@ -198,7 +199,7 @@ setMethod("plot", signature(x="genlight"), function(x,
           group_pop = group_pop,
           ind_labels = ind_labels, 
           ind_labels_size = ind_labels_size,
-          plot_colours = plot_colours, 
+          plot_colors = plot_colors, 
           posi = posi, 
           save2tmp = save2tmp,
           verbose = verbose)

@@ -2,15 +2,14 @@
 % Please edit documentation in R/gl.plot.r
 \name{gl.plot}
 \alias{gl.plot}
-\title{Plotting genlight object as a smear plot (loci by individuals color 
-coded for scores of 0, 1, 2 and NA)}
+\title{Smear plot of SNP or presence/absence (SilicoDArT) data}
 \usage{
 gl.plot(
   x,
   group_pop = FALSE,
   ind_labels = indNames(x),
   ind_labels_size = 10,
-  plot_colours = four_colors,
+  plot_colors = four_colors,
   posi = "bottom",
   save2tmp = FALSE,
   verbose = NULL
@@ -27,7 +26,7 @@ gl.plot(
 \item{ind_labels_size}{Size of the individual labels, if individual labels 
 are not required set this parameter to 0 [default 10].}
 
-\item{plot_colours}{Vector with four color names for homozygotes for the 
+\item{plot_colors}{Vector with four color names for homozygotes for the 
 reference allele, heterozygotes, homozygotes for the alternative allele and 
 for missing values (NA) [default four_colors].}
 
@@ -44,16 +43,17 @@ progress log ; 3, progress and results summary; 5, full report [default NULL].}
 Returns unaltered genlight object
 }
 \description{
-It adds the option to put labels on the individuals and grouping by populations. 
+Each locus is color coded for scores of 0, 1, 2 and NA for SNP data and 0, 1 
+and NA for presence/absence (SilicoDArT) data. Individual labels can be added 
+and individuals can be grouped into by population.
+ 
 If there are too many individuals, it is best to use ind_labels_size = 0.
 }
 \examples{
-gl.plot(bandicoot.gl[1:10,])
-
+gl.plot(testset.gl[1:10,])
+gl.plot(testset.gs[1:10,]) 
 }
 \seealso{
-\code{\link{gl.filter.callrate}}
-
 Other Exploration/visualisation functions: 
 \code{\link{gl.pcoa.plot.beta}()},
 \code{\link{gl.pcoa.plot}()},

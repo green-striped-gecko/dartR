@@ -79,9 +79,10 @@ gl.test.heterozygosity <- function(x,
     cat(warn("Warning: First alpha value should be between 0 and 1, set to 0.05\n"))
     alpha1 <- 0.05
   }
-  if(alpha2 < 0 || alpha1 > 2) {
+  
+  if(alpha2 < 0 || alpha2 > 1) {
     cat(warn("Warning: Second alpha value should be between 0 and 1, set to 0.01\n"))
-    alpha1 <- 0.01
+    alpha2 <- 0.01
   }
   
   upper1 <- 1-alpha1 # significance level #1
@@ -93,8 +94,6 @@ gl.test.heterozygosity <- function(x,
   }
   lower1 <- 1-upper1
   lower2 <- 1-upper2
-  
-  #bon.critical <- round(lower1/((nPop(x)*nPop(x)-nPop(x))/2),4)
   
   # Set a population if none is specified (such as if the genlight object has been generated manually)
   if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
