@@ -67,7 +67,6 @@ colors <- gl.select.colors(x=gl,library="baseR",palette="rainbow",ncolors=12,sel
 \code{\link{gl.select.shapes}}
 
 Other Exploration/visualisation functions: 
-\code{\link{gl.pcoa.plot.beta}()},
 \code{\link{gl.pcoa.plot}()},
 \code{\link{gl.plot}()},
 \code{\link{gl.select.shapes}()}

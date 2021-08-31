@@ -50,7 +50,7 @@ the sample size is adequate, say >=10).
   
 }
 \seealso{
-
+\code{\link{gl.assign.pca}}
 }
 \author{
 Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}

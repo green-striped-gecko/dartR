@@ -119,7 +119,6 @@ gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels="legend", pt.colors=
 \code{\link{gl.pcoa}}
 
 Other Exploration/visualisation functions: 
-\code{\link{gl.pcoa.plot.beta}()},
 \code{\link{gl.plot}()},
 \code{\link{gl.select.colors}()},
 \code{\link{gl.select.shapes}()}

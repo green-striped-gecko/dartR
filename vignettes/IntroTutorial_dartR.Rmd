@@ -1,5 +1,5 @@
 ---
-title: "Introduction to dartR"
+#' @title Bivariate or trivariate plot of the results of an ordination generated using \code{\link{gl.pcoa}}
 author: "Bernd Gruber, Peter Unmack, Oliver Berry & Arthur Georges"
 date: '`r Sys.Date()`'
 output:
@@ -1228,7 +1228,9 @@ A 95\% confidence envelope (or some other level of confidence specified by the u
 An Assignment Index is calculated in the same way for a notional individual residing on the boundary of the confidence envelope. Comparing the assignment index for each population with that of the notional boundary individual provides a basis for a decision on assignment. If the Assignment Index for the unknown is less than the critical value for the Assignment Index (that of the boundary individual), then the unknown is assigned to that population. Where more than one population is selected, the population with the greatest Assignment Index is the most likely. This will become evident in the examples that follow.
 
 ```{r}
-x <- gl.assign(testset.gl, unknown = "UC_00146", nmin=10, t=0)
+x <- gl.assign.pa(testset.gl, unknown = "UC_00146", nmin=10, t=0)
+x <- gl.assign.pca(x, unknown ="UC_00146", alpha=0.05)
+gl.pcoa.plot
 ```
 
 In this example, the unknown individual, UC_00146, is assigned to only one population, EmmaclGeor, so the assignment problem is resolved. This individual does indeed come from the Georges Creek, a tributary of the Macleay River.

@@ -104,11 +104,14 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   }
 
 # DO THE JOB
+  vec <- as.vector(pop(x))
+  vec[indNames(x)==unknown] <- "unknown"
+  pop(x) <- as.factor(vec)
 
 # Ordinate a reduced space of 2 dimensions
   pcoa <- gl.pcoa(x, nfactors=2,verbose=0)
 # Plot  
-  suppressWarnings(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=alpha)) # Because the unknown pop throws an ellipse error
+  suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=alpha))) # Because the unknown pop throws an ellipse error
 # Combine Pop names and pca scores
   df <- data.frame(pcoa$scores)
   df <- cbind(as.character(pop(x)),df)
@@ -117,7 +120,7 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   result <- data.frame() 
   count <- 0
   for (i in popNames(x)){
-    if(i=="unknown"){next}
+    if(i=="unknown" | nInd(x[pop=i])<=1){next}
     count <- count + 1
     A <- pcoa$scores[df$pop==i,]
     mu <- colMeans(A)
@@ -133,20 +136,20 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   nohits <- length(result$pop[!result$hit])
   if(verbose==3){
     if(nhits > 0){
-      cat("  Putative source populations:",paste(result$pop[result$hit],collapse=", "),"\n")
+      cat("  Putative source populations:",paste(result[result$hit==TRUE,"pop"],collapse=", "),"\n")
     } else {
       cat("  No putative source populations identified\n")
     } 
-    if(nohits > 0 ){
-      cat("  Populations eliminated from consideration:",paste(result$pop[!result$hit],collapse=", "),"\n")
+    if(all(result$hit ==TRUE)){
+      cat("  No populations elimated from consideration\n")
     } else {
-      cat("  No populations eliminated from consideration\n")
-    }  
+      cat("  Populations elimated from consideration:",paste(result[result$hit==FALSE,"pop"],collapse=", "),"\n")
+    }
   }
-  if(nhits > 0){
-    x2 <- gl.drop.pop(x,pop.list=result$pop[!result$hit],verbose=0)
-  } else {
+  if(all(result$hit==TRUE)){
     x2 <- x
+  } else {
+    x2 <- gl.drop.pop(x,pop.list=result[result$hit==FALSE,"pop"],verbose=0)
   }
   
 # Re-run the pcoa on the reduced set
