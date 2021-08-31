@@ -56,7 +56,9 @@ gl.plot(bandicoot.gl[1:10,])
 
 Other Exploration/visualisation functions: 
 \code{\link{gl.pcoa.plot.beta}()},
-\code{\link{gl.pcoa.plot}()}
+\code{\link{gl.pcoa.plot}()},
+\code{\link{gl.select.colors}()},
+\code{\link{gl.select.shapes}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
