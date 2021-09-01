@@ -6,6 +6,30 @@
 \usage{
 gl.sim.emigration(x, perc.mig = NULL, emi.m = NULL, emi.table = NULL)
 }
+\arguments{
+\item{x}{genlight or list of genlight objects}
+
+\item{perc.mig}{percentage of individuals that migrate. [emigrates = nInd times perc.mig]}
+
+\item{emi.m}{probabilistic emigration matrix. emigrate from=column to=row}
+
+\item{emi.table}{if presented emi.m matrix is ignored. Deterministic emigration as specified in the matrix [a square matrix of dimenstion of the number of populations]. e.g. an entry in the 'emi.table[2,1]<- 5' means that five individuals emigrate from population 1 to population 2 [from=columns and to=row].}
+}
+\value{
+a list or a single [depends on the input] genlight object, where emigration between population has happened
+}
 \description{
-A function that allows to exchange individuals of genlight object to be swapped between populations.
+A function that allows to exchange individuals of genlight object to be swapped between populations. There are two ways to specify emigration. If emi.table is given a square matrix of dimension of hte populations, then emigration is deterministic in terms of numbers of individuals as specified in the table. If perc.mig and emi.m are given, then emigration is probabilistic. The number of emigrants is determined by the populaltion size times the perc.mig and then the population where to migrate to is taken from the relative frequency in the columns of the emi.m table. Be aware if the diagonal is non zero then migration can occur into the same patch. So most often you want to set the diagonal of the emi.m matrix to zero. Which individuals is moved is random, but the order is in the order of populations. It is possible that an individual moved twice (as there is no check) and emigration occurs in the order of the population. [so an individal moved from population 1 to 2 can move again from population 2 to 3].
+}
+\examples{
+x <- possums.gl
+#one individual moves from every population to 
+#every other population
+emi.tab <- matrix(1, nrow=nPop(x), ncol=nPop(x))
+diag(emi.tab)<- 0
+np <- gl.sim.emigration(x, emi.table=emi.tab)
+np
+}
+\author{
+Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }
