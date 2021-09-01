@@ -40,10 +40,23 @@ gl.compliance.check <- function (x,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname, build = "Jackson", v = verbose)
   
+  # DO THE JOB
+  
+  # if ploidy is null
+  if(is.null(x@ploidy)){
+    # if diploid
+    if(unique(ploidy(x))==2){
+      ploidy(x) <- rep(2,nInd(x))
+      # if haploid
+    } else if(unique(ploidy(x))==1){
+      ploidy(x) <- rep(1,nInd(x))
+    } else {
+      stop(error("Ploidy cannot be determined, please check your input file"))
+    }
+  }
+  
   # CHECKS DATATYPE
   datatype <- utils.check.datatype(x, verbose = verbose)
-  
-  # DO THE JOB
   
   # if loci have no name
   if(is.null(locNames(x))){

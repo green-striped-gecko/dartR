@@ -115,12 +115,12 @@
   }
   
   # Check call rate up to date
-    if (x@other$loc.metrics.flags$CallRate == FALSE){
+    # if (x@other$loc.metrics.flags$CallRate == FALSE){
       if (verbose >= 2){
         cat(report("  Recalculating Call Rate\n"))
       }  
       x <- utils.recalc.callrate(x,verbose=0)
-    }
+    # }
    
   # Suppress plotting on verbose == 0
    if(verbose==0){
@@ -168,7 +168,7 @@
           xlabel <- "Pre-filter P/A Call Rate [Loci]"
         }
         p1 <- ggplot(data.frame(callrate), aes(x = callrate)) + 
-          geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+          geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
           coord_cartesian(xlim = c(min,1)) + 
           geom_vline(xintercept=threshold,color="red",size=1) +
           xlab(xlabel) + 
@@ -184,7 +184,7 @@
           xlabel <- "Post-filter P/A Call Rate [Loci]"
         }
         p2 <- ggplot(data.frame(callrate), aes(x = callrate)) + 
-          geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+          geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
           coord_cartesian(xlim = c(min,1)) + 
           geom_vline(xintercept=threshold,color="red",size=1) +
           xlab(xlabel) + 
@@ -306,6 +306,7 @@
             }  
             if (mono.rm) {
               # Remove monomorphic loci  
+              cat(report("  Removing monomorphic loci\n"))
               x2 <- gl.filter.monomorphs(x2,verbose=0)
             }
             if (recalc) {
@@ -339,7 +340,7 @@
         xlabel <- "Pre-filter P/A Call Rate [Individuals]"
       }
       p1 <- ggplot(data.frame(hold2), aes(x = hold2)) + 
-        geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+        geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
         coord_cartesian(xlim = c(min,1)) + 
         geom_vline(xintercept=threshold,color="red",size=1) +
         xlab(xlabel) + 
@@ -354,7 +355,7 @@
         xlabel <- "Post-filter P/A Call Rate [Individuals]"
       }
       p2 <- ggplot(data.frame(ind.call.rate), aes(x = ind.call.rate)) + 
-        geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+        geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
         coord_cartesian(xlim = c(min,1)) + 
         geom_vline(xintercept=threshold,color="red",size=1) +
         xlab(xlabel) + 
@@ -391,7 +392,7 @@
       xlabel <- "Pre-filter P/A Call Rate [by population]"
     }
     p1 <- ggplot(data.frame(tmp), aes(x = tmp)) + 
-      geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
       coord_cartesian(xlim = c(min,1)) + 
       geom_vline(xintercept=threshold,color="red",size=1) +
       xlab(xlabel) + 
@@ -407,7 +408,7 @@
       xlabel <- "Post-filter P/A Call Rate [by population]"
     }
     p2 <- ggplot(data.frame(tmp), aes(x = tmp)) + 
-      geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
       coord_cartesian(xlim = c(min,1)) + 
       geom_vline(xintercept=threshold,color="red",size=1) +
       xlab(xlabel) + 

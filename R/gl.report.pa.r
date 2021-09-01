@@ -37,7 +37,7 @@
 #'   
 #' @return A data.frame. Each row shows for a pair of populations the number of individuals in a population, the number of loci with fixed differences (same for both populations) in pop1 (compared to pop2) and vice versa. Same for private alleles and finally the absolute mean allele frequency difference between loci (mdf).
 #'
-#' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
 #' out <- gl.report.pa(testset.gl[1:20,])
@@ -53,60 +53,17 @@
 gl.report.pa <- function(x, 
                          x2 = NULL, 
                          verbose = NULL){
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  datatype <- utils.check.datatype(x, verbose=verbose)
-  
+  # CHECK DATATYPE 
+  datatype1 <- utils.check.datatype(x,verbose=verbose)
   if(!is.null(x2)){
-    datatype <- utils.check.datatype(x2)
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat(report("Starting",funname,"[ Build =",build,"]\n\n"))
-    } else {
-      cat(report("Starting",funname,"\n\n"))
-    }
-  }
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop(error("Fatal Error: genlight object required!\n"))
-  }
-  if (all(x@ploidy == 1)){
-    stop(error("Cannot calculate minor allele frequences for Tag presence/absence data. Please provide a SNP dataset.\n"))
-  } else if (all(x@ploidy == 2)){
-    if(verbose>=2){
-      cat(report("  Processing a SNP dataset\n"))
-      }
-  } else {
-    stop(error("Fatal Error: Ploidy must be universally 1 (Tag P/A data) or 2 (SNP data)!\n"))
-  }
-  
-  if(!is.null(x2)){
-    if(class(x2)!="genlight") {
-      stop(error("Fatal Error: genlight object required for gl2!\n"))
-    }
-    if (all(x2@ploidy == 1)){
-      stop(error("Fatal Error: Private alleles can only be calculated for SNP data. Please provide a SNP dataset for gl2\n"))
-    } else if (all(x2@ploidy == 2)){
-      if (verbose >= 2){
-        cat(report("  Processing a SNP dataset",x2,"\n"))
-        }
-    } else {
-      stop(error("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)"))
-    }
+    datatype2 <- utils.check.datatype(x2,verbose=verbose)
   }
 
 # FUNCTION SPECIFIC ERROR CHECKING
@@ -157,7 +114,7 @@ if (!is.null(x2)) {
 # FLAG SCRIPT END
 
     if (verbose >= 1) {
-    cat(report("\n\nCompleted:", funname, "\n\n"))
+    cat(report("Completed:", funname, "\n"))
   }
   
   # RETURN

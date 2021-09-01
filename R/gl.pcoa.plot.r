@@ -5,16 +5,19 @@
 #' @details
 #' The factor scores are taken from the output of gl.pcoa() and the population assignments are taken from
 #' from the original data file. In the bivariate plots, the specimens are shown optionally with adjacent labels
-#' and enclosing ellipses. Population labels on the plot are shuffled so as not to overlap (using package \{ggrepel\}).
+#' and enclosing ellipses. Population labels on the plot are shuffled so as not to overlap (using package \{directlabels\}).
 #' This can be a bit clunky, as the labels may be some distance from the points to which they refer, but it provides the
-#' opportunity for moving labels around using graphics software (e.g. Adobe Illustrator). A maximum number of labels to
-#' shuffle is given by parameter max.overlaps.
+#' opportunity for moving labels around using graphics software (e.g. Adobe Illustrator). 
 #' 
 #' 3D plotting is activated by specifying a zaxis.
 #'
 #' Any pair or trio of axes can be specified from the ordination, provided they are within the range of the nfactors value provided to gl.pcoa(). 
 #' In the 2D plots, axes can be scaled to represent the proportion of variation explained. In any case, the proportion of variation explained by 
 #' each axis is provided in the axis label.
+#' 
+#' Colours and shapes of the points can be altered by passing a vector of shapes and/or a vector of colours. These vectors can 
+#' be created with gl.select.shapes() and gl.select.colors() and passed to this script using the pt.shapes and 
+#' pt.colors parameters.
 #'
 #' Points displayed in the ordination can be identified if the option interactive=TRUE is chosen, in which case the resultant plot is
 #' ggplotly() friendly. Identification of points is by moving the mouse over them. Refer to the plotly package for further information. 
@@ -26,17 +29,19 @@
 #' @param scale If TRUE, scale the x and y axes in proportion to \% variation explained [default FALSE]
 #' @param ellipse If TRUE, display ellipses to encapsulate points for each population [default FALSE]
 #' @param plevel Value of the percentile for the ellipse to encapsulate points for each population [default 0.95]
-#' @param labels If TRUE, labels will be added to the plot. ["none"|"ind"|"pop"|"legend", default = "pop"]
-#' @param max.overlaps Maximum number of labels to attempt to rearrange to minimize overlaps. Use Inf to include all labels regardless. [default=20]
-#' @param interactive If TRUE then the populations are plotted without labels, mouse-over to identify points [default FALSE]
-#' @param as.pop -- assign another metric to represent populations for the plot [default NULL]
+#' @param pop.labels How labels will be added to the plot ["none"|"pop"|"legend", default = "pop"]
 #' @param hadjust Horizontal adjustment of label position in 2D plots [default 1.5]
 #' @param vadjust Vertical adjustment of label position in 2D plots [default 1]
+#' @param interactive If TRUE then the populations are plotted without labels, mouse-over to identify points [default FALSE]
+#' @param as.pop -- assign another metric to represent populations for the plot [default NULL]
 #' @param xaxis Identify the x axis from those available in the ordination (xaxis <= nfactors) [default 1]
 #' @param yaxis Identify the y axis from those available in the ordination (yaxis <= nfactors) [default 2]
 #' @param zaxis Identify the z axis from those available in the ordination for a 3D plot (zaxis <= nfactors) [default NULL]
 #' @param pt.size Specify the size of the dispayed points [default 2]
-#' @param label.size Specify the size of the dispayed axis labels [default 20]
+#' @param pt.colors Optionally provide a vector of nPop colours (run gl.select.colors() for colour options) [default NULL]
+#' @param pt.shapes Optionally provide a vector of nPop shapes (run gl.select.shapes() for shape options) [default NULL]
+#' @param label.size Specify the size of the point labels [default 1]
+#' @param axis.label.size Specify the size of the dispayed axis labels [default 1.5]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' 
@@ -45,18 +50,25 @@
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' 
 #' @examples
+#' # SET UP DATASET 
 #' gl <- testset.gl
 #' levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
 #' rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
-#' 
+#' # RUN PCA
 #' pca<-gl.pcoa(gl,nfactors=5)
-#' 
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="pop",hadjust=1.5,vadjust=1)
-#' gl.pcoa.plot(pca, gl, labels="none")
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="legend")
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="pop", xaxis=1, yaxis=3, zaxis=2)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, labels="none", xaxis=1, yaxis=3, zaxis=2)
-#' gl.pcoa.plot(pca, gl, interactive=TRUE)  
+#' # VARIOUS EXAMPLES
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels="pop", axis.label.size=1, hadjust=1.5,vadjust=1)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels="legend", axis.label.size=1)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels="legend", axis.label.size=1.5,scale=TRUE)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, axis.label.size=1.2, xaxis=1, yaxis=3, scale=TRUE)
+#' gl.pcoa.plot(pca, gl, pop.labels="none",scale=TRUE)
+#' gl.pcoa.plot(pca, gl, axis.label.size=1.2, interactive=TRUE) 
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, xaxis=1, yaxis=2, zaxis=3)
+#' # COLOUR AND SHAPE ADJUSTMENTS
+#' shp <- gl.select.shapes(select=c(16,17,17,0,2))
+#' col <- gl.select.colors(library="brewer",palette="Spectral",ncolors=11,select=c(1,9,3,11,11))
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels="pop", pt.colors=col, pt.shapes=shp, axis.label.size=1, hadjust=1.5,vadjust=1)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels="legend", pt.colors=col, pt.shapes=shp, axis.label.size=1)
 #' 
 #' @seealso \code{\link{gl.pcoa}}
 #' @family Exploration/visualisation functions
@@ -68,8 +80,7 @@ gl.pcoa.plot <- function(glPca,
                          scale=FALSE, 
                          ellipse=FALSE, 
                          plevel=0.95, 
-                         labels="pop",
-                         max.overlaps=20,
+                         pop.labels="pop",
                          interactive=FALSE,
                          as.pop=NULL,
                          hadjust=1.5, 
@@ -78,7 +89,10 @@ gl.pcoa.plot <- function(glPca,
                          yaxis=2, 
                          zaxis=NULL,
                          pt.size  = 2,
-                         label.size=20,
+                         pt.colors=NULL,
+                         pt.shapes=NULL,
+                         label.size=1,
+                         axis.label.size=1.5,
                          save2tmp=FALSE,
                          verbose=NULL) {
 
@@ -102,9 +116,9 @@ gl.pcoa.plot <- function(glPca,
     }
   }
   
-  if (labels != "none" && labels != "ind" && labels != "pop" && labels != "legend"){
-    cat(warn("  Warning: Parameter 'labels' must be one of none|ind|pop|legend, set to 'pop'\n"))
-    labels <- "pop"
+  if (pop.labels != "none" && pop.labels != "ind" && pop.labels != "pop" && pop.labels != "legend"){
+    cat(warn("  Warning: Parameter 'pop.labels' must be one of none|ind|pop|legend, set to 'pop'\n"))
+    pop.labels <- "pop"
   }
   if (plevel < 0 | plevel > 1){
     cat(warn("  Warning: Parameter 'plevel' must fall between 0 and 1, set to 0.95\n"))
@@ -145,12 +159,15 @@ gl.pcoa.plot <- function(glPca,
   }
   
   # If an fd object, pull out the genlight object
-    if(datatype2 == "fd"){
+  if(datatype2 == "fd"){
       x <- x$fd
       datatype2 <- utils.check.datatype(x,verbose=0)
-    }
+  }
+  axis.label.size <- axis.label.size*10
   
 # DO THE JOB
+  
+  PCoAx <- PCoAy <- NULL
   
   # Create a dataframe to hold the required scores
     if(is.null(zaxis)){
@@ -201,76 +218,49 @@ gl.pcoa.plot <- function(glPca,
         cat(warn("  Sorry, interactive labels are not available for an ordination generated from a Distance Matrix\n"))
         cat(warn("  Labelling the plot with names taken from the Distance Matrix\n"))
       }
-      labels <- "pop"
+      pop.labels <- "pop"
     }  
     
-    # # assigning colors to populations
-    # if(class(palette_discrete)=="function"){
-    #   colours_pops <- palette_discrete(length(levels(pop(x))))
-    # }
-    # 
-    # if(class(palette_discrete)!="function"){
-    #   colours_pops <- palette_discrete
-    # }
-    # 
-    # names(colours_pops) <- as.character(levels(x$pop))
-
   ####### 2D PLOT
     if(is.null(zaxis)){
   
-    # If individual labels
-
-    if (labels == "ind") {
-      if (verbose>0) cat(report("  Plotting individuals\n"))
-
-    # Plot
-      plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=ind, colour=pop)) +
-        geom_point(size=pt.size,aes(colour=pop)) +
-        ggrepel::geom_label_repel(aes(label = ind),show.legend = FALSE, label.size = NA, min.segment.length = Inf, fill=NA, max.overlaps = max.overlaps) +
-        theme(axis.title=element_text(face="bold.italic",size=label.size, color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              legend.title = element_text(colour="black", size=18, face="bold"),
-              legend.text = element_text(colour="black", size = 16, face="bold")
-        ) +
-        labs(x=xlab, y=ylab) +
-        geom_hline(yintercept=0) +
-        geom_vline(xintercept=0)
-      # Scale the axes in proportion to % explained, if requested
-        if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
-      # Add ellipses if requested
-        if(ellipse==TRUE) {plott <- plott + stat_ellipse(aes(colour=pop), type="norm", level=plevel)}
-    } 
-    
     # If population labels
 
-    if (labels == "pop") {
+    if (pop.labels == "pop") {
       if (datatype2=="SNP"){
         if (verbose >=2 ) cat(report("  Plotting populations in a space defined by the SNPs\n"))
       } else if (datatype2=="SilicoDArT") {
         if (verbose >=2 ) cat(report("  Plotting populations in a space defined by the presence/absence data\n"))
       } else {
         if (verbose >=2 ) cat(report("  Plotting entities from the Distance Matrix\n"))
-      }  
+      }
 
       # Plot
-      plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop)) +
-        geom_point(size=pt.size,aes(colour=pop)) +
-        ggrepel::geom_label_repel(aes(label = pop),show.legend = FALSE, label.size = NA, min.segment.length = Inf, fill=NA, max.overlaps = max.overlaps) +
-        theme(axis.title=element_text(face="bold.italic",size=label.size, color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              legend.title = element_text(colour="black", size=18, face="bold"),
-              legend.text = element_text(colour="black", size = 16, face="bold")
-        ) +
-        labs(x=xlab, y=ylab) +
-        geom_hline(yintercept=0) +
+      if(is.null(pt.shapes)){
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop))
+      } else {
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop, shape=pop))
+      }  
+        plott <- plott + geom_point(size=pt.size,aes(colour=pop)) +
+        directlabels::geom_dl(aes(label=pop),method=list("smart.grid",cex=label.size)) +
+        theme(axis.title=element_text(face="bold.italic",size=axis.label.size, color="black"),
+              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
+              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size)) +
+        labs(x=xlab, y=ylab)
+        if(!is.null(pt.shapes)){
+          plott <- plott + scale_shape_manual(values=pt.shapes)
+        }
+        if(!is.null(pt.colors)){
+          plott <- plott + scale_color_manual(values=pt.colors)
+        }    
+        plott <- plott + geom_hline(yintercept=0) +
         geom_vline(xintercept=0) +
         theme(legend.position="none")
       # Scale the axes in proportion to % explained, if requested
-      if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+        #if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+        if(scale==TRUE) { plott <- plott + coord_fixed(ratio=1) }
       # Add ellipses if requested
-      if(ellipse==TRUE) {plott <- plott + stat_ellipse(aes(colour="black"), type="norm", level=plevel)}
+        if(ellipse==TRUE) {plott <- plott + stat_ellipse(type="norm",level=plevel)}
     }
     
   # If interactive labels
@@ -278,23 +268,23 @@ gl.pcoa.plot <- function(glPca,
     if (interactive) {
       cat(report("  Displaying an interactive plot\n"))
       cat(warn("  NOTE: Returning the ordination scores, not a ggplot2 compatable object\n"))
-      #plot.out <- FALSE
 
       # Plot
       plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,label=ind)) +
         geom_point(size=pt.size,aes(colour=pop)) +
-         theme(axis.title=element_text(face="bold.italic",size=label.size, color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              legend.title = element_text(colour="black", size=18, face="bold"),
-              legend.text = element_text(colour="black", size = 16, face="bold")
+         theme(axis.title=element_text(face="bold.italic",size=axis.label.size, color="black"),
+              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
+              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
+              legend.title = element_text(colour="black", size=axis.label.size, face="bold"),
+              legend.text = element_text(colour="black", size = axis.label.size, face="bold")
         ) +
         labs(x=xlab, y=ylab) +
         geom_hline(yintercept=0) +
         geom_vline(xintercept=0) +
         theme(legend.position="none")
       # Scale the axes in proportion to % explained, if requested
-      if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+      #if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+      if(scale==TRUE) { plott <- plott + coord_fixed(ratio=1) }
       # Add ellipses if requested
       if(ellipse==TRUE) {plott <- plott + stat_ellipse(aes(colour=pop), type="norm", level=plevel)}
        cat(warn("  Ignore any warning on the number of shape categories\n"))
@@ -302,49 +292,72 @@ gl.pcoa.plot <- function(glPca,
     
   # If labels = legend
 
-    if (labels == "legend") {
+    if (pop.labels == "legend") {
       if (verbose>=2) cat(report("  Plotting populations identified by a legend\n"))
 
       # Plot
-      plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
-        geom_point(size=pt.size,aes(colour=pop)) +
-        theme(axis.title=element_text(face="bold.italic",size=label.size,color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              legend.title = element_text(colour="black", size=18, face="bold"),
-              legend.text = element_text(colour="black", size = 16, face="bold")
+      Population <- pop
+      if(is.null(pt.shapes)){
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=Population, colour=Population))
+      } else {
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=Population, shape=Population))
+      }  
+        plott <- plott + geom_point(size=pt.size,aes(colour=pop)) +
+        theme(axis.title=element_text(face="bold.italic",size=axis.label.size,color="black"),
+              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
+              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
+              legend.title = element_text(colour="black", size=axis.label.size, face="bold"),
+              legend.text = element_text(colour="black", size = axis.label.size, face="bold")
         ) +
-        labs(x=xlab, y=ylab) +
-        geom_hline(yintercept=0) +
-        geom_vline(xintercept=0)
+        labs(x=xlab, y=ylab)
+        if(!is.null(pt.shapes)){
+          plott <- plott + scale_shape_manual(values=pt.shapes)
+        }
+        if(!is.null(pt.colors)){
+          plott <- plott + scale_color_manual(values=pt.colors)
+        }    
+      plott <- plott + geom_hline(yintercept=0) +
+      geom_vline(xintercept=0)
       # Scale the axes in proportion to % explained, if requested
-      if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+      #if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+      if(scale==TRUE) { plott <- plott + coord_fixed(ratio=1) }
       # Add ellipses if requested
-      if(ellipse==TRUE) {plott <- plott + stat_ellipse(aes(colour=pop), type="norm", level=plevel)}
+      if(ellipse==TRUE) {plott <- plott + stat_ellipse(type="norm", level=plevel)}
     } 
     
     # If labels = none
     
-    if (labels == "none" | labels==FALSE) {
+    if (pop.labels == "none" | pop.labels==FALSE) {
       if (verbose >= 0) cat(report("  Plotting points with no labels\n"))
 
       # Plot
-      plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop)) +
-        geom_point(size=pt.size,aes(colour=pop)) +
-        theme(axis.title=element_text(face="bold.italic",size=label.size,color="black"),
-              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=label.size),
-              legend.title = element_text(colour="black", size=18, face="bold"),
-              legend.text = element_text(colour="black", size = 16, face="bold")
+      if(is.null(pt.shapes)){
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop))
+      } else {
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop,shape=pop))
+      }  
+      plott <- plott + geom_point(size=pt.size,aes(colour=pop)) +
+        theme(axis.title=element_text(face="bold.italic",size=axis.label.size,color="black"),
+              axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
+              axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size)
+              # legend.title = element_text(colour="black", size=18, face="bold"),
+              # legend.text = element_text(colour="black", size = 16, face="bold")
         ) +
-        labs(x=xlab, y=ylab) +
-        geom_hline(yintercept=0) +
-        geom_vline(xintercept=0)+
+        labs(x=xlab, y=ylab)
+        if(!is.null(pt.shapes)){
+          plott <- plott + scale_shape_manual(values=pt.shapes)
+        }
+        if(!is.null(pt.colors)){
+          plott <- plott + scale_color_manual(values=pt.colors)
+        }    
+      plott <- plott + geom_hline(yintercept=0) +
+        geom_vline(xintercept=0) +
         theme(legend.position="none")
       # Scale the axes in proportion to % explained, if requested
-      if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+      #if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+      if(scale==TRUE) { plott <- plott + coord_fixed(ratio=1) }
       # Add ellipses if requested
-      if(ellipse==TRUE) {plott <- plott + stat_ellipse(aes(colour=pop), type="norm", level=plevel)}
+      if(ellipse==TRUE) {plott <- plott + stat_ellipse(type="norm", level=plevel)}
     }
     
     if (verbose >= 2) {
@@ -367,9 +380,9 @@ gl.pcoa.plot <- function(glPca,
                                 marker = list(size = pt.size*2), text=ind) %>% 
         plotly::add_markers(color=~pop)%>% 
         plotly::layout(legend=list(title=list(text='Populations')),
-                           scene = list(xaxis = list(title = xlab,titlefont = list(size = label.size/2)),
-                                        yaxis = list(title = ylab,titlefont = list(size = label.size/2)),
-                                        zaxis = list(title = zlab,titlefont = list(size = label.size/2))))
+                           scene = list(xaxis = list(title = xlab,titlefont = list(size = axis.label.size/2)),
+                                        yaxis = list(title = ylab,titlefont = list(size = axis.label.size/2)),
+                                        zaxis = list(title = zlab,titlefont = list(size = axis.label.size/2))))
       show(plott)
       if(verbose >=2){cat(warn("  May need to zoom out to place 3D plot within bounds\n"))}
     }
