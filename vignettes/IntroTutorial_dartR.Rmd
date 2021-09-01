@@ -1229,8 +1229,6 @@ An Assignment Index is calculated in the same way for a notional individual resi
 
 ```{r}
 x <- gl.assign.pa(testset.gl, unknown = "UC_00146", nmin=10, t=0)
-x <- gl.assign.pca(x, unknown ="UC_00146", alpha=0.05)
-gl.pcoa.plot
 ```
 
 In this example, the unknown individual, UC_00146, is assigned to only one population, EmmaclGeor, so the assignment problem is resolved. This individual does indeed come from the Georges Creek, a tributary of the Macleay River.
@@ -1239,7 +1237,7 @@ If we are worried that the 1 locus with a private allele out of 255 loci for pop
 
 
 ```{r, fig.height=4}
-x <- gl.assign(testset.gl, unknown ="UC_00146", nmin=10, alpha=0.95, t=1)
+x <- gl.assign.pca(x, unknown ="UC_00146", alpha=0.05)
 ```
 
 The plot allows us to eliminate populations EmmacRichCasi and EmmacBurnBara from consideration as the unknown individual does not fall within or near their confidence ellipses. EmmacTweeUki and EmmacMaclGeor remain in contention.
@@ -1247,7 +1245,7 @@ The plot allows us to eliminate populations EmmacRichCasi and EmmacBurnBara from
 
 Output from further analysis using the ordination and assignment index yields the following. Both EmmacTweeUki and EmmacMaclGeor are potential sources for the unknown individual, but the most likely source is EmmacMaclGeor, as supported by the private allele analysis.
 
-A critical issue is whether the number of individuals in the target populations are sufficient to characterize them in the critical considerations made here. Is the sample size sufficient to support the identification of a private allele in the unknown? Is it sufficient to confidently construct confidence ellipses in the PCoA plot? Is it sufficient to provide a robust estimate of the distribution of individuals along each axis of the ordination in order to adequately estimate the likelihood of the unknown on that axis? We have set a default of nmin=10, but this is a matter of judgement that needs to be considered when planning a study.
+A critical issue is whether the number of individuals in the target populations are sufficient to characterize them in the critical considerations made here. Is the sample size sufficient to support the identification of a private allele in the unknown? Is it sufficient to confidently construct confidence ellipses in the PCoA plot? Is it sufficient to provide a robust estimate of the distribution of individuals along each axis of the ordination in order to adequately estimate the likelihood of the unknown on that axis? We have set a default of nmin=10, but this is a matter of judgment that needs to be considered when planning a study.
 
 
 # Sex Linkage
