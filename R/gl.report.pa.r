@@ -45,7 +45,7 @@
 #' @seealso \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #'  
-#' @family reporting functions
+#' @family reporting functions 
 #'
 #' @export
 #'
