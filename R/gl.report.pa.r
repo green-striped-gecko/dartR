@@ -9,7 +9,6 @@
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param x2 If two separate genlight objects are to be compared this can be provided here [default NULL].
-#' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param verbose Verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].
 #' 
 #' @details 
@@ -46,14 +45,13 @@
 #' @seealso \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #'  
-#' @family reporting functions
+#' @family reporting functions 
 #'
 #' @export
 #'
 
 gl.report.pa <- function(x, 
                          x2 = NULL, 
-                         plot.out = TRUE,
                          verbose = NULL){
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -104,45 +102,45 @@ if (!is.null(x2)) {
   }
   
   # PRINTING OUTPUTS
-    print(pall)
+    # print(pall)
     
-    mm <- matrix(0, nPop(x),nPop(x))
-    for (i in 1:nrow(pall)) mm[pall[i,1], pas[i,2]] <- pall$priv2[i]
-    for (i in 1:nrow(pall)) mm[pall[i,2], pas[i,1]] <- pall$priv1[i]
-    labs <- popNames(x)
-    
-    colnames(mm) <- popNames(x)
-    rownames(mm) <- popNames(x)
-    data <- as.data.frame(mm)
-    
-    data_long <- 
-      data %>% 
-      rownames_to_column('source') %>% 
-      as_tibble() %>% 
-      pivot_longer(-source, 'target') %>% 
-      filter(value > 0) %>% 
-      mutate(target = gsub('\\.', ' ', target)) %>% 
-      mutate(source = paste0('src_', source)) %>% 
-      mutate(target = paste0('trgt_', target))
-    
-    nodes <- data.frame(name = unique(c(data_long$source, data_long$target)), stringsAsFactors = FALSE)
-    nodes <- tibble(name = unique(c(data_long$source, data_long$target)),
-                    target = grepl('trgt_', name))
-    
-    data_long$IDsource <- match(data_long$source, nodes$name) - 1 
-    data_long$IDtarget <- match(data_long$target, nodes$name) - 1
-    
-    nodes$name <- sub('^.*_', '', nodes$name)
-    
-    ColourScal ='d3.scaleOrdinal() .range(["#FDE725FF","#B4DE2CFF","#6DCD59FF","#35B779FF","#1F9E89FF","#26828EFF","#31688EFF","#3E4A89FF","#482878FF","#440154FF"])'
-    
-    sn <- sankeyNetwork(Links = data_long, Nodes = nodes,
-                        Source = "IDsource", Target = "IDtarget",
-                        Value = "value", NodeID = "name", 
-                        sinksRight=FALSE, colourScale=ColourScal, nodeWidth=40, fontSize=13, nodePadding=20)
-    
-    print(sn)
-    
+    # mm <- matrix(0, nPop(x),nPop(x))
+    # for (i in 1:nrow(pall)) mm[pall[i,1], pas[i,2]] <- pall$priv2[i]
+    # for (i in 1:nrow(pall)) mm[pall[i,2], pas[i,1]] <- pall$priv1[i]
+    # labs <- popNames(x)
+    # 
+    # colnames(mm) <- popNames(x)
+    # rownames(mm) <- popNames(x)
+    # data <- as.data.frame(mm)
+    # 
+    # data_long <- 
+    #   data %>% 
+    #   rownames_to_column('source') %>% 
+    #   as_tibble() %>% 
+    #   pivot_longer(-source, 'target') %>% 
+    #   filter(value > 0) %>% 
+    #   mutate(target = gsub('\\.', ' ', target)) %>% 
+    #   mutate(source = paste0('src_', source)) %>% 
+    #   mutate(target = paste0('trgt_', target))
+    # 
+    # nodes <- data.frame(name = unique(c(data_long$source, data_long$target)), stringsAsFactors = FALSE)
+    # nodes <- tibble(name = unique(c(data_long$source, data_long$target)),
+    #                 target = grepl('trgt_', name))
+    # 
+    # data_long$IDsource <- match(data_long$source, nodes$name) - 1 
+    # data_long$IDtarget <- match(data_long$target, nodes$name) - 1
+    # 
+    # nodes$name <- sub('^.*_', '', nodes$name)
+    # 
+    # ColourScal ='d3.scaleOrdinal() .range(["#FDE725FF","#B4DE2CFF","#6DCD59FF","#35B779FF","#1F9E89FF","#26828EFF","#31688EFF","#3E4A89FF","#482878FF","#440154FF"])'
+    # 
+    # sn <- sankeyNetwork(Links = data_long, Nodes = nodes,
+    #                     Source = "IDsource", Target = "IDtarget",
+    #                     Value = "value", NodeID = "name", 
+    #                     sinksRight=FALSE, colourScale=ColourScal, nodeWidth=40, fontSize=13, nodePadding=20)
+    # 
+    # print(sn)
+    # 
     
     if(verbose >= 2){
     cat(report("  Table of private alleles and fixed differences returned\n"))
