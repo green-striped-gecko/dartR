@@ -55,7 +55,6 @@ gl.plot(testset.gs[1:10,])
 }
 \seealso{
 Other Exploration/visualisation functions: 
-\code{\link{gl.pcoa.plot.beta}()},
 \code{\link{gl.pcoa.plot}()},
 \code{\link{gl.select.colors}()},
 \code{\link{gl.select.shapes}()}
