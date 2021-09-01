@@ -55,13 +55,13 @@ gl.filter.heterozygosity <- function(x,
     # For each individual determine counts of hets, homs and NAs
     c.na <- array(NA, nInd(x))
     c.hets <- array(NA, nInd(x))
-    #c.hom0 <- array(NA, nInd(x))
-    #c.hom2 <- array(NA, nInd(x))
-    for (i in 1:nInd(x)){
-      c.na[i] <- sum(is.na(m[i,]))/nInd(x)
-      c.hets[i] <- sum(m[i,]==1,na.rm=TRUE)/(nInd(x)-c.na[i])
-      #c.hom0[i] <- sum(m[i,]==0,na.rm=TRUE)/(nInd(x)-c.na[i])
-      #c.hom2[i] <- sum(m[i,]==2,na.rm=TRUE)/(nInd(x)-c.na[i])
+    c.hom0 <- array(NA, nInd(x))
+    c.hom2 <- array(NA, nInd(x))
+    for (i in 1:nInd(x)) {
+      c.na[i] <- sum(is.na(m[i, ]))
+      c.hets[i] <- sum(m[i, ] == 1, na.rm = TRUE)/(nLoc(x) - c.na[i])
+      c.hom0[i] <- sum(m[i, ] == 0, na.rm = TRUE)/(nLoc(x) - c.na[i])
+      c.hom2[i] <- sum(m[i, ] == 2, na.rm = TRUE)/(nLoc(x) - c.na[i])
     }
     
     if (verbose >=2 ) {
