@@ -43,7 +43,6 @@ shapes <- gl.select.shapes(gl=gl,select=c(1,1,1,5,8)) # Select set of shapes and
 \code{\link{gl.select.colors}}
 
 Other Exploration/visualisation functions: 
-\code{\link{gl.pcoa.plot.beta}()},
 \code{\link{gl.pcoa.plot}()},
 \code{\link{gl.plot}()},
 \code{\link{gl.select.colors}()}

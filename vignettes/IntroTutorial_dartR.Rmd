@@ -1,5 +1,5 @@
 ---
-title: "Introduction to dartR"
+#' @title Bivariate or trivariate plot of the results of an ordination generated using \code{\link{gl.pcoa}}
 author: "Bernd Gruber, Peter Unmack, Oliver Berry & Arthur Georges"
 date: '`r Sys.Date()`'
 output:

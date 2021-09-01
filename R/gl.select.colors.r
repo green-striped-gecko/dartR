@@ -46,6 +46,7 @@
 #' @seealso \code{\link{gl.select.shapes}}
 #' @family Exploration/visualisation functions
 #' 
+#' @importFrom grDevices cm.colors hcl.pals palette.pals terrain.colors topo.colors
 #' @export
 
 
