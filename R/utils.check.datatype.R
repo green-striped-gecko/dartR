@@ -1,10 +1,10 @@
 #' @name utils.check.datatype
-#' @title Utility function to check the class of an object passed to afunction.
+#' @title Utility function to check the class of an object passed to a function.
 #'
 #' @description 
 #' Most functions require access to a genlight object, dist matrix, data matrix or fixed difference list (fd), 
-#' and this function checks that a genlight object has been passed, whether it is a SNP dataset or a SilicoDArT object, 
-#' and reports back if verbosity is >=2
+#' and this function checks that a genlight object or one of the above has been passed, whether the genlight object is a SNP dataset 
+#' or a SilicoDArT object, and reports back if verbosity is >=2
 #'
 #' @param x Name of the genlight object, dist matrix, data matrix, glPCA, or fixed difference list (fd) [required]
 #' @param accept Vector containing the classes of objects that are to be accepted [default c("genlight","SNP","SilicoDArT"]
@@ -13,6 +13,9 @@
 #' @details 
 #' This function checks the class of passed object and sets the datatype to "SNP", "SilicoDArT", "dist", "mat",
 #' or class[1](x) as appropriate.
+#' 
+#' Note also that this function checks to see if there are individuals or loci scored as all missing (NA)
+#' and if so, issues the user with a warning.
 #' 
 #' Note: One and only one of gl.check, fd.check, dist.check or mat.check can be TRUE.
 #' 
@@ -36,7 +39,6 @@ utils.check.datatype <- function(x,
 
 #### CHECK THE TYPE OF OBJECT ####
 
-
   if(is(x,"genlight")){
     if(is.null(ploidy(x))){
       stop(error("Fatal Error: ploidy not set in the genlight object, run gl <- gl.compliance.check(gl)\n"))
@@ -53,7 +55,15 @@ utils.check.datatype <- function(x,
       }
       datatype <- "SNP"
     } else {
-      stop(error("Fatal Error -- SNP or SilicoDArT coding misspecified, run gl <- gl.compliance.check(gl)."))
+      stop(error("Fatal Error -- SNP or SilicoDArT coding misspecified, run gl <- gl.compliance.check(gl)"))
+    }
+    # Check for individuals or loci scoring all missing values (NA)
+    tmp <- gl.filter.allna(x,verbose=verbose)
+    if (nLoc(tmp) < nLoc(x)){
+      cat(warn("  Warning: data include loci that are scored NA across all individuals. Consider filtering using gl <- gl.filter.allna(gl)\n"))
+    }
+    if (nInd(tmp) < nInd(x)){
+      cat(warn("  Warning: data include individuals that are scored NA across all loci. Consider filtering using gl <- gl.filter.allna(gl)\n"))
     }
   }
   else if(is(x,"fd")){

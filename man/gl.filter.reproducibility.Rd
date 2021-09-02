@@ -61,6 +61,7 @@ scores that are repeated in the technical replicate dataset.
 \code{\link{gl.report.reproducibility}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.secondaries}()},

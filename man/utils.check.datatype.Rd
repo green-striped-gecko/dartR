@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.check.datatype.R
 \name{utils.check.datatype}
 \alias{utils.check.datatype}
-\title{Utility function to check the class of an object passed to afunction.}
+\title{Utility function to check the class of an object passed to a function.}
 \usage{
 utils.check.datatype(
   x,
@@ -23,12 +23,15 @@ datatype, "SNP" for SNP data, "SilicoDArT" for P/A data, "dist" for a distance m
 }
 \description{
 Most functions require access to a genlight object, dist matrix, data matrix or fixed difference list (fd), 
-and this function checks that a genlight object has been passed, whether it is a SNP dataset or a SilicoDArT object, 
-and reports back if verbosity is >=2
+and this function checks that a genlight object or one of the above has been passed, whether the genlight object is a SNP dataset 
+or a SilicoDArT object, and reports back if verbosity is >=2
 }
 \details{
 This function checks the class of passed object and sets the datatype to "SNP", "SilicoDArT", "dist", "mat",
 or class[1](x) as appropriate.
+
+Note also that this function checks to see if there are individuals or loci scored as all missing (NA)
+and if so, issues the user with a warning.
 
 Note: One and only one of gl.check, fd.check, dist.check or mat.check can be TRUE.
 }
