@@ -31,6 +31,9 @@ Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools,reshape2,
         patchwork
 Suggests: 
+    tibble,
+    networkD3,
+    tidyverse,
     knitr,
     rmarkdown,
     rgl,
