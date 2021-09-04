@@ -4,7 +4,7 @@
 \alias{gl.assign.pca}
 \title{Assign an individual of unknown provenance to population based on PCA}
 \usage{
-gl.assign.pca(x, unknown, alpha = 0.05, verbose = 3)
+gl.assign.pca(x, unknown, alpha = 0.05, verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the input genlight object [required]}

@@ -65,7 +65,7 @@
 #'   x <- gl.assign.pca(x, unknown="UC_00146", alpha=0.05,verbose=3)
 
 
-gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
+gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=NULL) {
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -154,6 +154,10 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   
 # Re-run the pcoa on the reduced set
   hard.limit <- 8
+  if (nInd(x2) < 2){
+    cat("  No putative populations identified\n")
+    df <- NULL
+  } else {
   pcoa <- gl.pcoa(x2,nfactors=hard.limit,verbose=0)
 
 # Determine the number of dimensions for confidence envelope (the ordination and dimension reduction)
@@ -236,6 +240,8 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   # cat("    An index value less than 1 indicates the unknown resides inside the confidence ellipse for the focal population\n")
   # cat("    An index value greater than 1 indicates the unknown resides outside the confidence ellipse for the focal population\n")
   cat(report("  Best assignment is the population with the smallest value of the Index, in this case",best,"\n"))
+  
+  }
   
 # FLAG SCRIPT END
 
