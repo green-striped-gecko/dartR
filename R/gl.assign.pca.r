@@ -111,7 +111,9 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=NULL) {
 # Ordinate a reduced space of 2 dimensions
   pcoa <- gl.pcoa(x, nfactors=2,verbose=0)
 # Plot  
-  suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=alpha))) # Because the unknown pop throws an ellipse error
+  if(verbose >= 3){
+    suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=alpha))) # Because the unknown pop throws an ellipse error
+  }  
 # Combine Pop names and pca scores
   df <- data.frame(pcoa$scores)
   df <- cbind(as.character(pop(x)),df)
@@ -134,7 +136,7 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=NULL) {
   names(result) <- c("pop","hit")
   nhits <- length(result$pop[result$hit])
   nohits <- length(result$pop[!result$hit])
-  if(verbose==3){
+  if(verbose>=3){
     if(nhits > 0){
       cat("  Putative source populations:",paste(result[result$hit==TRUE,"pop"],collapse=", "),"\n")
     } else {
@@ -155,7 +157,7 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=NULL) {
 # Re-run the pcoa on the reduced set
   hard.limit <- 8
   if (nInd(x2) < 2){
-    cat("  No putative populations identified\n")
+    if(verbose >= 2){cat(warn("  Warning: No putative populations identified\n"))}
     df <- NULL
   } else {
   pcoa <- gl.pcoa(x2,nfactors=hard.limit,verbose=0)
@@ -170,10 +172,12 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=NULL) {
   #  sec.est <- nPop(x2)
 
     #cat("  Number of populations, including the unknown:",sec.est,"\n")
-    cat(report("  Number of dimensions with substantial eigenvalues:",first.est,". Hardwired limit",hard.limit,"\n"))
-    cat(report("    Selecting the smallest of the two\n"))
+    if(verbose >= 2){
+      cat(report("  Number of dimensions with substantial eigenvalues:",first.est,". Hardwired limit",hard.limit,"\n"))
+      cat(report("    Selecting the smallest of the two\n"))
+    }  
     dim <- min(first.est, hard.limit)
-    cat(report("    Dimension of confidence envelope set at",dim,"\n"))
+    if(verbose >= 2){cat(report("    Dimension of confidence envelope set at",dim,"\n"))}
     pcoa$scores <- pcoa$scores[,1:dim]
     
 # Add population names to the scores   
@@ -186,7 +190,7 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=NULL) {
   #Unknown[1:dim] <- as.numeric(Unknown[1:dim])
 
 
-  cat("  Likelihood Index for assignment of unknown",unknown,"to putative source populations\n") 
+  if(verbose >= 3){cat("  Likelihood Index for assignment of unknown",unknown,"to putative source populations\n")}
 # For each population
   p <- as.factor(unique(clouds[,"pop"]))
   for (i in 1:length(levels(p))) {
@@ -232,15 +236,14 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=NULL) {
   }  
   colnames(df) <- c("Population","Wt","CE","Index","Assign")
   df <- df[order(df$Index),]
-  print(df)
+  if(verbose >= 3){print(df)}
   best <- as.character(df$Population[df$Assign=="yes"][1])
   # cat("  Wt is a weighted log-likelihood\n")
   # cat("  CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
   # cat("  Index is the position of the unknown relative to the boundary of the",alpha*100,"% confidence envelope\n")
   # cat("    An index value less than 1 indicates the unknown resides inside the confidence ellipse for the focal population\n")
   # cat("    An index value greater than 1 indicates the unknown resides outside the confidence ellipse for the focal population\n")
-  cat(report("  Best assignment is the population with the smallest value of the Index, in this case",best,"\n"))
-  
+  if(verbose >= 3){cat(report("  Best assignment is the population with the smallest value of the Index, in this case",best,"\n"))}
   }
   
 # FLAG SCRIPT END
