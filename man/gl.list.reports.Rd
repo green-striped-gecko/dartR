@@ -14,7 +14,7 @@ Prints dartR reports saved in tempdir
 }
 \examples{
 \dontrun{
-gl.report.callrate(testset.gl)
+gl.report.callrate(testset.gl,save2tmp=TRUE)
 gl.list.reports()
 }
 }

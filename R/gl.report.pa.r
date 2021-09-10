@@ -209,6 +209,9 @@ if (!is.null(x2)) {
     
     if(class(palette_discrete)!="function"){
       colours_pops <- palette_discrete
+      if(!any(grepl("#", colours_pops))){
+        colours_pops <- gplots::col2hex(colours_pops)
+      }
     }
     
     colours_pops <- paste0('"',paste0(colours_pops, collapse='","'),'"')

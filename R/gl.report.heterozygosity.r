@@ -8,7 +8,8 @@
 #' @param n.invariant An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
 #' @param plot.out Whether produce a plot of the results [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours_pop A color palette for population plots [default discrete_palette].
+#' @param plot_colours_pop A color palette for population plots or a list with 
+#' as many colors as there are populations in the dataset [default discrete_palette].
 #' @param plot_colours_ind List of two color names for the borders and fill of the plot by individual [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
@@ -169,18 +170,29 @@ gl.report.heterozygosity <- function(x,
         names(df) <- c("pop", "nInd", "nLoc", "nLoc.inv", "Ho", "Ho.adj", "He", "He.adj")
 
         # printing plots and reports
+        # assigning colors to populations
+        if(class(plot_colours_pop)=="function"){
+            colours_pops <- plot_colours_pop(length(levels(pop(x))))
+        }
+        
+        if(class(plot_colours_pop)!="function"){
+            colours_pops <- plot_colours_pop
+        }
 
         if (is.null(n.invariant)) {
-            df.ordered <- df[order(df$Ho), ]
+            df.ordered <- df
+            df.ordered$color <- colours_pops
+            df.ordered <- df.ordered[order(df.ordered$Ho), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
             if(plot.out){
+                
             p1 <- ggplot(df.ordered, aes(x = pop, y = Ho, fill = pop)) + 
                 geom_bar(position = "dodge", stat = "identity", color = "black") + 
-                scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
+                scale_fill_manual(values = df.ordered$color ) + 
                 scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd,sep = " | ")) + 
                 plot_theme + 
                 theme(axis.ticks.x = element_blank(), 
-                      axis.text.x = element_text(angle = 90,hjust = 1,face = "bold", size = 12), 
+                      axis.text.x = element_blank(),  
                       axis.title.x = element_blank(), 
                       axis.ticks.y = element_blank(), 
                       axis.title.y = element_blank(),
@@ -190,7 +202,7 @@ gl.report.heterozygosity <- function(x,
 
             p2 <- ggplot(df.ordered, aes(x = pop, y = He, fill = pop)) + 
                 geom_bar(position = "dodge", stat = "identity", color = "black") + 
-                scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
+                scale_fill_manual(values = df.ordered$color ) + 
                 scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd,sep = " | ")) +
                 plot_theme + 
                 theme(axis.ticks.x = element_blank(), 
@@ -203,17 +215,19 @@ gl.report.heterozygosity <- function(x,
                 ggtitle("Expected Heterozygosity by Population")
             }
         } else {
-            df.ordered <- df[order(df$Ho.adj), ]
+            df.ordered <- df
+            df.ordered$color <- colours_pops
+            df.ordered <- df.ordered[order(df.ordered$Ho.adj), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
             if(plot.out){
             p1 <- ggplot(df.ordered, aes(x = pop, y = Ho.adj, fill = pop)) + 
-                geom_bar(position = "dodge", stat = "identity", 
-                color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
+                geom_bar(position = "dodge", stat = "identity", color = "black") + 
+                scale_fill_manual(values = df.ordered$color ) + 
                 scale_x_discrete(labels = paste(df.ordered$pop, 
                 df.ordered$nInd, sep = " | ")) + 
                 plot_theme + 
                 theme(axis.ticks.x = element_blank(),
-                      axis.text.x = element_text(angle = 90, hjust = 1, face = "bold", size = 12), 
+                      axis.text.x = element_blank(),  
                       axis.title.x = element_blank(), 
                       axis.ticks.y = element_blank(), 
                       axis.title.y = element_blank(), 
@@ -222,8 +236,8 @@ gl.report.heterozygosity <- function(x,
                 ggtitle("Observed Heterozygosity by Population")
 
             p2 <- ggplot(df.ordered, aes(x = pop, y = He.adj, fill = pop)) + 
-                geom_bar(position = "dodge", stat = "identity", 
-                color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
+                geom_bar(position = "dodge", stat = "identity", color = "black") + 
+                scale_fill_manual(values = df.ordered$color ) + 
                 scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd, sep = " | ")) + 
                 plot_theme + 
                 theme(axis.ticks.x = element_blank(),

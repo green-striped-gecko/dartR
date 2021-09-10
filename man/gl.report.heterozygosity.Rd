@@ -27,7 +27,8 @@ gl.report.heterozygosity(
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours_pop}{A color palette for population plots [default discrete_palette].}
+\item{plot_colours_pop}{A color palette for population plots or a list with 
+as many colors as there are populations in the dataset [default discrete_palette].}
 
 \item{plot_colours_ind}{List of two color names for the borders and fill of the plot by individual [default two_colors].}
 

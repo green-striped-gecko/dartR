@@ -9,7 +9,7 @@ gl.filter.secondaries(x, method = "random", verbose = NULL)
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{method}{-- method of selecting SNP locus to retain, best or random [random]}
+\item{method}{-- method of selecting SNP locus to retain, "best" or "random" [default "random"]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }

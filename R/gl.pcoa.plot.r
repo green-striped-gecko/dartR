@@ -33,15 +33,15 @@
 #' @param hadjust Horizontal adjustment of label position in 2D plots [default 1.5]
 #' @param vadjust Vertical adjustment of label position in 2D plots [default 1]
 #' @param interactive If TRUE then the populations are plotted without labels, mouse-over to identify points [default FALSE]
-#' @param as.pop -- assign another metric to represent populations for the plot [default NULL]
+#' @param as.pop Assign another metric to represent populations for the plot [default NULL]
 #' @param xaxis Identify the x axis from those available in the ordination (xaxis <= nfactors) [default 1]
 #' @param yaxis Identify the y axis from those available in the ordination (yaxis <= nfactors) [default 2]
 #' @param zaxis Identify the z axis from those available in the ordination for a 3D plot (zaxis <= nfactors) [default NULL]
-#' @param pt.size Specify the size of the dispayed points [default 2]
+#' @param pt.size Specify the size of the displayed points [default 2]
 #' @param pt.colors Optionally provide a vector of nPop colours (run gl.select.colors() for colour options) [default NULL]
 #' @param pt.shapes Optionally provide a vector of nPop shapes (run gl.select.shapes() for shape options) [default NULL]
 #' @param label.size Specify the size of the point labels [default 1]
-#' @param axis.label.size Specify the size of the dispayed axis labels [default 1.5]
+#' @param axis.label.size Specify the size of the displayed axis labels [default 1.5]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' 
@@ -377,7 +377,7 @@ gl.pcoa.plot <- function(glPca,
           cat(report("  Displaying a three dimensional plot, mouse over for details for each point\n"))
       }
         plott <- plotly::plot_ly(df,x=~PCoAx,y=~PCoAy,z=~PCoAz,
-                                marker = list(size = pt.size*2), text=ind) %>% 
+                                marker = list(size = pt.size*2),colors = pt.colors, text=ind) %>% 
         plotly::add_markers(color=~pop)%>% 
         plotly::layout(legend=list(title=list(text='Populations')),
                            scene = list(xaxis = list(title = xlab,titlefont = list(size = axis.label.size/2)),
