@@ -58,7 +58,7 @@ utils.check.datatype <- function(x,
       stop(error("Fatal Error -- SNP or SilicoDArT coding misspecified, run gl <- gl.compliance.check(gl)"))
     }
     # Check for individuals or loci scoring all missing values (NA)
-    tmp <- gl.filter.allna(x,verbose=verbose)
+    tmp <- gl.filter.allna(x,verbose=0)
     if (nLoc(tmp) < nLoc(x)){
       cat(warn("  Warning: data include loci that are scored NA across all individuals. Consider filtering using gl <- gl.filter.allna(gl)\n"))
     }
