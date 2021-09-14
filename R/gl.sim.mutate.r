@@ -1,9 +1,9 @@
 #' Simulate mutations within a genlight object
 #'
-#' This script provides is intended to be used within the simulation framework of dartR. It adds the ability to add a constant mutation rate across all loci. Only works currenlty for biallelic data sets (SNPs). Mutation rate is checking for all alleles position and mutations at loci with missing values are ignored and in principle "double mutations" at the same loci can occur, but should be rare.
+#' This script is intended to be used within the simulation framework of dartR. It adds the ability to add a constant mutation rate across all loci. Only works currently for biallelic data sets (SNPs). Mutation rate is checking for all alleles position and mutations at loci with missing values are ignored and in principle "double mutations" at the same loci can occur, but should be rare.
 #' 
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param mut.rate -- constant mutation rate over nInd*nLoc*2 possible locations [default 1e-7]
+#' @param mut.rate -- constant mutation rate over nInd*nLoc*2 possible locations [default 1e-6]
 #' @return Returns a genlight object with the applied mutations
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

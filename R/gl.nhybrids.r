@@ -46,7 +46,7 @@
 #' homozygous alternate (SNP) is produced for the F1 individuals [default TRUE, applies only 
 #' if both parental populations are specified]
 #' @param pprob -- threshold level for assignment to likelihood bins [default 0.95, used only if plot=TRUE]
-#' @param method -- specifies the method (random or AvgPIC) to select 200 loci for NewHybrids [default random]
+#' @param method -- specifies the method ("random" or "AvgPIC") to select 200 loci for NewHybrids [default "random"]
 #' @param nhyb.directory -- directory that holds the NewHybrids executable file e.g. C:/NewHybsPC [default NULL]
 #' @param BurnIn -- number of sweeps to use in the burn in [default 10000]
 #' @param sweeps -- number  of  sweeps  to  use  in  computing  the  actual Monte Carlo averages [default 10000]
@@ -69,20 +69,23 @@
 #' verbose=3)
 #' }
 
-gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
-                    p0=NULL, p1=NULL, 
-                    threshold=0, 
-                    method="random",
-                    plot=TRUE,
-                    pprob=0.95,
-                    nhyb.directory=NULL,
-                    BurnIn=10000,
-                    sweeps=10000,
-                    GtypFile = "TwoGensGtypFreq.txt",
-                    AFPriorFile = NULL,
-                    PiPrior = "Jeffreys",
-                    ThetaPrior = "Jeffreys",
-                    verbose=NULL) {
+gl.nhybrids <- function(gl, 
+                        outfile="nhyb.txt", 
+                        outpath=tempdir(),
+                        p0=NULL, 
+                        p1=NULL, 
+                        threshold=0, 
+                        method="random",
+                        plot=TRUE, 
+                        pprob=0.95,
+                        nhyb.directory=NULL,
+                        BurnIn=10000,
+                        sweeps=10000,
+                        GtypFile = "TwoGensGtypFreq.txt",
+                        AFPriorFile = NULL,
+                        PiPrior = "Jeffreys",
+                        ThetaPrior = "Jeffreys",
+                        verbose=NULL) {
 
 # TRAP COMMAND, SET VERSION
   
