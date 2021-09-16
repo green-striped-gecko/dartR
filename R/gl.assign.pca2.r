@@ -62,10 +62,10 @@
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 #'   x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1,verbose=3)
-#'   x <- gl.assign.pca(x, unknown="UC_00146", plevel=0.95, verbose=3)
+#'   x <- gl.assign.pca(x, unknown="UC_00146", alpha=0.05,verbose=3)
 
 
-gl.assign.pca <- function (x, unknown, plevel= 0.95, verbose=NULL) {
+gl.assign.pca2 <- function (x, unknown, plevel= 0.95, verbose=NULL) {
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -106,26 +106,38 @@ gl.assign.pca <- function (x, unknown, plevel= 0.95, verbose=NULL) {
   pop(x) <- as.factor(vec)
 
 # Ordinate a reduced space of 2 dimensions
-  pcoa <- gl.pcoa(x, nfactors=2,verbose=0)
+  hard.limit <- 8
+  pcoa <- gl.pcoa(x, nfactors=hard.limit,verbose=0)
 # Plot  
   if(verbose >= 3){
     suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=plevel))) # Because the unknown pop throws an ellipse error
   }  
+  # Determine the number of dimensions for confidence envelope (the ordination and dimension reduction)
+  # From the eigenvalue distribution
+  s <- sum(pcoa$eig)
+  e <- round(pcoa$eig*100/s,1)
+  e <- e[e>mean(e)]
+  first.est <- length(e)
+  dimension <- min(first.est,hard.limit)
+  if(verbose >= 2){cat(report("    Dimension of confidence envelope set at",dimension,"\n"))}
+  pcoa$scores <- pcoa$scores[,1:dimension]
 # Combine Pop names and pca scores
   df <- data.frame(pcoa$scores)
   df <- cbind(as.character(pop(x)),df)
-  names(df) <- c("pop","x","y")
-# Determine if the unknown lies within the confidence ellipses specified by plevel
+  names(df)[1] <- "pop"
+# Determine if the unknown lies within the confidence ellipses specified by alpha
   result <- data.frame() 
   count <- 0
   for (i in popNames(x)){
     if(i=="unknown" | nInd(x[pop=i])<=1){next}
     count <- count + 1
-    A <- pcoa$scores[df$pop==i,]
+    A <- pcoa$scores[(df$pop==i | df$pop=="unknown"),] # Including the unknown to be conservative
     mu <- colMeans(A)
     sigma <- stats::cov(A)
-    testset <- rbind(pcoa$scores[df$pop=="unknown",],A)
-    transform <- SIBER::pointsToEllipsoid(testset, sigma, mu)
+    #testset <- rbind(pcoa$scores[df$pop=="unknown",],A)
+    #row.names(testset)[1] <- "unknown"
+    transform <- SIBER::pointsToEllipsoid(A, sigma, mu)
+    #transform2 <- SIBER::pointsToEllipsoid(pcoa$scores[df$pop=="unknown",], sigma, mu)
     inside.or.out <- SIBER::ellipseInOut(transform, p = plevel)
     result[count,1] <- i
     result[count,2] <- inside.or.out[1]
@@ -208,7 +220,7 @@ gl.assign.pca <- function (x, unknown, plevel= 0.95, verbose=NULL) {
       sd <- sqrt(N/(N-1) * (colMeans(n*n)-colMeans(n)^2))
     # Standardise the unknown
       std.unknown <- abs((Unknown-means))/sd
-      std.boundary <- rep(qnorm((1-plevel/2), 0, 1),dim)
+      std.boundary <- rep(qnorm((1-(1-alpha)/2), 0, 1),dim)
     # Calculate log likelihoods
       li <- dnorm(std.unknown,0,1)
       li <- log(li)
@@ -236,7 +248,11 @@ gl.assign.pca <- function (x, unknown, plevel= 0.95, verbose=NULL) {
   df <- df[order(df$Index),]
   if(verbose >= 3){print(df)}
   best <- as.character(df$Population[df$Assign=="yes"][1])
-
+  # cat("  Wt is a weighted log-likelihood\n")
+  # cat("  CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
+  # cat("  Index is the position of the unknown relative to the boundary of the",alpha*100,"% confidence envelope\n")
+  # cat("    An index value less than 1 indicates the unknown resides inside the confidence ellipse for the focal population\n")
+  # cat("    An index value greater than 1 indicates the unknown resides outside the confidence ellipse for the focal population\n")
   if(verbose >= 3){cat(report("  Best assignment is the population with the smallest value of the Index, in this case",best,"\n"))}
   }
   

@@ -86,6 +86,7 @@ gl.report.hamming(testset.gs[,1:100])
 \code{\link{gl.filter.hamming}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
