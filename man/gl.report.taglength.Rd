@@ -68,6 +68,7 @@ out <- gl.report.taglength(testset.gl)
  \code{\link{gl.print.reports}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},

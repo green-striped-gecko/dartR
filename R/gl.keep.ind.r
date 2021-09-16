@@ -67,7 +67,7 @@ gl.keep.ind <- function(x,
     x <- x[x$ind.names%in%ind.list]
     
   # Monomorphic loci may have been created
-    x@other$loc.metrics.flags$monomorphs == FALSE
+    x@other$loc.metrics.flags$monomorphs <- FALSE
     
   # Remove monomorphic loci
     if(mono.rm){

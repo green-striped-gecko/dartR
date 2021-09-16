@@ -27,49 +27,15 @@ gl.tree.nj <- function(x,
                        treefile=NULL, 
                        verbose=NULL) {
 
-# TRAP COMMAND, SET VERSION
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-
-# STANDARD ERROR CHECKING
-
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-  }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
 
 # DO THE JOB
 
@@ -80,7 +46,7 @@ gl.tree.nj <- function(x,
     if (verbose >= 2) {cat("  Computing Euclidean distances\n")}
     d <- round(as.matrix(dist(t)),4)
     row.names(d) <- c(paste(row.names(d),"          "))
-    row.names(d) <- substr(row.names(d),1,10)
+    #row.names(d) <- substr(row.names(d),1,10)
     
   # Plot the distances as an nj tree  
     tree <- ape::nj(d)

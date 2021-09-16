@@ -136,6 +136,14 @@ gl.pcoa <- function(x,
     if (mono.rm == TRUE & (datatype=="SNP" | datatype=="SilicoDArT")) {
         x <- gl.filter.monomorphs(x,verbose=0)
     }
+  
+    if(nInd(x)< 2){
+      stop(error("Fatal Error: Only one individual or no individuals present in the dataset"))
+    }
+  
+    if(nLoc(x) < nInd(x)){
+      stop(error("Fatal Error: Number of loci is less than the number of individuals to be represented"))
+    }
 
     if (is.null(correction)) {
         correction <- "none"

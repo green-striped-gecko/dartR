@@ -63,6 +63,7 @@ The function displays a table of minimum, maximum, mean and quantiles for repeat
 \code{\link{gl.filter.reproducibility}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},

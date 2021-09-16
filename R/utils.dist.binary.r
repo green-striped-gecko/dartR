@@ -1,7 +1,8 @@
-#' Calculate a distance matrix for individuals defined in an \{adegenet\} genlight object using binary P/A data (SilicoDArT)
-#'
-#' This script calculates various distances between individuals based on Tag Presence/Absence data. #' 
-#'  
+#' @title utils.dist.binary
+#' @title Calculate a distance matrix for individuals defined in an \{adegenet\} genlight object using binary P/A data (SilicoDArT)
+#' @description 
+#' This script calculates various distances between individuals based on Tag Presence/Absence data.  
+#' @details  
 #' The distance measure can be one of
 #'  
 #'  simple -- simple matching, both 1 or both 0 = 0; one 1 and the other 0 = 1. Presence and absence equally weighted.
@@ -23,50 +24,15 @@
 
 utils.dist.binary <- function(x, method="simple", verbose=NULL) {
   
-# TRAP COMMAND, SET VERSION
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
+  utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-  
-# STANDARD ERROR CHECKING
-
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    stop("  Binary distance measures are for Tag P/A data only, detected a SNP dataset\n")
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-  }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,accept="SNP",verbose=verbose)
   
 # SCRIPT SPECIFIC ERROR CHECKING
   
@@ -75,7 +41,7 @@ utils.dist.binary <- function(x, method="simple", verbose=NULL) {
 # FUNCTION SPECIFIC ERROR CHECKING
   
   if (!(method %in% c("simple", "jaccard", "dice", "sorenson", "czekanowski", "phi"))){
-    if(version >= 2){cat(" Warning: Method not in the list of options, set to simple matching\n")}
+    if(verbose >= 2){cat(warn(" Warning: Method not in the list of options, set to simple matching\n"))}
     method <- 'simple'
   }
   
@@ -87,7 +53,7 @@ utils.dist.binary <- function(x, method="simple", verbose=NULL) {
   #dd[1:10,1:10]
   nI <- nInd(x)
 
-  if(verbose >= 2)cat("  Calculating the distance matrix --",method,"\n")  
+  if(verbose >= 2)cat(report("  Calculating the distance matrix --",method,"\n"))  
   for (i in (1:(nI-1))) {
   for (j in ((i+1):nI)){
     row1 <- mat[i,]
@@ -117,7 +83,7 @@ utils.dist.binary <- function(x, method="simple", verbose=NULL) {
     dd[i,i] <- 0
   }
 #dd[1:10,1:10]
-  if(verbose >= 2){ cat("  Converting to a distance object\n")}
+  if(verbose >= 2){ cat(report("  Converting to a distance object\n"))}
   dd <- as.dist(dd)
 
 # FLAG SCRIPT END
