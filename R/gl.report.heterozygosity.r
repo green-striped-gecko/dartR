@@ -160,32 +160,53 @@ gl.report.heterozygosity <- function(x,
   if (verbose >=2){cat("  Calculating Observed Heterozygosities, averaged across loci, for each population\n")}
     
   # Calculate heterozygosity for each population in the list
+  Ho.loc <- lapply(sgl, function(x) colMeans(as.matrix(x)==1, na.rm=TRUE) )
   Ho <- unlist(lapply(sgl, function(x) mean(colMeans(as.matrix(x)==1, na.rm=TRUE), na.rm=TRUE) ))
-  
+  HoSD <- unlist(lapply(sgl, function(x) sd(colMeans(as.matrix(x)==1, na.rm=TRUE), na.rm=TRUE) ))
   # Calculate the number of loci used
   
   nl <- unlist(lapply(sgl, function(x) sum(colSums(is.na(as.matrix(x)))==0)))
+  nltest <- unlist(lapply(sgl, function(x) length(colSums(is.na(as.matrix(x)))[ # the number of non-genotyped samples
+                                                    -which(colSums(is.na(as.matrix(x))) == nrow(as.matrix(x)))] ))) # remove the loci that are completely missing
   
   # Apply correction
-  Ho.adj <- Ho*nLoc(x)/(nLoc(x)+n.invariant)
+  #Ho.adj <- Ho*nLoc(x)/(nLoc(x)+n.invariant)
+  Ho.adj <- Ho*nltest/(nltest+n.invariant)
+  # Manually compute SD for Ho.adj
+  Ho.adjSD <- sqrt(
+    # sum of the square of differences from the mean for polymorphic sites
+    (mapply(function(x, Mean) sum((x - Mean)^2, na.rm=TRUE), Ho.loc, Mean=Ho.adj) + 
+       n.invariant * Ho.adj^2) / # plus sum of the square of differences (which is the Ho.adj because Ho=0) from the mean for invariant sites
+      (nltest+n.invariant-1) # sample size
+  )
   
   # Calculate sample sizes =Number of individuals
-
+  ntest <- sapply(sgl, function(x) mean(nrow(as.matrix(x)) - # the number of samples in the matrix
+                                          colSums(is.na(as.matrix(x)))[ # the number of non-genotyped samples
+                                            -which(colSums(is.na(as.matrix(x))) == nrow(as.matrix(x)))] )) # remove the loci that are completely missing
+  
   sums <- data.frame(lapply(sgl, function(x) mean(colSums(as.matrix(x)==1, na.rm=TRUE), na.rm=TRUE)))
   n <- t(sums/Ho)
-  n <- cbind(row.names(n),n,nl,nLoc(x)/(nLoc(x)+n.invariant))
+  n <- cbind(row.names(n),n,ntest,nl,nltest,nLoc(x)/(nLoc(x)+n.invariant))
+  
+  
   
   # Join the sample sizes with the heteozygosities
-  df1 <- data.frame(pop=names(Ho), Ho=as.numeric(Ho), Ho.adj=as.numeric(Ho.adj))
+  df1 <- data.frame(pop=names(Ho), Ho=as.numeric(Ho), HoSD=HoSD, Ho.adj=as.numeric(Ho.adj), Ho.adjSD=Ho.adjSD)
   df2 <- data.frame(n)
-  names(df2)<- c("pop","nInd","nLoc","nLoc.adj")
+  names(df2)<- c("pop","nInd","nIndTest","nLoc","nLocTest","nLoc.adj")
   df <- plyr::join(df1,df2, by="pop")  
 
 # EXPECTED HETEROZYGOSITY
   if (verbose >=2){cat("  Calculating Expected Heterozygosities\n")}
   
   Hexp <- array(NA,length(sgl))
+  HexpSD <- array(NA,length(sgl))
+  uHexp <- array(NA,length(sgl))
+  uHexpSD <- array(NA,length(sgl))
   Hexp.adj <- array(NA,length(sgl))
+  Hexp.adjSD <- array(NA,length(sgl))
+  
   # For each population
   for (i in 1:length(sgl)){
     gl <- sgl[[i]]
@@ -198,20 +219,38 @@ gl.report.heterozygosity <- function(x,
     p <- (2*p + hets)/2
     q <- (2*q + hets)/2
     H <- 1 - (p*p + q*q)
+    # Unbiased He (i.e. corrected for sample size)
+    # hard coded for diploid 
+    uH <- (2 * as.numeric(df$nInd[i]) / (2 * as.numeric(df$nInd[i]) - 1)) * H 
     Hexp[i] <- mean(H,na.rm=T)
-    Hexp.adj[i] <- Hexp[i]*nLoc(x)/(nLoc(x)+n.invariant)
+    uHexp[i] <- mean(uH, na.rm=T)
+    Hexp.adj[i] <- Hexp[i]*nltest[i]/(nltest[i]+n.invariant)
+    HexpSD[i] <- sd(H, na.rm=T)
+    uHexpSD[i] <- sd(uH, na.rm=T)
+    Hexp.adjSD[i] <- sqrt(
+      (sum((H - Hexp.adj[i])^2, na.rm = TRUE) + n.invariant * Hexp.adj[i]^2) / 
+        (nltest[i]+n.invariant-1)
+      )
   }
   
   df <- data.frame(popNames(x),
                    as.numeric(table(pop(x))),
+                   df$nIndTest,
                    nl,
                    n.invariant,
                    round(df$Ho,6),
+                   round(df$HoSD,6),
                    round(df$Ho.adj,6),
+                   round(df$Ho.adjSD,6),
                    round(Hexp,6),
-                   round(Hexp.adj,6)
+                   round(HexpSD,6),
+                   round(uHexp,6),
+                   round(uHexpSD,6),
+                   round(Hexp.adj,6),
+                   round(Hexp.adjSD,6)
                    )
-  names(df) <- c("pop","nInd","nLoc","nLoc.inv","Ho","Ho.adj","He","He.adj")
+  names(df) <- c("pop","nInd","mean.nInd","nLoc","nLoc.inv","Ho","HoSD","Ho.adj","Ho.adjSD",
+                 "He","HeSD","uHe","uHeSD","He.adj","He.adjSD")
   
   if (plot){
     op <- par(mfrow=c(2,1),mai=c(1,1,1,0),pty="m")
