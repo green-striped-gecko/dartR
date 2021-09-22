@@ -29,7 +29,7 @@ gl.set.verbosity <- function(value=2) {
 # FLAG SCRIPT END
   
   if (value >= 1) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
   
   invisible(NULL)

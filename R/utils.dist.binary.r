@@ -24,14 +24,14 @@
 
 utils.dist.binary <- function(x, method="simple", verbose=NULL) {
   
-  # SET VERBOSITY
+# SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   funname <- match.call()[[1]]
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  # CHECK DATATYPE 
+# CHECK DATATYPE 
   datatype <- utils.check.datatype(x,accept="SNP",verbose=verbose)
   
 # SCRIPT SPECIFIC ERROR CHECKING
@@ -89,7 +89,7 @@ utils.dist.binary <- function(x, method="simple", verbose=NULL) {
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
 
   return(dd)
