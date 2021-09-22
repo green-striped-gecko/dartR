@@ -24,7 +24,7 @@ gl.plot(
 \item{ind_labels}{Labels for individuals [default indNames(x)].}
 
 \item{ind_labels_size}{Size of the individual labels, if individual labels 
-are not required set this parameter to 0 [default 10].}
+are not required set this parameter to 0 [default 6].}
 
 \item{plot_colors}{Vector with four color names for homozygotes for the 
 reference allele, heterozygotes, homozygotes for the alternative allele and 
