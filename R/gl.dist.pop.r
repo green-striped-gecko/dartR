@@ -27,7 +27,7 @@
 #' @export
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' gl.dist.pop(testset.gl, method="euclidean")
+#' D <- gl.dist.pop(testset.gl, method="euclidean")
 
 gl.dist.pop <- function(x, 
                         method="euclidean", 
@@ -117,8 +117,8 @@ gl.dist.pop <- function(x,
     if (m %in% veganmethod) {
       dd <- vegan::vegdist(f, method=m, binary=b, diag=d, upper=u, na.rm=TRUE)
       if (verbose >= 2) {
-        cat(paste("  Calculating distances: ",m,"\n"))
-        cat("    Refer to vegdist {vegan} documentation for algorithm\n")
+        cat(report(paste("  Calculating distances: ",m,"\n")))
+        cat(report("    Refer to vegdist {vegan} documentation for algorithm\n"))
       }
       if (method == "bray"){
         if (verbose >= 2) {cat("  Note: the Bray-Curtis distance is non-metric, and so should be considered a dissimilarity measure. A metric alternative is the Jaccard distance.\n\n")}
@@ -128,8 +128,8 @@ gl.dist.pop <- function(x,
     if (m == "pcfixed"){
       dd <- gl.fixed.diff(x,verbose=0)[[3]]
       if (verbose >= 2) {
-        cat("  Calculating percent fixed differences\n")
-        cat("Note: this distance may be non-metric, and so should be considered a dissimilarity measure\n")
+        cat(report("  Calculating percent fixed differences\n"))
+        cat(warn("Note: this distance may be non-metric, and so should be considered a dissimilarity measure\n"))
       }  
     }
     # if (m == "pa"){
@@ -194,15 +194,15 @@ gl.dist.pop <- function(x,
   
 # SUMMARY 
     # Print out some statistics
-  if(verbose >= 2){
-    cat("\n  Reporting inter-population distances\n")
+  if(verbose >= 3){
+    cat("  Reporting inter-population distances\n")
     cat("  Distance measure:",method,"\n")
     cat("    No. of populations =", nPop(x), "\n")
     cat("    Average no. of individuals per population =", nInd(x)/nPop(x), "\n")
     cat("    No. of loci =", nLoc(x), "\n")
     cat("    Miniumum Distance: ",round(min(dd),2),"\n")
     cat("    Maximum Distance: ",round(max(dd),2),"\n")
-    cat("    Average Distance: ",round(mean(dd),3),"\n\n")
+    cat("    Average Distance: ",round(mean(dd),3),"\n")
   }  
     
     # SAVE INTERMEDIATES TO TEMPDIR             
@@ -235,7 +235,7 @@ gl.dist.pop <- function(x,
     
 # FLAG SCRIPT END
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
     
   return(dd)

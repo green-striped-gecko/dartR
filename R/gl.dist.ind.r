@@ -34,12 +34,12 @@
 #' @export
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' gl.dist.pop(testset.gl, method="euclidean")
+#' D <- gl.dist.ind(testset.gl, method="euclidean")
 
 gl.dist.ind <- function(x, 
                         method=NULL, 
                         plot.out=TRUE, 
-                        plot_theme=theme_dartR,
+                        plot_theme=theme_dartR(),
                         plot_colors=two_colors,
                         save2tmp=FALSE,
                         verbose=NULL) {
@@ -61,7 +61,7 @@ gl.dist.ind <- function(x,
   utils.flag.start(func=funname,build="Juliette",v=verbose)
   
 # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x,accept="SNP",verbose=verbose)
+  datatype <- utils.check.datatype(x,accept=c("SNP","SilicoDArT"),verbose=verbose)
   
 # FUNCTION SPECIFIC ERROR CHECKING
   
@@ -155,7 +155,7 @@ if (datatype == "SilicoDArT"){
         title_plot <- paste0("Presence/Absence data (SilicoDArT)\nInter-individual ",method," distance")
       }  
       values <- NULL
-      df_plot <- data.frame(values =as.vector(mat))
+      df_plot <- data.frame(values=as.vector(mat))
       #colnames(df_plot) <- "values"
       
       # Boxplot
@@ -164,7 +164,7 @@ if (datatype == "SilicoDArT"){
         coord_flip() + 
         plot_theme + 
         xlim(range = c(-1, 1)) + 
-        ylim(min(df_plot$values,na.rm=TRUE),1) +
+        ylim(min(df_plot$values,na.rm=TRUE),max(df_plot$values,na.rm=TRUE)) +
         ylab(" ") + 
         theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
         ggtitle(title_plot)
@@ -172,7 +172,7 @@ if (datatype == "SilicoDArT"){
       # Histogram
       p2 <- ggplot(df_plot, aes(x = values)) + 
         geom_histogram(bins = 100, color = plot_colors[1], fill = plot_colors[2]) +
-        xlim(min(df_plot$values,na.rm=TRUE),1) +
+        xlim(min(df_plot$values,na.rm=TRUE),max(df_plot$values,na.rm=TRUE)) +
         xlab("Distance") + 
         ylab("Count") + 
         plot_theme
