@@ -12,7 +12,7 @@
 #' The filter has not been implemented for tag presence/absence data.
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
-#' @param method -- method of selecting SNP locus to retain, best or random [random]
+#' @param method -- method of selecting SNP locus to retain, "best" or "random" [default "random"]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return the genlight object, with the secondary SNP loci removed
 

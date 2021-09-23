@@ -5,7 +5,7 @@
 #'
 #' @param x -- name of the genlight object containing the SNP data [required]
 #' @param n -- number of loci to include in the subsample [required]
-#' @param method -- "random", in which case the loci are sampled at random; or avgPIC, in which case the top n loci
+#' @param method -- "random", in which case the loci are sampled at random; or "avgPIC", in which case the top n loci
 #' ranked on information content (AvgPIC) are chosen [default 'random']
 #' @param mono.rm -- delete monomorphic loci before sampling [default FALSE]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]

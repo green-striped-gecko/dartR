@@ -139,9 +139,14 @@
 #'@export
 #'
 
-gl.blast <- function(x, ref_genome, task = "megablast", 
-                     Percentage_identity = 70, Percentage_overlap = 0.8, 
-                     bitscore = 50, number_of_threads = 2, verbose = 2) {
+gl.blast <- function(x,
+                     ref_genome, 
+                     task = "megablast", 
+                     Percentage_identity = 70, 
+                     Percentage_overlap = 0.8, 
+                     bitscore = 50, 
+                     number_of_threads = 2,
+                     verbose = NULL) {
   
   # TRAP COMMAND
   funname <- match.call()[[1]]

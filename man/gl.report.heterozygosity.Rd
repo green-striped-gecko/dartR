@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.report.heterozygosity.r
 \name{gl.report.heterozygosity}
 \alias{gl.report.heterozygosity}
-\title{Reports observed and expected heterozygosity by population or by individual from SNP data}
+\title{Reports observed and expected heterozygosity by population or by 
+individual from SNP data}
 \usage{
 gl.report.heterozygosity(
   x,
@@ -19,55 +20,68 @@ gl.report.heterozygosity(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP [required].}
 
-\item{method}{Calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']}
+\item{method}{Calculate heterozygosity by population (method="pop") or by 
+individual (method="ind") [default "pop"].}
 
-\item{n.invariant}{An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]}
+\item{n.invariant}{An estimate of the number of invariant sequence tags used 
+to adjust the heterozygosity rate [default 0].}
 
 \item{plot.out}{Whether produce a plot of the results [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours_pop}{A color palette for population plots [default discrete_palette].}
+\item{plot_colours_pop}{A color palette for population plots or a list with 
+as many colors as there are populations in the dataset [default discrete_palette].}
 
-\item{plot_colours_ind}{List of two color names for the borders and fill of the plot by individual [default two_colors].}
+\item{plot_colours_ind}{List of two color names for the borders and fill of 
+the plot by individual [default two_colors].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report 
+[default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 A dataframe containing population labels, heterozygosities and sample sizes
 }
 \description{
-Calculates the observed and expected heterozygosities for each population
-or the observed heterozygosity for each individual in a genlight object.
+Calculates the observed and expected heterozygosities for each
+population or the observed heterozygosity for each individual in a genlight 
+object.
 }
 \details{
-Observed heterozygosity for a population takes the proportion of heterozygous
-loci for each individual then averages over the individuals in that population. 
-The calculations take into account missing values.
+Observed heterozygosity for a population takes the proportion of 
+heterozygous loci for each individual then averages over the individuals in 
+that population. The calculations take into account missing values.
 
 Expected heterozygosity for a population takes the expected proportion of
-heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each locus, then
-averages this across the loci for an average estimate for the population.
-The calculations of expected heterozygosity use the unbiassed estimates of Nei, M. (1987) 
+heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each 
+locus, then averages this across the loci for an average estimate for the 
+population. The calculations of expected heterozygosity use the unbiased 
+estimates of Nei, M. (1987) 
 
-Output for method='pop' is an ordered barchart of observed heterozygosity across 
-populations together with a table of observed and expected heterozygosity by population.
+Observed heterozygosity for individuals is calculated as the proportion of 
+loci that are heterozygous for that individual.
 
-Observed heterozygosity for individuals is calculated as the proportion of loci that
-are heterozygous for that individual.
-
-Finally, the loci that are invariant across all individuals in the dataset (that is,
-across populations), is typically unknown. This can render estimates of heterozygosity
-analysis specific, and so it is not valid to compare such estimates across species
-or even across different analyses. This is a similar problem faced by microsatellites.
-If you have an estimate of the number of invariant sequence tags (loci) in your data,
-such as provided by gl.report.secondaries, you can specify it with the n.invariant
+Finally, the loci that are invariant across all individuals in the dataset 
+(that is, across populations), is typically unknown. This can render 
+estimates of heterozygosity analysis specific, and so it is not valid to 
+compare such estimates across species or even across different analyses. This
+is a similar problem faced by microsatellites. If you have an estimate of the 
+number of invariant sequence tags (loci) in your data, such as provided by 
+\code{\link{gl.report.secondaries}}, you can specify it with the n.invariant 
 parameter to standardize your estimates of heterozygosity.
 
 \strong{ Function's output }
-Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
+
+Output for method='pop' is an ordered barchart of observed heterozygosity 
+across populations together with a table of observed and expected 
+heterozygosity by population.
+
+Output for method='ind' is a histogram and a boxplot of heterozygosity across
+individuals.
 
  Plots and table are saved to the session temporary directory (tempdir) 
  
@@ -83,7 +97,10 @@ df <- gl.report.heterozygosity(testset.gl,plot.out=FALSE)
 
 }
 \references{
-Nei, M. and R. K. Chesser (1983). Estimation of fixation indices and gene diversities. Annals of Human Genetics 47:253-259.
+\itemize{
+\item Nei, M. and R. K. Chesser (1983). Estimation of fixation indices and 
+gene diversities. Annals of Human Genetics 47:253-259.
+}
 }
 \seealso{
 \code{\link{gl.filter.heterozygosity}}

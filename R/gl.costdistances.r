@@ -2,7 +2,7 @@
 #'
 #'@param landscape a raster object coding the resistance of the landscape
 #'@param locs coordinates of the subpopulations. If a genlight object is provided coordinates are taken from @other$latlon and centers for population (pop(gl)) are calculated. In case you want to calculate costdistances between individuals redefine pop(gl) via: \code{pop(gl)<- indNames(gl)}.
-#'@param method defines the type of cost distance, types are "least-cost", "rSPDistance" or "commute (Circuitscape type)"
+#'@param method defines the type of cost distance, types are "least-cost", "rSPDistance" or "commute" (Circuitscape type).
 #'@param NN number of next neighbours recommendation is 8
 #'@return a costdistance matrix between all pairs of locs
 #'@description calculates a cost distance matrix, to be used with run.popgensim

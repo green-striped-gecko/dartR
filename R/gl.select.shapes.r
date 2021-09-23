@@ -35,9 +35,9 @@
 #' 
 #' @export
 
-gl.select.shapes <- function(gl=NULL,
-                             select=NULL,
-                             verbose=NULL){
+gl.select.shapes <- function(gl = NULL,
+                             select = NULL,
+                             verbose = NULL){
   
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

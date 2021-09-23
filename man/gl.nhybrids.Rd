@@ -37,7 +37,7 @@ gl.nhybrids(
 
 \item{threshold}{-- sets the level at which a gene frequency difference is considered to be fixed [default 0]}
 
-\item{method}{-- specifies the method (random or AvgPIC) to select 200 loci for NewHybrids [default random]}
+\item{method}{-- specifies the method ("random" or "AvgPIC") to select 200 loci for NewHybrids [default "random"]}
 
 \item{plot}{-- if TRUE, a plot of the frequency of homozygous reference, heterozygotes and
 homozygous alternate (SNP) is produced for the F1 individuals [default TRUE, applies only 

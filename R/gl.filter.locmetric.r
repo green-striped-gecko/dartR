@@ -17,12 +17,12 @@
 #' - AvgCountSnp - sum of the tag read counts for all samples, divided by the number of samples with non-zero tag read counts, for the Alternate (SNP) allele row 
 #' - RepAvg - proportion of technical replicate assay pairs for which the marker score is consistent 
 #' 
-#' @param x -- name of the genlight object containing the SNP data [required]
-#' @param metric -- name of the metric to be used for filtering [required]
-#' @param upper -- filter upper threshold [required]
-#' @param lower -- filter lower threshold  [required]
-#' @param keep -- whether keep loci within of upper and lower thresholds or keep loci outside of upper and lower thresholds [within]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param metric Name of the metric to be used for filtering [required].
+#' @param upper Filter upper threshold [required].
+#' @param lower Filter lower threshold  [required].
+#' @param keep Whether keep loci "within" of upper and lower thresholds or keep loci "outside" of upper and lower thresholds [within].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity].
 #' @return The reduced genlight dataset
 #' @export
 #' @author Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
