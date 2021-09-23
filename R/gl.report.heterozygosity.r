@@ -221,7 +221,7 @@ gl.report.heterozygosity <- function(x,
     H <- 1 - (p*p + q*q)
     # Unbiased He (i.e. corrected for sample size)
     # hard coded for diploid 
-    uH <- (2 * as.numeric(df$nInd[i]) / (2 * as.numeric(df$nInd[i]) - 1)) * H 
+    uH <- (2 * as.numeric(df$nIndTest[i]) / (2 * as.numeric(df$nIndTest[i]) - 1)) * H 
     Hexp[i] <- mean(H,na.rm=T)
     uHexp[i] <- mean(uH, na.rm=T)
     Hexp.adj[i] <- Hexp[i]*nltest[i]/(nltest[i]+n.invariant)
