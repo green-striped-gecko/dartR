@@ -13,26 +13,26 @@
 #'  One might choose to disregard or downweight absences in comparison with presences because the homology of absences is less clear (mutation at one or
 #'  the other, or both restriction sites). Your call.
 #'  
-#' @param x -- name of the genlight containing the SNP genotypes [required]
+#' @param x -- name of the genlight containing the genotypes [required]
 #' @param method -- Specify distance measure [simple]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [2]
 #' @return An object of class 'dist' giving distances between individuals
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' D <- utils.dist.binary(testset.gs, method="Jaccard")
 
 utils.dist.binary <- function(x, method="simple", verbose=NULL) {
   
-  # SET VERBOSITY
+# SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
-  # FLAG SCRIPT START
+# FLAG SCRIPT START
   funname <- match.call()[[1]]
   utils.flag.start(func=funname,build="Jackson",v=verbose)
   
-  # CHECK DATATYPE 
-  datatype <- utils.check.datatype(x,accept="SNP",verbose=verbose)
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,accept="SilicoDArT",verbose=verbose)
   
 # SCRIPT SPECIFIC ERROR CHECKING
   
@@ -89,7 +89,7 @@ utils.dist.binary <- function(x, method="simple", verbose=NULL) {
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
 
   return(dd)
