@@ -166,9 +166,8 @@ gl.report.heterozygosity <- function(x,
   # Calculate the number of loci used
   
   nl <- unlist(lapply(sgl, function(x) sum(colSums(is.na(as.matrix(x)))==0)))
-  nltest <- unlist(lapply(sgl, function(x) length(colSums(is.na(as.matrix(x)))[ # the number of non-genotyped samples
-                                                    -which(colSums(is.na(as.matrix(x))) == nrow(as.matrix(x)))] ))) # remove the loci that are completely missing
-  
+  nltest <- unlist(lapply(sgl, function(x) sum(!(colSums(is.na(as.matrix(x))) == nrow(as.matrix(x))))))
+                          
   # Apply correction
   #Ho.adj <- Ho*nLoc(x)/(nLoc(x)+n.invariant)
   Ho.adj <- Ho*nltest/(nltest+n.invariant)
