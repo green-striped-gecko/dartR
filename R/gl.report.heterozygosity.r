@@ -420,7 +420,7 @@ gl.report.heterozygosity <- function(x,
   }  
 
   # Reset the par options    
-    if(verbose >= 1){par(op)}
+    if(verbose >= 1 & plot){par(op)}
     
 # FLAG SCRIPT END
 
