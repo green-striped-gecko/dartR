@@ -1,5 +1,5 @@
 #' @name gl.merge.pop
-#' @title Merge two or more populations in a genelight \{adegenet\} object into one population
+#' @title Merge two or more populations in a genlight object into one population
 #' @description 
 #' Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart(). 
 #'
@@ -8,13 +8,14 @@
 #' 
 #' The script returns a genlight object with the new population assignments.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes [required]
-#' @param old -- a list of populations to be merged [required]
-#' @param new -- name of the new population [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing SNP genotypes [required]
+#' @param old A list of populations to be merged [required]
+#' @param new Name of the new population [required]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the new population assignments
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #'    gl <- gl.merge.pop(testset.gl, old=c("EmsubRopeMata","EmvicVictJasp"), new="Outgroup")
 

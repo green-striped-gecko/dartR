@@ -13,8 +13,9 @@
 #' shape selection, and matching colours and shapes.
 #'
 #' @param gl Optionally, provide a gl object from which to determine the number of populations [default NULL]
-#' @param select select the shapes to retain in the output vector [default NULL, all shapes shown and returned] 
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param select Select the shapes to retain in the output vector [default NULL, all shapes shown and returned] 
+#' @param verbose -- Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
 #' @return A vector with the requried number of shapes
 #' 
@@ -44,7 +45,7 @@ gl.select.shapes <- function(gl=NULL,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # SCRIPT SPECIFIC ERROR CHECKING
 

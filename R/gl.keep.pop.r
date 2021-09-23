@@ -9,12 +9,13 @@
 #' 
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
-#' @param pop.list -- a list of populations to be kept [required]
-#' @param as.pop -- assign another metric to represent population [default NULL]
-#' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
-#' @param mono.rm -- Remove monomorphic loci [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
+#' @param pop.list A list of populations to be kept [required]
+#' @param as.pop Assign another metric to represent population [default NULL]
+#' @param recalc Recalculate the locus metadata statistics [default FALSE]
+#' @param mono.rm Remove monomorphic loci [default FALSE]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
 #' 
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
@@ -42,7 +43,7 @@ gl.keep.pop <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)

@@ -7,11 +7,12 @@
 #' 
 #' The script returns a genlight object with the individuals deleted and, optionally, the recalculated locus metadata.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
-#' @param ind.list -- a list of individuals to be removed [required]
-#' @param recalc -- Recalculate the locus metadata statistics [default FALSE]
-#' @param mono.rm -- Remove monomorphic loci [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]
+#' @param ind.list A list of individuals to be removed [required]
+#' @param recalc Recalculate the locus metadata statistics [default FALSE]
+#' @param mono.rm Remove monomorphic loci [default FALSE]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
 #' 
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
@@ -36,7 +37,7 @@ gl.keep.ind <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)

@@ -14,13 +14,13 @@
 #' @param x Name of the genlight object containing the SNP data [required]
 #' @param plot.out Specify if plot is to be produced [default TRUE]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
-#' @param plot_colours List of two color names for the borders and fill of the
+#' @param plot_colors List of two color names for the borders and fill of the
 #'  plots [default two_colors]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
-#' [default NULL, unless specified using gl.set.verbosity]
+#' [default 2, unless specified using gl.set.verbosity]
 #' @details 
 #' The function \code{\link{gl.filter.secondaries}} will filter out the
 #' loci with secondaries retaining only one sequence tag.
@@ -60,7 +60,7 @@
 gl.report.secondaries <- function(x, 
                                  plot.out = TRUE,
                                  plot_theme = theme_dartR(), 
-                                 plot_colours = two_colors, 
+                                 plot_colors = two_colors, 
                                  save2tmp = FALSE,
                                  verbose = NULL) {
     
@@ -69,7 +69,7 @@ gl.report.secondaries <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
@@ -94,7 +94,7 @@ gl.report.secondaries <- function(x,
     # Boxplot
     if(plot.out){
     p1 <- ggplot(secondaries_plot, aes(y = freqs)) + 
-      geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+      geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
       coord_flip() + 
       plot_theme + 
       xlim(range = c(-1, 1)) + 
@@ -113,7 +113,7 @@ gl.report.secondaries <- function(x,
     freq <- NULL
     
     p2 <- ggplot(secondaries_plot_2,aes(x=freq,y=count)) + 
-      geom_col(color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_col(color = plot_colors[1],fill = plot_colors[2]) + 
       xlab("Frequency") + 
       ylab("Count") + 
       ggtitle("Observed Frequency of SNPs per Sequence Tag") +
@@ -180,7 +180,7 @@ gl.report.secondaries <- function(x,
              # Barplot
             if(plot.out){
               p3 <- ggplot(reconstructed_plot,aes(x=freq,y=count)) + 
-              geom_col(color = plot_colours[1],fill = plot_colours[2]) + 
+              geom_col(color = plot_colors[1],fill = plot_colors[2]) + 
               xlab("Frequency") + 
               ylab("Count") + 
               ggtitle(title) +

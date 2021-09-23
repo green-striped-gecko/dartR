@@ -1,5 +1,6 @@
-#' Create an input file for the program NewHybrids and run it if NewHybrids is installed
-#'
+#' @name gl.nhybrids.r
+#' @title Create an input file for the program NewHybrids and run it if NewHybrids is installed
+#' @description
 #' This function compares two sets of parental populations to identify loci
 #' that exhibit a fixed difference, returns an genlight object with the reduced data,
 #' and creates an input file for the program NewHybrids using the top 200 (or hard specified loc.limit) loci. In
@@ -36,25 +37,26 @@
 #' of assignment of F1 individuals, a plot of the frequency of homozygous reference, heterozygotes and
 #' homozygous alternate (SNP) can be produced by setting plot=TRUE (the default).
 #'
-#' @param gl -- name of the genlight object containing the SNP data [required]
-#' @param outfile -- name of the file that will be the input file for NewHybrids [default nhyb.txt]
-#' @param outpath -- path where to save the output file (set to tempdir by default)
-#' @param p0 -- list of populations to be regarded as parental population 0 [default NULL]
-#' @param p1 -- list of populations to be regarded as parental population 1 [default NULL]
-#' @param threshold -- sets the level at which a gene frequency difference is considered to be fixed [default 0]
-#' @param plot -- if TRUE, a plot of the frequency of homozygous reference, heterozygotes and
+#' @param gl Name of the genlight object containing the SNP data [required]
+#' @param outfile Name of the file that will be the input file for NewHybrids [default nhyb.txt]
+#' @param outpath Path where to save the output file (set to tempdir by default)
+#' @param p0 List of populations to be regarded as parental population 0 [default NULL]
+#' @param p1 List of populations to be regarded as parental population 1 [default NULL]
+#' @param threshold Sets the level at which a gene frequency difference is considered to be fixed [default 0]
+#' @param plot If TRUE, a plot of the frequency of homozygous reference, heterozygotes and
 #' homozygous alternate (SNP) is produced for the F1 individuals [default TRUE, applies only 
 #' if both parental populations are specified]
-#' @param pprob -- threshold level for assignment to likelihood bins [default 0.95, used only if plot=TRUE]
-#' @param method -- specifies the method (random or AvgPIC) to select 200 loci for NewHybrids [default random]
-#' @param nhyb.directory -- directory that holds the NewHybrids executable file e.g. C:/NewHybsPC [default NULL]
-#' @param BurnIn -- number of sweeps to use in the burn in [default 10000]
-#' @param sweeps -- number  of  sweeps  to  use  in  computing  the  actual Monte Carlo averages [default 10000]
-#' @param GtypFile -- name of a file containing the genotype frequency classes [default TwoGensGtypFreq.txt]
-#' @param AFPriorFile -- name of the file containing prior allele frequency information [default NULL]
-#' @param PiPrior -- Jeffreys-like priors or Uniform priors for the parameter pi [default Jeffreys]
-#' @param ThetaPrior -- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param pprob Threshold level for assignment to likelihood bins [default 0.95, used only if plot=TRUE]
+#' @param method Specifies the method (random or AvgPIC) to select 200 loci for NewHybrids [default random]
+#' @param nhyb.directory Directory that holds the NewHybrids executable file e.g. C:/NewHybsPC [default NULL]
+#' @param BurnIn Number of sweeps to use in the burn in [default 10000]
+#' @param sweeps Number  of  sweeps  to  use  in  computing  the  actual Monte Carlo averages [default 10000]
+#' @param GtypFile Name of a file containing the genotype frequency classes [default TwoGensGtypFreq.txt]
+#' @param AFPriorFile Name of the file containing prior allele frequency information [default NULL]
+#' @param PiPrior Jeffreys-like priors or Uniform priors for the parameter pi [default Jeffreys]
+#' @param ThetaPrior Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return The reduced genlight object, if parentals are provided; output of NewHybrids is saved to disk
 #' @export
 #' @importFrom MASS write.matrix
@@ -84,59 +86,25 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
                     ThetaPrior = "Jeffreys",
                     verbose=NULL) {
 
-# TRAP COMMAND, SET VERSION
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
+  # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  build <- "Jacob"
-  x<-gl
-# SET VERBOSITY
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    stop("  Detected Tag Presence/Absence (SilicoDArT) data. Please provide a SNP dataset\n")
-  } else if (all(x@ploidy == 2)){
-    cat("  Processing a SNP dataset\n")
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)!\n")
-  }
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
   if (!(method=="random" | method=="AvgPic" | method=="avgPic" | method=="AvgPIC")){
-    cat("    Warning: method must be either 'random' or AvgPic, set to 'random'\n")
+    cat(warn("  Warning: method must be either 'random' or AvgPic, set to 'random'\n"))
     method <- "random"
   }
   
   if(pprob < 0 | pprob > 1){
-    cat("    Warning: threshold posterior probability for assignment, pprob, must be between 0 and 1, typically close to 1, set to 0.99\n")
+    cat(warn("  Warning: threshold posterior probability for assignment, pprob, must be between 0 and 1, typically close to 1, set to 0.99\n"))
     pprob <- 0.99
   }
 
@@ -157,7 +125,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
 
   # PROCESS AS FOLLOWS IF BOTH PARENTAL POPULATIONS ARE SPECIFIED
     if (!is.null(p0) & !is.null(p1)) {
-      if (verbose >= 3) {cat("  Both parental populations have been specified \n")}
+      if (verbose >= 3) {cat(report("  Both parental populations have been specified \n"))}
 
       # Replace those names with Z0 for Parental Population 0, and z1 for Parental Population 1
       indNames(gl.tmp) <- replace(indNames(gl.tmp), is.element(pop(gl.tmp), p0), "z0")
@@ -165,7 +133,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
 
       # Error checks
       if (length(indNames(gl.tmp)[indNames(gl.tmp)=="z0"]) < 1  | length(indNames(gl.tmp)[indNames(gl.tmp)=="z1"]) < 1) {
-        cat("Fatal Error [gl2nhyb]: One or both of two speciefied parental populations contains no individuals\n"); stop()
+        stop(error("Fatal Error [gl2nhyb]: One or both of two speciefied parental populations contains no individuals\n"))
       }
 
       # Create a vector containing the flags for the parental population
@@ -180,7 +148,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       gl2 <- gl.percent.freq(gl.tmp, verbose=verbose)
 
       # IDENTIFY LOCI WITH FIXED DIFFERENCES BETWEEN P0 AND P1
-      if ( verbose >= 3 ) {cat("Identifying loci with fixed difference between parental stocks\n")}
+      if ( verbose >= 3 ) {cat(report("  Identifying loci with fixed difference between parental stocks\n"))}
 
       # Establish a vector to hold the loci
       npops<-2
@@ -191,7 +159,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       # Cycle through the data to identify the fixed loci
       for (i in seq(1, nloci*2, 2)) {
         if (as.character(gl2$locus[i]) != as.character(gl2$locus[i+1])) {
-          cat("  Warning: Loci do not agree for the is.fixed comparison\n")
+          cat(warn("  Warning: Loci do not agree for the is.fixed comparison\n"))
         }
         if (!is.na(is.fixed(gl2$frequency[i],gl2$frequency[i+1], tloc=thold))) {
           if (is.fixed(gl2$frequency[i],gl2$frequency[i+1], tloc=thold)) {
@@ -211,23 +179,23 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       
       # Report on the analysis
 
-      if ( verbose >= 3 ) {cat("  No. of fixed loci identified:",nloci,"\n")}
+      if ( verbose >= 3 ) {cat(report("  No. of fixed loci identified:",nloci,"\n"))}
         if (nloci > loc.limit) {
-          if (verbose>=3){cat("  Selecting",loc.limit,"loci showing fixed differences between parentals at random\n")}
+          if (verbose>=3){cat(report("  Selecting",loc.limit,"loci showing fixed differences between parentals at random\n"))}
           gl.fixed.used <- gl.subsample.loci(gl, loc.limit, method="random",verbose=0)
           gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
           gl.fixed.all@other$loc.metrics <- gl@other$loc.metrics[(locNames(gl) %in% fixed.loci),]
           gl2nhyb <- gl.fixed.used
         } else {
           if (method == "random"){
-            if(verbose>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected at random\n")}
+            if(verbose>=3){cat(report("  Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected at random\n"))}
             gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
             gl.fixed.used <- gl.fixed.all
             tmp <- gl.subsample.loci(gl, 200-nloci, method="random",verbose=0)
             gl2nhyb <- cbind(gl.fixed.used,tmp)
             gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
           } else {
-            if(verbose>=3){cat("    Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected based on AvgPic\n")}
+            if(verbose>=3){cat(report("  Selecting",nloci,"loci showing fixed differences between parentals, supplementing with",loc.limit-nloci,"other loci selected based on AvgPic\n"))}
             gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
             gl.fixed.used <- gl.fixed.all
             tmp <- gl.subsample.loci(gl, loc.limit-nloci, method="AvgPic",verbose=0)
@@ -239,7 +207,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
 
     # PROCESS AS FOLLOWS IF ONLY ONE PARENTAL POPULATION IS SPECIFIED
     if ((!is.null(p0) & is.null(p1)) || (is.null(p0) & !is.null(p1))) {
-      if(verbose>=3){cat("  Only one parental population specified \n")}
+      if(verbose>=3){cat(report("  Only one parental population specified \n"))}
       
       # Replace those names with Z0 for Parental Population 0, and z1 for Parental Population 1
       if (!is.null(p0)){indNames(gl.tmp) <- replace(indNames(gl.tmp), is.element(pop(gl.tmp), p0), "z0")}
@@ -247,7 +215,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       
       # Error checks
       if (length(indNames(gl.tmp)[indNames(gl.tmp)=="z0"]) < 1  & length(indNames(gl.tmp)[indNames(gl.tmp)=="z1"]) < 1) {
-        cat("Fatal Error [gl2nhyb]: Specified parental population contains no individuals\n"); stop()
+        stop(error("Fatal Error [gl2nhyb]: Specified parental population contains no individuals\n"))
       }
       
       # Create a vector containing the flags for the parental population
@@ -265,20 +233,14 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     if (is.null(p0) & is.null(p1)) {
       if(verbose>=3){cat("  No parental population specified \n")}
       
-      if(method=="random" & verbose>=3) {cat("    Selecting",loc.limit,"random loci\n")}
-      if (method=="avgpic" & verbose>=3) {cat("    Selecting",loc.limit,"loci with most information content (AvgPIC)\n")}
+      if(method=="random" & verbose>=3) {cat(report("  Selecting",loc.limit,"random loci\n"))}
+      if (method=="avgpic" & verbose>=3) {cat(report("  Selecting",loc.limit,"loci with most information content (AvgPIC)\n"))}
       gl2nhyb <- gl.subsample.loci(gl, loc.limit, method=method, verbose=0)
       gl2nhyb@other$loc.metrics <- gl@other$loc.metrics[locNames(gl) %in% locNames(gl2nhyb),]
       flag <- "nopar"
     }
 
     # CREATE THE NEWHYBRIDS INPUT FILE
-    # Convert to NewHrbrids lumped format
-    # Recode values
-    #  0 to 11
-    #  1 to 12
-    #  2 to 22
-    #  NA to 0
     if(verbose>=3){cat("\nConverting data to NewHybrids format\n")}
     gl2 <- as.matrix(gl2nhyb)
     gl2[gl2 == 2] <- 22
@@ -296,12 +258,12 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     if (flag=="bothpar" || flag == "onepar" || flag == "bothparnonefixed") {
       gl2 <- cbind(rownum, par.names, gl2)
       metarows <- 2
-      if(verbose>=3){cat("  Adding sequential number and flagging parental stock\n")}
+      if(verbose>=3){cat(report("  Adding sequential number and flagging parental stock\n"))}
     }
     if (flag=="nopar") {
       gl2 <- cbind(rownum, gl2)
       metarows <- 1
-      if(verbose>=3){cat("  Adding sequential number\n")}
+      if(verbose>=3){cat(report("  Adding sequential number\n"))}
     }
 
     # Clear row and column names
@@ -327,8 +289,8 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     if (!is.null(nhyb.directory)) {
       
       if (verbose>=3){
-        cat("Copying New Hybrids input file", outfile, "to",nhyb.directory.win,"\n")
-        cat("Passing control to New Hybrids executable\n")
+        cat(report("  Copying New Hybrids input file", outfile, "to",nhyb.directory.win,"\n"))
+        cat(report("  Passing control to New Hybrids executable\n"))
         }
       cp <- paste("copy", outfile.win, nhyb.directory.win)
       shell(cp)
@@ -344,14 +306,14 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
       } else if (PiPrior == "Uniform" || PiPrior == "uniform") {
         PiPrior <- "1"
       }  else {
-        cat("Fatal Error: PiPrior parameter must be Jeffreys or Uniform\n"); stop()
+        stop(error("Fatal Error: PiPrior parameter must be Jeffreys or Uniform\n"))
       }
       if (ThetaPrior == "Jeffreys" || ThetaPrior == "jeffreys" ) {
         ThetaPrior <- "0"
       } else if (ThetaPrior == "Uniform" || ThetaPrior == "uniform") {
         ThetaPrior <- "1"
       }  else {
-        cat("Fatal Error: ThetaPrior parameter must be Jeffreys or Uniform\n"); stop()
+        stop(error("Fatal Error: ThetaPrior parameter must be Jeffreys or Uniform\n"))
       }
       rand1 <- sample(1:10,1)
       rand2 <- sample(11:20,1)
@@ -416,7 +378,7 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
         # Invert the matrix of data for F1 individuals only  
           mat <- t(as.matrix(F1.only))
         # Tally and plot the counts of homozygous reference, heterozygotes, and homozygous alternate (SNP)
-          if (verbose>=3) {cat("\nPlotting genotypes of",length(as.character(F1.test$id)),"F1 individuals\n")}
+          if (verbose>=3) {cat("  Plotting genotypes of",length(as.character(F1.test$id)),"F1 individuals\n")}
           barplot(table(mat),col="red",main="F1 Genotypes")
         # Report the results  
           if (verbose>=3) {
@@ -430,8 +392,8 @@ gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
     
     #if (verbose < 2) {sink()}
     if (verbose>=3) {
-      cat("\nResults are stored in file aa-PofZ.csv\n")
-      cat("Returning data used by New Hybrids in generating the results, as a genlight object\n")
+      cat(report("  Results are stored in file aa-PofZ.csv\n"))
+      cat(report("  Returning data used by New Hybrids in generating the results, as a genlight object\n"))
     }
     
     # FLAG SCRIPT END

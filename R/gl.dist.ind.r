@@ -21,13 +21,14 @@
 #'  
 #' Refer to the documentation in the relevant packages listed above.
 #'  
-#' @param x -- name of the genlight containing the SNP genotypes [required]
-#' @param method -- Specify distance measure [SNP: Euclidean; P/A: Simple]
-#' @param plot.out -- if TRUE, display a histogram and a boxplot of the genetic distances [TRUE]
+#' @param x Name of the genlight containing the SNP genotypes [required]
+#' @param method Specify distance measure [SNP: Euclidean; P/A: Simple]
+#' @param plot.out If TRUE, display a histogram and a boxplot of the genetic distances [TRUE]
 #' @param plot_theme User specified theme [default theme_dartR]
 #' @param plot_colors Vector with two colour names for the borders and fill [default two_colors]
 #' @param save2tmp If TRUE, saves any ggplots to the session temporary directory [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return An object of class 'dist' giving distances between individuals
 #' @importFrom ape dist.gene
 #' @importFrom stats dist
@@ -35,6 +36,7 @@
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' D <- gl.dist.ind(testset.gl, method="euclidean")
+#' D <- gl.dist.ind(testset.gs, method="euclidean")
 
 gl.dist.ind <- function(x, 
                         method=NULL, 
@@ -58,7 +60,7 @@ gl.dist.ind <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Juliette",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,accept=c("SNP","SilicoDArT"),verbose=verbose)

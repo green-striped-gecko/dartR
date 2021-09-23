@@ -31,21 +31,21 @@
 #' This adjustment can be done with the tloc parameter. For example, tloc=0.05 means that SNP allele frequencies of 
 #' 95,5 and 5,95 percent will be regarded as fixed when comparing two populations at a locus.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes or tag P/A data (SilicoDArT) 
+#' @param x Name of the genlight object containing SNP genotypes or tag P/A data (SilicoDArT) 
 #' or an object of class 'fd' [required]
-#' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) 
+#' @param tloc Threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) 
 #' [default 0]
-#' @param test -- if TRUE, calculate p values for the observed fixed differences [default FALSE]
-#' @param reps -- number of replications to undertake in the simulation to estimate probability 
+#' @param test If TRUE, calculate p values for the observed fixed differences [default FALSE]
+#' @param reps Number of replications to undertake in the simulation to estimate probability 
 #' of false positives [default 1000]
-#' @param delta -- threshold value for the true population minor allele frequency (MAF) from which 
+#' @param delta Threshold value for the true population minor allele frequency (MAF) from which 
 #' resultant sample fixed differences are considered true positives [default 0.02]
-#' @param alpha -- level of significance used to display non-significant differences between
+#' @param alpha Level of significance used to display non-significant differences between
 #' populations as they are compared pairwise [default 0.05]
-#' @param mono.rm -- if TRUE, loci that are monomorphic across all individuals are removed before 
+#' @param mono.rm If TRUE, loci that are monomorphic across all individuals are removed before 
 #' beginning computations [default TRUE]
-#' @param pb -- if TRUE, show a progress bar on time consuming loops [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' @param pb If TRUE, show a progress bar on time consuming loops [default FALSE]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
 #' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A list of Class "fd" containing the gl object and square matricies, as follows
 #'         [[1]] $gl -- the output genlight object;
@@ -58,11 +58,11 @@
 #'         [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
 #' @import utils
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' \donttest{
 #' fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=3 )
-#' fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, verbose=1 )
+#' fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, verbose=3 )
 #' }
 #' @seealso \code{\link{is.fixed}}
 
@@ -81,14 +81,12 @@ gl.fixed.diff <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,accept=c("genlight","SNP","SilicoDArT","fd"),verbose=verbose)
   if (datatype=="fd"){
     x <- x$gl
-    #datatype <- utils.check.datatype(x,verbose=0)
-    #if (verbose >=2){cat("  fd object detected\n")}
   }
   
 # FUNCTION SPECIFIC ERROR CHECKING

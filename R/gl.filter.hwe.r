@@ -22,7 +22,7 @@
 #' perform H-W tests [default 5].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
-#' [default NULL, unless specified using gl.set.verbosity].
+#' [default 2, unless specified using gl.set.verbosity].
 #' @details 
 #'  There are several factors that can cause deviations from Hardy-Weinberg proportions
 #' including: mutation, finite population size, selection, population structure, age 
@@ -96,7 +96,7 @@
 #' 
 #' @return A genlight object with the loci departing significantly from H-W 
 #' proportions removed.
-#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Luis Minjangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' result <- gl.filter.hwe(x = bandicoot.gl)
 #' @references 
@@ -143,7 +143,7 @@ gl.filter.hwe <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)

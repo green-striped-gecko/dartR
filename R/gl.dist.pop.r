@@ -1,5 +1,5 @@
 #' @name gl.dist.pop
-#' @title Calculate a distance matrix for populations defined in an \{adegenet\} genlight object
+#' @title Calculate a distance matrix for populations with SNP genotypes in a genlight object
 #' @description
 #' This script calculates various distances between populations based on allele frequencies. The distances are
 #' calculated by scripts in the {stats} or {vegan} libraries, with the exception of the pcfixed (percent fixed
@@ -12,15 +12,16 @@
 #' 
 #' Distance pcfixed calculates the pair-wise count of fixed allelic differences between populations.
 #'
-#' @param x -- name of the genlight containing the SNP genotypes [required]
-#' @param method -- Specify distance measure [default euclidean]
-#' @param plot.out -- if TRUE, display a histogram of the genetic distances, and a whisker plot [default TRUE]
-#' @param binary -- Perform presence/absence standardization before analysis using decostand [default FALSE]
-#' @param p -- The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [default 0.5]
+#' @param x Name of the genlight containing the SNP genotypes [required]
+#' @param method Specify distance measure [default euclidean]
+#' @param plot.out If TRUE, display a histogram of the genetic distances, and a whisker plot [default TRUE]
+#' @param binary Perform presence/absence standardization before analysis using decostand [default FALSE]
+#' @param p The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [default 0.5]
 #' @param plot_theme User specified theme [default theme_dartR()].
-#' @param plot_colours Vector with two colour names for the borders and fill [default two_colors].
+#' @param plot_colors Vector with two colour names for the borders and fill [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return An object of class 'dist' giving distances between populations
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
@@ -35,7 +36,7 @@ gl.dist.pop <- function(x,
                         binary=FALSE, 
                         p=NULL, 
                         plot_theme = theme_dartR(), 
-                        plot_colours = two_colors, 
+                        plot_colors = two_colors, 
                         save2tmp = FALSE,
                         verbose=NULL) {
 
@@ -50,7 +51,7 @@ gl.dist.pop <- function(x,
       
 # FLAG SCRIPT START
       funname <- match.call()[[1]]
-      utils.flag.start(func=funname,build="Juliette",v=verbose)
+      utils.flag.start(func=funname,build="Jody",v=verbose)
       
 # CHECK DATATYPE 
       datatype <- utils.check.datatype(x,accept="SNP",verbose=verbose)
@@ -173,7 +174,7 @@ gl.dist.pop <- function(x,
       
       # Boxplot
       p1 <- ggplot(df_plot, aes(y = values)) + 
-        geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+        geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
         coord_flip() + 
         plot_theme + 
         xlim(range = c(-1, 1)) + 
@@ -184,7 +185,7 @@ gl.dist.pop <- function(x,
       
       # Histogram
       p2 <- ggplot(df_plot, aes(x = values)) + 
-        geom_histogram(bins = 20, color = plot_colours[1], fill = plot_colours[2]) +
+        geom_histogram(bins = 20, color = plot_colors[1], fill = plot_colors[2]) +
         xlim(min(df_plot$values,na.rm=TRUE),max(df_plot$values,na.rm=TRUE)) +
         xlab("Distance") + 
         ylab("Count") + 

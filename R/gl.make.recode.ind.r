@@ -16,13 +16,14 @@
 #' can potentially generate monomorphic loci or loci with all
 #' values missing. Clean this up with gl.filter.monomorphic().
 #' 
-#' @param x -- name of the genlight object containing the SNP data [required]
-#' @param out.recode.file -- file name of the output file (including extension) [default default_recode_ind.csv]
-#' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing the SNP data [required]
+#' @param out.recode.file File name of the output file (including extension) [default default_recode_ind.csv]
+#' @param outpath Path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A vector containing the new individual names
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' result <- gl.make.recode.ind(testset.gl, out.recode.file ="Emmac_recode_ind.csv",outpath=tempdir())
 
@@ -36,7 +37,7 @@
     
 # FLAG SCRIPT START
     funname <- match.call()[[1]]
-    utils.flag.start(func=funname,build="Jackson",v=verbose)
+    utils.flag.start(func=funname,build="Jody",v=verbose)
     
 # CHECK DATATYPE 
     datatype <- utils.check.datatype(x,verbose=verbose)

@@ -1,5 +1,5 @@
 #' @name gl.recode.pop
-#' @title Recode population assignments in a genlight object \{adegenet\}
+#' @title Recode population assignments in a genlight object
 #' @description
 #' This script recodes population assignments and/or deletes populations from a DaRT genlight SNP file 
 #' based on information provided in a csv population recode file.
@@ -15,14 +15,15 @@
 #' with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
 #' recalculates the locus metadata as appropriate.
 #'
-#' @param x -- name of the genlight object containing the SNP data [required]
-#' @param pop.recode -- name of the csv file containing the population reassignments [required]
-#' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]
-#' @param mono.rm -- Remove monomorphic loci [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing the SNP data [required]
+#' @param pop.recode Name of the csv file containing the population reassignments [required]
+#' @param recalc Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]
+#' @param mono.rm Remove monomorphic loci [default FALSE]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the recoded and reduced data
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' \donttest{
 #'   mfile <- system.file("extdata", "testset_pop_recode.csv", package="dartR")
@@ -43,7 +44,7 @@ gl.recode.pop <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)

@@ -33,7 +33,7 @@
 gl.fdsim <- function(x, 
                      poppair,
                      obs = NULL,
-                     sympatric = FALSE, 
+                     sympatric = FALSE,
                      reps = 1000, 
                      delta = 0.02, 
                      verbose = NULL) {
@@ -43,7 +43,7 @@ gl.fdsim <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",verbose=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)

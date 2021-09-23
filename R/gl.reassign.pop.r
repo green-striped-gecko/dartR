@@ -11,12 +11,13 @@
 #' The script returns a genlight object with the new population assignments Note that the original population
 #' assigments are lost.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes [required]
-#' @param as.pop -- specify the name of the individual metric to set as the pop variable. [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing SNP genotypes [required]
+#' @param as.pop Specify the name of the individual metric to set as the pop variable. [required]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reassigned populations
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # SNP data
 #'    popNames(testset.gl)
@@ -36,7 +37,7 @@ gl.reassign.pop <- function (x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
