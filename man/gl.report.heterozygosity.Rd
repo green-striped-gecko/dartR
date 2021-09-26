@@ -2,8 +2,8 @@
 % Please edit documentation in R/gl.report.heterozygosity.r
 \name{gl.report.heterozygosity}
 \alias{gl.report.heterozygosity}
-\title{Reports observed and expected heterozygosity by population or by 
-individual from SNP data}
+\title{Reports observed, expected and unbiased heterozygosities and FIS 
+(inbreeding coefficient) by population or by individual from SNP data}
 \usage{
 gl.report.heterozygosity(
   x,
@@ -44,12 +44,14 @@ progress log ; 3, progress and results summary; 5, full report
 [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
-A dataframe containing population labels, heterozygosities and sample sizes
+A dataframe containing population labels, heterozygosities, FIS, 
+their standard deviations and sample sizes
 }
 \description{
-Calculates the observed and expected heterozygosities for each
-population or the observed heterozygosity for each individual in a genlight 
-object.
+Calculates the observed, expected and unbiased expected (i.e. 
+corrected for sample size) heterozygosities and FIS (inbreeding coefficient) 
+for each population or the observed heterozygosity for each individual in a 
+genlight object.
 }
 \details{
 Observed heterozygosity for a population takes the proportion of 
@@ -59,8 +61,7 @@ that population. The calculations take into account missing values.
 Expected heterozygosity for a population takes the expected proportion of
 heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each 
 locus, then averages this across the loci for an average estimate for the 
-population. The calculations of expected heterozygosity use the unbiased 
-estimates of Nei, M. (1987) 
+population.
 
 Observed heterozygosity for individuals is calculated as the proportion of 
 loci that are heterozygous for that individual.
@@ -74,11 +75,28 @@ number of invariant sequence tags (loci) in your data, such as provided by
 \code{\link{gl.report.secondaries}}, you can specify it with the n.invariant 
 parameter to standardize your estimates of heterozygosity.
 
+Heterozygosities and FIS (inbreeding coefficient) are calculated by locus 
+within each population using the following equations:
+\itemize{ 
+\item Observed heterozygosity (Ho) = number of homozygotes / n_Ind,
+where n_Ind is the number of individuals without missing data.  
+\item Observed heterozygosity adjusted (Ho.adj) <- Ho * n_Loc / (n_Loc + n.invariant),
+where n_Loc is the number of loci that do not have all missing data  and 
+n.invariant is an estimate of the number of invariant loci to adjust heterozygosity. 
+\item Expected heterozygosity (He) = 1 - (p^2 + q^2),
+where p is the frequency of the reference allele and q is the frequency of 
+the alternative allele.
+\item Expected heterozygosity (He.adj) = He * n_Loc / (n_Loc + n.invariant)
+Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / (2 * n_Ind - 1)) 
+\item Inbreeding coefficient (FIS) = 1 - (Ho / He)
+}
+
 \strong{ Function's output }
 
-Output for method='pop' is an ordered barchart of observed heterozygosity 
-across populations together with a table of observed and expected 
-heterozygosity by population.
+Output for method='pop' is an ordered barchart of observed heterozygosity, 
+expected heterozygosity and FIS (Inbreeding coefficient) across populations 
+together with a table of mean observed and expected heterozygosities and FIS by 
+population and their respective standard deviations (SD).
 
 Output for method='ind' is a histogram and a boxplot of heterozygosity across
 individuals.
@@ -95,12 +113,6 @@ df <- gl.report.heterozygosity(testset.gl)
 df <- gl.report.heterozygosity(testset.gl,method='ind')
 df <- gl.report.heterozygosity(testset.gl,plot.out=FALSE)
 
-}
-\references{
-\itemize{
-\item Nei, M. and R. K. Chesser (1983). Estimation of fixation indices and 
-gene diversities. Annals of Human Genetics 47:253-259.
-}
 }
 \seealso{
 \code{\link{gl.filter.heterozygosity}}
