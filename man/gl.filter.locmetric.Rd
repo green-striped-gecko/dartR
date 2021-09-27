@@ -7,17 +7,17 @@
 gl.filter.locmetric(x, metric, upper, lower, keep = "within", verbose = 2)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{metric}{-- name of the metric to be used for filtering [required]}
+\item{metric}{Name of the metric to be used for filtering [required].}
 
-\item{upper}{-- filter upper threshold [required]}
+\item{upper}{Filter upper threshold [required].}
 
-\item{lower}{-- filter lower threshold  [required]}
+\item{lower}{Filter lower threshold  [required].}
 
-\item{keep}{-- whether keep loci within of upper and lower thresholds or keep loci outside of upper and lower thresholds [within]}
+\item{keep}{Whether keep loci "within" of upper and lower thresholds or keep loci "outside" of upper and lower thresholds [within].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 The reduced genlight dataset

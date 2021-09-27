@@ -19,7 +19,7 @@
 #' @param reps -- number of replications to undertake in the simulation [default 1000]
 #' @param delta -- the threshold value for the minor allele frequency to regard the difference between two populations to be fixed [default 0.02]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
-#' @return A list containing the following square matricies
+#' @return A list containing the following square matrices
 #'         [[1]] observed fixed differences;
 #'         [[2]] mean expected number of false positives for each comparison;
 #'         [[3]] standard deviation of the no. of false positives for each comparison;

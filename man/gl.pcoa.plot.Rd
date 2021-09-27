@@ -43,7 +43,7 @@ the Distance Matrix used to generate the ordination [required]}
 
 \item{interactive}{If TRUE then the populations are plotted without labels, mouse-over to identify points [default FALSE]}
 
-\item{as.pop}{-- assign another metric to represent populations for the plot [default NULL]}
+\item{as.pop}{Assign another metric to represent populations for the plot [default NULL]}
 
 \item{hadjust}{Horizontal adjustment of label position in 2D plots [default 1.5]}
 
@@ -55,7 +55,7 @@ the Distance Matrix used to generate the ordination [required]}
 
 \item{zaxis}{Identify the z axis from those available in the ordination for a 3D plot (zaxis <= nfactors) [default NULL]}
 
-\item{pt.size}{Specify the size of the dispayed points [default 2]}
+\item{pt.size}{Specify the size of the displayed points [default 2]}
 
 \item{pt.colors}{Optionally provide a vector of nPop colours (run gl.select.colors() for colour options) [default NULL]}
 
@@ -63,7 +63,7 @@ the Distance Matrix used to generate the ordination [required]}
 
 \item{label.size}{Specify the size of the point labels [default 1]}
 
-\item{axis.label.size}{Specify the size of the dispayed axis labels [default 1.5]}
+\item{axis.label.size}{Specify the size of the displayed axis labels [default 1.5]}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 

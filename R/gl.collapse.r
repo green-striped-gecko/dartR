@@ -7,7 +7,7 @@
 #' gl.fixed.diff().
 #' 
 #' The script then applies the new population assignments to the genlight object and recalculates 
-#' the distance and associated matricies.
+#' the distance and associated matrices.
 #'
 #' @param fd Name of the list of matricies produced by gl.fixed.diff() [required]
 #' @param tloc Threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]

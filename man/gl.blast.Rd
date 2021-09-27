@@ -13,7 +13,7 @@ gl.blast(
   Percentage_overlap = 0.8,
   bitscore = 50,
   number_of_threads = 2,
-  verbose = 2
+  verbose = NULL
 )
 }
 \arguments{

@@ -11,7 +11,7 @@ gl.subsample.loci(x, n, method = "random", mono.rm = FALSE, verbose = NULL)
 
 \item{n}{-- number of loci to include in the subsample [required]}
 
-\item{method}{-- "random", in which case the loci are sampled at random; or avgPIC, in which case the top n loci
+\item{method}{-- "random", in which case the loci are sampled at random; or "avgPIC", in which case the top n loci
 ranked on information content (AvgPIC) are chosen [default 'random']}
 
 \item{mono.rm}{-- delete monomorphic loci before sampling [default FALSE]}

@@ -71,20 +71,23 @@
 #' verbose=3)
 #' }
 
-gl.nhybrids <- function(gl, outfile="nhyb.txt", outpath=tempdir(),
-                    p0=NULL, p1=NULL, 
-                    threshold=0, 
-                    method="random",
-                    plot=TRUE,
-                    pprob=0.95,
-                    nhyb.directory=NULL,
-                    BurnIn=10000,
-                    sweeps=10000,
-                    GtypFile = "TwoGensGtypFreq.txt",
-                    AFPriorFile = NULL,
-                    PiPrior = "Jeffreys",
-                    ThetaPrior = "Jeffreys",
-                    verbose=NULL) {
+gl.nhybrids <- function(gl, 
+                        outfile="nhyb.txt", 
+                        outpath=tempdir(),
+                        p0=NULL, 
+                        p1=NULL, 
+                        threshold=0, 
+                        method="random",
+                        plot=TRUE, 
+                        pprob=0.95,
+                        nhyb.directory=NULL,
+                        BurnIn=10000,
+                        sweeps=10000,
+                        GtypFile = "TwoGensGtypFreq.txt",
+                        AFPriorFile = NULL,
+                        PiPrior = "Jeffreys",
+                        ThetaPrior = "Jeffreys",
+                        verbose=NULL) {
 
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

@@ -1,4 +1,4 @@
-#' @name gl.plot
+#' @name gl.smearplot
 #' @title Smear plot of SNP or presence/absence (SilicoDArT) data
 #' @description 
 #' Each locus is color coded for scores of 0, 1, 2 and NA for SNP data and 0, 1 
@@ -32,7 +32,7 @@
 #' @export
 #'  
 
-gl.plot <- function (x,
+gl.smearplot <- function (x,
                      group_pop = FALSE,
                      ind_labels = indNames(x), 
                      ind_labels_size = 10,

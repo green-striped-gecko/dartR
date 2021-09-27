@@ -12,7 +12,7 @@
 #' because of the potential for breaking the "chain of evidence" between the samples themselves
 #' and the analyses. Recoding individuals can also be done with a recode table (csv).
 #' 
-#' This script will input an existing recode table for editting and
+#' This script will input an existing recode table for editing and
 #' optionally save it as a new table, or if the name of an input table is not
 #' supplied, will generate a table using the individual labels in the 
 #' parent genlight object.
