@@ -2,22 +2,23 @@
 % Please edit documentation in R/gl.filter.locmetric.r
 \name{gl.filter.locmetric}
 \alias{gl.filter.locmetric}
-\title{Filter loci on the basis of numeric information stored in other$loc.metrics in a genlight \{adegenet\} object}
+\title{gl.filter.locmetrics}
 \usage{
-gl.filter.locmetric(x, metric, upper, lower, keep = "within", verbose = 2)
+gl.filter.locmetric(x, metric, upper, lower, keep = "within", verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required].}
+\item{x}{Name of the genlight object containing the SNP data [required]}
 
-\item{metric}{Name of the metric to be used for filtering [required].}
+\item{metric}{Name of the metric to be used for filtering [required]}
 
-\item{upper}{Filter upper threshold [required].}
+\item{upper}{Filter upper threshold [required]}
 
-\item{lower}{Filter lower threshold  [required].}
+\item{lower}{Filter lower threshold  [required]}
 
-\item{keep}{Whether keep loci "within" of upper and lower thresholds or keep loci "outside" of upper and lower thresholds [within].}
+\item{keep}{Whether keep loci within of upper and lower thresholds or keep loci outside of upper and lower thresholds [within]}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight dataset
@@ -25,8 +26,7 @@ The reduced genlight dataset
 \description{
 This script uses any field with numeric values stored in $other$loc.metrics to filter loci. The loci to keep can be within the upper and lower thresholds ("within") or outside of the upper and lower thresholds ("outside").
 The fields that are included in dartR, and a short description, are found below. Optionally, the user can also set his/her own filter by adding a vector into $other$loc.metrics as shown in the example.
-}
-\details{
+
 - SnpPosition - position (zero is position 1) in the sequence tag of the defined SNP variant base 
 - CallRate - proportion of samples for which the genotype call is non-missing (that is, not '-' ) 
 - OneRatioRef - proportion of samples for which the genotype score is 0 
@@ -49,5 +49,5 @@ result <- gl.filter.locmetric(x=test, metric= "test", upper=255,
 lower=200, keep= "within", verbose=3)
 }
 \author{
-Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

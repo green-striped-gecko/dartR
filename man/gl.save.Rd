@@ -21,9 +21,8 @@ The input object
 }
 \description{
 This is a wrapper for saveRDS().
-}
-\details{
-The script saves the object to the current workspace and returns the input gl
+
+The script saves the object in binary form to the current workspace and returns the input gl
  object.
 }
 \examples{
@@ -33,5 +32,5 @@ gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
 \code{\link{gl.load}}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

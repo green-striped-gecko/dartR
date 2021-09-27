@@ -2,20 +2,21 @@
 % Please edit documentation in R/gl.recode.ind.r
 \name{gl.recode.ind}
 \alias{gl.recode.ind}
-\title{Recode individual (=specimen = sample) labels in a genelight object \{adegenet\}}
+\title{Recode individual (=specimen = sample) labels in a genelight object}
 \usage{
 gl.recode.ind(x, ind.recode, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes [required]}
+\item{x}{Name of the genlight object containing SNP genotypes [required]}
 
-\item{ind.recode}{-- name of the csv file containing the individual relabelling [required]}
+\item{ind.recode}{Name of the csv file containing the individual relabelling [required]}
 
-\item{recalc}{-- if TRUE, recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]}
+\item{recalc}{If TRUE, recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]}
 
-\item{mono.rm}{-- if TRUE, remove monomorphic loci [default FALSE]}
+\item{mono.rm}{If TRUE, remove monomorphic loci [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight or genind object with the recoded and reduced data
@@ -47,5 +48,5 @@ and the optionally recalculated locus metadata.
 \code{\link{gl.recode.pop}} for recoding populations
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

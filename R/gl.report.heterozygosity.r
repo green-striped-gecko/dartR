@@ -251,9 +251,17 @@ gl.report.heterozygosity <- function(x,
             FISSD[i] <- sd(FIS_temp, na.rm=T)
         }
         
+        # If there are more than one population get the mean by column
+        if(length(sgl)>1){
+            ind_n <- round(colMeans(n_ind,na.rm = T),2)
+            # if there is just one population get the mean from the vector
+        }else{
+            ind_n <- round(mean(n_ind,na.rm = T),2)
+        }
+        
         ### CP ### 
         df <- data.frame(pop = popNames(x),
-                         nInd = round(colMeans(n_ind,na.rm = T),2),
+                         nInd = ind_n,
                          nLoc = n_loc,
                          nLoc.adj = n_loc/(n_loc+ n.invariant),
                          Ho = as.numeric(Ho),

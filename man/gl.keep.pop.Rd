@@ -14,17 +14,18 @@ gl.keep.pop(
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
+\item{x}{Name of the genlight object containing SNP genotypes or a genind object containing presence/absence data [required]}
 
-\item{pop.list}{-- a list of populations to be kept [required]}
+\item{pop.list}{A list of populations to be kept [required]}
 
-\item{as.pop}{-- assign another metric to represent population [default NULL]}
+\item{as.pop}{Assign another metric to represent population [default NULL]}
 
-\item{recalc}{-- Recalculate the locus metadata statistics [default FALSE]}
+\item{recalc}{Recalculate the locus metadata statistics [default FALSE]}
 
-\item{mono.rm}{-- Remove monomorphic loci [default FALSE]}
+\item{mono.rm}{Remove monomorphic loci [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the reduced data

@@ -10,7 +10,7 @@ gl.filter.reproducibility(
   threshold = 0.99,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -26,15 +26,15 @@ threshold [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the 
+\item{plot_colors}{List of two color names for the borders and fill of the 
 plots [default two_colors].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
 temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report [default 2, 
-unless specified using gl.set.verbosity].}
+progress log ; 3, progress and results summary; 5, full report 
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 Returns a genlight object retaining loci with repeatability (Repavg 

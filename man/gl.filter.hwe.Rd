@@ -44,7 +44,7 @@ perform H-W tests [default 5].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 progress log ; 3, progress and results summary; 5, full report 
-[default NULL, unless specified using gl.set.verbosity].}
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 A genlight object with the loci departing significantly from H-W 
@@ -160,6 +160,6 @@ Other filters/filter reports:
 \code{\link{gl.report.hwe}()}
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Luis Minjangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters/filter reports}

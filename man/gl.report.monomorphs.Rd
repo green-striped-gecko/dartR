@@ -49,6 +49,6 @@ Other filters and filter reports:
 \code{\link{gl.report.taglength}()}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters and filter reports}

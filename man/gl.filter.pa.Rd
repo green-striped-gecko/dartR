@@ -7,15 +7,16 @@
 gl.filter.pa(x, pop1, pop2, invers = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required]}
 
-\item{pop1}{-- name of the first parental population (in quotes) [required]}
+\item{pop1}{Name of the first parental population (in quotes) [required]}
 
-\item{pop2}{-- name of the second parental population (in quotes) [required]}
+\item{pop2}{Name of the second parental population (in quotes) [required]}
 
-\item{invers}{-- switch to filter for all loci that have no private alleles and are not fixed [FALSE]}
+\item{invers}{Switch to filter for all loci that have no private alleles and are not fixed [FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight dataset, containing now only fixed and private alleles
@@ -30,5 +31,5 @@ invers is set to TRUE, the opposite is returned (all loci that are not fixed and
 result <- gl.filter.pa(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2],verbose=3)
 }
 \author{
-Bernd Gruber & Ella Kelly (University of Melbourne) (Post to \url{https://groups.google.com/d/forum/dartr})
+Authors: Bernd Gruber & Ella Kelly (University of Melbourne); Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
