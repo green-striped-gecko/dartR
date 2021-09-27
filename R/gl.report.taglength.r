@@ -10,13 +10,13 @@
 #' @param plot.out If TRUE, displays a plot to guide the decision on a filter 
 #' threshold [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the
+#' @param plot_colors List of two color names for the borders and fill of the
 #'  plots [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-#' progress log ; 3, progress and results summary; 5, full report [default NULL,
-#'  unless specified using gl.set.verbosity]
+#' progress log ; 3, progress and results summary; 5, full report 
+#' [default 2, unless specified using gl.set.verbosity]
 #'
 #' @details The function \code{\link{gl.filter.taglength}} will filter out the
 #'  loci with a tag length below a specified threshold.
@@ -40,7 +40,7 @@
 #'
 #' @return Returns unaltered genlight object
 #'
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
 #' out <- gl.report.taglength(testset.gl)
@@ -58,37 +58,24 @@
 gl.report.taglength <- function(x, 
                                 plot.out = TRUE,
                                 plot_theme = theme_dartR(), 
-                                plot_colours = two_colors, 
+                                plot_colors = two_colors, 
                                 save2tmp = FALSE,
                                 verbose = NULL) {
 
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
+  # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
   if(length(x@other$loc.metrics$TrimmedSequence) != nLoc(x)) {
     stop(error("Fatal Error: Data must include Trimmed Sequences for each loci in a column called 'TrimmedSequence' in the @other$loc.metrics slot.\n"))
-  }
-  
-  # FLAG SCRIPT START
-  
-  if (verbose >= 1) {
-    if (verbose == 5) {
-      cat(report("\n\nStarting", funname, "[ Build =", 
-                 build, "]\n\n"))
-    } else {
-      cat(report("\n\nStarting", funname, "\n\n"))
-    }
   }
   
 # DO THE JOB
@@ -101,7 +88,7 @@ gl.report.taglength <- function(x,
   
   # Boxplot
   p1 <- ggplot(plot_tags, aes(y = tags)) + 
-    geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+    geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
     coord_flip() + 
     plot_theme + 
     xlim(range = c(-1, 1)) + 
@@ -112,7 +99,7 @@ gl.report.taglength <- function(x,
   
   # Histogram
   p2 <- ggplot(plot_tags, aes(x = tags)) + 
-    geom_histogram(bins = 50, color = plot_colours[1],fill = plot_colours[2]) + 
+    geom_histogram(bins = 50, color = plot_colors[1],fill = plot_colors[2]) + 
     coord_cartesian(xlim = c(0,100)) + 
     xlab("Tag Length") + 
     ylab("Count") + 

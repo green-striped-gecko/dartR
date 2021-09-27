@@ -1,8 +1,9 @@
-#' Save an object in compressed binary format for later rapid retrieval
-#'
+#' @name gl.save
+#' @title Save an object in compressed binary format for later rapid retrieval
+#' @description
 #' This is a wrapper for saveRDS().
 #'
-#' The script saves the object to the current workspace and returns the input gl
+#' The script saves the object in binary form to the current workspace and returns the input gl
 #'  object.
 #'
 #' @param x Name of the genlight object containing SNP genotypes [required].
@@ -13,7 +14,7 @@
 #' [default 2 or as specified using gl.set.verbosity].
 #' @return The input object
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
 #' @seealso \code{\link{gl.load}}
@@ -27,7 +28,7 @@ gl.save <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)

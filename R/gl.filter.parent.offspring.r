@@ -1,7 +1,5 @@
 #' @name gl.filter.parent.offspring
-#'
 #' @title Filter putative parent offspring within a population
-#'
 #' @description 
 #' This script removes individuals suspected of being related as parent-offspring,
 #' using the output of the function \code{\link{gl.report.parent.offspring}}, which
@@ -25,13 +23,13 @@
 #' individuals [default FALSE].
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the
+#' @param plot_colors List of two color names for the borders and fill of the
 #'  plots [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #'  progress log ; 3, progress and results summary; 5, full report 
-#'  [default NULL, unless specified using gl.set.verbosity].
+#'  [default 2, unless specified using gl.set.verbosity].
 #'
 #' @details 
 #' If two individuals are in a parent offspring relationship, the true number of
@@ -84,7 +82,7 @@
 #' parent-offspring relationship. NULL if no parent-offspring relationships were 
 #' found. 
 #'
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
 #' out <- gl.filter.parent.offspring(testset.gl[1:10])
@@ -110,34 +108,19 @@ gl.filter.parent.offspring <- function(x,
                                        rm.monomorphs = FALSE,
                                        plot.out = TRUE,
                                        plot_theme = theme_dartR(), 
-                                       plot_colours = two_colors, 
+                                       plot_colors = two_colors, 
                                        save2tmp = FALSE,
                                        verbose = NULL) {
-  # TRAP COMMAND
-  
-  funname <- match.call()[[1]]
-  
   # SET VERBOSITY
-  
   verbose <- gl.check.verbosity(verbose)
   
-  # CHECKS DATATYPE 
-  
-  datatype <- utils.check.datatype(x, verbose=verbose)
-  
-  # FUNCTION SPECIFIC ERROR CHECKING
-  
   # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
-  if (verbose >= 1) {
-    if (verbose == 5) {
-      cat(report("\n\nStarting", funname, "[ Build =", 
-                 build, "]\n\n"))
-    } else {
-      cat(report("\n\nStarting", funname, "\n\n"))
-    }
-  }
-  
+  # CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
+
   # DO THE JOB
   hold <- x
   # Generate null expectation for pedigree inconsistency, and outliers
@@ -188,7 +171,7 @@ gl.filter.parent.offspring <- function(x,
   
   # Boxplot
   p1 <- ggplot(counts_plot, aes(y = counts)) + 
-    geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+    geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
     coord_flip() + 
     plot_theme + 
     xlim(range = c(-1, 1)) + 
@@ -239,7 +222,7 @@ gl.filter.parent.offspring <- function(x,
   
   # Histogram
   p2 <- ggplot(counts_plot, aes(x = counts)) + 
-    geom_histogram(bins = 50, color = plot_colours[1],fill = plot_colours[2]) + 
+    geom_histogram(bins = 50, color = plot_colors[1],fill = plot_colors[2]) + 
     geom_vline(xintercept=cutoff,color="red",size=1) +
     coord_cartesian(xlim = c(min(counts),max(counts))) +
     xlab("No. Pedigree incompatible") + 

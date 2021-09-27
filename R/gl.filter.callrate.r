@@ -40,7 +40,7 @@
 #' 
 #' @param x Name of the genlight object containing the SNP data, or the genind
 #'  object containing the SilocoDArT data [required].
-#' @param method "loc" to specify that loci are to be filtered, "ind" to specify 
+#' @param method Use method="loc" to specify that loci are to be filtered, "ind" to specify 
 #' that specimens are to be filtered, "pop" to remove loci that fail to meet the
 #'  specified threshold in any one population [default "loc"].
 #' @param threshold Threshold value below which loci will be removed 
@@ -55,7 +55,7 @@
 #' @param plot.out Specify if histograms of call rate, before and after, are to 
 #' be produced [default TRUE].
 #' @param plot_theme User specified theme for the plot [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the 
+#' @param plot_colors List of two color names for the borders and fill of the 
 #' plots [default two_colors].
 #' @param bins Number of bins to display in histograms [default 25].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
@@ -90,7 +90,7 @@
                                 recursive = FALSE, 
                                 plot.out = TRUE, 
                                 plot_theme = theme_dartR(), 
-                                plot_colours = two_colors,
+                                plot_colors = two_colors,
                                 bins = 25, 
                                 save2tmp = FALSE,
                                 verbose = NULL) {
@@ -100,7 +100,7 @@
    
 # FLAG SCRIPT START
    funname <- match.call()[[1]]
-   utils.flag.start(func=funname,build="Jackson",v=verbose)
+   utils.flag.start(func=funname,build="Jody",v=verbose)
    
 # CHECK DATATYPE 
    datatype <- utils.check.datatype(x, verbose=verbose)
@@ -168,7 +168,7 @@
           xlabel <- "Pre-filter P/A Call Rate [Loci]"
         }
         p1 <- ggplot(data.frame(callrate), aes(x = callrate)) + 
-          geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
+          geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) + 
           coord_cartesian(xlim = c(min,1)) + 
           geom_vline(xintercept=threshold,color="red",size=1) +
           xlab(xlabel) + 
@@ -184,7 +184,7 @@
           xlabel <- "Post-filter P/A Call Rate [Loci]"
         }
         p2 <- ggplot(data.frame(callrate), aes(x = callrate)) + 
-          geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
+          geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) + 
           coord_cartesian(xlim = c(min,1)) + 
           geom_vline(xintercept=threshold,color="red",size=1) +
           xlab(xlabel) + 
@@ -340,7 +340,7 @@
         xlabel <- "Pre-filter P/A Call Rate [Individuals]"
       }
       p1 <- ggplot(data.frame(hold2), aes(x = hold2)) + 
-        geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
+        geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) + 
         coord_cartesian(xlim = c(min,1)) + 
         geom_vline(xintercept=threshold,color="red",size=1) +
         xlab(xlabel) + 
@@ -355,7 +355,7 @@
         xlabel <- "Post-filter P/A Call Rate [Individuals]"
       }
       p2 <- ggplot(data.frame(ind.call.rate), aes(x = ind.call.rate)) + 
-        geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
+        geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) + 
         coord_cartesian(xlim = c(min,1)) + 
         geom_vline(xintercept=threshold,color="red",size=1) +
         xlab(xlabel) + 
@@ -392,7 +392,7 @@
       xlabel <- "Pre-filter P/A Call Rate [by population]"
     }
     p1 <- ggplot(data.frame(tmp), aes(x = tmp)) + 
-      geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) + 
       coord_cartesian(xlim = c(min,1)) + 
       geom_vline(xintercept=threshold,color="red",size=1) +
       xlab(xlabel) + 
@@ -408,7 +408,7 @@
       xlabel <- "Post-filter P/A Call Rate [by population]"
     }
     p2 <- ggplot(data.frame(tmp), aes(x = tmp)) + 
-      geom_histogram(bins = bins, color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) + 
       coord_cartesian(xlim = c(min,1)) + 
       geom_vline(xintercept=threshold,color="red",size=1) +
       xlab(xlabel) + 

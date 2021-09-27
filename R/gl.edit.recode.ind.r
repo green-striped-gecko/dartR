@@ -27,10 +27,11 @@
 #' 
 #' @param x Name of the genlight object for which individuals are to be relabelled.[required]
 #' @param out.recode.file Name of the file to output the new individual labels [optional]
-#' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN].
-#' @param recalc -- Recalculate the locus metadata statistics [default TRUE]
-#' @param mono.rm -- Remove monomorphic loci [default TRUE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param outpath Path where to save the output file [default tempdir(), mandated by CRAN].
+#' @param recalc Recalculate the locus metadata statistics [default TRUE]
+#' @param mono.rm Remove monomorphic loci [default TRUE]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return An object of class ("genlight") with the revised individual labels
 #' @import utils
 #' @export
@@ -54,7 +55,7 @@ gl.edit.recode.ind <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
@@ -131,11 +132,11 @@ gl.edit.recode.ind <- function(x,
   if (verbose>=2) {
     cat("  Summary of recoded dataset\n")
     # cat(paste("  Original No. of loci:",hold.nLoc,"\n"))
-    # cat(paste("    New No. of loci:",nLoc(x),"\n"))
+    # cat(paste("  New No. of loci:",nLoc(x),"\n"))
     cat(paste("  Original No. of individuals:", nInd(hold),"\n"))
     cat(paste("    New No. of individuals:", nInd(x),"\n"))
     # cat(paste("  Original No. of populations:", hold.nPop,"\n"))
-    # cat(paste("    New No. of populations:", nPop(x),"\n"))
+    # cat(paste("  New No. of populations:", nPop(x),"\n"))
     if (!recalc) {cat(report("  Note: Locus metrics not recalculated\n"))}
     if (!mono.rm) {cat(report("  Note: Resultant monomorphic loci not deleted\n"))}
   }

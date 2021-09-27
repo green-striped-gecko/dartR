@@ -11,14 +11,15 @@
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence
 #'  (SilicoDArT) data [required].
-#' @param plot.out specify if plot is to be produced [default TRUE].
+#' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the
+#' @param plot_colors List of two color names for the borders and fill of the
 #'  plots [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-#' progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].
+#' progress log ; 3, progress and results summary; 5, full report 
+#' [default 2, unless specified using gl.set.verbosity].
 #'
 #' @details 
 #'  The function displays a table of minimum, maximum, mean and quantiles for read depth against
@@ -34,7 +35,7 @@
 #'  }
 #'
 #' @return An unaltered genlight object
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples 
 #' # SNP data
@@ -50,7 +51,7 @@
 gl.report.rdepth <- function(x,
                              plot.out = TRUE,
                              plot_theme = theme_dartR(), 
-                             plot_colours = two_colors,  
+                             plot_colors = two_colors,  
                              save2tmp = FALSE,
                              verbose = NULL){
   
@@ -59,7 +60,7 @@ gl.report.rdepth <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)
@@ -96,7 +97,7 @@ gl.report.rdepth <- function(x,
 
   # Boxplot
   p1 <- ggplot(data.frame(rdepth), aes(y = rdepth)) + 
-    geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+    geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
     coord_flip() + 
     plot_theme + 
     xlim(range = c(-1, 1)) + 
@@ -107,7 +108,7 @@ gl.report.rdepth <- function(x,
   
   # Histogram
   p2 <- ggplot(data.frame(rdepth), aes(x = rdepth)) + 
-    geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+    geom_histogram(bins = 100, color = plot_colors[1],fill = plot_colors[2]) + 
     xlim(c(0, max)) + 
     xlab("Read Depth") + 
     ylab("Count") + 

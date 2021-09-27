@@ -17,13 +17,14 @@
 #' @param taglength Typical length of the sequence tags [default 69].
 #' @param plot.out specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the 
+#' @param plot_colors List of two color names for the borders and fill of the 
 #' plots [default two_colors].
 #' @param probar If TRUE, then a progress bar is displayed on long loops [default TRUE].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-#' progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].
+#' progress log ; 3, progress and results summary; 5, full report 
+#' [default 2, unless specified using gl.set.verbosity].
 #'
 #' @details The function \code{\link{gl.filter.hamming}} will filter out one of 
 #' two loci if their Hamming distance is less than a specified percentage
@@ -47,7 +48,7 @@
 #'  }
 #' 
 #' @return Returns unaltered genlight object
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
 #' gl.report.hamming(testset.gl[,1:100])
@@ -66,7 +67,7 @@ gl.report.hamming <- function(x,
                               taglength = 69, 
                               plot.out = TRUE,
                               plot_theme = theme_dartR(), 
-                              plot_colours = two_colors, 
+                              plot_colors = two_colors, 
                               probar = FALSE,
                               save2tmp = FALSE,
                               verbose = NULL) {
@@ -76,7 +77,7 @@ gl.report.hamming <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
@@ -142,7 +143,7 @@ gl.report.hamming <- function(x,
     
     # Boxplot
     p1 <- ggplot(as.data.frame(d),aes(y=d)) + 
-      geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+      geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
       geom_hline(yintercept=tld,color="red",size=1) +
       coord_flip() + 
       plot_theme + 
@@ -153,7 +154,7 @@ gl.report.hamming <- function(x,
     
     # Histogram
     p2 <- ggplot(as.data.frame(d),aes(x=d)) + 
-      geom_histogram(bins = 50, color =plot_colours[1], fill = plot_colours[2]) + 
+      geom_histogram(bins = 50, color =plot_colors[1], fill = plot_colors[2]) + 
       geom_vline(xintercept=tld,color="red",size=1) +
       coord_cartesian(xlim = c(0, 1)) + 
       xlab("Hamming distance") + 

@@ -1,5 +1,5 @@
 #' @name gl.recode.ind
-#' @title Recode individual (=specimen = sample) labels in a genelight object \{adegenet\}
+#' @title Recode individual (=specimen = sample) labels in a genelight object
 #' @description 
 #' This script recodes individual labels and/or deletes individuals from a DaRT genlight SNP file
 #' based on a lookup table provided as a csv file.
@@ -17,14 +17,15 @@
 #' The script returns a genlight object with the new individual labels, the monomorphic loci optionally removed
 #' and the optionally recalculated locus metadata.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes [required]
-#' @param ind.recode -- name of the csv file containing the individual relabelling [required]
-#' @param recalc -- if TRUE, recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]
-#' @param mono.rm -- if TRUE, remove monomorphic loci [default FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing SNP genotypes [required]
+#' @param ind.recode Name of the csv file containing the individual relabelling [required]
+#' @param recalc If TRUE, recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]
+#' @param mono.rm If TRUE, remove monomorphic loci [default FALSE]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight or genind object with the recoded and reduced data
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #'   file <- system.file("extdata","testset_ind_recode.csv", package="dartR")
 #'   gl <- gl.recode.ind(testset.gl, ind.recode=file, verbose=3)
@@ -42,7 +43,7 @@ gl.recode.ind <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)

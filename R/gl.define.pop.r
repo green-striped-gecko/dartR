@@ -1,19 +1,23 @@
 #' @name gl.define.pop
-#' @title Define a new population in a genlight \{adegenet\} object on the basis of specified individuals 
+#' @title Define a new population in a genlight object for specified individuals 
 #' @description
 #' The script reassigns existing individuals to a new population and removes their existing population assignment
 #' 
 #' The script returns a genlight object with the new population assignment.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes [required]
-#' @param ind.list -- a list of individuals to be assigned to the new population [required]
-#' @param new -- name of the new population
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing SNP genotypes [required]
+#' @param ind.list A list of individuals to be assigned to the new population [required]
+#' @param new Name of the new population [required]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ;
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the redefined population structure
 
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#'    gl <- gl.define.pop(testset.gl, ind.list=c("AA019073","AA004859"), new="newguys")
+#' popNames(testset.gl)
+#' gl <- gl.define.pop(testset.gl, ind.list=c("AA019073","AA004859"), new="newguys")
+#' popNames(gl)
+#' indNames(gl)[pop(gl)=="newguys"]
 #'    
 #' @export
 
@@ -27,7 +31,7 @@ gl.define.pop <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)

@@ -16,13 +16,13 @@
 #' @param plot.out If TRUE, displays a plot to guide the decision on a filter 
 #' threshold [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the 
+#' @param plot_colors List of two color names for the borders and fill of the 
 #' plots [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-#' progress log ; 3, progress and results summary; 5, full report [default 2, 
-#' unless specified using gl.set.verbosity].
+#' progress log ; 3, progress and results summary; 5, full report 
+#' [default 2, unless specified using gl.set.verbosity].
 #' 
 #' @return Returns a genlight object retaining loci with repeatability (Repavg 
 #' or Reproducibility) greater than the specified threshold.
@@ -43,7 +43,7 @@ gl.filter.reproducibility <- function(x,
                                       threshold = 0.99, 
                                       plot.out = TRUE,
                                       plot_theme = theme_dartR(),  
-                                      plot_colours = two_colors, 
+                                      plot_colors = two_colors, 
                                       save2tmp = FALSE,
                                       verbose = NULL) {
 
@@ -52,26 +52,10 @@ gl.filter.reproducibility <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop(error("  Fatal Error: genlight object required!\n"))
-  }
-  
-  if (verbose >= 2){
-    if (datatype=="SilicoDArT"){
-      cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
-    } else if (datatype=="SNP"){
-      cat(report("  Processing a SNP dataset\n"))
-    } else {
-      stop(error("Fatal Error: Datatype must be SilicoDArT (fragment P/A data) or SNP data"))
-    }
-  }
   
 # FUNCTION SPECIFIC ERROR CHECKING
   
@@ -141,7 +125,7 @@ gl.filter.reproducibility <- function(x,
     xlabel <- "Pre-filter P/A repeatability"
   }
   p1 <- ggplot(data.frame(repeatability), aes(x = repeatability)) + 
-    geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+    geom_histogram(bins = 100, color = plot_colors[1],fill = plot_colors[2]) + 
     coord_cartesian(xlim = c(min,1)) + 
     geom_vline(xintercept=threshold,color="red",size=1) +
     xlab(xlabel) + 
@@ -162,7 +146,7 @@ gl.filter.reproducibility <- function(x,
   min <- min(repeatability,threshold,na.rm=TRUE)
   min <- trunc(min*100)/100
   p2 <- ggplot(data.frame(repeatability), aes(x = repeatability)) + 
-    geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+    geom_histogram(bins = 100, color = plot_colors[1],fill = plot_colors[2]) + 
     coord_cartesian(xlim = c(min,1)) + 
     geom_vline(xintercept=threshold,color="red",size=1) +
     xlab(xlabel) + 

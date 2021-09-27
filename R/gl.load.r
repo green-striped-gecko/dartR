@@ -4,11 +4,12 @@
 #'
 #' The script loads the object from the current workspace and returns the gl object.
 #'
-#' @param file -- name of the file to receive the binary version of the object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param file Name of the file to receive the binary version of the object [required]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return the loaded object
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
 #' gl <- gl.load(file.path(tempdir(),"testset.rds"))
@@ -22,7 +23,7 @@ gl.load <- function(file,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   x <- readRDS(file)
   

@@ -13,7 +13,7 @@
 #' @param parallel TRUE if parallel processing is required (does fail under Windows) [default FALSE].
 #' @param n.cores Number of cores to use if parallel processing is requested [default 16].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the plot [default two_colors].
+#' @param plot_colors List of two color names for the borders and fill of the plot [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].
 #'
@@ -82,8 +82,8 @@
 #'@examples
 #' fd <- gl.fixed.diff(testset.gl)
 #' fd <- gl.collapse(fd)
-#' #pca <- gl.pcoa(fd)
-#' #gl.pcoa.plot(pca,fd$gl)
+#' pca <- gl.pcoa(fd)
+#' gl.pcoa.plot(pca,fd$gl)
 #'
 
 #'@references
@@ -112,7 +112,7 @@ gl.pcoa <- function(x,
                     parallel = FALSE, 
                     n.cores = 16, 
                     plot_theme = theme_dartR(),
-                    plot_colours = two_colors, 
+                    plot_colors = two_colors, 
                     save2tmp = FALSE,
                     verbose = NULL) {
 
@@ -142,7 +142,7 @@ gl.pcoa <- function(x,
     }
   
     if(nLoc(x) < nInd(x)){
-      stop(error("Fatal Error: Number of loci is less than the number of individuals to be represented"))
+      cat(warn("  Warning: Number of loci is less than the number of individuals to be represented"))
     }
 
     if (is.null(correction)) {
@@ -298,8 +298,8 @@ gl.pcoa <- function(x,
     ylab <- paste("Percentage Contribution")
     
     p1 <- ggplot(df,aes(x= eigenvalue, y=percent )) +
-            geom_line( color=plot_colours[2]) +
-            geom_point(color=plot_colours[1],size=4 ) +
+            geom_line( color=plot_colors[2]) +
+            geom_point(color=plot_colors[1],size=4 ) +
             geom_hline(yintercept = 10, color="blue" ) +
             plot_theme +
             xlab(xlab) +
@@ -313,7 +313,7 @@ gl.pcoa <- function(x,
     }
     
     p2 <- ggplot(as.data.frame(eig.raw.noise),aes(x= eig.raw.noise)) +
-        geom_histogram(bins = 50, color = plot_colours[1], fill = plot_colours[2]) +
+        geom_histogram(bins = 50, color = plot_colors[1], fill = plot_colors[2]) +
         geom_vline(xintercept = 0, color="blue" ) +
         plot_theme +
         xlab("Eigenvalue") +
