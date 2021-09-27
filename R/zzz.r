@@ -195,7 +195,7 @@ setMethod("plot", signature(x="genlight"), function(x,
                                                     posi = "bottom", 
                                                     save2tmp = FALSE,
                                                     verbose = NULL) {
-  gl.plot(x,
+  gl.smearplot(x,
           group_pop = group_pop,
           ind_labels = ind_labels, 
           ind_labels_size = ind_labels_size,
