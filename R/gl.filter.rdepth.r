@@ -12,15 +12,15 @@
 #'  the basis of loci with exceptionally low counts, 
 #' or loci with exceptionally high counts.
 #' 
-#' @param x -- name of the genlight object containing the SNP or tag presence/absence data [required].
-#' @param lower -- lower threshold value below which loci will be removed [default 5].
-#' @param upper -- upper threshold value above which loci will be removed [default 50].
-#' @param plot.out specify if plot is to be produced [default TRUE].
+#' @param x Name of the genlight object containing the SNP or tag presence/absence data [required].
+#' @param lower Lower threshold value below which loci will be removed [default 5].
+#' @param upper Upper threshold value above which loci will be removed [default 50].
+#' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the
+#' @param plot_colors List of two color names for the borders and fill of the
 #'  plots [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #'  progress log ; 3, progress and results summary; 5, full report
 #'   [default 2, unless specified using gl.set.verbosity].
 #' 
@@ -50,7 +50,7 @@ gl.filter.rdepth <- function(x,
                              upper = 50, 
                              plot.out = TRUE,
                              plot_theme = theme_dartR(), 
-                             plot_colours = two_colors,  
+                             plot_colors = two_colors,  
                              save2tmp = FALSE,
                              verbose = NULL) {
 
@@ -59,20 +59,10 @@ gl.filter.rdepth <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
-  
-# STANDARD ERROR CHECKING
-
-  if (datatype=="SilicoDArT"){
-    cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))
-  } else if (datatype=="SNP"){
-    if (verbose >= 2){cat(report("  Processing a SNP dataset\n"))}
-  } else {
-    stop("Fatal Error: Datatype must be fragment P/A data or SNP data!")
-  }
   
 # FUNCTION SPECIFIC ERROR CHECKING
     
@@ -109,7 +99,7 @@ gl.filter.rdepth <- function(x,
       xlabel <- "Pre-filter P/A read depth"
     }
     p1 <- ggplot(data.frame(plotvar), aes(x = plotvar)) + 
-      geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_histogram(bins = 100, color = plot_colors[1],fill = plot_colors[2]) + 
       coord_cartesian(xlim = c(0,max)) + 
       geom_vline(xintercept=lower,color="red",size=1) +
       geom_vline(xintercept=upper,color="red",size=1) +
@@ -133,7 +123,7 @@ gl.filter.rdepth <- function(x,
       xlabel <- "Post-filter P/A read depth"
     }
     p2 <- ggplot(data.frame(plotvar), aes(x = plotvar)) + 
-      geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_histogram(bins = 100, color = plot_colors[1],fill = plot_colors[2]) + 
       coord_cartesian(xlim = c(0,max)) + 
       geom_vline(xintercept=lower,color="red",size=1) +
       geom_vline(xintercept=upper,color="red",size=1) +

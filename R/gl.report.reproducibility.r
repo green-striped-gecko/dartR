@@ -13,9 +13,10 @@
 #'  (SilicoDArT) data [required].
 #' @param plot.out If TRUE, displays a plot to guide the decision on a filter threshold [default TRUE]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
-#' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors]
+#' @param plot_colors List of two color names for the borders and fill of the plots [default two_colors]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #'
 #' @details 
 #'  The function displays a table of minimum, maximum, mean and quantiles for repeatbility against
@@ -47,7 +48,7 @@
 gl.report.reproducibility <- function(x, 
                                       plot.out = TRUE,
                                       plot_theme = theme_dartR(),  
-                                      plot_colours = two_colors, 
+                                      plot_colors = two_colors, 
                                       save2tmp = FALSE,
                                       verbose = NULL) {
   
@@ -56,7 +57,7 @@ gl.report.reproducibility <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)
@@ -84,7 +85,7 @@ gl.report.reproducibility <- function(x,
   # Boxplot
   if(plot.out){
   p1 <- ggplot(repeatability_plot, aes(y = repeatability)) + 
-    geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+    geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
     coord_flip() + 
     plot_theme + 
     ylim(c(min(repeatability), 1)) + 
@@ -94,7 +95,7 @@ gl.report.reproducibility <- function(x,
   
   # Histogram
   p2 <- ggplot(repeatability_plot, aes(x = repeatability)) + 
-    geom_histogram(bins = 50, color = plot_colours[1],fill = plot_colours[2]) + 
+    geom_histogram(bins = 50, color = plot_colors[1],fill = plot_colors[2]) + 
     coord_cartesian(xlim = c(min(repeatability),1)) + 
     xlab("Repeatability") + 
     ylab("Count") + 

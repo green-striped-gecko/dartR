@@ -62,7 +62,7 @@ gl.select.colors <- function(x=NULL,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK PACKAGES
   pkg <- "RColorBrewer"

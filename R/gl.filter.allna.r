@@ -10,8 +10,9 @@
 #' but such individuals may sneak in to the dataset when loci are deleted.
 #' Retaining indiviudal or loci with all NAs can cause issues for several functions. 
 #' 
-#' @param x -- name of the input genlight object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
+#' @param x Name of the input genlight object [required]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return A genlight object having removed individuals that are scored NA across all loci, or loci that are scored NA across all individuals
 #' 
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
@@ -32,7 +33,7 @@ gl.filter.allna <- function (x,verbose=NULL) {
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
 #  datatype <- utils.check.datatype(x,verbose=verbose) # recurrence clash

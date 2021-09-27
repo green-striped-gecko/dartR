@@ -22,14 +22,15 @@
 #' Note that the locus metadata will be complemented by calculable statistics corresponding 
 #' to those that would be provided by Diversity Arrays Technology (e.g. CallRate)
 #'
-#' @param filename -- name of the csv file containing the SNP genotypes [required]
-#' @param transpose -- if TRUE, rows are loci and columns are individuals [default FALSE]
-#' @param ind.metafile -- name of the csv file containing the metrics for individuals [optional]
-#' @param loc.metafile -- name of the csv file containing the metrics for loci [optional]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param filename Name of the csv file containing the SNP genotypes [required]
+#' @param transpose If TRUE, rows are loci and columns are individuals [default FALSE]
+#' @param ind.metafile Name of the csv file containing the metrics for individuals [optional]
+#' @param loc.metafile Name of the csv file containing the metrics for loci [optional]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return a genlight object with the SNP data and associated metadata included.
 #' @export
-#' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 
 gl.read.csv <- function(filename, 
                         transpose=FALSE,

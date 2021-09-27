@@ -3,11 +3,12 @@
 #' @description 
 #' The script returns a genlight object with the all but the specified loci deleted.
 #'
-#' @param x -- name of the genlight object containing SNP genotypes or presence/absence data [required]
-#' @param loc.list -- a list of loci to be kept [required, if loc.range not specified]
-#' @param first -- first of a range of loci to be kept [required, if loc.list not specified]
-#' @param last -- last of a range of loci to be kept [if not specified, last locus in the dataset]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing SNP genotypes or presence/absence data [required]
+#' @param loc.list A list of loci to be kept [required, if loc.range not specified]
+#' @param first First of a range of loci to be kept [required, if loc.list not specified]
+#' @param last Last of a range of loci to be kept [if not specified, last locus in the dataset]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A genlight object with the reduced data
 #' 
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
@@ -32,7 +33,7 @@ gl.keep.loc <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)

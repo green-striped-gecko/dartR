@@ -9,7 +9,7 @@
 #' by the restriction enzyme recognition sequence, it is sensible to compare the
 #' two trimmed sequences starting from immediately after the common recognition
 #' sequence and terminating at the last base of the shorter sequence. 
-#'@details
+#' @details
 #' Hamming distance can be computed 
 #' by exploiting the fact that the dot product of two binary vectors x and (1-y)
 #' counts the corresponding elements that are different between x and y.
@@ -31,7 +31,7 @@
 #' @param taglength Typical length of the sequence tags [default 69].
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the
+#' @param plot_colors List of two color names for the borders and fill of the
 #'  plots [default two_colors].
 #' @param pb Switch to output progress bar [default FALSE].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
@@ -59,7 +59,7 @@ gl.filter.hamming <- function(x,
                               taglength = 69,
                               plot.out = TRUE,
                               plot_theme = theme_dartR(), 
-                              plot_colours = two_colors,  
+                              plot_colors = two_colors,  
                               pb = FALSE, 
                               save2tmp = FALSE,
                               verbose = NULL) {
@@ -69,12 +69,10 @@ gl.filter.hamming <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
-  
-  # STANDARD ERROR CHECKING
   
 # FUNCTION SPECIFIC ERROR CHECKING
 
@@ -155,7 +153,7 @@ gl.filter.hamming <- function(x,
       xlabel <- "Pre-filter P/A Hamming Distance"
     }
     p1 <- ggplot(data.frame(plotvar), aes(x = plotvar)) + 
-      geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_histogram(bins = 100, color = plot_colors[1],fill = plot_colors[2]) + 
       coord_cartesian(xlim = c(0,max)) + 
       geom_vline(xintercept=threshold,color="red",size=1) +
       xlab(xlabel) + 
@@ -178,7 +176,7 @@ gl.filter.hamming <- function(x,
       xlabel <- "Post-filter P/A Hamming Distance"
     }
     p2 <- ggplot(data.frame(plotvar), aes(x = plotvar)) + 
-      geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_histogram(bins = 100, color = plot_colors[1],fill = plot_colors[2]) + 
       coord_cartesian(xlim = c(0,max)) + 
       geom_vline(xintercept=threshold,color="red",size=1) +
       xlab(xlabel) + 

@@ -91,7 +91,7 @@ gl.grm.network <- function(G,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
@@ -181,14 +181,14 @@ gl.grm.network <- function(G,
   
   # assigning colors to populations
   if(class(palette_discrete)=="function"){
-    colours_pops <- palette_discrete(length(levels(pop(x))))
+    colors_pops <- palette_discrete(length(levels(pop(x))))
   }
   
   if(class(palette_discrete)!="function"){
-    colours_pops <- palette_discrete
+    colors_pops <- palette_discrete
   }
   
-  names(colours_pops) <- as.character(levels(x$pop))
+  names(colors_pops) <- as.character(levels(x$pop))
 
   p1 <- ggplot() + 
     geom_segment(data = edges, aes(x = X1, y = Y1, xend = X2, yend = Y2),size=1.5)+    
@@ -197,7 +197,7 @@ gl.grm.network <- function(G,
     theme_void()+
     ggtitle(paste(title,"\n[",layout.name,"]")) +
     theme(legend.position="bottom",plot.title = element_text(hjust = 0.5 ,face="bold", size=14))+
-    scale_color_manual(name = "Populations", values = colours_pops)
+    scale_color_manual(name = "Populations", values = colors_pops)
   
   if(node.label==T){
     p1 <- p1 + geom_text(data=plotcord,aes(x=X1, y=X2,label = label.node),size=node.label.size,show.legend=FALSE,colour=node.label.color) 

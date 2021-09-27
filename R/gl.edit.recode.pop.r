@@ -27,12 +27,13 @@
 #' The script returns a genlight object with the new population assignments and the recalculated locus metadata.
 #' 
 #' @param x Name of the genlight object for which populations are to be reassigned.[required]
-#' @param pop.recode path to recode file
+#' @param pop.recode Path to recode file
 #' @param out.recode.file Name of the file to output the new individual labels [null]
-#' @param outpath -- path where to save the output file [default tempdir(), mandated by CRAN].
-#' @param recalc -- Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]
-#' @param mono.rm -- Remove monomorphic loci [default TRUE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param outpath Path where to save the output file [default tempdir(), mandated by CRAN].
+#' @param recalc Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]
+#' @param mono.rm Remove monomorphic loci [default TRUE]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return An object of class ("genlight") with the revised population assignments
 #' @import utils
 #' @export
@@ -41,6 +42,7 @@
 #' @examples
 #' \dontrun{
 #' gl <- gl.edit.recode.pop(testset.gl)
+#' gs <- gl.edit.recode.pop(testset.gs)
 #' }
 
 gl.edit.recode.pop <- function(x, 
@@ -56,7 +58,7 @@ gl.edit.recode.pop <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)

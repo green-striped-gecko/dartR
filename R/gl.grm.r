@@ -62,7 +62,7 @@ gl.grm <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)
@@ -133,7 +133,7 @@ legend(0,0.8,legend=df_colours_2$pop,fill=df_colours_2$colour,cex=0.75,title="Po
  # FLAG SCRIPT END
  
  if (verbose >= 1) {
-   cat(report("\nCompleted:", funname, "\n\n"))
+   cat(report("Completed:", funname, "\n"))
  }
  
  # RETURN

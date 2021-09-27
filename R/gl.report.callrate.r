@@ -13,13 +13,13 @@
 #'  (method='ind') [default 'loc'].
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme User specified theme [default theme_dartR()].
-#' @param plot_colours Vector with two colour names for the borders and fill 
+#' @param plot_colors Vector with two colour names for the borders and fill 
 #' [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-#' progress log ; 3, progress and results summary; 5, full report [default NULL, 
-#' unless specified using gl.set.verbosity].
+#' progress log ; 3, progress and results summary; 5, full report 
+#' [default 2, unless specified using gl.set.verbosity].
 #'
 #' @details 
 #' This function expects a genlight object, containing either SNP data or 
@@ -57,7 +57,7 @@ gl.report.callrate <- function(x,
                                method = "loc", 
                                plot.out = TRUE,
                                plot_theme = theme_dartR(), 
-                               plot_colours = two_colors, 
+                               plot_colors = two_colors, 
                                save2tmp = FALSE,
                                verbose = NULL) {
   
@@ -66,7 +66,7 @@ gl.report.callrate <- function(x,
    
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
  
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)
@@ -100,7 +100,7 @@ gl.report.callrate <- function(x,
     
     # Boxplot
     p1 <- ggplot(data.frame(callrate), aes(y = callrate)) + 
-      geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+      geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
       coord_flip() + 
       plot_theme + 
       xlim(range = c(-1, 1)) + 
@@ -111,7 +111,7 @@ gl.report.callrate <- function(x,
     
     # Histogram
     p2 <- ggplot(data.frame(callrate), aes(x = callrate)) + 
-      geom_histogram(bins = 100, color = plot_colours[1],fill = plot_colours[2]) + 
+      geom_histogram(bins = 100, color = plot_colors[1],fill = plot_colors[2]) + 
       coord_cartesian(xlim = c(min,1)) + 
       xlab("Call rate") + 
       ylab("Count") + 
@@ -170,7 +170,7 @@ gl.report.callrate <- function(x,
     
     # Boxplot
     p1 <- ggplot(data.frame(ind.call.rate), aes(y = ind.call.rate)) + 
-      geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+      geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
       coord_flip() + 
       plot_theme + 
       xlim(range = c(-1, 1)) + 
@@ -181,7 +181,7 @@ gl.report.callrate <- function(x,
     
     # Histogram
     p2 <- ggplot(data.frame(ind.call.rate), aes(x = ind.call.rate)) + 
-      geom_histogram(bins = 100, color = plot_colours[1], fill = plot_colours[2]) +
+      geom_histogram(bins = 100, color = plot_colors[1], fill = plot_colors[2]) +
       coord_cartesian(xlim = c(min,1)) + 
       xlab("Call rate") + 
       ylab("Count") + 
