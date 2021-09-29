@@ -12,12 +12,12 @@
 #' select=c(1,1,3) will select shape 1, 1 again and 3 to retain in the final vector. This can be useful for fine-tuning 
 #' shape selection, and matching colours and shapes.
 #'
-#' @param gl Optionally, provide a gl object from which to determine the number of populations [default NULL]
+#' @param x Optionally, provide a gl object from which to determine the number of populations [default NULL]
 #' @param select Select the shapes to retain in the output vector [default NULL, all shapes shown and returned] 
 #' @param verbose -- Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
 #' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
-#' @return A vector with the requried number of shapes
+#' @return A vector with the required number of shapes
 #' 
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' 
@@ -36,7 +36,7 @@
 #' 
 #' @export
 
-gl.select.shapes <- function(gl = NULL,
+gl.select.shapes <- function(x = NULL,
                              select = NULL,
                              verbose = NULL){
   
@@ -60,13 +60,11 @@ gl.select.shapes <- function(gl = NULL,
     nshapes <- length(select)
   }
 
-  if(!is.null(gl)){
-    datatype <- utils.check.datatype(gl)
-    if(nshapes != nPop(gl)){
-      stop(error("Fatal Error: specified shapes",nshapes,"must agree in number with the number of populations",nPop(gl),"in the gl object\n"))
-    } else {
-      cat(report("  Number of specified shapes corresponds with the number of populations in the gl object\n"))
-    }
+  if(!is.null(x)){
+    datatype <- utils.check.datatype(x)
+    cat(warn("  Specified shapes",nshapes,"must agree in number with the number of populations",nPop(x),"in the gl object\n"))
+    cat(warn("  Setting the number of shapes to number of populations\n"))
+    nshapes <- nPop(x)
   }
   
   # DO THE JOB
