@@ -2,18 +2,19 @@
 % Please edit documentation in R/gl.write.csv.r
 \name{gl.write.csv}
 \alias{gl.write.csv}
-\title{Write out data from a gl object \link{adegenet} to csv file}
+\title{Write out data from a genlight object to csv file}
 \usage{
 gl.write.csv(x, outfile = "outfile.csv", outpath = tempdir(), verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- file name of the output file (including extension) [default outfile.csv]}
+\item{outfile}{File name of the output file (including extension) [default outfile.csv]}
 
-\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
+\item{outpath}{Path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 saves a glenlight object to csv, returns NULL
@@ -21,9 +22,8 @@ saves a glenlight object to csv, returns NULL
 \description{
 This script writes to file the SNP genotypes with specimens as entities (columns) and
 loci as attributes (rows). Each row has associated locus metadata. Each column, with header
-of specimen id, has population in the first row.
-}
-\details{
+of specimen id, has population in the first row. 
+
 The data coding differs from the DArT 1row format in that 0 = reference homozygous, 2 =
 alternate homozygous, 1 = heterozyous, and NA = missing SNP assignment.
 }
@@ -34,5 +34,5 @@ alternate homozygous, 1 = heterozyous, and NA = missing SNP assignment.
   gl.write.csv(testset.gs, outfile="PA_1row.csv")
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

@@ -1,4 +1,4 @@
-#' @name gl.nhybrids.r
+#' @name gl.nhybrids
 #' @title Create an input file for the program NewHybrids and run it if NewHybrids is installed
 #' @description
 #' This function compares two sets of parental populations to identify loci
@@ -10,14 +10,14 @@
 #'
 #' A fixed difference occurs when a SNP allele is present in all individuals
 #' of one population and absent in the other. There is provision for setting
-#' a level of tollerance, e.g. threshold = 0.05 which considers alleles present
+#' a level of tolerance, e.g. threshold = 0.05 which considers alleles present
 #' at greater than 95% in one population and less than 5% in the other to be
 #' a fixed difference. Only the 200 loci are retained, because of limitations
 #' of NewHybids.
 #' 
 #' If you specify a directory for the NewHybrids executable file, then the script
-#' will create the input file from the snp data then run NewHybrids. If the directory
-#' is set to NULL, the exectution will stop once the input file (default="nhyb.txt") has been 
+#' will create the input file from the SNP data then run NewHybrids. If the directory
+#' is set to NULL, the execution will stop once the input file (default="nhyb.txt") has been 
 #' written to disk.
 #' 
 #' Refer to the New Hybrids manual for further information on the parameters to set
@@ -25,7 +25,7 @@
 #'
 #' It is important to stringently filter the
 #' data on RepAvg and CallRate if using the random option. One might elect to repeat
-#' the analysis (method="random") and combine the resultant posterior probabilites
+#' the analysis (method="random") and combine the resultant posterior probabilities
 #' should 200 loci be considered insufficient.
 #' 
 #' The F1 individuals should be homozygous at all loci for which the parental populations are fixed 

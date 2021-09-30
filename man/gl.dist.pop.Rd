@@ -2,36 +2,39 @@
 % Please edit documentation in R/gl.dist.pop.r
 \name{gl.dist.pop}
 \alias{gl.dist.pop}
-\title{Calculate a distance matrix for populations defined in an \{adegenet\} genlight object}
+\title{Calculate a distance matrix for populations with SNP genotypes in a genlight object}
 \usage{
 gl.dist.pop(
   x,
   method = "euclidean",
-  plot = TRUE,
-  boxplot = "standard",
-  range = 1.5,
+  plot.out = TRUE,
   binary = FALSE,
   p = NULL,
+  plot_theme = theme_dartR(),
+  plot_colors = two_colors,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- name of the genlight containing the SNP genotypes [required]}
+\item{x}{Name of the genlight containing the SNP genotypes [required]}
 
-\item{method}{-- Specify distance measure [euclidean]}
+\item{method}{Specify distance measure [default euclidean]}
 
-\item{plot}{-- if TRUE, display a histogram of the genetic distances, and a whisker plot [TRUE]}
+\item{plot.out}{If TRUE, display a histogram of the genetic distances, and a whisker plot [default TRUE]}
 
-\item{boxplot}{-- if 'standard', plots a standard box and whisker plot; if 'adjusted',
-plots a boxplot adjusted for skewed distributions ['standard']}
+\item{binary}{Perform presence/absence standardization before analysis using decostand [default FALSE]}
 
-\item{range}{-- specifies the range for delimiting outliers [1.5 interquartile ranges]}
+\item{p}{The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [default 0.5]}
 
-\item{binary}{-- Perform presence/absence standardization before analysis using decostand [FALSE]}
+\item{plot_theme}{User specified theme [default theme_dartR()].}
 
-\item{p}{-- The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [0.5]}
+\item{plot_colors}{Vector with two colour names for the borders and fill [default two_colors].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 An object of class 'dist' giving distances between populations
@@ -45,13 +48,13 @@ differences) distance.
 The distance measure can be one of "manhattan", "euclidean", "pcfixed", "pa", canberra", "bray", 
 "kulczynski", "jaccard", "gower", "morisita", "horn", "mountford", "raup" , 
 "binomial", "chao", "cao", "mahalanobis", "maximum", "binary" or "minkowski". Refer to the documentation for
-dist stats or vegdist vegan for definitions. 
+of functions \link[stat]{dist} (package stat) or \link[vegan]{vegdist} (package vegan) vegan for definitions. 
 
 Distance pcfixed calculates the pair-wise count of fixed allelic differences between populations.
 }
 \examples{
-gl.dist.pop(testset.gl, method="euclidean")
+D <- gl.dist.pop(testset.gl, method="euclidean")
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

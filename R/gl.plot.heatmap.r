@@ -1,14 +1,19 @@
 #' @title gl.plot.heatmap
 #' @title Represent a distance matrix as a heatmap 
 #' @description 
-#' The script plots a heat map to represent the distances in the distance or dissimilarity matrix
+#' The script plots a heat map to represent the distances in the distance or 
+#' dissimilarity matrix. This function is a wrapper for 
+#' \link[gplots]{heatmap.2} (package gplots).
 #'
-#' @param D Name of the distance matrix or class fd object [required]
+#' @param D Name of the distance matrix or class fd object [required].
+#' @param palette_divergent A divergent palette for the distance values
+#'  [default diverging_palette].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
 #' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param ... Parameters passed to function \link[gplots]{heatmap.2} (package gplots)
 #' @return NULL
 #' @export
-#' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}) as a wrapper for pheatmap by Raivo Kolde.
+#' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #'    gl <- testset.gl[1:10,]
 #'    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
@@ -18,19 +23,11 @@
 #'    D3 <- gl.fixed.diff(testset.gl)
 #'    gl.plot.heatmap(D3)
 
-gl.plot.heatmap <- function(D,verbose=NULL){
+gl.plot.heatmap <- function(D,
+                            palette_divergent = diverging_palette,
+                            verbose = NULL,
+                            ...){
 
-# CHECK IF PACKAGES ARE INSTALLED
-  pkg <- "RColorBrewer"
-  if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package ",pkg," needed for this function to work. Please install it.") 
-    } 
-  
-  pkg <- "pheatmap"
-  if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package ",pkg," needed for this function to work. Please install it.")
-    } 
-  
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
@@ -43,11 +40,17 @@ gl.plot.heatmap <- function(D,verbose=NULL){
 
 # DO THE JOB
   
-  if (class(D)=="dist"){
-    pheatmap::pheatmap(as.matrix(D),color=RColorBrewer::brewer.pal(n = 8, name = 'Blues'))
+  if (datatype=="dist"){
+    p3 <- gplots::heatmap.2(as.matrix(D),
+                            col = palette_divergent(255),
+                            dendrogram = "column",
+                            trace = "none",...)
   }
-  if (class(D)=="fd"){
-    pheatmap::pheatmap(as.matrix(D$fd),color=RColorBrewer::brewer.pal(n = 8, name = 'Blues'))
+  if (datatype=="fd"){
+    p3 <- gplots::heatmap.2(as.matrix(D$fd),
+                            col = palette_divergent(255),
+                            dendrogram = "column",
+                            trace = "none",...)
   }
   
 # FLAG SCRIPT END
@@ -56,7 +59,7 @@ gl.plot.heatmap <- function(D,verbose=NULL){
     cat(report("Completed:",funname,"\n"))
   }
   
-  return(NULL)
+  invisible(p3)
 
 }
 

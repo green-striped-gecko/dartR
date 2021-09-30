@@ -10,28 +10,28 @@ gl.filter.rdepth(
   upper = 50,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP or tag presence/absence data [required].}
+\item{x}{Name of the genlight object containing the SNP or tag presence/absence data [required].}
 
-\item{lower}{-- lower threshold value below which loci will be removed [default 5].}
+\item{lower}{Lower threshold value below which loci will be removed [default 5].}
 
-\item{upper}{-- upper threshold value above which loci will be removed [default 50].}
+\item{upper}{Upper threshold value above which loci will be removed [default 50].}
 
-\item{plot.out}{specify if plot is to be produced [default TRUE].}
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the
+\item{plot_colors}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report
  [default 2, unless specified using gl.set.verbosity].}
 }

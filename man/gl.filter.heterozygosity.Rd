@@ -7,13 +7,14 @@
 gl.filter.heterozygosity(x, t.upper = 0.7, t.lower = 0, verbose = NULL)
 }
 \arguments{
-\item{x}{-- a genlight object containing the SNP genotypes [Required]}
+\item{x}{A genlight object containing the SNP genotypes [Required]}
 
-\item{t.upper}{-- filter individuals > the threshold [default 0.7]}
+\item{t.upper}{Filter individuals > the threshold [default 0.7]}
 
-\item{t.lower}{-- filter individuals < the threshold [default 0]}
+\item{t.lower}{Filter individuals < the threshold [default 0]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 the filtered genlight object

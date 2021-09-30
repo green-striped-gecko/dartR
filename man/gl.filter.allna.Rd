@@ -7,9 +7,10 @@
 gl.filter.allna(x, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the input genlight object [required]}
+\item{x}{Name of the input genlight object [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 A genlight object having removed individuals that are scored NA across all loci, or loci that are scored NA across all individuals

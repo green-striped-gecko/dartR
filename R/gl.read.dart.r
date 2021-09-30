@@ -2,24 +2,48 @@
 #'
 #'@title Imports DarT data into R and converts it into a genlight object
 #'
-#'@description This function is a wrapper function that allows you to convert you dart file into a genlight object in one step. In previous versions you had to use read.dart and then dart2genlight. In case you have individual metadata for each individual/sample you can specify as before in the dart2genlight command the file that combines the data.
+#'@description 
+#'This function is a wrapper function that allows you to convert your DArT file 
+#'into a genlight object in one step. In previous versions you had to use 
+#'read.dart and then dart2genlight. In case you have individual metadata for 
+#'each individual/sample you can specify as before in the dart2genlight command 
+#'the file that combines the data.
 #'
-#'@param filename File containing the SNP data (csv file) [required]
-#'@param ind.metafile File that contains additional information on individuals [required]
-#'@param covfilename Use ind.metafile parameter [depreciated, NULL]
-#'@param nas A character specifying NAs [default '-']
-#'@param topskip A number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are 'guessed' by the number of rows with '*' at the beginning [default NULL]
-#'@param lastmetric Specifies the last non-genetic column (Default is 'RepAvg'). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number [default "RepAvg"]
-#'@param service_row The row number in which the information of the DArT service is contained [default 1]
-#'@param plate_row The row number in which the information of the plate location is contained [default 3]
-#'@param recalc Force the recalculation of locus metrics, in case individuals have been manually deleted from the input csv file [default TRUE]
-#'@param mono.rm Force the removal of monomorphic loci (including all NAs), in case individuals have been manually deleted from the input csv file [default FALSE]
-#'@param probar Show progress bar [default FALSE]
-#'@param verbose verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, or as set by gl.set.verbose()]
+#'@param filename File containing the SNP data (csv file) [required].
+#'@param ind.metafile File that contains additional information on individuals
+#' [required].
+#'@param covfilename Use ind.metafile parameter [depreciated, NULL].
+#'@param nas A character specifying NAs [default '-'].
+#'@param topskip A number specifying the number of rows to be skipped. If not 
+#'provided the number of rows to be skipped are 'guessed' by the number of rows
+#' with '*' at the beginning [default NULL].
+#'@param lastmetric Specifies the last non-genetic column (Default is 'RepAvg').
+#' Be sure to check if that is true, otherwise the number of individuals will 
+#' not match. You can also specify the last column by a number
+#'  [default "RepAvg"].
+#'@param service_row The row number in which the information of the DArT service 
+#'is contained [default 1].
+#'@param plate_row The row number in which the information of the plate location
+#' is contained [default 3].
+#'@param recalc Force the recalculation of locus metrics, in case individuals 
+#'have been manually deleted from the input csv file [default TRUE].
+#'@param mono.rm Force the removal of monomorphic loci (including all NAs), in 
+#'case individuals have been manually deleted from the input csv file
+#' [default FALSE].
+#'@param probar Show progress bar [default FALSE].
+#'@param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#'progress log ; 3, progress and results summary; 5, full report
+#' [default 2, or as set by gl.set.verbose()]
 #'
-#'@details The dart genlight object can then be fed into a number of initial screening, export and export functions provided by the package. For some of the function it is necessary to have the metadata that was provided from DArT. Please check the vignette for more information. Additional information can also be found in the help documents for \code{\link{utils.read.dart}}.
+#'@details 
+#' The dartR genlight object can then be fed into a number of initial screening,
+#'  export and export functions provided by the package. For some of the 
+#'  functions it is necessary to have the metadata that was provided from DArT. 
+#'  Please check the vignette for more information. Additional information can 
+#'  also be found in the help documents for \code{\link{utils.read.dart}}.
 #'
-#'@return A genlight object that contains individual metrics [if data were provided] and locus metrics [from a DArT report].
+#'@return A genlight object that contains individual metrics 
+#'[if data were provided] and locus metrics [from a DArT report].
 #'
 #'@author Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
@@ -35,25 +59,28 @@
 #'@export 
 #'
 
-gl.read.dart <- function(filename, ind.metafile = NULL, recalc = TRUE, mono.rm = FALSE, nas = "-", topskip = NULL, lastmetric = "RepAvg", 
-    covfilename = NULL, service_row = 1, plate_row = 3, probar = FALSE, verbose = 2) {
+gl.read.dart <- function(filename, 
+                         ind.metafile = NULL, 
+                         recalc = TRUE, 
+                         mono.rm = FALSE, 
+                         nas = "-", 
+                         topskip = NULL, 
+                         lastmetric = "RepAvg", 
+                         covfilename = NULL, 
+                         service_row = 1, 
+                         plate_row = 3, 
+                         probar = FALSE, 
+                         verbose = NULL) {
 
-    # TRAP COMMAND
-
-    funname <- as.character(match.call()[[1]])
+    # SET VERBOSITY
+    verbose <- gl.check.verbosity(verbose)
+    
+    # FLAG SCRIPT START
+    funname <- match.call()[[1]]
+    utils.flag.start(func=funname,build="Jody",v=verbose)
 
     if (verbose == 0) {
         probar = FALSE
-    }
-
-    # FLAG SCRIPT START
-
-    if (verbose >= 1) {
-        if (verbose == 5) {
-            cat(report(paste("Starting", funname, "[ Build =", build, "]\n\n")))
-        } else {
-            cat(report(paste("Starting", funname, "\n\n")))
-        }
     }
 
     # DO THE JOB
@@ -63,17 +90,21 @@ gl.read.dart <- function(filename, ind.metafile = NULL, recalc = TRUE, mono.rm =
         ind.metafile <- covfilename
     }
 
-    dout <- utils.read.dart(filename = filename, nas = nas, topskip = topskip, lastmetric = lastmetric, service_row = service_row, plate_row = plate_row, 
-        verbose = verbose)
-    glout <- utils.dart2genlight(dout, ind.metafile = ind.metafile, probar = probar, verbose = verbose)
+    dout <- utils.read.dart(filename = filename, nas = nas, topskip = topskip,
+                            lastmetric = lastmetric, service_row = service_row, 
+                            plate_row = plate_row, verbose = verbose)
+    glout <- utils.dart2genlight(dout, ind.metafile = ind.metafile, 
+                                 probar = probar, verbose = verbose)
 
     if (verbose >= 2) {
         cat(report(" Data read in. Please check carefully the output above\n"))
     }
 
-    # Setting the recalc flags (TRUE=up-to-date, FALSE=no longer valid) for all locus metrics capable of being recalculated
-    recalc.flags <- c("AvgPIC", "OneRatioRef", "OneRatioSnp", "PICRef", "PICSnp", "CallRate", "maf", "FreqHets", "FreqHomRef", "FreqHomSnp", 
-        "monomorphs", "OneRatio", "PIC")
+    # Setting the recalc flags (TRUE=up-to-date, FALSE=no longer valid) for all
+    #locus metrics capable of being recalculated
+    recalc.flags <- c("AvgPIC", "OneRatioRef", "OneRatioSnp", "PICRef",
+                      "PICSnp", "CallRate", "maf", "FreqHets", "FreqHomRef", 
+                      "FreqHomSnp", "monomorphs", "OneRatio", "PIC")
     glout@other$loc.metrics.flags <- data.frame(matrix(TRUE, nrow = 1, ncol = length(recalc.flags)))
     names(glout@other$loc.metrics.flags) <- recalc.flags
     glout@other$verbose <- 2
@@ -103,7 +134,8 @@ gl.read.dart <- function(filename, ind.metafile = NULL, recalc = TRUE, mono.rm =
         }
     }
 
-    # Calculate metrics provided by DArT, as a hedge against the user having deleted individuals from the input csv file
+    # Calculate metrics provided by DArT, as a hedge against the user having 
+    # deleted individuals from the input csv file
     if (recalc) {
         if (verbose >= 2) {
             cat(report("  Recalculating locus metrics provided by DArT (optionally specified)\n"))
@@ -115,7 +147,8 @@ gl.read.dart <- function(filename, ind.metafile = NULL, recalc = TRUE, mono.rm =
         glout <- utils.recalc.freqhomsnp(glout, verbose = 0)
     }
 
-    # Remove monomorphs, which should not be present, but might have been introduced it the user deleted individuals from the input csv
+    # Remove monomorphs, which should not be present, but might have been 
+    # introduced it the user deleted individuals from the input csv
     # file
 
     glout@other$loc.metrics.flags$monomorphs <- FALSE

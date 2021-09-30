@@ -7,11 +7,12 @@
 gl.reassign.pop(x, as.pop, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes [required]}
+\item{x}{Name of the genlight object containing SNP genotypes [required]}
 
-\item{as.pop}{-- specify the name of the individual metric to set as the pop variable. [required]}
+\item{as.pop}{Specify the name of the individual metric to set as the pop variable. [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the reassigned populations
@@ -38,5 +39,5 @@ assigments are lost.
    popNames(gs)
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

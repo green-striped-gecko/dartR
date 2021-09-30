@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.set.verbosity.r
 \name{gl.set.verbosity}
 \alias{gl.set.verbosity}
-\title{Set the default verbosity level}
+\title{gl.set.verbosity}
 \usage{
 gl.set.verbosity(value = 2)
 }

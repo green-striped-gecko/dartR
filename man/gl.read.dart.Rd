@@ -16,42 +16,64 @@ gl.read.dart(
   service_row = 1,
   plate_row = 3,
   probar = FALSE,
-  verbose = 2
+  verbose = NULL
 )
 }
 \arguments{
-\item{filename}{File containing the SNP data (csv file) [required]}
+\item{filename}{File containing the SNP data (csv file) [required].}
 
-\item{ind.metafile}{File that contains additional information on individuals [required]}
+\item{ind.metafile}{File that contains additional information on individuals
+[required].}
 
-\item{recalc}{Force the recalculation of locus metrics, in case individuals have been manually deleted from the input csv file [default TRUE]}
+\item{recalc}{Force the recalculation of locus metrics, in case individuals 
+have been manually deleted from the input csv file [default TRUE].}
 
-\item{mono.rm}{Force the removal of monomorphic loci (including all NAs), in case individuals have been manually deleted from the input csv file [default FALSE]}
+\item{mono.rm}{Force the removal of monomorphic loci (including all NAs), in 
+case individuals have been manually deleted from the input csv file
+[default FALSE].}
 
-\item{nas}{A character specifying NAs [default '-']}
+\item{nas}{A character specifying NAs [default '-'].}
 
-\item{topskip}{A number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are 'guessed' by the number of rows with '*' at the beginning [default NULL]}
+\item{topskip}{A number specifying the number of rows to be skipped. If not 
+provided the number of rows to be skipped are 'guessed' by the number of rows
+with '*' at the beginning [default NULL].}
 
-\item{lastmetric}{Specifies the last non-genetic column (Default is 'RepAvg'). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number [default "RepAvg"]}
+\item{lastmetric}{Specifies the last non-genetic column (Default is 'RepAvg').
+Be sure to check if that is true, otherwise the number of individuals will 
+not match. You can also specify the last column by a number
+ [default "RepAvg"].}
 
-\item{covfilename}{Use ind.metafile parameter [depreciated, NULL]}
+\item{covfilename}{Use ind.metafile parameter [depreciated, NULL].}
 
-\item{service_row}{The row number in which the information of the DArT service is contained [default 1]}
+\item{service_row}{The row number in which the information of the DArT service 
+is contained [default 1].}
 
-\item{plate_row}{The row number in which the information of the plate location is contained [default 3]}
+\item{plate_row}{The row number in which the information of the plate location
+is contained [default 3].}
 
-\item{probar}{Show progress bar [default FALSE]}
+\item{probar}{Show progress bar [default FALSE].}
 
-\item{verbose}{verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, or as set by gl.set.verbose()]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report
+[default 2, or as set by gl.set.verbose()]}
 }
 \value{
-A genlight object that contains individual metrics [if data were provided] and locus metrics [from a DArT report].
+A genlight object that contains individual metrics 
+[if data were provided] and locus metrics [from a DArT report].
 }
 \description{
-This function is a wrapper function that allows you to convert you dart file into a genlight object in one step. In previous versions you had to use read.dart and then dart2genlight. In case you have individual metadata for each individual/sample you can specify as before in the dart2genlight command the file that combines the data.
+This function is a wrapper function that allows you to convert your DArT file 
+into a genlight object in one step. In previous versions you had to use 
+read.dart and then dart2genlight. In case you have individual metadata for 
+each individual/sample you can specify as before in the dart2genlight command 
+the file that combines the data.
 }
 \details{
-The dart genlight object can then be fed into a number of initial screening, export and export functions provided by the package. For some of the function it is necessary to have the metadata that was provided from DArT. Please check the vignette for more information. Additional information can also be found in the help documents for \code{\link{utils.read.dart}}.
+The dartR genlight object can then be fed into a number of initial screening,
+ export and export functions provided by the package. For some of the 
+ functions it is necessary to have the metadata that was provided from DArT. 
+ Please check the vignette for more information. Additional information can 
+ also be found in the help documents for \code{\link{utils.read.dart}}.
 }
 \examples{
 dartfile <- system.file('extdata','testset_SNPs_2Row.csv', package='dartR')

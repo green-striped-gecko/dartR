@@ -18,13 +18,14 @@ gl.edit.recode.ind(
 
 \item{out.recode.file}{Name of the file to output the new individual labels [optional]}
 
-\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN].}
+\item{outpath}{Path where to save the output file [default tempdir(), mandated by CRAN].}
 
-\item{recalc}{-- Recalculate the locus metadata statistics [default TRUE]}
+\item{recalc}{Recalculate the locus metadata statistics [default TRUE]}
 
-\item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
+\item{mono.rm}{Remove monomorphic loci [default TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 An object of class ("genlight") with the revised individual labels

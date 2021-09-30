@@ -2,16 +2,17 @@
 % Please edit documentation in R/gl.filter.maf.r
 \name{gl.filter.maf}
 \alias{gl.filter.maf}
-\title{Filter loci on the basis of minor allele frequency (MAF) in a genlight {adegenet} object}
+\title{gl.filter.maf}
 \usage{
 gl.filter.maf(x, threshold = 0.01, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required]}
 
-\item{threshold}{-- threshold MAF -- loci with a MAF less than the threshold will be removed [default 0.01]}
+\item{threshold}{Threshold MAF -- loci with a MAF less than the threshold will be removed [default 0.01]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight dataset
@@ -20,8 +21,7 @@ The reduced genlight dataset
 This script calculates the minor allele frequency for each locus and updates the locus
 metadata for FreqHomRef, FreqHomSnp, FreqHets and MAF (if it exists). It then uses 
 the updated metadata for MAF to filter loci.
-}
-\details{
+
 Note the this filter applies to MAF calculated across all individuals, without regard
 to population structure. It is a means of removing overall rare alleles. To apply this to
 single populations, use sepPop and lapply.
@@ -31,5 +31,5 @@ result <- gl.filter.monomorphs(testset.gl)
 result <- gl.filter.maf(result, threshold=0.05, verbose=3)
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

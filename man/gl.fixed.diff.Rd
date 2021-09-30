@@ -17,29 +17,29 @@ gl.fixed.diff(
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or tag P/A data (SilicoDArT) 
+\item{x}{Name of the genlight object containing SNP genotypes or tag P/A data (SilicoDArT) 
 or an object of class 'fd' [required]}
 
-\item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) 
+\item{tloc}{Threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) 
 [default 0]}
 
-\item{test}{-- if TRUE, calculate p values for the observed fixed differences [default FALSE]}
+\item{test}{If TRUE, calculate p values for the observed fixed differences [default FALSE]}
 
-\item{delta}{-- threshold value for the true population minor allele frequency (MAF) from which 
+\item{delta}{Threshold value for the true population minor allele frequency (MAF) from which 
 resultant sample fixed differences are considered true positives [default 0.02]}
 
-\item{alpha}{-- level of significance used to display non-significant differences between
+\item{alpha}{Level of significance used to display non-significant differences between
 populations as they are compared pairwise [default 0.05]}
 
-\item{reps}{-- number of replications to undertake in the simulation to estimate probability 
+\item{reps}{Number of replications to undertake in the simulation to estimate probability 
 of false positives [default 1000]}
 
-\item{mono.rm}{-- if TRUE, loci that are monomorphic across all individuals are removed before 
+\item{mono.rm}{If TRUE, loci that are monomorphic across all individuals are removed before 
 beginning computations [default TRUE]}
 
-\item{pb}{-- if TRUE, show a progress bar on time consuming loops [default FALSE]}
+\item{pb}{If TRUE, show a progress bar on time consuming loops [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
@@ -86,12 +86,12 @@ This adjustment can be done with the tloc parameter. For example, tloc=0.05 mean
 \examples{
 \donttest{
 fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=3 )
-fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, verbose=1 )
+fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, verbose=3 )
 }
 }
 \seealso{
 \code{\link{is.fixed}}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
