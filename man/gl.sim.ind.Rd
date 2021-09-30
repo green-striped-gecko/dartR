@@ -2,48 +2,56 @@
 % Please edit documentation in R/gl.sim.ind.r
 \name{gl.sim.ind}
 \alias{gl.sim.ind}
-\title{Simulates individuals based on the allele frequencies provided via a genlight object.}
+\title{Simulates individuals based on allele frequencies provided via a 
+genlight object}
 \usage{
 gl.sim.ind(gl, n = 50, popname = NULL)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing the SNP data}
+\item{gl}{Name of the genlight object containing the SNP data [required].}
 
-\item{n}{-- number of individuals that should be simulated}
+\item{n}{Number of individuals that should be simulated [default 50].}
 
-\item{popname}{-- a population name for the simulated individuals [default Null]}
+\item{popname}{A population name for the simulated individuals [default NULL].}
 }
 \value{
-a genlight object with n individuals.
+A genlight object with the same number of loci as the input genlight 
+object.
 }
 \description{
-This function simulates individuals based on the allele frequencies of a genlight object. The output is a genlight object with the same number of loci as the input genlight object.
+This function simulates individuals based on the allele frequencies of a 
+genlight object.
 }
 \details{
-The function can be used to simulate populations for sampling designs or for power analysis. Check the example below where the effect of drift is explored, by simply simulating several generation a genlight object and putting in the allele frequencies of the previous generation. The beauty of the function is, that it is lightning fast.
+This function can be used to simulate populations to explore sampling designs
+or perform power analysis. Check the example below where the effect of drift 
+is explored by simply simulating several generations based on a genlight 
+object and putting in the allele frequencies of the previous generation. The 
+beauty of this function is that it is lightning fast.
 }
 \examples{
 glsim <- gl.sim.ind(testset.gl, n=10, popname="sims")
 glsim
-###Simulate drift over 10 generation 
+# Simulate drift over 10 generations
 # assuming a bottleneck of only 10 individuals
-# [ignoring effect of mating and mutation]
+# and ignoring the effect of random mating and mutation
 # Simulate 20 individuals with no structure and 50 SNP loci
 founder <- glSim(n.ind = 20, n.snp.nonstruc = 50, ploidy=2)
-#number of fixed loci in the first generation
-
+# number of fixed loci in the first generation
 res <- sum(colMeans(as.matrix(founder), na.rm=TRUE) \%\%2 ==0)
 simgl <- founder
-#49 generations of only 10 individuals
+# 49 generations of only 10 individuals
 for (i in 2:50) 
 {
    simgl <- gl.sim.ind(simgl, n=10, popname="sims")
    res[i]<- sum(colMeans(as.matrix(simgl), na.rm=TRUE) \%\%2 ==0)
 }
 plot(1:50, res, type="b", xlab="generation", ylab="# fixed loci")
-
-
+}
+\seealso{
+\code{\link{gl.sim.offspring}},\code{\link{gl.sim.mutate}},
+\code{\link{gl.sim.emigration}}
 }
 \author{
-Bernd Gruber (bernd.gruber@canberra.edu.au)
+Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }
