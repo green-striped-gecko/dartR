@@ -14,7 +14,7 @@ gl.filter.callrate(
   recursive = FALSE,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   bins = 25,
   save2tmp = FALSE,
   verbose = NULL
@@ -24,7 +24,7 @@ gl.filter.callrate(
 \item{x}{Name of the genlight object containing the SNP data, or the genind
 object containing the SilocoDArT data [required].}
 
-\item{method}{"loc" to specify that loci are to be filtered, "ind" to specify 
+\item{method}{Use method="loc" to specify that loci are to be filtered, "ind" to specify 
 that specimens are to be filtered, "pop" to remove loci that fail to meet the
  specified threshold in any one population [default "loc"].}
 
@@ -46,7 +46,7 @@ be produced [default TRUE].}
 
 \item{plot_theme}{User specified theme for the plot [default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the 
+\item{plot_colors}{List of two color names for the borders and fill of the 
 plots [default two_colors].}
 
 \item{bins}{Number of bins to display in histograms [default 25].}

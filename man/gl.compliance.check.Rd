@@ -12,7 +12,7 @@ gl.compliance.check(x, verbose = NULL)
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report
-[default NULL, unless specified using gl.set.verbosity]}
+[default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object that conforms to the expectations of dartR
@@ -41,7 +41,8 @@ updated.
 }
 \examples{
 x <- gl.compliance.check(testset.gl)
+x <- gl.compliance.check(testset.gs)
 }
 \author{
-Core Development Team (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

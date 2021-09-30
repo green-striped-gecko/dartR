@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils.dist.binary.r
 \name{utils.dist.binary}
 \alias{utils.dist.binary}
-\title{Calculate a distance matrix for individuals defined in an \{adegenet\} genlight object using binary P/A data (SilicoDArT)}
+\title{utils.dist.binary}
 \usage{
 utils.dist.binary(x, method = "simple", verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight containing the SNP genotypes [required]}
+\item{x}{-- name of the genlight containing the genotypes [required]}
 
 \item{method}{-- Specify distance measure [simple]}
 
@@ -17,8 +17,9 @@ utils.dist.binary(x, method = "simple", verbose = NULL)
 An object of class 'dist' giving distances between individuals
 }
 \description{
-This script calculates various distances between individuals based on Tag Presence/Absence data. #' 
- 
+This script calculates various distances between individuals based on Tag Presence/Absence data.
+}
+\details{
 The distance measure can be one of
  
  simple -- simple matching, both 1 or both 0 = 0; one 1 and the other 0 = 1. Presence and absence equally weighted.
@@ -33,5 +34,5 @@ The distance measure can be one of
 D <- utils.dist.binary(testset.gs, method="Jaccard")
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

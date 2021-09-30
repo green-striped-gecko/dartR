@@ -12,7 +12,7 @@ gl.pcoa(
   parallel = FALSE,
   n.cores = 16,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -32,7 +32,7 @@ gl.pcoa(
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the plot [default two_colors].}
+\item{plot_colors}{List of two color names for the borders and fill of the plot [default two_colors].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 
@@ -108,8 +108,8 @@ best modern reference is Legendre & Legendre (1998).
 \examples{
 fd <- gl.fixed.diff(testset.gl)
 fd <- gl.collapse(fd)
-#pca <- gl.pcoa(fd)
-#gl.pcoa.plot(pca,fd$gl)
+pca <- gl.pcoa(fd)
+gl.pcoa.plot(pca,fd$gl)
 
 }
 \references{

@@ -4,45 +4,46 @@
 \alias{gl.dist.ind}
 \title{Calculate a distance matrix for individuals defined in an \{adegenet\} genlight object}
 \usage{
-gl.dist.ind(x, method = NULL, plot = TRUE, verbose = NULL)
+gl.dist.ind(
+  x,
+  method = NULL,
+  plot.out = TRUE,
+  plot_theme = theme_dartR(),
+  plot_colors = two_colors,
+  save2tmp = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{-- name of the genlight containing the SNP genotypes [required]}
+\item{x}{Name of the genlight containing the SNP genotypes [required]}
 
-\item{method}{-- Specify distance measure [SNP: Euclidean; P/A: Simple]}
+\item{method}{Specify distance measure [SNP: Euclidean; P/A: Simple]}
 
-\item{plot}{-- if TRUE, display a histogram and a boxplot of the genetic distances [TRUE]}
+\item{plot.out}{If TRUE, display a histogram and a boxplot of the genetic distances [TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{plot_theme}{User specified theme [default theme_dartR]}
+
+\item{plot_colors}{Vector with two colour names for the borders and fill [default two_colors]}
+
+\item{save2tmp}{If TRUE, saves any ggplots to the session temporary directory [default FALSE]}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 An object of class 'dist' giving distances between individuals
 }
 \description{
 This script calculates various distances between individuals based on allele frequencies. The distances are
-calculated by scripts in the {stats} or {vegan} libraries, with the exception of the pcfixed (percent fixed
-differences) distance.
+calculated by scripts in the {stats} or {vegan} libraries.
 }
 \details{
-The distance measure for SNP data can be one of 
 
- Euclidean -- Euclidean distance as computed by dist() in {stat}
- locus.count -- number of loci for which individuals differ, as implemented by dist.gene() in {ape}
- allele.count -- number of allelic differences between two individuals, as implemented by diss.dist() in {poppr}
- relatedness -- genetic relatedness between individuals (G matrix), as implemented by A.mat() in {rrBLUP}
- 
-The distance measure for Tag P/A data (binary) can be one of
- 
- Simple -- simple matching, both 1 or both 0 = 0; one 1 and the other 0 = 1. Presence and absence equally weighted.
- Jaccard -- ignores matching 0, both 1 = 0; one 1 and the other 0 = 1. Absences could be for different reasons.
- Dice -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences could be for different reasons. Sometimes called the Czekanowski or Sorensen distance.
- Phi -- binary analogue of the Pearson Correlation coefficient.
- 
-Refer to the documentation in the relevant packages listed above.
 }
 \examples{
-gl.dist.pop(testset.gl, method="euclidean")
+D <- gl.dist.ind(testset.gl, method="euclidean")
+D <- gl.dist.ind(testset.gs, method="euclidean")
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

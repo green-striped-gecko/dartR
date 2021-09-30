@@ -11,7 +11,7 @@ gl.filter.hamming(
   taglength = 69,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   pb = FALSE,
   save2tmp = FALSE,
   verbose = NULL
@@ -30,7 +30,7 @@ gl.filter.hamming(
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the
+\item{plot_colors}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
 \item{pb}{Switch to output progress bar [default FALSE].}

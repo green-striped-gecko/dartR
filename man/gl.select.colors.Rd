@@ -68,8 +68,8 @@ colors <- gl.select.colors(x=gl,library="baseR",palette="rainbow",ncolors=12,sel
 
 Other Exploration/visualisation functions: 
 \code{\link{gl.pcoa.plot}()},
-\code{\link{gl.plot}()},
-\code{\link{gl.select.shapes}()}
+\code{\link{gl.select.shapes}()},
+\code{\link{gl.smearplot}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}

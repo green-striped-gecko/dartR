@@ -14,17 +14,18 @@ gl.drop.pop(
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or Tag P/A data (SilicoDArT) [required]}
+\item{x}{Name of the genlight object containing SNP genotypes or Tag P/A data (SilicoDArT) [required]}
 
-\item{pop.list}{-- a list of populations to be removed [required]}
+\item{pop.list}{A list of populations to be removed [required]}
 
-\item{as.pop}{-- temporarily assign another metric to represent population for the purposes of deletions [default NULL]}
+\item{as.pop}{Temporarily assign another metric to represent population for the purposes of deletions [default NULL]}
 
-\item{recalc}{-- Recalculate the locus metadata statistics [default FALSE]}
+\item{recalc}{Recalculate the locus metadata statistics [default FALSE]}
 
-\item{mono.rm}{-- Remove monomorphic loci [default FALSE]}
+\item{mono.rm}{Remove monomorphic loci [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the reduced data

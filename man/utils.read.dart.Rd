@@ -11,26 +11,35 @@ utils.read.dart(
   lastmetric = "RepAvg",
   service_row = 1,
   plate_row = 3,
-  verbose = 2
+  verbose = NULL
 )
 }
 \arguments{
-\item{filename}{path to file (csv file only currently)}
+\item{filename}{Path to file (csv file only currently) [required].}
 
-\item{nas}{a character specifying NAs (default is "-")}
+\item{nas}{A character specifying NAs [default "-"].}
 
-\item{topskip}{a number specifying the number of rows to be skipped. If not provided the number of rows to be skipped are "guessed" by the number of rows with "*" at the beginning.}
+\item{topskip}{A number specifying the number of rows to be skipped. If not 
+provided the number of rows to be skipped are "guessed" by the number of rows
+with "*" at the beginning [default NULL].}
 
-\item{lastmetric}{specifies the last non genetic column (Default is "RepAvg"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number.}
+\item{lastmetric}{Specifies the last non genetic column [default "RepAvg"].
+Be sure to check if that is true, otherwise the number of individuals will 
+not match. You can also specify the last column by a number.}
 
-\item{service_row}{the row number in which the information of the DArT service is contained [1]}
+\item{service_row}{The row number in which the information of the DArT 
+service is contained [default 1].}
 
-\item{plate_row}{the row number in which the information of the plate location is contained [3]}
+\item{plate_row}{The row number in which the information of the plate 
+location is contained [default 3].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report [default NULL].}
 }
 \value{
-a list of length 5. #dart format (one or two rows) #individuals, #snps, #non genetic metrics, #genetic data (still two line format, rows=snps, columns=individuals)
+A list of length 5. #dart format (one or two rows) #individuals, 
+#snps, #non genetic metrics, #genetic data (still two line format, rows=snps,
+ columns=individuals)
 }
 \description{
 Internal function called by gl.read.dart

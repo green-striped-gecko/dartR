@@ -17,17 +17,18 @@ gl.edit.recode.pop(
 \arguments{
 \item{x}{Name of the genlight object for which populations are to be reassigned.[required]}
 
-\item{pop.recode}{path to recode file}
+\item{pop.recode}{Path to recode file}
 
 \item{out.recode.file}{Name of the file to output the new individual labels [null]}
 
-\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN].}
+\item{outpath}{Path where to save the output file [default tempdir(), mandated by CRAN].}
 
-\item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]}
+\item{recalc}{Recalculate the locus metadata statistics if any individuals are deleted [default TRUE]}
 
-\item{mono.rm}{-- Remove monomorphic loci [default TRUE]}
+\item{mono.rm}{Remove monomorphic loci [default TRUE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 An object of class ("genlight") with the revised population assignments
@@ -62,6 +63,7 @@ The script returns a genlight object with the new population assignments and the
 \examples{
 \dontrun{
 gl <- gl.edit.recode.pop(testset.gl)
+gs <- gl.edit.recode.pop(testset.gs)
 }
 }
 \seealso{
