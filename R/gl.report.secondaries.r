@@ -62,6 +62,7 @@
 #' @family Filter reports functions
 #' @importFrom stats dpois
 #' @import patchwork
+#' @import data.table
 #' @export
 
 gl.report.secondaries <- function(x, 
@@ -87,6 +88,31 @@ gl.report.secondaries <- function(x,
   # Extract the clone ID number
   a <- strsplit(as.character(x@other$loc.metrics$AlleleID),"\\|")
   b <- unlist(a)[ c(TRUE,FALSE,FALSE) ]
+  
+  # set up to estimate variable and inv sites in sequenced tags, and mean tag length
+  proc.data <- data.table(x$other$loc.metrics) # using data.table
+  if(isFALSE("CloneID" %in% names(x$other$loc.metrics))) {
+    proc.data[, CloneID := b]
+  }
+  if("TrimmedSequence" %in% names(x$other$loc.metrics)) {
+    proc.data[, lenTrimSeq := nchar(as.character(TrimmedSequence))]
+    proc.data[, n.variant := .N, by=CloneID]
+    proc.data[, n.invariant := lenTrimSeq - n.variant]
+    setkey(proc.data, CloneID)
+    # the number of invariant sites of the genotyped tags
+    n.inv.gen <- proc.data[J(unique(CloneID)), sum(n.invariant), mult="first"]
+    # the mean length of the sequenced tags
+    mean.len.tag <- proc.data[J(unique(CloneID)), mean(lenTrimSeq), mult="first"]
+  } else {
+    mean.len.tag <- 65
+    proc.data[, n.variant := .N, by=CloneID]
+    # The eman number of SNPs for each tag
+    mean.nSNP.tag <- proc.data[J(unique(CloneID)), mean(n.variant), mult="first"]
+    #                                             The number of tags
+    n.inv.gen <- round((mean.len.tag - mean.nSNP.tag) * proc.data[, length(unique(CloneID))], 0)
+    warning(paste("The column 'TrimmedSequence' was not found in loc.metrics\n",
+                  "Mean tag length assumed to be 65\n"))
+  }
   if (verbose >= 2) {
     cat(report("Counting ....\n"))
   }
@@ -236,19 +262,31 @@ gl.report.secondaries <- function(x,
   }
   
 # Identify secondaries in the genlight object
+  n.total.tags <- table(duplicated(b))[1]
+  n.SNPs.secondaries <- 0
+  n.invariant.tags <- NA
+  n.tags.secondaries <- NA
+  n.invariant <- NA
   cat("  Total number of SNP loci scored:",nLoc(x),"\n")
   if (is.na(table(duplicated(b))[2])) {
     cat("    Number of secondaries: 0 \n")
   } else {
-      cat("   Number of sequence tags in total:",table(duplicated(b))[1],"\n")
+      cat("   Number of sequence tags in total:",n.total.tags,"\n")
       if (fail){
         cat("    Number of invariant sequence tags cannot be estimated\n")
       } else {
-        cat("   Estimated number of invariant sequence tags:", round(dpois(x=0,lambda=k)*rn,0),"\n")
+        n.invariant.tags <- round(dpois(x=0,lambda=k)*rn,0)
+        cat("   Estimated number of invariant sequence tags:", n.invariant.tags,"\n")
       }  
-      cat("   Number of sequence tags with secondaries:",sum(table(as.numeric(table(b))))-table(as.numeric(table(b)))[1],"\n")
-      cat("   Number of secondary SNP loci that would be removed on filtering:",table(duplicated(b))[2],"\n")
-      cat("   Number of SNP loci that would be retained on filtering:",table(duplicated(b))[1],"\n")
+      n.tags.secondaries <- sum(table(as.numeric(table(b))))-table(as.numeric(table(b)))[1]
+      cat("   Number of sequence tags with secondaries:",n.tags.secondaries,"\n")
+      n.SNPs.secondaries <- table(duplicated(b))[2]
+      cat("   Number of secondary SNP loci that would be removed on filtering:",n.SNPs.secondaries,"\n")
+      cat("   Number of SNP loci that would be retained on filtering:",n.total.tags,"\n")
+      cat("   Number of invariant sites in sequenced tags:",n.inv.gen,"\n")
+      cat("   Mean length of sequence tags:", mean.len.tag,"\n")
+      n.invariant <- round(n.invariant.tags * mean.len.tag + n.inv.gen, 0)
+      cat("   Total Number of invariant sites (including invariant sequence tags:", n.inv.gen,"\n")
       if(verbose >= 3){
         cat(" Tabular 1 to K secondaries (refer plot)\n",table(as.numeric(table(b))),"\n")
         }
@@ -261,7 +299,13 @@ gl.report.secondaries <- function(x,
   }
   
   # RETURN
-  invisible(x)
+  return(data.frame(
+    Param=c("n.total.tags", "n.SNPs.secondaries", "n.invariant.tags",
+            "n.tags.secondaries", "n.inv.gen", "mean.len.tag", "n.invariant"), 
+    Value=c(unname(n.total.tags),n.SNPs.secondaries, n.invariant.tags,
+            n.tags.secondaries,n.inv.gen, mean.len.tag, n.invariant)
+  )
+  )
 }  
 
 
