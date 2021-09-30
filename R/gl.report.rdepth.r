@@ -154,7 +154,7 @@ gl.report.rdepth <- function(x,
   if(plot.out){
     # using package patchwork
     p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
-    print(p3)
+    suppressWarnings(print(p3))
   }
   print(df)
   

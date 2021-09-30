@@ -272,7 +272,7 @@ if (nrow(xy) == 0 & verbose>0 ){
       ylim(0,1)+
       plot_theme
     
-    print(gg)
+    suppressWarnings(print(gg))
   }
   
 l <- list(xxxy=xy, zzzw=zw, plot=gg)
@@ -403,7 +403,7 @@ if (datatype=="SilicoDArT"){
       ylim(0,1)+
       plot_theme
     
-    print(gg)
+    suppressWarnings(print(gg))
   }
   
   l <- list(xxxy=xy, zzzw=zw, plot=gg) 
@@ -412,7 +412,7 @@ if (datatype=="SilicoDArT"){
   # FLAG SCRIPT END
   
   if (verbose >= 1) {
-    cat(report("\n\nCompleted:", funname, "\n\n"))
+    cat(report("Completed:", funname, "\n"))
   }
   
   # RETURN

@@ -13,9 +13,9 @@
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param threshold Threshold value below which loci will be removed 
 #' [default 0.99].
-#' @param plot.out If TRUE, displays a plot to guide the decision on a filter 
-#' threshold [default TRUE].
-#' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
+#' @param plot.out If TRUE, displays a plots of the distribution of reproducibility
+#'  values before and after filtering [default TRUE].
+#' @param plot_theme Theme for the plot [default theme_dartR()].
 #' @param plot_colors List of two color names for the borders and fill of the 
 #' plots [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
@@ -77,7 +77,6 @@ gl.filter.reproducibility <- function(x,
 # DO THE JOB
 
   hold <- x
-  na.counter <- 0
   loc.list <- array(NA,nLoc(x))
   
   # Tag presence/absence data
@@ -110,8 +109,9 @@ gl.filter.reproducibility <- function(x,
     } 
     x2 <- gl.drop.loc(x,loc.list=loc.list,verbose=0)
   } else {
+    x2 <- x
     if (verbose >= 2){
-      cat("  No loci with repeatability less than",threshold,"\n")
+      cat(report("  No loci with repeatability less than",threshold,"\n"))
     } 
   }  
   
@@ -183,7 +183,7 @@ gl.filter.reproducibility <- function(x,
   
 # ADD TO HISTORY
   nh <- length(x2@other$history)
-  x@other$history[[nh + 1]] <- match.call()   
+  x2@other$history[[nh + 1]] <- match.call()   
   
 # FLAG SCRIPT END
 
