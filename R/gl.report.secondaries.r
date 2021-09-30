@@ -94,11 +94,12 @@ gl.report.secondaries <- function(x,
   if(isFALSE("CloneID" %in% names(x$other$loc.metrics))) {
     proc.data[, CloneID := b]
   }
+  setkey(proc.data, CloneID)
   if("TrimmedSequence" %in% names(x$other$loc.metrics)) {
     proc.data[, lenTrimSeq := nchar(as.character(TrimmedSequence))]
     proc.data[, n.variant := .N, by=CloneID]
     proc.data[, n.invariant := lenTrimSeq - n.variant]
-    setkey(proc.data, CloneID)
+   
     # the number of invariant sites of the genotyped tags
     n.inv.gen <- proc.data[J(unique(CloneID)), sum(n.invariant), mult="first"]
     # the mean length of the sequenced tags
