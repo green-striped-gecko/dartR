@@ -11,7 +11,7 @@ gl.report.hamming(
   taglength = 69,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   probar = FALSE,
   save2tmp = FALSE,
   verbose = NULL
@@ -31,7 +31,7 @@ boxplot and histogram [default 3].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the 
+\item{plot_colors}{List of two color names for the borders and fill of the 
 plots [default two_colors].}
 
 \item{probar}{If TRUE, then a progress bar is displayed on long loops [default TRUE].}
@@ -40,7 +40,8 @@ plots [default two_colors].}
 temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
+progress log ; 3, progress and results summary; 5, full report 
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 Returns unaltered genlight object
@@ -86,6 +87,7 @@ gl.report.hamming(testset.gs[,1:100])
 \code{\link{gl.filter.hamming}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
@@ -98,6 +100,6 @@ Other filters and filter reports:
 \code{\link{gl.report.taglength}()}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters and filter reports}

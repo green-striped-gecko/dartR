@@ -8,7 +8,7 @@ gl.report.rdepth(
   x,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -17,18 +17,19 @@ gl.report.rdepth(
 \item{x}{Name of the genlight object containing the SNP or presence/absence
 (SilicoDArT) data [required].}
 
-\item{plot.out}{specify if plot is to be produced [default TRUE].}
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the
+\item{plot_colors}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
 temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
+progress log ; 3, progress and results summary; 5, full report 
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 An unaltered genlight object
@@ -64,6 +65,7 @@ df <- gl.report.rdepth(testset.gs)
 \code{\link{gl.filter.rdepth}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
@@ -76,6 +78,6 @@ Other filters and filter reports:
 \code{\link{gl.report.taglength}()}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters and filter reports}

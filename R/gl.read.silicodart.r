@@ -39,12 +39,12 @@
 #' @seealso \code{\link{gl.read.dart}}
  
 gl.read.silicodart <- function(filename, 
-                               ind.metafile=NULL,  
-                               nas="-",  
-                               topskip=NULL, 
-                               lastmetric="Reproducibility",
-                               probar=TRUE,
-                               verbose=NULL) {
+                               ind.metafile = NULL,  
+                               nas = "-",  
+                               topskip = NULL, 
+                               lastmetric = "Reproducibility",
+                               probar = TRUE,
+                               verbose = NULL) {
 
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)

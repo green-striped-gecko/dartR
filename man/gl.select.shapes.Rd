@@ -9,9 +9,10 @@ gl.select.shapes(gl = NULL, select = NULL, verbose = NULL)
 \arguments{
 \item{gl}{Optionally, provide a gl object from which to determine the number of populations [default NULL]}
 
-\item{select}{select the shapes to retain in the output vector [default NULL, all shapes shown and returned]}
+\item{select}{Select the shapes to retain in the output vector [default NULL, all shapes shown and returned]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{-- Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A vector with the requried number of shapes
@@ -44,8 +45,8 @@ shapes <- gl.select.shapes(gl=gl,select=c(1,1,1,5,8)) # Select set of shapes and
 
 Other Exploration/visualisation functions: 
 \code{\link{gl.pcoa.plot}()},
-\code{\link{gl.plot}()},
-\code{\link{gl.select.colors}()}
+\code{\link{gl.select.colors}()},
+\code{\link{gl.smearplot}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}

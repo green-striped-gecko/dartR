@@ -1,5 +1,6 @@
-#' Set the default verbosity level
-#'
+#' @title gl.set.verbosity
+#' @title Set the default verbosity level
+#' @description
 #' dartR functions have a verbosity parameter that sets the level of reporting during the execution of the function. The verbosity level,
 #' set by parameter 'verbose' can be one of verbose 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary;
 #' 5, full report. The default value for verbosity is stored in the r environment. This script sets the default value.
@@ -22,13 +23,13 @@ gl.set.verbosity <- function(value=2) {
     options("dartR_verbose"=value)
   }
   if(value>=2){
-    cat("  Global verbosity set to:",value,"\n")
+    cat(report("  Global verbosity set to:",value,"\n"))
   }
   
 # FLAG SCRIPT END
   
   if (value >= 1) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
   
   invisible(NULL)

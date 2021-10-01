@@ -30,7 +30,7 @@ gl.fdsim(
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
 }
 \value{
-A list containing the following square matricies
+A list containing the following square matrices
         [[1]] observed fixed differences;
         [[2]] mean expected number of false positives for each comparison;
         [[3]] standard deviation of the no. of false positives for each comparison;

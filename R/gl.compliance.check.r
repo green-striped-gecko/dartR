@@ -8,7 +8,7 @@
 #' @param x Name of the input genlight object [required]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log ; 3, progress and results summary; 5, full report
-#' [default NULL, unless specified using gl.set.verbosity]
+#' [default 2 or as specified using gl.set.verbosity]
 #' @details
 #' A genlight object used by dartR has a number of requirements that allow
 #' functions within the package to operate correctly. The genlight object
@@ -27,9 +27,10 @@
 #' }
 #' @return A genlight object that conforms to the expectations of dartR
 #' @export
-#' @author Core Development Team (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' x <- gl.compliance.check(testset.gl)
+#' x <- gl.compliance.check(testset.gs)
 
 gl.compliance.check <- function (x,
                                  verbose = NULL) {
@@ -38,7 +39,7 @@ gl.compliance.check <- function (x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func = funname, build = "Jackson", v = verbose)
+  utils.flag.start(func = funname, build = "Jody", v = verbose)
   
   # DO THE JOB
   

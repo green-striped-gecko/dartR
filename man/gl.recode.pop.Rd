@@ -2,20 +2,21 @@
 % Please edit documentation in R/gl.recode.pop.r
 \name{gl.recode.pop}
 \alias{gl.recode.pop}
-\title{Recode population assignments in a genlight object \{adegenet\}}
+\title{Recode population assignments in a genlight object}
 \usage{
 gl.recode.pop(x, pop.recode, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required]}
 
-\item{pop.recode}{-- name of the csv file containing the population reassignments [required]}
+\item{pop.recode}{Name of the csv file containing the population reassignments [required]}
 
-\item{recalc}{-- Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]}
+\item{recalc}{Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]}
 
-\item{mono.rm}{-- Remove monomorphic loci [default FALSE]}
+\item{mono.rm}{Remove monomorphic loci [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the recoded and reduced data
@@ -49,5 +50,5 @@ recalculates the locus metadata as appropriate.
 \code{\link{gl.recode.pop}}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

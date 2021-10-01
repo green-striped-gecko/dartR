@@ -1,43 +1,75 @@
 #' @name gl.report.heterozygosity
-#' @title Reports observed and expected heterozygosity by population or by individual from SNP data
-#' @description Calculates the observed and expected heterozygosities for each population
-#' or the observed heterozygosity for each individual in a genlight object.
+#' @title Reports observed, expected and unbiased heterozygosities and FIS 
+#' (inbreeding coefficient) by population or by individual from SNP data
+#' @description Calculates the observed, expected and unbiased expected (i.e. 
+#' corrected for sample size) heterozygosities and FIS (inbreeding coefficient) 
+#' for each population or the observed heterozygosity for each individual in a 
+#' genlight object.
 #'
 #' @param x Name of the genlight object containing the SNP [required].
-#' @param method Calculate heterozygosity by population (method='pop') or by individual (method='ind') [default 'pop']
-#' @param n.invariant An estimate of the number of invariant sequence tags used to adjust the heterozygosity rate [default 0]
+#' @param method Calculate heterozygosity by population (method="pop") or by 
+#' individual (method="ind") [default "pop"].
+#' @param n.invariant An estimate of the number of invariant sequence tags used 
+#' to adjust the heterozygosity rate [default 0].
 #' @param plot.out Whether produce a plot of the results [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours_pop A color palette for population plots [default discrete_palette].
-#' @param plot_colours_ind List of two color names for the borders and fill of the plot by individual [default two_colors].
-#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
+#' @param plot_colours_pop A color palette for population plots or a list with 
+#' as many colors as there are populations in the dataset [default discrete_palette].
+#' @param plot_colours_ind List of two color names for the borders and fill of 
+#' the plot by individual [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session 
+#' temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#' progress log ; 3, progress and results summary; 5, full report 
+#' [default NULL, unless specified using gl.set.verbosity].
 #'
-#' @details Observed heterozygosity for a population takes the proportion of heterozygous
-#' loci for each individual then averages over the individuals in that population. 
-#' The calculations take into account missing values.
+#' @details 
+#' Observed heterozygosity for a population takes the proportion of 
+#' heterozygous loci for each individual then averages over the individuals in 
+#' that population. The calculations take into account missing values.
 #' 
 #' Expected heterozygosity for a population takes the expected proportion of
-#' heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each locus, then
-#' averages this across the loci for an average estimate for the population.
-#' The calculations of expected heterozygosity use the unbiassed estimates of Nei, M. (1987) 
-#'
-#' Output for method='pop' is an ordered barchart of observed heterozygosity across 
-#' populations together with a table of observed and expected heterozygosity by population.
+#' heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each 
+#' locus, then averages this across the loci for an average estimate for the 
+#' population.
 #' 
-#' Observed heterozygosity for individuals is calculated as the proportion of loci that
-#' are heterozygous for that individual.
+#' Observed heterozygosity for individuals is calculated as the proportion of 
+#' loci that are heterozygous for that individual.
 #' 
-#' Finally, the loci that are invariant across all individuals in the dataset (that is,
-#' across populations), is typically unknown. This can render estimates of heterozygosity
-#' analysis specific, and so it is not valid to compare such estimates across species
-#' or even across different analyses. This is a similar problem faced by microsatellites.
-#' If you have an estimate of the number of invariant sequence tags (loci) in your data,
-#' such as provided by gl.report.secondaries, you can specify it with the n.invariant
+#' Finally, the loci that are invariant across all individuals in the dataset 
+#' (that is, across populations), is typically unknown. This can render 
+#' estimates of heterozygosity analysis specific, and so it is not valid to 
+#' compare such estimates across species or even across different analyses. This
+#' is a similar problem faced by microsatellites. If you have an estimate of the 
+#' number of invariant sequence tags (loci) in your data, such as provided by 
+#' \code{\link{gl.report.secondaries}}, you can specify it with the n.invariant 
 #' parameter to standardize your estimates of heterozygosity.
 #' 
+#' Heterozygosities and FIS (inbreeding coefficient) are calculated by locus 
+#' within each population using the following equations:
+#' \itemize{ 
+#' \item Observed heterozygosity (Ho) = number of homozygotes / n_Ind,
+#' where n_Ind is the number of individuals without missing data.  
+#' \item Observed heterozygosity adjusted (Ho.adj) <- Ho * n_Loc / (n_Loc + n.invariant),
+#' where n_Loc is the number of loci that do not have all missing data  and 
+#' n.invariant is an estimate of the number of invariant loci to adjust heterozygosity. 
+#' \item Expected heterozygosity (He) = 1 - (p^2 + q^2),
+#' where p is the frequency of the reference allele and q is the frequency of 
+#' the alternative allele.
+#' \item Expected heterozygosity (He.adj) = He * n_Loc / (n_Loc + n.invariant)
+#' Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / (2 * n_Ind - 1)) 
+#' \item Inbreeding coefficient (FIS) = 1 - (Ho / He)
+#' }
+#' 
 #'\strong{ Function's output }
-#' Output for method='ind' is a histogram and a boxplot of heterozygosity across individuals.
+#'
+#' Output for method='pop' is an ordered barchart of observed heterozygosity, 
+#' expected heterozygosity and FIS (Inbreeding coefficient) across populations 
+#' together with a table of mean observed and expected heterozygosities and FIS by 
+#' population and their respective standard deviations (SD).
+#'
+#' Output for method='ind' is a histogram and a boxplot of heterozygosity across
+#' individuals.
 #' 
 #'  Plots and table are saved to the session temporary directory (tempdir) 
 #'  
@@ -46,7 +78,8 @@
 #'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
-#' @return A dataframe containing population labels, heterozygosities and sample sizes
+#' @return A dataframe containing population labels, heterozygosities, FIS, 
+#' their standard deviations and sample sizes
 #'
 #' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
@@ -58,8 +91,6 @@
 #' @seealso \code{\link{gl.filter.heterozygosity}}
 #'  
 #' @family reporting functions
-#' @references Nei, M. and R. K. Chesser (1983). Estimation of fixation indices and gene diversities. Annals of Human Genetics 47:253-259.
-#' @importFrom plyr join
 #' @export 
 
 gl.report.heterozygosity <- function(x, 
@@ -92,11 +123,13 @@ gl.report.heterozygosity <- function(x,
     if (n.invariant < 0) {
         cat(warn("Warning: Number of invariant loci must be non-negative, set to zero\n"))
         n.invariant <- 0
-        if(verbose==5){cat(report("  No. of invariant loci can be esimated using gl.report.secondaries\n"))}
+        if(verbose==5){
+            cat(report("  No. of invariant loci can be esimated using gl.report.secondaries\n"))
+            }
     }
 
 # DO THE JOB
-
+ 
     ########### FOR METHOD BASED ON POPULATIONS
 
     if (method == "pop") {
@@ -120,24 +153,48 @@ gl.report.heterozygosity <- function(x,
         }
 
         # Calculate heterozygosity for each population in the list
+        # CP = Carlo Pacioni
+        ### CP ### 
+        Ho.loc <- lapply(sgl, function(x) colMeans(as.matrix(x)==1, na.rm=TRUE) )
+        ##########
+        
         Ho <- unlist(lapply(sgl, function(x) mean(colMeans(as.matrix(x) == 1, na.rm = TRUE), na.rm = TRUE)))
+        
+        ### CP ### 
+        # observed heterozygosity standard deviation 
+        HoSD <- unlist(lapply(sgl, function(x) sd(colMeans(as.matrix(x)==1, na.rm=TRUE), na.rm=TRUE) ))
+        ##########
 
-        # Calculate the number of loci used
-        nl <- unlist(lapply(sgl, function(x) sum(colSums(is.na(as.matrix(x))) == 0)))
+        # Calculate the number of loci that are not all NAs
+        ### CP ### 
+        n_loc <- unlist(lapply(sgl, function(x) sum(!(colSums(is.na(as.matrix(x))) == nrow(as.matrix(x))))))
+        ##########
 
         # Apply correction
-        Ho.adj <- Ho * nLoc(x)/(nLoc(x) + n.invariant)
+        ### CP ### 
+        Ho.adj <- Ho*n_loc/(n_loc+n.invariant)
+        # Manually compute SD for Ho.adj
+        Ho.adjSD <- sqrt(
+            # sum of the square of differences from the mean for polymorphic sites
+            (mapply(function(x, Mean) sum((x - Mean)^2, na.rm=TRUE), Ho.loc, Mean=Ho.adj) + 
+                 n.invariant * Ho.adj^2) / # plus sum of the square of differences (which is the Ho.adj because Ho=0) from the mean for invariant sites
+                (n_loc+n.invariant-1) # sample size
+        )
+        ##########
 
-        # Calculate sample sizes =Number of individuals
-        sums <- data.frame(lapply(sgl, function(x) mean(colSums(as.matrix(x) == 1, na.rm = TRUE), na.rm = TRUE)))
-        n <- t(sums/Ho)
-        n <- cbind(row.names(n), n, nl, nLoc(x)/(nLoc(x) + n.invariant))
-
-        # Join the sample sizes with the heteozygosities
-        df1 <- data.frame(pop = names(Ho), Ho = as.numeric(Ho), Ho.adj = as.numeric(Ho.adj))
-        df2 <- data.frame(n)
-        names(df2) <- c("pop", "nInd", "nLoc", "nLoc.adj")
-        df <- plyr::join(df1, df2, by = "pop")
+        # sample size per locus per pop
+        # taken from adegenet basic.stats
+        ind.count <- function (df_ind.count) {
+            dum <- function(x) {
+                a <- which(!is.na(x))
+                tapply(x[a], df_ind.count[a, 1], length)
+            }
+            df_ind.count[, 1] <- factor(df_ind.count[, 1])
+            apply(df_ind.count[,-1], 2, dum)
+        }
+        
+        n_ind_df <- as.data.frame(cbind(as.character(pop(x)),as.matrix(x)))
+        n_ind <- t(ind.count(n_ind_df))
 
         # EXPECTED HETEROZYGOSITY
         if (verbose >= 2) {
@@ -146,9 +203,20 @@ gl.report.heterozygosity <- function(x,
 
         Hexp <- array(NA, length(sgl))
         Hexp.adj <- array(NA, length(sgl))
+        
+        ### CP ### 
+        HexpSD <- array(NA,length(sgl))
+        uHexp <- array(NA,length(sgl))
+        uHexpSD <- array(NA,length(sgl))
+        Hexp.adjSD <- array(NA,length(sgl))
+        ##########
+        
+        FIS <- array(NA,length(sgl))
+        FISSD <- array(NA,length(sgl))
 
         # For each population
         for (i in 1:length(sgl)) {
+
             gl <- sgl[[i]]
             gl <- utils.recalc.freqhomref(gl, verbose = 0)
             gl <- utils.recalc.freqhomsnp(gl, verbose = 0)
@@ -158,73 +226,118 @@ gl.report.heterozygosity <- function(x,
             hets <- gl@other$loc.metrics$FreqHets
             p <- (2 * p + hets)/2
             q <- (2 * q + hets)/2
-            H <- 1 - (p * p + q * q)
+            H <- 1 - (p^2 + q^2)
+            
+            
+            ### CP ### 
+            # Unbiased He (i.e. corrected for sample size)
+            # hard coded for diploid 
+            uH <- (2 * as.numeric(n_ind[,i]) / (2 * as.numeric(n_ind[,i]) - 1)) * H 
+            ##########
+            
             Hexp[i] <- mean(H, na.rm = T)
-            Hexp.adj[i] <- Hexp[i] * nLoc(x)/(nLoc(x) + n.invariant)
+            ### CP ### 
+            uHexp[i] <- mean(uH, na.rm=T)
+            Hexp.adj[i] <- Hexp[i]*n_loc[i]/(n_loc[i]+n.invariant)
+            HexpSD[i] <- sd(H, na.rm=T)
+            uHexpSD[i] <- sd(uH, na.rm=T)
+            Hexp.adjSD[i] <- sqrt(
+                (sum((H - Hexp.adj[i])^2, na.rm = TRUE) + n.invariant * Hexp.adj[i]^2) / 
+                    (n_loc[i]+n.invariant-1)
+            )
+            ##########
+            FIS_temp <- 1-(unlist(Ho.loc[i])/H)
+            FIS[i] <- mean(FIS_temp, na.rm=T)
+            FISSD[i] <- sd(FIS_temp, na.rm=T)
+        }
+        
+        # If there are more than one population get the mean by column
+        if(length(sgl)>1){
+            ind_n <- round(colMeans(n_ind,na.rm = T),2)
+            # if there is just one population get the mean from the vector
+        }else{
+            ind_n <- round(mean(n_ind,na.rm = T),2)
+        }
+        
+        ### CP ### 
+        df <- data.frame(pop = popNames(x),
+                         nInd = ind_n,
+                         nLoc = n_loc,
+                         nLoc.adj = n_loc/(n_loc+ n.invariant),
+                         Ho = as.numeric(Ho),
+                         HoSD = HoSD, 
+                         Ho.adj = as.numeric(Ho.adj),
+                         Ho.adjSD = Ho.adjSD,
+                         He = round(Hexp,6),
+                         HeSD = round(HexpSD,6),
+                         uHe = round(uHexp,6),
+                         uHeSD = round(uHexpSD,6),
+                         He.adj = round(Hexp.adj,6),
+                         He.adjSD = round(Hexp.adjSD,6),
+                         FIS = FIS,
+                         FISSD = FISSD
+        )
+        ##########
+        
+        if(plot.out){
+        # printing plots and reports
+        # assigning colors to populations
+        if(class(plot_colours_pop)=="function"){
+            colours_pops <- plot_colours_pop(length(levels(pop(x))))
+        }
+        
+        if(class(plot_colours_pop)!="function"){
+            colours_pops <- plot_colours_pop
         }
 
-        df <- data.frame(popNames(x), as.numeric(table(pop(x))), nl, n.invariant, round(df$Ho, 6), round(df$Ho.adj, 6), round(Hexp, 
-            6), round(Hexp.adj, 6))
-        He <- He.adj <- NULL
-        names(df) <- c("pop", "nInd", "nLoc", "nLoc.inv", "Ho", "Ho.adj", "He", "He.adj")
-
-        # printing plots and reports
-
-        if (is.null(n.invariant)) {
-            df.ordered <- df[order(df$Ho), ]
+        if (n.invariant==0) {
+            df.ordered <- df
+            df.ordered$color <- colours_pops
+            df.ordered <- df.ordered[order(df.ordered$Ho), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
-            if(plot.out){
-            p1 <- ggplot(df.ordered, aes(x = pop, y = Ho, fill = pop)) + 
-                geom_bar(position = "dodge", stat = "identity", color = "black") + 
-                scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
-                scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd,sep = " | ")) + 
+            df.ordered <- df.ordered[,c("pop","nInd","Ho","He","FIS","color")]
+            df.ordered <- reshape2::melt(df.ordered,id=c("pop","color","nInd"))
+            
+            p3 <- ggplot(df.ordered, aes(x = pop, y = value, fill = interaction(color,variable))) + 
+                geom_bar(position = "dodge",stat = "identity",  color = "black") +   
+                scale_fill_manual(values = df.ordered$color ) + 
+                scale_x_discrete(labels = paste(df.ordered$pop, round(df.ordered$nInd,0),sep = " | ")) + 
+                geom_text(aes(label=variable),position = position_dodge(width = .9),vjust = -0.5,size = 4) + 
                 plot_theme + 
                 theme(axis.ticks.x = element_blank(), 
-                      axis.text.x = element_text(angle = 90,hjust = 1,face = "bold", size = 12), 
+                      axis.text.x = element_text(angle = 90, hjust = 1, face = "bold", size = 12), 
                       axis.title.x = element_blank(), 
                       axis.ticks.y = element_blank(), 
                       axis.title.y = element_blank(),
                       legend.position = "none") +
                 labs(fill = "Population") +
-                ggtitle("Observed Heterozygosity by Population")
-
-            p2 <- ggplot(df.ordered, aes(x = pop, y = He, fill = pop)) + 
-                geom_bar(position = "dodge", stat = "identity", color = "black") + 
-                scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
-                scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd,sep = " | ")) +
-                plot_theme + 
-                theme(axis.ticks.x = element_blank(), 
-                      axis.text.x = element_text(angle = 90, hjust = 1, face = "bold", size = 12), 
-                      axis.title.x = element_blank(),
-                      axis.ticks.y = element_blank(), 
-                      axis.title.y = element_blank(),
-                      legend.position = "none") + 
-                labs(fill = "Population") + 
-                ggtitle("Expected Heterozygosity by Population")
-            }
-        } else {
-            df.ordered <- df[order(df$Ho.adj), ]
+                ggtitle("Heterozygosities and FIS by Population")
+            } else {
+                
+            df.ordered <- df
+            df.ordered$color <- colours_pops
+            df.ordered <- df.ordered[order(df.ordered$Ho.adj), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
-            if(plot.out){
             p1 <- ggplot(df.ordered, aes(x = pop, y = Ho.adj, fill = pop)) + 
-                geom_bar(position = "dodge", stat = "identity", 
-                color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
-                scale_x_discrete(labels = paste(df.ordered$pop, 
-                df.ordered$nInd, sep = " | ")) + 
+                geom_bar(position = "dodge", stat = "identity", color = "black") + 
+                scale_fill_manual(values = df.ordered$color ) + 
+                scale_x_discrete(labels = paste(df.ordered$pop,
+                                                round(df.ordered$nInd,0), sep = " | ")) + 
                 plot_theme + 
                 theme(axis.ticks.x = element_blank(),
-                      axis.text.x = element_text(angle = 90, hjust = 1, face = "bold", size = 12), 
+                      axis.text.x = element_blank(),  
                       axis.title.x = element_blank(), 
                       axis.ticks.y = element_blank(), 
                       axis.title.y = element_blank(), 
                       legend.position = "none") + 
                 labs(fill = "Population") + 
-                ggtitle("Observed Heterozygosity by Population")
+                ggtitle("Adjusted Observed Heterozygosity by Population")
 
             p2 <- ggplot(df.ordered, aes(x = pop, y = He.adj, fill = pop)) + 
-                geom_bar(position = "dodge", stat = "identity", 
-                color = "black") + scale_fill_manual(values = plot_colours_pop(nPop(x))) + 
-                scale_x_discrete(labels = paste(df.ordered$pop, df.ordered$nInd, sep = " | ")) + 
+                geom_bar(position = "dodge", stat = "identity", color = "black") + 
+                scale_fill_manual(values = df.ordered$color ) + 
+                scale_x_discrete(labels = paste(df.ordered$pop,
+                                                round(df.ordered$nInd,0), sep = " | ")) + 
                 plot_theme + 
                 theme(axis.ticks.x = element_blank(),
                       axis.text.x = element_text(angle = 90, hjust = 1, face = "bold", size = 12), 
@@ -233,9 +346,11 @@ gl.report.heterozygosity <- function(x,
                       axis.title.y = element_blank(),
                       legend.position = "none") + 
                 labs(fill = "Population") + 
-                ggtitle("Expected Heterozygosity by Population")
-            }
+                ggtitle("Adjusted Expected Heterozygosity by Population")
+            
+            p3 <- (p1/p2)
         }
+    }
 
         # OUTPUT REPORT
         if (verbose >= 3) {
@@ -261,19 +376,19 @@ gl.report.heterozygosity <- function(x,
             } else {
                 cat("\n\n")
             }
-            cat("    Miniumum Expected Heterozygosity: ", round(min(df$He, na.rm = TRUE), 6))
+            cat("    Minimum Unbiased Expected Heterozygosity: ", round(min(df$uHe, na.rm = TRUE), 6))
             if (n.invariant > 0) {
                 cat("   [Corrected:", round(min(df$He.adj, na.rm = TRUE), 6), "]\n")
             } else {
                 cat("\n")
             }
-            cat("    Maximum Expected Heterozygosity: ", round(max(df$He, na.rm = TRUE), 6))
+            cat("    Maximum Unbiased Expected Heterozygosity: ", round(max(df$uHe, na.rm = TRUE), 6))
             if (n.invariant > 0) {
                 cat("   [Corrected:", round(max(df$He.adj, na.rm = TRUE), 6), "]\n")
             } else {
                 cat("\n")
             }
-            cat("    Average Expected Heterozygosity: ", round(mean(df$He, na.rm = TRUE), 6))
+            cat("    Average Unbiased Expected Heterozygosity: ", round(mean(df$uHe, na.rm = TRUE), 6))
             if (n.invariant > 0) {
                 cat("   [Corrected:", round(mean(df$He.adj, na.rm = TRUE), 6), "]\n\n")
             } else {
@@ -281,29 +396,25 @@ gl.report.heterozygosity <- function(x,
             }
 
             if (n.invariant > 0) {
-                cat("  Average correction factor for invariant loci =", nLoc(x)/(nLoc(x) + n.invariant), "\n")
+                cat("  Average correction factor for invariant loci =", mean(n_loc/(n_loc + n.invariant),na.rm=T), "\n")
             } else {
                 cat("  Heterozygosity estimates not corrected for uncalled invariant loci\n")
             }
-
-            if (verbose >= 3) {
-                if (n.invariant > 0) {
-                  print(df)
-                } else {
-                  print(df[, c("pop", "nInd", "nLoc", "Ho", "He")])
-                }
-            }
-
         }
         
 # PRINTING OUTPUTS
         if(plot.out){
-            p3 <- (p1/p2)
-            print(p3)
+           print(p3)
         }
-        print(df.ordered)
+        if (verbose >= 2) {
+            if (n.invariant > 0) {
+                print(df)
+            } else {
+                print(df[, c("pop", "nInd", "nLoc", "Ho","HoSD","He","HeSD","uHe", "uHeSD","FIS","FISSD")], row.names = FALSE)
+            }
+        }
     }
-
+    
     ########### FOR METHOD BASED ON INDIVIDUAL
 
     if (method == "ind") {
@@ -326,12 +437,12 @@ gl.report.heterozygosity <- function(x,
             c.hom2[i] <- sum(m[i, ] == 2, na.rm = TRUE)/(nLoc(x) - c.na[i])
         }
 
-        # Join the sample sizes with the heteozygosities
+        # Join the sample sizes with the heterozygosities
         df <- cbind.data.frame(x@ind.names, c.hets, c.hom0, c.hom2)
         names(df) <- c("ind.name", "Ho", "f.hom.ref", "f.hom.alt")
         
         # Boxplot
-        #if(plot.out){
+        if(plot.out){
         upper <- ceiling(max(df$Ho)*10)/10
         p1 <- ggplot(df, aes(y = Ho)) + 
           geom_boxplot(color = plot_colours_ind[1], 
@@ -342,26 +453,26 @@ gl.report.heterozygosity <- function(x,
           ylim(0,upper) +
           ylab(" ") + 
           theme(axis.text.y = element_blank(),axis.ticks.y = element_blank()) +
-          ggtitle("Heterozygosity by Individual")
+          ggtitle("Observed Heterozygosity by Individual")
         
         # Histogram
         p2 <- ggplot(df,aes(x=Ho)) + 
-          geom_histogram(bins = 50, color =plot_colours_ind[1], fill = plot_colours_ind[2]) + 
+          geom_histogram(bins = 25, color =plot_colours_ind[1], fill = plot_colours_ind[2]) + 
           coord_cartesian(xlim = c(0, upper)) + 
           xlab("Observed heterozygosity") + 
           ylab("Count") + 
           plot_theme
+        }
         
         outliers_temp <- ggplot_build(p1)$data[[1]]$outliers[[1]]
         outliers <- data.frame(ID=as.character(df$ind.name[df$Ho %in% outliers_temp]), Ho=outliers_temp)
-        #}
         
          # OUTPUT REPORT
         if (verbose >= 3) {
             cat("Reporting Heterozygosity by Individual\n")
             cat("No. of loci =", nLoc(x), "\n")
             cat("No. of individuals =", nInd(x), "\n")
-            cat("  Miniumum Observed Heterozygosity: ", round(min(df$Ho), 6), "\n")
+            cat("  Minimum Observed Heterozygosity: ", round(min(df$Ho), 6), "\n")
             cat("  Maximum Observed Heterozygosity: ", round(max(df$Ho), 6), "\n")
             cat("  Average Observed Heterozygosity: ", round(mean(df$Ho), 6), "\n\n")
             cat("  Results returned as a dataframe\n\n")
@@ -379,7 +490,9 @@ gl.report.heterozygosity <- function(x,
             p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
             print(p3)
         }
-        print(df)
+        if (verbose >= 2) {
+        print(df, row.names = FALSE)
+        }
     }
     
     # SAVE INTERMEDIATES TO TEMPDIR  

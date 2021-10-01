@@ -38,6 +38,7 @@ discrete_palette <- function(n) {
   hues = seq(15, 375, length = n + 1)
   return(hcl(h = hues, l = 65, c = 100)[1:n])
 }
+
 # taken from wes_palette::Zissou1
 diverging_palette <- colorRampPalette(c("#3B9AB2" ,"#78B7C5" ,"#EBCC2A" ,"#E1AF00" ,"#F21A00"))
 # creating convergent to 0 palette
@@ -56,7 +57,6 @@ three_colors <- c("#3B9AB2","deeppink","lemonchiffon")
 four_colors <-  c( "lemonchiffon" ,"deeppink", "dodgerblue" ,"chartreuse3")
 
 # SET THEME FOR PLOTS
-
 #' dartR theme
 #'
 #' This is the theme used as default for dartR plots.
@@ -195,7 +195,7 @@ setMethod("plot", signature(x="genlight"), function(x,
                                                     posi = "bottom", 
                                                     save2tmp = FALSE,
                                                     verbose = NULL) {
-  gl.plot(x,
+  gl.smearplot(x,
           group_pop = group_pop,
           ind_labels = ind_labels, 
           ind_labels_size = ind_labels_size,

@@ -9,7 +9,7 @@ gl.report.callrate(
   method = "loc",
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -25,15 +25,15 @@ gl.report.callrate(
 
 \item{plot_theme}{User specified theme [default theme_dartR()].}
 
-\item{plot_colours}{Vector with two colour names for the borders and fill 
+\item{plot_colors}{Vector with two colour names for the borders and fill 
 [default two_colors].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
 temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report [default NULL, 
-unless specified using gl.set.verbosity].}
+progress log ; 3, progress and results summary; 5, full report 
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 Returns unaltered genlight object
@@ -74,6 +74,7 @@ directory.
 \code{\link{gl.filter.callrate}}
 
 Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},

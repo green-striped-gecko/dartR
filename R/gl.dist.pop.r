@@ -1,90 +1,61 @@
-#' Calculate a distance matrix for populations defined in an \{adegenet\} genlight object
-#'
+#' @name gl.dist.pop
+#' @title Calculate a distance matrix for populations with SNP genotypes in a genlight object
+#' @description
 #' This script calculates various distances between populations based on allele frequencies. The distances are
 #' calculated by scripts in the {stats} or {vegan} libraries, with the exception of the pcfixed (percent fixed
 #' differences) distance.
-#' 
+#' @details
 #' The distance measure can be one of "manhattan", "euclidean", "pcfixed", "pa", canberra", "bray", 
 #' "kulczynski", "jaccard", "gower", "morisita", "horn", "mountford", "raup" , 
 #' "binomial", "chao", "cao", "mahalanobis", "maximum", "binary" or "minkowski". Refer to the documentation for
-#' dist stats or vegdist vegan for definitions. 
+#' of functions \link[stat]{dist} (package stat) or \link[vegan]{vegdist} (package vegan) vegan for definitions. 
 #' 
 #' Distance pcfixed calculates the pair-wise count of fixed allelic differences between populations.
 #'
-#' @param x -- name of the genlight containing the SNP genotypes [required]
-#' @param method -- Specify distance measure [euclidean]
-#' @param plot -- if TRUE, display a histogram of the genetic distances, and a whisker plot [TRUE]
-#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
-#' plots a boxplot adjusted for skewed distributions ['standard']
-#' @param range -- specifies the range for delimiting outliers [1.5 interquartile ranges]
-#' @param binary -- Perform presence/absence standardization before analysis using decostand [FALSE]
-#' @param p -- The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [0.5]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight containing the SNP genotypes [required]
+#' @param method Specify distance measure [default euclidean]
+#' @param plot.out If TRUE, display a histogram of the genetic distances, and a whisker plot [default TRUE]
+#' @param binary Perform presence/absence standardization before analysis using decostand [default FALSE]
+#' @param p The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [default 0.5]
+#' @param plot_theme User specified theme [default theme_dartR()].
+#' @param plot_colors Vector with two colour names for the borders and fill [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return An object of class 'dist' giving distances between populations
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
-#' @importFrom grDevices rainbow
-#' @importFrom graphics par boxplot hist
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' gl.dist.pop(testset.gl, method="euclidean")
+#' D <- gl.dist.pop(testset.gl, method="euclidean")
 
-gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", range=1.5, binary=FALSE, p=NULL, verbose=NULL) {
+gl.dist.pop <- function(x, 
+                        method="euclidean", 
+                        plot.out=TRUE, 
+                        binary=FALSE, 
+                        p=NULL, 
+                        plot_theme = theme_dartR(), 
+                        plot_colors = two_colors, 
+                        save2tmp = FALSE,
+                        verbose=NULL) {
 
 # CHECK IF PACKAGES ARE INSTALLED
-  # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "reshape2"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package",pkg," needed for this function to work. Please   install it.")} else {
-  
-  
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
+    stop("Package",pkg," needed for this function to work. Please install it.")
+  }
   
 # SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
+      verbose <- gl.check.verbosity(verbose)
+      
 # FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-  }
-  
+      funname <- match.call()[[1]]
+      utils.flag.start(func=funname,build="Jody",v=verbose)
+      
+# CHECK DATATYPE 
+      datatype <- utils.check.datatype(x,accept="SNP",verbose=verbose)
+      
 # FUNCTION SPECIFIC ERROR CHECKING
 
 # DO THE JOB
@@ -95,7 +66,7 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
   distmethod <- c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski", "Chebyshev")
 
   if (!(method%in%veganmethod || method%in%distmethod || method=="pcfixed")){
-    stop("Fatal Error: Specified distance method is not among those available\n  Specify one of",veganmethod, distmethod,"or 'pcfixed'\n")
+    stop(error("Fatal Error: Specified distance method is not among those available.\n  Specify one of",paste(paste(veganmethod,collapse = ", "), paste(distmethod,collapse = ", "),collapse = ", "),"or pcfixed.\n"))
   }
   hard.min.p <- 0.25
 
@@ -124,7 +95,7 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
       }  
       if (method == "minkowski"){
         if (pr < 0.25) {
-          if (verbose >= 0){cat("  Warning:",hard.min.p,"is the practical minimum for Minkowski distance, set to,",hard.min.p,"\n\n")}
+          if (verbose >= 2){cat("  Warning:",hard.min.p,"is the practical minimum for Minkowski distance, set to,",hard.min.p,"\n\n")}
           pr <- hard.min.p
         }
         if (pr == 1) {
@@ -147,8 +118,8 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
     if (m %in% veganmethod) {
       dd <- vegan::vegdist(f, method=m, binary=b, diag=d, upper=u, na.rm=TRUE)
       if (verbose >= 2) {
-        cat(paste("  Calculating distances: ",m,"\n"))
-        cat("    Refer to vegdist {vegan} documentation for algorithm\n")
+        cat(report(paste("  Calculating distances: ",m,"\n")))
+        cat(report("    Refer to vegdist {vegan} documentation for algorithm\n"))
       }
       if (method == "bray"){
         if (verbose >= 2) {cat("  Note: the Bray-Curtis distance is non-metric, and so should be considered a dissimilarity measure. A metric alternative is the Jaccard distance.\n\n")}
@@ -158,8 +129,8 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
     if (m == "pcfixed"){
       dd <- gl.fixed.diff(x,verbose=0)[[3]]
       if (verbose >= 2) {
-        cat("  Calculating percent fixed differences\n")
-        cat("Note: this distance may be non-metric, and so should be considered a dissimilarity measure\n")
+        cat(report("  Calculating percent fixed differences\n"))
+        cat(warn("Note: this distance may be non-metric, and so should be considered a dissimilarity measure\n"))
       }  
     }
     # if (m == "pa"){
@@ -183,74 +154,90 @@ gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", ra
     
     dd <- as.dist(dd) 
     
-  # Revert to original order  
-    ord <- rank(popNames(x))
-    mat <- as.matrix(dd)[ord, ord]
-    dd <- as.dist(mat)
+  # # Revert to original order  
+  #   ord <- rank(popNames(x))
+  #   mat <- as.matrix(dd)[ord, ord]
+  #   dd <- as.dist(mat)
+    mat <- as.matrix(dd)
     
 # PLOT
-  if (plot){
-    
-    # Save the prior settings for mfrow, oma, mai and pty, and reassign
-    op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
-    
-    # Set margins for first plot
-    par(mai=c(1,0.5,0.5,0.5))
-    
     # Plot Box-Whisker plot
-    if (all(x@ploidy==2)){
-      title <- paste0("SNP data (DArTSeq)\nPopulation ",method," Distances")
-    } else {
-      title <- paste0("Tag P/A data (SilicoDArT)\nPopulation ",method," Distances")
-    }  
+
+  if (plot.out){
+      if (datatype=="SNP"){
+        title_plot <-  paste0("SNP data\nUsing ",method," distance")
+      } else {
+        title_plot <- paste0("Tag P/A data (SilicoDArT)\nUsing ",method," distance")
+      }  
+      values <- NULL
+      df_plot <- data.frame(values =as.vector(mat))
+      
+      # Boxplot
+      p1 <- ggplot(df_plot, aes(y = values)) + 
+        geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+        coord_flip() + 
+        plot_theme + 
+        xlim(range = c(-1, 1)) + 
+        ylim(min(df_plot$values,na.rm=TRUE),max(df_plot$values,na.rm=TRUE)) +
+        ylab(" ") + 
+        theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
+        ggtitle(title_plot)
+      
+      # Histogram
+      p2 <- ggplot(df_plot, aes(x = values)) + 
+        geom_histogram(bins = 20, color = plot_colors[1], fill = plot_colors[2]) +
+        xlim(min(df_plot$values,na.rm=TRUE),max(df_plot$values,na.rm=TRUE)) +
+        xlab("Distance") + 
+        ylab("Count") + 
+        plot_theme
+    }
     
-    if (boxplot == "standard"){
-      boxplot(dd, horizontal=TRUE, col='red', range=range, main = title)
-      cat("  Standard boxplot, no adjustment for skewness\n")
-    } else {
-      robustbase::adjbox(dd,
-                         horizontal = TRUE,
-                         col='red',
-                         range=range,
-                         main = title)
-      cat("  Boxplot adjusted to account for skewness\n")
-    }  
-    
-    # Set margins for second plot
-    par(mai=c(0.5,0.5,0,0.5))
-    hist(dd, 
-         main="", 
-         xlab="", 
-         border="blue", 
-         col="red",
-         xlim=c(min(dd),max(dd)),
-         breaks=100)
-  }  
   
 # SUMMARY 
     # Print out some statistics
-  if(verbose >= 2){
-    cat("\n  Reporting inter-population distances\n")
+  if(verbose >= 3){
+    cat("  Reporting inter-population distances\n")
     cat("  Distance measure:",method,"\n")
     cat("    No. of populations =", nPop(x), "\n")
     cat("    Average no. of individuals per population =", nInd(x)/nPop(x), "\n")
     cat("    No. of loci =", nLoc(x), "\n")
     cat("    Miniumum Distance: ",round(min(dd),2),"\n")
     cat("    Maximum Distance: ",round(max(dd),2),"\n")
-    cat("    Average Distance: ",round(mean(dd),3),"\n\n")
+    cat("    Average Distance: ",round(mean(dd),3),"\n")
   }  
     
+    # SAVE INTERMEDIATES TO TEMPDIR             
+    
+    # creating temp file names
+    if(save2tmp){
+      if(plot.out){
+        temp_plot <- tempfile(pattern = "Plot_")
+        match_call <- paste0(names(match.call()),"_",as.character(match.call()),collapse = "_")
+        # saving to tempdir
+        saveRDS(list(match_call,p3), file = temp_plot)
+        if(verbose>=2){
+          cat(report("  Saving the ggplot to session tempfile\n"))
+        }
+      }
+      temp_table <- tempfile(pattern = "Table_")
+      saveRDS(list(match_call,dd), file = temp_table)
+      if(verbose>=2){
+        cat(report("  Saving tabulation to session tempfile\n"))
+        cat(report("  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"))
+      }
+    }    
+    
+# PRINTING OUTPUTS
+    if(plot.out){
+      # using package patchwork
+      p3 <- (p1/p2) + plot_layout(heights = c(1, 4))
+      suppressWarnings(print(p3))
+    }
+    
 # FLAG SCRIPT END
-
-  if (plot){
-    # Reset the par options    
-    par(op)
-  }
-    
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
     
-    return(dd)
-  }
+  return(dd)
 }

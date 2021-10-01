@@ -2,14 +2,14 @@
 % Please edit documentation in R/gl.filter.secondaries.r
 \name{gl.filter.secondaries}
 \alias{gl.filter.secondaries}
-\title{Filter loci that represent secondary SNPs in a genlight \{adegenet\} object}
+\title{Filter loci that represent secondary SNPs in a genlight object}
 \usage{
 gl.filter.secondaries(x, method = "random", verbose = NULL)
 }
 \arguments{
 \item{x}{-- name of the genlight object containing the SNP data [required]}
 
-\item{method}{-- method of selecting SNP locus to retain, best or random [random]}
+\item{method}{-- method of selecting SNP locus to retain, "best" or "random" [default "random"]}
 
 \item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
@@ -33,6 +33,7 @@ result <- gl.filter.secondaries(testset.gl)
 }
 \seealso{
 Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
@@ -45,6 +46,6 @@ Other filters and filter reports:
 \code{\link{gl.report.taglength}()}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters and filter reports}

@@ -7,12 +7,12 @@
 gl.filter.overshoot(x, save2tmp = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object [required].}
+\item{x}{Name of the genlight object [required].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 progress log ; 3, progress and results summary; 5, full report 
 [default 2, unless specified using gl.set.verbosity].}
 }
@@ -22,8 +22,7 @@ A new genlight object with the recalcitrant loci deleted
 \description{
 This function checks the position of the SNP within the trimmed sequence tag and identifies those for which the SNP position is outside
 the trimmed sequence tag. This can happen, rarely, when the sequence containing the SNP resembles the adaptor.
-}
-\details{
+
 The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
 the sequence tag.
 
@@ -33,5 +32,5 @@ Not fatal, but should apply this filter before gl.filter.secondaries, for obviou
 result <- gl.filter.overshoot(testset.gl, verbose=3)
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

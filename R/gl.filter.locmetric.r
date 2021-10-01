@@ -1,5 +1,6 @@
-#' Filter loci on the basis of numeric information stored in other$loc.metrics in a genlight \{adegenet\} object
-#'
+#' @title gl.filter.locmetrics
+#' @title Filter loci on the basis of numeric information stored in other$loc.metrics in a genlight \{adegenet\} object
+#' @description
 #' This script uses any field with numeric values stored in $other$loc.metrics to filter loci. The loci to keep can be within the upper and lower thresholds ("within") or outside of the upper and lower thresholds ("outside").
 #' The fields that are included in dartR, and a short description, are found below. Optionally, the user can also set his/her own filter by adding a vector into $other$loc.metrics as shown in the example.
 #' 
@@ -17,15 +18,16 @@
 #' - AvgCountSnp - sum of the tag read counts for all samples, divided by the number of samples with non-zero tag read counts, for the Alternate (SNP) allele row 
 #' - RepAvg - proportion of technical replicate assay pairs for which the marker score is consistent 
 #' 
-#' @param x -- name of the genlight object containing the SNP data [required]
-#' @param metric -- name of the metric to be used for filtering [required]
-#' @param upper -- filter upper threshold [required]
-#' @param lower -- filter lower threshold  [required]
-#' @param keep -- whether keep loci within of upper and lower thresholds or keep loci outside of upper and lower thresholds [within]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
+#' @param x Name of the genlight object containing the SNP data [required]
+#' @param metric Name of the metric to be used for filtering [required]
+#' @param upper Filter upper threshold [required]
+#' @param lower Filter lower threshold  [required]
+#' @param keep Whether keep loci within of upper and lower thresholds or keep loci outside of upper and lower thresholds [within]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return The reduced genlight dataset
 #' @export
-#' @author Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # adding dummy data
 #' test <- testset.gl
@@ -33,62 +35,41 @@
 #' result <- gl.filter.locmetric(x=test, metric= "test", upper=255, 
 #' lower=200, keep= "within", verbose=3)
 
-gl.filter.locmetric <- function(x, metric, upper, lower, keep="within", verbose=2) {
+gl.filter.locmetric <- function(x, 
+                                metric, 
+                                upper, 
+                                lower, 
+                                keep="within", 
+                                verbose=NULL) {
   
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-
 # SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
-    }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
+  verbose <- gl.check.verbosity(verbose)
   
 # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
-    }
-  }
-
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("  Fatal Error: genlight object required!\n")
-  }
+# CHECK DATATYPE 
+  datatype <- utils.check.datatype(x,verbose=verbose)
 
   # Work around a bug in adegenet if genlight object is created by subsetting
-      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!")  }
+      if (nLoc(x)!=nrow(x@other$loc.metrics)) { stop(error("The number of rows in the loc.metrics table does not match the number of loci in your genlight object!"))  }
 
   # Set a population if none is specified (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
-      if (verbose >= 2){ cat("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n")}
+      if (verbose >= 2){ cat(report("  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n"))}
       pop(x) <- array("pop1",dim = nInd(x))
       pop(x) <- as.factor(pop(x))
     }
 
   # Check for monomorphic loci
     tmp <- gl.filter.monomorphs(x, verbose=0)
-    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat("  Warning: genlight object contains monomorphic loci\n")}
+    if ((nLoc(tmp) < nLoc(x)) & verbose >= 2) {cat(warn("  Warning: genlight object contains monomorphic loci\n"))}
 
 # FUNCTION SPECIFIC ERROR CHECKING
 # check whether the field exists in the genlight object
   if ( !(metric %in% colnames(x$other$loc.metrics)) ) {
-    stop("  Fatal Error: name of the metric not found\n")
+    stop(error("Fatal Error: name of the metric not found\n"))
   }
 
 # DO THE JOB
@@ -107,9 +88,9 @@ gl.filter.locmetric <- function(x, metric, upper, lower, keep="within", verbose=
   }
  
   if (verbose > 2) {
-    cat("    Initial number of loci:", nLoc(x), "\n")
-    cat("    Number of loci deleted:", nLoc(x) - nLoc(x2), "\n")
-    cat("    Final number of loci:", nLoc(x2), "\n")
+    cat("  Initial number of loci:", nLoc(x), "\n")
+    cat("  Number of loci deleted:", nLoc(x) - nLoc(x2), "\n")
+    cat("  Final number of loci:", nLoc(x2), "\n")
   }
 
 # ADD TO HISTORY  
@@ -119,7 +100,7 @@ gl.filter.locmetric <- function(x, metric, upper, lower, keep="within", verbose=
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-    cat("Completed:",funname,"\n")
+    cat(report("Completed:",funname,"\n"))
   }
 
   return(x2)

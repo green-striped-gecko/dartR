@@ -2,20 +2,21 @@
 % Please edit documentation in R/gl.drop.loc.r
 \name{gl.drop.loc}
 \alias{gl.drop.loc}
-\title{Remove specified loci from a genelight \{adegenet\} object}
+\title{Remove specified loci from a genlight \{adegenet\} object}
 \usage{
 gl.drop.loc(x, loc.list = NULL, first = NULL, last = NULL, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or presence/absence data [required]}
+\item{x}{Name of the genlight object containing SNP genotypes or presence/absence data [required]}
 
-\item{loc.list}{-- a list of loci to be deleted [required, if loc.range not specified]}
+\item{loc.list}{A list of loci to be deleted [required, if loc.range not specified]}
 
-\item{first}{-- first of a range of loci to be deleted [required, if loc.list not specified]}
+\item{first}{First of a range of loci to be deleted [required, if loc.list not specified]}
 
-\item{last}{-- last of a range of loci to be deleted [if not specified, last locus in the dataset]}
+\item{last}{Last of a range of loci to be deleted [if not specified, last locus in the dataset]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with the reduced data

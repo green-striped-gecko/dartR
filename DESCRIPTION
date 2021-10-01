@@ -31,6 +31,9 @@ Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools,reshape2,
         patchwork
 Suggests: 
+    tibble,
+    networkD3,
+    tidyverse,
     knitr,
     rmarkdown,
     rgl,
@@ -68,7 +71,7 @@ Suggests:
     testthat (>= 3.0.0)
 License: GPL-2
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 NeedsCompilation: no
 Packaged: 2021-04-28 23:28:46 UTC; s425824
 Author: Bernd Gruber [aut, cre],

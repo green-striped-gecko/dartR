@@ -9,7 +9,7 @@
 #' @param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required]
 #' @param plot.out If TRUE, histograms of base composition are produced [default TRUE]
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()]
-#' @param plot_colours List of two color names for the borders and fill of the
+#' @param plot_colors List of two color names for the borders and fill of the
 #'  plots [default two_colors]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
@@ -28,7 +28,7 @@
 #'  }
 #'
 #' @return the unchanged genlight object
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
 #' # SNP data
@@ -44,7 +44,7 @@
 gl.report.bases <- function(x, 
                             plot.out = TRUE, 
                             plot_theme = theme_dartR(), 
-                            plot_colours = two_colors,
+                            plot_colors = two_colors,
                             save2tmp = FALSE,
                             verbose = NULL) {
 
@@ -53,7 +53,7 @@ gl.report.bases <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)
@@ -155,8 +155,8 @@ gl.report.bases <- function(x,
         df <- data.frame(bases = bases, freq = freq)
         
         p1 <- ggplot(data = df, aes(x = bases, y = freq)) + 
-          geom_bar(stat = "identity",color = plot_colours[1], 
-                   fill = plot_colours[2]) + 
+          geom_bar(stat = "identity",color = plot_colors[1], 
+                   fill = plot_colors[2]) + 
           xlab("Bases") + 
           ylab("Percent Frequency") +
           ggtitle(title) +
@@ -168,8 +168,8 @@ gl.report.bases <- function(x,
             df2 <- data.frame(bases = bases, freq = freq)
             
             p2 <- ggplot(data = df2, aes(x = bases, y = freq)) + 
-              geom_bar(stat = "identity",color = plot_colours[1], 
-                       fill = plot_colours[2]) + 
+              geom_bar(stat = "identity",color = plot_colors[1], 
+                       fill = plot_colors[2]) + 
               xlab("Mutation Type") + 
               ylab("Percent Frequency") + 
               ggtitle(paste("SNP: Ts/Tv Rates [ratio =", round(ratio, 2), "]")) +
@@ -186,7 +186,7 @@ gl.report.bases <- function(x,
     if (verbose >= 2) {
         cat(report("  Returning a list containing
          [[1]] $freq -- the table of base frequencies and transition/transversion ratios;
-         [[2]] $plotbases -- ggplot bargraph of base frequencies;\n
+         [[2]] $plotbases -- ggplot bargraph of base frequencies;
          [[3]] $plottstv -- ggplot bargraph of transitions and transversions."))
     }
 

@@ -1,17 +1,18 @@
-#' Combines two genlight objects 
-#'
+#' @name gl.join
+#' @title Combines two genlight objects 
+#' @description
 #' This function combines two genlight objects and their associated metadata. The history associated with the two genlight objects is cleared
 #' from the new genlight object. The individuals/samples must be the same in each genlight object.
 #' 
 #' The function is typically used to combine datasets from the same service where the files have been split because of size limitations. The
 #' data is read in from multiple csv files, then the resultant genlight objects are combined.
 #' 
-#' @param x1 -- name of the first genlight object [required]
-#' @param x2 -- name of the first genlight object [required]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x1 Name of the first genlight object [required]
+#' @param x2 Name of the first genlight object [required]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A new genlight object
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' x1 <- testset.gl[,1:100]
 #' x1@other$loc.metrics <-  testset.gl@other$loc.metrics[1:100,]
@@ -29,24 +30,24 @@ gl.join <- function(x1, x2, verbose=NULL) {
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # STANDARD ERROR CHECKING
   
 # CHECK DATATYPE 
-  data.type1 <- utils.check.datatype(x1, verbose=verbose)
-  data.type2 <- utils.check.datatype(x2, verbose=verbose)
+  datatype1 <- utils.check.datatype(x1, verbose=0)
+  datatype2 <- utils.check.datatype(x2, verbose=0)
   
-    if((data.type1 != "SNP" && data.type1 != "SilicoDArT")|| (data.type2 != "SNP" && data.type2 != "SilicoDArT")){
+    if((datatype1 != "SNP" && datatype1 != "SilicoDArT")|| (datatype2 != "SNP" && datatype2 != "SilicoDArT")){
       stop (error("Fatal Error: Genlight objects must both be either SNP data or SilicoDArT data (fragment P/A data)"))
     }
 
-    if(data.type1 != data.type2){
+    if(datatype1 != datatype2){
       stop (error("Fatal Error: Genlight objects must both be either SNP data or SilicoDArT data (fragment P/A data), not a mixture\n"))
     } 
-    if (data.type1 == 1 && data.type2 == 1){
+    if (datatype1 == 1 && datatype2 == 1){
       if(verbose==2){cat(report("  Processing Presence/Absence (SilicoDArT) data\n"))}
-    } else if (data.type1 == 2 && data.type2 == 2){
+    } else if (datatype1 == 2 && datatype2 == 2){
       if(verbose==2){cat(report("  Processing SNP data \n"))}
     } 
 

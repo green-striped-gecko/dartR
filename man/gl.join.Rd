@@ -7,11 +7,11 @@
 gl.join(x1, x2, verbose = NULL)
 }
 \arguments{
-\item{x1}{-- name of the first genlight object [required]}
+\item{x1}{Name of the first genlight object [required]}
 
-\item{x2}{-- name of the first genlight object [required]}
+\item{x2}{Name of the first genlight object [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A new genlight object
@@ -19,8 +19,7 @@ A new genlight object
 \description{
 This function combines two genlight objects and their associated metadata. The history associated with the two genlight objects is cleared
 from the new genlight object. The individuals/samples must be the same in each genlight object.
-}
-\details{
+
 The function is typically used to combine datasets from the same service where the files have been split because of size limitations. The
 data is read in from multiple csv files, then the resultant genlight objects are combined.
 }
@@ -35,5 +34,5 @@ gl <- gl.join(x1, x2, verbose=2)
 nLoc(gl)
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

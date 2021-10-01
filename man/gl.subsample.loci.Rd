@@ -7,16 +7,17 @@
 gl.subsample.loci(x, n, method = "random", mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required]}
 
-\item{n}{-- number of loci to include in the subsample [required]}
+\item{n}{Number of loci to include in the subsample [required]}
 
-\item{method}{-- "random", in which case the loci are sampled at random; or avgPIC, in which case the top n loci
+\item{method}{-- Method: "random", in which case the loci are sampled at random; or avgPIC, in which case the top n loci
 ranked on information content (AvgPIC) are chosen [default 'random']}
 
-\item{mono.rm}{-- delete monomorphic loci before sampling [default FALSE]}
+\item{mono.rm}{-- Delete monomorphic loci before sampling [default FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{-- Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with n loci
@@ -32,5 +33,5 @@ to subsample, random and based on information content (avgPIC).
   gl2 <- gl.subsample.loci(testset.gl, n=100, method="random")
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

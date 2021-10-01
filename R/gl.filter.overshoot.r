@@ -1,5 +1,6 @@
-#' Filters loci for which the SNP has been trimmed from the sequence tag along with the adaptor 
-#'
+#' @name gl.filter.overshoot
+#' @title Filters loci for which the SNP has been trimmed from the sequence tag along with the adaptor 
+#' @description
 #' This function checks the position of the SNP within the trimmed sequence tag and identifies those for which the SNP position is outside
 #' the trimmed sequence tag. This can happen, rarely, when the sequence containing the SNP resembles the adaptor.
 #' 
@@ -8,15 +9,15 @@
 #' 
 #' Not fatal, but should apply this filter before gl.filter.secondaries, for obvious reasons.
 #' 
-#' @param x -- name of the genlight object [required].
+#' @param x Name of the genlight object [required].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #'  temporary directory (tempdir) [default FALSE].
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
 #' [default 2, unless specified using gl.set.verbosity].
 #' @return A new genlight object with the recalcitrant loci deleted
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' result <- gl.filter.overshoot(testset.gl, verbose=3)
 
@@ -29,7 +30,7 @@ gl.filter.overshoot <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)

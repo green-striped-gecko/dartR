@@ -8,16 +8,16 @@ less that a threshold}
 gl.collapse(fd, tpop = 0, tloc = 0, pb = FALSE, verbose = NULL)
 }
 \arguments{
-\item{fd}{-- name of the list of matricies produced by gl.fixed.diff() [required]}
+\item{fd}{Name of the list of matricies produced by gl.fixed.diff() [required]}
 
-\item{tpop}{-- threshold number of fixed differences above which populatons will not be 
+\item{tpop}{Threshold number of fixed differences above which populatons will not be 
 amalgamated [0]}
 
-\item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]}
+\item{tloc}{Threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]}
 
-\item{pb}{-- if TRUE, show a progress bar on time consuming loops [FALSE]}
+\item{pb}{If TRUE, show a progress bar on time consuming loops [FALSE]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
@@ -37,7 +37,7 @@ distance less than or equal to a specified threshold. The distance matrix is gen
 gl.fixed.diff().
 
 The script then applies the new population assignments to the genlight object and recalculates 
-the distance and associated matricies.
+the distance and associated matrices.
 }
 \examples{
 fd <- gl.fixed.diff(testset.gl,tloc=0.05)
@@ -48,5 +48,5 @@ fd3 <- gl.collapse(fd2,tpop=1)
 fd3
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

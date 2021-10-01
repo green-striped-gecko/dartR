@@ -7,9 +7,10 @@
 gl.filter.monomorphs(x, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the input genlight object [required]}
+\item{x}{Name of the input genlight object [required]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
 }
 \value{
 A genlight object with monomorphic (and all NA) loci removed
@@ -32,6 +33,7 @@ be reliably scored)
 }
 \seealso{
 Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.filter.secondaries}()},

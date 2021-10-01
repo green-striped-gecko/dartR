@@ -7,14 +7,14 @@
 #' gl.fixed.diff().
 #' 
 #' The script then applies the new population assignments to the genlight object and recalculates 
-#' the distance and associated matricies.
+#' the distance and associated matrices.
 #'
-#' @param fd -- name of the list of matricies produced by gl.fixed.diff() [required]
-#' @param tloc -- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]
-#' @param tpop -- threshold number of fixed differences above which populatons will not be 
+#' @param fd Name of the list of matricies produced by gl.fixed.diff() [required]
+#' @param tloc Threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) [0]
+#' @param tpop Threshold number of fixed differences above which populatons will not be 
 #' amalgamated [0]
-#' @param pb -- if TRUE, show a progress bar on time consuming loops [FALSE]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' @param pb If TRUE, show a progress bar on time consuming loops [FALSE]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
 #' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' @return A list containing the gl object x and the following square matricies
 #'         [[1]] $gl -- the new genlight object with populations collapsed;
@@ -27,7 +27,7 @@
 #'         [[8]] $prob -- NA's, populated by gl.fixed.diff [by simulation]
 #' @importFrom methods show       
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' fd <- gl.fixed.diff(testset.gl,tloc=0.05)
 #' fd
@@ -48,17 +48,11 @@ gl.collapse <- function(fd,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(fd,accept="fd",verbose=verbose)
   
-# # STANDARD ERROR CHECKING
-#   
-#   if (datatype != "fd") {
-#     stop("Fatal Error: fd must be a list of class 'fd' produced by gl.fixed.diff or gl.collapse\n")
-#   }
-#   
 # FUNCTION SPECIFIC ERROR CHECKING
   
   if (tloc > 0.5 || tloc < 0 ) {

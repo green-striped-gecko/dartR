@@ -25,41 +25,42 @@ gl.nhybrids(
 )
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing the SNP data [required]}
+\item{gl}{Name of the genlight object containing the SNP data [required]}
 
-\item{outfile}{-- name of the file that will be the input file for NewHybrids [default nhyb.txt]}
+\item{outfile}{Name of the file that will be the input file for NewHybrids [default nhyb.txt]}
 
-\item{outpath}{-- path where to save the output file (set to tempdir by default)}
+\item{outpath}{Path where to save the output file (set to tempdir by default)}
 
-\item{p0}{-- list of populations to be regarded as parental population 0 [default NULL]}
+\item{p0}{List of populations to be regarded as parental population 0 [default NULL]}
 
-\item{p1}{-- list of populations to be regarded as parental population 1 [default NULL]}
+\item{p1}{List of populations to be regarded as parental population 1 [default NULL]}
 
-\item{threshold}{-- sets the level at which a gene frequency difference is considered to be fixed [default 0]}
+\item{threshold}{Sets the level at which a gene frequency difference is considered to be fixed [default 0]}
 
-\item{method}{-- specifies the method (random or AvgPIC) to select 200 loci for NewHybrids [default random]}
+\item{method}{Specifies the method (random or AvgPIC) to select 200 loci for NewHybrids [default random]}
 
-\item{plot}{-- if TRUE, a plot of the frequency of homozygous reference, heterozygotes and
+\item{plot}{If TRUE, a plot of the frequency of homozygous reference, heterozygotes and
 homozygous alternate (SNP) is produced for the F1 individuals [default TRUE, applies only 
 if both parental populations are specified]}
 
-\item{pprob}{-- threshold level for assignment to likelihood bins [default 0.95, used only if plot=TRUE]}
+\item{pprob}{Threshold level for assignment to likelihood bins [default 0.95, used only if plot=TRUE]}
 
-\item{nhyb.directory}{-- directory that holds the NewHybrids executable file e.g. C:/NewHybsPC [default NULL]}
+\item{nhyb.directory}{Directory that holds the NewHybrids executable file e.g. C:/NewHybsPC [default NULL]}
 
-\item{BurnIn}{-- number of sweeps to use in the burn in [default 10000]}
+\item{BurnIn}{Number of sweeps to use in the burn in [default 10000]}
 
-\item{sweeps}{-- number  of  sweeps  to  use  in  computing  the  actual Monte Carlo averages [default 10000]}
+\item{sweeps}{Number  of  sweeps  to  use  in  computing  the  actual Monte Carlo averages [default 10000]}
 
-\item{GtypFile}{-- name of a file containing the genotype frequency classes [default TwoGensGtypFreq.txt]}
+\item{GtypFile}{Name of a file containing the genotype frequency classes [default TwoGensGtypFreq.txt]}
 
-\item{AFPriorFile}{-- name of the file containing prior allele frequency information [default NULL]}
+\item{AFPriorFile}{Name of the file containing prior allele frequency information [default NULL]}
 
-\item{PiPrior}{-- Jeffreys-like priors or Uniform priors for the parameter pi [default Jeffreys]}
+\item{PiPrior}{Jeffreys-like priors or Uniform priors for the parameter pi [default Jeffreys]}
 
-\item{ThetaPrior}{-- Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]}
+\item{ThetaPrior}{Jeffreys-like priors or Uniform priors for the parameter theta [default Jeffreys]}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 The reduced genlight object, if parentals are provided; output of NewHybrids is saved to disk
@@ -71,18 +72,17 @@ and creates an input file for the program NewHybrids using the top 200 (or hard 
 the absence of two identified parental populations, the script will
 select a random set 200 loci only (method="random") or the first 200 loci ranked
 on information content (method="AvgPIC").
-}
-\details{
+
 A fixed difference occurs when a SNP allele is present in all individuals
 of one population and absent in the other. There is provision for setting
-a level of tollerance, e.g. threshold = 0.05 which considers alleles present
+a level of tolerance, e.g. threshold = 0.05 which considers alleles present
 at greater than 95% in one population and less than 5% in the other to be
 a fixed difference. Only the 200 loci are retained, because of limitations
 of NewHybids.
 
 If you specify a directory for the NewHybrids executable file, then the script
-will create the input file from the snp data then run NewHybrids. If the directory
-is set to NULL, the exectution will stop once the input file (default="nhyb.txt") has been 
+will create the input file from the SNP data then run NewHybrids. If the directory
+is set to NULL, the execution will stop once the input file (default="nhyb.txt") has been 
 written to disk.
 
 Refer to the New Hybrids manual for further information on the parameters to set
@@ -90,7 +90,7 @@ Refer to the New Hybrids manual for further information on the parameters to set
 
 It is important to stringently filter the
 data on RepAvg and CallRate if using the random option. One might elect to repeat
-the analysis (method="random") and combine the resultant posterior probabilites
+the analysis (method="random") and combine the resultant posterior probabilities
 should 200 loci be considered insufficient.
 
 The F1 individuals should be homozygous at all loci for which the parental populations are fixed 

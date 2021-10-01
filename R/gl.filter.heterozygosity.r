@@ -4,13 +4,14 @@
 #' Calculates the observed heterozyosity for each individual in a genlight object and filters individuals based on specified threshold values.
 #' Use gl.report.heterozygosity to determine the appropriate thresholds.
 #' 
-#' @param x -- a genlight object containing the SNP genotypes [Required]
-#' @param t.upper -- filter individuals > the threshold [default 0.7]
-#' @param t.lower -- filter individuals < the threshold [default 0]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
+#' @param x A genlight object containing the SNP genotypes [Required]
+#' @param t.upper Filter individuals > the threshold [default 0.7]
+#' @param t.lower Filter individuals < the threshold [default 0]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
+#' 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]
 #' @return the filtered genlight object
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @importFrom plyr join
 #' @examples
 #'  result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
@@ -26,7 +27,7 @@ gl.filter.heterozygosity <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,accept="SNP",verbose=verbose)
@@ -111,7 +112,7 @@ gl.filter.heterozygosity <- function(x,
 # FLAG SCRIPT END
 
   if (verbose > 0) {
-      cat(report("\nCompleted:",funname,"\n"))
+      cat(report("Completed:",funname,"\n"))
   }
 
   return(x.kept) 

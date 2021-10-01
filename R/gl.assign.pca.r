@@ -49,7 +49,7 @@
 #'
 #' @param x -- name of the input genlight object [required]
 #' @param unknown -- identity label of the focal individual whose provenance is unknown [required]
-#' @param alpha -- probability level for bounding ellipses in the PCoA plot [default 0.05]
+#' @param plevel -- probability level for bounding ellipses in the PCoA plot [default 0.95]
 #' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #' 
 #' @return A genlight object containing the focal individual (assigned to population "unknown") and #' populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal to thresold t.
@@ -62,10 +62,10 @@
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 #'   x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1,verbose=3)
-#'   x <- gl.assign.pca(x, unknown="UC_00146", alpha=0.05,verbose=3)
+#'   x <- gl.assign.pca(x, unknown="UC_00146", plevel=0.95, verbose=3)
 
 
-gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
+gl.assign.pca <- function (x, unknown, plevel= 0.95, verbose=NULL) {
 
 # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -88,15 +88,12 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
 
 # FUNCTION SPECIFIC ERROR CHECKING
 
-  alpha <- 1-alpha
-
   if (!(unknown %in% indNames(x))) {
     stop(error("Fatal Error: Unknown must be listed among the individuals in the genlight object!\n"))
   }
-  if (alpha > 1 || alpha < 0) {
-    cat(warn("  Warning: Value of alpha must be between 0 and 1, set to 0.05\n"));
-    alpha <- 0.05
-    alpha <- 1- alpha
+  if (plevel > 1 || plevel < 0) {
+    cat(warn("  Warning: Value of plevel must be between 0 and 1, set to 0.95\n"));
+    plevel <- 0.95
   }
   
   if(nLoc(x) < nPop(x)){
@@ -111,12 +108,14 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
 # Ordinate a reduced space of 2 dimensions
   pcoa <- gl.pcoa(x, nfactors=2,verbose=0)
 # Plot  
-  suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=alpha))) # Because the unknown pop throws an ellipse error
+  if(verbose >= 3){
+    suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=plevel))) # Because the unknown pop throws an ellipse error
+  }  
 # Combine Pop names and pca scores
   df <- data.frame(pcoa$scores)
   df <- cbind(as.character(pop(x)),df)
   names(df) <- c("pop","x","y")
-# Determine if the unknown lies within the confidence ellipses specified by alpha
+# Determine if the unknown lies within the confidence ellipses specified by plevel
   result <- data.frame() 
   count <- 0
   for (i in popNames(x)){
@@ -127,14 +126,14 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
     sigma <- stats::cov(A)
     testset <- rbind(pcoa$scores[df$pop=="unknown",],A)
     transform <- SIBER::pointsToEllipsoid(testset, sigma, mu)
-    inside.or.out <- SIBER::ellipseInOut(transform, p = alpha)
+    inside.or.out <- SIBER::ellipseInOut(transform, p = plevel)
     result[count,1] <- i
     result[count,2] <- inside.or.out[1]
   }
   names(result) <- c("pop","hit")
   nhits <- length(result$pop[result$hit])
   nohits <- length(result$pop[!result$hit])
-  if(verbose==3){
+  if(verbose>=3){
     if(nhits > 0){
       cat("  Putative source populations:",paste(result[result$hit==TRUE,"pop"],collapse=", "),"\n")
     } else {
@@ -154,7 +153,12 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   
 # Re-run the pcoa on the reduced set
   hard.limit <- 8
-  pcoa <- gl.pcoa(x2,nfactors=hard.limit,verbose=0)
+  if (nInd(x2) < 2){
+    if(verbose >= 2){cat(warn("  Warning: No putative populations identified\n"))}
+    df <- NULL
+  } else {
+  #pcoa <- gl.pcoa(x2,nfactors=hard.limit,verbose=0)
+  #suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x2,ellipse=TRUE,plevel=plevel)))
 
 # Determine the number of dimensions for confidence envelope (the ordination and dimension reduction)
   # From the eigenvalue distribution
@@ -166,10 +170,12 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   #  sec.est <- nPop(x2)
 
     #cat("  Number of populations, including the unknown:",sec.est,"\n")
-    cat(report("  Number of dimensions with substantial eigenvalues:",first.est,". Hardwired limit",hard.limit,"\n"))
-    cat(report("    Selecting the smallest of the two\n"))
+    if(verbose >= 2){
+      cat(report("  Number of dimensions with substantial eigenvalues:",first.est,". Hardwired limit",hard.limit,"\n"))
+      cat(report("    Selecting the smallest of the two\n"))
+    }  
     dim <- min(first.est, hard.limit)
-    cat(report("    Dimension of confidence envelope set at",dim,"\n"))
+    if(verbose >= 2){cat(report("    Dimension of confidence envelope set at",dim,"\n"))}
     pcoa$scores <- pcoa$scores[,1:dim]
     
 # Add population names to the scores   
@@ -182,7 +188,7 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   #Unknown[1:dim] <- as.numeric(Unknown[1:dim])
 
 
-  cat("  Likelihood Index for assignment of unknown",unknown,"to putative source populations\n") 
+  if(verbose >= 3){cat("  Likelihood Index for assignment of unknown",unknown,"to putative source populations\n")}
 # For each population
   p <- as.factor(unique(clouds[,"pop"]))
   for (i in 1:length(levels(p))) {
@@ -201,8 +207,8 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
       N <- nrow(n)
       sd <- sqrt(N/(N-1) * (colMeans(n*n)-colMeans(n)^2))
     # Standardise the unknown
-      std.unknown <- (Unknown-means)/sd
-      std.boundary <- rep(qnorm((1-(1-alpha)/2), 0, 1),dim)
+      std.unknown <- abs((Unknown-means))/sd
+      std.boundary <- rep(qnorm((1-plevel/2), 0, 1),dim)
     # Calculate log likelihoods
       li <- dnorm(std.unknown,0,1)
       li <- log(li)
@@ -228,14 +234,11 @@ gl.assign.pca <- function (x, unknown, alpha= 0.05, verbose=3) {
   }  
   colnames(df) <- c("Population","Wt","CE","Index","Assign")
   df <- df[order(df$Index),]
-  print(df)
+  if(verbose >= 3){print(df)}
   best <- as.character(df$Population[df$Assign=="yes"][1])
-  # cat("  Wt is a weighted log-likelihood\n")
-  # cat("  CE is the value of the Index on the boundary of the",alpha*100,"% confidence envelope\n")
-  # cat("  Index is the position of the unknown relative to the boundary of the",alpha*100,"% confidence envelope\n")
-  # cat("    An index value less than 1 indicates the unknown resides inside the confidence ellipse for the focal population\n")
-  # cat("    An index value greater than 1 indicates the unknown resides outside the confidence ellipse for the focal population\n")
-  cat(report("  Best assignment is the population with the smallest value of the Index, in this case",best,"\n"))
+
+  if(verbose >= 3){cat(report("  Best assignment is the population with the smallest value of the Index, in this case",best,"\n"))}
+  }
   
 # FLAG SCRIPT END
 

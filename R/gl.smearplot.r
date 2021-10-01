@@ -1,4 +1,4 @@
-#' @name gl.plot
+#' @name gl.smearplot
 #' @title Smear plot of SNP or presence/absence (SilicoDArT) data
 #' @description 
 #' Each locus is color coded for scores of 0, 1, 2 and NA for SNP data and 0, 1 
@@ -12,7 +12,7 @@
 #' @param group_pop Group by population [default TRUE].
 #' @param ind_labels Labels for individuals [default indNames(x)].
 #' @param ind_labels_size Size of the individual labels, if individual labels 
-#' are not required set this parameter to 0 [default 10].
+#' are not required set this parameter to 0 [default 6].
 #' @param plot_colors Vector with four color names for homozygotes for the 
 #' reference allele, heterozygotes, homozygotes for the alternative allele and 
 #' for missing values (NA) [default four_colors].
@@ -32,7 +32,7 @@
 #' @export
 #'  
 
-gl.plot <- function (x,
+gl.smearplot <- function (x,
                      group_pop = FALSE,
                      ind_labels = indNames(x), 
                      ind_labels_size = 10,
@@ -109,7 +109,9 @@ gl.plot <- function (x,
     }
     
   # PRINTING OUTPUTS
+  if(verbose>0){
     print(p3)
+  }
 
   # creating temp file names
   if(save2tmp){
@@ -130,5 +132,5 @@ gl.plot <- function (x,
   
   # RETURN
   
-  invisible(x)
+  invisible(p3)
 }
