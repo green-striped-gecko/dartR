@@ -55,7 +55,7 @@
 #' @seealso \code{\link{gl.select.shapes}}
 #' @family Exploration/visualisation functions
 #' 
-#' @importFrom grDevices cm.colors hcl.pals palette.pals terrain.colors topo.colors
+#' @importFrom grDevices cm.colors hcl.pals palette.pals terrain.colors topo.colors rainbow
 #' @export
 
 
@@ -108,7 +108,7 @@ gl.select.colors <- function(x=NULL,
       if(nPop(x) != length(select)){
         stop(error("Fatal Error: Number of specified colors",length(select),"does not correspond to number of populations",nPop(x),"in supplied genlight object\n"))
       } else {
-        if(verbosity >= 2) {
+        if(verbose >= 2) {
           cat(report("  Number of specified colors",length(select),"corresponds to number of populations in supplied genlight object\n"))
         }  
       }

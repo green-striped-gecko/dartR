@@ -4,10 +4,10 @@
 \alias{gl.select.shapes}
 \title{Select shapes from the base R shape palette and output as a vector}
 \usage{
-gl.select.shapes(gl = NULL, select = NULL, verbose = NULL)
+gl.select.shapes(x = NULL, select = NULL, verbose = NULL)
 }
 \arguments{
-\item{gl}{Optionally, provide a gl object from which to determine the number of populations [default NULL]}
+\item{x}{Optionally, provide a gl object from which to determine the number of populations [default NULL]}
 
 \item{select}{Select the shapes to retain in the output vector [default NULL, all shapes shown and returned]}
 
@@ -15,7 +15,7 @@ gl.select.shapes(gl = NULL, select = NULL, verbose = NULL)
 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-A vector with the requried number of shapes
+A vector with the required number of shapes
 }
 \description{
 This script draws upon the standard R shape palette to extract a vector of shapes for plotting, where
@@ -37,7 +37,7 @@ rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
 # EXAMPLES
 shapes <- gl.select.shapes() # Select and display available shapes
 shapes <- gl.select.shapes(select=c(1,1,1,5,8)) # Select and display a restricted set of shapes
-shapes <- gl.select.shapes(gl=gl,select=c(1,1,1,5,8)) # Select set of shapes and check with no. of pops.
+shapes <- gl.select.shapes(x=gl,select=c(1,1,1,5,8)) # Select set of shapes and check with no. of pops.
 
 }
 \seealso{

@@ -34,9 +34,18 @@ This script draws upon a number of specified color libraries to extract a vector
 the script that follows has a color parameter expecting a vector of colors.
 }
 \details{
-The available color libraries include base R, RColorBrewer, gr.palette (grDevice palette) and gr.hcl (grDevice hcl).
-Each of these libraries have a set of palettes, which will be listed if the nominated palette is not specified. A
-default palette will then be chosen.
+The available color libraries and their palettes include: 
+\itemize{
+\item library "brewer" and the palettes available can be listed by 
+RColorBrewer::display.brewer.all() and RColorBrewer::brewer.pal.info.
+\item library "gr.palette" and the palettes available can be listed by 
+grDevices::palette.pals()
+\item library "r.hcl" and the palettes available can be listed by 
+grDevices::hcl.pals()
+\item library "baseR" and the palettes available are: "rainbow","heat",
+"topo.colors","terrain.colors","cm.colors".
+}
+If the nominated palette is not specified, all the palettes will be listed and a default palette will then be chosen.
 
 The color palette will be displayed in the graphics window for the requested number of colors (or 9 if not specified),
 and the vector of colors returned for later use.

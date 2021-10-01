@@ -84,9 +84,8 @@
 #' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
-#'df <- gl.report.heterozygosity(testset.gl)
-#'df <- gl.report.heterozygosity(testset.gl,method='ind')
-#'df <- gl.report.heterozygosity(testset.gl,plot.out=FALSE)
+#' df <- gl.report.heterozygosity(platypus.gl)
+#' df <- gl.report.heterozygosity(platypus.gl,method='ind')
 #'
 #' @seealso \code{\link{gl.filter.heterozygosity}}
 #'  
@@ -280,6 +279,7 @@ gl.report.heterozygosity <- function(x,
         ##########
         
         if(plot.out){
+            value <- color <- variable <- He.adj <- NULL
         # printing plots and reports
         # assigning colors to populations
         if(class(plot_colours_pop)=="function"){

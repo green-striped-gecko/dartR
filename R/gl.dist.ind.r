@@ -18,6 +18,7 @@
 #'  \item "Jaccard" -- ignores matching 0, both 1 = 0; one 1 and the other 0 = 1. Absences could be for different reasons.
 #'  \item "Dice" -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences could be for different reasons. Sometimes called the Czekanowski or Sorensen distance.
 #'  \item "Phi" -- binary analogue of the Pearson Correlation coefficient.
+#'  }
 #'  
 #' Refer to the documentation in the relevant packages listed above.
 #'  

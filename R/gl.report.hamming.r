@@ -159,7 +159,7 @@ gl.report.hamming <- function(x,
       coord_cartesian(xlim = c(0, 1)) + 
       xlab("Hamming distance") + 
       ylab("Count") + 
-      annotate(geom = "text", x = tld+0.2, y = max(hist(d,breaks=seq(0, 1, by=1/50), plot=FALSE)$counts)*0.75,
+      annotate(geom = "text", x = tld+0.2, y = max(graphics::hist(d,breaks=seq(0, 1, by=1/50), plot=FALSE)$counts)*0.75,
                label = paste("Threshold of\n", threshold, "bp [HD", round(tld, 2), "]")) +
       plot_theme
 

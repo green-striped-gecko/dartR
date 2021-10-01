@@ -21,10 +21,10 @@ gl.filter.reproducibility(
 \item{threshold}{Threshold value below which loci will be removed 
 [default 0.99].}
 
-\item{plot.out}{If TRUE, displays a plot to guide the decision on a filter 
-threshold [default TRUE].}
+\item{plot.out}{If TRUE, displays a plots of the distribution of reproducibility
+values before and after filtering [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot [default theme_dartR()].}
 
 \item{plot_colors}{List of two color names for the borders and fill of the 
 plots [default two_colors].}

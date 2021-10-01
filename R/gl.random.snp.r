@@ -88,7 +88,7 @@ gl.random.snp <- function(x,
     }
   
     #plot before randomisation 
-    p1 <- gl.plot(hold_plot, posi = "none",verbose=0)
+    p1 <- gl.smearplot(hold_plot, posi = "none",verbose=0)
     p1 <-  p1 + 
       ggtitle("Pre-randomisation") +
       theme(axis.title.x=element_blank(),
@@ -96,7 +96,7 @@ gl.random.snp <- function(x,
             axis.ticks.x=element_blank())
       
     #plot after randomisation 
-    p2 <- gl.plot(x_plot,verbose=0)
+    p2 <- gl.smearplot(x_plot,verbose=0)
     p2 <-  p2 + ggtitle("Post-randomisation")
   }
 
