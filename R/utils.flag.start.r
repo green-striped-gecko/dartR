@@ -2,14 +2,14 @@
 #'
 #' @param func name of the function that is starting [required].
 #' @param build name of the build [NULL].
-#' @param verbose verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param verbosity verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
 #' @return calling function name
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 
-utils.flag.start <- function(func=NULL, build=NULL, verbose=2) {
+utils.flag.start <- function(func=NULL, build=NULL, verbosity=NULL) {
 
 # SET VERBOSITY
-  verbose <- gl.check.verbosity(verbose)
+  verbose <- gl.check.verbosity(verbosity)
   
  if(is.null(func)){
    stop(error("Fatal Error: The calling function must be specified.\n"))

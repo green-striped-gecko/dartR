@@ -6,7 +6,7 @@
 #' @details
 #' The distance measure for SNP data can be one of:
 #' \itemize{
-#'  \item "Euclidean" -- Euclidean distance, as implemented in the function \link[stat]{dist} (package stat).
+#'  \item "Euclidean" -- Euclidean distance, as implemented in the function \link[stats]{dist} (package stats).
 #'  \item "locus.count" -- number of loci for which individuals differ, as implemented in the function \link[ape]{dist.gene} (package ape).
 #'  \item "allele.count" -- number of allelic differences between two individuals, as implemented in the function \link[poppr]{diss.dist} (package poppr).
 #'  \item "relatedness" -- genetic relatedness between individuals (G matrix), as implemented in the function \link[rrBLUP]{A.mat} (package rrBLUP).
@@ -61,7 +61,7 @@ gl.dist.ind <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jody",v=verbose)
+  utils.flag.start(func=funname,build="Jody",verbosity=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,accept=c("SNP","SilicoDArT"),verbose=verbose)

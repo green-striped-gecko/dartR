@@ -38,7 +38,7 @@ utils.outflank.plotter(
 \item{titletext}{Allows a test string to be printed as a title on the graph}
 }
 \value{
-produces a historgram of the FST
+produces a histogram of the FST
 }
 \description{
 Plotting functions for Fst distributions after OutFLANK

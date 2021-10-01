@@ -50,8 +50,8 @@ and individuals can be grouped into by population.
 If there are too many individuals, it is best to use ind_labels_size = 0.
 }
 \examples{
-gl.plot(testset.gl[1:10,])
-gl.plot(testset.gs[1:10,]) 
+gl.smearplot(testset.gl[1:10,])
+gl.smearplot(testset.gs[1:10,]) 
 }
 \seealso{
 Other Exploration/visualisation functions: 

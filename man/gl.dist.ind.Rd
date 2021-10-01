@@ -40,7 +40,7 @@ calculated by scripts in the {stats} or {vegan} libraries.
 \details{
 The distance measure for SNP data can be one of:
 \itemize{
- \item "Euclidean" -- Euclidean distance, as implemented in the function \link[stat]{dist} (package stat).
+ \item "Euclidean" -- Euclidean distance, as implemented in the function \link[stats]{dist} (package stats).
  \item "locus.count" -- number of loci for which individuals differ, as implemented in the function \link[ape]{dist.gene} (package ape).
  \item "allele.count" -- number of allelic differences between two individuals, as implemented in the function \link[poppr]{diss.dist} (package poppr).
  \item "relatedness" -- genetic relatedness between individuals (G matrix), as implemented in the function \link[rrBLUP]{A.mat} (package rrBLUP).

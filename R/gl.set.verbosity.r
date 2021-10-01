@@ -16,7 +16,7 @@ gl.set.verbosity <- function(value=2) {
 
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=value)
+  utils.flag.start(func=funname,build="Jackson", verbosity =value)
   
 # SET GLOBAL VERBOSITY
   if (!is.null(value) & is.numeric(value) & value>=0 & value<=5)  {
