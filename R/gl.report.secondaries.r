@@ -74,7 +74,7 @@
 #' @examples
 #' out <- gl.report.secondaries(bandicoot.gl)
 #' @seealso
-#' \code{\link{gl.filter.secondaries}},\code{\link{gl.report.heterozygosity}}
+#' \code{\link{gl.filter.secondaries}},\code{\link{gl.report.heterozygosity}},\code{\link{utils.n.invariant}}
 #' @references Schmidt, T.L., Jasper, M.-E., Weeks, A.R., Hoffmann, A.A., 2021.
 #'   Unbiased population heterozygosity estimates from genome-wide sequence
 #'   data. Methods in Ecology and Evolution n/a.
