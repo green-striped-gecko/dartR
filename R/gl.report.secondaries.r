@@ -35,21 +35,22 @@
 #'   is calculated against a background of only those loci that are polymorphic
 #'   somewhere in the dataset. To allow intercompatibility across studies and
 #'   species, any measure of heterozygosity needs to accommodate loci that are
-#'   invariant. However, the number of invariant loci are unknown given the SNPs
-#'   are detected as single point mutational variants and invariant sequences
-#'   are discarded, and because of the particular additional filtering
-#'   pre-analysis. Modelling the counts of SNPs per sequence tag as a Poisson
-#'   distribution in this script allows estimate of the zero class, that is, the
-#'   number of invariant loci. This is reported, and the veracity of the
-#'   estimate can be assessed by the correspondence of the observed frequencies
-#'   against those under Poisson expectation in the associated graphs. The
-#'   number of invariant loci can then be optionally provided to the function
+#'   invariant (autosomal heterozygosity. See Schmidt et al 2021). However, the
+#'   number of invariant loci are unknown given the SNPs are detected as single
+#'   point mutational variants and invariant sequences are discarded, and
+#'   because of the particular additional filtering pre-analysis. Modelling the
+#'   counts of SNPs per sequence tag as a Poisson distribution in this script
+#'   allows estimate of the zero class, that is, the number of invariant loci.
+#'   This is reported, and the veracity of the estimate can be assessed by the
+#'   correspondence of the observed frequencies against those under Poisson
+#'   expectation in the associated graphs. The number of invariant loci can then
+#'   be optionally provided to the function
 #'   \code{\link{gl.report.heterozygosity}} via the parameter n.invariants.
-#'   
+#'
 #'   In case the calculations for the Poisson expectation of the number of
 #'   invariant sequence tags fail to converge, try to rerun the analysis with a
 #'   larger \code{nsim} values.
-#'   
+#'
 #'   This function now also calculates the number of invariant sites (i.e.
 #'   nucleotides) of the sequence tags (if \code{TrimmedSequence} is present in
 #'   \code{x$other$loc.metrics}) or estimate these by assuming that the average
@@ -74,6 +75,9 @@
 #' out <- gl.report.secondaries(bandicoot.gl)
 #' @seealso
 #' \code{\link{gl.filter.secondaries}},\code{\link{gl.report.heterozygosity}}
+#' @references Schmidt, T.L., Jasper, M.-E., Weeks, A.R., Hoffmann, A.A., 2021.
+#'   Unbiased population heterozygosity estimates from genome-wide sequence
+#'   data. Methods in Ecology and Evolution n/a.
 #' @family Filter reports functions
 #' @importFrom stats dpois
 #' @import patchwork
