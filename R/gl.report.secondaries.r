@@ -68,7 +68,17 @@
 #'   \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
 #'   \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'    }
-#' @return A data.frame wit the list of parameter values
+#' @return A data.frame with the list of parameter values
+#' \itemize{
+#'   \item n.total.tags Number of sequence tags in total
+#'   \item n.SNPs.secondaries Number of secondary SNP loci that would be removed on filtering
+#'   \item n.invariant.tags Estimated number of invariant sequence tags
+#'   \item n.tags.secondaries Number of sequence tags with secondaries
+#'   \item n.inv.gen Number of invariant sites in sequenced tags
+#'   \item mean.len.tag Mean length of sequence tags
+#'   \item n.invariant Total Number of invariant sites (including invariant sequence tags)
+#'   \item k Lambda: mean of the Poisson distribution of number of SNPs in the sequence tags
+#' }
 #' @author Custodian: Arthur Georges (Post to
 #'   \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -307,7 +317,7 @@ gl.report.secondaries <- function(x,
       cat("   Number of invariant sites in sequenced tags:",n.inv.gen,"\n")
       cat("   Mean length of sequence tags:", mean.len.tag,"\n")
       n.invariant <- round(n.invariant.tags * mean.len.tag + n.inv.gen, 0)
-      cat("   Total Number of invariant sites (including invariant sequence tags:", n.inv.gen,"\n")
+      cat("   Total Number of invariant sites (including invariant sequence tags):", n.inv.gen,"\n")
       if(verbose >= 3){
         cat(" Tabular 1 to K secondaries (refer plot)\n",table(as.numeric(table(b))),"\n")
         }
