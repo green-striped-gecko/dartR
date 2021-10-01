@@ -17,6 +17,7 @@ Dev repositories:
 [![R-CMD-check-dev_Arthur](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Arthur.yaml/badge.svg?branch=dev_arthur)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Arthur.yaml)
 [![R-CMD-check-dev_Bernd](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Bernd.yaml/badge.svg?branch=dev_bernd)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Bernd.yaml)
 [![R-CMD-check-dev_Luis](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Luis.yaml/badge.svg?branch=dev_luis)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Luis.yaml)
+[![R-CMD-check-dev_Carlo](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Carlo.yaml/badge.svg?branch=dev_carlo)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Carlo.yaml)
  <!-- badges: end -->
 
 
