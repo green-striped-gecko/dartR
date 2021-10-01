@@ -109,9 +109,7 @@ gl.smearplot <- function (x,
     }
     
   # PRINTING OUTPUTS
-  if(verbose>0){
     print(p3)
-  }
 
   # creating temp file names
   if(save2tmp){
