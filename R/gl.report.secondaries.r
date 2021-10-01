@@ -199,6 +199,7 @@ gl.report.secondaries <- function(x,
               cat("  Converged on Lambda of",k.new,"\n\n")
               }
             fail <- FALSE
+            k <- k.new
             break
           }
           if (i == nsim){
@@ -317,9 +318,9 @@ gl.report.secondaries <- function(x,
   # RETURN
   return(data.frame(
     Param=c("n.total.tags", "n.SNPs.secondaries", "n.invariant.tags",
-            "n.tags.secondaries", "n.inv.gen", "mean.len.tag", "n.invariant"), 
+            "n.tags.secondaries", "n.inv.gen", "mean.len.tag", "n.invariant", "Lambda"), 
     Value=c(unname(n.total.tags),n.SNPs.secondaries, n.invariant.tags,
-            n.tags.secondaries,n.inv.gen, mean.len.tag, n.invariant)
+            n.tags.secondaries,n.inv.gen, mean.len.tag, n.invariant, k)
   )
   )
 }  
