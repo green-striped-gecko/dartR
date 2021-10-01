@@ -26,8 +26,8 @@
 #' @return Returns unaltered genlight object
 #' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' gl.plot(testset.gl[1:10,])
-#' gl.plot(testset.gs[1:10,]) 
+#' gl.smearplot(testset.gl[1:10,])
+#' gl.smearplot(testset.gs[1:10,]) 
 #' @family Exploration/visualisation functions
 #' @export
 #'  
@@ -52,7 +52,7 @@ gl.smearplot <- function (x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson", verbosity =verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x, verbose=verbose)
@@ -109,9 +109,7 @@ gl.smearplot <- function (x,
     }
     
   # PRINTING OUTPUTS
-  if(verbose>0){
     print(p3)
-  }
 
   # creating temp file names
   if(save2tmp){

@@ -109,9 +109,8 @@ individuals.
  }
 }
 \examples{
-df <- gl.report.heterozygosity(testset.gl)
-df <- gl.report.heterozygosity(testset.gl,method='ind')
-df <- gl.report.heterozygosity(testset.gl,plot.out=FALSE)
+df <- gl.report.heterozygosity(platypus.gl)
+df <- gl.report.heterozygosity(platypus.gl,method='ind')
 
 }
 \seealso{

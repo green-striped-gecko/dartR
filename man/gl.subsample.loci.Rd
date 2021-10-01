@@ -7,24 +7,29 @@
 gl.subsample.loci(x, n, method = "random", mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP or presence/absence
+(SilicoDArT) data [required].}
 
-\item{n}{Number of loci to include in the subsample [required]}
+\item{n}{Number of loci to include in the subsample [required].}
 
-\item{method}{-- Method: "random", in which case the loci are sampled at random; or avgPIC, in which case the top n loci
-ranked on information content (AvgPIC) are chosen [default 'random']}
+\item{method}{Method: "random", in which case the loci are sampled at random; 
+or "pic", in which case the top n loci ranked on information content are 
+chosen. Information content is stored in AvgPIC in the case of SNP data and in
+ PIC in the the case of presence/absence (SilicoDArT) data [default 'random'].}
 
-\item{mono.rm}{-- Delete monomorphic loci before sampling [default FALSE]}
+\item{mono.rm}{Delete monomorphic loci before sampling [default FALSE].}
 
-\item{verbose}{-- Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log; 3, progress and results summary; 5, full report 
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 A genlight object with n loci
 }
 \description{
-This is a support script, to subsample a genlight \{adegenet\} object based on loci. Two methods are used
-to subsample, random and based on information content (avgPIC).
+This is a support script, to subsample a genlight \{adegenet\} object based
+ on loci. Two methods are used to subsample, random and based on information 
+ content.
 }
 \examples{
 # SNP data

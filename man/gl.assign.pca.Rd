@@ -117,14 +117,6 @@ population. The smaller the index, the greater the confidence in the assignment.
 
 Each of these approaches provides evidence, none are 100% definitive. They need to be interpreted cautiously.
 }
-\examples{
-# Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-  x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1,verbose=3)
-  x <- gl.assign.pca(x, unknown="UC_00146", plevel=0.95, verbose=3)
-# Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-  x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1,verbose=3)
-  x <- gl.assign.pca(x, unknown="UC_00146", alpha=0.05,verbose=3)
-}
 \author{
 Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 

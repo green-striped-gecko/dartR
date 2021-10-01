@@ -8,7 +8,7 @@
 #' The distance measure can be one of "manhattan", "euclidean", "pcfixed", "pa", canberra", "bray", 
 #' "kulczynski", "jaccard", "gower", "morisita", "horn", "mountford", "raup" , 
 #' "binomial", "chao", "cao", "mahalanobis", "maximum", "binary" or "minkowski". Refer to the documentation for
-#' of functions \link[stat]{dist} (package stat) or \link[vegan]{vegdist} (package vegan) vegan for definitions. 
+#' of functions \link[stats]{dist} (package stat) or \link[vegan]{vegdist} (package vegan) vegan for definitions. 
 #' 
 #' Distance pcfixed calculates the pair-wise count of fixed allelic differences between populations.
 #'
@@ -51,7 +51,7 @@ gl.dist.pop <- function(x,
       
 # FLAG SCRIPT START
       funname <- match.call()[[1]]
-      utils.flag.start(func=funname,build="Jody",v=verbose)
+      utils.flag.start(func=funname,build="Jody",verbosity=verbose)
       
 # CHECK DATATYPE 
       datatype <- utils.check.datatype(x,accept="SNP",verbose=verbose)

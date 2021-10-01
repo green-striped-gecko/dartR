@@ -51,7 +51,7 @@ gl.read.csv <- function(filename,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",verbosity=verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
   
@@ -79,13 +79,11 @@ gl.read.csv <- function(filename,
   numrows <- dim(df0)[1] # Individuals plus labels if any
   numcols <- dim(df0)[2] # Loci plus labels if any
   
-  if(verbose>0) 
-    {
+  if(verbose>0){
     cat(report("Input data should be a csv file with individuals as rows, loci as columns\n"))
-  
-  cat("  ",numcols-1,"loci, confirming first 5:", as.matrix(df0[1,2:6]) ,"\n")
-  cat("  ",numrows-1,"individuals, confirming first 5:", as.matrix(df0[2:6,1]) ,"\n")
-  cat(important("    If these are reversed, re-run the script with transpose=TRUE\n"))
+    cat("  ",numcols-1,"loci, confirming first 5:", as.matrix(df0[1,2:6]) ,"\n")
+    cat("  ",numrows-1,"individuals, confirming first 5:", as.matrix(df0[2:6,1]) ,"\n")
+    cat(important("    If these are reversed, re-run the script with transpose=TRUE\n"))
     }
   data <- as.matrix(df0[2:numrows,2:numcols])
   
@@ -119,8 +117,7 @@ gl.read.csv <- function(filename,
     s1 <- toupper(s1)
     s2 <- unlist(strsplit(s1, " "))
     tmp <- table(s2)
-    if (!(names(tmp) == "A" || names(tmp) == "C" || names(tmp) == "G" || 
-          names(tmp) == "T" || names(tmp) == "-")){
+    if (all(names(tmp) %in% c("A", "C", "G" , "T", "-"))==F){
       cat(error("Fatal Error: Genotypes must be defined by the letters A, C, G, T or missing -\n"))
       stop()
     }

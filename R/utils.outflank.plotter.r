@@ -22,7 +22,8 @@
 #' 
 #' @param titletext Allows a test string to be printed as a title on the graph
 #' 
-#' @return produces a historgram of the FST
+#' @return produces a histogram of the FST
+#' @importFrom graphics hist
 #' @export
 
 

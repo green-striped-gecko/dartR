@@ -48,7 +48,7 @@ differences) distance.
 The distance measure can be one of "manhattan", "euclidean", "pcfixed", "pa", canberra", "bray", 
 "kulczynski", "jaccard", "gower", "morisita", "horn", "mountford", "raup" , 
 "binomial", "chao", "cao", "mahalanobis", "maximum", "binary" or "minkowski". Refer to the documentation for
-of functions \link[stat]{dist} (package stat) or \link[vegan]{vegdist} (package vegan) vegan for definitions. 
+of functions \link[stats]{dist} (package stat) or \link[vegan]{vegdist} (package vegan) vegan for definitions. 
 
 Distance pcfixed calculates the pair-wise count of fixed allelic differences between populations.
 }

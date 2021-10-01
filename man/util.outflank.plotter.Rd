@@ -31,14 +31,14 @@ util.outflank.plotter(
 
 \item{binwidth}{The width of bins in the histogram.}
 
-\item{Zoom}{If Zoom is set to TRUE, then the graph will zoom in on the right tail of the distirbution (based on argument RightZoomFraction)}
+\item{Zoom}{If Zoom is set to TRUE, then the graph will zoom in on the right tail of the distribution (based on argument RightZoomFraction)}
 
 \item{RightZoomFraction}{Used when Zoom = TRUE. Defines the proportion of the distribution to plot.}
 
 \item{titletext}{Allows a test string to be printed as a title on the graph}
 }
 \value{
-produces a historgram of the FST
+produces a histogram of the FST
 }
 \description{
 Plotting functions for Fst distributions after OutFLANK

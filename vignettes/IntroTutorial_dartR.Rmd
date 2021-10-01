@@ -1237,7 +1237,7 @@ If we are worried that the 1 locus with a private allele out of 255 loci for pop
 
 
 ```{r, fig.height=4}
-x <- gl.assign.pca(x, unknown ="UC_00146", alpha=0.05)
+#x <- gl.assign.pca(x, unknown ="UC_00146", plevel=0.95)
 ```
 
 The plot allows us to eliminate populations EmmacRichCasi and EmmacBurnBara from consideration as the unknown individual does not fall within or near their confidence ellipses. EmmacTweeUki and EmmacMaclGeor remain in contention.
