@@ -192,10 +192,33 @@ gl.report.heterozygosity <- function(x,
             df_ind.count[, 1] <- factor(df_ind.count[, 1])
             apply(df_ind.count[,-1], 2, dum)
         }
-        
+
         n_ind_df <- as.data.frame(cbind(as.character(pop(x)),as.matrix(x)))
         n_ind <- t(ind.count(n_ind_df))
-
+    
+        ##-------------##-------------------##-----------------##----------#
+        #  The code below is about 50 times faster of the above. Also it doesn't require the additional if statement at L276
+        # but if you do use this one, you have to fix the incex at line 257
+        #
+        # ind.count <- function(x) {
+        #   # the loci that are completely missing
+        #   loci.na <- which(colSums(is.na(as.matrix(x))) == nrow(as.matrix(x)))
+        #   if(length(loci.na)>0) {
+        #     nind <-  mean(nrow(as.matrix(x)) - # the number of samples in the matrix
+        #                     colSums(is.na(as.matrix(x)))[ # the number of non-genotyped samples
+        #                       - loci.na] # remove the loci that are completely missing
+        #     ) 
+        #   } else {
+        #     nind <- mean(nrow(as.matrix(x)) - # the number of samples in the matrix
+        #                    colSums(is.na(as.matrix(x))) # the number of non-genotyped samples
+        #     ) 
+        #   }
+        #   
+        #   return(nind)
+        # }
+        # 
+        # n_ind <- sapply(sgl, ind.count)
+        #----------------------------------------------------------------------#    
         # EXPECTED HETEROZYGOSITY
         if (verbose >= 2) {
             cat(report("  Calculating Expected Heterozygosities\n\n"))
