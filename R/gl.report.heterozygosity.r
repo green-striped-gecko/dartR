@@ -295,8 +295,8 @@ gl.report.heterozygosity <- function(x,
                          HeSD = round(HexpSD,6),
                          uHe = round(uHexp,6),
                          uHeSD = round(uHexpSD,6),
-                         He.adj = round(Hexp.adj,6),
-                         He.adjSD = round(Hexp.adjSD,6),
+                         He.adj = round(Hexp.adj,8),
+                         He.adjSD = round(Hexp.adjSD,8),
                          FIS = FIS,
                          FISSD = FISSD
         )
