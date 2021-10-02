@@ -217,7 +217,7 @@ gl.read.csv <- function(filename,
   # NOW THE INDIVIDUAL METADATA
   
   if(!is.null(ind.metafile)) {
-    ind.metrics <- read.csv(file=ind.metafile,header=TRUE, stringsAsFactors = TRUE)
+    ind.metrics <- read.csv(file=ind.metafile,header=TRUE, stringsAsFactors = TRUE,fileEncoding="UTF-8-BOM")
     if (!("id" %in% names(ind.metrics))){
       cat(error("Fatal Error: mandatory id column absent from the individual metadata file\n"))
       stop()
