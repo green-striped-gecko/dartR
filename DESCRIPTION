@@ -28,11 +28,12 @@ Encoding: UTF-8
 Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2
 biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
-        SNPRelate, StAMPP, sp, PopGenReport, hierfstat, robustbase,
-        gridExtra, HardyWeinberg, foreach, dplyr, crayon, devtools,reshape2,
-        patchwork
+        SNPRelate, StAMPP, sp, PopGenReport, robustbase,
+        gridExtra, foreach, dplyr, crayon, devtools,reshape2,
+        patchwork, data.table, hierfstat
 Suggests: 
     tibble,
+    HardyWeinberg,
     networkD3,
     tidyverse,
     knitr,
@@ -40,7 +41,6 @@ Suggests:
     rgl,
     parallel,
     doParallel,
-    data.table,
     pca3d,
     dismo,
     pegas,

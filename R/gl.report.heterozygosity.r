@@ -44,6 +44,9 @@
 #' number of invariant sequence tags (loci) in your data, such as provided by 
 #' \code{\link{gl.report.secondaries}}, you can specify it with the n.invariant 
 #' parameter to standardize your estimates of heterozygosity.
+#'
+#' \strong{NOTE}: It is important to realise that estimation of adjusted 
+#' heterozygosity requires that secondaries not to be removed. 
 #' 
 #' Heterozygosities and FIS (inbreeding coefficient) are calculated by locus 
 #' within each population using the following equations:
@@ -56,8 +59,8 @@
 #' \item Expected heterozygosity (He) = 1 - (p^2 + q^2),
 #' where p is the frequency of the reference allele and q is the frequency of 
 #' the alternative allele.
-#' \item Expected heterozygosity (He.adj) = He * n_Loc / (n_Loc + n.invariant)
-#' Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / (2 * n_Ind - 1)) 
+#' \item Expected heterozygosity adjusted (He.adj) = He * n_Loc / (n_Loc + n.invariant)
+#' \item Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / (2 * n_Ind - 1)) 
 #' \item Inbreeding coefficient (FIS) = 1 - (Ho / He)
 #' }
 #' 
@@ -86,6 +89,8 @@
 #' @examples
 #' df <- gl.report.heterozygosity(platypus.gl)
 #' df <- gl.report.heterozygosity(platypus.gl,method='ind')
+#' n.inv <- gl.report.secondaries(platypus.gl)
+#' gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
 #'
 #' @seealso \code{\link{gl.filter.heterozygosity}}
 #'  
@@ -125,6 +130,10 @@ gl.report.heterozygosity <- function(x,
         if(verbose==5){
             cat(report("  No. of invariant loci can be esimated using gl.report.secondaries\n"))
             }
+    }
+    
+    if (any(grepl(x@other$history, pattern = "gl.filter.secondaries")==TRUE) & n.invariant >0) {
+        cat(warn("  Warning: Estimation of adjusted heterozygosity requires that secondaries not to be removed. A gl.filter.secondaries call was found in the history. This may cause the results to be incorrect\n"))
     }
 
 # DO THE JOB
@@ -179,45 +188,28 @@ gl.report.heterozygosity <- function(x,
                  n.invariant * Ho.adj^2) / # plus sum of the square of differences (which is the Ho.adj because Ho=0) from the mean for invariant sites
                 (n_loc+n.invariant-1) # sample size
         )
-        ##########
 
-        # sample size per locus per pop
-        # taken from adegenet basic.stats
-        ind.count <- function (df_ind.count) {
-            dum <- function(x) {
-                a <- which(!is.na(x))
-                tapply(x[a], df_ind.count[a, 1], length)
-            }
-            df_ind.count[, 1] <- factor(df_ind.count[, 1])
-            apply(df_ind.count[,-1], 2, dum)
+        ind.count <- function(x) {
+          # the loci that are completely missing
+          loci.na <- which(colSums(is.na(as.matrix(x))) == nrow(as.matrix(x)))
+          if(length(loci.na)>0) {
+            nind <-  mean(nrow(as.matrix(x)) - # the number of samples in the matrix
+                            colSums(is.na(as.matrix(x)))[ # the number of non-genotyped samples
+                              - loci.na] # remove the loci that are completely missing
+            )
+          } else {
+            nind <- mean(nrow(as.matrix(x)) - # the number of samples in the matrix
+                           colSums(is.na(as.matrix(x))) # the number of non-genotyped samples
+            )
+          }
+
+          return(nind)
         }
 
-        n_ind_df <- as.data.frame(cbind(as.character(pop(x)),as.matrix(x)))
-        n_ind <- t(ind.count(n_ind_df))
-    
-        ##-------------##-------------------##-----------------##----------#
-        #  The code below is about 50 times faster of the above. Also it doesn't require the additional if statement at L276
-        # but if you do use this one, you have to fix the incex at line 257
-        #
-        # ind.count <- function(x) {
-        #   # the loci that are completely missing
-        #   loci.na <- which(colSums(is.na(as.matrix(x))) == nrow(as.matrix(x)))
-        #   if(length(loci.na)>0) {
-        #     nind <-  mean(nrow(as.matrix(x)) - # the number of samples in the matrix
-        #                     colSums(is.na(as.matrix(x)))[ # the number of non-genotyped samples
-        #                       - loci.na] # remove the loci that are completely missing
-        #     ) 
-        #   } else {
-        #     nind <- mean(nrow(as.matrix(x)) - # the number of samples in the matrix
-        #                    colSums(is.na(as.matrix(x))) # the number of non-genotyped samples
-        #     ) 
-        #   }
-        #   
-        #   return(nind)
-        # }
-        # 
-        # n_ind <- sapply(sgl, ind.count)
-        #----------------------------------------------------------------------#    
+        n_ind <- sapply(sgl, ind.count)
+        
+        ##########
+
         # EXPECTED HETEROZYGOSITY
         if (verbose >= 2) {
             cat(report("  Calculating Expected Heterozygosities\n\n"))
@@ -254,7 +246,7 @@ gl.report.heterozygosity <- function(x,
             ### CP ### 
             # Unbiased He (i.e. corrected for sample size)
             # hard coded for diploid 
-            uH <- (2 * as.numeric(n_ind[,i]) / (2 * as.numeric(n_ind[,i]) - 1)) * H 
+            uH <- (2 * as.numeric(n_ind[i]) / (2 * as.numeric(n_ind[i]) - 1)) * H 
             ##########
             
             Hexp[i] <- mean(H, na.rm = T)
@@ -273,17 +265,9 @@ gl.report.heterozygosity <- function(x,
             FISSD[i] <- sd(FIS_temp, na.rm=T)
         }
         
-        # If there are more than one population get the mean by column
-        if(length(sgl)>1){
-            ind_n <- round(colMeans(n_ind,na.rm = T),2)
-            # if there is just one population get the mean from the vector
-        }else{
-            ind_n <- round(mean(n_ind,na.rm = T),2)
-        }
-        
         ### CP ### 
         df <- data.frame(pop = popNames(x),
-                         nInd = ind_n,
+                         nInd = n_ind,
                          nLoc = n_loc,
                          nLoc.adj = n_loc/(n_loc+ n.invariant),
                          Ho = as.numeric(Ho),
@@ -427,7 +411,7 @@ gl.report.heterozygosity <- function(x,
         
 # PRINTING OUTPUTS
         if(plot.out){
-           print(p3)
+        suppressWarnings(print(p3))
         }
         if (verbose >= 2) {
             if (n.invariant > 0) {
