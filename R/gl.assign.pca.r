@@ -72,7 +72,7 @@ gl.assign.pca <- function (x, unknown, plevel= 0.95, verbose=NULL) {
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson",verbosity=verbose)
   
 # CHECK PACKAGES
   pkg <- "SIBER"
