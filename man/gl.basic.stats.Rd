@@ -12,7 +12,8 @@ gl.basic.stats(gl, digits = 4)
 \item{digits}{-- number of digits that should be returned}
 }
 \value{
-several tables and lists with all basic stats. Check \code{\link[hierfstat]{basic.stats}} for details.
+several tables and lists with all basic stats. Check
+\code{\link[hierfstat]{basic.stats}} for details.
 }
 \description{
 Based on function \code{\link[hierfstat]{basic.stats}}. Check ?basic.stats for help.
