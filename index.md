@@ -21,10 +21,11 @@ Syntax highlighted code block
 
 **Bold** and _Italic_ and `Code` text
 
+
+```
 [tutorial](https://github.com/green-striped-gecko/dartR/blob/master/webpage/RStudio_Refresher.pdf)
 
 ![grm](https://github.com/green-striped-gecko/dartR/blob/master/webpage/GRM.png)
-```
 
 ### Jekyll Themes
 
