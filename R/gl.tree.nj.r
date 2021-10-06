@@ -12,6 +12,7 @@
 #' @return A tree file of class phylo
 #' @importFrom stringr str_pad
 #' @importFrom ape nj root plot.phylo write.tree
+#' @importFrom graphics hist par
 #' @export
 #' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -32,7 +33,7 @@ gl.tree.nj <- function(x,
   
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",v=verbose)
+  utils.flag.start(func=funname,build="Jackson", verbosity =verbose)
   
   # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,verbose=verbose)

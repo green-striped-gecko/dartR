@@ -75,6 +75,9 @@ number of invariant sequence tags (loci) in your data, such as provided by
 \code{\link{gl.report.secondaries}}, you can specify it with the n.invariant 
 parameter to standardize your estimates of heterozygosity.
 
+\strong{NOTE}: It is important to realise that estimation of adjusted 
+heterozygosity requires that secondaries not to be removed. 
+
 Heterozygosities and FIS (inbreeding coefficient) are calculated by locus 
 within each population using the following equations:
 \itemize{ 
@@ -86,8 +89,8 @@ n.invariant is an estimate of the number of invariant loci to adjust heterozygos
 \item Expected heterozygosity (He) = 1 - (p^2 + q^2),
 where p is the frequency of the reference allele and q is the frequency of 
 the alternative allele.
-\item Expected heterozygosity (He.adj) = He * n_Loc / (n_Loc + n.invariant)
-Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / (2 * n_Ind - 1)) 
+\item Expected heterozygosity adjusted (He.adj) = He * n_Loc / (n_Loc + n.invariant)
+\item Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / (2 * n_Ind - 1)) 
 \item Inbreeding coefficient (FIS) = 1 - (Ho / He)
 }
 
@@ -109,9 +112,10 @@ individuals.
  }
 }
 \examples{
-df <- gl.report.heterozygosity(testset.gl)
-df <- gl.report.heterozygosity(testset.gl,method='ind')
-df <- gl.report.heterozygosity(testset.gl,plot.out=FALSE)
+df <- gl.report.heterozygosity(platypus.gl)
+df <- gl.report.heterozygosity(platypus.gl,method='ind')
+n.inv <- gl.report.secondaries(platypus.gl)
+gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
 
 }
 \seealso{

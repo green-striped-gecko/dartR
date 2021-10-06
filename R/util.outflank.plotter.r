@@ -16,13 +16,14 @@
 #' 
 #' @param binwidth The width of bins in the histogram.
 #' 
-#' @param Zoom If Zoom is set to TRUE, then the graph will zoom in on the right tail of the distirbution (based on argument RightZoomFraction)
+#' @param Zoom If Zoom is set to TRUE, then the graph will zoom in on the right tail of the distribution (based on argument RightZoomFraction)
 #' 
 #' @param RightZoomFraction Used when Zoom = TRUE. Defines the proportion of the distribution to plot.
 #' 
 #' @param titletext Allows a test string to be printed as a title on the graph
 #' 
-#' @return produces a historgram of the FST
+#' @return produces a histogram of the FST
+#' @importFrom graphics hist
 #' @export
 
 
