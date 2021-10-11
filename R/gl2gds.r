@@ -69,6 +69,8 @@ gl2gds <- function(x,
   
 # DO THE JOB
   
+  outfilespec <- file.path(outpath, outfile)
+  
   #ordering loc.metrics by chromosome and snp position 
   snp_order_temp <- x$other$loc.metrics
   # using CloneID as SNP ID
@@ -123,7 +125,7 @@ gl2gds <- function(x,
     }
   
   # create a gds file
-  with(geno_list, SNPRelate::snpgdsCreateGeno(outfile, genmat=genotype,
+  with(geno_list, SNPRelate::snpgdsCreateGeno(gds.fn=outfilespec, genmat=genotype,
                                      sample.id=sample.id, snp.id=snp.id, snp.chromosome=snp.chromosome,
                                      snp.position=snp.position, snp.allele=snp.allele, snpfirstdim=TRUE))
   
