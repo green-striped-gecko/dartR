@@ -11,7 +11,7 @@
 #' @param plot.out If TRUE, returns a plot object compatible with ggplot, 
 #' otherwise returns a dataframe [default TRUE].
 #' @param plot_theme User specified theme [default theme_dartR()].
-#' @param plot_colours Vector with two colour names for the borders and fill [default two_colors].
+#' @param plot_colors Vector with two color names for the borders and fill [default two_colors].
 #'  [default discrete_palette].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 #' progress log ; 3, progress and results summary; 5, full report 
@@ -61,7 +61,7 @@ gl.hwe.pop <- function(x,
                        alpha_val = 0.05, 
                        plot.out = TRUE, 
                        plot_theme = theme_dartR(),
-                       plot_colours = c("gray90","deeppink"),
+                       plot_colors = c("gray90","deeppink"),
                        HWformat = FALSE,
                        verbose = NULL) {
   
@@ -114,7 +114,7 @@ gl.hwe.pop <- function(x,
     longData <- reshape2::melt((as.matrix(output))*1)
     
     p1 <- ggplot(longData, aes(x = Var2, y = Var1,)) + 
-      geom_raster(aes(fill=plot_colours[value+1])) + 
+      geom_raster(aes(fill=plot_colors[value+1])) + 
       scale_fill_identity() +
       labs(x="Loci", y="Populations", title="HWE over populations and loci") +
       plot_theme +

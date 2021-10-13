@@ -36,11 +36,11 @@ gl.plot.heatmap <- function(D,
   utils.flag.start(func=funname,build="Jody",verbosity=verbose)
   
   # CHECK DATATYPE 
-  datatype <- utils.check.datatype(D,accept=c("dist","fd"),verbose=verbose)
+  datatype <- utils.check.datatype(D,accept=c("dist","fd","matrix"),verbose=verbose)
 
 # DO THE JOB
   
-  if (datatype=="dist"){
+  if (datatype=="dist" | datatype=="matrix"){
     p3 <- gplots::heatmap.2(as.matrix(D),
                             col = palette_divergent(255),
                             dendrogram = "column",

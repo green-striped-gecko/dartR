@@ -13,9 +13,9 @@
 #' to adjust the heterozygosity rate [default 0].
 #' @param plot.out Whether produce a plot of the results [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours_pop A color palette for population plots or a list with 
+#' @param plot_colors_pop A color palette for population plots or a list with 
 #' as many colors as there are populations in the dataset [default discrete_palette].
-#' @param plot_colours_ind List of two color names for the borders and fill of 
+#' @param plot_colors_ind List of two color names for the borders and fill of 
 #' the plot by individual [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
@@ -61,7 +61,7 @@
 #' the alternative allele.
 #' \item Expected heterozygosity adjusted (He.adj) = He * n_Loc / (n_Loc + n.invariant)
 #' \item Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / (2 * n_Ind - 1)) 
-#' \item Inbreeding coefficient (FIS) = 1 - (Ho / He)
+#' \item Inbreeding coefficient (FIS) = 1 - (Ho / uHe)
 #' }
 #' 
 #'\strong{ Function's output }
@@ -102,8 +102,8 @@ gl.report.heterozygosity <- function(x,
                                      n.invariant = 0, 
                                      plot.out = TRUE,
                                      plot_theme = theme_dartR(), 
-                                     plot_colours_pop = discrete_palette,
-                                     plot_colours_ind = two_colors,
+                                     plot_colors_pop = discrete_palette,
+                                     plot_colors_ind = two_colors,
                                      save2tmp = FALSE,
                                      verbose = NULL) {
 
@@ -260,7 +260,7 @@ gl.report.heterozygosity <- function(x,
                     (n_loc[i]+n.invariant-1)
             )
             ##########
-            FIS_temp <- 1-(unlist(Ho.loc[i])/H)
+            FIS_temp <- 1-(unlist(Ho.loc[i])/uH)
             FIS[i] <- mean(FIS_temp, na.rm=T)
             FISSD[i] <- sd(FIS_temp, na.rm=T)
         }
@@ -289,17 +289,17 @@ gl.report.heterozygosity <- function(x,
             value <- color <- variable <- He.adj <- NULL
         # printing plots and reports
         # assigning colors to populations
-        if(class(plot_colours_pop)=="function"){
-            colours_pops <- plot_colours_pop(length(levels(pop(x))))
+        if(class(plot_colors_pop)=="function"){
+            colors_pops <- plot_colors_pop(length(levels(pop(x))))
         }
         
-        if(class(plot_colours_pop)!="function"){
-            colours_pops <- plot_colours_pop
+        if(class(plot_colors_pop)!="function"){
+            colors_pops <- plot_colors_pop
         }
 
         if (n.invariant==0) {
             df.ordered <- df
-            df.ordered$color <- colours_pops
+            df.ordered$color <- colors_pops
             df.ordered <- df.ordered[order(df.ordered$Ho), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
             df.ordered <- df.ordered[,c("pop","nInd","Ho","He","FIS","color")]
@@ -322,7 +322,7 @@ gl.report.heterozygosity <- function(x,
             } else {
                 
             df.ordered <- df
-            df.ordered$color <- colours_pops
+            df.ordered$color <- colors_pops
             df.ordered <- df.ordered[order(df.ordered$Ho.adj), ]
             df.ordered$pop <- factor(df.ordered$pop, levels = df.ordered$pop)
             p1 <- ggplot(df.ordered, aes(x = pop, y = Ho.adj, fill = pop)) + 
@@ -452,8 +452,8 @@ gl.report.heterozygosity <- function(x,
         if(plot.out){
         upper <- ceiling(max(df$Ho)*10)/10
         p1 <- ggplot(df, aes(y = Ho)) + 
-          geom_boxplot(color = plot_colours_ind[1], 
-                       fill = plot_colours_ind[2]) + 
+          geom_boxplot(color = plot_colors_ind[1], 
+                       fill = plot_colors_ind[2]) + 
           coord_flip() + 
           plot_theme + 
           xlim(range = c(-1,1)) + 
@@ -464,7 +464,7 @@ gl.report.heterozygosity <- function(x,
         
         # Histogram
         p2 <- ggplot(df,aes(x=Ho)) + 
-          geom_histogram(bins = 25, color =plot_colours_ind[1], fill = plot_colours_ind[2]) + 
+          geom_histogram(bins = 25, color =plot_colors_ind[1], fill = plot_colors_ind[2]) + 
           coord_cartesian(xlim = c(0, upper)) + 
           xlab("Observed heterozygosity") + 
           ylab("Count") + 

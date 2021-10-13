@@ -20,7 +20,7 @@
 #' @param min_sample_size Minimum number of individuals per population in which 
 #' perform H-W tests [default 5].
 #' @param plot.out If TRUE, will produce Ternary Plot(s) [default TRUE].
-#' @param plot_colours Vector with two colour names for the significant and 
+#' @param plot_colors Vector with two color names for the significant and 
 #' not-significant loci [default two_colors_contrast].
 #' @param max_plots Maximum number of plots to print per page [default 4].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
@@ -155,7 +155,7 @@ gl.report.hwe <- function(x,
                           cc_val = 0.5,
                           min_sample_size = 5,
                           plot.out = TRUE,
-                          plot_colours = two_colors_contrast, 
+                          plot_colors = two_colors_contrast, 
                           max_plots = 4,
                           save2tmp = FALSE,
                           verbose = NULL) {
@@ -313,11 +313,11 @@ gl.report.hwe <- function(x,
     result[which(result$Prob.adj < alpha_val),"Sig.adj"] <- "sig" 
     result[which(result$Prob.adj > alpha_val),"Sig.adj"] <- "no_sig" 
     result$color <- NA
-    result[which(result$Sig=="sig"),"color"] <- plot_colours[1]
-    result[which(result$Sig=="no_sig"),"color"] <- plot_colours[2]
+    result[which(result$Sig=="sig"),"color"] <- plot_colors[1]
+    result[which(result$Sig=="no_sig"),"color"] <- plot_colors[2]
     if(multi_comp == TRUE){
-    result[which(result$Sig.adj=="sig"),"color"] <- plot_colours[1]
-    result[which(result$Sig.adj=="no_sig"),"color"] <- plot_colours[2]
+    result[which(result$Sig.adj=="sig"),"color"] <- plot_colors[1]
+    result[which(result$Sig.adj=="no_sig"),"color"] <- plot_colors[2]
     }
     
     result_test <- result[which(result$Population=="WA"),] 
@@ -398,7 +398,7 @@ gl.report.hwe <- function(x,
     
       
     }
-  #removing column with colour name
+  #removing column with color name
     df <- result[,-11]
   #### Report the results
   if(multi_comp==F){

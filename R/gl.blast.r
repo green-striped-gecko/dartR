@@ -148,11 +148,13 @@ gl.blast <- function(x,
                      number_of_threads = 2,
                      verbose = NULL) {
   
-  # TRAP COMMAND
-  funname <- match.call()[[1]]
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
-  # FUNCTION SPECIFIC ERROR CHECKING
-
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jody", verbosity =verbose)
+  
   # Check if the x@other$loc.metrics$TrimmedSequence
   # slot exists
   if (class(x)[1] == "genlight") {

@@ -12,7 +12,7 @@ gl.report.sexlinked(
   t.pres = 0.1,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = three_colors,
+  plot_colors = three_colors,
   verbose = NULL
 )
 }
@@ -33,7 +33,7 @@ be regarded as consistent with a sex specific marker [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours}{List of three color names for the not sex-linked loci, for the sex-linked loci and for the area in which sex-linked loci appear [default three_colors].}
+\item{plot_colors}{List of three color names for the not sex-linked loci, for the sex-linked loci and for the area in which sex-linked loci appear [default three_colors].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
 }

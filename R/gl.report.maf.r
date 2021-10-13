@@ -13,9 +13,9 @@
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options 
 #' [default theme_dartR()].
-#' @param plot_colours_pop A color palette for population plots 
+#' @param plot_colors_pop A color palette for population plots 
 #' [default discrete_palette].
-#' @param plot_colours_all List of two color names for the borders and fill of 
+#' @param plot_colors_all List of two color names for the borders and fill of 
 #' the overall plot [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
@@ -63,8 +63,8 @@ gl.report.maf <- function(x,
                           loc.limit = 30, 
                           plot.out = TRUE,
                           plot_theme = theme_dartR(), 
-                          plot_colours_pop = discrete_palette,
-                          plot_colours_all = two_colors, 
+                          plot_colors_pop = discrete_palette,
+                          plot_colors_all = two_colors, 
                           save2tmp = FALSE,
                           verbose = NULL) {
     
@@ -119,7 +119,7 @@ gl.report.maf <- function(x,
         mafs_per_pop_temp <- z$other$loc.metrics$maf
         mafs_per_pop <- mafs_per_pop_temp[mafs_per_pop_temp < maf.limit]
         p_temp <- ggplot(as.data.frame(mafs_per_pop), aes(x = mafs_per_pop)) + geom_histogram(bins = 12, color = "black", 
-            fill = plot_colours_pop(12)) + xlab("Minor Allele Frequency") + ylab("Count") + xlim(0, maf.limit) + plot_theme + 
+            fill = plot_colors_pop(12)) + xlab("Minor Allele Frequency") + ylab("Count") + xlim(0, maf.limit) + plot_theme + 
             ggtitle(paste(popNames(z), "n =", nInd(z)))
         return(p_temp)
     })
@@ -178,7 +178,7 @@ gl.report.maf <- function(x,
     if (length(popn.hold) > 1) {
         title.str <- "Minor Allele Frequency\nOverall"
         
-        p_all <- ggplot(as.data.frame(maf), aes(x = maf)) + geom_histogram(bins = 50, color = plot_colours_all[1], fill = plot_colours_all[2]) + 
+        p_all <- ggplot(as.data.frame(maf), aes(x = maf)) + geom_histogram(bins = 50, color = plot_colors_all[1], fill = plot_colors_all[2]) + 
           xlab("Minor Allele Frequency") + ylab("Count") + xlim(0, maf.limit) + plot_theme + ggtitle(title.str)
         
         row_plots <- ceiling(length(popn.hold)/3) + 1
@@ -190,7 +190,7 @@ gl.report.maf <- function(x,
             cat(important("  No populations met minimum limits on number of individuals or loci, reporting for overall\n"))
         }
         title.str <- "Minor Allele Frequency\nOverall"
-        p3 <- ggplot(as.data.frame(maf), aes(x = maf)) + geom_histogram(bins = 50, color = plot_colours_all[1], fill = plot_colours_all[2]) + 
+        p3 <- ggplot(as.data.frame(maf), aes(x = maf)) + geom_histogram(bins = 50, color = plot_colors_all[1], fill = plot_colors_all[2]) + 
           xlab("Minor Allele Frequency") + ylab("Count") + xlim(0, maf.limit) + plot_theme + ggtitle(title.str)
     }
 
@@ -199,7 +199,7 @@ gl.report.maf <- function(x,
             cat(important("  Only one population met minimum limits on number of individuals or loci\n"))
         }
         title.str <- paste("Minor Allele Frequency\n", popn.hold)
-        p3 <- ggplot(as.data.frame(maf), aes(x = maf)) + geom_histogram(bins = 50, color = plot_colours_all[1], fill = plot_colours_all[2]) + 
+        p3 <- ggplot(as.data.frame(maf), aes(x = maf)) + geom_histogram(bins = 50, color = plot_colors_all[1], fill = plot_colors_all[2]) + 
           xlab("Minor Allele Frequency") + ylab("Count") + xlim(0, maf.limit) + plot_theme + ggtitle(title.str)
     }
 
@@ -208,7 +208,7 @@ gl.report.maf <- function(x,
             cat(important("  Only one population specified\n"))
         }
         title.str <- paste("Minor Allele Frequency\n", pop(x2)[1])
-        p3 <- ggplot(as.data.frame(maf), aes(x = maf)) + geom_histogram(bins = 50, color = plot_colours_all[1], fill = plot_colours_all[2]) + 
+        p3 <- ggplot(as.data.frame(maf), aes(x = maf)) + geom_histogram(bins = 50, color = plot_colors_all[1], fill = plot_colors_all[2]) + 
           xlab("Minor Allele Frequency") + ylab("Count") + xlim(0, maf.limit) + plot_theme + ggtitle(title.str)
     }
     

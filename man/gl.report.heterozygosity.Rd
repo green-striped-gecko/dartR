@@ -11,8 +11,8 @@ gl.report.heterozygosity(
   n.invariant = 0,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours_pop = discrete_palette,
-  plot_colours_ind = two_colors,
+  plot_colors_pop = discrete_palette,
+  plot_colors_ind = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -30,10 +30,10 @@ to adjust the heterozygosity rate [default 0].}
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours_pop}{A color palette for population plots or a list with 
+\item{plot_colors_pop}{A color palette for population plots or a list with 
 as many colors as there are populations in the dataset [default discrete_palette].}
 
-\item{plot_colours_ind}{List of two color names for the borders and fill of 
+\item{plot_colors_ind}{List of two color names for the borders and fill of 
 the plot by individual [default two_colors].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
@@ -91,7 +91,7 @@ where p is the frequency of the reference allele and q is the frequency of
 the alternative allele.
 \item Expected heterozygosity adjusted (He.adj) = He * n_Loc / (n_Loc + n.invariant)
 \item Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / (2 * n_Ind - 1)) 
-\item Inbreeding coefficient (FIS) = 1 - (Ho / He)
+\item Inbreeding coefficient (FIS) = 1 - (Ho / uHe)
 }
 
 \strong{ Function's output }

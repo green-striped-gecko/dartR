@@ -15,7 +15,7 @@
 #' In the 2D plots, axes can be scaled to represent the proportion of variation explained. In any case, the proportion of variation explained by 
 #' each axis is provided in the axis label.
 #' 
-#' Colours and shapes of the points can be altered by passing a vector of shapes and/or a vector of colours. These vectors can 
+#' colors and shapes of the points can be altered by passing a vector of shapes and/or a vector of colors. These vectors can 
 #' be created with gl.select.shapes() and gl.select.colors() and passed to this script using the pt.shapes and 
 #' pt.colors parameters.
 #'
@@ -38,7 +38,7 @@
 #' @param yaxis Identify the y axis from those available in the ordination (yaxis <= nfactors) [default 2]
 #' @param zaxis Identify the z axis from those available in the ordination for a 3D plot (zaxis <= nfactors) [default NULL]
 #' @param pt.size Specify the size of the displayed points [default 2]
-#' @param pt.colors Optionally provide a vector of nPop colours (run gl.select.colors() for colour options) [default NULL]
+#' @param pt.colors Optionally provide a vector of nPop colors (run gl.select.colors() for color options) [default NULL]
 #' @param pt.shapes Optionally provide a vector of nPop shapes (run gl.select.shapes() for shape options) [default NULL]
 #' @param label.size Specify the size of the point labels [default 1]
 #' @param axis.label.size Specify the size of the displayed axis labels [default 1.5]
@@ -64,7 +64,7 @@
 #' gl.pcoa.plot(pca, gl, pop.labels="none",scale=TRUE)
 #' gl.pcoa.plot(pca, gl, axis.label.size=1.2, interactive=TRUE) 
 #' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, xaxis=1, yaxis=2, zaxis=3)
-#' # COLOUR AND SHAPE ADJUSTMENTS
+#' # color AND SHAPE ADJUSTMENTS
 #' shp <- gl.select.shapes(select=c(16,17,17,0,2))
 #' col <- gl.select.colors(library="brewer",palette="Spectral",ncolors=11,select=c(1,9,3,11,11))
 #' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels="pop", pt.colors=col, pt.shapes=shp, axis.label.size=1, hadjust=1.5,vadjust=1)
@@ -237,11 +237,11 @@ gl.pcoa.plot <- function(glPca,
 
       # Plot
       if(is.null(pt.shapes)){
-        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop))
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, color=pop))
       } else {
-        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=pop, shape=pop))
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, color=pop, shape=pop))
       }  
-        plott <- plott + geom_point(size=pt.size,aes(colour=pop)) +
+        plott <- plott + geom_point(size=pt.size,aes(color=pop)) +
         directlabels::geom_dl(aes(label=pop),method=list("smart.grid",cex=label.size)) +
         theme(axis.title=element_text(face="bold.italic",size=axis.label.size, color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
@@ -271,12 +271,12 @@ gl.pcoa.plot <- function(glPca,
 
       # Plot
       plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,label=ind)) +
-        geom_point(size=pt.size,aes(colour=pop)) +
+        geom_point(size=pt.size,aes(color=pop)) +
          theme(axis.title=element_text(face="bold.italic",size=axis.label.size, color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
-              legend.title = element_text(colour="black", size=axis.label.size, face="bold"),
-              legend.text = element_text(colour="black", size = axis.label.size, face="bold")
+              legend.title = element_text(color="black", size=axis.label.size, face="bold"),
+              legend.text = element_text(color="black", size = axis.label.size, face="bold")
         ) +
         labs(x=xlab, y=ylab) +
         geom_hline(yintercept=0) +
@@ -286,7 +286,7 @@ gl.pcoa.plot <- function(glPca,
       #if(scale==TRUE) { plott <- plott + coord_fixed(ratio=e[yaxis]/e[xaxis]) }
       if(scale==TRUE) { plott <- plott + coord_fixed(ratio=1) }
       # Add ellipses if requested
-      if(ellipse==TRUE) {plott <- plott + stat_ellipse(aes(colour=pop), type="norm", level=plevel)}
+      if(ellipse==TRUE) {plott <- plott + stat_ellipse(aes(color=pop), type="norm", level=plevel)}
        cat(warn("  Ignore any warning on the number of shape categories\n"))
     }  
     
@@ -298,16 +298,16 @@ gl.pcoa.plot <- function(glPca,
       # Plot
       Population <- pop
       if(is.null(pt.shapes)){
-        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=Population, colour=Population))
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=Population, color=Population))
       } else {
-        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, colour=Population, shape=Population))
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy, group=pop, color=Population, shape=Population))
       }  
-        plott <- plott + geom_point(size=pt.size,aes(colour=pop)) +
+        plott <- plott + geom_point(size=pt.size,aes(color=pop)) +
         theme(axis.title=element_text(face="bold.italic",size=axis.label.size,color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
-              legend.title = element_text(colour="black", size=axis.label.size, face="bold"),
-              legend.text = element_text(colour="black", size = axis.label.size, face="bold")
+              legend.title = element_text(color="black", size=axis.label.size, face="bold"),
+              legend.text = element_text(color="black", size = axis.label.size, face="bold")
         ) +
         labs(x=xlab, y=ylab)
         if(!is.null(pt.shapes)){
@@ -332,16 +332,16 @@ gl.pcoa.plot <- function(glPca,
 
       # Plot
       if(is.null(pt.shapes)){
-        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop))
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,color=pop))
       } else {
-        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,colour=pop,shape=pop))
+        plott <- ggplot(df, aes(x=PCoAx, y=PCoAy,color=pop,shape=pop))
       }  
-      plott <- plott + geom_point(size=pt.size,aes(colour=pop)) +
+      plott <- plott + geom_point(size=pt.size,aes(color=pop)) +
         theme(axis.title=element_text(face="bold.italic",size=axis.label.size,color="black"),
               axis.text.x  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size),
               axis.text.y  = element_text(face="bold",angle=0, vjust=0.5, size=axis.label.size)
-              # legend.title = element_text(colour="black", size=18, face="bold"),
-              # legend.text = element_text(colour="black", size = 16, face="bold")
+              # legend.title = element_text(color="black", size=18, face="bold"),
+              # legend.text = element_text(color="black", size = 16, face="bold")
         ) +
         labs(x=xlab, y=ylab)
         if(!is.null(pt.shapes)){

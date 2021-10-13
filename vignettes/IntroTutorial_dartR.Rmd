@@ -943,7 +943,7 @@ gl.pcoa.plot(pc, gl, pop.labels="pop", xaxis=1, yaxis=2)
 
 ```
 
-You can see that this plot is very busy, and that the many labels are displaced quite some distance from their associated points.  This is because there is a tradeoff between avoiding overlap of the labels and proximity of the labels - you can use colour to identify which labels go with which points. 
+You can see that this plot is very busy, and that the many labels are displaced quite some distance from their associated points.  This is because there is a tradeoff between avoiding overlap of the labels and proximity of the labels - you can use color to identify which labels go with which points. 
 More sensibly, recoding populations would be in order. We could use
 
 ```{r,eval=FALSE}
@@ -983,7 +983,7 @@ ggplotly()
 
 ```
 
-will plot the individuals in the top two dimensions of the ordinated space, colour the points in accordance to the population to which they belong, and allow points to be identified interactively using the mouse.
+will plot the individuals in the top two dimensions of the ordinated space, color the points in accordance to the population to which they belong, and allow points to be identified interactively using the mouse.
 
 \includegraphics{figures/ggplotly.png}
 

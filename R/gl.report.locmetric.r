@@ -12,7 +12,7 @@
 #' @param metric Name of the metric to be used for filtering [required].
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the plots [default two_colors].
+#' @param plot_colors List of two color names for the borders and fill of the plots [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity]
@@ -102,7 +102,7 @@ gl.report.locmetric <- function(x,
                                 metric, 
                                 plot.out = TRUE,
                                 plot_theme = theme_dartR(),
-                                plot_colours = two_colors,
+                                plot_colors = two_colors,
                                 save2tmp = FALSE,
                                 verbose = NULL) {
     # TRAP COMMAND
@@ -152,7 +152,7 @@ gl.report.locmetric <- function(x,
     colnames(metric_df) <- "field"
 
     p1 <- ggplot(metric_df, aes(y = field)) + 
-        geom_boxplot(color = plot_colours[1], fill = plot_colours[2]) + 
+        geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
         coord_flip() + 
         plot_theme + 
         xlim(range = c(-1, 1)) +
@@ -161,7 +161,7 @@ gl.report.locmetric <- function(x,
         ggtitle(title1)
 
     p2 <- ggplot(metric_df, aes(x = field)) + 
-        geom_histogram(bins = 50, color = plot_colours[1], fill = plot_colours[2]) + 
+        geom_histogram(bins = 50, color = plot_colors[1], fill = plot_colors[2]) + 
         xlab(metric) + 
         ylab("Count") + 
         plot_theme

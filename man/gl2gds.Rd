@@ -6,10 +6,10 @@
 \usage{
 gl2gds(
   x,
-  outfile = "gl2gds.gds",
+  outfile = "gl_gds.gds",
   outpath = tempdir(),
-  snp_pos = NULL,
-  snp_chr = NULL,
+  snp_pos = "0",
+  snp_chr = "0",
   chr_format = "character",
   verbose = NULL
 )
@@ -17,56 +17,59 @@ gl2gds(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{outfile}{File name of the output file (including extension) 
-[default gl2gds.gds].}
+\item{outfile}{File name of the output file (including extension)
+[default "gl_gds.gds"].}
 
-\item{outpath}{Path where to save the output file 
+\item{outpath}{Path where to save the output file
 [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="."
  when calling this function to direct output files to your working directory.}
 
-\item{snp_pos}{Field name from the slot loc.metrics where the SNP position is 
-stored [default NULL].}
+\item{snp_pos}{Field name from the slot loc.metrics where the SNP position is
+stored [default "0"].}
 
-\item{snp_chr}{Field name from the slot loc.metrics where the chromosome of 
-each is is stored [default NULL].}
+\item{snp_chr}{Field name from the slot loc.metrics where the chromosome of
+each is stored [default "0"].}
 
-\item{chr_format}{Whether chromosome information is stored as "numeric" or as 
+\item{chr_format}{Whether chromosome information is stored as "numeric" or as
 "character", see details [default "character"].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \description{
-Package SNPRelate relies on a bit-level representation of a SNP dataset that 
-competes with \{adegenet\} genlight objects and associated files. This 
-function saves a genlight object to a gds format file.
+Package SNPRelate relies on a bit-level representation of a SNP dataset that
+competes with \{adegenet\} genlight objects and associated files. This
+function converts a genlight object to a gds format file.
 }
 \details{
-This function orders the SNPS by chromosome and by position before converting 
-to SNPRelate format, as required by this package. 
+This function orders the SNPS by chromosome and by position before converting
+to SNPRelate format, as required by this package.
 
-The chromosome of each SNP can be a character or numeric, as described in the 
+The chromosome of each SNP can be a character or numeric, as described in the
 vignette of SNPRelate:
-"snp.chromosome, an integer or character mapping for each chromosome. 
-Integer: numeric values 1-26, mapped in order from 1-22, 23=X, 24=XY 
-(the pseudoautosomal region), 25=Y, 26=M (the mitochondrial probes), and 0 
+"snp.chromosome, an integer or character mapping for each chromosome.
+Integer: numeric values 1-26, mapped in order from 1-22, 23=X, 24=XY
+(the pseudoautosomal region), 25=Y, 26=M (the mitochondrial probes), and 0
 for probes with unknown positions; it does not allow NA. Character: “X”,
- “XY”, “Y” and “M” can be used here, and a blank string indicating unknown 
+ “XY”, “Y” and “M” can be used here, and a blank string indicating unknown
  position."
- 
-When using some functions from package SNPRelate with datasets other than 
-humans it might be necessary to use the option autosome.only=TRUE to avoid 
-detecting chromosome coding, so we recommended to read the documentation of 
-each SNPRelate function. 
 
-The chromosome information for unmapped SNPS is coded as 0, as required by 
-SNPRelate. 
+When using some functions from package SNPRelate with datasets other than
+humans it might be necessary to use the option autosome.only=FALSE to avoid
+detecting chromosome coding. So, it is important to read the documentation of
+the function before using it.
 
-Remember to close the GDS file before working in a different GDS object with 
+The chromosome information for unmapped SNPS is coded as 0, as required by
+SNPRelate.
+
+Remember to close the GDS file before working in a different GDS object with
 the function \link[SNPRelate]{snpgdsClose} (package SNPRelate).
 }
 \examples{
 \donttest{
-gl2gds(platypus.gl,snp_pos="ChromPos_Platypus_Chrom_NCBIv1", snp_chr = "Chrom_Platypus_Chrom_NCBIv1")
+gl2gds(platypus.gl,snp_pos="ChromPos_Platypus_Chrom_NCBIv1", 
+snp_chr = "Chrom_Platypus_Chrom_NCBIv1")
 }
 }
 \author{

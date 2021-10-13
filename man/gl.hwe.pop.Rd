@@ -9,7 +9,7 @@ gl.hwe.pop(
   alpha_val = 0.05,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = c("gray90", "deeppink"),
+  plot_colors = c("gray90", "deeppink"),
   HWformat = FALSE,
   verbose = NULL
 )
@@ -24,7 +24,7 @@ otherwise returns a dataframe [default TRUE].}
 
 \item{plot_theme}{User specified theme [default theme_dartR()].}
 
-\item{plot_colours}{Vector with two colour names for the borders and fill [default two_colors].
+\item{plot_colors}{Vector with two color names for the borders and fill [default two_colors].
 [default discrete_palette].}
 
 \item{HWformat}{switch if data should be returned in HWformat (counts of 

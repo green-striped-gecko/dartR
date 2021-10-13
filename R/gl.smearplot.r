@@ -3,7 +3,7 @@
 #' @description 
 #' Each locus is color coded for scores of 0, 1, 2 and NA for SNP data and 0, 1 
 #' and NA for presence/absence (SilicoDArT) data. Individual labels can be added 
-#' and individuals can be grouped into by population.
+#' and individuals can be grouped by population.
 #'  
 #' If there are too many individuals, it is best to use ind_labels_size = 0.
 #'

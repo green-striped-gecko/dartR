@@ -27,7 +27,7 @@ in a subsequent run, and the vector of shapes returned for later use.
 
 The select parameter can be used to select shapes from the specified 26 shapes available (0-25). For example, 
 select=c(1,1,3) will select shape 1, 1 again and 3 to retain in the final vector. This can be useful for fine-tuning 
-shape selection, and matching colours and shapes.
+shape selection, and matching colors and shapes.
 }
 \examples{
 # SET UP DATASET 
