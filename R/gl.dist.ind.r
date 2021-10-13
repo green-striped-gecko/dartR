@@ -26,7 +26,7 @@
 #' @param method Specify distance measure [SNP: Euclidean; P/A: Simple]
 #' @param plot.out If TRUE, display a histogram and a boxplot of the genetic distances [TRUE]
 #' @param plot_theme User specified theme [default theme_dartR]
-#' @param plot_colors Vector with two colour names for the borders and fill [default two_colors]
+#' @param plot_colors Vector with two color names for the borders and fill [default two_colors]
 #' @param save2tmp If TRUE, saves any ggplots to the session temporary directory [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
 #' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]

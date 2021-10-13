@@ -9,7 +9,7 @@ gl.report.diversity(
   pbar = TRUE,
   table = "DH",
   plot_theme = theme_dartR(),
-  plot_colours = discrete_palette,
+  plot_colors = discrete_palette,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -23,7 +23,7 @@ gl.report.diversity(
 
 \item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
 
-\item{plot_colours}{A color palette [default discrete_palette].}
+\item{plot_colors}{A color palette [default discrete_palette].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
 

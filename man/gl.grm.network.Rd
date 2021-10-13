@@ -90,9 +90,9 @@ gl_test <- bandicoot.gl
 # five populations in gl_test
 nPop(gl_test)
 # color list for population colors 
-pop_colours <- c("deepskyblue","green","gray","orange","deeppink")
+pop_colors <- c("deepskyblue","green","gray","orange","deeppink")
 G_out <- gl.grm(gl_test,plotheatmap=FALSE)
-gl.grm.network(G_out, gl_test, palette_discrete = pop_colours, relatedness_factor = 0.25)  
+gl.grm.network(G_out, gl_test, palette_discrete = pop_colors, relatedness_factor = 0.25)  
 }
 \references{
 \itemize{

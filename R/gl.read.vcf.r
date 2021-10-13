@@ -12,12 +12,20 @@
 #' test <- gl.read.vcf("your_data.vcf")
 #' }
 
-gl.read.vcf <- function(vcffile, verbose = 2) {
+gl.read.vcf <- function(vcffile, 
+                        verbose = NULL) {
 
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
+  
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jackson",verbosity=verbose)
+  
   x=NULL
 
   if (!(requireNamespace("vcfR", quietly = TRUE))) {
-    stop("To use this function you need to install package: vcfR.")
+    stop(error("To use this function you need to install package: vcfR."))
   } else {
   vcf <- vcfR::read.vcfR(file = vcffile, verbose = verbose)
   x <- vcfR::vcfR2genlight(vcf)
@@ -28,10 +36,9 @@ gl.read.vcf <- function(vcffile, verbose = 2) {
   x@other$history <- list(match.call())
   x <- gl.recalc.metrics(x)
 
-  if (verbose) {
-    cat(
-      "genlight object does not have individual metrics. You need to add them 'manually' to the @other$ind.metrics slot.\n"
-    )
+  if (verbose>2) {
+    cat(report("genlight object does not have individual metrics. You need to add them 'manually' to the @other$ind.metrics slot.\n"
+    ))
   }
   return(x)
   }

@@ -92,42 +92,42 @@ gl.grm <- function(x,
   
   # assigning colors to populations
   if(class(palette_discrete)=="function"){
-    colours_pops <- palette_discrete(length(levels(pop(x))))
+    colors_pops <- palette_discrete(length(levels(pop(x))))
   }
   
   if(class(palette_discrete)!="function"){
-    colours_pops <- palette_discrete
+    colors_pops <- palette_discrete
   }
   
-  names(colours_pops) <- as.character(levels(x$pop))
+  names(colors_pops) <- as.character(levels(x$pop))
     
 # calculating the realized additive relationship matrix
   
  G <- rrBLUP::A.mat(as.matrix(x)-1, ...)
  
-df_colours_temp_1 <- as.data.frame(cbind(indNames(x),as.character(pop(x)),1:nInd(x)))
-colnames(df_colours_temp_1) <- c("ind","pop","order")
-df_colours_temp_2 <- as.data.frame(cbind(names(colours_pops),colours_pops))
-colnames(df_colours_temp_2) <- c("pop","colour")
-df_colours <- merge(df_colours_temp_1,df_colours_temp_2,by= "pop")
-df_colours$order <- as.numeric(df_colours$order)
-df_colours <- df_colours[order(df_colours$order),]
+df_colors_temp_1 <- as.data.frame(cbind(indNames(x),as.character(pop(x)),1:nInd(x)))
+colnames(df_colors_temp_1) <- c("ind","pop","order")
+df_colors_temp_2 <- as.data.frame(cbind(names(colors_pops),colors_pops))
+colnames(df_colors_temp_2) <- c("pop","color")
+df_colors <- merge(df_colors_temp_1,df_colors_temp_2,by= "pop")
+df_colors$order <- as.numeric(df_colors$order)
+df_colors <- df_colors[order(df_colors$order),]
 
-df_colours_2 <- df_colours[,c("pop","colour")]
-df_colours_2 <- unique(df_colours_2)
+df_colors_2 <- df_colors[,c("pop","color")]
+df_colors_2 <- unique(df_colors_2)
 
 if(plotheatmap==T){
 # plotting heatmap 
 gplots::heatmap.2(G,
                   col = palette_convergent(255),
                   dendrogram = "column",
-                  ColSideColors = df_colours$colour,
-                  RowSideColors = df_colours$colour, 
+                  ColSideColors = df_colors$color,
+                  RowSideColors = df_colors$color, 
                   trace = "none", 
                   density.info = "none",
                   scale = "none",
                   main = "Probability of identity by descent")
-legend(0,0.8,legend=df_colours_2$pop,fill=df_colours_2$colour,cex=0.75,title="Populations")
+legend(0,0.8,legend=df_colors_2$pop,fill=df_colors_2$color,cex=0.75,title="Populations")
 }
  
  # FLAG SCRIPT END

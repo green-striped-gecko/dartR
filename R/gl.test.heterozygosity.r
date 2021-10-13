@@ -14,7 +14,7 @@
 #' @param plot.out If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE].
 #' @param max_plots Maximum number of plots to print per page [default 9].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours List of two color names for the borders and fill of the
+#' @param plot_colors List of two color names for the borders and fill of the
 #'  plots [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].
@@ -54,7 +54,7 @@ gl.test.heterozygosity <- function(x,
                                    plot.out = TRUE,
                                    max_plots = 6,
                                    plot_theme = theme_dartR(), 
-                                   plot_colours = two_colors, 
+                                   plot_colors = two_colors, 
                                    save2tmp = FALSE,
                                    verbose = NULL) { 
   
@@ -226,14 +226,14 @@ gl.test.heterozygosity <- function(x,
         
         suppressWarnings(
         p_temp <- ggplot(plot_values, aes(x = values)) + 
-          geom_histogram(bins = 50, color = plot_colours[1],fill = plot_colours[2]) + 
+          geom_histogram(bins = 50, color = plot_colors[1],fill = plot_colors[2]) + 
           # Add lines for the observed value of He, Zero, upper and lower levels of significance
-          geom_vline(xintercept=u1quantile,colour="firebrick4",size=1)+
-          geom_vline(xintercept=u2quantile,colour="firebrick1",size=1)+
-          geom_vline(xintercept=l1quantile,colour="firebrick4",size=1)+
-          geom_vline(xintercept=l2quantile,colour="firebrick1",size=1)+
-          geom_vline(xintercept=D[y,z],colour="green",size=2)+
-          geom_vline(xintercept = 0,colour= "blue",size=1) +
+          geom_vline(xintercept=u1quantile,color="firebrick4",size=1)+
+          geom_vline(xintercept=u2quantile,color="firebrick1",size=1)+
+          geom_vline(xintercept=l1quantile,color="firebrick4",size=1)+
+          geom_vline(xintercept=l2quantile,color="firebrick1",size=1)+
+          geom_vline(xintercept=D[y,z],color="green",size=2)+
+          geom_vline(xintercept = 0,color= "blue",size=1) +
           coord_cartesian(xlim = x_axis_limits_lots) + 
           xlab("Difference") + 
           ylab("Count") + 
@@ -251,19 +251,19 @@ gl.test.heterozygosity <- function(x,
 
           suppressWarnings(          
           p_temp <- ggplot(plot_values, aes(x = values)) + 
-            geom_histogram(bins = 50, color = plot_colours[1],fill = plot_colours[2]) + 
+            geom_histogram(bins = 50, color = plot_colors[1],fill = plot_colors[2]) + 
             coord_cartesian(xlim = x_axis_limits_lots) + 
             xlab("Difference") + 
             ylab("Count") + 
             plot_theme +
             theme(plot.title = element_text(size = 12))+
             labs(title=title,subtitle = subtitle)+
-            geom_vline(aes(xintercept=u1quantile,colour="alpha1"),size=1)+
-            geom_vline(aes(xintercept=u2quantile,colour="alpha2"),size=1)+
-            geom_vline(xintercept=l1quantile,colour="firebrick4",size=1)+
-            geom_vline(xintercept=l2quantile,colour="firebrick1",size=1)+
-            geom_vline(aes(xintercept=D[y,z],colour="Observed"),size=2)+
-            geom_vline(aes(xintercept = 0,colour= "Zero_value"),size=1) +
+            geom_vline(aes(xintercept=u1quantile,color="alpha1"),size=1)+
+            geom_vline(aes(xintercept=u2quantile,color="alpha2"),size=1)+
+            geom_vline(xintercept=l1quantile,color="firebrick4",size=1)+
+            geom_vline(xintercept=l2quantile,color="firebrick1",size=1)+
+            geom_vline(aes(xintercept=D[y,z],color="Observed"),size=2)+
+            geom_vline(aes(xintercept = 0,color= "Zero_value"),size=1) +
             scale_color_manual(name = "Values" ,values=c( Zero_value="blue",Observed="green",alpha1="firebrick4",alpha2="firebrick1"),labels=c("Zero value","Observed",paste("Sig. ",alpha1),paste("Sig. ",alpha2)))+
             guides(color = guide_legend(override.aes = list(size = 5),ncol = 2))+
             theme(legend.position="bottom",legend.title = element_text(face = "bold"),legend.text=element_text(size=10))

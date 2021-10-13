@@ -57,7 +57,7 @@ the Distance Matrix used to generate the ordination [required]}
 
 \item{pt.size}{Specify the size of the displayed points [default 2]}
 
-\item{pt.colors}{Optionally provide a vector of nPop colours (run gl.select.colors() for colour options) [default NULL]}
+\item{pt.colors}{Optionally provide a vector of nPop colors (run gl.select.colors() for color options) [default NULL]}
 
 \item{pt.shapes}{Optionally provide a vector of nPop shapes (run gl.select.shapes() for shape options) [default NULL]}
 
@@ -85,7 +85,7 @@ Any pair or trio of axes can be specified from the ordination, provided they are
 In the 2D plots, axes can be scaled to represent the proportion of variation explained. In any case, the proportion of variation explained by 
 each axis is provided in the axis label.
 
-Colours and shapes of the points can be altered by passing a vector of shapes and/or a vector of colours. These vectors can 
+colors and shapes of the points can be altered by passing a vector of shapes and/or a vector of colors. These vectors can 
 be created with gl.select.shapes() and gl.select.colors() and passed to this script using the pt.shapes and 
 pt.colors parameters.
 
@@ -108,7 +108,7 @@ gl.pcoa.plot(pca, gl, ellipse=TRUE, axis.label.size=1.2, xaxis=1, yaxis=3, scale
 gl.pcoa.plot(pca, gl, pop.labels="none",scale=TRUE)
 gl.pcoa.plot(pca, gl, axis.label.size=1.2, interactive=TRUE) 
 gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, xaxis=1, yaxis=2, zaxis=3)
-# COLOUR AND SHAPE ADJUSTMENTS
+# color AND SHAPE ADJUSTMENTS
 shp <- gl.select.shapes(select=c(16,17,17,0,2))
 col <- gl.select.colors(library="brewer",palette="Spectral",ncolors=11,select=c(1,9,3,11,11))
 gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels="pop", pt.colors=col, pt.shapes=shp, axis.label.size=1, hadjust=1.5,vadjust=1)

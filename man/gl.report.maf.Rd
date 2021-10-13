@@ -11,8 +11,8 @@ gl.report.maf(
   loc.limit = 30,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours_pop = discrete_palette,
-  plot_colours_all = two_colors,
+  plot_colors_pop = discrete_palette,
+  plot_colors_all = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -33,10 +33,10 @@ loc.limit polymorphic loci [default 30].}
 \item{plot_theme}{Theme for the plot. See Details for options 
 [default theme_dartR()].}
 
-\item{plot_colours_pop}{A color palette for population plots 
+\item{plot_colors_pop}{A color palette for population plots 
 [default discrete_palette].}
 
-\item{plot_colours_all}{List of two color names for the borders and fill of 
+\item{plot_colors_all}{List of two color names for the borders and fill of 
 the overall plot [default two_colors].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session 

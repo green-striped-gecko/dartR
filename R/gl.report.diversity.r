@@ -7,7 +7,7 @@
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence (SilicoDArT) data [required].
 #' @param plot_theme Theme for the plot. See Details for options [default theme_dartR()].
-#' @param plot_colours A color palette [default discrete_palette].
+#' @param plot_colors A color palette [default discrete_palette].
 #' @param pbar Report on progress. Silent if set to FALSE [default TRUE]. 
 #' @param table Prints a tabular output to the console either 'D'=D values, or 'H'=H values or 'DH','HD'=both or 'N'=no table. [default "DH"]
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]
@@ -50,7 +50,7 @@ gl.report.diversity <- function(x,
                                 pbar = TRUE, 
                                 table = "DH", 
                                 plot_theme = theme_dartR(),
-                                plot_colours = discrete_palette, 
+                                plot_colors = discrete_palette, 
                                 save2tmp = FALSE,
                                 verbose = NULL) {
   
@@ -352,7 +352,7 @@ gl.report.diversity <- function(x,
               ggplot(fs_final, aes(x=pop ,y=value,fill=pop)) +
               geom_bar(position = "dodge",stat="identity",color="black") + 
               geom_errorbar(aes(ymin = low , ymax =up), width = 0.2)+
-              scale_fill_manual(values = plot_colours(nPop(x))) +
+              scale_fill_manual(values = plot_colors(nPop(x))) +
               facet_wrap(~q,scales = "free_x") +
               plot_theme + 
               theme(  text = element_text(size=14),
