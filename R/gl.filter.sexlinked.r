@@ -273,7 +273,7 @@ gl.filter.sexlinked <- function(x,
         ylim(0,1)+
         plot_theme
       
-      print(gg)
+    suppressWarnings(print(gg))
     }
     
   } #end if datatype='SNP'
@@ -403,7 +403,7 @@ gl.filter.sexlinked <- function(x,
         ylim(0,1)+
         plot_theme
       
-      print(gg)
+      suppressWarnings(print(gg))
     }
     
   }

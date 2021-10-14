@@ -136,7 +136,7 @@ gl.nhybrids <- function(gl,
 
       # Error checks
       if (length(indNames(gl.tmp)[indNames(gl.tmp)=="z0"]) < 1  | length(indNames(gl.tmp)[indNames(gl.tmp)=="z1"]) < 1) {
-        stop(error("Fatal Error [gl2nhyb]: One or both of two speciefied parental populations contains no individuals\n"))
+        stop(error("Fatal Error [gl2nhyb]: One or both of two specified parental populations contains no individuals\n"))
       }
 
       # Create a vector containing the flags for the parental population
