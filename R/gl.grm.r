@@ -14,10 +14,12 @@
 #'  [default discrete_palette].
 #' @param palette_convergent A convergent palette for the IBD values
 #'  [default convergent_palette].
-#' @param ... Parameters passed to function A.mat from package rrBLUP
+#' @param legendx x coordinates for the legend[default 0].
+#' @param legendy y coordinates for the legend[default 1].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #'  progress log ; 3, progress and results summary; 5, full report 
 #'  [default 2 or as specified using gl.set.verbosity].
+#' @param ... Parameters passed to function A.mat from package rrBLUP.
 #'
 #' @details 
 #' Two or more alleles are identical by descent (IBD) if they are identical 
@@ -49,12 +51,12 @@
 #' @family inbreeding functions
 #' @export
 
-##@importFrom rrBLUP A.mat
-##@importFrom gplots heatmap.2
 gl.grm <- function(x,
                    plotheatmap = TRUE, 
                    palette_discrete = discrete_palette,
                    palette_convergent = convergent_palette,
+                   legendx=0, 
+                   legendy=1,
                    verbose = NULL, ...){
   
   # SET VERBOSITY
@@ -118,6 +120,7 @@ df_colors_2 <- unique(df_colors_2)
 
 if(plotheatmap==T){
 # plotting heatmap 
+par(mar=c(1, 1, 1, 1))
 gplots::heatmap.2(G,
                   col = palette_convergent(255),
                   dendrogram = "column",
@@ -127,7 +130,7 @@ gplots::heatmap.2(G,
                   density.info = "none",
                   scale = "none",
                   main = "Probability of identity by descent")
-legend(0,0.8,legend=df_colors_2$pop,fill=df_colors_2$color,cex=0.75,title="Populations")
+legend(legendx,legendy,legend=df_colors_2$pop,fill=df_colors_2$color,cex=0.75,title="Populations")
 }
  
  # FLAG SCRIPT END

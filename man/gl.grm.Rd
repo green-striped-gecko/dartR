@@ -9,6 +9,8 @@ gl.grm(
   plotheatmap = TRUE,
   palette_discrete = discrete_palette,
   palette_convergent = convergent_palette,
+  legendx = 0,
+  legendy = 1,
   verbose = NULL,
   ...
 )
@@ -25,11 +27,15 @@ list with as many colors as there are populations in the dataset
 \item{palette_convergent}{A convergent palette for the IBD values
 [default convergent_palette].}
 
+\item{legendx}{x coordinates for the legend[default 0].}
+
+\item{legendy}{y coordinates for the legend[default 1].}
+
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report 
 [default 2 or as specified using gl.set.verbosity].}
 
-\item{...}{Parameters passed to function A.mat from package rrBLUP}
+\item{...}{Parameters passed to function A.mat from package rrBLUP.}
 }
 \value{
 An identity by descent matrix
