@@ -24,7 +24,7 @@ gl.grm.network(
 
 \item{x}{A genlight object from which the G matrix was generated [required].}
 
-\item{method}{One of fr, kk, gh or mds [default fr].}
+\item{method}{One of "fr", "kk", "gh" or "mds" [default "fr"].}
 
 \item{node.size}{Size of the symbols for the network nodes [default 6].}
 
