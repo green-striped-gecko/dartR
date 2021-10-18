@@ -23,7 +23,7 @@ gl.dist.ind(
 
 \item{plot_theme}{User specified theme [default theme_dartR]}
 
-\item{plot_colors}{Vector with two colour names for the borders and fill [default two_colors]}
+\item{plot_colors}{Vector with two color names for the borders and fill [default two_colors]}
 
 \item{save2tmp}{If TRUE, saves any ggplots to the session temporary directory [default FALSE]}
 

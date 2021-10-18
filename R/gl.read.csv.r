@@ -139,6 +139,7 @@ gl.read.csv <- function(filename,
       cat (report("  Data confirmed as biallelic\n"))
       }
     
+    
     # Step through and convert data to 0, 1, 2, NA
     # homRef <- paste0(names(tmp)[1],"/",names(tmp)[1])
     # homAlt <- paste0(names(tmp)[2],"/",names(tmp)[2])

@@ -148,26 +148,18 @@ gl.blast <- function(x,
                      number_of_threads = 2,
                      verbose = NULL) {
   
-  # TRAP COMMAND
-  funname <- match.call()[[1]]
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
   
-  # FUNCTION SPECIFIC ERROR CHECKING
-
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func=funname,build="Jody", verbosity =verbose)
+  
   # Check if the x@other$loc.metrics$TrimmedSequence
   # slot exists
   if (class(x)[1] == "genlight") {
     if (is.null(x$other$loc.metrics$TrimmedSequence)) {
       stop(error("\n\nFatal Error: TrimmedSequence column is required!.\n\n"))
-    }
-  }
-  
-  # FLAG SCRIPT START
-  if (verbose >= 1) {
-    if (verbose == 5) {
-      cat(report("\n\nStarting", funname, "[ Build =", 
-                 build, "]\n\n"))
-    } else {
-      cat(report("\n\nStarting", funname, "\n\n"))
     }
   }
   
@@ -289,8 +281,10 @@ gl.blast <- function(x,
   if (class(x)[1] == "genlight") {
     one_hit_temp <- x$other$loc.metrics
     one_hit_temp$qseqid <- 1:nLoc(x)
+    if(!is.null(one_hit)){
     x$other$loc.metrics <- merge(one_hit_temp, 
                                  one_hit, by = "qseqid", all = T)
+    }
   }
   
   if (verbose >= 1) {
@@ -321,7 +315,7 @@ gl.blast <- function(x,
   
   # FLAG SCRIPT END
   if (verbose >= 1) {
-    cat(report("\n\nCompleted:", funname, "\n\n"))
+    cat(report("Completed:", funname, "\n\n"))
   }
   
   if (class(x)[1] == "genlight") {

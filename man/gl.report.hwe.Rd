@@ -15,7 +15,7 @@ gl.report.hwe(
   cc_val = 0.5,
   min_sample_size = 5,
   plot.out = TRUE,
-  plot_colours = two_colors_contrast,
+  plot_colors = two_colors_contrast,
   max_plots = 4,
   save2tmp = FALSE,
   verbose = NULL
@@ -48,7 +48,7 @@ perform H-W tests [default 5].}
 
 \item{plot.out}{If TRUE, will produce Ternary Plot(s) [default TRUE].}
 
-\item{plot_colours}{Vector with two colour names for the significant and 
+\item{plot_colors}{Vector with two color names for the significant and 
 not-significant loci [default two_colors_contrast].}
 
 \item{max_plots}{Maximum number of plots to print per page [default 4].}

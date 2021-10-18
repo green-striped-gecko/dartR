@@ -40,22 +40,26 @@ gl.tree.nj <- function(x,
 
 # DO THE JOB
 
-  # Convert gl object to a matrix of allele fequencies, locus by population
-    if (verbose >= 2) {cat("  Converting to a matrix of frequencies, locus by populations\n")}
+  # Convert gl object to a matrix of allele frequencies, locus by population
+    if (verbose >= 2) {
+      cat(report("  Converting to a matrix of frequencies, locus by populations\n"))
+      }
     t=apply(as.matrix(x),2, tapply, pop(x), function(e) mean(e)/2)
   # Compute Euclidean distance
-    if (verbose >= 2) {cat("  Computing Euclidean distances\n")}
+    if (verbose >= 2) {
+      cat(report("  Computing Euclidean distances\n"))
+      }
     d <- round(as.matrix(dist(t)),4)
-    row.names(d) <- c(paste(row.names(d),"          "))
+    # row.names(d) <- c(paste(row.names(d),"          "))
     #row.names(d) <- substr(row.names(d),1,10)
     
   # Plot the distances as an nj tree  
     tree <- ape::nj(d)
     if (!is.null(outgroup)) {
       # Function plot.phylo{ape} has the labels all of the same length
-      outgroup <- stringr::str_pad(outgroup, nchar(tree$tip.label[1]), side = c("right"), pad = " ")
-      # Truncate to 10 characters
-      outgroup <- substr(outgroup,1,10)
+      # outgroup <- stringr::str_pad(outgroup, nchar(tree$tip.label[1]), side = c("right"), pad = " ")
+      # # Truncate to 10 characters
+      # outgroup <- substr(outgroup,1,10)
       # Root the tree
       tree <- ape::root(tree, outgroup)
       # Plot the tree
@@ -70,8 +74,10 @@ gl.tree.nj <- function(x,
     
   # Output the tree file
     if(!is.null(treefile)){
-      if(verbose>=2){cat("  Writing the tree topology to",treefile,"\n")}
-      write.tree(tree,file=treefile)
+      if(verbose>=2){
+        cat(report("  Writing the tree topology to",treefile,"\n"))
+        }
+      ape::write.tree(tree,file=treefile)
     }  
     
   # Reset the par options    
@@ -80,7 +86,7 @@ gl.tree.nj <- function(x,
 # FLAG SCRIPT END
     
     if (verbose > 0) {
-      cat("Completed:",funname,"\n")
+      cat(report("Completed:",funname,"\n"))
     }
     
     return(tree)

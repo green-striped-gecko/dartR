@@ -24,7 +24,7 @@ gl.grm.network(
 
 \item{x}{A genlight object from which the G matrix was generated [required].}
 
-\item{method}{One of fr, kk, gh or mds [default fr].}
+\item{method}{One of "fr", "kk", "gh" or "mds" [default "fr"].}
 
 \item{node.size}{Size of the symbols for the network nodes [default 6].}
 
@@ -90,9 +90,9 @@ gl_test <- bandicoot.gl
 # five populations in gl_test
 nPop(gl_test)
 # color list for population colors 
-pop_colours <- c("deepskyblue","green","gray","orange","deeppink")
+pop_colors <- c("deepskyblue","green","gray","orange","deeppink")
 G_out <- gl.grm(gl_test,plotheatmap=FALSE)
-gl.grm.network(G_out, gl_test, palette_discrete = pop_colours, relatedness_factor = 0.25)  
+gl.grm.network(G_out, gl_test, palette_discrete = pop_colors, relatedness_factor = 0.25)  
 }
 \references{
 \itemize{

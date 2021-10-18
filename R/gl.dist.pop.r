@@ -18,7 +18,7 @@
 #' @param binary Perform presence/absence standardization before analysis using decostand [default FALSE]
 #' @param p The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [default 0.5]
 #' @param plot_theme User specified theme [default theme_dartR()].
-#' @param plot_colors Vector with two colour names for the borders and fill [default two_colors].
+#' @param plot_colors Vector with two color names for the borders and fill [default two_colors].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
 #' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
@@ -201,7 +201,7 @@ gl.dist.pop <- function(x,
     cat("    No. of populations =", nPop(x), "\n")
     cat("    Average no. of individuals per population =", nInd(x)/nPop(x), "\n")
     cat("    No. of loci =", nLoc(x), "\n")
-    cat("    Miniumum Distance: ",round(min(dd),2),"\n")
+    cat("    Minimum Distance: ",round(min(dd),2),"\n")
     cat("    Maximum Distance: ",round(max(dd),2),"\n")
     cat("    Average Distance: ",round(mean(dd),3),"\n")
   }  

@@ -10,7 +10,7 @@
 #' 
 #' The select parameter can be used to select shapes from the specified 26 shapes available (0-25). For example, 
 #' select=c(1,1,3) will select shape 1, 1 again and 3 to retain in the final vector. This can be useful for fine-tuning 
-#' shape selection, and matching colours and shapes.
+#' shape selection, and matching colors and shapes.
 #'
 #' @param x Optionally, provide a gl object from which to determine the number of populations [default NULL]
 #' @param select Select the shapes to retain in the output vector [default NULL, all shapes shown and returned] 

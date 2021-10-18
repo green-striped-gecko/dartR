@@ -26,6 +26,7 @@ gl.map.interactive <- function(x,
                                pop.labels.cex = 12, 
                                provider = "Esri.NatGeoWorldMap")
 {
+  
 # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "leaflet"
   if (!(requireNamespace(pkg, quietly = TRUE))) {

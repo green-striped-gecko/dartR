@@ -121,14 +121,19 @@ gl.pcoa <- function(x,
   
 # FLAG SCRIPT START
   funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jackson",verbosity=verbose)
+  utils.flag.start(func=funname,build="Jody",v=verbose)
   
 # CHECK DATATYPE 
   datatype <- utils.check.datatype(x,accept=c("SNP", "SilicoDArT", "dist", "fd"), verbose=verbose)
   
+  if (datatype=="SNP" | datatype=="SilicoDArT") {
+    x <- gl.filter.allna(x,verbose=0)
+  }
+  
   if(datatype=="fd"){
     datatype <- utils.check.datatype(x$gl, verbose=verbose)
     x <- x$gl
+    x <- gl.filter.allna(x,verbose=0)
   }
 
 # SCRIPT SPECIFIC ERROR CHECKING

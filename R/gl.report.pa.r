@@ -204,20 +204,20 @@ if (!is.null(x2)) {
     
     # assigning colors to populations
     if(class(palette_discrete)=="function"){
-      colours_pops <- palette_discrete(length(levels(pop(x))))
+      colors_pops <- palette_discrete(length(levels(pop(x))))
     }
     
     if(class(palette_discrete)!="function"){
-      colours_pops <- palette_discrete
-      if(!any(grepl("#", colours_pops))){
-        colours_pops <- gplots::col2hex(colours_pops)
+      colors_pops <- palette_discrete
+      if(!any(grepl("#", colors_pops))){
+        colors_pops <- gplots::col2hex(colors_pops)
       }
     }
     
-    colours_pops <- paste0('"',paste0(colours_pops, collapse='","'),'"')
+    colors_pops <- paste0('"',paste0(colors_pops, collapse='","'),'"')
     
-    ColourScal <- paste('d3.scaleOrdinal().range([',  colours_pops ,'])')
-    # Colour links
+    colorScal <- paste('d3.scaleOrdinal().range([',  colors_pops ,'])')
+    # color links
     data_long$color <- gsub("src_","",data_long$source)
     
     p3 <- suppressMessages(networkD3::sankeyNetwork(Links = data_long, Nodes = nodes,
@@ -225,7 +225,7 @@ if (!is.null(x2)) {
                                          LinkGroup="color",
                                          Value = "value", NodeID = "name",
                                          sinksRight=FALSE,   units = "Private alleles",
-                                         colourScale=ColourScal, 
+                                         colourScale=colorScal, 
                                          nodeWidth=40, fontSize=14, nodePadding=10))
     
     if(map.interactive){
@@ -274,11 +274,11 @@ if (!is.null(x2)) {
     if(plot.out){
       # assigning colors to populations
       if(class(palette_discrete)=="function"){
-        colours_pops <- palette_discrete(length(levels(pop(x)))+1)
+        colors_pops <- palette_discrete(length(levels(pop(x)))+1)
       }
       
       if(class(palette_discrete)!="function"){
-        colours_pops <- palette_discrete
+        colors_pops <- palette_discrete
       }
       
       data_long_1 <- as.data.frame(matrix(nrow=nPop(x),ncol = 6))
@@ -305,10 +305,10 @@ if (!is.null(x2)) {
       colnames(nodes) <- c("name")
       nodes$name <- c(data_long_1$source,"Rest",data_long_2$target)
       
-      colours_pops <- paste0('"',paste0(colours_pops, collapse='","'),'"')
+      colors_pops <- paste0('"',paste0(colors_pops, collapse='","'),'"')
       
-      ColourScal <- paste('d3.scaleOrdinal().range([',  colours_pops ,'])')
-      # Colour links
+      colorScal <- paste('d3.scaleOrdinal().range([',  colors_pops ,'])')
+      # color links
       data_long$color <- gsub("src_","",data_long$source)
       
       p3 <- suppressMessages(networkD3::sankeyNetwork(Links = data_long, Nodes = nodes,
@@ -316,7 +316,7 @@ if (!is.null(x2)) {
                                            LinkGroup="color",
                                            Value = "value", NodeID = "name",
                                            sinksRight=FALSE,  units = "Private alleles",
-                                           colourScale=ColourScal, iterations = 0,
+                                           colourScale=colorScal, iterations = 0,
                                            nodeWidth=40, fontSize=14, nodePadding=20))
     }
   }
