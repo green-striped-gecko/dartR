@@ -4,22 +4,31 @@
 \alias{gl.costdistances}
 \title{Calculates cost distances for a given landscape (resistance matrix)}
 \usage{
-gl.costdistances(landscape, locs, method, NN)
+gl.costdistances(landscape, locs, method, NN, verbose = NULL)
 }
 \arguments{
-\item{landscape}{a raster object coding the resistance of the landscape}
+\item{landscape}{A raster object coding the resistance of the landscape 
+[required].}
 
-\item{locs}{coordinates of the subpopulations. If a genlight object is provided coordinates are taken from @other$latlon and centers for population (pop(gl)) are calculated. In case you want to calculate costdistances between individuals redefine pop(gl) via: \code{pop(gl)<- indNames(gl)}.}
+\item{locs}{Coordinates of the subpopulations. If a genlight object is 
+provided coordinates are taken from @other$latlon and centers for population 
+(pop(gl)) are calculated. In case you want to calculate costdistances between 
+individuals redefine pop(gl) via: \code{pop(gl)<- indNames(gl)} [required].}
 
-\item{method}{defines the type of cost distance, types are "least-cost", "rSPDistance" or "commute" (Circuitscape type).}
+\item{method}{Defines the type of cost distance, types are "leastcost", 
+"rSPDistance" or "commute" (Circuitscape type) [required].}
 
-\item{NN}{number of next neighbours recommendation is 8}
+\item{NN}{Number of next neighbours recommendation is 8 [required].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report 
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-a costdistance matrix between all pairs of locs
+A costdistance matrix between all pairs of locs [required].
 }
 \description{
-calculates a cost distance matrix, to be used with run.popgensim
+Calculates a cost distance matrix, to be used with run.popgensim
 }
 \examples{
 \dontrun{

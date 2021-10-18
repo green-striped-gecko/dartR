@@ -3,12 +3,12 @@
 #' This function is a wrapper for the nj\{ape\} function applied to Euclidian
 #' distances calculated from the genlight object.
 #'
-#' @param x -- name of the genlight object containing the SNP data [required]
-#' @param outgroup -- Vector containing the population names that are the outgroups [Default NULL]
-#' @param type -- Type of dendrogram phylogram|cladogram|fan|unrooted [Default Phylogram]
-#' @param labelsize -- Size of the labels as a proportion of the graphics default [Default 0.7]
-#' @param treefile -- Name of the file for the tree topology using Newick format [Default NULL].
-#' @param verbose -- specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param outgroup Vector containing the population names that are the outgroups [Default NULL].
+#' @param type Type of dendrogram phylogram|cladogram|fan|unrooted [Default Phylogram].
+#' @param labelsize Size of the labels as a proportion of the graphics default [Default 0.7].
+#' @param treefile Name of the file for the tree topology using Newick format [Default NULL].
+#' @param verbose Specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2].
 #' @return A tree file of class phylo
 #' @importFrom stringr str_pad
 #' @importFrom ape nj root plot.phylo write.tree
@@ -22,11 +22,11 @@
 #'   gl.tree.nj(testset.gs,type="fan")
 
 gl.tree.nj <- function(x, 
-                       type="phylogram", 
-                       outgroup=NULL, 
-                       labelsize=0.7, 
-                       treefile=NULL, 
-                       verbose=NULL) {
+                       type = "phylogram", 
+                       outgroup = NULL, 
+                       labelsize = 0.7, 
+                       treefile = NULL, 
+                       verbose = NULL) {
 
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
