@@ -201,7 +201,7 @@ gl.dist.pop <- function(x,
     cat("    No. of populations =", nPop(x), "\n")
     cat("    Average no. of individuals per population =", nInd(x)/nPop(x), "\n")
     cat("    No. of loci =", nLoc(x), "\n")
-    cat("    Miniumum Distance: ",round(min(dd),2),"\n")
+    cat("    Minimum Distance: ",round(min(dd),2),"\n")
     cat("    Maximum Distance: ",round(max(dd),2),"\n")
     cat("    Average Distance: ",round(mean(dd),3),"\n")
   }  
