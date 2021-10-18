@@ -1,27 +1,38 @@
 #' @name gl.dist.pop
-#' @title Calculate a distance matrix for populations with SNP genotypes in a genlight object
+#' @title Calculate a distance matrix for populations with SNP genotypes in a 
+#' genlight object
 #' @description
-#' This script calculates various distances between populations based on allele frequencies. The distances are
-#' calculated by scripts in the {stats} or {vegan} libraries, with the exception of the pcfixed (percent fixed
-#' differences) distance.
+#' This script calculates various distances between populations based on allele 
+#' frequencies. The distances are calculated by scripts in the {stats} or 
+#' {vegan} libraries, with the exception of the pcfixed (percent fixed
+#'  differences) distance.
 #' @details
-#' The distance measure can be one of "manhattan", "euclidean", "pcfixed", "pa", canberra", "bray", 
-#' "kulczynski", "jaccard", "gower", "morisita", "horn", "mountford", "raup" , 
-#' "binomial", "chao", "cao", "mahalanobis", "maximum", "binary" or "minkowski". Refer to the documentation for
-#' of functions \link[stats]{dist} (package stat) or \link[vegan]{vegdist} (package vegan) vegan for definitions. 
+#' The distance measure can be one of "manhattan", "euclidean", "pcfixed", 
+#' canberra", "bray", "kulczynski", "jaccard", "gower", "morisita", "horn",
+#' "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "maximum",
+#'  "binary" or "minkowski". Refer to the documentation of functions
+#'   \link[stats]{dist} (package stat) or \link[vegan]{vegdist} (package vegan) 
+#'   for definitions. 
 #' 
-#' Distance pcfixed calculates the pair-wise count of fixed allelic differences between populations.
+#' Distance pcfixed calculates the pair-wise count of fixed allelic differences 
+#' between populations.
 #'
-#' @param x Name of the genlight containing the SNP genotypes [required]
-#' @param method Specify distance measure [default euclidean]
-#' @param plot.out If TRUE, display a histogram of the genetic distances, and a whisker plot [default TRUE]
-#' @param binary Perform presence/absence standardization before analysis using decostand [default FALSE]
-#' @param p The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [default 0.5]
+#' @param x Name of the genlight containing the SNP genotypes [required].
+#' @param method Specify distance measure [default euclidean].
+#' @param plot.out If TRUE, display a histogram of the genetic distances, and a
+#'  whisker plot [default TRUE].
+#' @param binary Perform presence/absence standardization before analysis using 
+#' decostand [default FALSE].
+#' @param p The power of the Minkowski distance (typically a value ranging from 
+#' 0.25 to infinity) [default 0.5].
 #' @param plot_theme User specified theme [default theme_dartR()].
-#' @param plot_colors Vector with two color names for the borders and fill [default two_colors].
-#' @param save2tmp If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param plot_colors Vector with two color names for the borders and fill 
+#' [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session
+#'  temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#'  progress log ; 3, progress and results summary; 5, full report
+#'   [default 2 or as specified using gl.set.verbosity].
 #' @return An object of class 'dist' giving distances between populations
 #' @importFrom stats dist
 #' @importFrom vegan vegdist
@@ -31,14 +42,14 @@
 #' D <- gl.dist.pop(testset.gl, method="euclidean")
 
 gl.dist.pop <- function(x, 
-                        method="euclidean", 
-                        plot.out=TRUE, 
-                        binary=FALSE, 
-                        p=NULL, 
+                        method = "euclidean", 
+                        plot.out = TRUE, 
+                        binary = FALSE, 
+                        p = NULL, 
                         plot_theme = theme_dartR(), 
                         plot_colors = two_colors, 
                         save2tmp = FALSE,
-                        verbose=NULL) {
+                        verbose = NULL) {
 
 # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "reshape2"
@@ -90,25 +101,35 @@ gl.dist.pop <- function(x,
   # Calculate distance using dist {stat}
     if (m %in% distmethod) {
       if (verbose >= 2) {
-        cat(paste("  Calculating distances: ",m,"\n"))
-        cat("  Refer to dist {stats} documentation for algorithm\n")
+        cat(report(paste("  Calculating distances: ",m,"\n")))
+        cat(report("  Refer to dist {stats} documentation for algorithm\n"))
       }  
       if (method == "minkowski"){
         if (pr < 0.25) {
-          if (verbose >= 2){cat("  Warning:",hard.min.p,"is the practical minimum for Minkowski distance, set to,",hard.min.p,"\n\n")}
+          if (verbose >= 2){
+            cat(warn("  Warning:",hard.min.p,"is the practical minimum for Minkowski distance, set to,",hard.min.p,"\n\n"))
+            }
           pr <- hard.min.p
         }
         if (pr == 1) {
-          if (verbose >= 2) {cat("  Note: for p = 1, Minkowski distance is equivalent to Manhattan distance\n\n")}
+          if (verbose >= 2) {
+            cat(report("  Note: for p = 1, Minkowski distance is equivalent to Manhattan distance\n\n"))
+            }
         }
         if (pr == 2) {
-          if (verbose >= 2) {cat("  Note: for p = 2, Minkowski distance is equivalent to Euclidean distance\n\n")}
+          if (verbose >= 2) {
+            cat(report("  Note: for p = 2, Minkowski distance is equivalent to Euclidean distance\n\n"))
+            }
         }
         if (pr >= 30) {
-          if (verbose >= 2) {cat("  Note: for large p, Minkowski distance is equivalent to the Maxiumum Metric distance\n\n")}
+          if (verbose >= 2) {
+            cat(report("  Note: for large p, Minkowski distance is equivalent to the Maximum Metric distance\n\n"))
+            }
         }
         if (pr < 1) {
-          if (verbose >= 2) {cat("  Note: for p < 1, Minkowski distance is not a metric distance, and so should be considered a measure of dissimilarity\n\n")}
+          if (verbose >= 2) {
+            cat(report("  Note: for p < 1, Minkowski distance is not a metric distance, and so should be considered a measure of dissimilarity\n\n"))
+            }
         }
       }
       dd <- stats::dist(f, method=m, diag=d, upper=u, p=pr)
@@ -116,13 +137,16 @@ gl.dist.pop <- function(x,
     
     # Calculate distance using vegdist {vegan}
     if (m %in% veganmethod) {
+      f <- f[ , colSums(is.na(f)) == 0]
       dd <- vegan::vegdist(f, method=m, binary=b, diag=d, upper=u, na.rm=TRUE)
       if (verbose >= 2) {
         cat(report(paste("  Calculating distances: ",m,"\n")))
         cat(report("    Refer to vegdist {vegan} documentation for algorithm\n"))
       }
       if (method == "bray"){
-        if (verbose >= 2) {cat("  Note: the Bray-Curtis distance is non-metric, and so should be considered a dissimilarity measure. A metric alternative is the Jaccard distance.\n\n")}
+        if (verbose >= 2) {
+          cat(report("  Note: the Bray-Curtis distance is non-metric, and so should be considered a dissimilarity measure. A metric alternative is the Jaccard distance.\n\n"))
+          }
       }
     }
     
@@ -165,7 +189,7 @@ gl.dist.pop <- function(x,
 
   if (plot.out){
       if (datatype=="SNP"){
-        title_plot <-  paste0("SNP data\nUsing ",method," distance")
+        title_plot <- paste0("SNP data\nUsing ",method," distance")
       } else {
         title_plot <- paste0("Tag P/A data (SilicoDArT)\nUsing ",method," distance")
       }  
@@ -201,7 +225,7 @@ gl.dist.pop <- function(x,
     cat("    No. of populations =", nPop(x), "\n")
     cat("    Average no. of individuals per population =", nInd(x)/nPop(x), "\n")
     cat("    No. of loci =", nLoc(x), "\n")
-    cat("    Miniumum Distance: ",round(min(dd),2),"\n")
+    cat("    Minimum Distance: ",round(min(dd),2),"\n")
     cat("    Maximum Distance: ",round(max(dd),2),"\n")
     cat("    Average Distance: ",round(mean(dd),3),"\n")
   }  

@@ -1,7 +1,23 @@
 #' Isolation by distance
 #' 
-#' This functions performs an isolation by distance analysis based on a mantel test and also produces an isolation by distance plot. If a genlight object with coordinates is provided, then a Euclidean and genetic distance matrix are calculated. Currently pairwise Fst and D between population and 1-propShared and Euclidean distance are implemented between individuals are implemented. Coordinates are expected as lat long and converted to Google Earth Mercator projection. If coordinates are already projected, provide them at the x@other$xy slot. 
-#' You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), using the functions  \link[vegan]{mantel} (package vegan), \link[StAMPP]{stamppFst}, \link[StAMPP]{stamppNeisD} (package StAMPP) and gl.propShared or gl.dist.ind. For transformation you need to have the dismo package installed. As a new feature you can plot pairwise relationship using double colored points (paircols=TRUE). Pairwise relationship can be visualised via populations or individuals, depending which distance is calculated.
+#' This function performs an isolation by distance analysis based on a Mantel 
+#' test and also produces an isolation by distance plot. If a genlight object 
+#' with coordinates is provided, then an Euclidean and genetic distance matrices  
+#' are calculated. Currently pairwise Fst and D between populations and 
+#' 1-propShared and Euclidean distance between individuals are 
+#' implemented. Coordinates are expected as lat long and converted to Google 
+#' Earth Mercator projection. If coordinates are already projected, provide them 
+#' at the x@other$xy slot. 
+#' You can provide also your own genetic and Euclidean distance matrices. The 
+#' function is based on the code provided by the adegenet tutorial 
+#' (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), 
+#' using the functions  \link[vegan]{mantel} (package vegan), 
+#' \link[StAMPP]{stamppFst}, \link[StAMPP]{stamppNeisD} (package StAMPP) and 
+#' gl.propShared or gl.dist.ind. For transformation you need to have the dismo 
+#' package installed. As a new feature you can plot pairwise relationship using 
+#' double colored points (paircols=TRUE). Pairwise relationship can be 
+#' visualised via populations or individuals, depending which distance is 
+#' calculated.
 #' 
 #' @importFrom vegan mantel
 #' @importFrom MASS kde2d
@@ -10,27 +26,54 @@
 #' @importFrom stats as.dist lm
 #' @importFrom StAMPP stamppFst stamppNeisD
 #' @importFrom stats coef
-#' @param x Genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed
-#' @param distance Type of distance that is calculated and used for the analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared", [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].
-#' @param coordinates Can be either "latlon", "xy" or a two column data.frame with column names "lat","lon", "x", "y")  Coordinates are provided via \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon data will be projected to meters using Mercator system [google maps] or if xy then distance is directly calculated on the coordinates.
-#' @param Dgen Genetic distance matrix if no genlight object is provided
-#' @param Dgeo Euclidean distance matrix if no genlight object is provided
-#' @param Dgeo_trans Transformation to be used on the Euclidean distances. see Dgen_trans. [Default: "log(Dgeo)"]
-#' @param Dgen_trans You can provide a formula to transform the genetic distance. For example Rousset (see below) suggests to study \code{Fst/(1-Fst)} against log transformed distances as this is the expectations of Fst versus distances in the case of a stepping stone model. The transformation can be applied as a formula using Dgen as the variable to be transformed. So for the Fst transformation of Rousset use \code{Dgen_trans = "Dgen/(1-Dgen)". Any valid R expression can be used here. [Default is "Dgen", which is the identity function.]}
-#' @param permutations Number of permutations in the mantel test
-#' @param plot.out Should an isolation by distance plot be returned [default TRUE].
-#' @param paircols Should pairwise dots colored by "pop"ulation/"ind"ividual pairs [default: pop]. You can color pairwise individuals by pairwise population colors.
-#' @param plot_theme Theme for the plot. See details for options [default theme_dartR()].
+#' @param x Genlight object. If provided a standard analysis on Fst/1-Fst and 
+#' log(distance) is performed
+#' @param distance Type of distance that is calculated and used for the 
+#' analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], 
+#' "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared",
+#'  [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].
+#' @param coordinates Can be either "latlon", "xy" or a two column data.frame 
+#' with column names "lat","lon", "x", "y")  Coordinates are provided via 
+#' \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon 
+#' data will be projected to meters using Mercator system [google maps] or if 
+#' xy then distance is directly calculated on the coordinates.
+#' @param Dgen Genetic distance matrix if no genlight object is provided 
+#' [default NULL].
+#' @param Dgeo Euclidean distance matrix if no genlight object is provided 
+#' [default NULL].
+#' @param Dgeo_trans Transformation to be used on the Euclidean distances. see 
+#' Dgen_trans [default "log(Dgeo)"].
+#' @param Dgen_trans You can provide a formula to transform the genetic 
+#' distance. For example Rousset (see below) suggests to study 
+#' \code{Fst/(1-Fst)} against log transformed distances as this is the 
+#' expectations of Fst versus distances in the case of a stepping stone model. 
+#' The transformation can be applied as a formula using Dgen as the variable to
+#'  be transformed. So, for the Fst transformation of Rousset use 
+#'  \code{Dgen_trans = "Dgen/(1-Dgen)". Any valid R expression can be used here.
+#'  [Default is "Dgen", which is the identity function.]}
+#' @param permutations Number of permutations in the Mantel test [default 999].
+#' @param plot.out Should an isolation by distance plot be returned 
+#' [default TRUE].
+#' @param paircols Should pairwise dots colored by "pop"ulation/"ind"ividual 
+#' pairs [default "pop"]. You can color pairwise individuals by pairwise
+#'  population colors.
+#' @param plot_theme Theme for the plot. See details for options 
+#' [default theme_dartR()].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session 
 #' temporary directory (tempdir) [default FALSE].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#' progress log ; 3, progress and results summary; 5, full report 
+#' [default 2 or as specified using gl.set.verbosity]
 
-#' @return returns a list of the following components: Dgen (the genetic distance matrix), Dgeo (the Euclidean distance matrix), mantel (the statistics of the mantel test)
+#' @return returns a list of the following components: Dgen (the genetic 
+#' distance matrix), Dgeo (the Euclidean distance matrix), mantel (the 
+#' statistics of the mantel test)
 #' @export
 #' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
 #' @seealso \link[vegan]{mantel}, \link[StAMPP]{stamppFst}
 #' @references 
-#' Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
+#' Rousset, F. (1997). Genetic differentiation and estimation of gene flow from 
+#' F-statistics under isolation by distance. Genetics, 145(4), 1219-1228.
 #' @examples 
 #' #only first 100 loci
 #' ibd <- gl.ibd(bandicoot.gl[,1:100])
@@ -66,15 +109,9 @@ gl.ibd <-  function(x = NULL,
 
     if (!is.null(x))  dt <- utils.check.datatype(x, verbose=0)
 
-    
+     #specific error checks       
 
- #specific error checks       
-
-
-    
- 
-
- if (!is.null(Dgen) & !is.null(Dgeo) ) 
+     if (!is.null(Dgen) & !is.null(Dgeo) ) 
   {
    if (verbose>0)  cat(report("Analysis performed using provided genetic and Euclidean distance matrices. If a genlight object is provided, it is ignored."))
    ta="dgendgeo"
@@ -159,8 +196,6 @@ if (is.null(Dgeo) & typedis=="ind")
 
 #apply logarithm to distance
 
-
-
 if (is.null(Dgen) & distance=="Fst")
   Dgen <- as.dist(StAMPP::stamppFst(x, nboots=1))
 if (is.null(Dgen) & distance=="D")
@@ -169,7 +204,6 @@ if (is.null(Dgen) & distance=="propShared")
   Dgen <- as.dist(1-gl.propShared(x))
 if (is.null(Dgen) & distance=="euclidean")
   Dgen <- as.dist(dist(as.matrix(x)))
-
 
 ### order both matrices to be alphabetically as levels in genlight (ind or pop)
 if (is(x,"genlight")) {
@@ -204,7 +238,6 @@ if (is.null(Dgen)) stop(error("Cannot calculate genetic distance matrix or no ge
 
 manteltest <- vegan::mantel(Dgen, Dgeo, na.rm=TRUE, permutations = permutations)
 
-
 lm_eqn <- function(df,r=manteltest$statistic,pp=manteltest$signif){
   m <- lm(Dgen ~ Dgeo, df);
   eq <- substitute(italic(y) == a + b %.% italic(x)*","~~italic(R)^2~"="~r2*","~~italic(p)~"="~pp, 
@@ -215,10 +248,7 @@ lm_eqn <- function(df,r=manteltest$statistic,pp=manteltest$signif){
   as.character(as.expression(eq));
 }
 
-
 ####### Printing outputs, using package patchwork
-
-                                        
 
 res <- data.frame(Dgen=as.numeric(Dgen), Dgeo=as.numeric(Dgeo))
 if (is.null(paircols)) {

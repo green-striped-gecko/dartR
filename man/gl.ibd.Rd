@@ -21,39 +21,81 @@ gl.ibd(
 )
 }
 \arguments{
-\item{x}{Genlight object. If provided a standard analysis on Fst/1-Fst and log(distance) is performed}
+\item{x}{Genlight object. If provided a standard analysis on Fst/1-Fst and 
+log(distance) is performed}
 
-\item{distance}{Type of distance that is calculated and used for the analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], "D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared", [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].}
+\item{distance}{Type of distance that is calculated and used for the 
+analysis. Can be either population based "Fst" [\link[StAMPP]{stamppFst}], 
+"D" [\link[StAMPP]{stamppNeisD}] or individual based "propShared",
+ [gl.propShared], "euclidean" [gl.dist.ind, method="Euclidean"].}
 
-\item{coordinates}{Can be either "latlon", "xy" or a two column data.frame with column names "lat","lon", "x", "y")  Coordinates are provided via \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon data will be projected to meters using Mercator system [google maps] or if xy then distance is directly calculated on the coordinates.}
+\item{coordinates}{Can be either "latlon", "xy" or a two column data.frame 
+with column names "lat","lon", "x", "y")  Coordinates are provided via 
+\code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon 
+data will be projected to meters using Mercator system [google maps] or if 
+xy then distance is directly calculated on the coordinates.}
 
-\item{Dgen}{Genetic distance matrix if no genlight object is provided}
+\item{Dgen}{Genetic distance matrix if no genlight object is provided 
+[default NULL].}
 
-\item{Dgeo}{Euclidean distance matrix if no genlight object is provided}
+\item{Dgeo}{Euclidean distance matrix if no genlight object is provided 
+[default NULL].}
 
-\item{Dgeo_trans}{Transformation to be used on the Euclidean distances. see Dgen_trans. [Default: "log(Dgeo)"]}
+\item{Dgeo_trans}{Transformation to be used on the Euclidean distances. see 
+Dgen_trans [default "log(Dgeo)"].}
 
-\item{Dgen_trans}{You can provide a formula to transform the genetic distance. For example Rousset (see below) suggests to study \code{Fst/(1-Fst)} against log transformed distances as this is the expectations of Fst versus distances in the case of a stepping stone model. The transformation can be applied as a formula using Dgen as the variable to be transformed. So for the Fst transformation of Rousset use \code{Dgen_trans = "Dgen/(1-Dgen)". Any valid R expression can be used here. [Default is "Dgen", which is the identity function.]}}
+\item{Dgen_trans}{You can provide a formula to transform the genetic 
+distance. For example Rousset (see below) suggests to study 
+\code{Fst/(1-Fst)} against log transformed distances as this is the 
+expectations of Fst versus distances in the case of a stepping stone model. 
+The transformation can be applied as a formula using Dgen as the variable to
+ be transformed. So, for the Fst transformation of Rousset use 
+ \code{Dgen_trans = "Dgen/(1-Dgen)". Any valid R expression can be used here.
+ [Default is "Dgen", which is the identity function.]}}
 
-\item{permutations}{Number of permutations in the mantel test}
+\item{permutations}{Number of permutations in the Mantel test [default 999].}
 
-\item{plot.out}{Should an isolation by distance plot be returned [default TRUE].}
+\item{plot.out}{Should an isolation by distance plot be returned 
+[default TRUE].}
 
-\item{paircols}{Should pairwise dots colored by "pop"ulation/"ind"ividual pairs [default: pop]. You can color pairwise individuals by pairwise population colors.}
+\item{paircols}{Should pairwise dots colored by "pop"ulation/"ind"ividual 
+pairs [default "pop"]. You can color pairwise individuals by pairwise
+ population colors.}
 
-\item{plot_theme}{Theme for the plot. See details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See details for options 
+[default theme_dartR()].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log ; 3, progress and results summary; 5, full report 
+[default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-returns a list of the following components: Dgen (the genetic distance matrix), Dgeo (the Euclidean distance matrix), mantel (the statistics of the mantel test)
+returns a list of the following components: Dgen (the genetic 
+distance matrix), Dgeo (the Euclidean distance matrix), mantel (the 
+statistics of the mantel test)
 }
 \description{
-This functions performs an isolation by distance analysis based on a mantel test and also produces an isolation by distance plot. If a genlight object with coordinates is provided, then a Euclidean and genetic distance matrix are calculated. Currently pairwise Fst and D between population and 1-propShared and Euclidean distance are implemented between individuals are implemented. Coordinates are expected as lat long and converted to Google Earth Mercator projection. If coordinates are already projected, provide them at the x@other$xy slot. 
-You can provide also your own genetic and Euclidean distance matrix. The function is based on the code provided by the adegenet tutorial (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), using the functions  \link[vegan]{mantel} (package vegan), \link[StAMPP]{stamppFst}, \link[StAMPP]{stamppNeisD} (package StAMPP) and gl.propShared or gl.dist.ind. For transformation you need to have the dismo package installed. As a new feature you can plot pairwise relationship using double colored points (paircols=TRUE). Pairwise relationship can be visualised via populations or individuals, depending which distance is calculated.
+This function performs an isolation by distance analysis based on a Mantel 
+test and also produces an isolation by distance plot. If a genlight object 
+with coordinates is provided, then an Euclidean and genetic distance matrices  
+are calculated. Currently pairwise Fst and D between populations and 
+1-propShared and Euclidean distance between individuals are 
+implemented. Coordinates are expected as lat long and converted to Google 
+Earth Mercator projection. If coordinates are already projected, provide them 
+at the x@other$xy slot. 
+You can provide also your own genetic and Euclidean distance matrices. The 
+function is based on the code provided by the adegenet tutorial 
+(\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}), 
+using the functions  \link[vegan]{mantel} (package vegan), 
+\link[StAMPP]{stamppFst}, \link[StAMPP]{stamppNeisD} (package StAMPP) and 
+gl.propShared or gl.dist.ind. For transformation you need to have the dismo 
+package installed. As a new feature you can plot pairwise relationship using 
+double colored points (paircols=TRUE). Pairwise relationship can be 
+visualised via populations or individuals, depending which distance is 
+calculated.
 }
 \examples{
 #only first 100 loci
@@ -64,7 +106,8 @@ ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans="log(Dgeo)" ,Dgen_trans='Dgen/(1-
 ibd <- gl.ibd(bandicoot.gl[1:10,], distance="euclidean", paircols="pop", Dgeo_trans="Dgeo")
 }
 \references{
-Rousset (1997) Genetic Differentiation and Estimation of Gene Flow from F-Statistics Under Isolation by Distancenetics 145(4), 1219-1228.
+Rousset, F. (1997). Genetic differentiation and estimation of gene flow from 
+F-statistics under isolation by distance. Genetics, 145(4), 1219-1228.
 }
 \seealso{
 \link[vegan]{mantel}, \link[StAMPP]{stamppFst}

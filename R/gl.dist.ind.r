@@ -1,35 +1,50 @@
 #' @name gl.dist.ind
-#' @title Calculate a distance matrix for individuals defined in an \{adegenet\} genlight object
+#' @title Calculate a distance matrix for individuals defined in an \{adegenet\}
+#'  genlight object
 #' @description
-#' This script calculates various distances between individuals based on allele frequencies. The distances are
+#' This script calculates various distances between individuals based on allele
+#'  frequencies. The distances are
 #' calculated by scripts in the {stats} or {vegan} libraries.
 #' @details
 #' The distance measure for SNP data can be one of:
 #' \itemize{
-#'  \item "Euclidean" -- Euclidean distance, as implemented in the function \link[stats]{dist} (package stats).
-#'  \item "locus.count" -- number of loci for which individuals differ, as implemented in the function \link[ape]{dist.gene} (package ape).
-#'  \item "allele.count" -- number of allelic differences between two individuals, as implemented in the function \link[poppr]{diss.dist} (package poppr).
-#'  \item "relatedness" -- genetic relatedness between individuals (G matrix), as implemented in the function \link[rrBLUP]{A.mat} (package rrBLUP).
+#'  \item "Euclidean" -- Euclidean distance, as implemented in the function 
+#'  \link[stats]{dist} (package stats).
+#'  \item "locus.count" -- number of loci for which individuals differ, as 
+#'  implemented in the function \link[ape]{dist.gene} (package ape).
+#'  \item "allele.count" -- number of allelic differences between two 
+#'  individuals, as implemented in the function \link[poppr]{diss.dist} 
+#'  (package poppr).
+#'  \item "relatedness" -- genetic relatedness between individuals (G matrix),
+#'   as implemented in the function \link[rrBLUP]{A.mat} (package rrBLUP).
 #'  }
 #'  
 #' The distance measure for Tag P/A data (binary) can be one of:
 #' \itemize{
-#'  \item "Simple" -- simple matching, both 1 or both 0 = 0; one 1 and the other 0 = 1. Presence and absence equally weighted.
-#'  \item "Jaccard" -- ignores matching 0, both 1 = 0; one 1 and the other 0 = 1. Absences could be for different reasons.
-#'  \item "Dice" -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences could be for different reasons. Sometimes called the Czekanowski or Sorensen distance.
+#'  \item "Simple" -- simple matching, both 1 or both 0 = 0; one 1 and the other
+#'   0 = 1. Presence and absence equally weighted.
+#'  \item "Jaccard" -- ignores matching 0, both 1 = 0; one 1 and the other 
+#'  0 = 1. Absences could be for different reasons.
+#'  \item "Dice" -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences 
+#'  could be for different reasons. Sometimes called the Czekanowski or Sorensen 
+#'  distance.
 #'  \item "Phi" -- binary analogue of the Pearson Correlation coefficient.
 #'  }
 #'  
 #' Refer to the documentation in the relevant packages listed above.
 #'  
-#' @param x Name of the genlight containing the SNP genotypes [required]
-#' @param method Specify distance measure [SNP: Euclidean; P/A: Simple]
-#' @param plot.out If TRUE, display a histogram and a boxplot of the genetic distances [TRUE]
-#' @param plot_theme User specified theme [default theme_dartR]
-#' @param plot_colors Vector with two color names for the borders and fill [default two_colors]
-#' @param save2tmp If TRUE, saves any ggplots to the session temporary directory [default FALSE]
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-#' 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight containing the SNP genotypes [required].
+#' @param method Specify distance measure [SNP: Euclidean; P/A: Simple].
+#' @param plot.out If TRUE, display a histogram and a boxplot of the genetic 
+#' distances [TRUE].
+#' @param plot_theme User specified theme [default theme_dartR].
+#' @param plot_colors Vector with two color names for the borders and fill
+#'  [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots to the session temporary directory
+#'  [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#' progress log ; 3, progress and results summary; 5, full report 
+#' [default 2 or as specified using gl.set.verbosity].
 #' @return An object of class 'dist' giving distances between individuals
 #' @importFrom ape dist.gene
 #' @importFrom stats dist
@@ -197,7 +212,7 @@ if (datatype == "SilicoDArT"){
       cat("    No. of populations =", nPop(x), "\n")
       cat("    Average no. of individuals per population =", round(nInd(x)/nPop(x),1), "\n")
       cat("    No. of loci =", nLoc(x), "\n")
-      cat("    Miniumum Distance: ",round(min(dd),2),"\n")
+      cat("    Minimum Distance: ",round(min(dd),2),"\n")
       cat("    Maximum Distance: ",round(max(dd),2),"\n")
       cat("    Average Distance: ",round(mean(dd),3),"\n\n")
     }  
