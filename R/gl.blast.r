@@ -25,21 +25,21 @@
 #'  similar sequences (e.g, sequencing errors), 2) “dc-megablast”, typically
 #'  used for inter-species comparisons, 3) “blastn”, the traditional program
 #'  used for inter-species comparisons, 4) “blastn-short”, optimized for
-#'  sequences less than 30 nucleotides [default: 'megablast'].
+#'  sequences less than 30 nucleotides [default 'megablast'].
 #'@param Percentage_identity Not a very sensitive or reliable measure of
 #'  sequence similarity, however it is a reasonable proxy for evolutionary
 #'  distance. The evolutionary distance associated with a 10 percent change in
 #'  Percentage_identity is much greater at longer distances. Thus, a change from
 #'  80 – 70 percent identity might reflect divergence 200 million years earlier
 #'  in time, but the change from 30 percent to 20 percent might correspond to a
-#'  billion year divergence time change [default: 70].
+#'  billion year divergence time change [default 70].
 #'@param Percentage_overlap Calculated as alignment length divided by the
 #'  query length or subject length (whichever is shortest of the two lengths,
-#'  i.e.  length / min(qlen,slen) ) [default: 0.8].
+#'  i.e.  length / min(qlen,slen) ) [default 0.8].
 #'@param bitscore A rule-of-thumb for inferring homology, a bit score of 50
-#'  is almost always significant [default: 50].
+#'  is almost always significant [default 50].
 #'@param number_of_threads Number of threads (CPUs) to use in blastn search
-#'  [default: 2].
+#'  [default 2].
 #'@param verbose verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
 #'
 #'@details \strong{Installing BLAST}
