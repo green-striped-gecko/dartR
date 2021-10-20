@@ -1,3 +1,4 @@
+
 #'Convert a genlight object into a sfs input file
 #'
 #'The output of this function is suitable for analysis in fastsimcoal2 or dada.
@@ -90,5 +91,12 @@ writeLines(c(" 1 observations", paste(paste("d0", seq(0, length(maf) - 1), sep="
              paste(as.character(maf), collapse=" ")), 
            con=file.path(outpath, paste0(outfile_root, "_MAFpop0.obs")))
 
+# FLAG SCRIPT END
+
+if (verbose > 0) {
+  cat("Completed:",funname,"\n")
+}
+
 return(list(DAF=daf, MAF=maf))
 }
+
