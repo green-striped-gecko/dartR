@@ -14,6 +14,7 @@
 #'Note that the invariant sites can be estimated with
 #'\code{gl.report.secondaries}.
 #'
+#'
 #'It expects a dartR formatted genlight object, but it should also  work with
 #'other genlight objects. If \code{n.invariant == 0} the genlight object needs
 #'to have a \code{data.frame} in \code{other} called loc.metrics with a column
