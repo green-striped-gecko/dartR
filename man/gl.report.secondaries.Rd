@@ -36,20 +36,23 @@ plots [default two_colors].}
 temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log ; 3, progress and results summary; 5, full report [default 2,
-unless specified using gl.set.verbosity].}
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 A data.frame with the list of parameter values
 \itemize{
   \item n.total.tags Number of sequence tags in total
-  \item n.SNPs.secondaries Number of secondary SNP loci that would be removed on filtering
+  \item n.SNPs.secondaries Number of secondary SNP loci that would be removed
+  on filtering
   \item n.invariant.tags Estimated number of invariant sequence tags
   \item n.tags.secondaries Number of sequence tags with secondaries
   \item n.inv.gen Number of invariant sites in sequenced tags
   \item mean.len.tag Mean length of sequence tags
-  \item n.invariant Total Number of invariant sites (including invariant sequence tags)
-  \item k Lambda: mean of the Poisson distribution of number of SNPs in the sequence tags
+  \item n.invariant Total Number of invariant sites (including invariant
+  sequence tags)
+  \item k Lambda: mean of the Poisson distribution of number of SNPs in the
+  sequence tags
 }
 }
 \description{
@@ -97,14 +100,15 @@ The function \code{\link{gl.filter.secondaries}} will filter out the
   expectation of the number of invariant sequence tags, it also estimates the
   number of invariant sites for these to eventually provide an estimate of
   the total number of invariant sites.
-  
+
  \strong{Note}, previous version of
   \code{dartR} would only return an estimate of the number of invariant
   sequence tags (not sites).
 
   Plots are saved to the session temporary directory (tempdir).
 
-  Examples of other themes that can be used can be consulted in \itemize{
+  Examples of other themes that can be used can be consulted in:
+   \itemize{
   \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
   \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
    }

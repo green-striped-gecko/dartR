@@ -2,33 +2,40 @@
 % Please edit documentation in R/utils.recalc.maf.r
 \name{utils.recalc.maf}
 \alias{utils.recalc.maf}
-\title{A utility script to recalculate the the minor allele frequency by locus, typically after some populations have been deleted}
+\title{A utility script to recalculate the minor allele frequency by locus,
+typically after some populations have been deleted}
 \usage{
 utils.recalc.maf(x, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report [default 2].}
 }
 \value{
-The modified genlight dataset
+The modified genlight dataset.
 }
 \description{
-The locus metadata supplied by DArT does not have MAF included, so it is calculated and
-added to the locus.metadata by this script. The minimum allele frequency will change when
-some individuals are removed from the dataset. This script recalculates the MAF and 
-places these recalculated values in the appropriate place in the genlight object.
+The locus metadata supplied by DArT does not have MAF included, so it is
+calculated and added to the locus.metadata by this script. The minimum allele
+frequency will change when some individuals are removed from the dataset.
+This script recalculates the MAF and places these recalculated values in the
+ appropriate place in the genlight object.
 }
 \examples{
 #f <- dartR::utils.recalc.maf(testset.gl)
 }
 \seealso{
-\code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,
-\code{utils.recalc.freqhomref} for recalculating frequency of homozygous reference, \code{utils.recalc.freqhomsnp} for recalculating frequency of homozygous alternate,
-\code{utils.recalc.freqhet} for recalculating frequency of heterozygotes, \code{gl.recalc.avgpic} for recalculating AvgPIC,
+\code{utils.recalc.metrics} for recalculating all metrics,
+\code{utils.recalc.callrate} for recalculating CallRate,
+\code{utils.recalc.freqhomref} for recalculating frequency of homozygous
+reference, \code{utils.recalc.freqhomsnp} for recalculating frequency of
+homozygous alternate, \code{utils.recalc.freqhet} for recalculating frequency
+of heterozygotes, \code{gl.recalc.avgpic} for recalculating AvgPIC,
 \code{gl.recalc.rdepth} for recalculating average read depth
 }
 \author{
-Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

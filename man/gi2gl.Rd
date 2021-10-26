@@ -13,7 +13,7 @@ gi2gl(gi, parallel = FALSE, verbose = NULL)
 to run it parallel most of the times [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log ; 3, progress and results summary; 5, full report [default 2]}
+progress log ; 3, progress and results summary; 5, full report [default 2].}
 }
 \value{
 A genlight object, with all slots filled.

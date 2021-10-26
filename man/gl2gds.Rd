@@ -18,23 +18,23 @@ gl2gds(
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
 \item{outfile}{File name of the output file (including extension)
-[default "gl_gds.gds"].}
+[default 'gl_gds.gds'].}
 
 \item{outpath}{Path where to save the output file
-[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="."
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
  when calling this function to direct output files to your working directory.}
 
 \item{snp_pos}{Field name from the slot loc.metrics where the SNP position is
-stored [default "0"].}
+stored [default '0'].}
 
 \item{snp_chr}{Field name from the slot loc.metrics where the chromosome of
-each is stored [default "0"].}
+each is stored [default '0'].}
 
-\item{chr_format}{Whether chromosome information is stored as "numeric" or as
-"character", see details [default "character"].}
+\item{chr_format}{Whether chromosome information is stored as 'numeric' or as
+'character', see details [default 'character'].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log ; 3, progress and results summary; 5, full report
+progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
 \description{
@@ -48,12 +48,12 @@ to SNPRelate format, as required by this package.
 
 The chromosome of each SNP can be a character or numeric, as described in the
 vignette of SNPRelate:
-"snp.chromosome, an integer or character mapping for each chromosome.
+'snp.chromosome, an integer or character mapping for each chromosome.
 Integer: numeric values 1-26, mapped in order from 1-22, 23=X, 24=XY
 (the pseudoautosomal region), 25=Y, 26=M (the mitochondrial probes), and 0
 for probes with unknown positions; it does not allow NA. Character: “X”,
  “XY”, “Y” and “M” can be used here, and a blank string indicating unknown
- position."
+ position.'
 
 When using some functions from package SNPRelate with datasets other than
 humans it might be necessary to use the option autosome.only=FALSE to avoid
@@ -68,10 +68,11 @@ the function \link[SNPRelate]{snpgdsClose} (package SNPRelate).
 }
 \examples{
 \donttest{
-gl2gds(platypus.gl,snp_pos="ChromPos_Platypus_Chrom_NCBIv1", 
-snp_chr = "Chrom_Platypus_Chrom_NCBIv1")
+gl2gds(platypus.gl,snp_pos='ChromPos_Platypus_Chrom_NCBIv1',
+snp_chr = 'Chrom_Platypus_Chrom_NCBIv1')
 }
 }
 \author{
-Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

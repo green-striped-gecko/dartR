@@ -16,18 +16,24 @@ gl.tree.nj(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{type}{Type of dendrogram phylogram|cladogram|fan|unrooted [Default Phylogram].}
+\item{type}{Type of dendrogram "phylogram"|"cladogram"|"fan"|"unrooted"
+[default "phylogram"].}
 
-\item{outgroup}{Vector containing the population names that are the outgroups [Default NULL].}
+\item{outgroup}{Vector containing the population names that are the outgroups
+[deefault NULL].}
 
-\item{labelsize}{Size of the labels as a proportion of the graphics default [Default 0.7].}
+\item{labelsize}{Size of the labels as a proportion of the graphics default
+[default 0.7].}
 
-\item{treefile}{Name of the file for the tree topology using Newick format [Default NULL].}
+\item{treefile}{Name of the file for the tree topology using Newick format 
+[default NULL].}
 
-\item{verbose}{Specify the level of verbosity: 0, silent, fatal errors only; 1, flag function begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2].}
+\item{verbose}{Specify the level of verbosity: 0, silent, fatal errors only; 
+1, flag function begin and end; 2, progress log; 3, progress and results 
+summary; 5, full report [default 2].}
 }
 \value{
-A tree file of class phylo
+A tree file of class phylo.
 }
 \description{
 This function is a wrapper for the nj\{ape\} function applied to Euclidian
@@ -35,10 +41,11 @@ distances calculated from the genlight object.
 }
 \examples{
 # SNP data
-  gl.tree.nj(testset.gl,type="fan")
+  gl.tree.nj(testset.gl,type='fan')
 # Tag P/A data
-  gl.tree.nj(testset.gs,type="fan")
+  gl.tree.nj(testset.gs,type='fan')
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

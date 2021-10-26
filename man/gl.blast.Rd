@@ -49,12 +49,14 @@ is almost always significant [default 50].}
 \item{number_of_threads}{Number of threads (CPUs) to use in blastn search
 [default 2].}
 
-\item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 If the input is a genlight object: returns a genlight object with one
- hit per sequence merged to the slot $other$loc.metrics. If the input is a fasta file: returns a dataframe
- with one hit per sequence.
+ hit per sequence merged to the slot $other$loc.metrics. If the input is a
+ fasta file: returns a dataframe with one hit per sequence.
 }
 \description{
 Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
@@ -122,7 +124,12 @@ Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
  \item PercentageOverlap - length / min(qlen,slen) }
 
  Databases containing unfiltered aligned sequences, filtered aligned
- sequences and one hit per sequence are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+ sequences and one hit per sequence are saved to the temporal directory
+ (tempdir) and can be accessed with the function
+ \code{\link{gl.print.reports}} and listed with the function
+ \code{\link{gl.list.reports}}. Note that they can be accessed only in the
+ current R session because tempdir is cleared each time that the R session is
+ closed.
 
  \strong{BLAST filtering}
 
@@ -136,7 +143,7 @@ Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
 res <- gl.blast(x= testset.gl,ref_genome = 'sequence.fasta')
 # display of reports saved in the temporal directory
 gl.list.reports()
-# open the reports saved in the temporal directory 
+# open the reports saved in the temporal directory
 blast_databases <- gl.print.reports(1)
 }
 

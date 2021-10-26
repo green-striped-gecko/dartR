@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.dist.pop.r
 \name{gl.dist.pop}
 \alias{gl.dist.pop}
-\title{Calculate a distance matrix for populations with SNP genotypes in a 
+\title{Calculate a distance matrix for populations with SNP genotypes in a
 genlight object}
 \usage{
 gl.dist.pop(
@@ -25,15 +25,15 @@ gl.dist.pop(
 \item{plot.out}{If TRUE, display a histogram of the genetic distances, and a
 whisker plot [default TRUE].}
 
-\item{binary}{Perform presence/absence standardization before analysis using 
+\item{binary}{Perform presence/absence standardization before analysis using
 decostand [default FALSE].}
 
-\item{p}{The power of the Minkowski distance (typically a value ranging from 
+\item{p}{The power of the Minkowski distance (typically a value ranging from
 0.25 to infinity) [default 0.5].}
 
 \item{plot_theme}{User specified theme [default theme_dartR()].}
 
-\item{plot_colors}{Vector with two color names for the borders and fill 
+\item{plot_colors}{Vector with two color names for the borders and fill
 [default two_colors].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
@@ -47,25 +47,26 @@ progress log ; 3, progress and results summary; 5, full report
 An object of class 'dist' giving distances between populations
 }
 \description{
-This script calculates various distances between populations based on allele 
-frequencies. The distances are calculated by scripts in the {stats} or 
+This script calculates various distances between populations based on allele
+frequencies. The distances are calculated by scripts in the {stats} or
 {vegan} libraries, with the exception of the pcfixed (percent fixed
  differences) distance.
 }
 \details{
-The distance measure can be one of "manhattan", "euclidean", "pcfixed", 
-canberra", "bray", "kulczynski", "jaccard", "gower", "morisita", "horn",
-"mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "maximum",
- "binary" or "minkowski". Refer to the documentation of functions
-  \link[stats]{dist} (package stat) or \link[vegan]{vegdist} (package vegan) 
-  for definitions. 
+The distance measure can be one of 'manhattan', 'euclidean', 'pcfixed',
+canberra', 'bray', 'kulczynski', 'jaccard', 'gower', 'morisita', 'horn',
+'mountford', 'raup', 'binomial', 'chao', 'cao', 'mahalanobis', 'maximum',
+ 'binary' or 'minkowski'. Refer to the documentation of functions
+  \link[stats]{dist} (package stat) or \link[vegan]{vegdist} (package vegan)
+  for definitions.
 
-Distance pcfixed calculates the pair-wise count of fixed allelic differences 
+Distance pcfixed calculates the pair-wise count of fixed allelic differences
 between populations.
 }
 \examples{
-D <- gl.dist.pop(testset.gl, method="euclidean")
+D <- gl.dist.pop(testset.gl, method='euclidean')
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

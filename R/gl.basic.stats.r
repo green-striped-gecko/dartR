@@ -1,17 +1,48 @@
 #' Calculates basic statistics for each loci (Hs, Ho, Fis etc.)
-#' 
-#' Based on function \code{\link[hierfstat]{basic.stats}}. Check ?basic.stats for help. 
-#' @param gl -- a genlight object
-#' @param digits -- number of digits that should be returned
+#'
+#' Based on function \code{\link[hierfstat]{basic.stats}}. Check ?basic.stats
+#' for help.
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param digits Number of digits that should be returned [default 4].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' progress log ; 3, progress and results summary; 5, full report
+#' [default 2, unless specified using gl.set.verbosity].
 #' @importFrom hierfstat genind2hierfstat basic.stats
-#' @return several tables and lists with all basic stats. Check
+#' @return Several tables and lists with all basic stats.
 #' \code{\link[hierfstat]{basic.stats}} for details.
-#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
-#' @examples 
-#' gl.basic.stats(possums.gl)
+#' @author Bernd Gruber (bugs? Post to
+#' \url{https://groups.google.com/d/forum/dartr})
+#' @examples
+#' out <- gl.basic.stats(possums.gl)
 #' @export
 
-gl.basic.stats <- function(gl, digits=4){
-  out <- basic.stats(genind2hierfstat(gl2gi(gl, verbose = 0)), digits = digits)
-  return(out)
+gl.basic.stats <- function(x,
+                           digits = 4,
+                           verbose = NULL) {
+    # SET VERBOSITY
+    verbose <- gl.check.verbosity(verbose)
+    
+    # FLAG SCRIPT START
+    funname <- match.call()[[1]]
+    utils.flag.start(func = funname,
+                     build = "Jody",
+                     verbosity = verbose)
+    
+    # CHECK DATATYPE
+    datatype <- utils.check.datatype(x, verbose = verbose)
+    
+    # DO THE JOB
+    
+    out <-
+        hierfstat::basic.stats(hierfstat::genind2hierfstat(gl2gi(x, verbose = 0)), digits = digits)
+    
+    # FLAG SCRIPT END
+    
+    if (verbose >= 1) {
+        cat(report("Completed:", funname, "\n"))
+    }
+    
+    # RETURN
+    
+    return(out)
 }

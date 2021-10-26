@@ -7,38 +7,43 @@
 gl.select.shapes(x = NULL, select = NULL, verbose = NULL)
 }
 \arguments{
-\item{x}{Optionally, provide a gl object from which to determine the number of populations [default NULL]}
+\item{x}{Optionally, provide a gl object from which to determine the number
+of populations [default NULL].}
 
-\item{select}{Select the shapes to retain in the output vector [default NULL, all shapes shown and returned]}
+\item{select}{Select the shapes to retain in the output vector
+[default NULL, all shapes shown and returned].}
 
-\item{verbose}{-- Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 A vector with the required number of shapes
 }
 \description{
-This script draws upon the standard R shape palette to extract a vector of shapes for plotting, where
-the script that follows has a shape parameter expecting a vector of shapes.
+This script draws upon the standard R shape palette to extract a vector of
+shapes for plotting, where the script that follows has a shape parameter
+expecting a vector of shapes.
 }
 \details{
-By default the shape palette will be displayed in full in the graphics window from which shapes can be selected
-in a subsequent run, and the vector of shapes returned for later use.
+By default the shape palette will be displayed in full in the graphics window
+from which shapes can be selected in a subsequent run, and the vector of
+shapes returned for later use.
 
-The select parameter can be used to select shapes from the specified 26 shapes available (0-25). For example, 
-select=c(1,1,3) will select shape 1, 1 again and 3 to retain in the final vector. This can be useful for fine-tuning 
+The select parameter can be used to select shapes from the specified 26
+shapes available (0-25). For example, select=c(1,1,3) will select shape 1, 1
+again and 3 to retain in the final vector. This can be useful for fine-tuning
 shape selection, and matching colors and shapes.
 }
 \examples{
-# SET UP DATASET 
+# SET UP DATASET
 gl <- testset.gl
-levels(pop(gl))<-c(rep("Coast",5),rep("Cooper",3),rep("Coast",5),
-rep("MDB",8),rep("Coast",7),"Em.subglobosa","Em.victoriae")
+levels(pop(gl))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
+rep('MDB',8),rep('Coast',7),'Em.subglobosa','Em.victoriae')
 # EXAMPLES
 shapes <- gl.select.shapes() # Select and display available shapes
 shapes <- gl.select.shapes(select=c(1,1,1,5,8)) # Select and display a restricted set of shapes
 shapes <- gl.select.shapes(x=gl,select=c(1,1,1,5,8)) # Select set of shapes and check with no. of pops.
-
 }
 \seealso{
 \code{\link{gl.select.colors}}
@@ -49,6 +54,7 @@ Other Exploration/visualisation functions:
 \code{\link{gl.smearplot}()}
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }
 \concept{Exploration/visualisation functions}

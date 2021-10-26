@@ -7,34 +7,47 @@
 gl.play.history(x, history = NULL, verbose = 0)
 }
 \arguments{
-\item{x}{-- a genlight object [with a history slot [optional]]}
+\item{x}{A genlight object (with a history slot) [optional].}
 
-\item{history}{-- [optional]. If no history is provided the complete history of x is used (recreating the identical object x). If history is a vector it indicates which which part of the history of x is used [\code{c(1,3,4)} uses the first, third and forth entry from \code{x@other$history}]. Or a simple link to a history slot of another genlight object (e.g. code{x2@other$history[c(1,4,5)]}).}
+\item{history}{If no history is provided the complete history of
+x is used (recreating the identical object x). If history is a vector it
+indicates which which part of the history of x is used [\code{c(1,3,4)} uses
+the first, third and forth entry from \code{x@other$history}]. Or a simple
+link to a history slot of another genlight object (e.g.
+code{x2@other$history[c(1,4,5)]}). [optional].}
 
-\item{verbose}{[default 0]. If set to one then history commands are printed, which may facilitate reading the output.}
+\item{verbose}{If set to one then history commands are printed,
+which may facilitate reading the output [default 0].}
 }
 \value{
-returns a genlight object that was created by replaying the provided applied to the genlight object x. Please note you can "mix" histories or part of them and apply them to different genlight objects. If the history does not contain \code{gl.read.dart}, histories of x and history are concatenated.
+Returns a genlight object that was created by replaying the provided
+ applied to the genlight object x. Please note you can 'mix' histories or
+ part of them and apply them to different genlight objects. If the history
+ does not contain \code{gl.read.dart}, histories of x and history are
+ concatenated.
 }
 \description{
 Replays the history and applies it to a genlight object
 }
 \details{
-This function basically allows to create a "template history" (=set of filters) and apply them to any other genlight object. Histories can also be saved and loaded (see. gl.save.history and gl.load.history).
+This function basically allows to create a 'template history'
+(=set of filters) and apply them to any other genlight object. Histories can
+also be saved and loaded (see. gl.save.history and gl.load.history).
 }
 \examples{
 \dontrun{
-dartfile <- system.file("extdata","testset_SNPs_2Row.csv", package="dartR")
-metadata <- system.file("extdata","testset_metadata.csv", package="dartR")
-gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=FALSE) 
-gl2 <- gl.filter.callrate(gl, method="loc", threshold=0.9)
-gl3 <- gl.filter.callrate(gl2, method="ind", threshold=0.95)
-#Now "replay" part of the history "onto" another genlight object
-#bc.fil <- gl.play.history(gl.compliance.check(bandicoot.gl), 
+dartfile <- system.file('extdata','testset_SNPs_2Row.csv', package='dartR')
+metadata <- system.file('extdata','testset_metadata.csv', package='dartR')
+gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=FALSE)
+gl2 <- gl.filter.callrate(gl, method='loc', threshold=0.9)
+gl3 <- gl.filter.callrate(gl2, method='ind', threshold=0.95)
+#Now 'replay' part of the history 'onto' another genlight object
+#bc.fil <- gl.play.history(gl.compliance.check(bandicoot.gl),
 #history=gl3@other$history[c(2,3)], verbose=1)
 #gl.print.history(bc.fil)
 }
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber (bugs? Post to
+\url{https://groups.google.com/d/forum/dartr}).
 }

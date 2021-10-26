@@ -7,10 +7,10 @@
 gl.Ho(gl)
 }
 \arguments{
-\item{gl}{-- a genlight object}
+\item{gl}{A genlight object [required]}
 }
 \value{
-a simple vector wiht Ho for each loci
+A simple vector whit Ho for each loci
 }
 \description{
 A very simple function to report observed Heterozygosity

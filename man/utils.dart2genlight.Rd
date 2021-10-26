@@ -23,7 +23,7 @@ individual (see details for explanation) [default NULL].}
 \item{probar}{Show progress bar [default TRUE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log ; 3, progress and results summary; 5, full report [default NULL].}
+progress log; 3, progress and results summary; 5, full report [default NULL].}
 }
 \value{
 A genlight object. Including all available slots are filled.

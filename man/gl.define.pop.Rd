@@ -7,30 +7,33 @@
 gl.define.pop(x, ind.list, new, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing SNP genotypes [required]}
+\item{x}{Name of the genlight object containing SNP genotypes [required].}
 
-\item{ind.list}{A list of individuals to be assigned to the new population [required]}
+\item{ind.list}{A list of individuals to be assigned to the new population
+[required].}
 
-\item{new}{Name of the new population [required]}
+\item{new}{Name of the new population [required].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ;
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A genlight object with the redefined population structure
+A genlight object with the redefined population structure.
 }
 \description{
-The script reassigns existing individuals to a new population and removes their existing population assignment
+The script reassigns existing individuals to a new population and removes
+their existing population assignment.
 
 The script returns a genlight object with the new population assignment.
 }
 \examples{
 popNames(testset.gl)
-gl <- gl.define.pop(testset.gl, ind.list=c("AA019073","AA004859"), new="newguys")
+gl <- gl.define.pop(testset.gl, ind.list=c('AA019073','AA004859'), new='newguys')
 popNames(gl)
-indNames(gl)[pop(gl)=="newguys"]
-   
+indNames(gl)[pop(gl)=='newguys']
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

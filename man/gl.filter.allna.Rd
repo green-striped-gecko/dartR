@@ -2,34 +2,40 @@
 % Please edit documentation in R/gl.filter.allna.r
 \name{gl.filter.allna}
 \alias{gl.filter.allna}
-\title{Remove loci that are all NA across individuals and/or individuals with all NA across loci}
+\title{Remove loci that are all NA across individuals and/or individuals with
+ all NA across loci}
 \usage{
 gl.filter.allna(x, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the input genlight object [required]}
+\item{x}{Name of the input genlight object [required].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-A genlight object having removed individuals that are scored NA across all loci, or loci that are scored NA across all individuals
+A genlight object having removed individuals that are scored NA
+across all loci, or loci that are scored NA across all individuals.
 }
 \description{
-This script deletes deletes loci or individuals with all calls missing (NA), from a genlight object
+This script deletes deletes loci or individuals with all calls missing (NA),
+ from a genlight object
 
-A DArT dataset will not have loci for which the calls are scored all as missing (NA) for a particular individual, 
-but such loci can arise rarely when populations or individuals are deleted. Similarly, a DArT dataset will 
-not have individuals for which the calls are scored all as missing (NA) across all loci, 
-but such individuals may sneak in to the dataset when loci are deleted.
-Retaining indiviudal or loci with all NAs can cause issues for several functions.
+A DArT dataset will not have loci for which the calls are scored all as
+missing (NA) for a particular individual, but such loci can arise rarely when
+ populations or individuals are deleted. Similarly, a DArT dataset will not
+ have individuals for which the calls are scored all as missing (NA) across
+ all loci, but such individuals may sneak in to the dataset when loci are
+ deleted. Retaining individual or loci with all NAs can cause issues for
+ several functions.
 }
 \examples{
 # SNP data
   result <- gl.filter.allna(testset.gl, verbose=3)
 # Tag P/A data
   result <- gl.filter.allna(testset.gs, verbose=3)
- 
+
 }
 \seealso{
 Other filters and filter reports: 
@@ -46,6 +52,7 @@ Other filters and filter reports:
 \code{\link{gl.report.taglength}()}
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters and filter reports}
