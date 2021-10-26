@@ -12,25 +12,37 @@ gl.map.interactive(
   ind.circles = TRUE,
   pop.labels = TRUE,
   pop.labels.cex = 12,
-  provider = "Esri.NatGeoWorldMap"
+  provider = "Esri.NatGeoWorldMap",
+  verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- a genlight object [including coordinates within the latlon slot]}
+\item{x}{A genlight object (including coordinates within the latlon slot) 
+[required].}
 
-\item{matrix}{-- a distance matrix between populations or individuals. The matrix is visualised as lines between individuals/populations. If matrix is asymmetric two lines with arrows are plotted.}
+\item{matrix}{A distance matrix between populations or individuals. The
+matrix is visualised as lines between individuals/populations. If matrix is
+asymmetric two lines with arrows are plotted [default NULL].}
 
-\item{standard}{-- if a matrix is provided line width will be standardised to be between 1 to 10, if set to true, otherwise taken as given.}
+\item{standard}{If a matrix is provided line width will be standardised to be
+between 1 to 10, if set to true, otherwise taken as given [default TRUE].}
 
-\item{symmetric}{-- if a symmetric matrix is provided only one line is drawn based on the lower triangle of the matrix. If set to false arrows indicating the direction are used instead.}
+\item{symmetric}{If a symmetric matrix is provided only one line is drawn
+based on the lower triangle of the matrix. If set to false arrows indicating
+the direction are used instead [default TRUE].}
 
-\item{ind.circles}{-- should individuals plotted as circles, default is TRUE}
+\item{ind.circles}{Should individuals plotted as circles [default TRUE].}
 
-\item{pop.labels}{-- population labels at the center of the individuals of populations, default is TRUE}
+\item{pop.labels}{Population labels at the center of the individuals of
+populations [default TRUE].}
 
-\item{pop.labels.cex}{-- size of population labels, default is 20.}
+\item{pop.labels.cex}{Size of population labels [default 12].}
 
-\item{provider}{-- passed to leaflet}
+\item{provider}{Passed to leaflet [default "Esri.NatGeoWorldMap"].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 plots a map
@@ -39,11 +51,13 @@ plots a map
 Creates an interactive map (based on latlon) from a genlight object
 }
 \details{
-A wrapper around the \pkg{leaflet} package. For possible background maps check as specified via the provider: \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
+A wrapper around the \pkg{leaflet} package. For possible background 
+maps check as specified via the provider:
+\url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
 }
 \examples{
 gl.map.interactive(bandicoot.gl)
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
+Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

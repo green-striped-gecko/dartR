@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.edit.recode.ind.r
 \name{gl.edit.recode.ind}
 \alias{gl.edit.recode.ind}
-\title{Create or edit a individual (=specimen) names, create an recode_ind file amd apply the changes to a genlight object.}
+\title{Create or edit a individual (=specimen) names, create an recode_ind
+ file amd apply the changes to a genlight object.}
 \usage{
 gl.edit.recode.ind(
   x,
@@ -14,57 +15,66 @@ gl.edit.recode.ind(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object for which individuals are to be relabelled.[required]}
+\item{x}{Name of the genlight object for which individuals are to be
+relabelled [required].}
 
-\item{out.recode.file}{Name of the file to output the new individual labels [optional]}
+\item{out.recode.file}{Name of the file to output the new individual labels
+[optional].}
 
-\item{outpath}{Path where to save the output file [default tempdir(), mandated by CRAN].}
+\item{outpath}{Path where to save the output file
+[default tempdir(), mandated by CRAN].}
 
-\item{recalc}{Recalculate the locus metadata statistics [default TRUE]}
+\item{recalc}{Recalculate the locus metadata statistics [default TRUE].}
 
-\item{mono.rm}{Remove monomorphic loci [default TRUE]}
+\item{mono.rm}{Remove monomorphic loci [default TRUE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-An object of class ("genlight") with the revised individual labels
+An object of class ('genlight') with the revised individual labels.
 }
 \description{
-A script to edit individual names in a genlight object, or to 
-create a reassignment table taking the individual labels
-from a genlight object, or to edit existing individual labels in
-an existing recode_ind file.
+A script to edit individual names in a genlight object, or to create a
+reassignment table taking the individual labels from a genlight object, or to
+edit existing individual labels in an existing recode_ind file.
 }
 \details{
-Renaming individuals may be required when there have been errors in labelling arising
-in the process from sample to DArT files. There may be occasions where renaming
-individuals is required for preparation of figures. Caution needs to be exercised
-because of the potential for breaking the "chain of evidence" between the samples themselves
-and the analyses. Recoding individuals can also be done with a recode table (csv).
+Renaming individuals may be required when there have been errors in labelling
+ arising in the process from sample to DArT files. There may be occasions
+ where renaming individuals is required for preparation of figures. Caution
+ needs to be exercised because of the potential for breaking the 'chain of
+ evidence' between the samples themselves and the analyses. Recoding
+ individuals can also be done with a recode table (csv).
 
-This script will input an existing recode table for editing and
-optionally save it as a new table, or if the name of an input table is not
-supplied, will generate a table using the individual labels in the 
-parent genlight object.
+This script will input an existing recode table for editing and optionally
+save it as a new table, or if the name of an input table is not supplied,
+will generate a table using the individual labels in the parent genlight
+object.
 
-The script, having deleted individuals, optionally identifies resultant monomorphic loci or loci
-with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
-recalculates statistics made redundant by the deletion of individuals from the dataset.
+The script, having deleted individuals, optionally identifies resultant
+monomorphic loci or loci with all values missing and deletes them (using
+gl.filter.monomorphs.r). The script also optionally recalculates statistics
+made redundant by the deletion of individuals from the dataset.
 
-Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.
+Use outpath=getwd() or outpath='.' when calling this function to direct
+output files to your working directory.
 
-The script returns a genlight object with the new individual labels and the recalculated locus metadata.
+The script returns a genlight object with the new individual labels and the
+recalculated locus metadata.
 }
 \examples{
 \dontrun{
 gl <- gl.edit.recode.ind(testset.gl)
-gl <- gl.edit.recode.ind(testset.gl, out.recode.file="ind.recode.table.csv")
+gl <- gl.edit.recode.ind(testset.gl, out.recode.file='ind.recode.table.csv')
 }
 }
 \seealso{
-\code{\link{gl.recode.ind}}, \code{\link{gl.drop.ind}}, \code{\link{gl.keep.ind}}
+\code{\link{gl.recode.ind}}, \code{\link{gl.drop.ind}},
+\code{\link{gl.keep.ind}}
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

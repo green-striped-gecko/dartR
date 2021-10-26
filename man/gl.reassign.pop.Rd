@@ -7,26 +7,30 @@
 gl.reassign.pop(x, as.pop, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing SNP genotypes [required]}
+\item{x}{Name of the genlight object containing SNP genotypes [required].}
 
-\item{as.pop}{Specify the name of the individual metric to set as the pop variable. [required]}
+\item{as.pop}{Specify the name of the individual metric to set as the pop
+variable [required].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A genlight object with the reassigned populations
+A genlight object with the reassigned populations.
 }
 \description{
-Individuals are assigned to populations based on the individual/sample/specimen metrics file (csv)
- used with gl.read.dart(). 
+Individuals are assigned to populations based on the
+individual/sample/specimen metrics file (csv) used with gl.read.dart().
 
-One might want to define the population structure in accordance with another classification, such as
-using an individual metric (e.g. sex, male or female). This script discards the current population 
-assignments and replaces them with new population assignments defined by a specified individual metric.
+One might want to define the population structure in accordance with another
+classification, such as using an individual metric (e.g. sex, male or
+female). This script discards the current population assignments and replaces
+them with new population assignments defined by a specified individual
+metric.
 
-The script returns a genlight object with the new population assignments Note that the original population
-assigments are lost.
+The script returns a genlight object with the new population assignments.
+Note that the original population assignments are lost.
 }
 \examples{
 # SNP data
@@ -39,5 +43,6 @@ assigments are lost.
    popNames(gs)
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

@@ -25,27 +25,27 @@ gl.read.dart(
 \item{ind.metafile}{File that contains additional information on individuals
 [required].}
 
-\item{recalc}{Force the recalculation of locus metrics, in case individuals 
+\item{recalc}{Force the recalculation of locus metrics, in case individuals
 have been manually deleted from the input csv file [default TRUE].}
 
-\item{mono.rm}{Force the removal of monomorphic loci (including all NAs), in 
+\item{mono.rm}{Force the removal of monomorphic loci (including all NAs), in
 case individuals have been manually deleted from the input csv file
 [default FALSE].}
 
 \item{nas}{A character specifying NAs [default '-'].}
 
-\item{topskip}{A number specifying the number of rows to be skipped. If not 
+\item{topskip}{A number specifying the number of rows to be skipped. If not
 provided the number of rows to be skipped are 'guessed' by the number of rows
 with '*' at the beginning [default NULL].}
 
 \item{lastmetric}{Specifies the last non-genetic column (Default is 'RepAvg').
-Be sure to check if that is true, otherwise the number of individuals will 
+Be sure to check if that is true, otherwise the number of individuals will
 not match. You can also specify the last column by a number
- [default "RepAvg"].}
+ [default 'RepAvg'].}
 
 \item{covfilename}{Use ind.metafile parameter [depreciated, NULL].}
 
-\item{service_row}{The row number in which the information of the DArT service 
+\item{service_row}{The row number in which the information of the DArT service
 is contained [default 1].}
 
 \item{plate_row}{The row number in which the information of the plate location
@@ -53,26 +53,26 @@ is contained [default 3].}
 
 \item{probar}{Show progress bar [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report
-[default 2, or as set by gl.set.verbose()]}
+[default 2, or as set by gl.set.verbose()].}
 }
 \value{
-A genlight object that contains individual metrics 
+A genlight object that contains individual metrics
 [if data were provided] and locus metrics [from a DArT report].
 }
 \description{
-This function is a wrapper function that allows you to convert your DArT file 
-into a genlight object in one step. In previous versions you had to use 
-read.dart and then dart2genlight. In case you have individual metadata for 
-each individual/sample you can specify as before in the dart2genlight command 
+This function is a wrapper function that allows you to convert your DArT file
+into a genlight object in one step. In previous versions you had to use
+read.dart and then dart2genlight. In case you have individual metadata for
+each individual/sample you can specify as before in the dart2genlight command
 the file that combines the data.
 }
 \details{
 The dartR genlight object can then be fed into a number of initial screening,
- export and export functions provided by the package. For some of the 
- functions it is necessary to have the metadata that was provided from DArT. 
- Please check the vignette for more information. Additional information can 
+ export and export functions provided by the package. For some of the
+ functions it is necessary to have the metadata that was provided from DArT.
+ Please check the vignette for more information. Additional information can
  also be found in the help documents for \code{\link{utils.read.dart}}.
 }
 \examples{

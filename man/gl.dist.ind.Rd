@@ -20,7 +20,7 @@ gl.dist.ind(
 
 \item{method}{Specify distance measure [SNP: Euclidean; P/A: Simple].}
 
-\item{plot.out}{If TRUE, display a histogram and a boxplot of the genetic 
+\item{plot.out}{If TRUE, display a histogram and a boxplot of the genetic
 distances [TRUE].}
 
 \item{plot_theme}{User specified theme [default theme_dartR].}
@@ -31,8 +31,8 @@ distances [TRUE].}
 \item{save2tmp}{If TRUE, saves any ggplots to the session temporary directory
 [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
@@ -40,41 +40,42 @@ An object of class 'dist' giving distances between individuals
 }
 \description{
 This script calculates various distances between individuals based on allele
- frequencies. The distances are
-calculated by scripts in the {stats} or {vegan} libraries.
+ frequencies. The distances are calculated by scripts in the {stats} or
+ {vegan} libraries.
 }
 \details{
 The distance measure for SNP data can be one of:
 \itemize{
- \item "Euclidean" -- Euclidean distance, as implemented in the function 
+ \item 'Euclidean' -- Euclidean distance, as implemented in the function
  \link[stats]{dist} (package stats).
- \item "locus.count" -- number of loci for which individuals differ, as 
+ \item 'locus.count' -- number of loci for which individuals differ, as
  implemented in the function \link[ape]{dist.gene} (package ape).
- \item "allele.count" -- number of allelic differences between two 
- individuals, as implemented in the function \link[poppr]{diss.dist} 
+ \item 'allele.count' -- number of allelic differences between two
+ individuals, as implemented in the function \link[poppr]{diss.dist}
  (package poppr).
- \item "relatedness" -- genetic relatedness between individuals (G matrix),
+ \item 'relatedness' -- genetic relatedness between individuals (G matrix),
   as implemented in the function \link[rrBLUP]{A.mat} (package rrBLUP).
  }
- 
+
 The distance measure for Tag P/A data (binary) can be one of:
 \itemize{
- \item "Simple" -- simple matching, both 1 or both 0 = 0; one 1 and the other
+ \item 'Simple' -- simple matching, both 1 or both 0 = 0; one 1 and the other
   0 = 1. Presence and absence equally weighted.
- \item "Jaccard" -- ignores matching 0, both 1 = 0; one 1 and the other 
+ \item 'Jaccard' -- ignores matching 0, both 1 = 0; one 1 and the other
  0 = 1. Absences could be for different reasons.
- \item "Dice" -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences 
- could be for different reasons. Sometimes called the Czekanowski or Sorensen 
+ \item 'Dice' -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences
+ could be for different reasons. Sometimes called the Czekanowski or Sorensen
  distance.
- \item "Phi" -- binary analogue of the Pearson Correlation coefficient.
+ \item 'Phi' -- binary analogue of the Pearson Correlation coefficient.
  }
- 
+
 Refer to the documentation in the relevant packages listed above.
 }
 \examples{
-D <- gl.dist.ind(testset.gl, method="euclidean")
-D <- gl.dist.ind(testset.gs, method="euclidean")
+D <- gl.dist.ind(testset.gl, method='euclidean')
+D <- gl.dist.ind(testset.gs, method='euclidean')
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

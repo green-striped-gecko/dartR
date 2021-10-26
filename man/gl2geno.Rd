@@ -10,19 +10,19 @@ gl2geno(x, outfile = "gl_geno", outpath = tempdir(), verbose = NULL)
 \item{x}{Name of the genlight object containing the SNP or presence/absence
 (SilicoDArT) data [required].}
 
-\item{outfile}{File name of the output file [default "gl_geno"].}
+\item{outfile}{File name of the output file [default 'gl_geno'].}
 
 \item{outpath}{Path where to save the output file
-[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="."
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
  when calling this function to direct output files to your working directory.}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \description{
 The function converts a genlight object (SNP or presence/absence
- i.e. SilicoDArT data) into a file in the 'geno' for 
+ i.e. SilicoDArT data) into a file in the 'geno' for
 \link[LEA]{snmf} (package LEA) and the 'lfmm' format for \link[LEA]{lfmm}
 (package LEA).
 }
@@ -33,5 +33,6 @@ gl2geno(testset.gl)
 gl2geno(testset.gs)
 }
 \author{
-Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

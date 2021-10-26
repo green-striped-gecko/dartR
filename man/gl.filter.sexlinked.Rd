@@ -22,49 +22,68 @@ gl.filter.sexlinked(
 \item{x}{Name of the genlight object containing the SNP or presence/absence
 (SilicoDArT) data [required].}
 
-\item{sex}{Factor that defines the sex of individuals. See explanation in details [default NULL].}
+\item{sex}{Factor that defines the sex of individuals. See explanation in
+details [default NULL].}
 
-\item{filter}{Either "keep" to keep sex linked markers only or "drop" to drop sex linked markers [required].}
+\item{filter}{Either 'keep' to keep sex linked markers only or 'drop' to drop
+sex linked markers [required].}
 
-\item{read.depth}{Additional filter option to keep only loci above a certain read.depth. Default to 0, which means read.depth is not taken into account [default 0].}
+\item{read.depth}{Additional filter option to keep only loci above a certain
+read.depth. Default to 0, which means read.depth is not taken into account
+[default 0].}
 
-\item{t.het}{Tolerance in the heterogametic sex, that is t.het=0.05 means that 5\% of the heterogametic sex can be homozygous and still be regarded as consistent with a sex specific marker [default 0.1].}
+\item{t.het}{Tolerance in the heterogametic sex, that is t.het=0.05 means
+that 5\% of the heterogametic sex can be homozygous and still be regarded as
+ consistent with a sex specific marker [default 0.1].}
 
-\item{t.hom}{Tolerance in the homogametic sex, that is t.hom=0.05 means that 5\% of the homogametic sex can be heterozygous and still be regarded as consistent with a sex specific marker [default 0.1].}
+\item{t.hom}{Tolerance in the homogametic sex, that is t.hom=0.05 means that
+5\% of the homogametic sex can be heterozygous and still be regarded as
+consistent with a sex specific marker [default 0.1].}
 
-\item{t.pres}{Tolerance in presence, that is t.pres=0.05 means that a silicodart marker can be present in either of the sexes and still be regarded as a sex-linked marker [default 0.1].}
+\item{t.pres}{Tolerance in presence, that is t.pres=0.05 means that a
+silicodart marker can be present in either of the sexes and still be regarded
+ as a sex-linked marker [default 0.1].}
 
-\item{plot.out}{Creates a plot that shows the heterozygosity of males and females at each loci.
-be regarded as consistent with a sex specific marker [default TRUE].}
+\item{plot.out}{Creates a plot that shows the heterozygosity of males and
+females at each loci be regarded as consistent with a sex specific marker 
+[default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default theme_dartR()].}
 
-\item{plot_colors}{List of three color names for the not sex-linked loci, for the sex-linked loci and for the area in which sex-linked loci appear [default three_colors].}
+\item{plot_colors}{List of three color names for the not sex-linked loci, for
+the sex-linked loci and for the area in which sex-linked loci appear 
+[default three_colors].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log; 3, progress and results summary; 5, full report 
+[default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
-The filtered genlight object (filter = "keep": sex linked loci, filter="drop", everything except sex linked loci).
+The filtered genlight object (filter = 'keep': sex linked loci,
+filter='drop', everything except sex linked loci).
 }
 \description{
-Alleles unique to the Y or W chromosome and monomorphic on the X chromosomes 
-will appear in the SNP dataset as genotypes that are heterozygotic in all 
-individuals of the heterogametic sex and homozygous in all individuals of the 
-homogametic sex. This function keeps or drops loci with alleles that behave in 
-this way, as putative sex specific SNP markers.
+Alleles unique to the Y or W chromosome and monomorphic on the X chromosomes
+will appear in the SNP dataset as genotypes that are heterozygotic in all
+individuals of the heterogametic sex and homozygous in all individuals of the
+homogametic sex. This function keeps or drops loci with alleles that behave
+in this way, as putative sex specific SNP markers.
 }
 \details{
-Sex of the individuals for which sex is known with certainty can be provided 
-via a factor (equal to the length of the number of individuals) or to be held 
+Sex of the individuals for which sex is known with certainty can be provided
+via a factor (equal to the length of the number of individuals) or to be held
 in the variable \code{x@other$ind.metrics$sex}.
-Coding is: M for male, F for female, U or NA for unknown/missing. 
+Coding is: M for male, F for female, U or NA for unknown/missing.
 The script abbreviates the entries here to the first character. So, coding of
-"Female" and "Male" works as well. Character are also converted to upper cases.
+'Female' and 'Male' works as well. Character are also converted to upper 
+cases.
 
 '\strong{ Function's output }
 
-This function creates also a plot that shows the heterozygosity of males and females at each loci 
-for SNP data or percentage of present/absent in the case of SilicoDArT data.
+This function creates also a plot that shows the heterozygosity of males and
+females at each loci for SNP data or percentage of present/absent in the case 
+of SilicoDArT data.
 
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
@@ -72,8 +91,8 @@ for SNP data or percentage of present/absent in the case of SilicoDArT data.
  }
 }
 \examples{
-out <- gl.filter.sexlinked(testset.gl, filter="drop")
-out <- gl.filter.sexlinked(testset.gs, filter="drop")
+out <- gl.filter.sexlinked(testset.gl, filter='drop')
+out <- gl.filter.sexlinked(testset.gs, filter='drop')
 
 }
 \seealso{
@@ -82,6 +101,7 @@ Other filter functions:
 \code{\link{gl.filter.parent.offspring}()}
 }
 \author{
-Arthur Georges, Bernd Gruber & Floriaan Devloo-Delva (Post to \url{https://groups.google.com/d/forum/dartr})
+Arthur Georges, Bernd Gruber & Floriaan Devloo-Delva (Post to
+ \url{https://groups.google.com/d/forum/dartr})
 }
 \concept{filter functions}

@@ -9,13 +9,13 @@ gl2sfs(x, n.invariant = 0, outfile_root = "gl2sfs", outpath = tempdir())
 \arguments{
 \item{x}{Name of the genlight object containing the SNP [required].}
 
-\item{n.invariant}{An estimate of the number of invariant sequence tags used 
+\item{n.invariant}{An estimate of the number of invariant sequence tags used
 to adjust the heterozygosity rate [default 0].}
 
 \item{outfile_root}{The root of the name of the output file}
 
 \item{outpath}{Path where to save the output file
-[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="."
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
  when calling this function to direct output files to your working directory.}
 }
 \value{

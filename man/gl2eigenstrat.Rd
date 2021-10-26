@@ -19,10 +19,10 @@ gl2eigenstrat(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{outfile}{File name of the output file [default "gl_eigenstrat"].}
+\item{outfile}{File name of the output file [default 'gl_eigenstrat'].}
 
 \item{outpath}{Path where to save the output file
-[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="."
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
  when calling this function to direct output files to your working directory.}
 
 \item{snp_pos}{Field name from the slot loc.metrics where the SNP position is
@@ -35,10 +35,10 @@ each is stored [default 1].}
 the SNP position in morgans or centimorgans [default 1].}
 
 \item{sex_code}{A vector, with as many elements as there are individuals,
-containing the sex code ("male", "female", "unknown") [default "unknown"].}
+containing the sex code ('male', 'female', 'unknown') [default 'unknown'].}
 
 \item{phen_value}{A vector, with as many elements as there are individuals,
-containing the phenotype value ("Case", "Control") [default "Case"].}
+containing the phenotype value ('Case', 'Control') [default 'Case'].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report
@@ -48,10 +48,10 @@ progress log ; 3, progress and results summary; 5, full report
 The output of this function are three files:
 \itemize{
 \item genotype file: contains genotype data for each individual at each SNP
-with an extension "eigenstratgeno."
-\item snp file: contains information about each SNP with an extension "snp."
+with an extension 'eigenstratgeno.'
+\item snp file: contains information about each SNP with an extension 'snp.'
 \item indiv file: contains information about each individual with an
-extension "ind."
+extension 'ind.'
 }
 }
 \details{
@@ -62,8 +62,8 @@ as 0, will be removed.
 }
 \examples{
 \donttest{
-gl2eigenstrat(platypus.gl,snp_pos="ChromPos_Platypus_Chrom_NCBIv1",
-snp_chr = "Chrom_Platypus_Chrom_NCBIv1")
+gl2eigenstrat(platypus.gl,snp_pos='ChromPos_Platypus_Chrom_NCBIv1',
+snp_chr = 'Chrom_Platypus_Chrom_NCBIv1')
 }
 }
 \references{

@@ -7,39 +7,47 @@
 gl.recode.pop(x, pop.recode, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{pop.recode}{Name of the csv file containing the population reassignments [required]}
+\item{pop.recode}{Name of the csv file containing the population
+reassignments [required].}
 
-\item{recalc}{Recalculate the locus metadata statistics if any individuals are deleted in the filtering [default FALSE]}
+\item{recalc}{Recalculate the locus metadata statistics if any individuals
+are deleted in the filtering [default FALSE].}
 
-\item{mono.rm}{Remove monomorphic loci [default FALSE]}
+\item{mono.rm}{Remove monomorphic loci [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A genlight object with the recoded and reduced data
+A genlight object with the recoded and reduced data.
 }
 \description{
-This script recodes population assignments and/or deletes populations from a DaRT genlight SNP file 
-based on information provided in a csv population recode file.
+This script recodes population assignments and/or deletes populations from a
+DaRT genlight SNP file based on information provided in a csv population
+recode file.
 }
 \details{
-Individuals are assigned to populations based on the specimen metadata data file (csv) used with gl.read.dart(). 
-Recoding can be used to amalgamate populations or to selectively delete or retain populations.
+Individuals are assigned to populations based on the specimen metadata data
+file (csv) used with gl.read.dart(). Recoding can be used to amalgamate
+populations or to selectively delete or retain populations.
 
-The population recode file contains a list of populations in the genelight object as
-the first column of the csv file, and the new population assignments in the second column of the csv file.
-The keyword Delete used as a new population assignment will result in the associated specimen being dropped from the dataset.
+The population recode file contains a list of populations in the genlight
+ object as the first column of the csv file, and the new population
+ assignments in the second column of the csv file. The keyword Delete used as
+ a new population assignment will result in the associated specimen being
+  dropped from the dataset.
 
-The script, having deleted populations, optionally identifies resultant monomorphic loci or loci
-with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
-recalculates the locus metadata as appropriate.
+The script, having deleted populations, optionally identifies resultant
+monomorphic loci or loci with all values missing and deletes them
+(using gl.filter.monomorphs.r). The script also optionally recalculates the
+locus metadata as appropriate.
 }
 \examples{
 \donttest{
-  mfile <- system.file("extdata", "testset_pop_recode.csv", package="dartR")
+  mfile <- system.file('extdata', 'testset_pop_recode.csv', package='dartR')
   nPop(testset.gl)
   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=3)
  }
@@ -50,5 +58,6 @@ recalculates the locus metadata as appropriate.
 \code{\link{gl.recode.pop}}
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }
