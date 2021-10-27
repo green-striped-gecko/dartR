@@ -12,7 +12,7 @@ gl.basic.stats(x, digits = 4, verbose = NULL)
 \item{digits}{Number of digits that should be returned [default 4].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log ; 3, progress and results summary; 5, full report
+progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{

@@ -137,9 +137,11 @@ gl2plink <- function(x,
     
     # Family ID ('FID')
     FID <- as.character(x$pop)
+    FID <- gsub(" ","_",FID)
     # Within-family ID ('IID'; cannot be '0')
     IID <- sample.id_temp
-    
+    IID <- gsub(" ","_",IID)
+
     # Sex code ('1' = male, '2' = female, '0' = unknown)
     if (length(sex_code) > 1) {
         sex_code <- as.character(sex_code)

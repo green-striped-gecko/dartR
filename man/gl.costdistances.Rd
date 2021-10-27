@@ -25,10 +25,10 @@ progress log ; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-A costdistance matrix between all pairs of locs [required].
+A costdistance matrix between all pairs of locs.
 }
 \description{
-Calculates a cost distance matrix, to be used with run.popgensim
+Calculates a cost distance matrix, to be used with run.popgensim.
 }
 \examples{
 \dontrun{
