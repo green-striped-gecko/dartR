@@ -9,12 +9,12 @@
 #' @param method Defines the type of cost distance, types are 'leastcost',
 #' 'rSPDistance' or 'commute' (Circuitscape type) [required].
 #' @param NN Number of next neighbours recommendation is 8 [required].
-#' @return A costdistance matrix between all pairs of locs [required].
+#' @return A costdistance matrix between all pairs of locs.
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log ; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
 #' @description
-#' Calculates a cost distance matrix, to be used with run.popgensim
+#' Calculates a cost distance matrix, to be used with run.popgensim.
 #' @export
 #' @examples
 #' \dontrun{
