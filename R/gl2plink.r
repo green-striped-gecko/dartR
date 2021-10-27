@@ -25,7 +25,9 @@
 #' @param ID_mom A vector, with as many elements as there are individuals,
 #' containing the ID of the mother, '0' if mother isn't in dataset [default '0'].
 #' @param sex_code A vector, with as many elements as there are individuals,
-#' containing the sex code ('male', 'female', 'unknown') [default  'unknown'].
+#' containing the sex code ('male', 'female', 'unknown'). Sex information needs 
+#' just to start with an "F" or "f" for females, with an "M" or "m" for males 
+#' and with a "U", "u" or being empty if the sex is unknown [default 'unknown'].
 #' @param phen_value A vector, with as many elements as there are individuals,
 #' containing the phenotype value. '1' = control, '2' = case, '0' = unknown
 #' [default '0'].
@@ -43,6 +45,8 @@
 #' Family ID is taken from  x$pop.
 #' Within-family ID (cannot be '0') is taken from indNames(x).
 #' Variant identifier is taken from locNames(x).
+#' Note that if names of populations or individuals contain spaces, they are 
+#' replaced by an underscore "_".
 #' @return NULL
 #' @references
 #' Purcell, Shaun, et al. 'PLINK: a tool set for whole-genome association and
@@ -140,7 +144,9 @@ gl2plink <- function(x,
     FID <- gsub(" ","_",FID)
     # Within-family ID ('IID'; cannot be '0')
     IID <- sample.id_temp
-    IID <- gsub(" ","_",IID)
+
+    ID_dad <- gsub(" ","_",ID_dad)
+    ID_mom <- gsub(" ","_",ID_mom)
 
     # Sex code ('1' = male, '2' = female, '0' = unknown)
     if (length(sex_code) > 1) {
