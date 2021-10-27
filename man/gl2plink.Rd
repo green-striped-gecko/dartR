@@ -54,7 +54,9 @@ containing the ID of the father, '0' if father isn't in dataset [default '0'].}
 containing the ID of the mother, '0' if mother isn't in dataset [default '0'].}
 
 \item{sex_code}{A vector, with as many elements as there are individuals,
-containing the sex code ('male', 'female', 'unknown') [default  'unknown'].}
+containing the sex code ('male', 'female', 'unknown'). Sex information needs 
+just to start with an "F" or "f" for females, with an "M" or "m" for males 
+and with a "U", "u" or being empty if the sex is unknown [default 'unknown'].}
 
 \item{phen_value}{A vector, with as many elements as there are individuals,
 containing the phenotype value. '1' = control, '2' = case, '0' = unknown
@@ -80,6 +82,8 @@ information for unmapped SNPS is coded as 0.
 Family ID is taken from  x$pop.
 Within-family ID (cannot be '0') is taken from indNames(x).
 Variant identifier is taken from locNames(x).
+Note that if names of populations or individuals contain spaces, they are 
+replaced by an underscore "_".
 }
 \examples{
 \donttest{
