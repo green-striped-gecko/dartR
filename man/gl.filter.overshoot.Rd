@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.filter.overshoot.r
 \name{gl.filter.overshoot}
 \alias{gl.filter.overshoot}
-\title{Filters loci for which the SNP has been trimmed from the sequence tag along with the adaptor}
+\title{Filters loci for which the SNP has been trimmed from the sequence tag
+along with the adaptor}
 \usage{
 gl.filter.overshoot(x, save2tmp = FALSE, verbose = NULL)
 }
@@ -12,25 +13,30 @@ gl.filter.overshoot(x, save2tmp = FALSE, verbose = NULL)
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 A new genlight object with the recalcitrant loci deleted
 }
 \description{
-This function checks the position of the SNP within the trimmed sequence tag and identifies those for which the SNP position is outside
-the trimmed sequence tag. This can happen, rarely, when the sequence containing the SNP resembles the adaptor.
+This function checks the position of the SNP within the trimmed sequence tag
+and identifies those for which the SNP position is outside the trimmed
+ sequence tag. This can happen, rarely, when the sequence containing the SNP
+ resembles the adaptor.
 
-The SNP genotype can still be used in most analyses, but functions like gl2fasta() will present challenges if the SNP has been trimmed from
-the sequence tag.
+The SNP genotype can still be used in most analyses, but functions like
+gl2fasta() will present challenges if the SNP has been trimmed from the
+sequence tag.
 
-Not fatal, but should apply this filter before gl.filter.secondaries, for obvious reasons.
+Not fatal, but should apply this filter before gl.filter.secondaries, for
+obvious reasons.
 }
 \examples{
 result <- gl.filter.overshoot(testset.gl, verbose=3)
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

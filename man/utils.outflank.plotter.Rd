@@ -2,12 +2,7 @@
 % Please edit documentation in R/utils.outflank.plotter.r
 \name{utils.outflank.plotter}
 \alias{utils.outflank.plotter}
-\title{Plotting functions for Fst distributions after OutFLANK
- 
-This function takes the output of OutFLANK as
-input with the OFoutput parameter.  It plots a histogram of the FST (by
-default, the uncorrected FSTs used by OutFLANK) of loci and overlays the
-inferred null histogram.}
+\title{Plotting functions for Fst distributions after OutFLANK}
 \usage{
 utils.outflank.plotter(
   OFoutput,
@@ -23,17 +18,22 @@ utils.outflank.plotter(
 \arguments{
 \item{OFoutput}{The output of the function OutFLANK()}
 
-\item{withOutliers}{Determines whether the loci marked as outliers (with $OutlierFlag) are included in the histogram.}
+\item{withOutliers}{Determines whether the loci marked as outliers (with
+$OutlierFlag) are included in the histogram.}
 
-\item{NoCorr}{Plots the distribution of FSTNoCorr when TRUE. Recommended, because this is the data used by OutFLANK to infer the distribution.}
+\item{NoCorr}{Plots the distribution of FSTNoCorr when TRUE. Recommended,
+because this is the data used by OutFLANK to infer the distribution.}
 
-\item{Hmin}{The minimum heterozygosity required before including  a locus in the plot.}
+\item{Hmin}{The minimum heterozygosity required before including  a locus in
+the plot.}
 
 \item{binwidth}{The width of bins in the histogram.}
 
-\item{Zoom}{If Zoom is set to TRUE, then the graph will zoom in on the right tail of the distirbution (based on argument RightZoomFraction)}
+\item{Zoom}{If Zoom is set to TRUE, then the graph will zoom in on the right
+tail of the distirbution (based on argument RightZoomFraction)}
 
-\item{RightZoomFraction}{Used when Zoom = TRUE. Defines the proportion of the distribution to plot.}
+\item{RightZoomFraction}{Used when Zoom = TRUE. Defines the proportion of the
+distribution to plot.}
 
 \item{titletext}{Allows a test string to be printed as a title on the graph}
 }
@@ -41,8 +41,6 @@ utils.outflank.plotter(
 produces a histogram of the FST
 }
 \description{
-Plotting functions for Fst distributions after OutFLANK
- 
 This function takes the output of OutFLANK as
 input with the OFoutput parameter.  It plots a histogram of the FST (by
 default, the uncorrected FSTs used by OutFLANK) of loci and overlays the

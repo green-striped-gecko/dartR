@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.test.heterozygosity.r
 \name{gl.test.heterozygosity}
 \alias{gl.test.heterozygosity}
-\title{Tests the difference in heterozygosity between populations taken pairwise}
+\title{Tests the difference in heterozygosity between populations taken
+pairwise}
 \usage{
 gl.test.heterozygosity(
   x,
@@ -12,7 +13,7 @@ gl.test.heterozygosity(
   plot.out = TRUE,
   max_plots = 6,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -22,39 +23,53 @@ gl.test.heterozygosity(
 
 \item{nreps}{Number of replications of the re-randomization [default 1,000].}
 
-\item{alpha1}{First significance level for comparison with diff=0 on plot [default 0.05].}
+\item{alpha1}{First significance level for comparison with diff=0 on plot
+[default 0.05].}
 
-\item{alpha2}{Second significance level for comparison with diff=0 on plot [default 0.01].}
+\item{alpha2}{Second significance level for comparison with diff=0 on plot
+[default 0.01].}
 
-\item{plot.out}{If TRUE, plots a sampling distribution of the differences for each comparison [default TRUE].}
+\item{plot.out}{If TRUE, plots a sampling distribution of the differences for
+each comparison [default TRUE].}
 
 \item{max_plots}{Maximum number of plots to print per page [default 9].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the
+\item{plot_colors}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE].}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
-A dataframe containing population labels, heterozygosities and sample sizes
+A dataframe containing population labels, heterozygosities and sample
+ sizes
 }
 \description{
-Calculates the expected heterozygosities for each population in a genlight object,
-and uses re-randomization to test the statistical significance of differences
-in heterozygosity between populations taken pairwise.
+Calculates the expected heterozygosities for each population in a genlight
+object, and uses re-randomization to test the statistical significance of
+differences in heterozygosity between populations taken pairwise.
 }
 \details{
 \strong{ Function's output }
 
-If plot.out = TRUE, plots are created showing the sampling distribution for the difference between each pair
-of heterozygosities, marked with the critical limits alpha1 and alpha2, the observed
-heterozygosity, and the zero value (if in range).
- Plots and table are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
-  
+If plot.out = TRUE, plots are created showing the sampling distribution for
+the difference between each pair of heterozygosities, marked with the
+critical limits alpha1 and alpha2, the observed heterozygosity, and the zero
+value (if in range).
+
+Plots and table are saved to the temporal directory (tempdir) and can be
+accessed with the function \code{\link{gl.print.reports}} and listed with the
+function \code{\link{gl.list.reports}}. Note that they can be accessed only
+in the current R session because tempdir is cleared each time that the R
+session is closed.
+
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
@@ -62,9 +77,9 @@ heterozygosity, and the zero value (if in range).
 }
 \examples{
 out <- gl.test.heterozygosity(bandicoot.gl, nreps=10, verbose=3, plot.out=TRUE)
-
 }
 \author{
-Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+ \url{https://groups.google.com/d/forum/dartr})
 }
 \concept{Genetic variation within populations}

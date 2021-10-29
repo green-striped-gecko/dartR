@@ -23,35 +23,35 @@ gl.smearplot(
 
 \item{ind_labels}{Labels for individuals [default indNames(x)].}
 
-\item{ind_labels_size}{Size of the individual labels, if individual labels 
+\item{ind_labels_size}{Size of the individual labels, if individual labels
 are not required set this parameter to 0 [default 6].}
 
-\item{plot_colors}{Vector with four color names for homozygotes for the 
-reference allele, heterozygotes, homozygotes for the alternative allele and 
+\item{plot_colors}{Vector with four color names for homozygotes for the
+reference allele, heterozygotes, homozygotes for the alternative allele and
 for missing values (NA) [default four_colors].}
 
 \item{posi}{Position of the legend: “left”, “top”, “right”, “bottom” or
-"none" [default = "bottom"].}
+'none' [default = 'bottom'].}
 
-\item{save2tmp}{If TRUE, saves plot to the session temporary directory 
+\item{save2tmp}{If TRUE, saves plot to the session temporary directory
 (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report [default NULL].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report [default NULL].}
 }
 \value{
 Returns unaltered genlight object
 }
 \description{
-Each locus is color coded for scores of 0, 1, 2 and NA for SNP data and 0, 1 
-and NA for presence/absence (SilicoDArT) data. Individual labels can be added 
-and individuals can be grouped into by population.
- 
+Each locus is color coded for scores of 0, 1, 2 and NA for SNP data and 0, 1
+and NA for presence/absence (SilicoDArT) data. Individual labels can be added
+and individuals can be grouped by population.
+
 If there are too many individuals, it is best to use ind_labels_size = 0.
 }
 \examples{
 gl.smearplot(testset.gl[1:10,])
-gl.smearplot(testset.gs[1:10,]) 
+gl.smearplot(testset.gs[1:10,])
 }
 \seealso{
 Other Exploration/visualisation functions: 
@@ -60,6 +60,7 @@ Other Exploration/visualisation functions:
 \code{\link{gl.select.shapes}()}
 }
 \author{
-Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Luis Mijangos -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }
 \concept{Exploration/visualisation functions}

@@ -11,10 +11,11 @@ utils.n.var.invariant(x, verbose = NULL)
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log ; 3, progress and results summary; 5, full report [default NULL].}
+progress log; 3, progress and results summary; 5, full report
+ [default NULL].}
 }
 \value{
-The modified genlight object
+The modified genlight object.
 }
 \description{
 Calculate the number of variant and invariant sites by locus and add them as
@@ -27,9 +28,9 @@ Invariant sites are the sites (nucleotide) that are not polymorphic. When the
 locus metadata supplied by DArT includes the sequence of the allele
 (\code{TrimmedSequence}), it is used by this function to estimate the number
 of sites that were sequenced in each tag (read). This script then subtracts
-the number of polymorphic sites. The length of the trimmed sequence 
-(lenTrimSeq), the number of variant (n.variant) and 
-invariant (n.invariant) sites are the added to the table in 
+the number of polymorphic sites. The length of the trimmed sequence
+(lenTrimSeq), the number of variant (n.variant) and
+invariant (n.invariant) sites are the added to the table in
 \code{gl@others$loc.metrics}.
 
 \strong{NOTE}: It is important to realise that this function correctly

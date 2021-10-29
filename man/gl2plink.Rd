@@ -2,30 +2,101 @@
 % Please edit documentation in R/gl2plink.r
 \name{gl2plink}
 \alias{gl2plink}
-\title{Converts a genlight object to PLINK file format}
+\title{Convert a genlight object into PLINK format}
 \usage{
-gl2plink(x, outfile = "plink.csv", outpath = tempdir(), verbose = NULL)
+gl2plink(
+  x,
+  plink_path = getwd(),
+  bed_file = FALSE,
+  outfile = "gl_plink",
+  outpath = tempdir(),
+  snp_pos = "0",
+  snp_chr = "0",
+  chr_format = "character",
+  pos_cM = "0",
+  ID_dad = "0",
+  ID_mom = "0",
+  sex_code = "unknown",
+  phen_value = "0",
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{outfile}{-- file name of the output file (including extension) [default plink.csv]}
+\item{plink_path}{Path of PLINK binary file [default getwd())].}
 
-\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
-to direct output files to your working directory.}
+\item{bed_file}{Whether create PLINK files .bed, .bim and .fam
+[default FALSE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{outfile}{File name of the output file [default 'gl_plink'].}
+
+\item{outpath}{Path where to save the output file
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
+ when calling this function to direct output files to your working directory.}
+
+\item{snp_pos}{Field name from the slot loc.metrics where the SNP position is
+stored [default '0'].}
+
+\item{snp_chr}{Field name from the slot loc.metrics where the chromosome of
+each is stored [default '0'].}
+
+\item{chr_format}{Whether chromosome information is stored as 'numeric' or as
+'character', see details [default 'character'].}
+
+\item{pos_cM}{A vector, with as many elements as there are loci, containing
+the SNP position in morgans or centimorgans [default '0'].}
+
+\item{ID_dad}{A vector, with as many elements as there are individuals,
+containing the ID of the father, '0' if father isn't in dataset [default '0'].}
+
+\item{ID_mom}{A vector, with as many elements as there are individuals,
+containing the ID of the mother, '0' if mother isn't in dataset [default '0'].}
+
+\item{sex_code}{A vector, with as many elements as there are individuals,
+containing the sex code ('male', 'female', 'unknown'). Sex information needs 
+just to start with an "F" or "f" for females, with an "M" or "m" for males 
+and with a "U", "u" or being empty if the sex is unknown [default 'unknown'].}
+
+\item{phen_value}{A vector, with as many elements as there are individuals,
+containing the phenotype value. '1' = control, '2' = case, '0' = unknown
+[default '0'].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \description{
-This function exports a genlight object into PLINK format and save it into a file
+This function exports a genlight object into PLINK format and save it into a
+file.
+This function produces the following PLINK files: bed, bim, fam, ped and map.
+}
+\details{
+To create PLINK files .bed, .bim and .fam (bed_file = TRUE), it is necessary
+to download the binary file of PLINK 1.9 and provide its path (plink_path).
+The binary file can be downloaded from:
+\url{https://www.cog-genomics.org/plink/}
+
+The chromosome of each SNP can be a character or numeric. The chromosome
+information for unmapped SNPS is coded as 0.
+Family ID is taken from  x$pop.
+Within-family ID (cannot be '0') is taken from indNames(x).
+Variant identifier is taken from locNames(x).
+Note that if names of populations or individuals contain spaces, they are 
+replaced by an underscore "_".
 }
 \examples{
-gl2plink(testset.gl)
+\donttest{
+gl2plink(platypus.gl,snp_pos='ChromPos_Platypus_Chrom_NCBIv1',
+snp_chr = 'Chrom_Platypus_Chrom_NCBIv1')
+}
 }
 \references{
-Purcell S, Neale B, Todd-Brown K, Thomas L, Ferreira MAR, Bender D, Maller J, Sklar P, de Bakker PIW, Daly MJ & Sham PC (2007).
-PLINK: a toolset for whole-genome association and population-based linkage analysis. American Journal of Human Genetics 81:551-575.
+Purcell, Shaun, et al. 'PLINK: a tool set for whole-genome association and
+population-based linkage analyses.' The American journal of human genetics
+81.3 (2007): 559-575.
 }
 \author{
-Bernd Guber (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+ \url{https://groups.google.com/d/forum/dartr})
 }

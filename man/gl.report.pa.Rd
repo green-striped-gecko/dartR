@@ -18,69 +18,69 @@ gl.report.pa(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{x2}{If two separate genlight objects are to be compared this can be 
+\item{x2}{If two separate genlight objects are to be compared this can be
 provided here, but they must have the same number of SNPs [default NULL].}
 
-\item{method}{Method to calculate private alleles: "pairwise" comparison or 
-compare each population against the rest "one2rest" [default "pairwise"].}
+\item{method}{Method to calculate private alleles: 'pairwise' comparison or
+compare each population against the rest 'one2rest' [default 'pairwise'].}
 
 \item{plot.out}{Specify if Sankey plot is to be produced [default TRUE].}
 
-\item{map.interactive}{Specify whether an interactive map showing private 
+\item{map.interactive}{Specify whether an interactive map showing private
 alleles between populations is to be produced [default FALSE].}
 
-\item{palette_discrete}{A discrete palette for the color of populations or a 
+\item{palette_discrete}{A discrete palette for the color of populations or a
 list with as many colors as there are populations in the dataset
  [default discrete_palette].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent, fatal errors only; 1, flag function 
-begin and end; 2, progress log ; 3, progress and results summary; 5, full 
+\item{verbose}{Verbosity: 0, silent, fatal errors only; 1, flag function
+begin and end; 2, progress log; 3, progress and results summary; 5, full
 report [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A data.frame. Each row shows, for each pair of populations the number of
- individuals in each population, the number of loci with fixed differences (same
-  for both populations) in pop1 (compared to pop2) and vice versa. Same for 
-  private alleles and finally the absolute mean allele frequency difference 
-  between loci (AFD).
+A data.frame. Each row shows, for each pair of populations the number
+ of individuals in each population, the number of loci with fixed differences
+ (same for both populations) in pop1 (compared to pop2) and vice versa. Same 
+ for private alleles and finally the absolute mean allele frequency
+ difference between loci (AFD).
 }
 \description{
-This function reports private alleles in one population compared with a 
-second population, for all populations taken pairwise. It also reports a 
+This function reports private alleles in one population compared with a
+second population, for all populations taken pairwise. It also reports a
 count of fixed allelic differences and the mean absolute allele frequency
 differences (AFD) between pairs of populations.
 }
 \details{
-Note that the number of paired alleles between two populations is not a 
+Note that the number of paired alleles between two populations is not a
 symmetric dissimilarity measure.
 
-If no x2 is provided, the function uses the pop(gl) hierarchy to determine 
-pairs of populations, otherwise it runs a single comparison between x and 
-x2. 
+If no x2 is provided, the function uses the pop(gl) hierarchy to determine
+pairs of populations, otherwise it runs a single comparison between x and
+x2.
 
-\strong{Hint:} in case you want to run comparisons between individuals (assuming 
-individual names are unique), you can simply redefine your population names 
-with your individual names, as below:
+\strong{Hint:} in case you want to run comparisons between individuals 
+(assuming individual names are unique), you can simply redefine your 
+population names with your individual names, as below:
 
 \code{pop(gl) <- indNames(gl)}
- 
+
 \strong{ Definition of fixed and private alleles }
 
-The table below shows the possible cases of allele frequencies between 
-two populations (0 = homozygote for Allele 1, x = both Alleles are present, 
+The table below shows the possible cases of allele frequencies between
+two populations (0 = homozygote for Allele 1, x = both Alleles are present,
 1 = homozygote for Allele 2).
 
 \itemize{
 \item p: cases where there is a private allele in pop1 compared to pop2 (but
 not vice versa)
-\item f: cases where there is a fixed allele in pop1 (and pop2, as those cases 
+\item f: cases where there is a fixed allele in pop1 (and pop2, as those cases
 are symmetric)
-} 
+}
 
-\tabular{ccccc}{ 
+\tabular{ccccc}{
 \tab \tab \tab \emph{pop1} \tab \cr
 \tab \tab \strong{0} \tab   \strong{x}  \tab  \strong{1}\cr
 \tab     \strong{0}\tab -  \tab  p \tab  p,f\cr
@@ -88,27 +88,26 @@ are symmetric)
 \tab \strong{1} \tab p,f\tab p \tab   -\cr
 }
 
-The absolute allele frequency difference (AFD) in this function is a simple 
-differentiation metric displaying intuitive properties which provides a 
-valuable alternative to FST. For details about its properties and how it is 
+The absolute allele frequency difference (AFD) in this function is a simple
+differentiation metric displaying intuitive properties which provides a
+valuable alternative to FST. For details about its properties and how it is
 calculated see Berner (2019).
 
-In this function a Sankey Diagram is used to visualize patterns of private 
-alleles between populations. This diagram allows to display flows (private 
-alleles) between nodes (populations). Their links are represented with arcs 
-that have a width proportional to the importance of the flow (number of 
+In this function a Sankey Diagram is used to visualize patterns of private
+alleles between populations. This diagram allows to display flows (private
+alleles) between nodes (populations). Their links are represented with arcs
+that have a width proportional to the importance of the flow (number of
 private alleles).
 
-if save2temp=TRUE, resultant plot(s) and the tabulation(s) are saved to the 
+if save2temp=TRUE, resultant plot(s) and the tabulation(s) are saved to the
 session's temporary directory.
 }
 \examples{
 out <- gl.report.pa(testset.gl[1:20,])
-
 }
 \references{
 \itemize{
-\item Berner, D. (2019). Allele frequency difference AFD – an intuitive 
+\item Berner, D. (2019). Allele frequency difference AFD – an intuitive
 alternative to FST for quantifying genetic population differentiation. Genes,
  10(4), 308.
 }
@@ -125,6 +124,7 @@ Other reporting functions:
 \code{\link{gl.report.sexlinked}()}
 }
 \author{
-Custodian: Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Bernd Gruber -- Post to 
+\url{https://groups.google.com/d/forum/dartr}
 }
 \concept{reporting functions}

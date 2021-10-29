@@ -2,15 +2,18 @@
 % Please edit documentation in R/gl.propShared.r
 \name{gl.propShared}
 \alias{gl.propShared}
-\title{Calculate a similarity(distance) matrix for individuals on the proportion of shared alleles}
+\title{Calculate a similarity (distance) matrix for individuals on the proportion of
+shared alleles}
 \usage{
 gl.propShared(x)
 }
 \arguments{
-\item{x}{-- name of the genlight containing the SNP genotypes [required]}
+\item{x}{Name of the genlight containing the SNP genotypes [required].}
 }
 \description{
-This script calculates a individual based distance matrix. It uses an C++ implementation, so package Rcpp needs to be installed and it is therefore really fast (once it has compiled the function after the first run).
+This script calculates an individual based distance matrix. It uses an C++
+ implementation, so package Rcpp needs to be installed and it is therefore
+  really fast (once it has compiled the function after the first run).
 }
 \examples{
 #takes some time at the first run of the function...

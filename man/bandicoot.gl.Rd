@@ -11,9 +11,12 @@ genlight object
 bandicoot.gl
 }
 \description{
-This a test data set to test the validity of functions within dartR and is based on a DArT SNP data set of simulated bandicoots across Australia. It contains 96 individuals and 1000 SNPs.
+This a test data set to test the validity of functions within dartR and is 
+based on a DArT SNP data set of simulated bandicoots across Australia. It 
+contains 96 individuals and 1000 SNPs.
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
+Bernd Gruber (bugs? Post to
+ \url{https://groups.google.com/d/forum/dartr}
 }
 \keyword{datasets}

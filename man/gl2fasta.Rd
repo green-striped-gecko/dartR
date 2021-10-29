@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2fasta.r
 \name{gl2fasta}
 \alias{gl2fasta}
-\title{Concatenates DArT trimmed sequences and outputs a fastA file.}
+\title{Concatenates DArT trimmed sequences and outputs a FASTA file.}
 \usage{
 gl2fasta(
   x,
@@ -14,59 +14,72 @@ gl2fasta(
 )
 }
 \arguments{
-\item{x}{-- name of the DArT genlight object [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{method}{-- 1 | 2 | 3 | 4. Type method=0 for a list of options  [method=1]}
+\item{method}{One of 1 | 2 | 3 | 4. Type method=0 for a list of options 
+[method=1].}
 
-\item{outfile}{-- name of the output file (fasta format) [output.fasta]}
+\item{outfile}{Name of the output file (fasta format) ["output.fasta"].}
 
-\item{outpath}{-- path where to save the output file (set to tempdir by default)}
+\item{outpath}{Path where to save the output file (set to tempdir by default)}
 
-\item{probar}{-- if TRUE, a progress bar will be displayed for long loops [default = TRUE]}
+\item{probar}{If TRUE, a progress bar will be displayed for long loops 
+[default = TRUE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report 
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A new gl object with all loci rendered homozygous
+A new gl object with all loci rendered homozygous.
 }
 \description{
-Concatenated sequence tags are useful for phylogenetic methods where information
-on base frequencies and transition and transversion ratios are required (for
-example, Maximum Liklihood methods). Where relevant, heterozygous loci are resolved 
-before concatenation by either assigning ambiguity codes or by random allele 
-assignment.
+Concatenated sequence tags are useful for phylogenetic methods where
+information on base frequencies and transition and transversion ratios are
+required (for example, Maximum Likelihood methods). Where relevant,
+heterozygous loci are resolved before concatenation by either assigning
+ ambiguity codes or by random allele assignment.
 }
 \details{
-Four methods are employed
+Four methods are employed:
 
-Method 1 -- heterozygous positions are replaced by
-the standard ambiguity codes. The resultant sequence fragments are concatenated across loci to generate
-a single combined sequence to be used in subsequent ML phylogenetic analyses.
+Method 1 -- heterozygous positions are replaced by the standard ambiguity c
+odes. The resultant sequence fragments are concatenated across loci to
+generate a single combined sequence to be used in subsequent ML phylogenetic
+analyses.
 
-Method=2 -- the heterozyous state is resolved by randomly assigning one or the other SNP variant
-to the individual. The resultant sequence fragments are concatenated across loci to generate
-a single composite haplotype to be used in subsequent ML phylogenetic analyses.
+Method=2 -- the heterozygous state is resolved by randomly assigning one or
+the other SNP variant to the individual. The resultant sequence fragments are
+concatenated across loci to generate a single composite haplotype to be used
+in subsequent ML phylogenetic analyses.
 
-Method 3 -- heterozygous positions are replaced by
-the standard ambiguity codes. The resultant SNP bases are concatenated across loci to generate
-a single combined sequence to be used in subsequent MP phylogenetic analyses.
+Method 3 -- heterozygous positions are replaced by the standard ambiguity
+codes. The resultant SNP bases are concatenated across loci to generate a
+single combined sequence to be used in subsequent MP phylogenetic analyses.
 
-Method=4 -- the heterozyous state is resolved by randomly assigning one or the other SNP variant
-to the individual. The resultant SNP bases are concatenated across loci to generate
-a single composite haplotype to be used in subsequent MP phylogenetic analyses.
+Method=4 -- the heterozygous state is resolved by randomly assigning one or
+the other SNP variant to the individual. The resultant SNP bases are
+concatenated across loci to generate a single composite haplotype to be used
+in subsequent MP phylogenetic analyses.
 
-Trimmed sequences for which the SNP has been trimmed out, rarely, by adaptor mis-identity are deleted.
+Trimmed sequences for which the SNP has been trimmed out, rarely, by adapter
+ mis-identity are deleted.
 
-The script writes out the composite haplotypes for each individual as a fastA file. Requires
-'TrimmedSequence' to be among the locus metrics (\code{@other$loc.metrics}) and information of the type of alleles (slot loc.all e.g. "G/A") and the position of the SNP in slot position of the ```genlight``` object (see testset.gl@position and testset.gl@loc.all for how to format these slots.)
+The script writes out the composite haplotypes for each individual as a
+fastA file. Requires 'TrimmedSequence' to be among the locus metrics
+(\code{@other$loc.metrics}) and information of the type of alleles (slot
+loc.all e.g. 'G/A') and the position of the SNP in slot position of the
+ ```genlight``` object (see testset.gl@position and testset.gl@loc.all for
+ how to format these slots.)
 }
 \examples{
 gl <- gl.filter.reproducibility(testset.gl,t=1)
 gl <- gl.filter.overshoot(gl,verbose=3)
 gl <- gl.filter.callrate(testset.gl,t=.98)
 gl <- gl.filter.monomorphs(gl)
-gl2fasta(gl, method=1, outfile="test.fasta",verbose=3)
+gl2fasta(gl, method=1, outfile='test.fasta',verbose=3)
 }
 \author{
-Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+ \url{https://groups.google.com/d/forum/dartr})
 }

@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl2phylip.r
 \name{gl2phylip}
 \alias{gl2phylip}
-\title{Create a Phylip input distance matrix from a genlight (SNP) \{adegenet\} object}
+\title{Create a Phylip input distance matrix from a genlight (SNP) \{adegenet\}
+ object}
 \usage{
 gl2phylip(
   x,
@@ -13,28 +14,36 @@ gl2phylip(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data or a genind object containing presence absence data [required]}
+\item{x}{Name of the genlight object containing the SNP or presence/absence
+(SilicoDArT) data [required].}
 
-\item{outfile}{Name of the file to become the input file for phylip [default phyinput.txt]}
+\item{outfile}{Name of the file to become the input file for phylip
+[default "phyinput.txt"].}
 
-\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
+\item{outpath}{Path where to save the output file 
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
+ when calling this function to direct output files to your working directory.}
 
-\item{bstrap}{Number of bootstrap replicates [default 1]}
+\item{bstrap}{Number of bootstrap replicates [default 1].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log; 3, progress and results summary; 5, full report 
+[default 2 or as specified using gl.set.verbosity]}
 }
 \value{
-Matrix of Euclidean distances between populations
+Matrix of Euclidean distances between populations.
 }
 \description{
-This function calculates and returns a matrix of Euclidean distances between populations
-and produces an input file for the phylogenetic program Phylip (Joe Felsenstein).
+This function calculates and returns a matrix of Euclidean distances between 
+populations and produces an input file for the phylogenetic program Phylip 
+(Joe Felsenstein).
 }
 \examples{
 \donttest{
-result <- gl2phylip(testset.gl, outfile="test.txt", bstrap=10)
+result <- gl2phylip(testset.gl, outfile='test.txt', bstrap=10)
 }
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to
+ \url{https://groups.google.com/d/forum/dartr})
 }

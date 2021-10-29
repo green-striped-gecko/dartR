@@ -4,23 +4,29 @@
 \alias{gl.basic.stats}
 \title{Calculates basic statistics for each loci (Hs, Ho, Fis etc.)}
 \usage{
-gl.basic.stats(gl, digits = 4)
+gl.basic.stats(x, digits = 4, verbose = NULL)
 }
 \arguments{
-\item{gl}{-- a genlight object}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{digits}{-- number of digits that should be returned}
+\item{digits}{Number of digits that should be returned [default 4].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-several tables and lists with all basic stats. Check
+Several tables and lists with all basic stats.
 \code{\link[hierfstat]{basic.stats}} for details.
 }
 \description{
-Based on function \code{\link[hierfstat]{basic.stats}}. Check ?basic.stats for help.
+Based on function \code{\link[hierfstat]{basic.stats}}. Check ?basic.stats
+for help.
 }
 \examples{
-gl.basic.stats(possums.gl)
+out <- gl.basic.stats(possums.gl)
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber (bugs? Post to
+\url{https://groups.google.com/d/forum/dartr})
 }
