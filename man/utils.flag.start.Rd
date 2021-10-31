@@ -23,4 +23,5 @@ A utility script to flag the start of a script
 \author{
 Custodian: Arthur Georges -- Post to
  \url{https://groups.google.com/d/forum/dartr}
+ @export
 }

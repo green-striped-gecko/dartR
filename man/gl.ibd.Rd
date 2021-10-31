@@ -95,7 +95,14 @@ gl.propShared or gl.dist.ind. For transformation you need to have the dismo
 package installed. As a new feature you can plot pairwise relationship using
 double colored points (paircols=TRUE). Pairwise relationship can be
 visualised via populations or individuals, depending which distance is
-calculated.
+calculated. Please note: Often a problem arises, if an individual based distance is
+ calculated (e.g. propShared) and some individuals have identical coordinates
+ as this results in distances of zero between those pairs of individuals. 
+ If the standard transformation [log(Dgeo)] is used, this results in an infinite
+ value, because of trying to calculate'log(0)'. To avoid this, the easiest fix 
+ is to change the transformation from log(Dgeo) to log(Dgeo+1) or you could add
+ some "noise" to th coordinates of the individuals (e.g. +- 1m, but be aware 
+ if you use lat lon than you rather want to add +0.00001 degrees or so)
 }
 \examples{
 #only first 100 loci

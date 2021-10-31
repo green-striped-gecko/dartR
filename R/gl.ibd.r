@@ -17,7 +17,14 @@
 #' package installed. As a new feature you can plot pairwise relationship using
 #' double colored points (paircols=TRUE). Pairwise relationship can be
 #' visualised via populations or individuals, depending which distance is
-#' calculated.
+#' calculated. Please note: Often a problem arises, if an individual based distance is
+#'  calculated (e.g. propShared) and some individuals have identical coordinates
+#'  as this results in distances of zero between those pairs of individuals. 
+#'  If the standard transformation [log(Dgeo)] is used, this results in an infinite
+#'  value, because of trying to calculate'log(0)'. To avoid this, the easiest fix 
+#'  is to change the transformation from log(Dgeo) to log(Dgeo+1) or you could add
+#'  some "noise" to th coordinates of the individuals (e.g. +- 1m, but be aware 
+#'  if you use lat lon than you rather want to add +0.00001 degrees or so)
 #'
 #' @importFrom vegan mantel
 #' @importFrom MASS kde2d
@@ -271,11 +278,10 @@ gl.ibd <- function(x = NULL,
         Dgeo <- eval(parse(text = Dgeo_trans))
         
         if (sum(is.infinite(Dgeo)) > 0) {
-            cat(
-                warn(
-                    "Some distances were zero, hence the log transformation created missing values. This affects the mantel test and also points are omitted from the plot. Consider adding an offset to your Dgeo transformation. E.g. Dgeo_trans='log(Dgeo+1)'. "
-                )
-            )
+            stop(error(
+                    "Most likely some pairwise individual distances were zero and the transformation created missing values [e.g. log(Dgeo)]. This affects the mantel test and points are omitted from the plot. Consider adding a suitable tranformation e.g. an offset to your Dgeo transformation if using a log transformation  [e.g. Dgeo_trans='log(Dgeo+1)'] or adding some 'noise' to the coordinates."
+                ))
+            
         }
         
         if (is.null(Dgeo))
