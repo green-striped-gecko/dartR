@@ -45,8 +45,9 @@ populations [default TRUE].}
 
 \item{ind.circle.cex}{(size or circles in pixels ). Defaults to 10.}
 
-\item{ind.circle.transparency}{Transparency of circles between 0=invisible and 1=no transparency. Defaults to 0.8.
-#' @param provider Passed to leaflet [default "Esri.NatGeoWorldMap"].}
+\item{ind.circle.transparency}{Transparency of circles between 0=invisible and 1=no transparency. Defaults to 0.8.}
+
+\item{provider}{Passed to leaflet [default "Esri.NatGeoWorldMap"].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report

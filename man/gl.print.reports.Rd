@@ -21,6 +21,9 @@ Prints dartR reports saved in tempdir
 reports <- gl.print.reports(1)
 }
 }
+\seealso{
+\code{\link{gl.list.reports}}
+}
 \author{
 Bernd Gruber & Luis Mijangos (bugs? Post to
  \url{https://groups.google.com/d/forum/dartr})

@@ -1,15 +1,16 @@
 #' Prints dartR reports saved in tempdir
 #'
-#'@return Prints a table with all reports saved in tempdir. Currently the style
-#'cannot be changed.
-#'@export
-#'@author Bernd Gruber & Luis Mijangos (bugs? Post to
-#'\url{https://groups.google.com/d/forum/dartr})
-#'@examples
-#'\dontrun{
+#' @return Prints a table with all reports saved in tempdir. Currently the style
+#' cannot be changed.
+#' @export
+#' @author Bernd Gruber & Luis Mijangos (bugs? Post to
+#' \url{https://groups.google.com/d/forum/dartr})
+#' @seealso \code{\link{gl.print.reports}}
+#' @examples
+#' \dontrun{
 #' gl.report.callrate(testset.gl,save2tmp=TRUE)
 #' gl.list.reports()
-#'}
+#' }
 
 gl.list.reports <- function() {
     files_tempdir_temp <- list.files(tempdir())
