@@ -19,6 +19,9 @@ gl.report.callrate(testset.gl,save2tmp=TRUE)
 gl.list.reports()
 }
 }
+\seealso{
+\code{\link{gl.print.reports}}
+}
 \author{
 Bernd Gruber & Luis Mijangos (bugs? Post to
 \url{https://groups.google.com/d/forum/dartr})
