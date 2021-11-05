@@ -9,6 +9,7 @@ gl.report.pa(
   x2 = NULL,
   method = "pairwise",
   plot.out = TRUE,
+  font_plot = 14,
   map.interactive = FALSE,
   palette_discrete = discrete_palette,
   save2tmp = FALSE,
@@ -25,6 +26,9 @@ provided here, but they must have the same number of SNPs [default NULL].}
 compare each population against the rest 'one2rest' [default 'pairwise'].}
 
 \item{plot.out}{Specify if Sankey plot is to be produced [default TRUE].}
+
+\item{font_plot}{Numeric font size in pixels for the node text labels 
+[default 14].}
 
 \item{map.interactive}{Specify whether an interactive map showing private
 alleles between populations is to be produced [default FALSE].}
