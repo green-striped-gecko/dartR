@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2sfs.R
 \name{gl2sfs}
 \alias{gl2sfs}
-\title{Convert a genlight object into a sfs input file}
+\title{Converts a genlight object into a sfs input file}
 \usage{
 gl2sfs(x, n.invariant = 0, outfile_root = "gl2sfs", outpath = tempdir())
 }

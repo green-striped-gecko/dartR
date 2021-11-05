@@ -1,4 +1,4 @@
-#' Create a Phylip input distance matrix from a genlight (SNP) \{adegenet\}
+#' Creates a Phylip input distance matrix from a genlight (SNP) \{adegenet\}
 #'  object
 #'
 #' This function calculates and returns a matrix of Euclidean distances between 

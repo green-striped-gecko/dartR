@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.evanno.r
 \name{gl.evanno}
 \alias{gl.evanno}
-\title{Create an Evanno plot from an sr structure run object}
+\title{Creates an Evanno plot from an sr structure run object}
 \usage{
 gl.evanno(sr, plot.out = TRUE)
 }

@@ -1,4 +1,4 @@
-#' Recalculate locus metrics when individuals or populations are deleted from a
+#' Recalculates locus metrics when individuals or populations are deleted from a
 #' genlight \{adegenet\} object
 #'
 #' When individuals,or populations, are deleted from a genlight object, the

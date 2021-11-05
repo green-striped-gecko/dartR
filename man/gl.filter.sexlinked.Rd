@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.filter.sexlinked.r
 \name{gl.filter.sexlinked}
 \alias{gl.filter.sexlinked}
-\title{Filter loci that are sex linked}
+\title{Filters loci that are sex linked}
 \usage{
 gl.filter.sexlinked(
   x,

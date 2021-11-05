@@ -1,4 +1,4 @@
-#' Convert genlight objects to the format used in the SNPassoc package
+#' Converts genlight objects to the format used in the SNPassoc package
 #'
 #' This function exports a genlight object into a SNPassoc object. See package
 #' SNPassoc for details. This function needs package SNPassoc. At the time of

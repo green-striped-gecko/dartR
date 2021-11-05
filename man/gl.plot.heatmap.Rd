@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.plot.heatmap.r
 \name{gl.plot.heatmap}
 \alias{gl.plot.heatmap}
-\title{gl.plot.heatmap}
+\title{Represents a distance matrix as a heatmap}
 \usage{
 gl.plot.heatmap(D, palette_divergent = diverging_palette, verbose = NULL, ...)
 }

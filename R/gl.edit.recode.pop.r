@@ -1,5 +1,5 @@
 #' @name gl.edit.recode.pop
-#' @title Create or edit a population re-assignment table
+#' @title Creates or edits a population re-assignment table
 #' @description
 #' A script to edit population assignments in a genlight object, or to
 #' create a reassignment table taking the population assignments

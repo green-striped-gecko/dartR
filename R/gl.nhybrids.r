@@ -1,5 +1,5 @@
 #' @name gl.nhybrids
-#' @title Create an input file for the program NewHybrids and run it if
+#' @title Creates an input file for the program NewHybrids and runs it if
 #'  NewHybrids is installed
 #' @description
 #' This function compares two sets of parental populations to identify loci that

@@ -1,4 +1,5 @@
-#' Prints dartR reports saved in tempdir
+#' @name gl.list.reports
+#' @title Prints dartR reports saved in tempdir
 #'
 #' @return Prints a table with all reports saved in tempdir. Currently the style
 #' cannot be changed.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2bayescan.r
 \name{gl2bayescan}
 \alias{gl2bayescan}
-\title{Convert a genlight object to format suitable for input to Bayescan}
+\title{Converts a genlight object to format suitable for input to Bayescan}
 \usage{
 gl2bayescan(x, outfile = "bayescan.txt", outpath = tempdir(), verbose = NULL)
 }

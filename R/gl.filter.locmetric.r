@@ -1,5 +1,5 @@
-#' @title gl.filter.locmetrics
-#' @title Filter loci on the basis of numeric information stored in
+#' @name gl.filter.locmetrics
+#' @title Filters loci on the basis of numeric information stored in
 #' other$loc.metrics in a genlight \{adegenet\} object
 #' @description
 #' This script uses any field with numeric values stored in $other$loc.metrics

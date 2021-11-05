@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.check.verbosity.r
 \name{gl.check.verbosity}
 \alias{gl.check.verbosity}
-\title{A function to check the current global verbosity}
+\title{Checks the current global verbosity}
 \usage{
 gl.check.verbosity(x = NULL)
 }

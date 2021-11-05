@@ -1,5 +1,5 @@
-#' @title gl.filter.maf
-#' @title Filter loci on the basis of minor allele frequency (MAF) in a genlight
+#' @name gl.filter.maf
+#' @title Filters loci on the basis of minor allele frequency (MAF) in a genlight
 #'  {adegenet} object
 #' @description
 #' This script calculates the minor allele frequency for each locus and updates

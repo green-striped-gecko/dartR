@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.monomorphs.r
 \name{gl.report.monomorphs}
 \alias{gl.report.monomorphs}
-\title{Report monomorphic loci}
+\title{Reports monomorphic loci}
 \usage{
 gl.report.monomorphs(x, verbose = NULL)
 }

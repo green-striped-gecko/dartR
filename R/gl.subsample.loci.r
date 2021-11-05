@@ -1,4 +1,4 @@
-#' Subsample n loci from a genlight object and return as a genlight object
+#' Subsamples n loci from a genlight object and return it as a genlight object
 #'
 #' This is a support script, to subsample a genlight \{adegenet\} object based
 #'  on loci. Two methods are used to subsample, random and based on information

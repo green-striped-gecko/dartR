@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.fst.pop.r
 \name{gl.fst.pop}
 \alias{gl.fst.pop}
-\title{Calculate a pairwise Fst values for populations in a genlight object}
+\title{Calculates a pairwise Fst values for populations in a genlight object}
 \usage{
 gl.fst.pop(x, nboots = 100, percent = 95, nclusters = 1, verbose = NULL)
 }

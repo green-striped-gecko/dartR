@@ -2,7 +2,7 @@
 % Please edit documentation in R/is.fixed.r
 \name{is.fixed}
 \alias{is.fixed}
-\title{Test to see if two populations are fixed at a given locus}
+\title{Tests if two populations are fixed at a given locus}
 \usage{
 is.fixed(s1, s2, tloc = 0)
 }

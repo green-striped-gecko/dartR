@@ -1,5 +1,5 @@
 #' @name gl.write.csv
-#' @title Write out data from a genlight object to csv file
+#' @title Writes out data from a genlight object to csv file
 #' @description
 #' This script writes to file the SNP genotypes with specimens as entities
 #' (columns) and loci as attributes (rows). Each row has associated locus

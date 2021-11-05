@@ -1,5 +1,5 @@
 #' @name gl.report.sexlinked
-#' @title Identify loci that are sex linked
+#' @title Identifies loci that are sex linked
 #' @description
 #' Alleles unique to the Y or W chromosome and monomorphic on the X chromosomes
 #' will appear in the SNP dataset as genotypes that are heterozygotic in all

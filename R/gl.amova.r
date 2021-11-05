@@ -1,4 +1,4 @@
-#' Performs AMOVA using genlight data.
+#' Performs AMOVA using genlight data
 #'
 #' This script performs an AMOVA based on the genetic distance matrix from
 #' stamppNeisD() [package StAMPP] using the amova() function from the package

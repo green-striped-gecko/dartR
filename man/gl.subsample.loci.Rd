@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.subsample.loci.r
 \name{gl.subsample.loci}
 \alias{gl.subsample.loci}
-\title{Subsample n loci from a genlight object and return as a genlight object}
+\title{Subsamples n loci from a genlight object and return it as a genlight object}
 \usage{
 gl.subsample.loci(x, n, method = "random", mono.rm = FALSE, verbose = NULL)
 }

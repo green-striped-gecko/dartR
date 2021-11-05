@@ -1,5 +1,5 @@
 #' @name gl.report.pa
-#' @title Report private alleles (and fixed alleles) per pair of populations
+#' @title Reports private alleles (and fixed alleles) per pair of populations
 #' @description
 #' This function reports private alleles in one population compared with a
 #' second population, for all populations taken pairwise. It also reports a
@@ -11,6 +11,8 @@
 #' @param method Method to calculate private alleles: 'pairwise' comparison or
 #' compare each population against the rest 'one2rest' [default 'pairwise'].
 #' @param plot.out Specify if Sankey plot is to be produced [default TRUE].
+#' @param font_plot Numeric font size in pixels for the node text labels 
+#' [default 14].
 #' @param map.interactive Specify whether an interactive map showing private
 #' alleles between populations is to be produced [default FALSE].
 #' @param palette_discrete A discrete palette for the color of populations or a
@@ -95,6 +97,7 @@ gl.report.pa <- function(x,
                          x2 = NULL,
                          method = "pairwise",
                          plot.out = TRUE,
+                         font_plot =14,
                          map.interactive = FALSE,
                          palette_discrete = discrete_palette,
                          save2tmp = FALSE,
@@ -278,7 +281,7 @@ gl.report.pa <- function(x,
                         units = "Private alleles",
                         colourScale = colorScal,
                         nodeWidth = 40,
-                        fontSize = 14,
+                        fontSize = font_plot,
                         nodePadding = 10
                     )
                 )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.outflank.r
 \name{gl.outflank}
 \alias{gl.outflank}
-\title{Function to identify loci under selection per population using the outflank
+\title{Identifies loci under selection per population using the outflank
 method of Whitlock and Lotterhos (2015)}
 \usage{
 gl.outflank(
@@ -16,7 +16,7 @@ gl.outflank(
 )
 }
 \arguments{
-\item{gi}{a genlight or genind object, with a defined population structure
+\item{gi}{A genlight or genind object, with a defined population structure
 [required].}
 
 \item{plot}{A switch if a barplot is wanted [default TRUE].}
@@ -35,13 +35,13 @@ from a locus [default 0.1].}
 \item{qthreshold}{The desired false discovery rate threshold for calculating
 q-values [default 0.05].}
 
-\item{...}{additional parameters (see documentation of outflank on github)}
+\item{...}{additional parameters (see documentation of outflank on github).}
 }
 \value{
-returns an index of outliers and the full outflank list
+Returns an index of outliers and the full outflank list
 }
 \description{
-Function to identify loci under selection per population using the outflank
+Identifies loci under selection per population using the outflank
 method of Whitlock and Lotterhos (2015)
 }
 \details{

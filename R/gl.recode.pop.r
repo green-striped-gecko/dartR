@@ -1,5 +1,5 @@
 #' @name gl.recode.pop
-#' @title Recode population assignments in a genlight object
+#' @title Recodes population assignments in a genlight object
 #' @description
 #' This script recodes population assignments and/or deletes populations from a
 #' DaRT genlight SNP file based on information provided in a csv population

@@ -1,5 +1,5 @@
 #' @name gl.map.structure
-#' @title Map a STRUCTURE plot using a genlight object
+#' @title Maps a STRUCTURE plot using a genlight object
 #' @description
 #' This function takes the output of plotstructure (the q matrix) and maps the
 #' q-matrix across using the population centers from the genlight object that

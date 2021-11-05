@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.taglength.r
 \name{gl.report.taglength}
 \alias{gl.report.taglength}
-\title{Report summary of sequence tag length across loci}
+\title{Reports summary of sequence tag length across loci}
 \usage{
 gl.report.taglength(
   x,

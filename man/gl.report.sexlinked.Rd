@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.sexlinked.r
 \name{gl.report.sexlinked}
 \alias{gl.report.sexlinked}
-\title{Identify loci that are sex linked}
+\title{Identifies loci that are sex linked}
 \usage{
 gl.report.sexlinked(
   x,

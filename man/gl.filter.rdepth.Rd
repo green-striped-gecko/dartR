@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.filter.rdepth.r
 \name{gl.filter.rdepth}
 \alias{gl.filter.rdepth}
-\title{Filter loci based on counts of sequence tags scored at a locus (read
+\title{Filters loci based on counts of sequence tags scored at a locus (read
 depth)}
 \usage{
 gl.filter.rdepth(

@@ -1,4 +1,4 @@
-#' Calculate a similarity (distance) matrix for individuals on the proportion of
+#' Calculates a similarity (distance) matrix for individuals on the proportion of
 #' shared alleles
 #'
 #' This script calculates an individual based distance matrix. It uses an C++

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.filter.secondaries.r
 \name{gl.filter.secondaries}
 \alias{gl.filter.secondaries}
-\title{Filter loci that represent secondary SNPs in a genlight object}
+\title{Filters loci that represent secondary SNPs in a genlight object}
 \usage{
 gl.filter.secondaries(x, method = "random", verbose = NULL)
 }

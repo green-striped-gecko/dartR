@@ -1,6 +1,6 @@
 #' @name gl.report.diversity
 #'
-#' @title Calculate diversity indexes for SNPs
+#' @title Calculates diversity indexes for SNPs
 #'
 #' @description
 #'This script takes a genlight object and calculates alpha and beta diversity

@@ -1,4 +1,4 @@
-#' Read SNP data from a csv file into a genlight object
+#' Reads SNP data from a csv file into a genlight object
 #'
 #' This script takes SNP genotypes from a csv file, combines them with
 #' individual and locus metrics and creates a genlight object.

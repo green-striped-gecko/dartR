@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2plink.r
 \name{gl2plink}
 \alias{gl2plink}
-\title{Convert a genlight object into PLINK format}
+\title{Converts a genlight object into PLINK format}
 \usage{
 gl2plink(
   x,

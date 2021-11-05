@@ -1,5 +1,5 @@
 #' @name gl.merge.pop
-#' @title Merge two or more populations in a genlight object into one population
+#' @title Merges two or more populations in a genlight object into one population
 #' @description
 #' Individuals are assigned to populations based on the specimen metadata data
 #' file (csv) used with gl.read.dart().

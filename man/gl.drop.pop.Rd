@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.drop.pop.r
 \name{gl.drop.pop}
 \alias{gl.drop.pop}
-\title{Remove specified populations from a genlight object}
+\title{Removes specified populations from a genlight object}
 \usage{
 gl.drop.pop(
   x,

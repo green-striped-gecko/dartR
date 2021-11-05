@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2related.r
 \name{gl2related}
 \alias{gl2related}
-\title{Convert a genlight object to format suitable to be run with Coancestry}
+\title{Converts a genlight object to format suitable to be run with Coancestry}
 \usage{
 gl2related(
   x,

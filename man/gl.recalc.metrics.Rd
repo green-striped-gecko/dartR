@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.recalc.metrics.r
 \name{gl.recalc.metrics}
 \alias{gl.recalc.metrics}
-\title{Recalculate locus metrics when individuals or populations are deleted from a
+\title{Recalculates locus metrics when individuals or populations are deleted from a
 genlight \{adegenet\} object}
 \usage{
 gl.recalc.metrics(x, mono.rm = FALSE, verbose = NULL)

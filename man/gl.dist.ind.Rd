@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.dist.ind.r
 \name{gl.dist.ind}
 \alias{gl.dist.ind}
-\title{Calculate a distance matrix for individuals defined in an \{adegenet\}
+\title{Calculates a distance matrix for individuals defined in an \{adegenet\}
  genlight object}
 \usage{
 gl.dist.ind(

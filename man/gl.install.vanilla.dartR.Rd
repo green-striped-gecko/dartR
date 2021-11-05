@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.install.vanilla.dartR.r
 \name{gl.install.vanilla.dartR}
 \alias{gl.install.vanilla.dartR}
-\title{This functions installs all required packages for using all functions
+\title{Installs all required packages for using all functions
 available in dartR}
 \usage{
 gl.install.vanilla.dartR(flavour = NULL, verbose = TRUE)

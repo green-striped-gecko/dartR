@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.edit.recode.pop.r
 \name{gl.edit.recode.pop}
 \alias{gl.edit.recode.pop}
-\title{Create or edit a population re-assignment table}
+\title{Creates or edits a population re-assignment table}
 \usage{
 gl.edit.recode.pop(
   x,

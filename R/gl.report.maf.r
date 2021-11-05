@@ -1,5 +1,5 @@
 #' @name gl.report.maf
-#' @title Report minor allele frequency (MAF) for each locus in a SNP dataset
+#' @title Reports minor allele frequency (MAF) for each locus in a SNP dataset
 #' @description
 #' This script provides summary histograms of MAF for each
 #' population in the dataset and an overall histogram to assist the decision of

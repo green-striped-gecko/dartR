@@ -1,5 +1,5 @@
-#' Export DArT genlight object \{adegenet\} to faststructure format (to run
-#' faststructure elsewhere)
+#' Exports DArT genlight object \{adegenet\} to faststructure format (to run
+#'  faststructure elsewhere)
 #'
 #' Recodes in the quite specific faststructure format (e.g first six columns
 #' need to be there, but are ignored...check faststructure documentation

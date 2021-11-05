@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.read.dart.r
 \name{utils.read.dart}
 \alias{utils.read.dart}
-\title{Import DarT data to R}
+\title{Imports DarT data to R}
 \usage{
 utils.read.dart(
   filename,

@@ -1,5 +1,5 @@
 #' @name gl.drop.ind
-#' @title Remove specified individuals from a genlight \{adegenet\} object
+#' @title Removes specified individuals from a genlight \{adegenet\} object
 #' @description
 #' The script, having deleted individuals, optionally identifies resultant
 #' monomorphic loci or loci with all values missing and deletes them

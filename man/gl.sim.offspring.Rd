@@ -14,7 +14,7 @@ gl.sim.offspring(fathers, mothers, noffpermother, sexratio = 0.5)
 
 \item{noffpermother}{Number of offspring per mother [required].}
 
-\item{sexratio}{The sex ratio of simulated offsprings 
+\item{sexratio}{The sex ratio of simulated offspring 
 (females / females +males, 1 equals 100 percent females) [default 0.5.].}
 }
 \value{

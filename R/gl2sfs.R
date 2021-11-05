@@ -1,4 +1,4 @@
-#'Convert a genlight object into a sfs input file
+#'Converts a genlight object into a sfs input file
 #'
 #'The output of this function is suitable for analysis in fastsimcoal2 or dada.
 #'

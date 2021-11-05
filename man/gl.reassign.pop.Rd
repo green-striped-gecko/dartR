@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.reassign.pop.r
 \name{gl.reassign.pop}
 \alias{gl.reassign.pop}
-\title{Assign a individual metric as pop in a genlight \{adegenet\} object}
+\title{Assigns an individual metric as pop in a genlight \{adegenet\} object}
 \usage{
 gl.reassign.pop(x, as.pop, verbose = NULL)
 }

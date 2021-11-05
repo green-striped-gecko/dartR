@@ -1,5 +1,5 @@
 #' @name gl2vcf
-#' @title Convert a genlight object into vcf format
+#' @title Converts a genlight object into vcf format
 #' @description
 #' This function exports a genlight object into VCF format and save it into a
 #' file.

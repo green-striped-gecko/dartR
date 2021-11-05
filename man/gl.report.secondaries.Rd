@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.secondaries.r
 \name{gl.report.secondaries}
 \alias{gl.report.secondaries}
-\title{Report loci containing secondary SNPs in sequence tags and calculates
+\title{Reports loci containing secondary SNPs in sequence tags and calculates
   number of invariant sites}
 \usage{
 gl.report.secondaries(

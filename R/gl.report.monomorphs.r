@@ -1,5 +1,5 @@
 #' @name gl.report.monomorphs
-#' @title Report monomorphic loci
+#' @title Reports monomorphic loci
 #' @description
 #' This script reports the number of monomorphic loci and those with all NAs in
 #' a genlight \{adegenet\} object
