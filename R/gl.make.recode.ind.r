@@ -1,5 +1,5 @@
 #' @name gl.make.recode.ind
-#' @title Create a proforma recode_ind file for reassigning individual
+#' @title Creates a proforma recode_ind file for reassigning individual
 #'  (=specimen) names
 #' @description
 #' Renaming individuals may be required when there have been errors in

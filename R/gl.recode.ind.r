@@ -1,5 +1,5 @@
 #' @name gl.recode.ind
-#' @title Recode individual (=specimen = sample) labels in a genlight object
+#' @title Recodes individual (=specimen = sample) labels in a genlight object
 #' @description
 #' This script recodes individual labels and/or deletes individuals from a DaRT
 #' genlight SNP file based on a lookup table provided as a csv file.

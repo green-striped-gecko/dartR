@@ -1,7 +1,7 @@
-#' Function to identify loci under selection per population using the outflank
+#' Identifies loci under selection per population using the outflank
 #' method of Whitlock and Lotterhos (2015)
 #'
-#' @param gi a genlight or genind object, with a defined population structure
+#' @param gi A genlight or genind object, with a defined population structure
 #' [required].
 #' @param plot A switch if a barplot is wanted [default TRUE].
 #' @param LeftTrimFraction The proportion of loci that are trimmed from the
@@ -14,8 +14,8 @@
 #' from a locus [default 0.1].
 #' @param qthreshold The desired false discovery rate threshold for calculating
 #' q-values [default 0.05].
-#' @param ... additional parameters (see documentation of outflank on github)
-#' @return returns an index of outliers and the full outflank list
+#' @param ... additional parameters (see documentation of outflank on github). 
+#' @return Returns an index of outliers and the full outflank list
 #' @details
 #' This function is a wrapper around the outflank function provided by
 #' Whitlock and Lotterhos. To be able to run this function the packages qvalue

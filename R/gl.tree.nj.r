@@ -1,4 +1,4 @@
-#' Output an nj tree to summarize genetic similarity among populations
+#' Outputs an nj tree to summarize genetic similarity among populations
 #'
 #' This function is a wrapper for the nj\{ape\} function applied to Euclidian
 #' distances calculated from the genlight object.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.bases.r
 \name{gl.report.bases}
 \alias{gl.report.bases}
-\title{Report summary of base pair frequencies}
+\title{Reports summary of base pair frequencies}
 \usage{
 gl.report.bases(
   x,

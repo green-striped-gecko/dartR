@@ -1,4 +1,4 @@
-#' Load an object from compressed binary format produced by gl.save()
+#' Loads an object from compressed binary format produced by gl.save()
 #'
 #' This is a wrapper for readRDS()
 #'

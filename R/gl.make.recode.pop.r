@@ -1,5 +1,5 @@
 #' @name gl.make.recode.pop
-#' @title Create a proforma recode_pop_table file for reassigning population
+#' @title Creates a proforma recode_pop_table file for reassigning population
 #' names
 #' @description
 #' Renaming populations may be required when there have been errors in

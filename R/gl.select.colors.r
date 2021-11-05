@@ -1,5 +1,5 @@
 #' @name gl.select.colors
-#' @title Select colors from one of several palettes and output as a vector
+#' @title Selects colors from one of several palettes and output as a vector
 #' @description
 #' This script draws upon a number of specified color libraries to extract a
 #' vector of colors for plotting, where the script that follows has a color

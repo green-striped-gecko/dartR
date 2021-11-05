@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.amova.r
 \name{gl.amova}
 \alias{gl.amova}
-\title{Performs AMOVA using genlight data.}
+\title{Performs AMOVA using genlight data}
 \usage{
 gl.amova(x, distance = NULL, permutations = 100, verbose = NULL)
 }

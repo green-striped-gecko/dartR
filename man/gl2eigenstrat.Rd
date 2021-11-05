@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2eigenstrat.r
 \name{gl2eigenstrat}
 \alias{gl2eigenstrat}
-\title{Convert a genlight object into eigenstrat format}
+\title{Converts a genlight object into eigenstrat format}
 \usage{
 gl2eigenstrat(
   x,

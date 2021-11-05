@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.read.silicodart.r
 \name{gl.read.silicodart}
 \alias{gl.read.silicodart}
-\title{Import presence/absence data from SilicoDArT to genlight \{agegenet\}
+\title{Imports presence/absence data from SilicoDArT to genlight \{agegenet\}
 format (ploidy=1)}
 \usage{
 gl.read.silicodart(
@@ -31,9 +31,9 @@ specimen identities) [optional].}
 individuals will not match. You can also specify the last column by a number
  [default "Reproducibility"].}
 
-\item{probar}{show progress bar [default TRUE].}
+\item{probar}{Show progress bar [default TRUE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, or as set by gl.set.verbose()].}
 }

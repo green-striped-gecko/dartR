@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.pa.r
 \name{gl.report.pa}
 \alias{gl.report.pa}
-\title{Report private alleles (and fixed alleles) per pair of populations}
+\title{Reports private alleles (and fixed alleles) per pair of populations}
 \usage{
 gl.report.pa(
   x,

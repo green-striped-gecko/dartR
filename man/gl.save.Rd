@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.save.r
 \name{gl.save}
 \alias{gl.save}
-\title{Save an object in compressed binary format for later rapid retrieval}
+\title{Saves an object in compressed binary format for later rapid retrieval}
 \usage{
 gl.save(x, file, verbose = NULL)
 }

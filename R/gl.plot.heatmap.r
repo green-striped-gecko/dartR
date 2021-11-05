@@ -1,5 +1,5 @@
-#' @title gl.plot.heatmap
-#' @title Represent a distance matrix as a heatmap
+#' @name gl.plot.heatmap
+#' @title Represents a distance matrix as a heatmap
 #' @description
 #' The script plots a heat map to represent the distances in the distance or
 #' dissimilarity matrix. This function is a wrapper for

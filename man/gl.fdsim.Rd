@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.fdsim.r
 \name{gl.fdsim}
 \alias{gl.fdsim}
-\title{Estimate the rate of false positives in a fixed difference analysis}
+\title{Estimates the rate of false positives in a fixed difference analysis}
 \usage{
 gl.fdsim(
   x,

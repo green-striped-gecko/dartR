@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.filter.maf.r
 \name{gl.filter.maf}
 \alias{gl.filter.maf}
-\title{gl.filter.maf}
+\title{Filters loci on the basis of minor allele frequency (MAF) in a genlight
+ {adegenet} object}
 \usage{
 gl.filter.maf(x, threshold = 0.01, verbose = NULL)
 }

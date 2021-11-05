@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.make.recode.pop.r
 \name{gl.make.recode.pop}
 \alias{gl.make.recode.pop}
-\title{Create a proforma recode_pop_table file for reassigning population
+\title{Creates a proforma recode_pop_table file for reassigning population
 names}
 \usage{
 gl.make.recode.pop(

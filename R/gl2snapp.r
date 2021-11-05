@@ -1,4 +1,4 @@
-#' Convert a genlight object to nexus format suitable for phylogenetic analysis
+#' Converts a genlight object to nexus format suitable for phylogenetic analysis
 #'  by SNAPP (via BEAUti)
 #'
 #' The output nexus file contains the SNP data and relevant PAUP command lines

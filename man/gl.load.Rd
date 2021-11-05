@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.load.r
 \name{gl.load}
 \alias{gl.load}
-\title{Load an object from compressed binary format produced by gl.save()}
+\title{Loads an object from compressed binary format produced by gl.save()}
 \usage{
 gl.load(file, verbose = NULL)
 }

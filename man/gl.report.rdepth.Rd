@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.rdepth.r
 \name{gl.report.rdepth}
 \alias{gl.report.rdepth}
-\title{Report summary of Read Depth for each locus}
+\title{Reports summary of Read Depth for each locus}
 \usage{
 gl.report.rdepth(
   x,

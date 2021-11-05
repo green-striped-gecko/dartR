@@ -1,5 +1,5 @@
 #' @name gl.evanno
-#' @title Create an Evanno plot from an sr structure run object
+#' @title Creates an Evanno plot from an sr structure run object
 #' @description
 #' This function takes a genlight object and runs a STRUCTURE analysis based on
 #' functions from \code{strataG}

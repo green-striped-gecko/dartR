@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.dist.binary.r
 \name{utils.dist.binary}
 \alias{utils.dist.binary}
-\title{Calculate a distance matrix for individuals defined in an \{adegenet\}
+\title{Calculates a distance matrix for individuals defined in an \{adegenet\}
 genlight object using binary P/A data (SilicoDArT)}
 \usage{
 utils.dist.binary(x, method = "simple", verbose = NULL)

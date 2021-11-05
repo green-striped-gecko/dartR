@@ -1,4 +1,4 @@
-#' Convert a genlight object to format suitable to be run with Coancestry
+#' Converts a genlight object to format suitable to be run with Coancestry
 #'
 #' The output txt file contains the SNP data and an additional column with the
 #' names of the individual. The file then can be used and loaded into coancestry

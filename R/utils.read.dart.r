@@ -1,4 +1,4 @@
-#' Import DarT data to R
+#' Imports DarT data to R
 #'
 #' Internal function called by gl.read.dart
 #' @param filename Path to file (csv file only currently) [required].

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.keep.pop.r
 \name{gl.keep.pop}
 \alias{gl.keep.pop}
-\title{Remove all but specified populations from a genlight \{adegenet\}
+\title{Removes all but specified populations from a genlight \{adegenet\}
 object}
 \usage{
 gl.keep.pop(

@@ -1,4 +1,4 @@
-#' Convert a genlight object to nexus format PAUP SVDquartets
+#' Converts a genlight object to nexus format PAUP SVDquartets
 #'
 #' The output nexus file contains the SNP data in one of two forms, depending
 #' upon what you regard as most appropriate. One form, that used by Chifman and

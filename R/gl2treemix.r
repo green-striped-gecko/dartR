@@ -1,4 +1,4 @@
-#' Convert a genlight object to a treemix input file
+#' Converts a genlight object to a treemix input file
 #'
 #' The output file contains the SNP data in the format expected by treemix --
 #' see the treemix manual. The file will be gzipped before in order to be

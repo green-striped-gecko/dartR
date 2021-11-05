@@ -1,6 +1,6 @@
 #' @name gl.plot.structure
 #'
-#' @title Plot a STRUCTURE analysis using a genlight object
+#' @title Plots a STRUCTURE analysis using a genlight object
 #'
 #' @description
 #' This function takes a structure run object (output from

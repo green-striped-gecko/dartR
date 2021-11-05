@@ -1,5 +1,5 @@
 #' @name gl.define.pop
-#' @title Define a new population in a genlight object for specified individuals
+#' @title Defines a new population in a genlight object for specified individuals
 #' @description
 #' The script reassigns existing individuals to a new population and removes
 #' their existing population assignment.

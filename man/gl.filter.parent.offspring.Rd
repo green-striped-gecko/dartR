@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.filter.parent.offspring.r
 \name{gl.filter.parent.offspring}
 \alias{gl.filter.parent.offspring}
-\title{Filter putative parent offspring within a population}
+\title{Filters putative parent offspring within a population}
 \usage{
 gl.filter.parent.offspring(
   x,

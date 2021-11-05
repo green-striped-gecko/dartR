@@ -1,5 +1,5 @@
 #' @name gl.filter.parent.offspring
-#' @title Filter putative parent offspring within a population
+#' @title Filters putative parent offspring within a population
 #' @description
 #' This script removes individuals suspected of being related as
 #' parent-offspring,using the output of the function

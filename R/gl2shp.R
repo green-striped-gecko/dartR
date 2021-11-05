@@ -1,4 +1,4 @@
-#' Convert genlight objects to ESRI shapefiles or kml files
+#' Converts genlight objects to ESRI shapefiles or kml files
 #'
 #' This function exports coordinates in a genlight object to a point shape file
 #'  (including also individual meta data if available).

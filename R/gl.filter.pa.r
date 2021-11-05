@@ -1,7 +1,7 @@
-#' Filter loci that contain private (and fixed alleles) between two populations.
+#' Filters loci that contain private (and fixed alleles) between two populations
 #'
 #' This script is meant to be used prior to \code{gl.nhybrids} to maximise the
-#' information content of the snps used to identify hybrids (currently
+#' information content of the SNPs used to identify hybrids (currently
 #'  newhybrids does allow only 200 SNPs). The idea is to use first all loci that
 #'   have fixed alleles between the potential source populations and then 'fill
 #'    up' to 200 loci using loci that have private alleles between those. The

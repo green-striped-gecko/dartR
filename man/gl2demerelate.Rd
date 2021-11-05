@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2demerelate.r
 \name{gl2demerelate}
 \alias{gl2demerelate}
-\title{Create a dataframe suitable for input to package \{Demerelate\} from a
+\title{Creates a dataframe suitable for input to package \{Demerelate\} from a
 genlight \{adegenet\} object}
 \usage{
 gl2demerelate(x, verbose = NULL)
@@ -18,7 +18,7 @@ progress log; 3, progress and results summary; 5, full report
 A dataframe suitable as input to package \{Demerelate\}
 }
 \description{
-Create a dataframe suitable for input to package \{Demerelate\} from a
+Creates a dataframe suitable for input to package \{Demerelate\} from a
 genlight \{adegenet\} object
 }
 \examples{

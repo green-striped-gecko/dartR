@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.read.csv.r
 \name{gl.read.csv}
 \alias{gl.read.csv}
-\title{Read SNP data from a csv file into a genlight object}
+\title{Reads SNP data from a csv file into a genlight object}
 \usage{
 gl.read.csv(
   filename,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.run.structure.r
 \name{gl.run.structure}
 \alias{gl.run.structure}
-\title{Run a STRUCTURE analysis using a genlight object}
+\title{Runs a STRUCTURE analysis using a genlight object}
 \usage{
 gl.run.structure(
   x,

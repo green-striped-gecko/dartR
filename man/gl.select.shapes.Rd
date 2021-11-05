@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.select.shapes.r
 \name{gl.select.shapes}
 \alias{gl.select.shapes}
-\title{Select shapes from the base R shape palette and output as a vector}
+\title{Selects shapes from the base R shape palette and outputs as a vector}
 \usage{
 gl.select.shapes(x = NULL, select = NULL, verbose = NULL)
 }

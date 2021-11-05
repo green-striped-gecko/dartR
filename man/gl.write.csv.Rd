@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.write.csv.r
 \name{gl.write.csv}
 \alias{gl.write.csv}
-\title{Write out data from a genlight object to csv file}
+\title{Writes out data from a genlight object to csv file}
 \usage{
 gl.write.csv(x, outfile = "outfile.csv", outpath = tempdir(), verbose = NULL)
 }

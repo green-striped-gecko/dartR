@@ -1,5 +1,5 @@
 #' @name gl.assign.pa
-#' @title Eliminate populations as possible source populations for an individual
+#' @title Eliminates populations as possible source populations for an individual
 #'  of unknown provenance, using private alleles
 #' @description
 #' This script eliminates from consideration as putative source populations,

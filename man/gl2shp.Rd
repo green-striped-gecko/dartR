@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2shp.R
 \name{gl2shp}
 \alias{gl2shp}
-\title{Convert genlight objects to ESRI shapefiles or kml files}
+\title{Converts genlight objects to ESRI shapefiles or kml files}
 \usage{
 gl2shp(
   x,

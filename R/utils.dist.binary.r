@@ -1,5 +1,5 @@
 #' @name utils.dist.binary
-#' @title Calculate a distance matrix for individuals defined in an \{adegenet\}
+#' @title Calculates a distance matrix for individuals defined in an \{adegenet\}
 #' genlight object using binary P/A data (SilicoDArT)
 #' @description
 #' This script calculates various distances between individuals based on Tag

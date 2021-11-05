@@ -1,5 +1,5 @@
 #' @name gl.report.reproducibility
-#' @title Report summary of RepAvg (repeatability averaged over both alleles for
+#' @title Reports summary of RepAvg (repeatability averaged over both alleles for
 #' each locus) or reproducibility (repeatability of the scores for fragment
 #' presence/absence)
 #' @description

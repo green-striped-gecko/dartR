@@ -1,5 +1,5 @@
 #' @name gl2plink
-#' @title Convert a genlight object into PLINK format
+#' @title Converts a genlight object into PLINK format
 #' @description
 #' This function exports a genlight object into PLINK format and save it into a
 #' file.

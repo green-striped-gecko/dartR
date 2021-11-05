@@ -1,4 +1,4 @@
-#' Create a dataframe suitable for input to package \{Demerelate\} from a
+#' Creates a dataframe suitable for input to package \{Demerelate\} from a
 #' genlight \{adegenet\} object
 #'
 #' @param x Name of the genlight object containing the SNP data [required].

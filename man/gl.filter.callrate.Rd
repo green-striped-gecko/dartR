@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.filter.callrate.r
 \name{gl.filter.callrate}
 \alias{gl.filter.callrate}
-\title{Filter loci or specimens in a genlight \{adegenet\} object based on
+\title{Filters loci or specimens in a genlight \{adegenet\} object based on
 call rate}
 \usage{
 gl.filter.callrate(

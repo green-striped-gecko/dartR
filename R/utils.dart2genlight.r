@@ -1,4 +1,4 @@
-#' Convert DarT to genlight
+#' Converts DarT to genlight
 #'
 #' @description Converts a DArT file (read via \code{read.dart}) into an
 #' genlight object \code{\link{adegenet}}. Internal function called by

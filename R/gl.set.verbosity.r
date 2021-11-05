@@ -1,5 +1,5 @@
-#' @title gl.set.verbosity
-#' @title Set the default verbosity level
+#' @name gl.set.verbosity
+#' @title Sets the default verbosity level
 #' @description
 #' dartR functions have a verbosity parameter that sets the level of reporting
 #'  during the execution of the function. The verbosity level, set by parameter

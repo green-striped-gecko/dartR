@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.percent.freq.r
 \name{gl.percent.freq}
 \alias{gl.percent.freq}
-\title{Generate percentage allele frequencies by locus and population}
+\title{Generates percentage allele frequencies by locus and population}
 \usage{
 gl.percent.freq(x, verbose = NULL)
 }

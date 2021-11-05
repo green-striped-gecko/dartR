@@ -1,5 +1,5 @@
 #' @name gl.keep.ind
-#' @title Remove all but the specified individuals from a genlight \{adegenet\}
+#' @title Removes all but the specified individuals from a genlight \{adegenet\}
 #' object
 #' @description
 #' The script, having deleted individuals, optionally identifies resultant

@@ -1,6 +1,6 @@
 #' @name gl.report.locmetric
 #'
-#' @title Report summary of the slot $other$loc.metrics
+#' @title Reports summary of the slot $other$loc.metrics
 #'
 #' @description
 #' This script uses any field with numeric values stored in $other$loc.metrics

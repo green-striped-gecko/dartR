@@ -1,6 +1,6 @@
 #' @name gl.report.bases
 #'
-#' @title Report summary of base pair frequencies
+#' @title Reports summary of base pair frequencies
 #'
 #' @description
 #' This script calculates the frequencies of the four DNA nucleotide bases:
@@ -21,7 +21,8 @@
 #' progress log; 3, progress and results summary; 5, full report
 #'  [default NULL, unless specified using gl.set.verbosity]
 #'
-#' @details The script checks first if trimmed sequences are included in the
+#' @details 
+#' The script checks first if trimmed sequences are included in the
 #' locus metadata (@@other$loc.metrics$TrimmedSequence), and if so, tallies up
 #' the numbers of A, T, G and C bases. Only the reference state at the SNP locus
 #' is counted. Counts of transitions (Ts) and transversions (Tv) assume that

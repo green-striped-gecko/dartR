@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2snapp.r
 \name{gl2snapp}
 \alias{gl2snapp}
-\title{Convert a genlight object to nexus format suitable for phylogenetic analysis
+\title{Converts a genlight object to nexus format suitable for phylogenetic analysis
  by SNAPP (via BEAUti)}
 \usage{
 gl2snapp(x, outfile = "snapp.nex", outpath = tempdir(), verbose = NULL)

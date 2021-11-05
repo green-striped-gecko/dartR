@@ -1,5 +1,5 @@
 #' @name gl.select.shapes
-#' @title Select shapes from the base R shape palette and output as a vector
+#' @title Selects shapes from the base R shape palette and outputs as a vector
 #' @description
 #' This script draws upon the standard R shape palette to extract a vector of
 #' shapes for plotting, where the script that follows has a shape parameter

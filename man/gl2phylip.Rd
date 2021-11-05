@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2phylip.r
 \name{gl2phylip}
 \alias{gl2phylip}
-\title{Create a Phylip input distance matrix from a genlight (SNP) \{adegenet\}
+\title{Creates a Phylip input distance matrix from a genlight (SNP) \{adegenet\}
  object}
 \usage{
 gl2phylip(

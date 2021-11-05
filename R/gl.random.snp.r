@@ -1,5 +1,5 @@
 #' @name gl.random.snp
-#' @title Randomly change the allocation of 0's and 2's in a genlight object
+#' @title Randomly changes the allocation of 0's and 2's in a genlight object
 #' @description
 #' This function samples randomly half of the SNPs and re-codes, in the sampled
 #' SNP's, 0's by 2's.

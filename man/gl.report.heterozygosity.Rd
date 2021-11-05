@@ -28,11 +28,11 @@ to adjust the heterozygosity rate [default 0].}
 
 \item{plot.out}{Whether produce a plot of the results [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See Details for options 
+\item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}
 
 \item{plot_colors_pop}{A color palette for population plots or a list with
-as many colors as there are populations in the dataset 
+as many colors as there are populations in the dataset
 [default discrete_palette].}
 
 \item{plot_colors_ind}{List of two color names for the borders and fill of
@@ -88,23 +88,23 @@ where n_Ind is the number of individuals without missing data.
 \item Observed heterozygosity adjusted (Ho.adj) <- Ho * n_Loc /
  (n_Loc + n.invariant),
 where n_Loc is the number of loci that do not have all missing data  and
-n.invariant is an estimate of the number of invariant loci to adjust 
+n.invariant is an estimate of the number of invariant loci to adjust
 heterozygosity.
 \item Expected heterozygosity (He) = 1 - (p^2 + q^2),
 where p is the frequency of the reference allele and q is the frequency of
 the alternative allele.
-\item Expected heterozygosity adjusted (He.adj) = He * n_Loc / 
+\item Expected heterozygosity adjusted (He.adj) = He * n_Loc /
 (n_Loc + n.invariant)
-\item Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / 
+\item Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind /
 (2 * n_Ind - 1))
-\item Inbreeding coefficient (FIS) = 1 - (Ho / uHe)
+\item Inbreeding coefficient (FIS) = 1 - (mean(Ho) / mean(uHe))
 }
 
 \strong{ Function's output }
 
 Output for method='pop' is an ordered barchart of observed heterozygosity,
 expected heterozygosity and FIS (Inbreeding coefficient) across populations
-together with a table of mean observed and expected heterozygosities and FIS 
+together with a table of mean observed and expected heterozygosities and FIS
 by population and their respective standard deviations (SD).
 
 Output for method='ind' is a histogram and a boxplot of heterozygosity across
@@ -135,7 +135,7 @@ Other reporting functions:
 \code{\link{gl.report.sexlinked}()}
 }
 \author{
-Custodian: Luis Mijangos (Post to 
+Custodian: Luis Mijangos (Post to
 \url{https://groups.google.com/d/forum/dartr})
 }
 \concept{reporting functions}

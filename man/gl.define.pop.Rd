@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.define.pop.r
 \name{gl.define.pop}
 \alias{gl.define.pop}
-\title{Define a new population in a genlight object for specified individuals}
+\title{Defines a new population in a genlight object for specified individuals}
 \usage{
 gl.define.pop(x, ind.list, new, verbose = NULL)
 }

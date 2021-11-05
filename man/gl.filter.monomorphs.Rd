@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.filter.monomorphs.r
 \name{gl.filter.monomorphs}
 \alias{gl.filter.monomorphs}
-\title{Remove monomorphic loci, including those with all NAs}
+\title{Removes monomorphic loci, including those with all NAs}
 \usage{
 gl.filter.monomorphs(x, verbose = NULL)
 }

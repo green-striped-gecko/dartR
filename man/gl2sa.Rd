@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2sa.r
 \name{gl2sa}
 \alias{gl2sa}
-\title{Convert genlight objects to the format used in the SNPassoc package}
+\title{Converts genlight objects to the format used in the SNPassoc package}
 \usage{
 gl2sa(x, verbose = NULL, installed = FALSE)
 }

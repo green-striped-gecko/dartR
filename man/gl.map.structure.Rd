@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.map.structure.r
 \name{gl.map.structure}
 \alias{gl.map.structure}
-\title{Map a STRUCTURE plot using a genlight object}
+\title{Maps a STRUCTURE plot using a genlight object}
 \usage{
 gl.map.structure(
   qmat,

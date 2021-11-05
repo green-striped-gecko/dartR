@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.maf.r
 \name{gl.report.maf}
 \alias{gl.report.maf}
-\title{Report minor allele frequency (MAF) for each locus in a SNP dataset}
+\title{Reports minor allele frequency (MAF) for each locus in a SNP dataset}
 \usage{
 gl.report.maf(
   x,

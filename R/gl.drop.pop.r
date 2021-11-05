@@ -1,5 +1,5 @@
 #' @name gl.drop.pop
-#' @title Remove specified populations from a genlight object
+#' @title Removes specified populations from a genlight object
 #' @description
 #' Individuals are assigned to populations based on the specimen metadata data
 #' file (csv) used with \code{\link{gl.read.dart}}.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.nhybrids.r
 \name{gl.nhybrids}
 \alias{gl.nhybrids}
-\title{Create an input file for the program NewHybrids and run it if
+\title{Creates an input file for the program NewHybrids and runs it if
  NewHybrids is installed}
 \usage{
 gl.nhybrids(

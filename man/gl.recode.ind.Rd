@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.recode.ind.r
 \name{gl.recode.ind}
 \alias{gl.recode.ind}
-\title{Recode individual (=specimen = sample) labels in a genlight object}
+\title{Recodes individual (=specimen = sample) labels in a genlight object}
 \usage{
 gl.recode.ind(x, ind.recode, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }

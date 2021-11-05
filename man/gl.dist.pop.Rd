@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.dist.pop.r
 \name{gl.dist.pop}
 \alias{gl.dist.pop}
-\title{Calculate a distance matrix for populations with SNP genotypes in a
+\title{Calculates a distance matrix for populations with SNP genotypes in a
 genlight object}
 \usage{
 gl.dist.pop(

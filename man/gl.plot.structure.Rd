@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.plot.structure.r
 \name{gl.plot.structure}
 \alias{gl.plot.structure}
-\title{Plot a STRUCTURE analysis using a genlight object}
+\title{Plots a STRUCTURE analysis using a genlight object}
 \usage{
 gl.plot.structure(sr, k, sort = NULL, CLUMPP = "./", ..., plot_theme, verbose)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2genalex.r
 \name{gl2genalex}
 \alias{gl2genalex}
-\title{Convert a genlight object to format suitable for input to genalex}
+\title{Converts a genlight object to format suitable for input to genalex}
 \usage{
 gl2genalex(
   x,

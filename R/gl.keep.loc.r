@@ -1,5 +1,5 @@
 #' @name gl.keep.loc
-#' @title Remove all but the specified loci from a genlight \{adegenet\} object
+#' @title Removes all but the specified loci from a genlight \{adegenet\} object
 #' @description
 #' The script returns a genlight object with the all but the specified loci
 #' deleted.

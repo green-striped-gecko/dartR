@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.select.colors.r
 \name{gl.select.colors}
 \alias{gl.select.colors}
-\title{Select colors from one of several palettes and output as a vector}
+\title{Selects colors from one of several palettes and output as a vector}
 \usage{
 gl.select.colors(
   x = NULL,

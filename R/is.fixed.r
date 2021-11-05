@@ -1,4 +1,4 @@
-#' Test to see if two populations are fixed at a given locus
+#' Tests if two populations are fixed at a given locus
 #'
 #' This script compares two percent allele frequencies
 #' and reports TRUE if they represent a fixed difference, FALSE otherwise.

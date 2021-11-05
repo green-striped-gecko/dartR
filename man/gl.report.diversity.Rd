@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.diversity.r
 \name{gl.report.diversity}
 \alias{gl.report.diversity}
-\title{Calculate diversity indexes for SNPs}
+\title{Calculates diversity indexes for SNPs}
 \usage{
 gl.report.diversity(
   x,

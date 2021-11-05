@@ -1,5 +1,5 @@
 #' @name gl.keep.pop
-#' @title Remove all but specified populations from a genlight \{adegenet\}
+#' @title Removes all but specified populations from a genlight \{adegenet\}
 #' object
 #' @description
 #' Individuals are assigned to populations based on the specimen metadata data

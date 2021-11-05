@@ -1,4 +1,4 @@
-#' Calculate a pairwise Fst values for populations in a genlight object
+#' Calculates a pairwise Fst values for populations in a genlight object
 #'
 #' This script calculates pairwise Fst values based on the implementation in the
 #' StAMPP package (?stamppFst). It allows to run bootstrap to estimate

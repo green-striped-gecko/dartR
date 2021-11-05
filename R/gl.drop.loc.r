@@ -1,5 +1,5 @@
 #' @name gl.drop.loc
-#' @title Remove specified loci from a genlight \{adegenet\} object
+#' @title Removes specified loci from a genlight \{adegenet\} object
 #' @description
 #' The script returns a genlight object with specified loci deleted.
 #'
