@@ -50,7 +50,7 @@ gl.reassign.pop <- function(x,
     
     # DO THE JOB
     
-    pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
+    pop(x) <- x@other$ind.metrics[[as.pop]]
     if (verbose >= 2) {
         cat(report(
             "  Setting population assignments to individual metric",
