@@ -12,8 +12,8 @@
 #' exceed a user specified threshold.
 #'
 #' An excessive count of private alleles is an indication that the unknown does
-#'  not belong to a target population (provided that the sample size is
-#'  adequate, say >=10).
+#' not belong to a target population (provided that the sample size is
+#' adequate, say >=10).
 #'
 #' @param x Name of the input genlight object [required].
 #' @param unknown SpecimenID label (indName) of the focal individual whose
@@ -38,8 +38,7 @@
 #' @importFrom stats dnorm qnorm
 #' @export
 #'
-#' @author Custodian: Arthur Georges -- Post to
-#'  \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 #'   x <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,verbose=3)
@@ -59,7 +58,7 @@ gl.assign.pa <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jackson",
+                     build = "Jody",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -257,7 +256,7 @@ gl.assign.pa <- function(x,
     for (m in levels(as.factor(count))) {
         if (as.numeric(as.character(m)) > threshold) {
             if (verbose >= 3) {
-                cat(paste0("  >", threshold, "---"))
+                cat(paste0("  >", threshold, " ---"))
             }
         }
         if (verbose >= 3) {
@@ -314,7 +313,7 @@ gl.assign.pa <- function(x,
                             nPop(gl) - 1,
                             "putative source populations for",
                             unknown,
-                            "based on the specified threshold\n"
+                            " (the unknown) based on the specified threshold\n"
                         )
                     )
                     cat(report("  Monomorphic loci removed\n"))
