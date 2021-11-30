@@ -68,8 +68,7 @@ Suggests:
     markdown,
     RColorBrewer,
     scales,
-    SIBER,
-    testthat (>= 3.0.0)
+    SIBER
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2
@@ -83,4 +82,3 @@ Author: Bernd Gruber [aut, cre],
   Lindsay V. Clark [ctb],
   Floriaan Devloo-Delva [ctb]
 Maintainer: Bernd Gruber <bernd.gruber@canberra.edu.au>
-Config/testthat/edition: 3
