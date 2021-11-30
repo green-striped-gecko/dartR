@@ -285,11 +285,6 @@ gl.report.pa <- function(x,
                         nodePadding = 10
                     )
                 )
-            
-            if (map.interactive) {
-                labs <- popNames(x)
-                gl.map.interactive(x, matrix = mm, symmetric = FALSE)
-            }
         }
     }
     
@@ -445,6 +440,10 @@ gl.report.pa <- function(x,
     
     # PRINTING OUTPUTS
     if (plot.out) {
+        if (map.interactive) {
+            labs <- popNames(x)
+            gl.map.interactive(x, matrix = mm, symmetric = FALSE)
+        }
         # using package patchwork
         print(p3)
     }
