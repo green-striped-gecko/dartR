@@ -64,7 +64,7 @@
 
 gl.assign.pca <- function(x,
                           unknown,
-                          plevel = 0.95,
+                          plevel = 0.995,
                           verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
