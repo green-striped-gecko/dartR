@@ -39,12 +39,15 @@
 #'
 #' Each of these approaches provides evidence, none are 100% definitive. They
 #'  need to be interpreted cautiously. They are best applied sequentially.
+#'  
+#' In deciding the assignment, the script considers an individual to be an
+#' outlier with respect to a particular population at alpha = 0.001 as default.
 #'
 #' @param x Name of the input genlight object [required].
 #' @param unknown Identity label of the focal individual whose provenance is
 #' unknown [required].
 #' @param plevel Probability level for bounding ellipses in the PCoA plot
-#' [default 0.95].
+#' [default 0.999].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
@@ -64,7 +67,7 @@
 
 gl.assign.pca <- function(x,
                           unknown,
-                          plevel = 0.995,
+                          plevel = 0.999,
                           verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)

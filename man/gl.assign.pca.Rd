@@ -4,7 +4,7 @@
 \alias{gl.assign.pca}
 \title{Assign an individual of unknown provenance to population based on PCA}
 \usage{
-gl.assign.pca(x, unknown, plevel = 0.95, verbose = NULL)
+gl.assign.pca(x, unknown, plevel = 0.999, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the input genlight object [required].}
@@ -13,7 +13,7 @@ gl.assign.pca(x, unknown, plevel = 0.95, verbose = NULL)
 unknown [required].}
 
 \item{plevel}{Probability level for bounding ellipses in the PCoA plot
-[default 0.95].}
+[default 0.999].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -63,6 +63,9 @@ in all selected dimensions of the ordination.
 
 Each of these approaches provides evidence, none are 100% definitive. They
  need to be interpreted cautiously. They are best applied sequentially.
+ 
+In deciding the assignment, the script considers an individual to be an
+outlier with respect to a particular population at alpha = 0.001 as default.
 }
 \examples{
 Test run with a focal individual from the Macleay River (EmmacMaclGeor) 

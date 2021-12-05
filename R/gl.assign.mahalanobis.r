@@ -45,12 +45,15 @@
 #'
 #' Each of these above approaches provides evidence, none are 100% definitive. 
 #' They need to be interpreted cautiously.
+#' 
+#' In deciding the assignment, the script considers an individual to be an
+#' outlier with respect to a particular population at alpha = 0.001 as default
 #'
 #' @param x Name of the input genlight object [required].
 #' @param unknown Identity label of the focal individual whose provenance is
 #' unknown [required].
 #' @param dim.limit Maximum number of dimensions to consider for the
-#' confidence ellipses [default 5]
+#' confidence ellipses [default 2]
 #' @param plevel Probability level for bounding ellipses
 #' [default 0.999].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
@@ -71,7 +74,7 @@
 #' df <- gl.assign.mahalanobis(x, unknown='UC_01044', verbose=3)
 
 gl.assign.mahalanobis <- function(x,
-                                  dim.limit=5,
+                                  dim.limit=2,
                                   plevel=0.999,
                                   unknown,
                                   verbose = NULL) {
