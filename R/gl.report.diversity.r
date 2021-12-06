@@ -12,7 +12,8 @@
 #' (SilicoDArT) data [required].
 #' @param plot_theme Theme for the plot. See Details for options
 #' [default theme_dartR()].
-#' @param plot_colors A color palette [default discrete_palette].
+#' @param plot_colors A color palette or a list with as many colors as there are 
+#' populations in the dataset [default discrete_palette].
 #' @param pbar Report on progress. Silent if set to FALSE [default TRUE].
 #' @param table Prints a tabular output to the console either 'D'=D values, or
 #'  'H'=H values or 'DH','HD'=both or 'N'=no table. [default 'DH'].
@@ -462,19 +463,29 @@ gl.report.diversity <- function(x,
         as.data.frame(cbind(fs_plot, fs_plot_up[, 3], fs_plot_low[, 3]))
     colnames(fs_final) <- c("pop", "q", "value", "up", "low")
     
+    # printing plots and reports assigning colors to populations
+    if (class(plot_colors) == "function") {
+        colors_pops <- plot_colors(length(levels(pop(x))))
+    }
+    
+    if (class(plot_colors) != "function") {
+        colors_pops <- plot_colors
+    }
+    
+    
     p3 <-
-        ggplot(fs_final, aes(x = pop, y = value, fill = pop)) + geom_bar(position = "dodge",
-                                                                         stat = "identity",
-                                                                         color = "black") + geom_errorbar(aes(ymin = low,
-                                                                                                              ymax = up), width = 0.2) + scale_fill_manual(values = plot_colors(nPop(x))) + facet_wrap(~
-                                                                                                                                                                                                           q, scales = "free_x") + plot_theme + theme(
-                                                                                                                                                                                                               text = element_text(size = 14),
-                                                                                                                                                                                                               axis.ticks.x = element_blank(),
-                                                                                                                                                                                                               axis.text.x = element_blank(),
-                                                                                                                                                                                                               axis.title.x = element_blank(),
-                                                                                                                                                                                                               axis.ticks.y = element_blank(),
-                                                                                                                                                                                                               axis.title.y = element_blank()
-                                                                                                                                                                                                           ) +
+        ggplot(fs_final, aes(x = pop, y = value, fill = pop)) + 
+        geom_bar(position = "dodge", stat = "identity",color = "black") + 
+        geom_errorbar(aes(ymin = low, ymax = up), width = 0.2) + 
+        scale_fill_manual(values = plot_colors) + 
+        facet_wrap(~ q, scales = "free_x") + 
+        plot_theme + 
+        theme(text = element_text(size = 14),
+              axis.ticks.x = element_blank(), 
+              axis.text.x = element_blank(),
+              axis.title.x = element_blank(),
+              axis.ticks.y = element_blank(),
+              axis.title.y = element_blank()) +
         labs(fill = "Population") + ggtitle("q-profile")
     
     print(p3)
