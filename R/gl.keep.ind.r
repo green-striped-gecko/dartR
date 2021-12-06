@@ -80,8 +80,9 @@ gl.keep.ind <- function(x,
     # Delete all but the listed individuals, recalculate relevant locus metadata and remove monomorphic loci
     
     # Remove rows flagged for deletion
-    x <- x[x$ind.names %in% ind.list]
-    
+    ind_to_keep <- which(x$ind.names %in% ind.list)
+    x <- x[ind_to_keep,]
+
     # Monomorphic loci may have been created
     x@other$loc.metrics.flags$monomorphs <- FALSE
     

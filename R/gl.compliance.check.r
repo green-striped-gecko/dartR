@@ -180,10 +180,12 @@ gl.compliance.check <- function(x,
     if (verbose >= 2) {
         cat(report("  Checking for individual metrics\n"))
     }
-    if (is.null(x@other$loc.metrics)) {
+    if (is.null(x@other$ind.metrics)) {
         if (verbose >= 1) {
             cat(warn("  Warning: Creating a slot for individual metrics\n"))
         }
+        x@other$ind.metrics <- as.data.frame(matrix(nrow= nInd(x),ncol = 1))
+        colnames(x@other$ind.metrics) <- "id"
         x@other$ind.metrics$id <- indNames(x)
     } else {
         if (verbose >= 1) {
@@ -191,6 +193,9 @@ gl.compliance.check <- function(x,
         }
     }
     
+    # convert the ind.metric slot into a dataframe
+    x@other$ind.metrics <- as.data.frame(x@other$ind.metrics)
+
     # Check that the population variable exists, and if it does not, create it
     # with a single population 'pop1'
     

@@ -1,7 +1,7 @@
 #' @name gl.drop.pop
 #' @title Removes specified populations from a genlight object
 #' @description
-#' Individuals are assigned to populations based on the specimen metadata data
+#' Individuals are assigned to populations based on the specimen metadata
 #' file (csv) used with \code{\link{gl.read.dart}}.
 #' The script, having deleted populations, optionally identifies resultant
 #' monomorphic loci or loci with all values missing and deletes them
@@ -46,6 +46,8 @@ gl.drop.pop <-  function(x,
                          recalc = FALSE,
                          mono.rm = FALSE,
                          verbose = NULL) {
+    hold <- x
+    
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -78,7 +80,7 @@ gl.drop.pop <-  function(x,
     pop.hold <- pop(x)
     if (!is.null(as.pop)) {
         if (as.pop %in% names(x@other$ind.metrics)) {
-            pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
+            pop(x) <- unname(unlist(x@other$ind.metrics[as.pop]))
             if (verbose >= 2) {
                 cat(report(
                     "  Temporarily assigning",
@@ -120,8 +122,6 @@ gl.drop.pop <-  function(x,
     
     # Remove populations
     
-    hold <- x
-    
     if (verbose >= 2) {
         cat("  Deleting populations",
             paste(pop.list, collapse = ", "),
@@ -129,12 +129,11 @@ gl.drop.pop <-  function(x,
     }
     
     # Delete listed populations, recalculate relevant locus metadata and remove monomorphic loci
-    
     # Remove rows flagged for deletion
-    x2 <- x[!x$pop %in% pop.list]
-    pop.hold <- pop.hold[!x$pop %in% pop.list]
-    x <- x2
-    
+    pops_to_drop <- which(!x$pop %in% pop.list)
+    x <- x[pops_to_drop,]
+    pop.hold <- pop.hold[pops_to_drop]
+
     # Monomorphic loci may have been created
     x@other$loc.metrics.flags$monomorphs == FALSE
     
