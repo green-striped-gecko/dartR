@@ -2,15 +2,25 @@
 % Please edit documentation in R/gl.assign.mahalanobis.r
 \name{gl.assign.mahalanobis}
 \alias{gl.assign.mahalanobis}
-\title{Assign an individual of unknown provenance to population based on PCA}
+\title{Assign an individual of unknown provenance to population based on Mahalanobis
+Distance}
 \usage{
-gl.assign.mahalanobis(x, plevel = 1 - 0.001, unknown, verbose = NULL)
+gl.assign.mahalanobis(
+  x,
+  dim.limit = 2,
+  plevel = 0.999,
+  unknown,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{Name of the input genlight object [required].}
 
-\item{plevel}{Probability level for bounding ellipses in the PCoA plot
-[default 1- 0.001].}
+\item{dim.limit}{Maximum number of dimensions to consider for the
+confidence ellipses [default 2]}
+
+\item{plevel}{Probability level for bounding ellipses
+[default 0.999].}
 
 \item{unknown}{Identity label of the focal individual whose provenance is
 unknown [required].}
@@ -31,8 +41,9 @@ The following process is followed:
 \enumerate{
 \item An ordination is undertaken on the populations to again yield a
 series of orthogonal (independent) axes.
-\item A workable subset of dimensions is chosen, normally equal to the number
- of dimensions with substantive eigenvalues.
+\item A workable subset of dimensions is chosen, that specified, or
+equal to the number of dimensions with substantive eigenvalues, whichever is
+the smaller.
 \item The Mahalobalis Distance is calculated for the unknown against each
 population and probability of membership of each population is calculated.
 The assignment probabilities are listed in support of a decision.
@@ -48,31 +59,27 @@ an indication that the unknown does not belong to a target population
 A next step is to consider the PCoA plot for populations where no private
 alleles have been detected. The position of the unknown in relation to the
 confidence ellipses is plotted by this script as a basis for narrowing down
-the list of putative source populations. 
+the list of putative source populations. This can be evaluated with 
+gl.assign.pca().
 
-Note, this plot is
-considering only the top two dimensions of the ordination, and so an unknown
-lying outside the confidence ellipse can be interpreted as it lying outside
-the confidence envelope. However, if the unknown lies inside the confidence
-ellipse in two dimensions, then it may still lie outside the confidence
-envelope. Thus this second step is good for eliminating populations from
-consideration, but does not provide confidence in assignment.
+The third step (delivered by this script) is to consider the assignment 
+probabilities based on the squared Generalised Linear Distance 
+(Mahalanobis distance) of the unknown from the centroid for each population, 
+then to consider the probability associated with its quantile using the 
+Chisquare approximation. In effect, this index takes into account position 
+of the unknown in relation to the confidence envelope in all selected 
+dimensions of the ordination. The larger the assignment probability, 
+the greater the confidence in the assignment. 
 
-The third step (delivered by this script) is to consider the assignment probabilities based on 
-the squared Generalised Linear Distance (Mahalanobis distance) of
-the unknown from the centroid for each population, then to consider the
-probability associated with its quantile using the Chisquare approximation. 
-In effect, this index takes into account position of the unknown in
-relation to the confidence envelope in all selected dimensions of the
-ordination. The larger the assignment probability, the greater the confidence in the
-assignment. 
+If the unknown individual is an extreme outlier, say at less than 0.001 
+probability of population membership (0.999 confidence envelope), then 
+the associated population can be eliminated from further consideration.
 
-If the unknown individual is an extreme outlier, say at less than 0.001 probability
-of population membership, then the associated population can be eliminated from
-further consideration.
+Each of these above approaches provides evidence, none are 100% definitive. 
+They need to be interpreted cautiously.
 
-Each of these above approaches provides evidence, none are 100% definitive. They
-need to be interpreted cautiously.
+In deciding the assignment, the script considers an individual to be an
+outlier with respect to a particular population at alpha = 0.001 as default
 }
 \examples{
 Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
