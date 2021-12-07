@@ -515,24 +515,24 @@ gl.nhybrids <- function(gl,
             AFPriorFile <- "0"
         }
         
-        if (PiPrior == "Jeffreys" || PiPrior == "jeffreys") {
-            PiPrior <- "0"
-        } else if (PiPrior == "Uniform" ||
-                   PiPrior == "uniform") {
-            PiPrior <- "1"
-        } else {
-            stop(error(
-                "Fatal Error: PiPrior parameter must be Jeffreys or Uniform\n"
-            ))
-        }
-    
+        # if (PiPrior == "Jeffreys" || PiPrior == "jeffreys") {
+        #     PiPrior <- "0"
+        # } else if (PiPrior == "Uniform" ||
+        #            PiPrior == "uniform") {
+        #     PiPrior <- "1"
+        # } else {
+        #     stop(error(
+        #         "Fatal Error: PiPrior parameter must be Jeffreys or Uniform\n"
+        #     ))
+        # }
+        # 
         rand1 <- sample(1:10, 1)
         rand2 <- sample(11:20, 1)
         
         # Run New Hybrids
         input_file <- paste0(getwd(),"/","nhyb.txt")
         GtypFile <- paste0(getwd(),"/","TwoGensGtypFreq.txt")
-        system(paste("./newhybs",
+        system(paste(path_newhybs,
                       "--no-gui",
                       "--data-file",input_file,
                        "--seeds",rand1, rand2,
