@@ -26,7 +26,8 @@ gl.report.diversity(
 \item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}
 
-\item{plot_colors}{A color palette [default discrete_palette].}
+\item{plot_colors}{A color palette or a list with as many colors as there are 
+populations in the dataset [default discrete_palette].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}

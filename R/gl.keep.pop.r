@@ -42,6 +42,9 @@ gl.keep.pop <-  function(x,
                          recalc = FALSE,
                          mono.rm = FALSE,
                          verbose = NULL) {
+    
+    hold <- x
+    
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -72,7 +75,7 @@ gl.keep.pop <-  function(x,
     
     if (!is.null(as.pop)) {
         if (as.pop %in% names(x@other$ind.metrics)) {
-            pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
+            pop(x) <- unname(unlist(x@other$ind.metrics[as.pop]))
             if (verbose >= 2) {
                 cat(
                     report(
@@ -114,8 +117,6 @@ gl.keep.pop <-  function(x,
     
     # DO THE JOB
     
-    hold <- x
-    
     if (verbose >= 2) {
         cat(report(
             "  Retaining only populations",
@@ -127,9 +128,10 @@ gl.keep.pop <-  function(x,
     # Delete all but the listed populations, recalculate relevant locus metadata and remove monomorphic loci
     
     # Keep only rows flagged for retention
-    x2 <- x[x$pop %in% pop.list]
-    pop.hold <- pop.hold[x$pop %in% pop.list]
-    x <- x2
+    # Remove rows flagged for deletion
+    pops_to_keep <- which(x$pop %in% pop.list)
+    x <- x[pops_to_keep,]
+    pop.hold <- pop.hold[pops_to_keep]
     
     # Monomorphic loci may have been created
     x@other$loc.metrics.flags$monomorphs == FALSE
