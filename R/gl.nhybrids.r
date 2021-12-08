@@ -465,6 +465,7 @@ gl.nhybrids <- function(gl,
         # Find executable if unix
         if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
             path_newhybs <- paste0(nhyb.directory,"/newhybs")
+            
             if(file.exists(path_newhybs)==FALSE){
                 path_newhybs <- ""
             }
@@ -496,16 +497,19 @@ gl.nhybrids <- function(gl,
             )
         }
         
-        # if unix
-        if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
-            cp <- paste("cp", outfile.win, nhyb.directory.win)
-            system(cp)
-        }
-        ## if windows
-        if (!grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
-            cp <- paste("copy", outfile.win, nhyb.directory.win)
-            shell(cp)
+        if(outfile.win!=paste0(nhyb.directory.win,outfile)){
+            # if unix
+            if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+                cp <- paste("cp", outfile.win, nhyb.directory.win)
+                system(cp)
             }
+            ## if windows
+            if (!grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+                cp <- paste("copy", outfile.win, nhyb.directory.win)
+                shell(cp)
+            }
+        }
+      
         
         # Set the parameters to conform with NewHybrids input
         if (GtypFile == "TwoGensGtypFreq.txt") {
@@ -530,11 +534,9 @@ gl.nhybrids <- function(gl,
         rand2 <- sample(11:20, 1)
         
         # Run New Hybrids
-        input_file <- paste0(getwd(),"/","nhyb.txt")
-        GtypFile <- paste0(getwd(),"/","TwoGensGtypFreq.txt")
         system(paste(path_newhybs,
                       "--no-gui",
-                      "--data-file",input_file,
+                      "--data-file",outfile,
                        "--seeds",rand1, rand2,
                       " --pi-prior", PiPrior,
                      "--theta-prior", ThetaPrior,
