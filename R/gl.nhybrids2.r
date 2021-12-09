@@ -1,4 +1,4 @@
-#' @name gl.nhybrids
+#' @name gl.nhybrids2
 #' @title Creates an input file for the program NewHybrids and runs it if
 #'  NewHybrids is installed
 #' @description
@@ -92,7 +92,7 @@
 #' verbose=3)
 #' }
 
-gl.nhybrids <- function(gl,
+gl.nhybrids2 <- function(gl,
                         outfile = "nhyb.txt",
                         outpath = tempdir(),
                         p0 = NULL,
@@ -148,17 +148,29 @@ gl.nhybrids <- function(gl,
     loc.limit <- 200
     
     # Housekeeping on the paths
-    outfile <- file.path(outpath, outfile)
-    outfile.win <- gsub("/", "\\\\", outfile)
-    if (!is.null(nhyb.directory)) {
-        nhyb.directory.win <- gsub("/", "\\\\", nhyb.directory)
-        wd.hold <- getwd()
-        wd.hold.win <- gsub("/", "\\\\", wd.hold)
+    # if unix
+    if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+        outfile <- paste0(outpath, "/",outfile)
+        outfile.win <- outfile
+        if (!is.null(nhyb.directory)) {
+            nhyb.directory.win <- nhyb.directory
+            wd.hold <- getwd()
+            wd.hold.win <- getwd()
+        }
+    }
+    ## if windows
+    if (!grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+        outfile <- file.path(outpath, outfile)
+        outfile.win <- gsub("/", "\\\\", outfile)
+        if (!is.null(nhyb.directory)) {
+            nhyb.directory.win <- gsub("/", "\\\\", nhyb.directory)
+            wd.hold <- getwd()
+            wd.hold.win <- gsub("/", "\\\\", wd.hold)
+        }
     }
     
     # PROCESS AS FOLLOWS IF BOTH PARENTAL POPULATIONS ARE SPECIFIED
-    if (!is.null(p0) & !is.null(p1))
-    {
+    if (!is.null(p0) & !is.null(p1)){
         if (verbose >= 3) {
             cat(report("  Both parental populations have been specified \n"))
         }
@@ -358,7 +370,7 @@ gl.nhybrids <- function(gl,
     # PROCESS AS FOLLOWS IF NO PARENTAL POPULATION IS SPECIFIED
     if (is.null(p0) & is.null(p1)) {
         if (verbose >= 3) {
-            cat("  No parental population specified \n")
+            cat(important("  No parental population specified \n"))
         }
         
         if (method == "random" & verbose >= 3) {
@@ -382,7 +394,7 @@ gl.nhybrids <- function(gl,
     
     # CREATE THE NEWHYBRIDS INPUT FILE
     if (verbose >= 3) {
-        cat("\nConverting data to NewHybrids format\n")
+        cat(report("\nConverting data to NewHybrids format\n"))
     }
     gl2 <- as.matrix(gl2nhyb)
     gl2[gl2 == 2] <- 22
@@ -448,10 +460,56 @@ gl.nhybrids <- function(gl,
             )
             cat(report("  Passing control to New Hybrids executable\n"))
         }
-        cp <- paste("copy", outfile.win, nhyb.directory.win)
-        shell(cp)
         
-        setwd(nhyb.directory)
+        
+        # Find executable if unix
+        if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+            path_newhybs <- paste0(nhyb.directory,"/newhybs")
+            
+            if(file.exists(path_newhybs)==FALSE){
+                path_newhybs <- ""
+            }
+        }
+        ## if windows
+        if (!grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+            path_newhybs <-
+                tryCatch(
+                    system(sprintf("where %s", "newhybrids.exe"), intern = TRUE)[1],
+                    warning = function(w)
+                        "",
+                    error = function(e)
+                        ""
+                )
+            if (grepl("\\s", path_newhybs)) {
+                stop(
+                    error(
+                        "The path to the executable for newhybrids has spaces. Please move it\n to a path without spaces so newhybrids can work.\n\n"
+                    )
+                )
+            }
+        }
+        ## if not found
+        if (all(path_newhybs == "")) {
+            stop(
+                error(
+                    "Executable for newhybrids not found! Please make sure that the software\n is correctly installed.\n\n"
+                )
+            )
+        }
+        
+        if(outfile.win!=paste0(nhyb.directory.win,outfile)){
+            # if unix
+            if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+                cp <- paste("cp", outfile.win, nhyb.directory.win)
+                system(cp)
+            }
+            ## if windows
+            if (!grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+                cp <- paste("copy", outfile.win, nhyb.directory.win)
+                shell(cp)
+            }
+        }
+      
         
         # Set the parameters to conform with NewHybrids input
         if (GtypFile == "TwoGensGtypFreq.txt") {
@@ -461,47 +519,31 @@ gl.nhybrids <- function(gl,
             AFPriorFile <- "0"
         }
         
-        if (PiPrior == "Jeffreys" || PiPrior == "jeffreys") {
-            PiPrior <- "0"
-        } else if (PiPrior == "Uniform" ||
-                   PiPrior == "uniform") {
-            PiPrior <- "1"
-        } else {
-            stop(error(
-                "Fatal Error: PiPrior parameter must be Jeffreys or Uniform\n"
-            ))
-        }
-        if (ThetaPrior == "Jeffreys" ||
-            ThetaPrior == "jeffreys") {
-            ThetaPrior <- "0"
-        } else if (ThetaPrior == "Uniform" ||
-                   ThetaPrior == "uniform") {
-            ThetaPrior <- "1"
-        } else {
-            stop(error(
-                "Fatal Error: ThetaPrior parameter must be Jeffreys or Uniform\n"
-            ))
-        }
+        # if (PiPrior == "Jeffreys" || PiPrior == "jeffreys") {
+        #     PiPrior <- "0"
+        # } else if (PiPrior == "Uniform" ||
+        #            PiPrior == "uniform") {
+        #     PiPrior <- "1"
+        # } else {
+        #     stop(error(
+        #         "Fatal Error: PiPrior parameter must be Jeffreys or Uniform\n"
+        #     ))
+        # }
+        # 
         rand1 <- sample(1:10, 1)
         rand2 <- sample(11:20, 1)
         
-        # Create the batch file
-        sink("nhyb.cmd")
-        cat("(\n")
-        cat("echo", outfile, "\n")
-        cat("echo", GtypFile, "\n")
-        cat("echo", AFPriorFile, "\n")
-        cat("echo", rand1, rand2, "\n")
-        cat("echo", PiPrior, "\n")
-        cat("echo", ThetaPrior, "\n")
-        cat("echo", BurnIn, "\n")
-        cat("echo", sweeps, "\n")
-        cat(") | NewHybrids_PC_1_1_WOG.exe")
-        sink()
-        
         # Run New Hybrids
-        
-        shell("nhyb.cmd")
+        system(paste(path_newhybs,
+                      "--no-gui",
+                      "--data-file",outfile,
+                       "--seeds",rand1, rand2,
+                      " --pi-prior", PiPrior,
+                     "--theta-prior", ThetaPrior,
+                     "--burn-in", BurnIn,
+                     "--num-sweeps", sweeps
+                      # "--gtyp-cat-file",GtypFile,
+                          ))
         
         # Add in individual labels
         tbl <-
@@ -514,37 +556,6 @@ gl.nhybrids <- function(gl,
         # names(tbl)[2] <- 'pop'
         
         write.csv(tbl, file = "aa-pofZ.csv", row.names = FALSE)
-        
-        # Transfer files to default directory and housekeeping
-        cp <- paste("copy aa-LociAndAlleles.txt", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-LociAndAlleles.txt")
-        shell(cp)
-        cp <- paste("copy aa-ProcessedPriors.txt", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-ProcessedPriors.txt")
-        shell(cp)
-        cp <- paste("copy aa-Pi.hist", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-Pi.hist")
-        shell(cp)
-        cp <- paste("copy aa-PofZ.csv", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-PofZ.csv")
-        shell(cp)
-        cp <- paste("del aa-PofZ.txt")
-        shell(cp)
-        cp <- paste("copy aa-Theta.hist", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-Theta.hist")
-        shell(cp)
-        cp <- paste("del", basename(outfile))
-        shell(cp)
-        cp <- paste("del nhyb.cmd")
-        shell(cp)
-        # cp <- paste('Taskkill /IM NewHybrids_PC_1_1_WOG.exe /F'); shell(cp)
-        
-        setwd(wd.hold)
         
     }
     
