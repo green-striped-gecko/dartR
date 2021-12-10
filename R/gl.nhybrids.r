@@ -1,14 +1,14 @@
 #' @name gl.nhybrids
 #' @title Creates an input file for the program NewHybrids and runs it if
-#'  NewHybrids is installed
+#'  NewHybrids is installed (PC only)
 #' @description
 #' This function compares two sets of parental populations to identify loci that
-#'  exhibit a fixed difference, returns an genlight object with the reduced
-#'  data, and creates an input file for the program NewHybrids using the top 200
-#'  (or hard specified loc.limit) loci. In the absence of two identified
-#'  parental populations, the script will select a random set 200 loci only
-#'  (method='random') or the first 200 loci ranked on information content
-#'  (method='AvgPIC').
+#' exhibit a fixed difference, returns an genlight object with the reduced
+#' data, and creates an input file for the program NewHybrids using the top 200
+#' (or hard specified loc.limit) loci. In the absence of two identified
+#' parental populations, the script will select a random set 200 loci only
+#' (method='random') or the first 200 loci ranked on information content
+#' (method='AvgPIC').
 #'
 #' A fixed difference occurs when a SNP allele is present in all individuals
 #' of one population and absent in the other. There is provision for setting
@@ -20,16 +20,18 @@
 #' If you specify a directory for the NewHybrids executable file, then the
 #' script will create the input file from the SNP data then run NewHybrids. If
 #' the directory is set to NULL, the execution will stop once the input file
-#' (default='nhyb.txt') has been written to disk.
+#' (default='nhyb.txt') has been written to disk. Note: the executable option
+#' will not work on a Mac; Mac users should generate the NewHybrids input file
+#' and run this on their local installation of NewHybrids.
 #'
 #' Refer to the New Hybrids manual for further information on the parameters to
 #' set
 #' -- http://ib.berkeley.edu/labs/slatkin/eriq/software/new_hybs_doc1_1Beta3.pdf
 #'
 #' It is important to stringently filter the data on RepAvg and CallRate if
-#'  using the random option. One might elect to repeat the analysis
-#'  (method='random') and combine the resultant posterior probabilities should
-#'  200 loci be considered insufficient.
+#' using the random option. One might elect to repeat the analysis
+#' (method='random') and combine the resultant posterior probabilities should
+#' 200 loci be considered insufficient.
 #'
 #' The F1 individuals should be homozygous at all loci for which the parental
 #' populations are fixed and different, assuming parental populations have been
@@ -77,16 +79,16 @@
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
 #' @return The reduced genlight object, if parentals are provided; output of
-#'  NewHybrids is saved to di.sk
+#'  NewHybrids is saved to the working directory.
 #' @export
 #' @importFrom MASS write.matrix
-#' @author Custodian: Arthur Georges (Post to
-#'  \url{https://groups.google.com/d/forum/dartr})
+#' @author Custodian: Arthur Georges -- Post to
+#'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' \dontrun{
 #' m <- gl.nhybrids(testset.gl, outfile='nhyb.txt',
 #' p0=NULL, p1=NULL,
-#' nhyb.directory='C:/workspace/R/NewHybsPC',
+#' nhyb.directory='C:/workspace/R/NewHybsPC', # Specify as necessary
 #' BurnIn=100,
 #' sweeps=100,
 #' verbose=3)
@@ -148,8 +150,16 @@ gl.nhybrids <- function(gl,
     loc.limit <- 200
     
     # Housekeeping on the paths
+    if(!is.null(nhyb.directory)){
+    if (outpath == nyb.directory){
+        stop(error("Fatal Error: Directory for the NewHybrids executable cannot be the same as the directory to receive the output\n"))
+    }
+    }
     outfile <- file.path(outpath, outfile)
     outfile.win <- gsub("/", "\\\\", outfile)
+    if(nchar(outfile.win) > nchar(gsub(" ","",outfile.win))){
+        stop(error("Fatal Error: NewHybrids will not accept filenames that contain spaces\n"))
+    }
     if (!is.null(nhyb.directory)) {
         nhyb.directory.win <- gsub("/", "\\\\", nhyb.directory)
         wd.hold <- getwd()
