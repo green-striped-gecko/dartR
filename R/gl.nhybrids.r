@@ -82,13 +82,16 @@
 #'  NewHybrids is saved to the working directory.
 #' @export
 #' @importFrom MASS write.matrix
+#' @references Anderson, E.C. and Thompson, E.A.(2002). A model-based method for identifying 
+#' species hybrids using multilocus genetic data. Genetics. 160:1217-1229. 
 #' @author Custodian: Arthur Georges -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' \dontrun{
 #' m <- gl.nhybrids(testset.gl, outfile='nhyb.txt',
 #' p0=NULL, p1=NULL,
-#' nhyb.directory='C:/workspace/R/NewHybsPC', # Specify as necessary
+#' nhyb.directory='D:/workspace/R/NewHybsPC', # Specify as necessary
+#' outpath="D:",  # Specify as necessary, usually getwd()
 #' BurnIn=100,
 #' sweeps=100,
 #' verbose=3)
@@ -148,23 +151,6 @@ gl.nhybrids <- function(gl,
     gl.tmp <- gl
     thold <- threshold
     loc.limit <- 200
-    
-    # Housekeeping on the paths
-    if(!is.null(nhyb.directory)){
-    if (outpath == nyb.directory){
-        stop(error("Fatal Error: Directory for the NewHybrids executable cannot be the same as the directory to receive the output\n"))
-    }
-    }
-    outfile <- file.path(outpath, outfile)
-    outfile.win <- gsub("/", "\\\\", outfile)
-    if(nchar(outfile.win) > nchar(gsub(" ","",outfile.win))){
-        stop(error("Fatal Error: NewHybrids will not accept filenames that contain spaces\n"))
-    }
-    if (!is.null(nhyb.directory)) {
-        nhyb.directory.win <- gsub("/", "\\\\", nhyb.directory)
-        wd.hold <- getwd()
-        wd.hold.win <- gsub("/", "\\\\", wd.hold)
-    }
     
     # PROCESS AS FOLLOWS IF BOTH PARENTAL POPULATIONS ARE SPECIFIED
     if (!is.null(p0) & !is.null(p1))
@@ -443,10 +429,46 @@ gl.nhybrids <- function(gl,
     MASS::write.matrix(gl2[, 1:(ncol(gl2))], sep = " ")
     sink()
     
+##### IF AN EXECUTABLE DIRECTORY IS SPECIFIED
+    ##### IF WINDOWS ON PC
+    
+    # Housekeeping on the paths
+    if(!is.null(nhyb.directory)){
+        if (outpath == nyb.directory){
+            stop(error("Fatal Error: Directory for the NewHybrids executable cannot be the same as the directory to receive the output\n"))
+        }
+    }
+    outfile <- file.path(outpath, outfile)
+    outfile.win <- gsub("/", "\\\\", outfile)
+    if(nchar(outfile.win) > nchar(gsub(" ","",outfile.win))){
+        stop(error("Fatal Error: NewHybrids will not accept filenames that contain spaces\n"))
+    }
+    
+    if (!is.null(nhyb.directory)) {
+        nhyb.directory.win <- gsub("/", "\\\\", nhyb.directory)
+        wd.hold <- getwd()
+        wd.hold.win <- gsub("/", "\\\\", wd.hold)
+    }
+    
+    # Check the installation of New Hybrids
+    tmp1 <- file.exists(paste0(nhyb.directory.win,"/NewHybrids_PC_1_1_WOG.exe"))
+    if(!tmp1){
+        stop(error("Fatal Error: New Hybrids executable not found in",nhyb.directory.win,"\n"))
+    }
+    tmp2 <- file.exists(paste0(nhyb.directory.win,"/TwoGensGtypFreq.txt"))
+    if(!tmp2){
+        stop(error("Fatal Error: New Hybrids Genotype Frequency file not found in",nhyb.directory.win,"\n"))
+    }
+    if (verbose >= 2){
+        if(tmp1 & tmp2){
+            cat(report("  New Hybrids executable found\n"))
+        }
+    }
+    
     # Run New Hybrids
     
     if (!is.null(nhyb.directory)) {
-        if (verbose >= 3) {
+        if (verbose >= 2) {
             cat(
                 report(
                     "  Copying New Hybrids input file",
@@ -458,8 +480,16 @@ gl.nhybrids <- function(gl,
             )
             cat(report("  Passing control to New Hybrids executable\n"))
         }
-        cp <- paste("copy", outfile.win, nhyb.directory.win)
-        shell(cp)
+#        cp <- paste("copy", outfile.win, nhyb.directory.win)
+#        shell(cp)
+        tmp <- file.copy(from=outfile.win, to=nhyb.directory.win, overwrite = TRUE)
+        if (verbose >= 2) {
+            if(tmp){
+              cat(report("  .... success\n"))
+            } else {
+                cat(stop("  .... failed to copy nhyb.txt to",nhyb.directory.win,"-- check permissions\n"))
+            }
+        }
         
         setwd(nhyb.directory)
         
@@ -511,7 +541,7 @@ gl.nhybrids <- function(gl,
         
         # Run New Hybrids
         
-        shell("nhyb.cmd")
+        system("nhyb.cmd")
         
         # Add in individual labels
         tbl <-
@@ -526,39 +556,77 @@ gl.nhybrids <- function(gl,
         write.csv(tbl, file = "aa-pofZ.csv", row.names = FALSE)
         
         # Transfer files to default directory and housekeeping
-        cp <- paste("copy aa-LociAndAlleles.txt", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-LociAndAlleles.txt")
-        shell(cp)
-        cp <- paste("copy aa-ProcessedPriors.txt", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-ProcessedPriors.txt")
-        shell(cp)
-        cp <- paste("copy aa-Pi.hist", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-Pi.hist")
-        shell(cp)
-        cp <- paste("copy aa-PofZ.csv", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-PofZ.csv")
-        shell(cp)
-        cp <- paste("del aa-PofZ.txt")
-        shell(cp)
-        cp <- paste("copy aa-Theta.hist", wd.hold.win)
-        shell(cp)
-        cp <- paste("del aa-Theta.hist")
-        shell(cp)
-        cp <- paste("del", basename(outfile))
-        shell(cp)
-        cp <- paste("del nhyb.cmd")
-        shell(cp)
-        # cp <- paste('Taskkill /IM NewHybrids_PC_1_1_WOG.exe /F'); shell(cp)
+        # cp <- paste("copy aa-LociAndAlleles.txt", wd.hold.win)
+        # shell(cp)
+        tmp <- file.copy(from="aa-LociAndAlleles.txt", to=nhyb.directory.win, overwrite = TRUE)
         
+        # cp <- paste("del aa-LociAndAlleles.txt")
+        # shell(cp)
+        tmp <- file.remove("aa-LociAndAlleles.txt")
+        
+        # cp <- paste("copy aa-ProcessedPriors.txt", wd.hold.win)
+        # shell(cp)
+        tmp <- file.copy(from="aa-ProcessedPriors.txt", to=nhyb.directory.win, overwrite = TRUE)
+        
+        # cp <- paste("del aa-ProcessedPriors.txt")
+        # shell(cp)
+        tmp <- file.remove("aaa-ProcessedPriors.txt")
+        
+        # cp <- paste("copy aa-Pi.hist", wd.hold.win)
+        # shell(cp)
+        tmp <- file.copy(from="aa-Pi.hist", to=nhyb.directory.win, overwrite = TRUE)
+        
+        # cp <- paste("del aa-Pi.hist")
+        # shell(cp)
+        tmp <- file.remove("aa-Pi.hist")
+        
+        # cp <- paste("copy aa-PofZ.csv", wd.hold.win)
+        # shell(cp)
+        tmp <- file.copy(from="aa-PofZ.csv", to=nhyb.directory.win, overwrite = TRUE)
+        
+        # cp <- paste("del aa-PofZ.csv")
+        # shell(cp)
+        tmp <- file.remove("aa-PofZ.csv")
+        
+        # cp <- paste("del aa-PofZ.txt")
+        # shell(cp)
+        tmp <- file.remove("aa-PofZ.txt")
+        
+        # cp <- paste("copy aa-Theta.hist", wd.hold.win)
+        # shell(cp)
+        tmp <- file.copy(from="aa-Theta.hist", to=nhyb.directory.win, overwrite = TRUE)
+        
+        # cp <- paste("del aa-Theta.hist")
+        # shell(cp)
+        tmp <- file.remove("aa-Theta.hist")
+        
+        # cp <- paste("del", basename(outfile))
+        # shell(cp)
+        tmp <- file.remove(basename(outfile))
+        
+        # cp <- paste("del nhyb.cmd")
+        # shell(cp)
+        tmp <- file.remove("nhyb.cmd")
+
         setwd(wd.hold)
         
     }
     
-    # Analyse the F1 genotypes
+    ##### FOR THE MAC -- Luis to add code
+    
+      # 1. check that the necessary files exist in the executable directory
+      # 2. Make sure there are no spaces in the user specified file or directory names -- stop, error
+      # 3. Trap the user specifying the same directory for the executables as for the output
+      # 2. transfer the nhyb.txt file to the executable directory
+      # 3. Run the executable (no gui)
+      # 4. Transfer the relevant output files to the user specified directory
+      # 5. Delete those files from the executable directory, including any cmd file
+    
+    ##### FOR UNIX (if different from mac) -- Luis to add code
+    
+      # Ditto
+    
+    ##### Analyse the F1 genotypes
     
     if (flag == "bothpar" & plot == TRUE) {
         # Read in the results of the New Hybrids analysis
