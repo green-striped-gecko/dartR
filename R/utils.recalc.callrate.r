@@ -70,6 +70,7 @@ utils.recalc.callrate <- function(x,
     }
     x@other$loc.metrics$CallRate <-
         1 - (glNA(x, alleleAsUnit = FALSE)) / nInd(x)
+    x@other$loc.metrics$CallRate <- signif(x@other$loc.metrics$CallRate,digits=6)
     x@other$loc.metrics.flags$CallRate <- TRUE
     
     # FLAG SCRIPT END
