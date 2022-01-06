@@ -73,24 +73,22 @@ gl.report.callrate <- function(x,
     
     # Check that call rate is up to date and recalculate if necessary
     
-    if (!x@other$loc.metrics.flags$CallRate) {
+    # if (!x@other$loc.metrics.flags$CallRate) {
         x <- utils.recalc.callrate(x, verbose = 0)
-    }
+    # }
     
     # DO THE JOB
     
     ########### FOR METHOD BASED ON LOCUS
     if (method == "loc") {
+        callrate <- x@other$loc.metrics$CallRate
         if (plot.out) {
             # get title for plots
-            if (method == "loc") {
                 if (datatype == "SNP") {
                     title1 <- "SNP data - Call Rate by Locus"
                 } else {
                     title1 <- "Fragment P/A data - Call Rate by Locus"
                 }
-                
-                callrate <- x@other$loc.metrics$CallRate
                 
                 # Calculate minimum and maximum graph cutoffs for callrate
                 min <- min(callrate, na.rm = TRUE)
@@ -109,10 +107,11 @@ gl.report.callrate <- function(x,
                                                                                      color = plot_colors[1],
                                                                                      fill = plot_colors[2]) +
                     coord_cartesian(xlim = c(min, 1)) + xlab("Call rate") + ylab("Count") + plot_theme
-            }
+        }
+
             
             # Print out some statistics
-            stats <- summary(x@other$loc.metrics$CallRate)
+            stats <- summary(callrate)
             cat("  Reporting Call Rate by Locus\n")
             cat("  No. of loci =", nLoc(x), "\n")
             cat("  No. of individuals =", nInd(x), "\n")
@@ -129,6 +128,7 @@ gl.report.callrate <- function(x,
             # Determine the loss of loci for a given threshold
             quantile_res <-
                 quantile(callrate, probs = seq(0, 1, 1 / 20))
+            quantile_res <- quantile_res - 0.000001
             retained <-
                 unlist(lapply(quantile_res, function(y) {
                     res <- length(callrate[callrate >= y])
@@ -154,10 +154,10 @@ gl.report.callrate <- function(x,
                   "Percent",
                   "Filtered",
                   "Percent")
-            df <- df[order(-df$Quantile), ]
+             df <- df[order(-df$Quantile), ]
             df$Quantile <- paste0(df$Quantile, "%")
             rownames(df) <- NULL
-        }
+        
     }
     
     ########### FOR METHOD BASED ON INDIVIDUAL Calculate the call rate by individual
