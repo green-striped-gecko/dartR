@@ -45,8 +45,8 @@
 #' default).
 #'
 #' @param gl Name of the genlight object containing the SNP data [required].
-#' @param outfile Name of the file that will be the input file for NewHybrids
-#' [default nhyb.txt].
+# @param outfile Name of the file that will be the input file for NewHybrids
+# [default nhyb.txt].
 #' @param outpath Path where to save the output file [default tempdir()].
 #' @param p0 List of populations to be regarded as parental population 0
 #' [default NULL].
@@ -89,7 +89,6 @@
 #' @examples
 #' \dontrun{
 #' m <- gl.nhybrids(testset.gl, 
-#' outfile='nhyb.txt',
 #' p0=NULL, p1=NULL,
 #' nhyb.directory='D:/workspace/R/NewHybsPC', # Specify as necessary
 #' outpath="D:/workspace",  # Specify as necessary, usually getwd() [= workspace]
@@ -99,7 +98,7 @@
 #' }
 
 gl.nhybrids <- function(gl,
-                        outfile = "nhyb.txt",
+#                        outfile = "nhyb.txt",
                         outpath = tempdir(),
                         p0 = NULL,
                         p1 = NULL,
@@ -148,6 +147,7 @@ gl.nhybrids <- function(gl,
     }
     
     # Housekeeping on the outfile specifications
+    outfile <- "nhyb.txt"
     outfile <- file.path(outpath, outfile)
     outfile.win <- gsub("/", "\\\\", outfile)
     if (!is.null(nhyb.directory)) {
@@ -459,7 +459,7 @@ gl.nhybrids <- function(gl,
     }
 
     if(nchar(outfile.win) > nchar(gsub(" ","",outfile.win))){
-        stop(error("Fatal Error: NewHybrids will not accept filenames that contain spaces\n"))
+        stop(error("Fatal Error: NewHybrids will not accept file or directory names that contain spaces\n"))
     }
     
     # Check the installation of New Hybrids
@@ -492,8 +492,6 @@ gl.nhybrids <- function(gl,
             )
             cat(report("  Passing control to New Hybrids executable\n"))
         }
-#        cp <- paste("copy", outfile.win, nhyb.directory.win)
-#        shell(cp)
         tmp <- file.copy(from=outfile.win, to=nhyb.directory.win, overwrite = TRUE)
         if (verbose >= 2) {
             if(tmp){
@@ -606,9 +604,152 @@ gl.nhybrids <- function(gl,
       # 4. Transfer the relevant output files to the user specified directory
       # 5. Delete those files from the executable directory, including any cmd file
     
-    ##### FOR UNIX (if different from mac) -- Luis to add code
+    #### MAC CODE #####
     
-      # Ditto
+    ##### IF MAC
+    
+    if (OS != "Windows"){
+      if (verbose >= 2){
+        cat(report("  Unix operating system\n"))
+      }  
+      
+      outfile.mac  <- outfile
+      nhyb.directory.mac <- nhyb.directory
+      
+      # Checking for directories and files
+      if(!is.null(nhyb.directory)){
+        if(!dir.exists(nhyb.directory)){
+          stop(error("Fatal Error: Directory for the NewHybrids executable does not exist\n"))
+        }
+        if (outpath == nhyb.directory){
+          stop(error("Fatal Error: Directory for the NewHybrids executable cannot be the same as",
+                     "the directory to receive the output\n"))
+        }
+      }
+      
+      if (grepl("\\s", outfile.mac) | grepl("\\s", nhyb.directory)) {
+        stop(
+          error(
+            "Fatal Error: The path to the executable for NewHybrids or the outfile name has spaces. Please move it to a path without spaces or choose a file name without spaces.\n"
+          )
+        )
+      }
+      
+      
+      if(nchar(outfile.mac) > nchar(gsub(" ","",outfile.mac))){
+        stop(error("Fatal Error: NewHybrids will not accept filenames that contain spaces\n"))
+      }
+      
+      # Check the installation of New Hybrids
+      tmp1 <- file.exists(paste0(nhyb.directory.mac,"/newhybs"))
+      if(!tmp1){
+        stop(error("Fatal Error: New Hybrids executable not found in",nhyb.directory.mac,"; required\n"))
+      }
+      # tmp2 <- file.exists(paste0(nhyb.directory.mac,"/TwoGensGtypFreq.txt"))
+      # if(!tmp2){
+      #   stop(error("Fatal Error: New Hybrids Genotype Frequency file not found in",nhyb.directory.win,"; required\n"))
+      # }
+      if (verbose >= 2){
+        # if(tmp1 & tmp2){
+        if(tmp1){
+          
+          cat(report("  New Hybrids executable files found\n"))
+        }
+      }
+      
+      # Run New Hybrids
+      
+      if (!is.null(nhyb.directory)) {
+        if (verbose >= 2) {
+          cat(
+            report(
+              "  Copying New Hybrids input file",
+              outfile,
+              "to",
+              nhyb.directory.mac,
+              "\n"
+            )
+          )
+          cat(report("  Passing control to New Hybrids executable\n"))
+        }
+        
+        tmp <- file.copy(from=outfile.mac, to=nhyb.directory.mac, overwrite = TRUE)
+        if (verbose >= 2) {
+          if(tmp){
+            cat(report("  .... success\n"))
+          } else {
+            cat(stop("  .... failed to copy nhyb.txt to",nhyb.directory.mac,"-- check permissions\n"))
+          }
+        }
+        
+        setwd(nhyb.directory)
+        
+        # Set the parameters to conform with NewHybrids input
+        if (GtypFile == "TwoGensGtypFreq.txt") {
+          GtypFile <- "0"
+        }
+        if (is.null(AFPriorFile)) {
+          AFPriorFile <- "0"
+        }
+        
+        rand1 <- sample(1:10, 1)
+        rand2 <- sample(11:20, 1)
+        
+        system(paste(paste0(nhyb.directory.mac,"/newhybs"),
+                     "--no-gui",
+                     "--data-file",paste0(nhyb.directory.mac,"/",basename(outfile)),
+                     "--seeds",rand1, rand2,
+                     "--pi-prior", PiPrior,
+                     "--theta-prior", ThetaPrior,
+                     "--burn-in", BurnIn,
+                     "--num-sweeps", sweeps
+                     # "--gtyp-cat-file",GtypFile,
+        ))
+        
+        # Add in individual labels
+        tbl <-
+          read.table("aa-PofZ.txt", stringsAsFactors = FALSE)
+        names(tbl) <- tbl[1, ]
+        tbl <- tbl[-1, -1]
+        tbl <- cbind(indNames(gl), pop(gl), tbl)
+        names(tbl) <-
+          c("id", "pop", "P0", "P1", "F1", "F2", "F1xP0", "F1xP1")
+        
+        write.csv(tbl, file = "aa-PofZ.csv", row.names = FALSE)
+        
+        # Transfer files to default directory and housekeeping
+        if (verbose == 2){
+          cat(report("  Transferring output files to output directory",outpath,"\n"))
+        }
+        tmp <- file.copy(from="aa-LociAndAlleles.txt", to=outpath, overwrite = TRUE)
+        tmp <- file.remove("aa-LociAndAlleles.txt")
+        
+        # tmp <- file.copy(from="aa-ProcessedPriors.txt", to=outpath, overwrite = TRUE)
+        # tmp <- file.remove("aa-ProcessedPriors.txt")
+        
+        tmp <- file.copy(from="aa-Pi.hist", to=nhyb.directory.mac, overwrite = TRUE)
+        tmp <- file.remove("aa-Pi.hist")
+        
+        tmp <- file.copy(from="aa-PofZ.csv", to=outpath, overwrite = TRUE)
+        tmp <- file.remove("aa-PofZ.csv")
+        tmp <- file.remove("aa-PofZ.txt")
+        
+        tmp <- file.copy(from="aa-Theta.hist", to=outpath, overwrite = TRUE)
+        tmp <- file.remove("aa-Theta.hist")
+        
+        tmp <- file.remove(basename(outfile))
+        
+        tmp <- file.remove("aa-ThetaAverages.txt")
+        tmp <- file.remove("aa-EchoedGtypFreqCats.txt")
+        tmp <- file.remove("EchoedGtypData.txt")
+        
+        # tmp <- file.remove("nhyb.cmd")
+        
+        setwd(wd.hold)
+        
+      }
+    } ##### END MAC BLOCK
+    
     
     ##### Analyse the F1 genotypes
     
