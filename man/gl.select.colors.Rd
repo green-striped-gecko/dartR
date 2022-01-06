@@ -87,6 +87,7 @@ colors <- gl.select.colors(x=gl,library='baseR',palette='rainbow',ncolors=12,sel
 Other Exploration/visualisation functions: 
 \code{\link{gl.pcoa.plot}()},
 \code{\link{gl.select.shapes}()},
+\code{\link{gl.smearplot2}()},
 \code{\link{gl.smearplot}()}
 }
 \author{
