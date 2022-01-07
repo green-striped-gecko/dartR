@@ -249,3 +249,4 @@ gl.compliance.check <- function(x,
     
     invisible(x)
 }
+

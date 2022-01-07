@@ -72,7 +72,7 @@ utils.reset.flags <- function(x,
                 )
             )
             cat(report(
-                "  Resetting SilicoDArT flags for OneRatio, PIC to FALSE\n"
+                "  Resetting flags for OneRatio, PIC to FALSE\n"
             ))
         }
         
@@ -84,6 +84,9 @@ utils.reset.flags <- function(x,
         if (is.null(x@other$loc.metrics.flags)) {
             x@other$loc.metrics.flags <- as.data.frame(array(NA, 1))
         }
+        
+        # loc.metric should be a dataframe
+        x@other$loc.metrics <- as.data.frame(x@other$loc.metrics)
         
         # AvgPIC
         if (is.null(x@other$loc.metrics$AvgPIC)) {

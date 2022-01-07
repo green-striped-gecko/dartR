@@ -223,7 +223,7 @@ gl.report.hamming <- function(x,
     
     # Determine the loss of loci for a given threshold using quantiles
     nl <- nLoc(x)
-    quantile_res <- quantile(d, probs = seq(0, 1, 1 / 20))
+    quantile_res <- quantile(d, probs = seq(0, 1, 1 / 20),type=1)
     retained <- unlist(lapply(quantile_res, function(y) {
         res <- sum(d >= y)
     }))
