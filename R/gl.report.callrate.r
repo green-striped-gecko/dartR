@@ -127,8 +127,7 @@ gl.report.callrate <- function(x,
             
             # Determine the loss of loci for a given threshold
             quantile_res <-
-                quantile(callrate, probs = seq(0, 1, 1 / 20))
-            quantile_res <- quantile_res - 0.000001
+                quantile(callrate, probs = seq(0, 1, 1 / 20),type=1)
             retained <-
                 unlist(lapply(quantile_res, function(y) {
                     res <- length(callrate[callrate >= y])
