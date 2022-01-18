@@ -5,17 +5,13 @@
 #' file.
 #' This function produces the following PLINK files: bed, bim, fam, ped and map.
 #' @param x Name of the genlight object containing the SNP data [required].
-#' @param plink_path Path of PLINK binary file [default getwd())].
+#' @param plink_path Path of PLINK binary file [default getwd()].
 #' @param bed_file Whether create PLINK files .bed, .bim and .fam
 #' [default FALSE].
 #' @param outfile File name of the output file [default 'gl_plink'].
 #' @param outpath Path where to save the output file
 #' [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
 #'  when calling this function to direct output files to your working directory.
-#' @param snp_pos Field name from the slot loc.metrics where the SNP position is
-#' stored [default '0'].
-#' @param snp_chr Field name from the slot loc.metrics where the chromosome of
-#' each is stored [default '0'].
 #' @param chr_format Whether chromosome information is stored as 'numeric' or as
 #' 'character', see details [default 'character'].
 #' @param pos_cM A vector, with as many elements as there are loci, containing
@@ -45,6 +41,8 @@
 #' Family ID is taken from  x$pop.
 #' Within-family ID (cannot be '0') is taken from indNames(x).
 #' Variant identifier is taken from locNames(x).
+#' SNP position is taken from the accessor x$position.
+#' Chromosome name is taken from the accessor x$chromosome
 #' Note that if names of populations or individuals contain spaces, they are 
 #' replaced by an underscore "_".
 #' @return NULL
@@ -57,8 +55,10 @@
 #'  \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
-#' gl2plink(platypus.gl,snp_pos='ChromPos_Platypus_Chrom_NCBIv1',
-#' snp_chr = 'Chrom_Platypus_Chrom_NCBIv1')
+#' test <- platypus.gl
+#' test$position <- test$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
+#' test$chromosome <- test$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
+#' gl2plink(test)
 #' }
 
 gl2plink <- function(x,
@@ -66,8 +66,6 @@ gl2plink <- function(x,
                      bed_file = FALSE,
                      outfile = "gl_plink",
                      outpath = tempdir(),
-                     snp_pos = "0",
-                     snp_chr = "0",
                      chr_format = "character",
                      pos_cM = "0",
                      ID_dad = "0",
@@ -91,24 +89,18 @@ gl2plink <- function(x,
     
     outfilespec <- file.path(outpath, outfile)
     
-    snp_temp <- x$other$loc.metrics
+    snp_temp <- as.data.frame(cbind(x$chromosome,x$position))
+    colnames(snp_temp) <- c("chrom","snp_pos")
     
-    if (snp_chr == "0") {
-        snp_temp$chrom <- 0
-    } else {
+
         if (chr_format == "numeric") {
-            snp_temp$chrom <- as.numeric(unname(unlist(snp_temp[snp_chr])))
+            snp_temp$chrom <- as.numeric(snp_temp$chrom)
         }
         if (chr_format == "character") {
-            snp_temp$chrom <- as.character(unname(unlist(snp_temp[snp_chr])))
+            snp_temp$chrom <- as.character(snp_temp$chrom)
         }
-    }
     
-    if (snp_pos == "0") {
-        snp_temp$snp_pos <- 0
-    } else {
-        snp_temp$snp_pos <- as.numeric(unname(unlist(snp_temp[snp_pos])))
-    }
+        snp_temp$snp_pos <- as.numeric(snp_temp$snp_pos)
     
     # Convert any NA values to 0
     snp_temp[is.na(snp_temp$snp_pos), "snp_pos"] <- 0
