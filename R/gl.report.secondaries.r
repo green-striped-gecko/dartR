@@ -387,7 +387,7 @@ gl.report.secondaries <- function(x,
             round(n.invariant.tags * mean.len.tag + n.inv.gen, 0)
         cat(
             "   Total Number of invariant sites (including invariant sequence tags):",
-            n.inv.gen,
+            n.invariant,
             "\n"
         )
         if (verbose >= 3) {
