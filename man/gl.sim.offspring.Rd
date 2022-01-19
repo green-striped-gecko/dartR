@@ -2,24 +2,31 @@
 % Please edit documentation in R/gl.sim.offspring.r
 \name{gl.sim.offspring}
 \alias{gl.sim.offspring}
-\title{Simulates a specified number of offsprings based on alleles provided by potential father(s) and mother(s)}
+\title{Simulates a specified number of offspring based on alleles provided by
+potential father(s) and mother(s)}
 \usage{
 gl.sim.offspring(fathers, mothers, noffpermother, sexratio = 0.5)
 }
 \arguments{
-\item{fathers}{-- genlight object of potential fathers}
+\item{fathers}{Genlight object of potential fathers [required].}
 
-\item{mothers}{-- genlight object of potential mothers simulated}
+\item{mothers}{Genlight object of potential mothers simulated [required].}
 
-\item{noffpermother}{-- number of offsprings per mother}
+\item{noffpermother}{Number of offspring per mother [required].}
 
-\item{sexratio}{-- the sex ratio of simulated offsprings [females / females +males, 1 equals 100 percent females]}
+\item{sexratio}{The sex ratio of simulated offspring 
+(females / females +males, 1 equals 100 percent females) [default 0.5.].}
 }
 \value{
-a genlight object with n individuals.
+A genlight object with n individuals.
 }
 \description{
-This takes a population (or a single individual) of fathers (provided as a genlight object) and mother(s) and simulates offsprings based on "random" mating. It can be used to simulate population dynamics and check the effect of those dynamics and allele frequencies, number of alleles. Another application is to simulate relatedness of siblings and compare it to actual relatedness found in the population to determine kinship.
+This takes a population (or a single individual) of fathers (provided as a
+genlight object) and mother(s) and simulates offspring based on 'random'
+ mating. It can be used to simulate population dynamics and check the effect
+ of those dynamics and allele frequencies, number of alleles. Another
+ application is to simulate relatedness of siblings and compare it to actual
+ relatedness found in the population to determine kinship.
 }
 \examples{
 #Simulate 10 potential fathers
@@ -29,5 +36,5 @@ gl.mothers <- glSim(10, 20, ploidy=2)
 gl.sim.offspring(gl.fathers, gl.mothers, 2, sexratio=0.5)
 }
 \author{
-Bernd Gruber (bernd.gruber@canberra.edu.au)
+Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

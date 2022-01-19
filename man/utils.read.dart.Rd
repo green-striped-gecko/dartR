@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.read.dart.r
 \name{utils.read.dart}
 \alias{utils.read.dart}
-\title{Import DarT data to R}
+\title{Imports DarT data to R}
 \usage{
 utils.read.dart(
   filename,
@@ -17,27 +17,27 @@ utils.read.dart(
 \arguments{
 \item{filename}{Path to file (csv file only currently) [required].}
 
-\item{nas}{A character specifying NAs [default "-"].}
+\item{nas}{A character specifying NAs [default '-'].}
 
-\item{topskip}{A number specifying the number of rows to be skipped. If not 
-provided the number of rows to be skipped are "guessed" by the number of rows
-with "*" at the beginning [default NULL].}
+\item{topskip}{A number specifying the number of rows to be skipped. If not
+provided the number of rows to be skipped are 'guessed' by the number of rows
+with '*' at the beginning [default NULL].}
 
-\item{lastmetric}{Specifies the last non genetic column [default "RepAvg"].
-Be sure to check if that is true, otherwise the number of individuals will 
+\item{lastmetric}{Specifies the last non genetic column [default 'RepAvg'].
+Be sure to check if that is true, otherwise the number of individuals will
 not match. You can also specify the last column by a number.}
 
-\item{service_row}{The row number in which the information of the DArT 
+\item{service_row}{The row number in which the information of the DArT
 service is contained [default 1].}
 
-\item{plate_row}{The row number in which the information of the plate 
+\item{plate_row}{The row number in which the information of the plate
 location is contained [default 3].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report [default NULL].}
 }
 \value{
-A list of length 5. #dart format (one or two rows) #individuals, 
+A list of length 5. #dart format (one or two rows) #individuals,
 #snps, #non genetic metrics, #genetic data (still two line format, rows=snps,
  columns=individuals)
 }

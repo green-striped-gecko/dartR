@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.heterozygosity.r
 \name{gl.report.heterozygosity}
 \alias{gl.report.heterozygosity}
-\title{Reports observed, expected and unbiased heterozygosities and FIS 
+\title{Reports observed, expected and unbiased heterozygosities and FIS
 (inbreeding coefficient) by population or by individual from SNP data}
 \usage{
 gl.report.heterozygosity(
@@ -20,92 +20,98 @@ gl.report.heterozygosity(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP [required].}
 
-\item{method}{Calculate heterozygosity by population (method="pop") or by 
-individual (method="ind") [default "pop"].}
+\item{method}{Calculate heterozygosity by population (method='pop') or by
+individual (method='ind') [default 'pop'].}
 
-\item{n.invariant}{An estimate of the number of invariant sequence tags used 
+\item{n.invariant}{An estimate of the number of invariant sequence tags used
 to adjust the heterozygosity rate [default 0].}
 
 \item{plot.out}{Whether produce a plot of the results [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default theme_dartR()].}
 
-\item{plot_colors_pop}{A color palette for population plots or a list with 
-as many colors as there are populations in the dataset [default discrete_palette].}
+\item{plot_colors_pop}{A color palette for population plots or a list with
+as many colors as there are populations in the dataset
+[default discrete_palette].}
 
-\item{plot_colors_ind}{List of two color names for the borders and fill of 
+\item{plot_colors_ind}{List of two color names for the borders and fill of
 the plot by individual [default two_colors].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
 [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
-A dataframe containing population labels, heterozygosities, FIS, 
+A dataframe containing population labels, heterozygosities, FIS,
 their standard deviations and sample sizes
 }
 \description{
-Calculates the observed, expected and unbiased expected (i.e. 
-corrected for sample size) heterozygosities and FIS (inbreeding coefficient) 
-for each population or the observed heterozygosity for each individual in a 
+Calculates the observed, expected and unbiased expected (i.e.
+corrected for sample size) heterozygosities and FIS (inbreeding coefficient)
+for each population or the observed heterozygosity for each individual in a
 genlight object.
 }
 \details{
-Observed heterozygosity for a population takes the proportion of 
-heterozygous loci for each individual then averages over the individuals in 
+Observed heterozygosity for a population takes the proportion of
+heterozygous loci for each individual then averages over the individuals in
 that population. The calculations take into account missing values.
 
 Expected heterozygosity for a population takes the expected proportion of
-heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each 
-locus, then averages this across the loci for an average estimate for the 
+heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each
+locus, then averages this across the loci for an average estimate for the
 population.
 
-Observed heterozygosity for individuals is calculated as the proportion of 
+Observed heterozygosity for individuals is calculated as the proportion of
 loci that are heterozygous for that individual.
 
-Finally, the loci that are invariant across all individuals in the dataset 
-(that is, across populations), is typically unknown. This can render 
-estimates of heterozygosity analysis specific, and so it is not valid to 
+Finally, the loci that are invariant across all individuals in the dataset
+(that is, across populations), is typically unknown. This can render
+estimates of heterozygosity analysis specific, and so it is not valid to
 compare such estimates across species or even across different analyses. This
-is a similar problem faced by microsatellites. If you have an estimate of the 
-number of invariant sequence tags (loci) in your data, such as provided by 
-\code{\link{gl.report.secondaries}}, you can specify it with the n.invariant 
+is a similar problem faced by microsatellites. If you have an estimate of the
+number of invariant sequence tags (loci) in your data, such as provided by
+\code{\link{gl.report.secondaries}}, you can specify it with the n.invariant
 parameter to standardize your estimates of heterozygosity.
 
-\strong{NOTE}: It is important to realise that estimation of adjusted 
-heterozygosity requires that secondaries not to be removed. 
+\strong{NOTE}: It is important to realise that estimation of adjusted
+heterozygosity requires that secondaries not to be removed.
 
-Heterozygosities and FIS (inbreeding coefficient) are calculated by locus 
+Heterozygosities and FIS (inbreeding coefficient) are calculated by locus
 within each population using the following equations:
-\itemize{ 
+\itemize{
 \item Observed heterozygosity (Ho) = number of homozygotes / n_Ind,
-where n_Ind is the number of individuals without missing data.  
-\item Observed heterozygosity adjusted (Ho.adj) <- Ho * n_Loc / (n_Loc + n.invariant),
-where n_Loc is the number of loci that do not have all missing data  and 
-n.invariant is an estimate of the number of invariant loci to adjust heterozygosity. 
+where n_Ind is the number of individuals without missing data.
+\item Observed heterozygosity adjusted (Ho.adj) <- Ho * n_Loc /
+ (n_Loc + n.invariant),
+where n_Loc is the number of loci that do not have all missing data  and
+n.invariant is an estimate of the number of invariant loci to adjust
+heterozygosity.
 \item Expected heterozygosity (He) = 1 - (p^2 + q^2),
-where p is the frequency of the reference allele and q is the frequency of 
+where p is the frequency of the reference allele and q is the frequency of
 the alternative allele.
-\item Expected heterozygosity adjusted (He.adj) = He * n_Loc / (n_Loc + n.invariant)
-\item Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind / (2 * n_Ind - 1)) 
-\item Inbreeding coefficient (FIS) = 1 - (Ho / uHe)
+\item Expected heterozygosity adjusted (He.adj) = He * n_Loc /
+(n_Loc + n.invariant)
+\item Unbiased expected heterozygosity (uHe) = He * (2 * n_Ind /
+(2 * n_Ind - 1))
+\item Inbreeding coefficient (FIS) = 1 - (mean(Ho) / mean(uHe))
 }
 
 \strong{ Function's output }
 
-Output for method='pop' is an ordered barchart of observed heterozygosity, 
-expected heterozygosity and FIS (Inbreeding coefficient) across populations 
-together with a table of mean observed and expected heterozygosities and FIS by 
-population and their respective standard deviations (SD).
+Output for method='pop' is an ordered barchart of observed heterozygosity,
+expected heterozygosity and FIS (Inbreeding coefficient) across populations
+together with a table of mean observed and expected heterozygosities and FIS
+by population and their respective standard deviations (SD).
 
 Output for method='ind' is a histogram and a boxplot of heterozygosity across
 individuals.
 
- Plots and table are saved to the session temporary directory (tempdir) 
- 
+ Plots and table are saved to the session temporary directory (tempdir)
+
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
@@ -129,6 +135,7 @@ Other reporting functions:
 \code{\link{gl.report.sexlinked}()}
 }
 \author{
-Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }
 \concept{reporting functions}

@@ -2,26 +2,31 @@
 % Please edit documentation in R/gl.percent.freq.r
 \name{gl.percent.freq}
 \alias{gl.percent.freq}
-\title{Generate percentage allele frequencies by locus and population}
+\title{Generates percentage allele frequencies by locus and population}
 \usage{
 gl.percent.freq(x, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP or Tag P/A (SilicoDArT) data [required]}
+\item{x}{Name of the genlight object containing the SNP or Tag P/A
+(SilicoDArT) data [required].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A matrix with allele (SNP data) or presence/absence frequencies (Tag P/A data) broken down by population and locus
+A matrix with allele (SNP data) or presence/absence frequencies
+(Tag P/A data) broken down by population and locus
 }
 \description{
-This is a support script, to take SNP data or SilicoDArT presence/absence data grouped into populations in a genlight object \{adegenet\}
-and generate a table of allele frequencies for each population and locus
+This is a support script, to take SNP data or SilicoDArT presence/absence
+data grouped into populations in a genlight object \{adegenet\} and generate
+a table of allele frequencies for each population and locus
 }
 \examples{
 m <-  gl.percent.freq(testset.gl)
-m
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

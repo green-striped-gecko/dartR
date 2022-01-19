@@ -2,48 +2,53 @@
 % Please edit documentation in R/gl.drop.ind.r
 \name{gl.drop.ind}
 \alias{gl.drop.ind}
-\title{Remove specified individuals from a genelight \{adegenet\} object}
+\title{Removes specified individuals from a genlight \{adegenet\} object}
 \usage{
 gl.drop.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing SNP genotypes [required]}
+\item{x}{Name of the genlight object containing SNP genotypes [required].}
 
-\item{ind.list}{A list of individuals to be removed [required]}
+\item{ind.list}{A list of individuals to be removed [required].}
 
-\item{recalc}{Recalculate the locus metadata statistics [default FALSE]}
+\item{recalc}{Recalculate the locus metadata statistics [default FALSE].}
 
-\item{mono.rm}{Remove monomorphic loci [default FALSE]}
+\item{mono.rm}{Remove monomorphic loci [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 A genlight object with the reduced data
 }
 \description{
-The script, having deleted individuals, optionally identifies resultant monomorphic loci or loci
-with all values missing and deletes them (using gl.filter.monomorphs.r). The script also optionally
-recalculates statistics made redundant by the deletion of individuals from the dataset.
+The script, having deleted individuals, optionally identifies resultant
+monomorphic loci or loci with all values missing and deletes them
+(using gl.filter.monomorphs.r). The script also optionally recalculates
+statistics made redundant by the deletion of individuals from the dataset.
 
-The script returns a genlight object with the individuals deleted and, optionally, the recalculated locus metadata.
+The script returns a genlight object with the individuals deleted and,
+optionally, the recalculated locus metadata.
 }
 \examples{
  # SNP data
-   gl2 <- gl.drop.ind(testset.gl, 
-   ind.list=c("AA019073","AA004859"))
-   gl2 <- gl.drop.ind(testset.gl, 
-   ind.list=c("AA019073","AA004859"))
+   gl2 <- gl.drop.ind(testset.gl,
+   ind.list=c('AA019073','AA004859'))
+   gl2 <- gl.drop.ind(testset.gl,
+   ind.list=c('AA019073','AA004859'))
  # Tag P/A data
-   gs2 <- gl.drop.ind(testset.gs, 
-   ind.list=c("AA020656","AA19077","AA004859"))
-   gs2 <- gl.drop.ind(testset.gs, ind.list=c("AA020656"
-   ,"AA19077","AA004859"),mono.rm=TRUE, recalc=TRUE)
-   
+   gs2 <- gl.drop.ind(testset.gs,
+   ind.list=c('AA020656','AA19077','AA004859'))
+   gs2 <- gl.drop.ind(testset.gs, ind.list=c('AA020656'
+   ,'AA19077','AA004859'),mono.rm=TRUE, recalc=TRUE)
+
 }
 \seealso{
-\code{\link{gl.keep.ind}} to keep rather than drop specified individuals
+\code{\link{gl.keep.ind}} to keep rather than drop specified
+individuals
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

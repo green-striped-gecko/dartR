@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.subsample.loci.r
 \name{gl.subsample.loci}
 \alias{gl.subsample.loci}
-\title{Subsample n loci from a genlight object and return as a genlight object}
+\title{Subsamples n loci from a genlight object and return it as a genlight object}
 \usage{
 gl.subsample.loci(x, n, method = "random", mono.rm = FALSE, verbose = NULL)
 }
@@ -12,15 +12,15 @@ gl.subsample.loci(x, n, method = "random", mono.rm = FALSE, verbose = NULL)
 
 \item{n}{Number of loci to include in the subsample [required].}
 
-\item{method}{Method: "random", in which case the loci are sampled at random; 
-or "pic", in which case the top n loci ranked on information content are 
+\item{method}{Method: 'random', in which case the loci are sampled at random;
+or 'pic', in which case the top n loci ranked on information content are
 chosen. Information content is stored in AvgPIC in the case of SNP data and in
  PIC in the the case of presence/absence (SilicoDArT) data [default 'random'].}
 
 \item{mono.rm}{Delete monomorphic loci before sampling [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log; 3, progress and results summary; 5, full report 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
@@ -28,15 +28,16 @@ A genlight object with n loci
 }
 \description{
 This is a support script, to subsample a genlight \{adegenet\} object based
- on loci. Two methods are used to subsample, random and based on information 
+ on loci. Two methods are used to subsample, random and based on information
  content.
 }
 \examples{
 # SNP data
-  gl2 <- gl.subsample.loci(testset.gl, n=200, method="pic")
+  gl2 <- gl.subsample.loci(testset.gl, n=200, method='pic')
 # Tag P/A data
-  gl2 <- gl.subsample.loci(testset.gl, n=100, method="random")
+  gl2 <- gl.subsample.loci(testset.gl, n=100, method='random')
 }
 \author{
-Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Luis Mijangos -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

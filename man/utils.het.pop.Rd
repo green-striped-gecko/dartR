@@ -7,7 +7,7 @@
 utils.het.pop(x)
 }
 \arguments{
-\item{x}{A genlight object containing the SNP genotypes [required]}
+\item{x}{A genlight object containing the SNP genotypes [required].}
 }
 \value{
 A vector with the mean expected heterozygosity for each population
@@ -19,5 +19,6 @@ Calculates expected mean expected heterozygosity per population
 out <- utils.het.pop(testset.gl)
 }
 \author{
-Bernd Gruber & Luis Mijangos (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber & Luis Mijangos (bugs? Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

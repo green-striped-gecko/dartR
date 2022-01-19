@@ -9,28 +9,49 @@ gl.map.interactive(
   matrix = NULL,
   standard = TRUE,
   symmetric = TRUE,
-  ind.circles = TRUE,
   pop.labels = TRUE,
   pop.labels.cex = 12,
-  provider = "Esri.NatGeoWorldMap"
+  ind.circles = TRUE,
+  ind.circle.cols = NULL,
+  ind.circle.cex = 10,
+  ind.circle.transparency = 0.8,
+  provider = "Esri.NatGeoWorldMap",
+  verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- a genlight object [including coordinates within the latlon slot]}
+\item{x}{A genlight object (including coordinates within the latlon slot) 
+[required].}
 
-\item{matrix}{-- a distance matrix between populations or individuals. The matrix is visualised as lines between individuals/populations. If matrix is asymmetric two lines with arrows are plotted.}
+\item{matrix}{A distance matrix between populations or individuals. The
+matrix is visualised as lines between individuals/populations. If matrix is
+asymmetric two lines with arrows are plotted [default NULL].}
 
-\item{standard}{-- if a matrix is provided line width will be standardised to be between 1 to 10, if set to true, otherwise taken as given.}
+\item{standard}{If a matrix is provided line width will be standardised to be
+between 1 to 10, if set to true, otherwise taken as given [default TRUE].}
 
-\item{symmetric}{-- if a symmetric matrix is provided only one line is drawn based on the lower triangle of the matrix. If set to false arrows indicating the direction are used instead.}
+\item{symmetric}{If a symmetric matrix is provided only one line is drawn
+based on the lower triangle of the matrix. If set to false arrows indicating
+the direction are used instead [default TRUE].}
 
-\item{ind.circles}{-- should individuals plotted as circles, default is TRUE}
+\item{pop.labels}{Population labels at the center of the individuals of
+populations [default TRUE].}
 
-\item{pop.labels}{-- population labels at the center of the individuals of populations, default is TRUE}
+\item{pop.labels.cex}{Size of population labels [default 12].}
 
-\item{pop.labels.cex}{-- size of population labels, default is 20.}
+\item{ind.circles}{Should individuals plotted as circles [default TRUE].}
 
-\item{provider}{-- passed to leaflet}
+\item{ind.circle.cols}{colors off circles. Colors can be provided as usual by names (e.g. "black") and are re-cycled. So a color c("blue","red") colors individuals alternatively between blue and red using the genlight object order of inidividuals. For transparency see parameter ind.circle.transparency. Defaults to rainbow colors by population  if not provided. If you want to have your own colors for each population, check the platypus.gl example below.}
+
+\item{ind.circle.cex}{(size or circles in pixels ). Defaults to 10.}
+
+\item{ind.circle.transparency}{Transparency of circles between 0=invisible and 1=no transparency. Defaults to 0.8.}
+
+\item{provider}{Passed to leaflet [default "Esri.NatGeoWorldMap"].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 plots a map
@@ -39,11 +60,15 @@ plots a map
 Creates an interactive map (based on latlon) from a genlight object
 }
 \details{
-A wrapper around the \pkg{leaflet} package. For possible background maps check as specified via the provider: \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
+A wrapper around the \pkg{leaflet} package. For possible background 
+maps check as specified via the provider:
+\url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
 }
 \examples{
 gl.map.interactive(bandicoot.gl)
+cols <- c("red","blue","yellow")[as.numeric(pop(platypus.gl))]
+gl.map.interactive(platypus.gl, ind.circle.cols=cols, ind.circle.cex=10, ind.circle.transparency=0.5)
 }
 \author{
-Bernd Gruber (glbugs@aerg.canberra.edu.au)
+Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
 }

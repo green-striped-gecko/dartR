@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2svdquartets.r
 \name{gl2svdquartets}
 \alias{gl2svdquartets}
-\title{Convert a genlight object to nexus format PAUP SVDquartets}
+\title{Converts a genlight object to nexus format PAUP SVDquartets}
 \usage{
 gl2svdquartets(
   x,
@@ -13,27 +13,36 @@ gl2svdquartets(
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data or tag P/A data [required]}
+\item{x}{Name of the genlight object containing the SNP data or tag P/A data
+[required].}
 
-\item{outfile}{-- file name of the output file (including extension) [default svd.nex]}
+\item{outfile}{File name of the output file (including extension)
+[default 'svd.nex'].}
 
-\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
-to direct output files to your working directory.}
+\item{outpath}{Path where to save the output file
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this
+function or set.tempdir <- getwd() elsewhere in your script to direct output
+ files to your working directory.}
 
-\item{method}{-- method = 1, nexus file with two lines per individual; method = 2, nexus
-file with one line per individual, ambiguity codes for SNP genotypes, 0 or 1 for presence/absence data [default 2]}
+\item{method}{Method = 1, nexus file with two lines per individual; method =
+2, nexus file with one line per individual, ambiguity codes for SNP
+genotypes, 0 or 1 for presence/absence data [default 2].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity]}
 }
 \description{
-The output nexus file contains the snp data in one of two forms, depending upon what you regard
-as most appropriate. One form, that used by Chifman and Kubatko, has two lines per individual,
-one providing the reference SNP the second providing the alternate SNP (method=1). 
-A second form, recommended by Dave Swofford, has
-a single line per individual, resolving heterozygous SNPs by replacing them with standard
-ambiguity codes (method=2).
+The output nexus file contains the SNP data in one of two forms, depending
+upon what you regard as most appropriate. One form, that used by Chifman and
+ Kubatko, has two lines per individual, one providing the reference SNP the
+  second providing the alternate SNP (method=1).
 }
 \details{
+A second form, recommended by Dave Swofford, has a single line per
+  individual, resolving heterozygous SNPs by replacing them with standard
+ambiguity codes (method=2).
+
 If the data are tag presence/absence, then method=2 is assumed.
 }
 \examples{
@@ -42,8 +51,10 @@ gg@other$loc.metrics <- gg@other$loc.metrics[1:100,]
 gl2svdquartets(gg)
 }
 \references{
-Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data under the coalescent. Bioinformatics 30: 3317-3324
+Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data
+under the coalescent. Bioinformatics 30: 3317-3324
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

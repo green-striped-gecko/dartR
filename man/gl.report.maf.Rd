@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.maf.r
 \name{gl.report.maf}
 \alias{gl.report.maf}
-\title{Report minor allele frequency (MAF) for each locus in a SNP dataset}
+\title{Reports minor allele frequency (MAF) for each locus in a SNP dataset}
 \usage{
 gl.report.maf(
   x,
@@ -22,57 +22,57 @@ gl.report.maf(
 
 \item{maf.limit}{Show histograms MAF range <= maf.limit [default 0.5].}
 
-\item{ind.limit}{Show histograms only for populations of size greater than 
+\item{ind.limit}{Show histograms only for populations of size greater than
 ind.limit [default 5].}
 
-\item{loc.limit}{Show histograms only for populations with more than 
+\item{loc.limit}{Show histograms only for populations with more than
 loc.limit polymorphic loci [default 30].}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See Details for options 
+\item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}
 
-\item{plot_colors_pop}{A color palette for population plots 
+\item{plot_colors_pop}{A color palette for population plots
 [default discrete_palette].}
 
-\item{plot_colors_all}{List of two color names for the borders and fill of 
+\item{plot_colors_all}{List of two color names for the borders and fill of
 the overall plot [default two_colors].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
 [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 An unaltered genlight object
 }
 \description{
-This script provides summary histograms of MAF for each 
-population in the dataset and an overall histogram to assist the decision of 
+This script provides summary histograms of MAF for each
+population in the dataset and an overall histogram to assist the decision of
 choosing thresholds for the filter function \code{\link{gl.filter.maf}}
 }
 \details{
 The function \code{\link{gl.filter.maf}} will filter out the
  loci with MAF below a specified threshold.
- 
+
 \strong{ Function's output }
- 
+
  The minimum, maximum, mean and a tabulation of MAF quantiles against
  thresholds rate are provided. Output also includes a boxplot and a
  histogram.
- 
+
  This function reports the
  MAF for each of several quantiles. Quantiles are
  partitions of a finite set of values into q subsets of (nearly) equal sizes.
  In this function q = 20. Quantiles are useful measures because they are less
  susceptible to long-tailed distributions and outliers.
 
- Plots and table are saved to the temporal directory (tempdir) and can be 
- accessed with the function \code{\link{gl.print.reports}} and listed with 
- the function \code{\link{gl.list.reports}}. Note that they can be accessed 
+ Plots and table are saved to the temporal directory (tempdir) and can be
+ accessed with the function \code{\link{gl.print.reports}} and listed with
+ the function \code{\link{gl.list.reports}}. Note that they can be accessed
  only in the current R session because tempdir is cleared each time that the
   R session is closed.
 
@@ -89,6 +89,7 @@ gl <- gl.report.maf(testset.gl)
  \code{\link{gl.print.reports}}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to 
+\url{https://groups.google.com/d/forum/dartr})
 }
 \concept{filter reports functions}

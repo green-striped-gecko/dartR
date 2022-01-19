@@ -7,7 +7,8 @@
 gl.list.reports()
 }
 \value{
-Prints a table with all reports saved in tempdir. Currently the style cannot be changed.
+Prints a table with all reports saved in tempdir. Currently the style
+cannot be changed.
 }
 \description{
 Prints dartR reports saved in tempdir
@@ -18,6 +19,10 @@ gl.report.callrate(testset.gl,save2tmp=TRUE)
 gl.list.reports()
 }
 }
+\seealso{
+\code{\link{gl.print.reports}}
+}
 \author{
-Bernd Gruber & Luis Mijangos (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber & Luis Mijangos (bugs? Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

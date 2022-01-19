@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.make.recode.ind.r
 \name{gl.make.recode.ind}
 \alias{gl.make.recode.ind}
-\title{Create a proforma recode_ind file for reassigning individual (=specimen) names}
+\title{Creates a proforma recode_ind file for reassigning individual
+ (=specimen) names}
 \usage{
 gl.make.recode.ind(
   x,
@@ -12,38 +13,44 @@ gl.make.recode.ind(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{out.recode.file}{File name of the output file (including extension) [default default_recode_ind.csv]}
+\item{out.recode.file}{File name of the output file (including extension)
+[default default_recode_ind.csv].}
 
-\item{outpath}{Path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
+\item{outpath}{Path where to save the output file
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
+when calling this function to direct output files to your working directory.}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A vector containing the new individual names
+A vector containing the new individual names.
 }
 \description{
-Renaming individuals may be required when there have been errors in labelling arising
-in the process from sample to DArT files. There may be occasions where renaming
-individuals is required for preparation of figures. Caution needs to be exercised
-because of the potential for breaking the "chain of evidence" between the samples themselves
-and the analyses. Recoding individuals can be done with a recode table (csv).
+Renaming individuals may be required when there have been errors in
+labelling arising in the process from sample to DArT files. There may be
+occasions where renaming individuals is required for preparation of figures.
+Caution needs to be exercised because of the potential for breaking the
+'chain of evidence' between the samples themselves and the analyses. Recoding
+individuals can be done with a recode table (csv).
 }
 \details{
-This script facilitates 
-the construction of a recode table by producing a proforma file with
-current individual (=specimen) names in two identical columns. Edit the second
-column to reassign individual names. Use keyword Delete to delete an individual.
+This script facilitates the construction of a recode table by producing a
+ proforma file with current individual (=specimen) names in two identical
+ columns. Edit the second column to reassign individual names. Use keyword
+ Delete to delete an individual.
 
-Apply the recoding using gl.recode.ind(). Deleting individuals
-can potentially generate monomorphic loci or loci with all
-values missing. Clean this up with gl.filter.monomorphic().
+Apply the recoding using gl.recode.ind(). Deleting individuals can
+potentially generate monomorphic loci or loci with all values missing. Clean
+this up with gl.filter.monomorphic().
 }
 \examples{
-result <- gl.make.recode.ind(testset.gl, out.recode.file ="Emmac_recode_ind.csv",outpath=tempdir())
+result <- gl.make.recode.ind(testset.gl, out.recode.file ='Emmac_recode_ind.csv',outpath=tempdir())
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

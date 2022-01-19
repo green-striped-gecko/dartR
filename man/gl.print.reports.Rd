@@ -7,7 +7,8 @@
 gl.print.reports(print_report)
 }
 \arguments{
-\item{print_report}{number of report from \code{\link{gl.list.reports}} that is to be printed}
+\item{print_report}{Number of report from \code{\link{gl.list.reports}} that 
+is to be printed}
 }
 \value{
 Prints reports that were saved in tempdir.
@@ -20,6 +21,10 @@ Prints dartR reports saved in tempdir
 reports <- gl.print.reports(1)
 }
 }
+\seealso{
+\code{\link{gl.list.reports}}
+}
 \author{
-Bernd Gruber & Luis Mijangos (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber & Luis Mijangos (bugs? Post to
+ \url{https://groups.google.com/d/forum/dartr})
 }

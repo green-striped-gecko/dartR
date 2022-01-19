@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.read.csv.r
 \name{gl.read.csv}
 \alias{gl.read.csv}
-\title{Read SNP data from a csv file into a genlight object}
+\title{Reads SNP data from a csv file into a genlight object}
 \usage{
 gl.read.csv(
   filename,
@@ -15,44 +15,48 @@ gl.read.csv(
 \arguments{
 \item{filename}{Name of the csv file containing the SNP genotypes [required].}
 
-\item{transpose}{If TRUE, rows are loci and columns are individuals [default FALSE].}
+\item{transpose}{If TRUE, rows are loci and columns are individuals
+[default FALSE].}
 
-\item{ind.metafile}{Name of the csv file containing the metrics for individuals [optional].}
+\item{ind.metafile}{Name of the csv file containing the metrics for
+individuals [optional].}
 
-\item{loc.metafile}{Name of the csv file containing the metrics for loci [optional].}
+\item{loc.metafile}{Name of the csv file containing the metrics for
+loci [optional].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 a genlight object with the SNP data and associated metadata included.
 }
 \description{
-This script takes SNP genotypes from a csv file, combines them with 
+This script takes SNP genotypes from a csv file, combines them with
 individual and locus metrics and creates a genlight object.
 }
 \details{
-The SNP data need to be in one of two forms. SNPs can be coded 0 for 
-homozygous reference, 2 for homozygous alternate, and 1 for heterozygous with 
-NA for missing values; or the SNP data can be coded A/A, A/C, C/T, G/A etc, 
-with -/- as missing. In this format A and T are used as reference alleles. 
+The SNP data need to be in one of two forms. SNPs can be coded 0 for
+homozygous reference, 2 for homozygous alternate, and 1 for heterozygous with
+NA for missing values; or the SNP data can be coded A/A, A/C, C/T, G/A etc,
+with -/- as missing. In this format A and T are used as reference alleles.
 This is in contrast to the format used by DArT, where the reference allele is
 the most frequent allele. Other formats will throw an error.
 
-The SNP data need to be individuals as rows, labelled, and loci as columns, 
+The SNP data need to be individuals as rows, labelled, and loci as columns,
 also labelled. If the orientation is individuals as columns and loci by rows,
  then set transpose=TRUE.
 
 The individual metrics need to be in a csv file, with headings, with a
- mandatory id column corresponding exactly to the individual identity labels 
- provided with the SNP data and in the same order. 
+ mandatory id column corresponding exactly to the individual identity labels
+ provided with the SNP data and in the same order.
 
-The locus metadata needs to be in a csv file with headings, with a mandatory 
-column headed AlleleID corresponding exactly to the locus identity labels 
+The locus metadata needs to be in a csv file with headings, with a mandatory
+column headed AlleleID corresponding exactly to the locus identity labels
 provided with the SNP data and in the same order.
 
-Note that the locus metadata will be complemented by calculable statistics 
-corresponding to those that would be provided by Diversity Arrays Technology 
+Note that the locus metadata will be complemented by calculable statistics
+corresponding to those that would be provided by Diversity Arrays Technology
 (e.g. CallRate).
 }
 \examples{
@@ -61,5 +65,6 @@ ind_metadata <- system.file('extdata','platy_ind.csv', package='dartR')
 gl  <- gl.read.csv(filename = csv_file, ind.metafile = ind_metadata)
 }
 \author{
-Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Luis Mijangos -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

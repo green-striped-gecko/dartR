@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl2faststructure.r
 \name{gl2faststructure}
 \alias{gl2faststructure}
-\title{Export DArT genlight object \{adegenet\} to faststructure format (to run faststructure elsewhere)}
+\title{Exports DArT genlight object \{adegenet\} to faststructure format (to run
+ faststructure elsewhere)}
 \usage{
 gl2faststructure(
   x,
@@ -13,18 +14,25 @@ gl2faststructure(
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{outfile}{-- file name of the output file (including extension) [default gl.str]}
+\item{outfile}{File name of the output file (including extension)
+[default "gl.str"].}
 
-\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
+\item{outpath}{Path where to save the output file
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
+when calling this function to direct output files to your working directory.}
 
-\item{probar}{switch to show/hide progress bar}
+\item{probar}{Switch to show/hide progress bar [default FALSE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \description{
-Recodes in the quite specific faststructure format (e.g first six columns need to be there, but are ignored...check faststructure documentation (if you find any :-( )))
+Recodes in the quite specific faststructure format (e.g first six columns
+need to be there, but are ignored...check faststructure documentation
+ (if you find any :-( )))
 }
 \details{
 The script writes out the a file in faststructure format.

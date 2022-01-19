@@ -2,19 +2,19 @@
 % Please edit documentation in R/gl.alf.r
 \name{gl.alf}
 \alias{gl.alf}
-\title{Calculates allele frequency of the first and second allele for each loci #' 
+\title{Calculates allele frequency of the first and second allele for each loci
 A very simple function to report allele frequencies}
 \usage{
-gl.alf(gl)
+gl.alf(x)
 }
 \arguments{
-\item{gl}{-- a genlight object}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 }
 \value{
-a simple data.frame with alf1, alf2
+A simple data.frame with alf1, alf2.
 }
 \description{
-Calculates allele frequency of the first and second allele for each loci #' 
+Calculates allele frequency of the first and second allele for each loci
 A very simple function to report allele frequencies
 }
 \examples{
@@ -23,5 +23,6 @@ gl.alf(possums.gl[,1:10])
 barplot(t(as.matrix(gl.alf(possums.gl[,1:10]))))
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber (bugs? Post to
+ \url{https://groups.google.com/d/forum/dartr})
 }

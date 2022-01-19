@@ -2,37 +2,47 @@
 % Please edit documentation in R/utils.dist.binary.r
 \name{utils.dist.binary}
 \alias{utils.dist.binary}
-\title{utils.dist.binary}
+\title{Calculates a distance matrix for individuals defined in an \{adegenet\}
+genlight object using binary P/A data (SilicoDArT)}
 \usage{
 utils.dist.binary(x, method = "simple", verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight containing the genotypes [required]}
+\item{x}{Name of the genlight containing the genotypes [required].}
 
-\item{method}{-- Specify distance measure [simple]}
+\item{method}{Specify distance measure [default simple].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [2]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report [default 2].}
 }
 \value{
 An object of class 'dist' giving distances between individuals
 }
 \description{
-This script calculates various distances between individuals based on Tag Presence/Absence data.
+This script calculates various distances between individuals based on Tag
+Presence/Absence data.
 }
 \details{
-The distance measure can be one of
- 
- simple -- simple matching, both 1 or both 0 = 0; one 1 and the other 0 = 1. Presence and absence equally weighted.
- Jaccard -- ignores matching 0, both 1 = 0; one 1 and the other 0 = 1. Absences could be for different reasons.
- Dice -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences could be for different reasons. Sometimes called the Czekanowski or Sorensen distance.
- Phi -- binary analogue of the Pearson Correlation coefficient.
- 
- One might choose to disregard or downweight absences in comparison with presences because the homology of absences is less clear (mutation at one or
+The distance measure can be one of:
+ \itemize{
+ \item simple -- simple matching, both 1 or both 0 = 0; one 1 and the other
+ 0 = 1. Presence and absence equally weighted.
+ \item Jaccard -- ignores matching 0, both 1 = 0; one 1 and the other 0 = 1.
+ Absences could be for different reasons.
+ \item Dice -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences
+ could be for different reasons. Sometimes called the Czekanowski or Sorensen
+ distance.
+ \item Phi -- binary analogue of the Pearson Correlation coefficient.
+ }
+
+ One might choose to disregard or downweight absences in comparison with
+ presences because the homology of absences is less clear (mutation at one or
  the other, or both restriction sites). Your call.
 }
 \examples{
-D <- utils.dist.binary(testset.gs, method="Jaccard")
+D <- utils.dist.binary(testset.gs, method='Jaccard')
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

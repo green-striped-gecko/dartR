@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.assign.pa.r
 \name{gl.assign.pa}
 \alias{gl.assign.pa}
-\title{Eliminate populations as possible source populations for an individual of unknown provenance, using private alleles}
+\title{Eliminates populations as possible source populations for an individual
+ of unknown provenance, using private alleles}
 \usage{
 gl.assign.pa(
   x,
@@ -14,44 +15,55 @@ gl.assign.pa(
 )
 }
 \arguments{
-\item{x}{-- name of the input genlight object [required]}
+\item{x}{Name of the input genlight object [required].}
 
-\item{unknown}{-- SpecimenID label (indName) of the focal individual whose provenance is unknown [required]}
+\item{unknown}{SpecimenID label (indName) of the focal individual whose
+provenance is unknown [required].}
 
-\item{nmin}{-- minimum sample size for a target population to be included in the analysis [default 10]}
+\item{nmin}{Minimum sample size for a target population to be included in the
+analysis [default 10].}
 
-\item{threshold}{-- populations to retain for consideration; those for which the focal individual has 
-less than or equal to threshold loci with private alleles [default 0]}
+\item{threshold}{Populations to retain for consideration; those for which the
+focal individual has less than or equal to threshold loci with private
+alleles [default 0].}
 
-\item{n.best}{-- if given a value, dictates the best n=n.best populations to retain for consideration (or more if their
-are ties) based on private alleles [default NULL]}
+\item{n.best}{If given a value, dictates the best n=n.best populations to
+retain for consideration (or more if their are ties) based on private alleles
+ [default NULL].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+ [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A genlight object containing the focal individual (assigned to population "unknown") and 
-populations for which the focal individual is not distinctive (number of loci with private alleles less than or equal 
-to the threshold). If no such populations, the genlight object contains only data for the unknown individual.
+A genlight object containing the focal individual (assigned to
+population 'unknown') and populations for which the focal individual is not
+distinctive (number of loci with private alleles less than or equal to the
+threshold). If no such populations, the genlight object contains only data
+for the unknown individual.
 }
 \description{
-This script eliminates from consideration as putative source populations, those populations for which the individual
-has too many private alleles. The populations that remain are putative source populations, subject to further 
-consideration. 
+This script eliminates from consideration as putative source populations,
+those populations for which the individual has too many private alleles. The
+populations that remain are putative source populations, subject to further
+consideration.
 
-The algorithm identifies those target populations for which the individual has no private alleles or for which the
-number of private alleles does not exceed a user specified threshold.
+The algorithm identifies those target populations for which the individual
+has no private alleles or for which the number of private alleles does not
+exceed a user specified threshold.
 
-An excessive count of private alleles is an indication that the unknown does not belong to a target population (provided that
-the sample size is adequate, say >=10).
+An excessive count of private alleles is an indication that the unknown does
+not belong to a target population (provided that the sample size is
+adequate, say >=10).
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-  x <- gl.assign.pa(testset.gl, unknown="UC_00146", nmin=10, threshold=1,verbose=3)
-  
+  x <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,verbose=3)
+
 }
 \seealso{
 \code{\link{gl.assign.pca}}
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to #'  \url{https://groups.google.com/d/forum/dartr}
 }

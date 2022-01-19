@@ -7,19 +7,23 @@
 gl.read.vcf(vcffile, verbose = NULL)
 }
 \arguments{
-\item{vcffile}{-- a vcf file (works only for diploid data)}
+\item{vcffile}{A vcf file (works only for diploid data) [required].}
 
-\item{verbose}{set to 2}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 A genlight object.
 }
 \description{
-This function needs package vcfR, please install it. The converted genlight object does not have individual metrics. You need to add them 'manually' to the other$ind.metrics slot.
+This function needs package vcfR, please install it. The converted genlight
+object does not have individual metrics. You need to add them 'manually' to
+the other$ind.metrics slot.
 }
 \examples{
 \dontrun{
-test <- gl.read.vcf("your_data.vcf")
+obj <- gl.read.vcf(system.file('extdata/test.vcf', package='dartR'))
 }
 }
 \author{

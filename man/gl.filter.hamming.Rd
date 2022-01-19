@@ -20,22 +20,25 @@ gl.filter.hamming(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{threshold}{A threshold Hamming distance for filtering loci [default threshold 0.2].}
+\item{threshold}{A threshold Hamming distance for filtering loci
+[default threshold 0.2].}
 
-\item{rs}{Number of bases in the restriction enzyme recognition sequence [default 5].}
+\item{rs}{Number of bases in the restriction enzyme recognition sequence
+[default 5].}
 
 \item{taglength}{Typical length of the sequence tags [default 69].}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default theme_dartR()].}
 
 \item{plot_colors}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
 \item{pb}{Switch to output progress bar [default FALSE].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
@@ -46,7 +49,7 @@ progress log ; 3, progress and results summary; 5, full report
 A genlight object filtered on Hamming distance.
 }
 \description{
-Hamming distance is calculated as the number of base differences between two 
+Hamming distance is calculated as the number of base differences between two
 sequences which can be expressed as a count or a proportion. Typically, it is
 calculated between two sequences of equal length. In the context of DArT
 trimmed sequences, which differ in length but which are anchored to the left
@@ -55,15 +58,15 @@ two trimmed sequences starting from immediately after the common recognition
 sequence and terminating at the last base of the shorter sequence.
 }
 \details{
-Hamming distance can be computed 
+Hamming distance can be computed
 by exploiting the fact that the dot product of two binary vectors x and (1-y)
 counts the corresponding elements that are different between x and y.
-This approach can also be used for vectors that contain more than two possible 
-values at each position (e.g. A, C, T or G).
+This approach can also be used for vectors that contain more than two 
+possible values at each position (e.g. A, C, T or G).
 
 If a pair of DNA sequences are of differing length, the longer is truncated.
 
-The algorithm is that of Johann de Jong 
+The algorithm is that of Johann de Jong
 \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
 as implemented in \code{\link{utils.hamming}}.
 
@@ -79,6 +82,7 @@ percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 \code{\link{gl.filter.hamming}}
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+ \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters functions}

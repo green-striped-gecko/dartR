@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2treemix.r
 \name{gl2treemix}
 \alias{gl2treemix}
-\title{Convert a genlight object to a treemix input file}
+\title{Converts a genlight object to a treemix input file}
 \usage{
 gl2treemix(
   x,
@@ -12,26 +12,35 @@ gl2treemix(
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{outfile}{-- file name of the output file (including gz extension)[default treemix_input.gz]}
+\item{outfile}{File name of the output file (including gz extension)
+[default 'treemix_input.gz'].}
 
-\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this function or set.tempdir <- getwd() elsewhere in your script
-to direct output files to your working directory.}
+\item{outpath}{Path where to save the output file
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() when calling this
+ function or set.tempdir <- getwd() elsewhere in your script to direct
+ output files to your working directory.}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \description{
-The output file contains the snp data in the format expected by treemix -- see the treemix manual. The file will be gzipped before in order to be recognised
-by treemix. Plotting functions provided with treemix will need to be sourced from the treemix download page.
+The output file contains the SNP data in the format expected by treemix --
+see the treemix manual. The file will be gzipped before in order to be
+recognised by treemix. Plotting functions provided with treemix will need to
+ be sourced from the treemix download page.
 }
 \examples{
-
 gl2treemix(testset.gl, outpath=tempdir())
 }
 \references{
-Pickrell and Pritchard (2012). Inference of population splits and mixtures from genome-wide allele frequency data. PLoS Genetics https://doi.org/10.1371/journal.pgen.1002967
+Pickrell and Pritchard (2012). Inference of population splits and
+mixtures from genome-wide allele frequency data. PLoS Genetics
+ https://doi.org/10.1371/journal.pgen.1002967
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }
