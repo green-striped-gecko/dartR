@@ -70,7 +70,9 @@ Suggests:
     scales,
     SIBER,
     fields,
-    snpStats
+    snpStats,
+    boot,
+    amplicR
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2

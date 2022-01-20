@@ -89,7 +89,7 @@ AIC <- function(dir.in, k=NULL) {
   bLhood <- list.files(dir.in, pattern="*.bestlhoods$", recursive=TRUE, full.names=TRUE)
   path.length <- sapply(bLhood, nchar)
   bLhood <- bLhood[which.min(path.length)]
-  lbest <- read.table(bLhood, h=TRUE)[1, "MaxEstLhood"]
+  lbest <- read.table(bLhood, header =TRUE)[1, "MaxEstLhood"]
   if(is.null(k)) {
   est <- list.files(dir.in, pattern="*.est$", recursive=TRUE, full.names=TRUE)
   est <- est[which.min(sapply(est, nchar))]
@@ -183,7 +183,7 @@ AIC.comp <- function(dir.in) {
 #'@author  Carlo Pacioni (Post to \url{https://groups.google.com/d/forum/dartr})
 #'@return A list with the following elements \itemize{ \item Bootstr.stats:
 #'  Descriptive statistics from bootstraps (Median, lower and upper limit), an
-#'  the intial estimated parameters  \item P.Rand.less.Obs: The probability that
+#'  the initial estimated parameters  \item P.Rand.less.Obs: The probability that
 #'  a random value from the null Composite Likelihood Ratio distribution is less
 #'  than the observed CLR \item P.Rand.gt.Obs: The probability that a random
 #'  value from the null Composite Likelihood Ratio distribution is greater than
@@ -191,9 +191,10 @@ AIC.comp <- function(dir.in) {
 #'@references Excoffier L., Dupanloup I., Huerta-Sánchez E., Sousa V. C. and
 #'  Foll M. (2013) Robust demographic inference from genomic and SNP data. PLoS
 #'  genetics 9(10)
-#'@import boot
-#'@import data.table
 #'@export
+
+CLR <- MaxEstLhood <- MaxObsLhood <- Param <- NULL
+
 fsc.bootstraps <- function(dir.in, nLoci=10000, nSim=100, maf=TRUE, ncpu=0, 
                            nBatches=NULL, fsc.cmd="fsc2702", fsc.path="path",
                            par.indLoci="200000 0", par.nBlocks=1, 
@@ -203,8 +204,8 @@ fsc.bootstraps <- function(dir.in, nLoci=10000, nSim=100, maf=TRUE, ncpu=0,
   med.i <- function(x, i) median(x[i])
   
   extractCI <- function(x, nBoot, conf, boot.type) {
-    bootstr <- boot(x, statistic=med.i, R=nBoot)
-    b.ci <- boot.ci(bootstr, conf=conf, type=boot.type)
+    bootstr <- boot::boot(x, statistic=med.i, R=nBoot)
+    b.ci <- boot::boot.ci(bootstr, conf=conf, type=boot.type)
     t0 <- b.ci$t0
     ci <- b.ci[[4]][1, tail(seq_len(ncol(b.ci[[4]])), 2)]
     return(c(t0, ci))
@@ -219,7 +220,7 @@ est <- list.files(dir.in, pattern="*.est$", full.names=TRUE)
 est.bLhood.path <- list.files(dir.in, pattern="*.bestlhoods$", recursive=TRUE, full.names=TRUE)
 path.length <- sapply(est.bLhood.path, nchar)
 est.bLhood.path <- est.bLhood.path[which.min(path.length)]
-est.bLhood <- read.table(est.bLhood.path, h=TRUE)
+est.bLhood <- read.table(est.bLhood.path, header=TRUE)
 
 res.dir <- gsub(".tpl$", replacement = "", x = basename(tpl))
 par.file <- list.files(file.path(dir.in, res.dir), pattern="*_maxL.par$", recursive=FALSE, full.names=TRUE)
@@ -268,7 +269,7 @@ est.sim <- do.call(rbind, args=lbLhoods)
 
 est.dt <- data.table(est.sim)
 est.dt[, CLR := MaxEstLhood / MaxObsLhood] # Compute the Composite Likelihood Ration
-Pclr <- ecdf(est.dt[, CLR]) # Compute the empirical cumulative density function
+Pclr <- stats::ecdf(est.dt[, CLR]) # Compute the empirical cumulative density function
 est.bLhood$CLR <- est.bLhood$MaxEstLhood / est.bLhood$MaxObsLhood # Observed ratio
 
 P.Rand.less.Obs <- Pclr(est.bLhood$CLR) # The probability that a random value from the null distribution is less than the observed
