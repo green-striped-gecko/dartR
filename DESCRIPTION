@@ -68,7 +68,9 @@ Suggests:
     markdown,
     RColorBrewer,
     scales,
-    SIBER
+    SIBER,
+    fields,
+    snpStats
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2

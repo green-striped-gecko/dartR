@@ -3,11 +3,10 @@
 \name{gl.nhybrids}
 \alias{gl.nhybrids}
 \title{Creates an input file for the program NewHybrids and runs it if
- NewHybrids is installed}
+ NewHybrids is installed (PC only)}
 \usage{
 gl.nhybrids(
   gl,
-  outfile = "nhyb.txt",
   outpath = tempdir(),
   p0 = NULL,
   p1 = NULL,
@@ -27,9 +26,6 @@ gl.nhybrids(
 }
 \arguments{
 \item{gl}{Name of the genlight object containing the SNP data [required].}
-
-\item{outfile}{Name of the file that will be the input file for NewHybrids
-[default nhyb.txt].}
 
 \item{outpath}{Path where to save the output file [default tempdir()].}
 
@@ -79,16 +75,16 @@ progress log; 3, progress and results summary; 5, full report
 }
 \value{
 The reduced genlight object, if parentals are provided; output of
- NewHybrids is saved to di.sk
+ NewHybrids is saved to the working directory.
 }
 \description{
 This function compares two sets of parental populations to identify loci that
- exhibit a fixed difference, returns an genlight object with the reduced
- data, and creates an input file for the program NewHybrids using the top 200
- (or hard specified loc.limit) loci. In the absence of two identified
- parental populations, the script will select a random set 200 loci only
- (method='random') or the first 200 loci ranked on information content
- (method='AvgPIC').
+exhibit a fixed difference, returns an genlight object with the reduced
+data, and creates an input file for the program NewHybrids using the top 200
+(or hard specified loc.limit) loci. In the absence of two identified
+parental populations, the script will select a random set 200 loci only
+(method='random') or the first 200 loci ranked on information content
+(method='AvgPIC').
 
 A fixed difference occurs when a SNP allele is present in all individuals
 of one population and absent in the other. There is provision for setting
@@ -100,16 +96,18 @@ of NewHybids.
 If you specify a directory for the NewHybrids executable file, then the
 script will create the input file from the SNP data then run NewHybrids. If
 the directory is set to NULL, the execution will stop once the input file
-(default='nhyb.txt') has been written to disk.
+(default='nhyb.txt') has been written to disk. Note: the executable option
+will not work on a Mac; Mac users should generate the NewHybrids input file
+and run this on their local installation of NewHybrids.
 
 Refer to the New Hybrids manual for further information on the parameters to
 set
 -- http://ib.berkeley.edu/labs/slatkin/eriq/software/new_hybs_doc1_1Beta3.pdf
 
 It is important to stringently filter the data on RepAvg and CallRate if
- using the random option. One might elect to repeat the analysis
- (method='random') and combine the resultant posterior probabilities should
- 200 loci be considered insufficient.
+using the random option. One might elect to repeat the analysis
+(method='random') and combine the resultant posterior probabilities should
+200 loci be considered insufficient.
 
 The F1 individuals should be homozygous at all loci for which the parental
 populations are fixed and different, assuming parental populations have been
@@ -124,15 +122,20 @@ default).
 }
 \examples{
 \dontrun{
-m <- gl.nhybrids(testset.gl, outfile='nhyb.txt',
+m <- gl.nhybrids(testset.gl, 
 p0=NULL, p1=NULL,
-nhyb.directory='C:/workspace/R/NewHybsPC',
+nhyb.directory='D:/workspace/R/NewHybsPC', # Specify as necessary
+outpath="D:/workspace",  # Specify as necessary, usually getwd() [= workspace]
 BurnIn=100,
 sweeps=100,
 verbose=3)
 }
 }
+\references{
+Anderson, E.C. and Thompson, E.A.(2002). A model-based method for identifying 
+species hybrids using multilocus genetic data. Genetics. 160:1217-1229.
+}
 \author{
-Custodian: Arthur Georges (Post to
- \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to
+ \url{https://groups.google.com/d/forum/dartr}
 }
