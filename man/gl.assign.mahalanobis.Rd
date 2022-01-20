@@ -71,9 +71,21 @@ of the unknown in relation to the confidence envelope in all selected
 dimensions of the ordination. The larger the assignment probability, 
 the greater the confidence in the assignment. 
 
-If the unknown individual is an extreme outlier, say at less than 0.001 
-probability of population membership (0.999 confidence envelope), then 
-the associated population can be eliminated from further consideration.
+If dim.limit is set to 2, to correspond with the dimensions used in
+gl.assign.pa(), then the output provides a ranking of the final set
+of putative source populations.
+
+If dim.limit is set to be > 2, then this script provides a basis for
+further narrowing the set of putative populations.If the unknown individual
+is an extreme outlier, say at less than 0.001 probability of population 
+membership (0.999 confidence envelope), then the associated population 
+can be eliminated from further consideration.
+
+Warning: gl.assign.mahal() treats each specified dimension equally, without
+regard to the percentage variation explained after ordination. If the 
+unknown is an outlier in a lower dimension with an explanatory variance of,
+say, 0.1%, the putative population will be eliminated. Use only substantive
+dimensions from the ordination.
 
 Each of these above approaches provides evidence, none are 100% definitive. 
 They need to be interpreted cautiously.
