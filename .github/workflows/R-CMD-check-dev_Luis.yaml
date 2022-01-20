@@ -67,6 +67,7 @@ jobs:
             CRAN = "https://cloud.r-project.org/"
           ))
           remotes::install_github('EricArcher/strataG')
+          remotes::install_github("carlopacioni/amplicR")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
