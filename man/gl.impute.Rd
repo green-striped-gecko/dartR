@@ -2,19 +2,18 @@
 % Please edit documentation in R/gl.impute.r
 \name{gl.impute}
 \alias{gl.impute}
-\alias{matrix2gen}
 \title{Imputation of missing data}
 \usage{
-matrix2gen(snp_matrix, parallel)
+gl.impute(x, method = "HW", parallel = FALSE, verbose = NULL)
 }
 \arguments{
-\item{parallel}{A logical indicating whether multiple cores -if available- 
-should be used for the computations (TRUE), or not (FALSE); requires the 
-package parallel to be installed [default FALSE].}
-
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
 \item{method}{Imputation method, either "frequency" or "HW" [default "HW"].}
+
+\item{parallel}{A logical indicating whether multiple cores -if available- 
+should be used for the computations (TRUE), or not (FALSE); requires the 
+package parallel to be installed [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
 progress log ; 3, progress and results summary; 5, full report 

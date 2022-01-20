@@ -477,7 +477,7 @@ gl.report.diversity <- function(x,
         ggplot(fs_final, aes(x = pop, y = value, fill = pop)) + 
         geom_bar(position = "dodge", stat = "identity",color = "black") + 
         geom_errorbar(aes(ymin = low, ymax = up), width = 0.2) + 
-        scale_fill_manual(values = plot_colors) + 
+        scale_fill_manual(values = colors_pops) + 
         facet_wrap(~ q, scales = "free_x") + 
         plot_theme + 
         theme(text = element_text(size = 14),
@@ -486,7 +486,8 @@ gl.report.diversity <- function(x,
               axis.title.x = element_blank(),
               axis.ticks.y = element_blank(),
               axis.title.y = element_blank()) +
-        labs(fill = "Population") + ggtitle("q-profile")
+        labs(fill = "Population") + 
+        ggtitle("q-profile")
     
     print(p3)
     

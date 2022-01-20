@@ -1,20 +1,21 @@
-#' @name gl.report.ld_2
+#' @name gl.report.ld.map
 #' @title Calculates pairwise linkage disequilibrium
 #' @description
 #' This function calculate
 #'  the function \link[snpStats]{ld} (package snpStats).
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
-#' @param by_pop = TRUE,
-#' @param ld_max_pairwise = 5000000,
-#' @param ld_resolution = 1000000,
-#' @param region_size = 100000,
-#' @param ld_bins = 100000
-#' @param maf [default 0.05].
-#' @param ld_stat Linkage disequilibrium measure to be calculated. This should contain one or more of the strings: "LLR", "OR", "Q", "Covar", "D.prime", "R.squared", and "R"= "R.squared",
-#' @param pairwise_plot [default TRUE].
-#' @param haplotype_plot [default TRUE]
-#' @param stat_keep [default "AvgPIC"]
+#' @param ld_max_pairwise Maximum distance in number of base pairs at which LD 
+#' should be calculated [default 1000000].
+#' @param ld_resolution Resolution at which LD should be reported in number of 
+#' base pairs [default]
+#' @param maf Minor allele frequency threshold to filter out loci  [default 0.05].
+#' @param ld_stat Linkage disequilibrium measure to be calculated.
+#'  This should contain one or more of the strings: "LLR", "OR", "Q", "Covar",
+#'   "D.prime", "R.squared", and "R"= "R.squared",
+#' @param plot.out Specify if plot is to be produced [default TRUE].
+#' @param stat_keep Statistic to be used to choose SNP to be kept 
+#' [default "AvgPIC"].
 #' @param plot_theme User specified theme [default theme_dartR()].
 #' @param plot_colors Vector with two color names for the borders and fill
 #' [default two_colors].
@@ -23,27 +24,35 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
-#' @param ... Parameters passed to function A.mat from package rrBLUP.
 #'
 #' @details
 #' Keeping only loci that were mapped
-#' Distribution of LD between SNP pairs in relation to the physical distance between loci (Mb), pooled over all autosomes. The red line shows average LD in each 500 kb sliding window. Grey dots are individual LD estimates plotted
+#' Distribution of LD between SNP pairs in relation to the physical distance 
+#' between loci (Mb), pooled over all autosomes. The red line shows average LD 
+#' in each 500 kb sliding window. Grey dots are individual LD estimates plotted
 #'
-#' he distance at which pairwise LD (as measured by the statistic r2) decayed below 0.2, a threshold that is commonly used to imply that two loci are unlinked (Delourme et al., 2013; Li et al., 2014).
+#' he distance at which pairwise LD (as measured by the statistic r2) decayed 
+#' below 0.2, a threshold that is commonly used to imply that two loci are 
+#' unlinked (Delourme et al., 2013; Li et al., 2014).
 #'
-#' Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., André, I., . . . Marty, A. (2013). High-density SNP-based genetic map development and linkage disequilibrium assessment in Brassica napusL. BMC genomics, 14(1), 120.
-#' Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . Brummer, E. C. (2014). Development of an alfalfa SNP array and its use to evaluate patterns of population structure and linkage disequilibrium. PLoS One, 9(1), e84329.
-#' @return An identity by descent matrix
-#' @author Custodian: Luis Mijangos -- Post to
-#' \url{https://groups.google.com/d/forum/dartr}
+#' Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., André, 
+#' I., . . . Marty, A. (2013). High-density SNP-based genetic map development 
+#' and linkage disequilibrium assessment in Brassica napusL. BMC genomics, 14(1), 120.
+#' Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . Brummer,
+#'  E. C. (2014). Development of an alfalfa SNP array and its use to evaluate 
+#'  patterns of population structure and linkage disequilibrium. PLoS One, 9(1), e84329.
+#' @return 
+#' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' \dontrun{
 #' x <- platypus.gl
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 #' x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
-#' gl.report.ld_2(x)
+#' gl.report.ld.map(x)
+#' }
 #' @export
 
-gl.report.ld_2 <- function(x,
+gl.report.ld.map <- function(x,
                            ld_max_pairwise = 1000000,
                            ld_resolution = 10000,
                            maf = 0.05,
@@ -182,7 +191,7 @@ gl.report.ld_2 <- function(x,
       mean_dis <- mean(diff(ld_map_loci$loc_bp))
       ld_depth_b <- ceiling((ld_max_pairwise / mean_dis))
       ld_snps <-
-        ld(genotype_loci, depth = ld_depth_b, stats = ld_stat) #function to calculate LD
+        snpStats::ld(genotype_loci, depth = ld_depth_b, stats = ld_stat) #function to calculate LD
       ld_columns <- as.matrix(ld_snps)
       colnames(ld_columns) <- rownames(ld_columns)
       
@@ -255,7 +264,7 @@ gl.report.ld_2 <- function(x,
   })
   bins_ld_temp <-
     lapply(split_df, function(x) {
-      stats.bin(x$distance, x$ld_stat, breaks = break_bins)
+      fields::stats.bin(x$distance, x$ld_stat, breaks = break_bins)
     })
   bins_ld <-
     lapply(seq_along(bins_ld_temp), function(i) {
@@ -322,6 +331,7 @@ gl.report.ld_2 <- function(x,
       plot_theme
     
     # pairwise LD by population
+    distance <- NULL
     p4 <-
       ggplot(bins_ld, aes(x = distance, y = ld_stat, colour = pop)) +
       geom_line(size = 1) +

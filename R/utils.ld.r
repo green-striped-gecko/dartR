@@ -17,7 +17,6 @@ utils.read.ped <- function (file,
     n <- 0
     repeat {
       line <- readLines(con, n = 1)
-      if (length(line) == 0) 
         break
       n <- n + 1
     }
@@ -133,7 +132,7 @@ utils.read.ped <- function (file,
   result <- new("SnpMatrix", result)
   if (lex.order) {
     swa <- (!(is.na(a1) | is.na(a2)) & (a1 > a2))
-    switch.alleles(result, swa)
+    snpStats::switch.alleles(result, swa)
     a1n <- a1
     a1n[swa] <- a2[swa]
     a2[swa] <- a1[swa]
