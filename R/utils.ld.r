@@ -1,5 +1,5 @@
 utils.read.ped <- function (file, 
-                            n, 
+                            # n, 
                             snps, 
                             which, 
                             split = "\t| +",
@@ -13,17 +13,19 @@ utils.read.ped <- function (file,
   r3 <- as.raw(3)
   con <- gzfile(file)
   open(con)
-  if (missing(n)) {
-    n <- 0
-    repeat {
-      line <- readLines(con, n = 1)
-        break
-      n <- n + 1
-    }
-    if (n == 0) 
-      stop("Nothing read")
-    seek(con, 0)
+  # if (missing(n)) {
+  n <- 0
+  repeat {
+    line <- readLines(con, n = 1)
+    if (length(line) == 0) 
+      break
+    n <- n + 1
   }
+  if (n == 0){ 
+    stop("Nothing read")
+  }
+  seek(con, 0)
+  # }
   gen <- missing(snps)
   map <- NULL
   if (!gen) {

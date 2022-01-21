@@ -1,21 +1,25 @@
 #' @name gl.report.ld.map
 #' @title Calculates pairwise linkage disequilibrium
 #' @description
-#' This function calculate
-#'  the function \link[snpStats]{ld} (package snpStats).
+#' This function calculates pairwise linkage disequilibrium (LD) within each 
+#' chromosome and by population using the function \link[snpStats]{ld} 
+#' (package snpStats).
+#' 
+#' This function requires that SNPs to be mapped to a reference genome and the 
+#' information for SNP's position must be stored in the genlight accessor 
+#' @@position" and the SNP's chromosome name in the accessor @@chromosome. 
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param ld_max_pairwise Maximum distance in number of base pairs at which LD 
 #' should be calculated [default 1000000].
 #' @param ld_resolution Resolution at which LD should be reported in number of 
-#' base pairs [default]
-#' @param maf Minor allele frequency threshold to filter out loci  [default 0.05].
-#' @param ld_stat Linkage disequilibrium measure to be calculated.
-#'  This should contain one or more of the strings: "LLR", "OR", "Q", "Covar",
-#'   "D.prime", "R.squared", and "R"= "R.squared",
+#' base pairs [default 10000]
+#' @param maf Minor allele frequency threshold to filter out loci [default 0.05].
+#' @param ld_stat The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
+#'   "D.prime", "R.squared", and "R" [default "R.squared"].
 #' @param plot.out Specify if plot is to be produced [default TRUE].
-#' @param stat_keep Statistic to be used to choose SNP to be kept 
-#' [default "AvgPIC"].
+#' @param stat_keep Name of the column from the slot loc.metrics to be used to 
+#' choose SNP to be kept [default "AvgPIC"].
 #' @param plot_theme User specified theme [default theme_dartR()].
 #' @param plot_colors Vector with two color names for the borders and fill
 #' [default two_colors].
@@ -26,29 +30,29 @@
 #' [default 2, unless specified using gl.set.verbosity].
 #'
 #' @details
-#' Keeping only loci that were mapped
-#' Distribution of LD between SNP pairs in relation to the physical distance 
-#' between loci (Mb), pooled over all autosomes. The red line shows average LD 
-#' in each 500 kb sliding window. Grey dots are individual LD estimates plotted
-#'
-#' he distance at which pairwise LD (as measured by the statistic r2) decayed 
-#' below 0.2, a threshold that is commonly used to imply that two loci are 
+#' This function reports pairwise LD of those SNPs in which the LD measure is 
+#' > 0 in all the populations. 
+#' The LD plot shows the pairwise LD measure against distance in number
+#' of base pairs pooled over all the chromosomes and a red line representing the
+#' threshold (R.squared = 0.2) that is commonly used to imply that two loci are
 #' unlinked (Delourme et al., 2013; Li et al., 2014).
-#'
-#' Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., André, 
+#' @references
+#' \itemize{
+#' \item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., André, 
 #' I., . . . Marty, A. (2013). High-density SNP-based genetic map development 
 #' and linkage disequilibrium assessment in Brassica napusL. BMC genomics, 14(1), 120.
-#' Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . Brummer,
+#' \item Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . Brummer,
 #'  E. C. (2014). Development of an alfalfa SNP array and its use to evaluate 
 #'  patterns of population structure and linkage disequilibrium. PLoS One, 9(1), e84329.
-#' @return 
+#'  }
+#' @return A dataframe with information for each SNP pair in LD. 
 #' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' \dontrun{
 #' x <- platypus.gl
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 #' x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
-#' gl.report.ld.map(x)
+#' gl.report.ld.map(x,ld_resolution = 100000)
 #' }
 #' @export
 
@@ -79,14 +83,6 @@ gl.report.ld.map <- function(x,
   
   # check if packages are installed
   pkg <- "snpStats"
-  if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
-      "Package",
-      pkg,
-      " needed for this function to work. Please install it."
-    ))
-  }
-  pkg <- "data.table"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop(error(
       "Package",
@@ -156,7 +152,7 @@ gl.report.ld.map <- function(x,
         file = paste0(tempdir(), "/", "gl_plink", "_", pop_name, ".ped"),
         snps = paste0(tempdir(), "/", "gl_plink", "_", pop_name, ".map") ,
         sep = " ",
-        show_warnings = T
+        show_warnings = F
       )
     
     ld_map <- snp_stats$map
@@ -439,6 +435,6 @@ gl.report.ld.map <- function(x,
   }
   
   # RETURN
-  return(invisible(df_ld))
+  return(df_ld)
   
 }
