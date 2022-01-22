@@ -51,6 +51,7 @@ shapes <- gl.select.shapes(x=gl,select=c(1,1,1,5,8)) # Select set of shapes and 
 Other Exploration/visualisation functions: 
 \code{\link{gl.pcoa.plot}()},
 \code{\link{gl.select.colors}()},
+\code{\link{gl.smearplot2}()},
 \code{\link{gl.smearplot}()}
 }
 \author{
