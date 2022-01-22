@@ -25,16 +25,15 @@ gl.report.ld.map(
 should be calculated [default 1000000].}
 
 \item{ld_resolution}{Resolution at which LD should be reported in number of 
-base pairs [default]}
+base pairs [default 10000]}
 
-\item{maf}{Minor allele frequency threshold to filter out loci  [default 0.05].}
+\item{maf}{Minor allele frequency threshold to filter out loci [default 0.05].}
 
-\item{ld_stat}{Linkage disequilibrium measure to be calculated.
-This should contain one or more of the strings: "LLR", "OR", "Q", "Covar",
- "D.prime", "R.squared", and "R"= "R.squared",}
+\item{ld_stat}{The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
+"D.prime", "R.squared", and "R" [default "R.squared"].}
 
-\item{stat_keep}{Statistic to be used to choose SNP to be kept 
-[default "AvgPIC"].}
+\item{stat_keep}{Name of the column from the slot loc.metrics to be used to 
+choose SNP to be kept [default "AvgPIC"].}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
@@ -51,36 +50,41 @@ progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-
+A dataframe with information for each SNP pair in LD.
 }
 \description{
-This function calculate
- the function \link[snpStats]{ld} (package snpStats).
+This function calculates pairwise linkage disequilibrium (LD) within each 
+chromosome and by population using the function \link[snpStats]{ld} 
+(package snpStats).
+
+This function requires that SNPs to be mapped to a reference genome and the 
+information for SNP's position must be stored in the genlight accessor
 }
 \details{
-Keeping only loci that were mapped
-Distribution of LD between SNP pairs in relation to the physical distance 
-between loci (Mb), pooled over all autosomes. The red line shows average LD 
-in each 500 kb sliding window. Grey dots are individual LD estimates plotted
-
-he distance at which pairwise LD (as measured by the statistic r2) decayed 
-below 0.2, a threshold that is commonly used to imply that two loci are 
+This function reports pairwise LD of those SNPs in which the LD measure is 
+> 0 in all the populations. 
+The LD plot shows the pairwise LD measure against distance in number
+of base pairs pooled over all the chromosomes and a red line representing the
+threshold (R.squared = 0.2) that is commonly used to imply that two loci are
 unlinked (Delourme et al., 2013; Li et al., 2014).
-
-Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., André, 
-I., . . . Marty, A. (2013). High-density SNP-based genetic map development 
-and linkage disequilibrium assessment in Brassica napusL. BMC genomics, 14(1), 120.
-Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . Brummer,
- E. C. (2014). Development of an alfalfa SNP array and its use to evaluate 
- patterns of population structure and linkage disequilibrium. PLoS One, 9(1), e84329.
 }
 \examples{
 \dontrun{
 x <- platypus.gl
 x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
-gl.report.ld.map(x)
+gl.report.ld.map(x,ld_resolution = 100000)
 }
+}
+\references{
+\itemize{
+\item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., André, 
+I., . . . Marty, A. (2013). High-density SNP-based genetic map development 
+and linkage disequilibrium assessment in Brassica napusL. BMC genomics, 14(1), 120.
+\item Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . Brummer,
+ E. C. (2014). Development of an alfalfa SNP array and its use to evaluate 
+ patterns of population structure and linkage disequilibrium. PLoS One, 9(1), e84329.
+ }
 }
 \author{
 Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}

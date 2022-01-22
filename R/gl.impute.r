@@ -135,6 +135,15 @@ gl.impute <-  function(x,
     x3 <- pop_list[[1]]
   }
   
+  x3$chromosome <- x@chromosome
+  x3$position <- x$position
+  x3$ploidy <- x$ploidy
+  x3$strata <- x$strata
+  x3$hierarchy <- x$hierarchy
+  x3$other <- x$other
+  
+  x3 <- gl.compliance.check(x3)
+  
   # ADD TO HISTORY
   x3@other$history <- x@other$history
   nh <- length(x3@other$history)
