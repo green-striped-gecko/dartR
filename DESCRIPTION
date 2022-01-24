@@ -70,7 +70,6 @@ Suggests:
     SIBER,
     fields,
     snpStats,
-    raster,
     boot
 License: GPL-2
 LazyData: true
