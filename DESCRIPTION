@@ -13,7 +13,7 @@ Authors@R: c(
             person("Lindsay V.", "Clark", email="lvclark@illinois.edu", role="ctb"),
             person("Floriaan", "Devloo-Delva",email="Floriaan.Devloo-Delva@csiro.au", role="ctb"))
 Description: Functions are provided that facilitate the import and analysis of
-    SNP (single nucleotide polymorphism) and silicodart (presence/absence) data. The main focus is on data generated
+    SNP (single nucleotide polymorphism) and Silicodart (presence/absence) data. The main focus is on data generated
     by DarT (Diversity Arrays Technology). However, once SNP or related fragment
     presence/absence data from any source is imported into a genlight object many
     of the functions can be used. Functions are available for input and output of
