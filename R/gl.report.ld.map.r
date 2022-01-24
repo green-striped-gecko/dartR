@@ -7,7 +7,7 @@
 #' 
 #' This function requires that SNPs to be mapped to a reference genome and the 
 #' information for SNP's position must be stored in the genlight accessor 
-#' @@position" and the SNP's chromosome name in the accessor @@chromosome. 
+#' position" and the SNP's chromosome name in the accessor chromosome. 
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param ld_max_pairwise Maximum distance in number of base pairs at which LD 

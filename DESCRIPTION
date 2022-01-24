@@ -30,7 +30,7 @@ biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         SNPRelate, StAMPP, sp, PopGenReport, robustbase,
         gridExtra, foreach, dplyr, crayon, devtools,reshape2,
-        patchwork, data.table, hierfstat
+        patchwork, hierfstat, data.table
 Suggests: 
     tibble,
     HardyWeinberg,
@@ -62,7 +62,6 @@ Suggests:
     plotly,
     ggthemes,
     ggrepel,
-    raster,
     strataG,
     ggtern,
     markdown,
@@ -71,6 +70,7 @@ Suggests:
     SIBER,
     fields,
     snpStats,
+    raster,
     boot
 License: GPL-2
 LazyData: true

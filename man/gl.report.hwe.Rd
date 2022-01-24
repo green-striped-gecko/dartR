@@ -151,12 +151,16 @@ the number of populations times the number of loci.
 
 Ternary plots can be used to visualise patterns of H-W proportions (plot.out
 = TRUE). P-values and the statistical (non)significance of a large number of
-bi- allelic markers can be inferred from their position in a ternary plot.
+bi-allelic markers can be inferred from their position in a ternary plot.
 See Graffelman & Morales-Camarena (2008) for further details. Ternary plots
 are based on the function  \code{\link[HardyWeinberg]{HWTernaryPlot}} from
-the package HardyWeinberg. Loci that depart significantly from H-W
-proportions are shown in red, and those not showing significant departure are
-shown in green.
+the package HardyWeinberg. Each vertex of the Ternary plot represents one of 
+the three possible genotypes for SNP data: homozygous for the reference 
+allele (AA), heterozygous (AB) and homozygous for the alternative allele
+ (BB). Loci deviating significantly from Hardy-Weinberg proportions after 
+ correction for multiple tests are shown in pink. The blue parabola 
+ represents Hardy-Weinberg equilibrium, and the area between green lines 
+ represents the acceptance region.
 
 For these plots to work it is necessary to install the package ggtern.
 }

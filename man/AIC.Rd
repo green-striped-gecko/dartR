@@ -2,7 +2,7 @@
 % Please edit documentation in R/fastsimcoal.R
 \name{AIC}
 \alias{AIC}
-\title{AIC}
+\title{Compute the AIC given the likelihood in log10 scale}
 \usage{
 AIC(dir.in, k = NULL)
 }
@@ -13,7 +13,9 @@ AIC(dir.in, k = NULL)
 automatically by the function}
 }
 \description{
-
+Compute the AIC given the likelihood in log10 scale (default fsc
+ output) and number of parameters, which is automatically read by the 
+ function if \code{k=NULL}.
 }
 \details{
 It is important to note that this function will probably fail if there are
