@@ -38,6 +38,7 @@
 #' @importFrom PopGenReport lgrMMRR wassermann gd.smouse gd.kosman
 #' @importFrom stats step
 #' @importFrom sp Line Lines SpatialLines SpatialLinesLengths
+#' @importFrom raster plot
 #' @return Returns a list that consists of four pairwise distance matrices
 #' (Euclidean, Cost, length of path and genetic) and the actual paths as spatial
 #'  line objects.
