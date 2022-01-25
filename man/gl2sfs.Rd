@@ -13,17 +13,17 @@ gl2sfs(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP [required].}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{outfile_root}{The root of the name of the output file}
+\item{n.invariant.tags}{Number of invariant sites[default 0].}
 
-\item{outpath}{Path where to save the output file
-[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
- when calling this function to direct output files to your working directory.}
+\item{outfile_root}{The root of the name of the output file [default "gl2sfs"].}
+
+\item{outpath}{Path where to save the output file [default tempdir()].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
-[default NULL, unless specified using gl.set.verbosity].}
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 A list with two elements: the DAF and MAF.

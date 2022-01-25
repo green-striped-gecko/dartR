@@ -127,7 +127,7 @@ gl.impute <-  function(x,
     x3 <- NULL
     # merge back populations
     for (pop in pop_list) {
-      x3 <- rbind (x3, pop)
+      x3 <- rbind(x3, pop)
     }
   }
   # if 1 population

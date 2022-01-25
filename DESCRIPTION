@@ -30,7 +30,7 @@ biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         SNPRelate, StAMPP, sp, PopGenReport, robustbase,
         gridExtra, foreach, dplyr, crayon, devtools,reshape2,
-        patchwork, data.table, hierfstat
+        patchwork, raster, data.table
 Suggests: 
     tibble,
     HardyWeinberg,
@@ -62,7 +62,6 @@ Suggests:
     plotly,
     ggthemes,
     ggrepel,
-    raster,
     strataG,
     ggtern,
     markdown,
@@ -71,7 +70,8 @@ Suggests:
     SIBER,
     fields,
     snpStats,
-    boot
+    boot,
+    hierfstat
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2

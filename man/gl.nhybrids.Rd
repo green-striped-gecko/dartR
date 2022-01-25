@@ -3,7 +3,7 @@
 \name{gl.nhybrids}
 \alias{gl.nhybrids}
 \title{Creates an input file for the program NewHybrids and runs it if
- NewHybrids is installed (PC only)}
+ NewHybrids is installed}
 \usage{
 gl.nhybrids(
   gl,

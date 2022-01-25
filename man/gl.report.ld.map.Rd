@@ -58,7 +58,8 @@ chromosome and by population using the function \link[snpStats]{ld}
 (package snpStats).
 
 This function requires that SNPs to be mapped to a reference genome and the 
-information for SNP's position must be stored in the genlight accessor
+information for SNP's position must be stored in the genlight accessor 
+position" and the SNP's chromosome name in the accessor chromosome.
 }
 \details{
 This function reports pairwise LD of those SNPs in which the LD measure is 

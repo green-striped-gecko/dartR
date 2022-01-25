@@ -1,4 +1,3 @@
-
 #' Run fastsimcoal to estimate parameters' values
 #'
 #' Run fastsimcoal assuming that in \code{dir.in} there are the tpl, est and obs
@@ -8,7 +7,6 @@
 #' If \code{ncpu=0} and \code{nBatches=NULL}, \code{nBatches} is set to 12 (fsc
 #' default value). If \code{ncpu}>0 and \code{nBatches=NULL}, \code{nBatches} is
 #' set to twice ]code{nspu}.
-#'
 #'
 #' @param dir.in The path where to run fsc
 #' @param n The number of coalescent simulations to approximate the expected SFS
@@ -24,13 +22,20 @@
 #' @param fsc.path The path where fsc is installed or \code{"path"} if it is in
 #'   the PATH (that means that it can be called regardless of the working
 #'   directory)
-#'@author  Carlo Pacioni (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author  Carlo Pacioni (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @references Excoffier L., Dupanloup I., Huerta-Sánchez E., Sousa V. C. and
 #'   Foll M. (2013) Robust demographic inference from genomic and SNP data. PLoS
 #'   genetics 9(10)
-fsc.estimate <- function(dir.in, n=500000, L=100, maf=TRUE, ncpu=0, nBatches=NULL, 
-                         fsc.cmd="fsc2702", fsc.path="path") {
+fsc.estimate <- function(dir.in,
+                         n=500000,
+                         L=100,
+                         maf=TRUE,
+                         ncpu=0, 
+                         nBatches=NULL, 
+                         fsc.cmd="fsc2702", 
+                         fsc.path="path") {
+  
   if(!is.integer(as.integer(ncpu))) stop("The number of CPUs has to be an integer")
   if(ncpu == 0 & is.null(nBatches)) nBatches <- 12
   if(ncpu > 0 & is.null(nBatches)) nBatches <- 2 * ncpu
@@ -62,27 +67,26 @@ fsc.multiple.estimate <- function(dir.in, n=500000, L=100, maf=TRUE, ncpu=0,
   
 }
 
-
-#' AIC
-#'
-#' compute the AIC given the likelihood in log10 scale (default fsc output) and
-#' number of parameters, which is automatically read by the function if
-#' \code{k=NULL).
-#'
+#' @name AIC
+#' @title Compute the AIC given the likelihood in log10 scale
+#' @description Compute the AIC given the likelihood in log10 scale (default fsc
+#'  output) and number of parameters, which is automatically read by the 
+#'  function if \code{k=NULL}.
+#' @param dir.in The directory where the analysis was conducted
+#' @param k The number of parameters in the model. If \code{NULL} is read
+#'   automatically by the function
+#' @details
 #' It is important to note that this function will probably fail if there are
 #' more than one .est within each directory as it will read these to evaluate
 #' the number of parameters in the model. If there is more than one file, there
 #' is no way to know which one is correct.
-#'
-#' @param dir.in The directory where the analysis was conducted
-#' @param k The number of parameters in the model. If \code{NULL} is read
-#'   automatically by the function
-#'@author  Carlo Pacioni (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author  Carlo Pacioni (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @references Excoffier L., Dupanloup I., Huerta-Sánchez E., Sousa V. C. and
 #'   Foll M. (2013) Robust demographic inference from genomic and SNP data. PLoS
 #'   genetics 9(10)
-AIC <- function(dir.in, k=NULL) {
+AIC <- function(dir.in,
+                k=NULL) {
   log10toln<-function(l10) {
     rlns=l10/log10(exp(1))
   }
@@ -106,13 +110,14 @@ AIC <- function(dir.in, k=NULL) {
   return(2*k-2*ln)
 }
 
-#' Compute and compare AIC for different fasimcoal models
-#'
+#' @name AIC_comp 
+#' @title Compute and compare AIC for different fastsimcoal models
+#' @description
 #' This functions expects that different fastsimcoal models were run in
 #' different directories within the same parent directory (as for
 #' \code{fsc.multiple.estimate}). Assuming that \code{dir.in} is the parent
 #' directory, it will extract and compute AIC from all of them.
-#'
+#' @details
 #' It is important to note that this function will probably fail if there are
 #' more than one .est within each directory as it will read these to evaluate
 #' the number of parameters in the model. If there is more than one file, there
@@ -121,15 +126,15 @@ AIC <- function(dir.in, k=NULL) {
 #' cause problems in reporting the results even if the function completes.
 #'
 #' @param dir.in The parent directory within which the models have been run
-#'@author  Carlo Pacioni (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author  Carlo Pacioni (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @export
 #' @references Excoffier L., Dupanloup I., Huerta-Sánchez E., Sousa V. C. and
 #'   Foll M. (2013) Robust demographic inference from genomic and SNP data. PLoS
 #'   genetics 9(10)
-AIC.comp <- function(dir.in) {
+AIC_comp <- function(dir.in) {
   mod.nms <- list.dirs(dir.in, full.names=FALSE, recursive=FALSE)
   ld <- list.dirs(dir.in,full.names=TRUE, recursive=FALSE)
-  lAICs <- sapply(ld, amplicR::AIC, USE.NAMES=FALSE)
+  lAICs <- sapply(ld, AIC, USE.NAMES=FALSE)
   mod.rank <- rank(lAICs)
   return(data.frame(Model=mod.nms, AIC=lAICs, Delta=lAICs - min(lAICs), Rank=mod.rank))
 }
@@ -179,27 +184,41 @@ AIC.comp <- function(dir.in) {
 #'@param boot.type The method to be used to compute the confidence intervals.
 #'  See \code{?boot.ci} for details. By default, percentile intervals are
 #'  computed.
-#'@inheritParams fsc.estimate
-#'@author  Carlo Pacioni (Post to \url{https://groups.google.com/d/forum/dartr})
-#'@return A list with the following elements \itemize{ \item Bootstr.stats:
-#'  Descriptive statistics from bootstraps (Median, lower and upper limit), an
-#'  the initial estimated parameters  \item P.Rand.less.Obs: The probability that
-#'  a random value from the null Composite Likelihood Ratio distribution is less
-#'  than the observed CLR \item P.Rand.gt.Obs: The probability that a random
-#'  value from the null Composite Likelihood Ratio distribution is greater than
-#'  the observed CLR \item Sim: The estimates from the simulated data }
+#' @inheritParams fsc.estimate
+#' @author  Carlo Pacioni (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @return A list with the following elements: 
+#' \itemize{ 
+#' \item Bootstr.stats: Descriptive statistics from bootstraps (Median, lower and
+#' upper limit), an the initial estimated parameters.  
+#' \item P.Rand.less.Obs: The probability that a random value from the null 
+#' Composite Likelihood Ratio distribution is less than the observed CLR.
+#' \item P.Rand.gt.Obs: The probability that a random value from the null 
+#' Composite Likelihood Ratio distribution is greater than the observed CLR.
+#' \item Sim: The estimates from the simulated data.
+#' }
+#' @export
 #'@references Excoffier L., Dupanloup I., Huerta-Sánchez E., Sousa V. C. and
 #'  Foll M. (2013) Robust demographic inference from genomic and SNP data. PLoS
 #'  genetics 9(10)
-#'@export
 
-CLR <- MaxEstLhood <- MaxObsLhood <- Param <- NULL
-
-fsc.bootstraps <- function(dir.in, nLoci=10000, nSim=100, maf=TRUE, ncpu=0, 
-                           nBatches=NULL, fsc.cmd="fsc2702", fsc.path="path",
-                           par.indLoci="200000 0", par.nBlocks=1, 
+fsc.bootstraps <- function(dir.in, 
+                           nLoci=10000, 
+                           nSim=100,
+                           maf=TRUE, 
+                           ncpu=0, 
+                           nBatches=NULL, 
+                           fsc.cmd="fsc2702", 
+                           fsc.path="path",
+                           par.indLoci="200000 0",
+                           par.nBlocks=1, 
                            par.data="DNA 100 0 2.5e-8 0.33",
-                           n=100000, L=50, nBoot=1000, conf=0.95, boot.type="perc") {
+                           n=100000, 
+                           L=50, 
+                           nBoot=1000, 
+                           conf=0.95, 
+                           boot.type="perc") {
+  
+  CLR <- MaxEstLhood <- MaxObsLhood <- Param <- NULL
   #---------- Helper ---------------#
   med.i <- function(x, i) median(x[i])
   
