@@ -1,7 +1,7 @@
 #' Run fastsimcoal to estimate parameters' values
 #'
 #' Run fastsimcoal assuming that in \code{dir.in} there are the tpl, est and obs
-#' files properly named and formatted.It writes a fsc_run.txt file and execute
+#' files properly named and formatted. It writes a fsc_run.txt file and execute
 #' fsc in \code{dir.in}
 #'
 #' If \code{ncpu=0} and \code{nBatches=NULL}, \code{nBatches} is set to 12 (fsc
@@ -54,7 +54,8 @@ fsc.estimate <- function(dir.in,
 #' Run fsc over multiple models
 #'
 #' This function expects one or more folders within \code{dir.in}, where in each
-#' directory there are all the files needed to run \code{fsc.estimate}, which is run iteratively 
+#' directory there are all the files needed to run \code{fsc.estimate}, which is
+#'  run iteratively 
 #' @inheritParams fsc.estimate
 #' @export
 fsc.multiple.estimate <- function(dir.in, n=500000, L=100, maf=TRUE, ncpu=0, 
