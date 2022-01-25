@@ -40,5 +40,6 @@ directory)}
 }
 \description{
 This function expects one or more folders within \code{dir.in}, where in each
-directory there are all the files needed to run \code{fsc.estimate}, which is run iteratively
+directory there are all the files needed to run \code{fsc.estimate}, which is
+ run iteratively
 }

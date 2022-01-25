@@ -40,7 +40,7 @@ directory)}
 }
 \description{
 Run fastsimcoal assuming that in \code{dir.in} there are the tpl, est and obs
-files properly named and formatted.It writes a fsc_run.txt file and execute
+files properly named and formatted. It writes a fsc_run.txt file and execute
 fsc in \code{dir.in}
 }
 \details{
