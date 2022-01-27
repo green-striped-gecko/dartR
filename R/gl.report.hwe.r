@@ -600,7 +600,7 @@ gl.report.hwe <- function(x,
     # removing column with color name
     df <- result[,-11]
     #### Report the results
-    if(sign_only) {
+    if(sig_only) {
         if (multi_comp == F) {
             df <- df[which(df$Prob <= alpha_val),]
         }
