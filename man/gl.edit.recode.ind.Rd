@@ -2,8 +2,8 @@
 % Please edit documentation in R/gl.edit.recode.ind.r
 \name{gl.edit.recode.ind}
 \alias{gl.edit.recode.ind}
-\title{Create or edit a individual (=specimen) names, create an recode_ind
- file amd apply the changes to a genlight object.}
+\title{Creates or edits an individual (=specimen) names, creates an recode_ind
+ file and applies the changes to a genlight object.}
 \usage{
 gl.edit.recode.ind(
   x,

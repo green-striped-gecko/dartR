@@ -1,5 +1,5 @@
 #' @name gl.report.maf
-#' @title Report minor allele frequency (MAF) for each locus in a SNP dataset
+#' @title Reports minor allele frequency (MAF) for each locus in a SNP dataset
 #' @description
 #' This script provides summary histograms of MAF for each
 #' population in the dataset and an overall histogram to assist the decision of
@@ -172,7 +172,7 @@ gl.report.maf <- function(x,
     ))) / (nLoc(x) * nInd(x)), 2), "\n\n")
     
     # Determine the loss of loci for a given threshold using quantiles
-    quantile_res <- quantile(maf$maf, probs = seq(0, 1, 1 / 20))
+    quantile_res <- quantile(maf$maf, probs = seq(0, 1, 1 / 20),type=1)
     retained <- unlist(lapply(quantile_res, function(y) {
         res <- length(maf$maf[maf$maf >= y])
     }))

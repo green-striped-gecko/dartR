@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.filter.allna.r
 \name{gl.filter.allna}
 \alias{gl.filter.allna}
-\title{Remove loci that are all NA across individuals and/or individuals with
+\title{Removes loci that are all NA across individuals and/or individuals with
  all NA across loci}
 \usage{
 gl.filter.allna(x, verbose = NULL)

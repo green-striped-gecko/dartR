@@ -1,8 +1,10 @@
-#' Prints dartR reports saved in tempdir
-#' @param print_report number of report from \code{\link{gl.list.reports}} that 
+#' @name gl.print.reports
+#' @title Prints dartR reports saved in tempdir
+#' @param print_report Number of report from \code{\link{gl.list.reports}} that 
 #' is to be printed
 #' @return Prints reports that were saved in tempdir.
 #' @export
+#' @seealso \code{\link{gl.list.reports}}
 #' @author Bernd Gruber & Luis Mijangos (bugs? Post to
 #'  \url{https://groups.google.com/d/forum/dartr})
 #' @examples

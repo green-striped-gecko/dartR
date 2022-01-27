@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.sim.mutate.r
 \name{gl.sim.mutate}
 \alias{gl.sim.mutate}
-\title{Simulate mutations within a genlight object}
+\title{Simulates mutations within a genlight object}
 \usage{
 gl.sim.mutate(x, mut.rate = 1e-06)
 }

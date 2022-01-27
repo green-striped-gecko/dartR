@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.keep.loc.r
 \name{gl.keep.loc}
 \alias{gl.keep.loc}
-\title{Remove all but the specified loci from a genlight \{adegenet\} object}
+\title{Removes all but the specified loci from a genlight \{adegenet\} object}
 \usage{
 gl.keep.loc(x, loc.list = NULL, first = NULL, last = NULL, verbose = NULL)
 }

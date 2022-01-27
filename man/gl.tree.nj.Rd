@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.tree.nj.r
 \name{gl.tree.nj}
 \alias{gl.tree.nj}
-\title{Output an nj tree to summarize genetic similarity among populations}
+\title{Outputs an nj tree to summarize genetic similarity among populations}
 \usage{
 gl.tree.nj(
   x,

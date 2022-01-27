@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2vcf.r
 \name{gl2vcf}
 \alias{gl2vcf}
-\title{Convert a genlight object into vcf format}
+\title{Converts a genlight object into vcf format}
 \usage{
 gl2vcf(
   x,

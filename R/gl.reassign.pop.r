@@ -1,5 +1,5 @@
 #' @name gl.reassign.pop
-#' @title Assign a individual metric as pop in a genlight \{adegenet\} object
+#' @title Assigns an individual metric as pop in a genlight \{adegenet\} object
 #' @description
 #' Individuals are assigned to populations based on the
 #' individual/sample/specimen metrics file (csv) used with gl.read.dart().
@@ -50,7 +50,7 @@ gl.reassign.pop <- function(x,
     
     # DO THE JOB
     
-    pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
+    pop(x) <- x@other$ind.metrics[[as.pop]]
     if (verbose >= 2) {
         cat(report(
             "  Setting population assignments to individual metric",

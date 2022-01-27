@@ -1,5 +1,5 @@
 #' @name gl.filter.allna
-#' @title Remove loci that are all NA across individuals and/or individuals with
+#' @title Removes loci that are all NA across individuals and/or individuals with
 #'  all NA across loci
 #'
 #' @description

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.sim.emigration.r
 \name{gl.sim.emigration}
 \alias{gl.sim.emigration}
-\title{Simulate emigration between populations}
+\title{Simulates emigration between populations}
 \usage{
 gl.sim.emigration(x, perc.mig = NULL, emi.m = NULL, emi.table = NULL)
 }

@@ -1,5 +1,5 @@
 #' @name gl2eigenstrat
-#' @title Convert a genlight object into eigenstrat format
+#' @title Converts a genlight object into eigenstrat format
 #' @description
 #' The output of this function are three files:
 #' \itemize{

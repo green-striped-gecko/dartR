@@ -1,4 +1,4 @@
-#' This functions installs all required packages for using all functions
+#' Installs all required packages for using all functions
 #' available in dartR
 #'
 #' The function compares the installed packages with the the currently available

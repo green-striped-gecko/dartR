@@ -1,4 +1,5 @@
-#'Convert a genlight object into a sfs input file
+
+#'Converts a genlight object into a sfs input file
 #'
 #'The output of this function is suitable for analysis in fastsimcoal2 or dada.
 #'
@@ -6,24 +7,29 @@
 #'and a MAF sfs.
 #'
 #'At this stage this function caters only for diploid organisms, for samples
-#'from one population only, and for genotypes without missing data.
+#'from one population only, and for genotypes without missing data. Note that
+#'sfs uses frequencies considered \bold{independent}, data are assumed to be
+#'from independent (i.e. not linked) loci. This means that only one site per tag
+#'should be considered 9i.e. secondaries should be removed). If no monomorphic
+#'site estimates is provided (with \code{n.invariant.tags}), the sfs will only
+#'include the number of monomorphic sites in the data (but this will be a biased
+#'estimates as it doesn't take into account the invariant tags that have not
+#'been included. This will affect parameter estimates in the analyses). Note
+#'that the number of invariant tags can be estimated with
+#'\code{gl.report.secondaries}. In a limited number of cases, ascertainment bias
+#'can be explicitly modelled in fastsimcoal2. See fastsimcoal2 manual for
+#'details.
 #'
-#'If no invariant site estimates is provided (with \code{n.invariant}), it will
-#'estimate the number of invariant site from the sequenced tags (but this will
-#'be a biased estimates as it doesn't take into account the invariant tags).
-#'Note that the invariant sites can be estimated with
-#'\code{gl.report.secondaries}.
 #'
 #'It expects a dartR formatted genlight object, but it should also  work with
-#'other genlight objects. If \code{n.invariant == 0} the genlight object needs
-#'to have a \code{data.frame} in \code{other} called loc.metrics with a column
-#'named \code{TrimmedSequence} that contains a character string whose length
-#'corresponds to the number of sites of the allele. This information is used to
-#'obtained the number of non-polymorphic sites.
-#'
-#'@param outfile_root The root of the name of the output file
-#'@inheritParams gl.report.heterozygosity
-#'@inheritParams gl2vcf
+#'other genlight objects.
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param n.invariant.tags Number of invariant sites[default 0].
+#' @param outfile_root The root of the name of the output file [default "gl2sfs"].
+#' @param outpath Path where to save the output file [default tempdir()].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' progress log; 3, progress and results summary; 5, full report
+#' [default 2, unless specified using gl.set.verbosity].
 #'@return A list with two elements: the DAF and MAF.
 #'@author Custodian: Carlo Pacioni (Post to
 #'  \url{https://groups.google.com/d/forum/dartr})
@@ -35,9 +41,10 @@
 #'  genetics 9(10)
 
 gl2sfs <- function(x,
-                   n.invariant = 0,
+                   n.invariant.tags = 0,
                    outfile_root = "gl2sfs",
-                   outpath = tempdir()) {
+                   outpath = tempdir(),
+                   verbose = NULL) {
     #---------- Helper ---------------#
     count.freq.ref <- function(x) {
         if (x == 0)
@@ -73,23 +80,8 @@ gl2sfs <- function(x,
     
     names(daf) <-
         paste("d0", seq(0, length(daf) - 1), sep = "_")
-    if (n.invariant == 0) {
-        if (isFALSE("TrimmedSequence" %in% names(x$other$loc.metrics))) {
-            stop(
-                error(
-                    "The column 'TrimmedSequence' is not present in x$other$loc.metrics, but it is needed for this function"
-                )
-            )
-        }
-        inv <-
-            sum(nchar(as.character(
-                x$other$loc.metrics$TrimmedSequence
-            ))) - x@n.loc
-    } else {
-        inv <- n.invariant
-    }
     
-    daf[1] <- daf[1] + inv
+    daf[1] <- daf[1] + n.invariant.tags
     writeLines(c(
         " 1 observations",
         paste(paste("d0", seq(
@@ -104,7 +96,7 @@ gl2sfs <- function(x,
     freq.alt <- colSums(glm)
     maf <- table(c(freq.ref, freq.alt))
     maf <- maf[which(as.numeric(names(maf)) <= nrow(glm))]
-    maf[1] <- maf[1] + inv
+    maf[1] <- maf[1] + n.invariant.tags
     if (length(maf) == nrow(glm))
         maf[length(maf)] <- maf[length(maf)] / 2
     writeLines(c(
@@ -124,3 +116,4 @@ gl2sfs <- function(x,
     
     return(list(DAF = daf, MAF = maf))
 }
+

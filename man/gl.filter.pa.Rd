@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.filter.pa.r
 \name{gl.filter.pa}
 \alias{gl.filter.pa}
-\title{Filter loci that contain private (and fixed alleles) between two populations.}
+\title{Filters loci that contain private (and fixed alleles) between two populations}
 \usage{
 gl.filter.pa(x, pop1, pop2, invers = FALSE, verbose = NULL)
 }
@@ -26,7 +26,7 @@ alleles.
 }
 \description{
 This script is meant to be used prior to \code{gl.nhybrids} to maximise the
-information content of the snps used to identify hybrids (currently
+information content of the SNPs used to identify hybrids (currently
  newhybrids does allow only 200 SNPs). The idea is to use first all loci that
   have fixed alleles between the potential source populations and then 'fill
    up' to 200 loci using loci that have private alleles between those. The

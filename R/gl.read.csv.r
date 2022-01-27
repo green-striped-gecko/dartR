@@ -1,17 +1,16 @@
-#' Read SNP data from a csv file into a genlight object
+#' Reads SNP data from a csv file into a genlight object
 #'
 #' This script takes SNP genotypes from a csv file, combines them with
 #' individual and locus metrics and creates a genlight object.
 #'
 #' The SNP data need to be in one of two forms. SNPs can be coded 0 for
-#' homozygous reference, 2 for homozygous alternate, and 1 for heterozygous with
-#' NA for missing values; or the SNP data can be coded A/A, A/C, C/T, G/A etc,
-#' with -/- as missing. In this format A and T are used as reference alleles.
-#' This is in contrast to the format used by DArT, where the reference allele is
-#' the most frequent allele. Other formats will throw an error.
+#' homozygous reference, 2 for homozygous alternate, 1 for heterozygous, and NA 
+#' for missing values; or the SNP data can be coded A/A, A/C, C/T, G/A etc,
+#' and -/- for missing data. In this format, the reference allele is the most 
+#' frequent allele, as used by DArT. Other formats will throw an error.
 #'
-#' The SNP data need to be individuals as rows, labelled, and loci as columns,
-#' also labelled. If the orientation is individuals as columns and loci by rows,
+#' The SNP data need to be individuals as rows, labeled, and loci as columns,
+#' also labeled. If the orientation is individuals as columns and loci by rows,
 #'  then set transpose=TRUE.
 #'
 #' The individual metrics need to be in a csv file, with headings, with a
@@ -36,7 +35,7 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
-#' @return a genlight object with the SNP data and associated metadata included.
+#' @return A genlight object with the SNP data and associated metadata included.
 #' @export
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
@@ -175,33 +174,32 @@ gl.read.csv <- function(filename,
             v1 <- toupper(v1)
             v1 <- unlist(strsplit(v1, " "))
             tmp <- table(v1)
+            tmp <- tmp[order(as.numeric(tmp),decreasing = T)]
             if (length(names(tmp)) > 2) {
                 cat(error("Fatal Error: Loci are not bi-allelic\n"))
                 stop()
             }
+            
+            # Step through and convert data to 0, 1, 2, NA
+            homRef <- paste0(names(tmp)[1],"/",names(tmp)[1])
+            homAlt <- paste0(names(tmp)[2],"/",names(tmp)[2])
+            het1 <- paste0(names(tmp)[1],"/",names(tmp)[2])
+            het2 <- paste0(names(tmp)[2],"/",names(tmp)[1])
+            missing <- "-/-"
+  
+                data[,i] <- gsub(homRef,"0",data[,i])
+                data[,i] <- gsub(homAlt,"2",data[,i])
+                data[,i] <- gsub(het1,"1",data[,i])
+                data[,i] <- gsub(het2,"1",data[,i])
+                data[,i] <- gsub(missing,NA,data[,i])
+        
         }
         if (verbose >= 2) {
             cat(report("  Data confirmed as biallelic\n"))
         }
         
-        
-        # Step through and convert data to 0, 1, 2, NA homRef <- paste0(names(tmp)[1],'/',names(tmp)[1]) homAlt <-
-        # paste0(names(tmp)[2],'/',names(tmp)[2]) het1 <- paste0(names(tmp)[1],'/',names(tmp)[2]) het2 <-
-        # paste0(names(tmp)[2],'/',names(tmp)[1])
-        data[data == "A/A"] <- "0"
-        data[data == "T/T"] <- "2"
-        data[data == "C/C"] <- "0"
-        data[data == "G/G"] <- "2"
-        data[data == "A/T"] <- "1"
-        data[data == "T/A"] <- "1"
-        data[data == "G/C"] <- "1"
-        data[data == "C/G"] <- "1"
-        data[data == "-/-"] <- NA
-        # for (i in 1:dim(data)[2]){ data[,i] <- toupper(data[,i]) data[,i] <- gsub(homRef,'0',data[,i]) data[,i] <-
-        # gsub(homAlt,'2',data[,i]) data[,i] <- gsub(het1,'1',data[,i]) data[,i] <- gsub(het2,'1',data[,i]) data[,i] <-
-        # gsub(missing,NA,data[,i]) }
         if (verbose >= 2) {
-            cat(report("  SNP coding converted to 0,1,2,NA\n"))
+            cat(report("  SNP coding converted to 0, 1, 2 and NA\n"))
         }
         
         data <- apply(data, 2, as.numeric)

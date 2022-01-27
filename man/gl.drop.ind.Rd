@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.drop.ind.r
 \name{gl.drop.ind}
 \alias{gl.drop.ind}
-\title{Remove specified individuals from a genlight \{adegenet\} object}
+\title{Removes specified individuals from a genlight \{adegenet\} object}
 \usage{
 gl.drop.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }

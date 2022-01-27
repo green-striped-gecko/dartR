@@ -1,5 +1,5 @@
 #' @name gl.drop.ind
-#' @title Remove specified individuals from a genlight \{adegenet\} object
+#' @title Removes specified individuals from a genlight \{adegenet\} object
 #' @description
 #' The script, having deleted individuals, optionally identifies resultant
 #' monomorphic loci or loci with all values missing and deletes them
@@ -74,7 +74,7 @@ gl.drop.ind <- function(x,
     
     hold <- x
     
-    # Remobe individuals
+    # Remove individuals
     
     if (verbose >= 2) {
         cat("  Deleting individuals",
@@ -85,8 +85,9 @@ gl.drop.ind <- function(x,
     # Delete listed individuals, recalculate relevant locus metadata and remove monomorphic loci
     
     # Remove rows flagged for deletion
-    x <- x[!x$ind.names %in% ind.list]
-    
+    inds_to_drop <- which(!x$ind.names %in% ind.list)
+    x <- x[inds_to_drop,]
+
     # Monomorphic loci may have been created
     x@other$loc.metrics.flags$monomorphs == FALSE
     

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2treemix.r
 \name{gl2treemix}
 \alias{gl2treemix}
-\title{Convert a genlight object to a treemix input file}
+\title{Converts a genlight object to a treemix input file}
 \usage{
 gl2treemix(
   x,

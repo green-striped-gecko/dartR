@@ -1,5 +1,5 @@
 #' @name gl2vcf
-#' @title Convert a genlight object into vcf format
+#' @title Converts a genlight object into vcf format
 #' @description
 #' This function exports a genlight object into VCF format and save it into a
 #' file.
@@ -84,8 +84,6 @@ gl2vcf <- function(x,
         x = x,
         outfile = "gl_plink_temp",
         outpath = tempdir(),
-        snp_pos = snp_pos,
-        snp_chr = snp_chr,
         chr_format = chr_format,
         pos_cM = pos_cM,
         ID_dad = ID_dad,

@@ -1,5 +1,5 @@
 #' @name gl.dist.pop
-#' @title Calculate a distance matrix for populations with SNP genotypes in a
+#' @title Calculates a distance matrix for populations with SNP genotypes in a
 #' genlight object
 #' @description
 #' This script calculates various distances between populations based on allele

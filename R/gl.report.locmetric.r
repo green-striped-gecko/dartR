@@ -1,6 +1,6 @@
 #' @name gl.report.locmetric
 #'
-#' @title Report summary of the slot $other$loc.metrics
+#' @title Reports summary of the slot $other$loc.metrics
 #'
 #' @description
 #' This script uses any field with numeric values stored in $other$loc.metrics
@@ -171,7 +171,7 @@ gl.report.locmetric <- function(x,
     
     # Determine the loss of loci for a given threshold using quantiles
     quantile_res <-
-        quantile(metric_df$field, probs = seq(0, 1, 1 / 20))
+        quantile(metric_df$field, probs = seq(0, 1, 1 / 20),type=1)
     retained <- unlist(lapply(quantile_res, function(y) {
         res <- length(metric_df$field[metric_df$field >= y])
     }))

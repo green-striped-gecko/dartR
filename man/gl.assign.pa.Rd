@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.assign.pa.r
 \name{gl.assign.pa}
 \alias{gl.assign.pa}
-\title{Eliminate populations as possible source populations for an individual
+\title{Eliminates populations as possible source populations for an individual
  of unknown provenance, using private alleles}
 \usage{
 gl.assign.pa(
@@ -53,8 +53,8 @@ has no private alleles or for which the number of private alleles does not
 exceed a user specified threshold.
 
 An excessive count of private alleles is an indication that the unknown does
- not belong to a target population (provided that the sample size is
- adequate, say >=10).
+not belong to a target population (provided that the sample size is
+adequate, say >=10).
 }
 \examples{
 # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
@@ -65,6 +65,5 @@ An excessive count of private alleles is an indication that the unknown does
 \code{\link{gl.assign.pca}}
 }
 \author{
-Custodian: Arthur Georges -- Post to
- \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to #'  \url{https://groups.google.com/d/forum/dartr}
 }

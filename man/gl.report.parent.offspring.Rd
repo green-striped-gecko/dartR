@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.parent.offspring.r
 \name{gl.report.parent.offspring}
 \alias{gl.report.parent.offspring}
-\title{Identify putative parent offspring within a population}
+\title{Identifies putative parent offspring within a population}
 \usage{
 gl.report.parent.offspring(
   x,

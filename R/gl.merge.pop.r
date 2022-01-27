@@ -1,5 +1,5 @@
 #' @name gl.merge.pop
-#' @title Merge two or more populations in a genlight object into one population
+#' @title Merges two or more populations in a genlight object into one population
 #' @description
 #' Individuals are assigned to populations based on the specimen metadata data
 #' file (csv) used with gl.read.dart().
@@ -32,7 +32,7 @@ gl.merge.pop <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jackson",
+                     build = "Jody",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -52,12 +52,15 @@ gl.merge.pop <- function(x,
     
     # SCRIPT SPECIFIC ERROR TESTING
     
-    if (is.null(new)) {
+    if (is.null(old)) {
+        stop(error("Fatal Error: Populations to be combined must be specified\n"))
+    }
+        if (is.null(new)) {
         stop(error("Fatal Error: A new population label must be specified\n"))
     }
     if (class(x) != "genlight") {
         stop(error(
-            "Fatal Error: genlight object required for gl.keep.pop.r!\n"
+            "Fatal Error: genlight object required!\n"
         ))
     }
     if (verbose >= 2) {

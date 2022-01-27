@@ -57,7 +57,8 @@ gl.smearplot(testset.gs[1:10,])
 Other Exploration/visualisation functions: 
 \code{\link{gl.pcoa.plot}()},
 \code{\link{gl.select.colors}()},
-\code{\link{gl.select.shapes}()}
+\code{\link{gl.select.shapes}()},
+\code{\link{gl.smearplot2}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to

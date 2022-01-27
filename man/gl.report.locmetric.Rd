@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.locmetric.r
 \name{gl.report.locmetric}
 \alias{gl.report.locmetric}
-\title{Report summary of the slot $other$loc.metrics}
+\title{Reports summary of the slot $other$loc.metrics}
 \usage{
 gl.report.locmetric(
   x,

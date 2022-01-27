@@ -1,4 +1,4 @@
-#' Simulate emigration between populations
+#' Simulates emigration between populations
 #'
 #' A function that allows to exchange individuals of populations within a
 #' genlight object (=simulate emigration between populations).

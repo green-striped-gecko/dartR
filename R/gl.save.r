@@ -1,5 +1,5 @@
 #' @name gl.save
-#' @title Save an object in compressed binary format for later rapid retrieval
+#' @title Saves an object in compressed binary format for later rapid retrieval
 #' @description
 #' This is a wrapper for saveRDS().
 #'

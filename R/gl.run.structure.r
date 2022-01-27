@@ -1,6 +1,6 @@
 #' @name gl.run.structure
 #'
-#' @title Run a STRUCTURE analysis using a genlight object
+#' @title Runs a STRUCTURE analysis using a genlight object
 #'
 #' @description
 #' This function takes a genlight object and runs a STRUCTURE analysis based on

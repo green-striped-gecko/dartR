@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.recode.pop.r
 \name{gl.recode.pop}
 \alias{gl.recode.pop}
-\title{Recode population assignments in a genlight object}
+\title{Recodes population assignments in a genlight object}
 \usage{
 gl.recode.pop(x, pop.recode, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }

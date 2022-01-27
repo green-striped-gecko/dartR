@@ -17,7 +17,7 @@
 #' @param ind.circle.cols colors off circles. Colors can be provided as usual by names (e.g. "black") and are re-cycled. So a color c("blue","red") colors individuals alternatively between blue and red using the genlight object order of inidividuals. For transparency see parameter ind.circle.transparency. Defaults to rainbow colors by population  if not provided. If you want to have your own colors for each population, check the platypus.gl example below.
 #' @param ind.circle.cex (size or circles in pixels ). Defaults to 10.
 #' @param ind.circle.transparency Transparency of circles between 0=invisible and 1=no transparency. Defaults to 0.8.
-#' #' @param provider Passed to leaflet [default "Esri.NatGeoWorldMap"].
+#' @param provider Passed to leaflet [default "Esri.NatGeoWorldMap"].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -44,7 +44,8 @@ gl.map.interactive <- function(x,
                                ind.circles = TRUE,
                                ind.circle.cols = NULL,
                                ind.circle.cex=10,
-                               ind.circle.transparency=0.8,                                  provider = "Esri.NatGeoWorldMap",
+                               ind.circle.transparency=0.8,                                  
+                               provider = "Esri.NatGeoWorldMap",
                                verbose = NULL) {
     
     # SET VERBOSITY

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.dart2genlight.r
 \name{utils.dart2genlight}
 \alias{utils.dart2genlight}
-\title{Convert DarT to genlight}
+\title{Converts DarT to genlight}
 \usage{
 utils.dart2genlight(
   dart,

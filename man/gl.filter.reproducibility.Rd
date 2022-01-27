@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.filter.reproducibility.r
 \name{gl.filter.reproducibility}
 \alias{gl.filter.reproducibility}
-\title{Filter loci in a genlight \{adegenet\} object based on average
+\title{Filters loci in a genlight \{adegenet\} object based on average
 repeatability of alleles at a locus}
 \usage{
 gl.filter.reproducibility(

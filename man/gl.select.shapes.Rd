@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.select.shapes.r
 \name{gl.select.shapes}
 \alias{gl.select.shapes}
-\title{Select shapes from the base R shape palette and output as a vector}
+\title{Selects shapes from the base R shape palette and outputs as a vector}
 \usage{
 gl.select.shapes(x = NULL, select = NULL, verbose = NULL)
 }
@@ -51,6 +51,7 @@ shapes <- gl.select.shapes(x=gl,select=c(1,1,1,5,8)) # Select set of shapes and 
 Other Exploration/visualisation functions: 
 \code{\link{gl.pcoa.plot}()},
 \code{\link{gl.select.colors}()},
+\code{\link{gl.smearplot2}()},
 \code{\link{gl.smearplot}()}
 }
 \author{

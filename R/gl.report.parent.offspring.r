@@ -1,5 +1,5 @@
 #' @name gl.report.parent.offspring
-#' @title Identify putative parent offspring within a population
+#' @title Identifies putative parent offspring within a population
 #' @description
 #' This script examines the frequency of pedigree inconsistent loci, that is,
 #' those loci that are homozygotes in the parent for the reference allele, and

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.merge.pop.r
 \name{gl.merge.pop}
 \alias{gl.merge.pop}
-\title{Merge two or more populations in a genlight object into one population}
+\title{Merges two or more populations in a genlight object into one population}
 \usage{
 gl.merge.pop(x, old = NULL, new = NULL, verbose = NULL)
 }

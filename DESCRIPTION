@@ -30,7 +30,7 @@ biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         SNPRelate, StAMPP, sp, PopGenReport, robustbase,
         gridExtra, foreach, dplyr, crayon, devtools,reshape2,
-        patchwork, data.table, hierfstat
+        patchwork, raster, data.table
 Suggests: 
     tibble,
     HardyWeinberg,
@@ -62,14 +62,16 @@ Suggests:
     plotly,
     ggthemes,
     ggrepel,
-    raster,
     strataG,
     ggtern,
     markdown,
     RColorBrewer,
     scales,
     SIBER,
-    testthat (>= 3.0.0)
+    fields,
+    snpStats,
+    boot,
+    hierfstat
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2
@@ -83,4 +85,3 @@ Author: Bernd Gruber [aut, cre],
   Lindsay V. Clark [ctb],
   Floriaan Devloo-Delva [ctb]
 Maintainer: Bernd Gruber <bernd.gruber@canberra.edu.au>
-Config/testthat/edition: 3

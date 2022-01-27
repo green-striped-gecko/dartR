@@ -1,5 +1,5 @@
 #' @name gl.dist.ind
-#' @title Calculate a distance matrix for individuals defined in an \{adegenet\}
+#' @title Calculates a distance matrix for individuals defined in an \{adegenet\}
 #'  genlight object
 #' @description
 #' This script calculates various distances between individuals based on allele

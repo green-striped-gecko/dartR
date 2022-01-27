@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.callrate.r
 \name{gl.report.callrate}
 \alias{gl.report.callrate}
-\title{Report summary of Call Rate for loci or individuals}
+\title{Reports summary of Call Rate for loci or individuals}
 \usage{
 gl.report.callrate(
   x,

@@ -22,12 +22,12 @@ gl.ibd(
 }
 \arguments{
 \item{x}{Genlight object. If provided a standard analysis on Fst/1-Fst and
-log(distance) is performed}
+log(distance) is performed [required].}
 
 \item{distance}{Type of distance that is calculated and used for the
 analysis. Can be either population based 'Fst' [\link[StAMPP]{stamppFst}],
 'D' [\link[StAMPP]{stamppNeisD}] or individual based 'propShared',
- [gl.propShared], 'euclidean' [gl.dist.ind, method='Euclidean'].}
+ [gl.propShared], 'euclidean' [gl.dist.ind, method='Euclidean'] [default "Fst"].}
 
 \item{coordinates}{Can be either 'latlon', 'xy' or a two column data.frame
 with column names 'lat','lon', 'x', 'y')  Coordinates are provided via
@@ -51,7 +51,7 @@ expectations of Fst versus distances in the case of a stepping stone model.
 The transformation can be applied as a formula using Dgen as the variable to
  be transformed. So, for the Fst transformation of Rousset use
  \code{Dgen_trans = 'Dgen/(1-Dgen)'. Any valid R expression can be used here.
- [Default is 'Dgen', which is the identity function.]}}
+ [default 'Dgen', which is the identity function.]}}
 
 \item{permutations}{Number of permutations in the Mantel test [default 999].}
 
@@ -73,19 +73,23 @@ progress log ; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-returns a list of the following components: Dgen (the genetic
-distance matrix), Dgeo (the Euclidean distance matrix), mantel (the
-statistics of the mantel test)
+Returns a list of the following components: Dgen (the genetic
+distance matrix), Dgeo (the Euclidean distance matrix), Mantel (the
+statistics of the Mantel test).
 }
 \description{
 This function performs an isolation by distance analysis based on a Mantel
 test and also produces an isolation by distance plot. If a genlight object
 with coordinates is provided, then an Euclidean and genetic distance matrices
-are calculated. Currently pairwise Fst and D between populations and
+are calculated. #'
+}
+\details{
+Currently pairwise Fst and D between populations and
 1-propShared and Euclidean distance between individuals are
 implemented. Coordinates are expected as lat long and converted to Google
 Earth Mercator projection. If coordinates are already projected, provide them
 at the x@other$xy slot.
+
 You can provide also your own genetic and Euclidean distance matrices. The
 function is based on the code provided by the adegenet tutorial
 (\url{http://adegenet.r-forge.r-project.org/files/tutorial-basics.pdf}),
@@ -96,13 +100,13 @@ package installed. As a new feature you can plot pairwise relationship using
 double colored points (paircols=TRUE). Pairwise relationship can be
 visualised via populations or individuals, depending which distance is
 calculated. Please note: Often a problem arises, if an individual based distance is
- calculated (e.g. propShared) and some individuals have identical coordinates
- as this results in distances of zero between those pairs of individuals. 
- If the standard transformation [log(Dgeo)] is used, this results in an infinite
- value, because of trying to calculate'log(0)'. To avoid this, the easiest fix 
- is to change the transformation from log(Dgeo) to log(Dgeo+1) or you could add
- some "noise" to th coordinates of the individuals (e.g. +- 1m, but be aware 
- if you use lat lon than you rather want to add +0.00001 degrees or so)
+calculated (e.g. propShared) and some individuals have identical coordinates
+as this results in distances of zero between those pairs of individuals.
+If the standard transformation [log(Dgeo)] is used, this results in an infinite
+value, because of trying to calculate'log(0)'. To avoid this, the easiest fix
+is to change the transformation from log(Dgeo) to log(Dgeo+1) or you could add
+some "noise" to the coordinates of the individuals (e.g. +- 1m, but be aware
+if you use lat lon then you rather want to add +0.00001 degrees or so).
 }
 \examples{
 #only first 100 loci

@@ -7,7 +7,7 @@
 gl.print.reports(print_report)
 }
 \arguments{
-\item{print_report}{number of report from \code{\link{gl.list.reports}} that 
+\item{print_report}{Number of report from \code{\link{gl.list.reports}} that 
 is to be printed}
 }
 \value{
@@ -20,6 +20,9 @@ Prints dartR reports saved in tempdir
 \dontrun{
 reports <- gl.print.reports(1)
 }
+}
+\seealso{
+\code{\link{gl.list.reports}}
 }
 \author{
 Bernd Gruber & Luis Mijangos (bugs? Post to

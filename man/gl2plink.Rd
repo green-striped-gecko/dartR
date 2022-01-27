@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2plink.r
 \name{gl2plink}
 \alias{gl2plink}
-\title{Convert a genlight object into PLINK format}
+\title{Converts a genlight object into PLINK format}
 \usage{
 gl2plink(
   x,
@@ -10,8 +10,6 @@ gl2plink(
   bed_file = FALSE,
   outfile = "gl_plink",
   outpath = tempdir(),
-  snp_pos = "0",
-  snp_chr = "0",
   chr_format = "character",
   pos_cM = "0",
   ID_dad = "0",
@@ -24,7 +22,7 @@ gl2plink(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{plink_path}{Path of PLINK binary file [default getwd())].}
+\item{plink_path}{Path of PLINK binary file [default getwd()].}
 
 \item{bed_file}{Whether create PLINK files .bed, .bim and .fam
 [default FALSE].}
@@ -34,12 +32,6 @@ gl2plink(
 \item{outpath}{Path where to save the output file
 [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
  when calling this function to direct output files to your working directory.}
-
-\item{snp_pos}{Field name from the slot loc.metrics where the SNP position is
-stored [default '0'].}
-
-\item{snp_chr}{Field name from the slot loc.metrics where the chromosome of
-each is stored [default '0'].}
 
 \item{chr_format}{Whether chromosome information is stored as 'numeric' or as
 'character', see details [default 'character'].}
@@ -82,13 +74,17 @@ information for unmapped SNPS is coded as 0.
 Family ID is taken from  x$pop.
 Within-family ID (cannot be '0') is taken from indNames(x).
 Variant identifier is taken from locNames(x).
+SNP position is taken from the accessor x$position.
+Chromosome name is taken from the accessor x$chromosome
 Note that if names of populations or individuals contain spaces, they are 
 replaced by an underscore "_".
 }
 \examples{
 \donttest{
-gl2plink(platypus.gl,snp_pos='ChromPos_Platypus_Chrom_NCBIv1',
-snp_chr = 'Chrom_Platypus_Chrom_NCBIv1')
+test <- platypus.gl
+test$position <- test$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
+test$chromosome <- test$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
+gl2plink(test)
 }
 }
 \references{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.random.snp.r
 \name{gl.random.snp}
 \alias{gl.random.snp}
-\title{Randomly change the allocation of 0's and 2's in a genlight object}
+\title{Randomly changes the allocation of 0's and 2's in a genlight object}
 \usage{
 gl.random.snp(x, plot.out = TRUE, save2tmp = FALSE, verbose = NULL)
 }

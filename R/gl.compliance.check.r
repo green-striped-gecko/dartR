@@ -69,7 +69,8 @@ gl.compliance.check <- function(x,
         locNames(x) <- paste0("Loc", 1:nLoc(x))
     }
     
-    # Check that the data exist, and that they are restricted to the appropriate values
+    # Check that the data exist, and that they are restricted to the
+    # appropriate values
     
     if (datatype == "SNP") {
         mat <- as.matrix(x)
@@ -115,7 +116,8 @@ gl.compliance.check <- function(x,
         }
     }
     
-    # Check for the locus metrics, and create if they do not exist.  Check for the locus metrics flags, and create if they do not exist.
+    # Check for the locus metrics, and create if they do not exist.
+    # Check for the locus metrics flags, and create if they do not exist.
     # Check for the verbosity flag, and create if it does not exist.
     
     if (verbose >= 2) {
@@ -146,7 +148,8 @@ gl.compliance.check <- function(x,
         x@other$loc.metrics.flags$monomorphs <- FALSE
     }
     
-    # Check that the number of values in the loc.metrics dataframe is the same as the number of loci
+    # Check that the number of values in the loc.metrics dataframe is the same
+    # as the number of loci
     if (nLoc(x) != nrow(x@other$loc.metrics)) {
         cat(
             warn(
@@ -155,15 +158,34 @@ gl.compliance.check <- function(x,
         )
     }
     
+    # check that individual names are unique, and if not, add underscore and
+    # letters
+    if (verbose >= 2) {
+        cat(report("  Checking whether individual names are unique.\n"))
+    }
+    
+    if (any(duplicated(indNames(x)))) {
+        if (verbose >= 2) {
+            cat(
+                warn(
+                    "  Individual names are not unique. Appending an extra number to make them unique.\n"
+                )
+            )
+        }
+        indNames(x) <- make.unique(indNames(x), sep = '_')
+    }
+    
     # Check that the individual metrics exist, and if not, create the df
     
     if (verbose >= 2) {
         cat(report("  Checking for individual metrics\n"))
     }
-    if (is.null(x@other$loc.metrics)) {
+    if (is.null(x@other$ind.metrics)) {
         if (verbose >= 1) {
             cat(warn("  Warning: Creating a slot for individual metrics\n"))
         }
+        x@other$ind.metrics <- as.data.frame(matrix(nrow= nInd(x),ncol = 1))
+        colnames(x@other$ind.metrics) <- "id"
         x@other$ind.metrics$id <- indNames(x)
     } else {
         if (verbose >= 1) {
@@ -171,7 +193,11 @@ gl.compliance.check <- function(x,
         }
     }
     
-    # Check that the population variable exists, and if it does not, create it with a single population 'pop1'
+    # convert the ind.metric slot into a dataframe
+    x@other$ind.metrics <- as.data.frame(x@other$ind.metrics)
+
+    # Check that the population variable exists, and if it does not, create it
+    # with a single population 'pop1'
     
     if (verbose >= 2) {
         cat(report("  Checking for population assignments\n"))
@@ -223,3 +249,4 @@ gl.compliance.check <- function(x,
     
     invisible(x)
 }
+

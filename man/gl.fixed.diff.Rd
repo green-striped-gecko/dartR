@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.fixed.diff.r
 \name{gl.fixed.diff}
 \alias{gl.fixed.diff}
-\title{Generate a matrix of fixed differences and associated statistics for
+\title{Generates a matrix of fixed differences and associated statistics for
 populations taken pairwise}
 \usage{
 gl.fixed.diff(

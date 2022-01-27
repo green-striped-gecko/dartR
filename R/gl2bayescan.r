@@ -1,4 +1,4 @@
-#' Convert a genlight object to format suitable for input to Bayescan
+#' Converts a genlight object to format suitable for input to Bayescan
 #'
 #' The output text file contains the SNP data and relevant BAyescan command
 #'  lines to guide input.

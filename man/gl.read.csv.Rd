@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.read.csv.r
 \name{gl.read.csv}
 \alias{gl.read.csv}
-\title{Read SNP data from a csv file into a genlight object}
+\title{Reads SNP data from a csv file into a genlight object}
 \usage{
 gl.read.csv(
   filename,
@@ -29,7 +29,7 @@ progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-a genlight object with the SNP data and associated metadata included.
+A genlight object with the SNP data and associated metadata included.
 }
 \description{
 This script takes SNP genotypes from a csv file, combines them with
@@ -37,14 +37,13 @@ individual and locus metrics and creates a genlight object.
 }
 \details{
 The SNP data need to be in one of two forms. SNPs can be coded 0 for
-homozygous reference, 2 for homozygous alternate, and 1 for heterozygous with
-NA for missing values; or the SNP data can be coded A/A, A/C, C/T, G/A etc,
-with -/- as missing. In this format A and T are used as reference alleles.
-This is in contrast to the format used by DArT, where the reference allele is
-the most frequent allele. Other formats will throw an error.
+homozygous reference, 2 for homozygous alternate, 1 for heterozygous, and NA 
+for missing values; or the SNP data can be coded A/A, A/C, C/T, G/A etc,
+and -/- for missing data. In this format, the reference allele is the most 
+frequent allele, as used by DArT. Other formats will throw an error.
 
-The SNP data need to be individuals as rows, labelled, and loci as columns,
-also labelled. If the orientation is individuals as columns and loci by rows,
+The SNP data need to be individuals as rows, labeled, and loci as columns,
+also labeled. If the orientation is individuals as columns and loci by rows,
  then set transpose=TRUE.
 
 The individual metrics need to be in a csv file, with headings, with a

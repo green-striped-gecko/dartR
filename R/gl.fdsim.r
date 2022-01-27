@@ -1,5 +1,5 @@
 #' @name gl.fdsim
-#' @title Estimate the rate of false positives in a fixed difference analysis
+#' @title Estimates the rate of false positives in a fixed difference analysis
 #' @description
 #' This function takes two populations and generates allele frequency profiles
 #' for them. It then samples an allele frequency for each, at random, and

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.drop.pop.r
 \name{gl.drop.pop}
 \alias{gl.drop.pop}
-\title{Remove specified populations from a genlight object}
+\title{Removes specified populations from a genlight object}
 \usage{
 gl.drop.pop(
   x,
@@ -34,7 +34,7 @@ progress log; 3, progress and results summary; 5, full report
 A genlight object with the reduced data
 }
 \description{
-Individuals are assigned to populations based on the specimen metadata data
+Individuals are assigned to populations based on the specimen metadata
 file (csv) used with \code{\link{gl.read.dart}}.
 The script, having deleted populations, optionally identifies resultant
 monomorphic loci or loci with all values missing and deletes them

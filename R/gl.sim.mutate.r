@@ -1,4 +1,4 @@
-#' Simulate mutations within a genlight object
+#' Simulates mutations within a genlight object
 #'
 #' This script is intended to be used within the simulation framework of dartR. 
 #' It adds the ability to add a constant mutation rate across all loci. Only 

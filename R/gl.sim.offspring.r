@@ -11,7 +11,7 @@
 #' @param fathers Genlight object of potential fathers [required].
 #' @param mothers Genlight object of potential mothers simulated [required].
 #' @param noffpermother Number of offspring per mother [required].
-#' @param sexratio The sex ratio of simulated offsprings 
+#' @param sexratio The sex ratio of simulated offspring 
 #' (females / females +males, 1 equals 100 percent females) [default 0.5.].
 #' @return A genlight object with n individuals.
 #' @importFrom stats runif

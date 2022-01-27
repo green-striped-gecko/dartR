@@ -1,5 +1,5 @@
 #' @name gl.report.reproducibility
-#' @title Report summary of RepAvg (repeatability averaged over both alleles for
+#' @title Reports summary of RepAvg (repeatability averaged over both alleles for
 #' each locus) or reproducibility (repeatability of the scores for fragment
 #' presence/absence)
 #' @description
@@ -129,7 +129,7 @@ gl.report.reproducibility <- function(x,
     
     # Determine the loss of loci for a given threshold using quantiles
     quantile_res <-
-        quantile(repeatability, probs = seq(0, 1, 1 / 20))
+        quantile(repeatability, probs = seq(0, 1, 1 / 20),type=1)
     retained <- unlist(lapply(quantile_res, function(y) {
         res <- length(repeatability[repeatability >= y])
     }))

@@ -1,5 +1,5 @@
 #' @name gl.filter.rdepth
-#' @title Filter loci based on counts of sequence tags scored at a locus (read
+#' @title Filters loci based on counts of sequence tags scored at a locus (read
 #' depth)
 #'
 #' @description

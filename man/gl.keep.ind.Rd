@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.keep.ind.r
 \name{gl.keep.ind}
 \alias{gl.keep.ind}
-\title{Remove all but the specified individuals from a genlight \{adegenet\}
+\title{Removes all but the specified individuals from a genlight \{adegenet\}
 object}
 \usage{
 gl.keep.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE, verbose = NULL)

@@ -1,4 +1,4 @@
-#' Convert a genlight object to format suitable for input to genalex
+#' Converts a genlight object to format suitable for input to genalex
 #'
 #' The output csv file contains the snp data and other relevant lines suitable
 #'  for genalex. This script is a wrapper for  \link[poppr]{genind2genalex}

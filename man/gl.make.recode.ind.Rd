@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.make.recode.ind.r
 \name{gl.make.recode.ind}
 \alias{gl.make.recode.ind}
-\title{Create a proforma recode_ind file for reassigning individual
+\title{Creates a proforma recode_ind file for reassigning individual
  (=specimen) names}
 \usage{
 gl.make.recode.ind(

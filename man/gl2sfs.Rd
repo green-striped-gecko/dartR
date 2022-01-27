@@ -2,21 +2,28 @@
 % Please edit documentation in R/gl2sfs.R
 \name{gl2sfs}
 \alias{gl2sfs}
-\title{Convert a genlight object into a sfs input file}
+\title{Converts a genlight object into a sfs input file}
 \usage{
-gl2sfs(x, n.invariant = 0, outfile_root = "gl2sfs", outpath = tempdir())
+gl2sfs(
+  x,
+  n.invariant.tags = 0,
+  outfile_root = "gl2sfs",
+  outpath = tempdir(),
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP [required].}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{n.invariant}{An estimate of the number of invariant sequence tags used
-to adjust the heterozygosity rate [default 0].}
+\item{n.invariant.tags}{Number of invariant sites[default 0].}
 
-\item{outfile_root}{The root of the name of the output file}
+\item{outfile_root}{The root of the name of the output file [default "gl2sfs"].}
 
-\item{outpath}{Path where to save the output file
-[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
- when calling this function to direct output files to your working directory.}
+\item{outpath}{Path where to save the output file [default tempdir()].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
 A list with two elements: the DAF and MAF.
@@ -29,20 +36,22 @@ It saves a derived sfs, assuming that the reference allele is the ancestral,
 and a MAF sfs.
 
 At this stage this function caters only for diploid organisms, for samples
-from one population only, and for genotypes without missing data.
+from one population only, and for genotypes without missing data. Note that
+sfs uses frequencies considered \bold{independent}, data are assumed to be
+from independent (i.e. not linked) loci. This means that only one site per tag
+should be considered 9i.e. secondaries should be removed). If no monomorphic
+site estimates is provided (with \code{n.invariant.tags}), the sfs will only
+include the number of monomorphic sites in the data (but this will be a biased
+estimates as it doesn't take into account the invariant tags that have not
+been included. This will affect parameter estimates in the analyses). Note
+that the number of invariant tags can be estimated with
+\code{gl.report.secondaries}. In a limited number of cases, ascertainment bias
+can be explicitly modelled in fastsimcoal2. See fastsimcoal2 manual for
+details.
 
-If no invariant site estimates is provided (with \code{n.invariant}), it will
-estimate the number of invariant site from the sequenced tags (but this will
-be a biased estimates as it doesn't take into account the invariant tags).
-Note that the invariant sites can be estimated with
-\code{gl.report.secondaries}.
 
 It expects a dartR formatted genlight object, but it should also  work with
-other genlight objects. If \code{n.invariant == 0} the genlight object needs
-to have a \code{data.frame} in \code{other} called loc.metrics with a column
-named \code{TrimmedSequence} that contains a character string whose length
-corresponds to the number of sites of the allele. This information is used to
-obtained the number of non-polymorphic sites.
+other genlight objects.
 }
 \references{
 Excoffier L., Dupanloup I., Huerta-Sánchez E., Sousa V. C. and

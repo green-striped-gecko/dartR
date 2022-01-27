@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.propShared.r
 \name{gl.propShared}
 \alias{gl.propShared}
-\title{Calculate a similarity (distance) matrix for individuals on the proportion of
+\title{Calculates a similarity (distance) matrix for individuals on the proportion of
 shared alleles}
 \usage{
 gl.propShared(x)

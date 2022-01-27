@@ -13,7 +13,7 @@
 #' generate a single combined sequence to be used in subsequent ML phylogenetic
 #' analyses.
 #'
-#' Method=2 -- the heterozygous state is resolved by randomly assigning one or
+#' Method 2 -- the heterozygous state is resolved by randomly assigning one or
 #' the other SNP variant to the individual. The resultant sequence fragments are
 #' concatenated across loci to generate a single composite haplotype to be used
 #' in subsequent ML phylogenetic analyses.
@@ -22,7 +22,7 @@
 #' codes. The resultant SNP bases are concatenated across loci to generate a
 #' single combined sequence to be used in subsequent MP phylogenetic analyses.
 #'
-#' Method=4 -- the heterozygous state is resolved by randomly assigning one or
+#' Method 4 -- the heterozygous state is resolved by randomly assigning one or
 #' the other SNP variant to the individual. The resultant SNP bases are
 #' concatenated across loci to generate a single composite haplotype to be used
 #' in subsequent MP phylogenetic analyses.

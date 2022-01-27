@@ -1,5 +1,5 @@
 #' @name gl.read.silicodart
-#' @title Import presence/absence data from SilicoDArT to genlight \{agegenet\}
+#' @title Imports presence/absence data from SilicoDArT to genlight \{agegenet\}
 #' format (ploidy=1)
 #'
 #' @description
@@ -42,8 +42,8 @@
 #' 'Reproducibility'). Be sure to check if that is true, otherwise the number of
 #' individuals will not match. You can also specify the last column by a number
 #'  [default "Reproducibility"].
-#' @param probar show progress bar [default TRUE].
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' @param probar Show progress bar [default TRUE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, or as set by gl.set.verbose()].
 #' @return An object of class \code{genlight} with ploidy set to 1, containing

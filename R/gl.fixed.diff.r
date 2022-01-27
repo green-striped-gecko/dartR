@@ -1,5 +1,5 @@
 #' @name gl.fixed.diff
-#' @title Generate a matrix of fixed differences and associated statistics for
+#' @title Generates a matrix of fixed differences and associated statistics for
 #' populations taken pairwise
 #' @description
 #' This script takes SNP data or sequence tag P/A data grouped into populations

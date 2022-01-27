@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2svdquartets.r
 \name{gl2svdquartets}
 \alias{gl2svdquartets}
-\title{Convert a genlight object to nexus format PAUP SVDquartets}
+\title{Converts a genlight object to nexus format PAUP SVDquartets}
 \usage{
 gl2svdquartets(
   x,
