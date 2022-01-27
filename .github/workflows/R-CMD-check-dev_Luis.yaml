@@ -55,6 +55,7 @@ jobs:
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
+          remotes::install_github('EricArcher/strataG')
           while read -r cmd
           do
             eval sudo $cmd
