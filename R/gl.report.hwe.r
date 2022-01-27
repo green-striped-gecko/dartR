@@ -440,8 +440,6 @@ gl.report.hwe <- function(x,
             plot_colors[2]
     }
     
-    result_test <- result[which(result$Population == "WA"),]
-    
     if (plot.out) {
         count <- 0
         # count how many plots are going to be created
