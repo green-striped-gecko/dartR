@@ -55,6 +55,7 @@ jobs:
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
+          remotes::install_github('EricArcher/strataG')
           while read -r cmd
           do
             eval sudo $cmd
@@ -62,11 +63,11 @@ jobs:
 
       - name: Install dependencies
         run: |
+          remotes::install_github('EricArcher/strataG')
           options(repos = c(
             `r-spatial` = "https://r-spatial.r-universe.dev/",
             CRAN = "https://cloud.r-project.org/"
           ))
-          remotes::install_github('EricArcher/strataG')
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}

@@ -35,61 +35,6 @@
 
 # this is a a function to convert a matrix to a format suitable for the slot 
 # @gen in a genlight object
-matrix2gen <- function(snp_matrix, parallel) {
-  if (parallel) {
-    i@gen <-
-      parallel::mclapply(1:nrow(snp_matrix), function(i)
-        new("SNPbin", as.integer(snp_matrix[i, ])),
-        mc.cores = n.cores, mc.silent = TRUE, mc.cleanup =
-          TRUE, mc.preschedule = FALSE)
-  } else {
-    lapply(1:nrow(snp_matrix), function(i)
-      new("SNPbin", as.integer(snp_matrix[i, ])))
-  }
-}
-
-# function to sample alleles using allele frequencies as probability
-sample_alleles <- function(alleles_list = c("a", "A"), q) {
-  if (is.na(q)) {
-    return(NA)
-  }
-  alleles_sampled <-
-    paste0(sample(
-      alleles_list,
-      size = 2,
-      prob = c(q, 1 - q),
-      replace = T
-    ), collapse = "")
-  alleles_sampled
-  if (alleles_sampled == "AA") {
-    alleles_sampled <- 0
-  }
-  if (alleles_sampled == "aA") {
-    alleles_sampled <- 1
-  }
-  if (alleles_sampled == "Aa") {
-    alleles_sampled <- 1
-  }
-  if (alleles_sampled == "aa") {
-    alleles_sampled <- 2
-  }
-  return(alleles_sampled)
-}
-
-# function to sample genotypes based on Hardy-Weinberg equation
-sample_genotype <- function(genotype_list = c(0, 1, 2), q) {
-  if (is.na(q)) {
-    return(NA)
-  }
-  #genotype probabilities based on Hardy-Weinberg equation
-  # p^2 + 2pq + q^2 = 1
-  geno_probs <- c(((1 - q) ^ 2), # homozygote for the reference allele
-                  (2 * (1 - q) * q), # heterozygote
-                  (q ^ 2)) # homozygote for the alternative allele)
-                  genotype_sampled <-
-                    sample(genotype_list, size = 1, prob = geno_probs)
-                  return(genotype_sampled)
-}
 
 gl.impute <-  function(x,
                        method = "HW",
@@ -182,7 +127,7 @@ gl.impute <-  function(x,
     x3 <- NULL
     # merge back populations
     for (pop in pop_list) {
-      x3 <- rbind (x3, pop)
+      x3 <- rbind(x3, pop)
     }
   }
   # if 1 population
@@ -190,10 +135,19 @@ gl.impute <-  function(x,
     x3 <- pop_list[[1]]
   }
   
+  x3$chromosome <- x@chromosome
+  x3$position <- x$position
+  x3$ploidy <- x$ploidy
+  x3$strata <- x$strata
+  x3$hierarchy <- x$hierarchy
+  x3$other <- x$other
+  
+  x3 <- gl.compliance.check(x3)
+  
   # ADD TO HISTORY
   x3@other$history <- x@other$history
   nh <- length(x3@other$history)
-  x3@other$history[[nh + 1]] <-  c(match.call(), temp_report)
+  x3@other$history[[nh + 1]] <- match.call()
   
   # FLAG SCRIPT END
   

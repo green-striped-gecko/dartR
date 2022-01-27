@@ -23,10 +23,13 @@
 #'
 #'It expects a dartR formatted genlight object, but it should also  work with
 #'other genlight objects.
-#'
-#'@param outfile_root The root of the name of the output file
-#'@inheritParams gl.report.heterozygosity
-#'@inheritParams gl2vcf
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param n.invariant.tags Number of invariant sites[default 0].
+#' @param outfile_root The root of the name of the output file [default "gl2sfs"].
+#' @param outpath Path where to save the output file [default tempdir()].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' progress log; 3, progress and results summary; 5, full report
+#' [default 2, unless specified using gl.set.verbosity].
 #'@return A list with two elements: the DAF and MAF.
 #'@author Custodian: Carlo Pacioni (Post to
 #'  \url{https://groups.google.com/d/forum/dartr})

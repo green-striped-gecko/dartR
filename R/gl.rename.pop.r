@@ -1,28 +1,27 @@
-#' @name gl.merge.pop
-#' @title Merges two or more populations in a genlight object into one population
+#' @name gl.rename.pop
+#' @title Renames a population in a genlight object
 #' @description
 #' Individuals are assigned to populations based on the specimen metadata data
 #' file (csv) used with gl.read.dart().
 #'
-#' This script assigns individuals from two nominated populations into a new
-#' single population. It can also be used to rename populations.
+#' This script renames a nominated population.
 #'
-#' The script returns a genlight object with the new population assignments.
+#' The script returns a genlight object with the new population name.
 #'
 #' @param x Name of the genlight object containing SNP genotypes [required].
-#' @param old A list of populations to be merged [required].
-#' @param new Name of the new population [required].
+#' @param old Name of population to be changed [required].
+#' @param new New name for the population [required].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #'  [default 2 or as specified using gl.set.verbosity].
-#' @return A genlight object with the new population assignments.
+#' @return A genlight object with the new population name.
 #' @export
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#'    gl <- gl.merge.pop(testset.gl, old=c('EmsubRopeMata','EmvicVictJasp'), new='Outgroup')
+#'    gl <- gl.rename.pop(testset.gl, old='EmsubRopeMata', new='Outgroup')
 
-gl.merge.pop <- function(x,
+gl.rename.pop <- function(x,
                          old = NULL,
                          new = NULL,
                          verbose = NULL) {
@@ -38,24 +37,12 @@ gl.merge.pop <- function(x,
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
     
-    if (verbose >= 1) {
-        if (length(old) == 1) {
-            cat(report("  Renaming a population\n"))
-        } else if (length(old) > 1) {
-            cat(report("  Merging a list of populations into one\n"))
-        } else {
-            stop(error(
-                "Fatal Error: At least one old population label must be provided\n"
-            ))
-        }
-    }
-    
     # SCRIPT SPECIFIC ERROR TESTING
     
     if (is.null(old)) {
-        stop(error("Fatal Error: Populations to be combined must be specified\n"))
+        stop(error("Fatal Error: A population to be renamed must be specified\n"))
     }
-        if (is.null(new)) {
+    if (is.null(new)) {
         stop(error("Fatal Error: A new population label must be specified\n"))
     }
     if (class(x) != "genlight") {
@@ -64,20 +51,12 @@ gl.merge.pop <- function(x,
         ))
     }
     if (verbose >= 2) {
-        if (length(old) == 1) {
             cat("  Renaming", old, "as", new, "\n")
-        } else {
-            cat("  Merging", old, "into", new, "\n")
-        }
     }
     
     # DO THE JOB
-    
-    # Merge or rename
-    
-    for (i in 1:length(old)) {
-        levels(pop(x))[levels(pop(x)) == old[i]] <- new
-    }
+
+    levels(pop(x))[levels(pop(x)) == old] <- new
     
     # ADD TO HISTORY
     nh <- length(x@other$history)

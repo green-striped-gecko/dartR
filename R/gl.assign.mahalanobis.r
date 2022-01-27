@@ -80,7 +80,8 @@
 #' @author Custodian: Arthur Georges --
 #' Post to \url{https://groups.google.com/d/forum/dartr}
 #'
-#' @examples Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
+#' @examples 
+#' #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
 #' x <- gl.assign.pa(testset.gl, unknown='UC_01044', nmin=10, threshold=1,verbose=3) 
 #' x <- gl.assign.pca(x, unknown='UC_01044', plevel=0.95, verbose=3)
 #' df <- gl.assign.mahalanobis(x, unknown='UC_01044', verbose=3)
@@ -208,11 +209,11 @@ gl.assign.mahalanobis <- function(x,
             Unknown <- as.numeric(Unknown)
             # Calculate statistics for the data without the unknown
             means <- colMeans(n)
-            covariance <- cov(n)
+            covariance <- stats::cov(n)
             # Add back in the unknown
             all <- rbind(n,Unknown)
             # Calculate Mahalanobis Distances
-            D <- mahalanobis(all, means, covariance, toll=1e-20)
+            D <- stats::mahalanobis(all, means, covariance, toll=1e-20)
 #            wtD <- WMDB::wmahalanobis(all,means,covariance,weight=e)
             names(D) <- c(hold,"unknown")
             # Calculate the associated probabilities

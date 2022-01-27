@@ -7,7 +7,6 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
-#' @importFrom hierfstat genind2hierfstat basic.stats
 #' @return Several tables and lists with all basic stats.
 #' \code{\link[hierfstat]{basic.stats}} for details.
 #' @author Bernd Gruber (bugs? Post to
@@ -30,6 +29,17 @@ gl.basic.stats <- function(x,
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
+    
+    # CHECK IF PACKAGES ARE INSTALLED
+    pkg <- "hierfstat"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(error(
+            "Package",
+            pkg,
+            " needed for this function to work. Please install it."
+        ))
+    }
+    
     
     # DO THE JOB
     

@@ -1,6 +1,6 @@
 #' @name gl.nhybrids
 #' @title Creates an input file for the program NewHybrids and runs it if
-#'  NewHybrids is installed (PC only)
+#'  NewHybrids is installed
 #' @description
 #' This function compares two sets of parental populations to identify loci that
 #' exhibit a fixed difference, returns an genlight object with the reduced
@@ -98,7 +98,7 @@
 #' }
 
 gl.nhybrids <- function(gl,
-#                        outfile = "nhyb.txt",
+#                       outfile = "nhyb.txt",
                         outpath = tempdir(),
                         p0 = NULL,
                         p1 = NULL,
@@ -448,7 +448,13 @@ gl.nhybrids <- function(gl,
       }  
     
     # Checking for directories and files
+    if(nchar(outfile.win) > nchar(gsub(" ","",outfile.win))){
+      stop(error("Fatal Error: NewHybrids will not accept file or directory names that contain spaces\n"))
+    }
     if(!is.null(nhyb.directory)){
+      if(nchar(nhyb.directory) > nchar(gsub(" ","",nhyb.directory))){
+        stop(error("Fatal Error: NewHybrids will not accept file or directory names that contain spaces\n"))
+      }
       if(!dir.exists(nhyb.directory)){
         stop(error("Fatal Error: Directory for the NewHybrids executable does not exist\n"))
       }
@@ -456,10 +462,6 @@ gl.nhybrids <- function(gl,
           stop(error("Fatal Error: Directory for the NewHybrids executable cannot be the same as",
             "the directory to receive the output\n"))
       }
-    }
-
-    if(nchar(outfile.win) > nchar(gsub(" ","",outfile.win))){
-        stop(error("Fatal Error: NewHybrids will not accept file or directory names that contain spaces\n"))
     }
     
     # Check the installation of New Hybrids
