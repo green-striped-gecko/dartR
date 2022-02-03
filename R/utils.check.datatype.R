@@ -132,6 +132,11 @@ utils.check.datatype <- function(x,
             cat(report("  Processing an ordination file (glPca)\n"))
         }
         datatype <- "glPca"
+    } else if (is.list(x)) {
+        if (verbose >= 2) {
+            cat(report("  Processing a list\n"))
+        }
+        datatype <- "list"
     } else {
         cat(warn("  Warning: Found object of class", class(x)[1], "\n"))
         datatype <- class(x)[1]

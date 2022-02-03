@@ -33,11 +33,10 @@ than the threshold for a loci to be filtered out. Only used if by.pop=TRUE.
 The default value is half of the populations [default ceiling(nPop(x)/2)].}
 
 \item{ind.limit}{Minimum number of individuals that a population should 
-loc.limit polymorphic loci [default 30].}
+contain to calculate MAF. Only used if by.pop=TRUE [default 10].}
 
 \item{recalc}{Recalculate the locus metadata statistics if any individuals
-are deleted in the filtering [default FALSE].
-contain to calculate MAF. Only used if by.pop=TRUE. [default 10].}
+are deleted in the filtering [default FALSE].}
 
 \item{plot.out}{Specify if histograms of call rate, before and after, are to
 be produced [default TRUE].}
@@ -63,10 +62,6 @@ The reduced genlight dataset
 This script calculates the minor allele frequency for each locus and updates
 the locus metadata for FreqHomRef, FreqHomSnp, FreqHets and MAF (if it
 exists). It then uses the updated metadata for MAF to filter loci.
-
-Note the this filter applies to MAF calculated across all individuals,
- without regard to population structure. It is a means of removing overall
- rare alleles. To apply this to single populations, use seppop and lapply.
 }
 \examples{
 result <- gl.filter.monomorphs(testset.gl)
