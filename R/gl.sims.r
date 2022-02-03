@@ -9,8 +9,10 @@ gl.sims <- function(file_var,
 
   ##### SIMULATIONS VARIABLES######
   sim_vars <- suppressWarnings(read.csv(file_var))
+  cat(important("Use the second column ('value') to change the values of the simulation variables and then clic on the quit icon\n"))
+  cat(important("The description of the variables and their range of values are shown in the fourth and fifth colums respectively\n"))
   sim_vars <- edit(sim_vars)
-  vars_assign <- unlist(unname(mapply(paste, sim_vars$var, "<-", sim_vars$val, SIMPLIFY = F)))
+  vars_assign <- unlist(unname(mapply(paste, sim_vars$variable, "<-", sim_vars$value, SIMPLIFY = F)))
   eval(parse(text = vars_assign))
   # setting the seed
   if(!is.null(seed)){
