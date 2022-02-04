@@ -1,6 +1,6 @@
 #' @export
 
-gl.sims <- function(file_var,
+gl.sims <- function(file_var=system.file('extdata','sim_variables.csv', package='dartR'),
                     number_iterations = 1,
                     every_gen = 5,
                     seed = NULL,
@@ -11,9 +11,10 @@ gl.sims <- function(file_var,
   sim_vars <- suppressWarnings(read.csv(file_var))
   cat(important("Use the second column ('value') to change the values of the simulation variables and then clic on the quit icon\n"))
   cat(important("The description of the variables and their range of values are shown in the fourth and fifth colums respectively\n"))
-  sim_vars <- edit(sim_vars)
+   sim_vars <- edit(sim_vars)
   vars_assign <- unlist(unname(mapply(paste, sim_vars$variable, "<-", sim_vars$value, SIMPLIFY = F)))
   eval(parse(text = vars_assign))
+  
   # setting the seed
   if(!is.null(seed)){
     set.seed(seed)
@@ -159,6 +160,12 @@ gl.sims <- function(file_var,
     reference$q <- q_gral
     reference$h <- h_gral
     reference$s <- s_gral
+    # setting h and s to 0 in neutral loci
+    reference[as.numeric(neutral_loci_location),"s"] <- 0
+    reference[as.numeric(neutral_loci_location),"h"] <- 0
+    reference$selection <- "under_selection"
+    reference[as.numeric(neutral_loci_location),"selection"] <- "neutral"
+    
     loci_number <- nrow(recombination_map) - 1
     reference$location <- recombination_map[1:loci_number, 2]
     
@@ -340,6 +347,11 @@ gl.sims <- function(file_var,
       as.numeric(row.names(reference[reference$s > 1,]))
     reference[s_more_than_one, "s"] <- 0.99
     loci_number <- nrow(reference)
+    # setting h and s to 0 in neutral loci
+    reference[as.numeric(neutral_loci_location),"s"] <- 0
+    reference[as.numeric(neutral_loci_location),"h"] <- 0
+    reference$selection <- "under_selection"
+    reference[as.numeric(neutral_loci_location),"selection"] <- "neutral"
   }
   
   ##### REFERENCE VALUES BOTH SIMULATIONS #####
@@ -427,6 +439,11 @@ gl.sims <- function(file_var,
         sim_type = simulation_type
       )
     })
+    #if there is just one population set dispersal to FALSE
+    if(length(pop_list)==1){
+      dispersal <- FALSE
+      dispersal_dispersal <- FALSE
+    }
    
     ##### START GENERATION LOOP ######
     for (generation in 1:number_generations) {
@@ -501,65 +518,8 @@ gl.sims <- function(file_var,
         gen_dispersal <- gen_dispersal + 1
       }
       ##### REPRODUCTION#########
-      if (simulation_type_2 == "fly") {
-        offspring_pop1 <-
-          reproduction(
-            pop = pop1,
-            pop_number = 1,
-            pop_size = population_size,
-            var_off = variance_offspring,
-            num_off = number_offspring,
-            r_event = recom_event,
-            recom = recombination,
-            r_males = recombination_males,
-            r_map_1 = recombination_map,
-            n_loc = loci_number
-          )
-        offspring_pop2 <-
-          reproduction(
-            pop = pop2,
-            pop_number = 2,
-            pop_size = population_size,
-            var_off = variance_offspring,
-            num_off = number_offspring,
-            r_event = recom_event,
-            recom = recombination,
-            r_males = recombination_males,
-            r_map_1 = recombination_map,
-            n_loc = loci_number
-          )
-      }
-      if (simulation_type_2 == "chillingham") {
-        offspring_pop1 <-
-          reproduction_2(
-            pop = pop1,
-            pop_number = 1,
-            pop_size = population_size,
-            var_off = variance_offspring,
-            num_off = number_offspring,
-            r_event = recom_event,
-            recom = recombination,
-            r_males = recombination_males,
-            r_map_1 = recombination_map,
-            n_loc = loci_number
-          )
-        offspring_pop2 <-
-          reproduction_2(
-            pop = pop2,
-            pop_number = 2,
-            pop_size = population_size,
-            var_off = variance_offspring,
-            num_off = number_offspring,
-            r_event = recom_event,
-            recom = recombination,
-            r_males = recombination_males,
-            r_map_1 = recombination_map,
-            n_loc = loci_number
-          )
-      }
-      if (simulation_type_2 == "general") {
         offspring_list <- lapply(pops_vector,function(x){
-          reproduction_2(
+          reproduction(
             pop = pop_list[[x]],
             pop_number = x,
             pop_size = population_size,
@@ -572,18 +532,17 @@ gl.sims <- function(file_var,
             n_loc = loci_number
           )
         })
-      }
       
       ##### SELECTION ####
       if (selection == TRUE) {
         offspring_list <- lapply(pops_vector,function(x){
           selection_fun(offspring = offspring_list[[x]], 
                         reference_pop = reference,
-                        sel_model = natural_selection_model)
+                        sel_model = natural_selection_model,
+                        g_load = genetic_load)
         })
       }
       ##### SAMPLING NEXT GENERATION #########
-      
       test_extinction <- unlist(lapply(pops_vector,function(x){
         length(which(offspring_list[[x]]$V1 == "Male")) < population_size / 2 |
           length(which(offspring_list[[x]]$V1 == "Female")) < population_size / 2
@@ -722,11 +681,12 @@ gl.sims <- function(file_var,
         misc.info$phenotype <- factor(misc.info$phenotype)
         res$other$ind.metrics <- as.data.frame(misc.info)
         loc_metrics_temp <-
-          as.data.frame(cbind(plink_map, reference[, 2:4]))
+          as.data.frame(cbind(plink_map, reference[, 2:5]))
         colnames(loc_metrics_temp) <-
-          c("chr", "loc_id", "loc_cM", "loc_bp", "q", "h", "s")
+          c("chr", "loc_id", "loc_cM", "loc_bp", "q", "h", "s","selection")
         res$other$loc.metrics <- loc_metrics_temp
-        sim_vars_temp <- setNames(data.frame(t(sim_vars[,-1])), sim_vars[,1])
+        sim_vars_temp <- sim_vars[,2:3]
+        sim_vars_temp <- setNames(data.frame(t(sim_vars_temp[,-1])), sim_vars_temp[,1])
         sim_vars_temp$generation <- generation
         sim_vars_temp$iteration <- iteration
         sim_vars_temp$seed <- seed

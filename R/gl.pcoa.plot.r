@@ -181,7 +181,7 @@ gl.pcoa.plot <- function(glPca,
                 )
             )
         }
-        x <- x[[1]][[1]]
+        x <- x[[1]]
         glPca <- glPca[[1]]
     }
     
@@ -279,12 +279,12 @@ gl.pcoa.plot <- function(glPca,
     # DO THE JOB
     
     if(datatype1=="list"){
-        gen_number <- length(hold_x[[1]])
+        gen_number <- length(hold_x)
         df_sim <- as.data.frame(matrix(ncol = 5))
         colnames(df_sim) <- c("PCoAx","PCoAy","ind","pop","gen")
         for(sim_i in 1:gen_number){
             glPca <- hold_glPca[[sim_i]]
-            x <- hold_x[[1]][[sim_i]]
+            x <- hold_x[[sim_i]]
             m <- cbind(glPca$scores[, xaxis], glPca$scores[, yaxis])
             df <- data.frame(m)
             # Convert the eigenvalues to percentages
@@ -295,8 +295,8 @@ gl.pcoa.plot <- function(glPca,
                 ylab <- paste("PCA Axis", yaxis)
                 ind <- indNames(x)
                 pop <- factor(pop(x))
-                gen <- x$other$sim.vars$generation
-                df <- cbind(df, ind, pop,gen)
+                # gen <- unique(x$other$sim.vars$generation)
+                df <- cbind(df, ind, pop,unique(x$other$sim.vars$generation))
                 colnames(df) <- c("PCoAx", "PCoAy", "ind", "pop","gen")
                 df_sim <- rbind(df_sim,df)
         }
