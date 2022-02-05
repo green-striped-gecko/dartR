@@ -65,11 +65,10 @@ gl.LDNe <- function(  x,
   #copy info file to tempdir
   info <- NA
   info[1] <- "1"
-  info[2] <- ""  #path of input file
+  info[2] <- "./"  #path of input file
   info[3] <- "dummy.gen"  #input file
   info[4] <- 2  #Genepop format
-  if (substr(outpath, nchar(outpath),500)!="/") op <- paste0(outpath,"/") else op<- outpath
-  info[5] <- paste0(op) #path of output file
+  info[5] <- "./" #path of output file
   info[6] <- outfile #output file
   info[7] <- length(critical)
   info[8] <- paste(critical, collapse = " ")
@@ -82,14 +81,14 @@ gl.LDNe <- function(  x,
   
   if (Sys.info()["sysname"] == "Windows") 
   {
-   prog <- "Ne2-1.exe"
-   cmd <- "Ne2-1.exe i:infodummy"
+    prog <- "Ne2-1.exe"
+    cmd <- "Ne2-1.exe i:infodummy"
     
   }  
   if (Sys.info()["sysname"] == "Linux") 
   {
     prog <- "Ne2-1L"
-    cmd <- "./Ne2-L i:infodummy"
+    cmd <- "./Ne2-1L i:infodummy"
   }  
   if (Sys.info()["sysname"] == "Darwin") 
   {
@@ -101,17 +100,19 @@ gl.LDNe <- function(  x,
   if(file.exists(file.path(neest.path,prog)))
     file.copy(file.path(neest.path,prog), to = tempdir(), overwrite = TRUE ) else cat(error(paste0("Cannot find ", prog," in the specified folder given by neest.path: ",neest.path))) 
   
-    #change into temddir (run it there)
-    old.path=getwd()
-    setwd(tempdir())
-    ret <- system(cmd)
-    setwd(old.path)
-    res <- readLines(file.path(outpath, outfile))
-    cat(message(paste0("The results are saved in: ", file.path(outpath, outfile))))
+  #change into temddir (run it there)
+  old.path=getwd()
+  setwd(tempdir())
+  system(cmd)
+  res <- readLines(outfile)
+  file.copy(outfile, file.path(outpath, outfile))
+  setwd(old.path)
+  
+  cat(message(paste0("The results are saved in: ", file.path(outpath, outfile))))
   return(res)
 }
-  
 
-#nes <- gl.LDNe(pops, outfile="popsLD2.txt", outpath="d:/temp",neest.path = "d:/programms/Neestimator/",critical=c(0), singleton.rm=FALSE, mating='mon')
-#nes
+#pop <- possums.gl[1:15,1:200]
+#nes <- gl.LDNe(pops, outfile="popsLD2dsfa.txt", outpath="c:/temp",neest.path = "c:/programms/Neestimator/",critical=c(0,0.05), singleton.rm=FALSE, mating='random')
+
 
