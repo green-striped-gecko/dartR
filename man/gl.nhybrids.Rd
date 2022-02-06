@@ -3,7 +3,7 @@
 \name{gl.nhybrids}
 \alias{gl.nhybrids}
 \title{Creates an input file for the program NewHybrids and runs it if
- NewHybrids is installed (PC only)}
+ NewHybrids is installed}
 \usage{
 gl.nhybrids(
   gl,
@@ -13,6 +13,8 @@ gl.nhybrids(
   threshold = 0,
   method = "random",
   plot = TRUE,
+  plot_theme = theme_dartR(),
+  plot_colors = two_colors,
   pprob = 0.95,
   nhyb.directory = NULL,
   BurnIn = 10000,
@@ -45,6 +47,11 @@ NewHybrids [default random].}
 heterozygotes and homozygous alternate (SNP) is produced for the F1
 individuals
 [default TRUE, applies only if both parental populations are specified].}
+
+\item{plot_theme}{User specified theme [default theme_dartR()].}
+
+\item{plot_colors}{Vector with two color names for the borders and fill
+[default two_colors].}
 
 \item{pprob}{Threshold level for assignment to likelihood bins
 [default 0.95, used only if plot=TRUE].}
