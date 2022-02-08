@@ -148,8 +148,7 @@ initialise <- function(pop_number,
                        pop_size = population_size, 
                        refer = reference,
                        n_l_loc = neutral_loci_location, 
-                       exp_freq = experiment_freq, 
-                       sim_type = simulation_type) {
+                       r_freq = real_freq) {
   
     pop <- as.data.frame(matrix(ncol = 4, nrow = pop_size))
     pop[, 1] <- rep(c("Male", "Female"), each = pop_size / 2)
@@ -169,7 +168,7 @@ initialise <- function(pop_number,
                  size = 1,
                  prob = c(rep(1 / 2, 2)))
       }
-      if (exp_freq == TRUE & sim_type == "fly") {
+      if (!is.null(r_freq)) {
         counter_msats <- 1
         for (element in 1:length(loc_exp_loci_2)) {
           substr(
@@ -273,4 +272,101 @@ reproduction <- function(pop,
     offspring <- rbind(offspring, offspring_temp)
   }
   return(offspring)
+}
+
+store <- function(p_vector = pops_vector,
+                  p_size = population_size,
+                  p_list = pop_list,
+                  n_loc_1 = loci_number,
+                  paral = parallel,
+                  n_cores = n.cores,
+                  ref = reference,
+                  p_map = plink_map,
+                  s_vars = s_vars_temp){
+  pop_names <- rep(paste0("pop",p_vector),p_size)
+  pop_names <- pop_names[order(pop_names)]
+  df_genotypes <- rbindlist(p_list)
+  df_genotypes$V1[df_genotypes$V1 == "Male"]   <- 1
+  df_genotypes$V1[df_genotypes$V1 == "Female"] <- 2
+  df_genotypes[, 2] <- pop_names
+  df_genotypes$id <- paste0(unlist(unname(df_genotypes[, 2])), "_", rep(1:p_size,length(p_vector)))
+  plink_ped <- apply(df_genotypes, 1, ped, n_loc = n_loc_1)
+  # converting allele names to numbers
+  plink_ped <- gsub("a", "1", plink_ped) 
+  plink_ped <- gsub("A", "2", plink_ped)
+  plink_ped <-
+    lapply(plink_ped, function(x) {
+      gsub(" ", "", strsplit(x, '(?<=([^ ]\\s){2})', perl = TRUE)[[1]])
+    })
+  plink_ped_2 <- lapply(plink_ped, function(x) {
+    x[x == "22"] <- 2
+    x[x == "11"] <- 0
+    x[x == "21"] <- 1
+    x[x == "12"] <- 1
+    return(x)
+  })
+  
+  if (paral && is.null(n_cores)) {
+    n_cores <- parallel::detectCores()
+  }
+  
+  loc.names <- 1:nrow(ref)
+  n.loc <- length(loc.names)
+  misc.info <- lapply(1:6, function(i)
+    NULL)
+  names(misc.info) <-
+    c("FID", "IID", "PAT", "MAT", "SEX", "PHENOTYPE")
+  res <- list()
+  temp <-
+    as.data.frame(cbind(
+      df_genotypes[,2],
+      df_genotypes[,7],
+      df_genotypes[,5],
+      df_genotypes[,6],
+      df_genotypes[,1],
+      1
+    ))
+  
+  for (i in 1:6) {
+    misc.info[[i]] <- temp[, i]
+  }
+  txt <-
+    lapply(plink_ped_2, function(e)
+      suppressWarnings(as.integer(e)))
+  if (paral) {
+    res <-
+      c(
+        res,
+        parallel::mclapply(txt, function(e)
+          new("SNPbin", snp = e, ploidy = 2L), mc.cores = n_cores, mc.silent = TRUE, mc.cleanup = TRUE, mc.preschedule = FALSE)
+      )
+  } else {
+    res <-
+      c(res, lapply(txt, function(e)
+        new(
+          "SNPbin", snp = e, ploidy = 2L
+        )))
+  }
+  
+  res <- new("genlight", res, ploidy = 2L,parallel = paral)
+  
+  indNames(res) <- misc.info$IID
+  pop(res) <- misc.info$FID
+  locNames(res) <- loc.names
+  misc.info <- misc.info[c("SEX", "PHENOTYPE", "PAT", "MAT")]
+  names(misc.info) <- tolower(names(misc.info))
+  misc.info$sex[misc.info$sex == 1] <- "m"
+  misc.info$sex[misc.info$sex == 2] <- "f"
+  misc.info$sex <- factor(misc.info$sex)
+  misc.info$phenotype[misc.info$phenotype == 1] <- "control"
+  misc.info$phenotype[misc.info$phenotype == 2] <- "case"
+  misc.info$phenotype <- factor(misc.info$phenotype)
+  res$other$ind.metrics <- as.data.frame(misc.info)
+  loc_metrics_temp <- as.data.frame(cbind(p_map, ref[, 2:5]))
+  colnames(loc_metrics_temp) <-
+    c("chr", "loc_id", "loc_cM", "loc_bp", "q", "h", "s","selection")
+  res$other$loc.metrics <- loc_metrics_temp
+  res$other$sim.vars <- s_vars
+  return(res)
+  
 }

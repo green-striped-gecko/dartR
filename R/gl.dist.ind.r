@@ -1,62 +1,54 @@
 #' @name gl.dist.ind
-#' @title Calculates a distance matrix for individuals defined in an \{adegenet\}
-#'  genlight object
+#' @title Calculates a distance matrix for individuals defined in a genlight object
 #' @description
 #' This script calculates various distances between individuals based on allele
-#'  frequencies. The distances are calculated by scripts in the {stats} or
-#'  {vegan} libraries.
+#'  frequencies or presence-absence data 
 #' @details
-#' The distance measure for SNP data can be one of:
+#' The distance measure for SNP genotypes can be one of:
 #' \itemize{
-#'  \item 'Euclidean' -- Euclidean distance, as implemented in the function
-#'  \link[stats]{dist} (package stats).
-#'  \item 'locus.count' -- number of loci for which individuals differ, as
-#'  implemented in the function \link[ape]{dist.gene} (package ape).
-#'  \item 'allele.count' -- number of allelic differences between two
-#'  individuals, as implemented in the function \link[poppr]{diss.dist}
-#'  (package poppr).
-#'  \item 'relatedness' -- genetic relatedness between individuals (G matrix),
-#'   as implemented in the function \link[rrBLUP]{A.mat} (package rrBLUP).
+#'  \item Euclidean Distance
+#'  \item Scaled Euclidean Distance
+#'  \item Simple Mismatch Distance
+#'  \item Absolute Mismatch Distance
+#'  \item Czekanowski (Manhattan) Distance
 #'  }
 #'
-#' The distance measure for Tag P/A data (binary) can be one of:
+#' The distance measure for Sequence Tag Presence/Absence data (binary) can be one of:
 #' \itemize{
-#'  \item 'Simple' -- simple matching, both 1 or both 0 = 0; one 1 and the other
-#'   0 = 1. Presence and absence equally weighted.
-#'  \item 'Jaccard' -- ignores matching 0, both 1 = 0; one 1 and the other
-#'  0 = 1. Absences could be for different reasons.
-#'  \item 'Dice' -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences
-#'  could be for different reasons. Sometimes called the Czekanowski or Sorensen
-#'  distance.
-#'  \item 'Phi' -- binary analogue of the Pearson Correlation coefficient.
+#'  \item Euclidean Distance
+#'  \item Scaled Euclidean Distance
+#'  \item Simple Matching Distance
+#'  \item Jaccard Distance
+#'  \item Bray-Curtis Distance
 #'  }
 #'
-#' Refer to the documentation in the relevant packages listed above.
+#' Refer to the dartR Technical Note on Distances in Genetics.
 #'
-#' @param x Name of the genlight containing the SNP genotypes [required].
-#' @param method Specify distance measure [SNP: Euclidean; P/A: Simple].
-#' @param plot.out If TRUE, display a histogram and a boxplot of the genetic
-#' distances [TRUE].
+#' @param x Name of the genlight containing the SNP genotypes or presence-absence data [required].
+#' @param method Specify distance measure [SNP: Euclidean; P/A: SMD].
+#' @param scale If TRUE, the distances are scaled to fall in the range [0,1] [default TRUE]
+#' @param output Specify the format and class of the object to be returned, 
+#' 'dist' for a object of class dist, 'matrix' for an object of class matrix [default "dist"].
+#' @param plot.out If TRUE, display a histogram and a boxplot of the genetic distances [TRUE].
 #' @param plot_theme User specified theme [default theme_dartR].
-#' @param plot_colors Vector with two color names for the borders and fill
-#'  [default two_colors].
-#' @param save2tmp If TRUE, saves any ggplots to the session temporary directory
-#'  [default FALSE].
+#' @param plot_colors Vector with two color names for the borders and fill [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots to the session temporary directory [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log ; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
-#' @return An object of class 'dist' giving distances between individuals
+#' @return An object of class 'matrix' or dist' giving distances between individuals
 #' @importFrom ape dist.gene
 #' @importFrom stats dist
 #' @export
-#' @author Custodian: Arthur Georges -- Post to
-#' \url{https://groups.google.com/d/forum/dartr}
+#' @author Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' D <- gl.dist.ind(testset.gl, method='euclidean')
-#' D <- gl.dist.ind(testset.gs, method='euclidean')
+#' D <- gl.dist.ind.new(testset.gs, method='euclidean')
 
 gl.dist.ind <- function(x,
                         method = NULL,
+                        scale = FALSE,
+                        output="dist",
                         plot.out = TRUE,
                         plot_theme = theme_dartR(),
                         plot_colors = two_colors,
@@ -115,7 +107,7 @@ gl.dist.ind <- function(x,
             "relatedness",
             "simple",
             "jaccard",
-            "dice",
+            "bray-curtis",
             "sorenson",
             "czekanowski",
             "phi"
@@ -123,7 +115,7 @@ gl.dist.ind <- function(x,
     )) {
         cat(
             warn(
-                " Warning: Method not in the list of options, set to euclidean for SNP data; simple matching for Tag P/A data\n"
+                " Warning: Method not in the list of options, set to Euclidean for SNP data; Simple Matching for Tag P/A data\n"
             )
         )
         if (datatype == "SNP") {
@@ -190,47 +182,42 @@ gl.dist.ind <- function(x,
     }
     
     if (datatype == "SilicoDArT") {
+        if (method == "euclidean" && scale==FALSE) {
+            if (verbose >= 2) {
+                cat(report("  Calculating the Unscaled Euclidean Distances\n"))
+            }
+        }
+        if (method == "euclidean" && scale==TRUE) {
+            if (verbose >= 2) {
+                cat(report("  Calculating the Scaled Euclidean Distances\n"))
+            }
+        }
         if (method == "simple") {
             if (verbose >= 2) {
-                cat(report("  Calculating the Simple Matching Index\n"))
+                cat(report("  Calculating the Simple Matching Distances\n"))
             }
         }
         if (method == "jaccard") {
             if (verbose >= 2) {
-                cat(report("  Calculating the Jaccard Index\n"))
+                cat(report("  Calculating distances based on the Jaccard Coefficient\n"))
             }
         }
-        if (method == "dice") {
+        if (method == "bray-curtis") {
             if (verbose >= 2) {
                 cat(report(
-                    "  Calculating the Dice Index (= Sorenson or Czekanowski)\n"
+                    "  Calculating the Bray-Curtis Distance\n"
                 ))
             }
         }
-        if (method == "sorenson") {
-            if (verbose >= 2) {
-                cat(report(
-                    "  Calculating the Dice Index (= Sorenson or Czekanowski\n"
-                ))
-            }
-        }
-        if (method == "czekanowski") {
-            if (verbose >= 2) {
-                cat(report(
-                    "  Calculating the Dice Index (= Sorenson or Czekanowski\n"
-                ))
-            }
-        }
-        if (method == "phi") {
-            if (verbose >= 2) {
-                cat(report(
-                    "  Calculating the Pearson Phi Index (= Binary correlation\n"
-                ))
-            }
-        }
-        dd <-
-            utils.dist.binary(x, method = method, verbose = verbose)
-        mat <- as.matrix(dd)
+        # if (method == "phi") {
+        #     if (verbose >= 2) {
+        #         cat(report(
+        #             "  Calculating the Pearson Phi Index (= Binary correlation\n"
+        #         ))
+        #     }
+        # }
+        mat <-
+            utils.dist.binary(x, method = method, output="matrix", scale = scale, verbose = 0)
         dd <- as.dist(mat)
     }
     
@@ -242,12 +229,21 @@ gl.dist.ind <- function(x,
                        method,
                        " distance")
         } else {
-            title_plot <-
+            if(method=="euclidean" && scale == TRUE){
+                title_plot <-
                 paste0(
-                    "Presence/Absence data (SilicoDArT)\nInter-individual ",
+                    "Presence/Absence data (SilicoDArT)\nInter-individual scaled ",
                     method,
                     " distance"
                 )
+            } else {
+                title_plot <-
+                    paste0(
+                        "Presence/Absence data (SilicoDArT)\nInter-individual ",
+                        method,
+                        " distance"
+                    )
+            }
         }
         values <- NULL
         df_plot <- data.frame(values = as.vector(mat))
@@ -255,18 +251,30 @@ gl.dist.ind <- function(x,
         
         # Boxplot
         p1 <-
-            ggplot(df_plot, aes(y = values)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + coord_flip() + plot_theme + xlim(range = c(-1,
-                                                                                                                                                        1)) + ylim(min(df_plot$values, na.rm = TRUE),
-                                                                                                                                                                   max(df_plot$values, na.rm = TRUE)) + ylab(" ") + theme(axis.text.y = element_blank(),
-                                                                                                                                                                                                                          axis.ticks.y = element_blank()) + ggtitle(title_plot)
+            ggplot(df_plot, aes(y = values)) + 
+            geom_boxplot(color = plot_colors[1], 
+            fill = plot_colors[2]) + 
+            coord_flip() + 
+            plot_theme + 
+            xlim(range = c(-1,1)) + 
+            ylim(min(df_plot$values, na.rm = TRUE),
+            max(df_plot$values, na.rm = TRUE)) + 
+            ylab(" ") + 
+            theme(axis.text.y = element_blank(), 
+                  axis.ticks.y = element_blank()) + 
+            ggtitle(title_plot)
         
         # Histogram
         p2 <-
-            ggplot(df_plot, aes(x = values)) + geom_histogram(bins = 100,
-                                                              color = plot_colors[1],
-                                                              fill = plot_colors[2]) + xlim(min(df_plot$values,
-                                                                                                na.rm = TRUE),
-                                                                                            max(df_plot$values, na.rm = TRUE)) + xlab("Distance") + ylab("Count") + plot_theme
+            ggplot(df_plot, aes(x = values)) + 
+            geom_histogram(bins = 100,
+                           color = plot_colors[1],
+                           fill = plot_colors[2]) + 
+            xlim(min(df_plot$values, na.rm = TRUE), 
+                 max(df_plot$values, na.rm = TRUE)) + 
+            xlab("Distance") + 
+            ylab("Count") + 
+            plot_theme
         
         # PRINTING OUTPUTS
         if (plot.out) {
@@ -274,7 +282,6 @@ gl.dist.ind <- function(x,
             p3 <- (p1 / p2) + plot_layout(heights = c(1, 4))
             suppressWarnings(print(p3))
         }
-        
     }
     
     # SUMMARY Print out some statistics
@@ -322,9 +329,17 @@ gl.dist.ind <- function(x,
     
     # FLAG SCRIPT END
     
-    if (verbose > 0) {
-        cat(report("Completed:", funname, "\n"))
+    if(output=="matrix"){
+        if(verbose >= 2){cat(report("  Returning a square matrix\n"))}
+        return(mat)
+        if (verbose > 0) {
+            cat(report("Completed:", funname, "\n"))
+        }
+    } else {
+        if(verbose >= 2){cat(report("  Returning a stat::dist object\n"))}
+        return(dd)
+        if (verbose > 0) {
+            cat(report("Completed:", funname, "\n"))
+        }
     }
-    
-    return(dd)
 }

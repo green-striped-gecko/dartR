@@ -122,13 +122,28 @@
 #' the best modern reference is Legendre & Legendre (1998).
 #'
 #'@return An object of class pcoa containing the eigenvalues and factor scores
-#'@author Custodian: Arthur Georges (Post to
+#'@author Author(s): Arthur Georges. Custodian: Arthur Georges (Post to
 #'\url{https://groups.google.com/d/forum/dartr})
 #'@examples
+#' # PCA (using SNP genlight object)
+#' pca <- gl.pcoa(testset.gl)
+#' gl.pcoa.plot(pca,testset.gl)
+#' 
+#' # PCA (using SilicoDArT genlight object)
+#' pca <- gl.pcoa(testset.gs)
+#' gl.pcoa.plot(pca,testset.gs)
+#' 
+#' # Collapsing pops to OTUs using Fixed Difference Analysis (using fd object)
 #' fd <- gl.fixed.diff(testset.gl)
 #' fd <- gl.collapse(fd)
 #' pca <- gl.pcoa(fd)
 #' gl.pcoa.plot(pca,fd$gl)
+#' 
+#' # Using a distance matrix
+#' D <- gl.dist.ind(testset.gs, method='jaccard')
+#' pcoa <- gl.pcoa(D,correction="cailliez")
+#' gl.pcoa.plot(pcoa,testset.gs)
+#' 
 #'@references
 #'\itemize{
 #'\item Cailliez, F. (1983) The analytical solution of the additive constant
@@ -200,20 +215,22 @@ gl.pcoa <- function(x,
         x <- gl.filter.monomorphs(x, verbose = 0)
     }
     
-    if (nInd(x) < 2) {
+    if((datatype == "SNP" | datatype == "SilicoDArT")){
+        if (nInd(x) < 2) {
         stop(
             error(
                 "Fatal Error: Only one individual or no individuals present in the dataset"
             )
         )
-    }
-    
-    if (nLoc(x) < nInd(x)) {
+        }
+   
+        if (nLoc(x) < nInd(x)) {
         cat(
             warn(
                 "  Warning: Number of loci is less than the number of individuals to be represented"
             )
         )
+        }
     }
     
     if (is.null(correction)) {
