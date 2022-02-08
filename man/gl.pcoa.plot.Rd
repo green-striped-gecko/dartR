@@ -149,7 +149,6 @@ gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', pt.colors=
 Other Exploration/visualisation functions: 
 \code{\link{gl.select.colors}()},
 \code{\link{gl.select.shapes}()},
-\code{\link{gl.smearplot2}()},
 \code{\link{gl.smearplot}()}
 }
 \author{
