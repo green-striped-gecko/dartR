@@ -1,20 +1,22 @@
 #' @name utils.dist.binary
-#' @title Calculates a distance matrix for individuals defined in an \{adegenet\}
+#' @title Calculates a distance matrix for individuals defined in a dartR
 #' genlight object using binary P/A data (SilicoDArT)
 #' @description
-#' This script calculates various distances between individuals based on Tag
+#' This script calculates various distances between individuals based on sequence tag
 #' Presence/Absence data.
 #' @details
 #' The distance measure can be one of:
 #'  \itemize{
+#'   \item Euclidean -- Euclidean Distance applied to cartesian coordinates defined
+#'   by the loci, scored as 0 or 1. Presence and absence equally weighted.
 #'  \item simple -- simple matching, both 1 or both 0 = 0; one 1 and the other
 #'  0 = 1. Presence and absence equally weighted.
 #'  \item Jaccard -- ignores matching 0, both 1 = 0; one 1 and the other 0 = 1.
 #'  Absences could be for different reasons.
-#'  \item Dice -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences
-#'  could be for different reasons. Sometimes called the Czekanowski or Sorensen
+#'  \item Bray-Curtis -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences
+#'  could be for different reasons. Sometimes called the Dice or Sorensen
 #'  distance.
-#'  \item Phi -- binary analogue of the Pearson Correlation coefficient.
+#  \item Phi -- binary analogue of the Pearson Correlation coefficient.
 #'  }
 #'
 #'  One might choose to disregard or downweight absences in comparison with
@@ -23,17 +25,25 @@
 #'
 #' @param x Name of the genlight containing the genotypes [required].
 #' @param method Specify distance measure [default simple].
+#' @param scale If TRUE and method='euclidean', the distance will be scaled to 
+#'  fall in the range [0,1] [default FALSE].
+#' @param output Specify the format and class of the object to be returned, 
+#' dist for a object of class dist, matrix for an object of class matrix [default "dist"].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #'  progress log; 3, progress and results summary; 5, full report [default 2].
-#' @return An object of class 'dist' giving distances between individuals
+#' @return An object of class 'dist' or 'matrix' giving distances between individuals
 #' @export
-#' @author Custodian: Arthur Georges -- Post to
+#' @author Author: Arthur Georges. Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' D <- utils.dist.binary(testset.gs, method='Jaccard')
-
+#' D <- utils.dist.binary(testset.gs, method='Simple')
+#' D <- utils.dist.binary(testset.gs, method='Euclidean',scale=TRUE)
+#' 
 utils.dist.binary <- function(x,
                               method = "simple",
+                              scale=FALSE,
+                              output="dist",
                               verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -41,7 +51,7 @@ utils.dist.binary <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jackson",
+                     build = "Jody",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -55,19 +65,22 @@ utils.dist.binary <- function(x,
     # FUNCTION SPECIFIC ERROR CHECKING
     
     if (!(method %in% c(
+        "euclidean",
         "simple",
         "jaccard",
-        "dice",
-        "sorenson",
-        "czekanowski",
-        "phi"
+        "bray-curtis"
+#       ,"phi"
     ))) {
         if (verbose >= 2) {
             cat(warn(
-                " Warning: Method not in the list of options, set to simple matching\n"
+                "  Warning: Method not in the list of options, set to Simple Matching\n"
             ))
         }
         method <- "simple"
+    }
+    
+    if(scale==TRUE && !(method == "euclidean")){
+        cat(warn("  Warning: parameter scale only applies to Euclidean Distance, ignored\n"))
     }
     
     # DO THE JOB
@@ -75,11 +88,18 @@ utils.dist.binary <- function(x,
     mat <- as.matrix(x)
     
     dd <- array(NA, c(nInd(x), nInd(x)))
-    # dd[1:10,1:10]
     nI <- nInd(x)
     
     if (verbose >= 2) {
-        cat(report("  Calculating the distance matrix --", method, "\n"))
+        if(method=="euclidean"){
+            if(scale==TRUE){
+                cat(report("  Calculating the scaled distance matrix --", method, "\n"))
+            } else {
+                cat(report("  Calculating the unscaled distance matrix --", method, "\n"))
+            }
+        } else {
+            cat(report("  Calculating the distance matrix --", method, "\n"))
+        }
     }
     for (i in (1:(nI - 1))) {
         for (j in ((i + 1):nI)) {
@@ -95,27 +115,35 @@ utils.dist.binary <- function(x,
             c <- sum(a10 == 1, na.rm = TRUE)
             d <- sum(a00 == 1, na.rm = TRUE)
             # a;b;c;d
-            if (method == "simple") {
-                dd[j, i] <- 1 - (a + d) / (a + b + c + d)
+            if (method == "euclidean") {
+                if(scale==TRUE){
+                    dd[j,i] <- sqrt((b+c)/(a + b + c + d))
+                } else {
+                    dd[j,i] <- sqrt(b+c)
+                }
+            } else if (method == "simple") {
+                dd[j,i] <- 1 - ((a + d) / (a + b + c + d))
             } else if (method == "jaccard") {
-                dd[j, i] <- 1 - a / (a + b + c)
-            } else if (method == "dice" ||
-                       method == "sorenson" ||
-                       method == "czekanowski") {
-                dd[j, i] <- 1 - 2 * a / (2 * a + b + c)
+                dd[j,i] <- 1 - (a / (a + b + c))
+            } else if (method == "bray-curtis") {
+                dd[j,i] <- 1 - 2 * a / (2 * a + b + c)
+            # } else if (method == "phi") {
+            #     dd[j,i] <- 1 - ((a * d - b * c) / sqrt((a + b) * (a + c) * (d + b) * (d + c)))
             } else {
-                # method == phi
-                dd[j, i] <-
-                    1 - ((a * d - b * c) / sqrt((a + b) * (a + c) * (d + b) * (d + c)))
+                # Programming error
+                stop(error("Fatal Error: Notify dartR development team\n"))
             }
         }
         dd[i, i] <- 0
+        dd[i,j] <- dd[j,i]
     }
-    # dd[1:10,1:10]
-    if (verbose >= 2) {
-        cat(report("  Converting to a distance object\n"))
+
+    if(output=="dist"){
+      dd <- as.dist(dd)
+      if(verbose >= 2){cat(report("  Returning a stats::dist object\n"))}
+    } else {
+        if(verbose >= 2){cat(report("  Returning a square matrix object\n"))}
     }
-    dd <- as.dist(dd)
     
     # FLAG SCRIPT END
     

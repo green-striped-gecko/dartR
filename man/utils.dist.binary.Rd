@@ -2,37 +2,50 @@
 % Please edit documentation in R/utils.dist.binary.r
 \name{utils.dist.binary}
 \alias{utils.dist.binary}
-\title{Calculates a distance matrix for individuals defined in an \{adegenet\}
+\title{Calculates a distance matrix for individuals defined in a dartR
 genlight object using binary P/A data (SilicoDArT)}
 \usage{
-utils.dist.binary(x, method = "simple", verbose = NULL)
+utils.dist.binary(
+  x,
+  method = "simple",
+  scale = FALSE,
+  output = "dist",
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{Name of the genlight containing the genotypes [required].}
 
 \item{method}{Specify distance measure [default simple].}
 
+\item{scale}{If TRUE and method='euclidean', the distance will be scaled to 
+fall in the range [0,1] [default FALSE].}
+
+\item{output}{Specify the format and class of the object to be returned, 
+dist for a object of class dist, matrix for an object of class matrix [default "dist"].}
+
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report [default 2].}
 }
 \value{
-An object of class 'dist' giving distances between individuals
+An object of class 'dist' or 'matrix' giving distances between individuals
 }
 \description{
-This script calculates various distances between individuals based on Tag
+This script calculates various distances between individuals based on sequence tag
 Presence/Absence data.
 }
 \details{
 The distance measure can be one of:
  \itemize{
+  \item Euclidean -- Euclidean Distance applied to cartesian coordinates defined
+  by the loci, scored as 0 or 1. Presence and absence equally weighted.
  \item simple -- simple matching, both 1 or both 0 = 0; one 1 and the other
  0 = 1. Presence and absence equally weighted.
  \item Jaccard -- ignores matching 0, both 1 = 0; one 1 and the other 0 = 1.
  Absences could be for different reasons.
- \item Dice -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences
- could be for different reasons. Sometimes called the Czekanowski or Sorensen
+ \item Bray-Curtis -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences
+ could be for different reasons. Sometimes called the Dice or Sorensen
  distance.
- \item Phi -- binary analogue of the Pearson Correlation coefficient.
  }
 
  One might choose to disregard or downweight absences in comparison with
@@ -41,8 +54,11 @@ The distance measure can be one of:
 }
 \examples{
 D <- utils.dist.binary(testset.gs, method='Jaccard')
+D <- utils.dist.binary(testset.gs, method='Simple')
+D <- utils.dist.binary(testset.gs, method='Euclidean',scale=TRUE)
+
 }
 \author{
-Custodian: Arthur Georges -- Post to
+Author: Arthur Georges. Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
