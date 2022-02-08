@@ -43,14 +43,19 @@ gl2genepop <- function (x,
   if (datatype!="SNP") cat(error(
     "  Only SNPs (diploid data can be transformed into genepop format!\n" ))
   
+  if (is.null(pop(x))) {
+    cat(important("Your genlight object does not have a population definition. Therefore the function assumes you the whole genlight object to be one population!\n"))
+    pop(x)<- rep("Pop1", nInd(x))
+    }
+  
+  
   # DO THE JOB
   
   
   #convert to genind
+  x<- x[order(pop(x)),]
   x <- gl2gi(x, verbose = 0,probar = FALSE)
-  data <- as.matrix(x[order(pop(x)),])
-  
-  
+  data <- as.matrix(x)
   pop_names <- x@pop
   
   
