@@ -8,6 +8,7 @@ gl.dist.ind(
   x,
   method = NULL,
   scale = FALSE,
+  swap = FALSE,
   output = "dist",
   plot.out = TRUE,
   plot_theme = theme_dartR(),
@@ -22,6 +23,10 @@ gl.dist.ind(
 \item{method}{Specify distance measure [SNP: Euclidean; P/A: SMD].}
 
 \item{scale}{If TRUE, the distances are scaled to fall in the range [0,1] [default TRUE]}
+
+\item{swap}{If TRUE and working with presence-absence data, then presence 
+(no disrupting mutation) is scored as 0 and absence (presence of a disrupting 
+mutation) is scored as 1 [default FALSE].}
 
 \item{output}{Specify the format and class of the object to be returned, 
 'dist' for a object of class dist, 'matrix' for an object of class matrix [default "dist"].}
@@ -68,7 +73,7 @@ Refer to the dartR Technical Note on Distances in Genetics.
 }
 \examples{
 D <- gl.dist.ind(testset.gl, method='euclidean')
-D <- gl.dist.ind.new(testset.gs, method='euclidean')
+D <- gl.dist.ind.new(testset.gs, method='Jaccard',swap=TRUE)
 }
 \author{
 Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}

@@ -27,6 +27,9 @@
 #' @param x Name of the genlight containing the SNP genotypes or presence-absence data [required].
 #' @param method Specify distance measure [SNP: Euclidean; P/A: SMD].
 #' @param scale If TRUE, the distances are scaled to fall in the range [0,1] [default TRUE]
+#' @param swap If TRUE and working with presence-absence data, then presence 
+#' (no disrupting mutation) is scored as 0 and absence (presence of a disrupting 
+#' mutation) is scored as 1 [default FALSE].
 #' @param output Specify the format and class of the object to be returned, 
 #' 'dist' for a object of class dist, 'matrix' for an object of class matrix [default "dist"].
 #' @param plot.out If TRUE, display a histogram and a boxplot of the genetic distances [TRUE].
@@ -43,11 +46,12 @@
 #' @author Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' D <- gl.dist.ind(testset.gl, method='euclidean')
-#' D <- gl.dist.ind.new(testset.gs, method='euclidean')
+#' D <- gl.dist.ind(testset.gs, method='Jaccard',swap=TRUE)
 
 gl.dist.ind <- function(x,
                         method = NULL,
                         scale = FALSE,
+                        swap=FALSE,
                         output="dist",
                         plot.out = TRUE,
                         plot_theme = theme_dartR(),
@@ -216,8 +220,12 @@ gl.dist.ind <- function(x,
         #         ))
         #     }
         # }
-        mat <-
-            utils.dist.binary(x, method = method, output="matrix", scale = scale, verbose = 0)
+        mat <- utils.dist.binary(x, 
+                                 method = method, 
+                                 swap=swap, 
+                                 output="matrix", 
+                                 scale = scale, 
+                                 verbose = 0)
         dd <- as.dist(mat)
     }
     
@@ -232,17 +240,20 @@ gl.dist.ind <- function(x,
             if(method=="euclidean" && scale == TRUE){
                 title_plot <-
                 paste0(
-                    "Presence/Absence data (SilicoDArT)\nInter-individual scaled ",
+                    "Presence[1]/Absence[0] data (SilicoDArT)\nInter-individual scaled ",
                     method,
                     " distance"
                 )
             } else {
-                title_plot <-
-                    paste0(
-                        "Presence/Absence data (SilicoDArT)\nInter-individual ",
-                        method,
-                        " distance"
-                    )
+                if(swap==TRUE){
+                    title_plot <- paste0(
+                        "Presence[0]/Absence[1] data (SilicoDArT swapped)\nInter-individual ",
+                        method, " distance")
+                } else {
+                    title_plot <- paste0(
+                        "Presence[1]/Absence[0] data (SilicoDArT)\nInter-individual ",
+                        method, " distance")
+                }
             }
         }
         values <- NULL

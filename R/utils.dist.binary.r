@@ -27,6 +27,9 @@
 #' @param method Specify distance measure [default simple].
 #' @param scale If TRUE and method='euclidean', the distance will be scaled to 
 #'  fall in the range [0,1] [default FALSE].
+#' @param swap If TRUE and working with presence-absence data, then presence 
+#' (no disrupting mutation) is scored as 0 and absence (presence of a disrupting 
+#' mutation) is scored as 1 [default FALSE].
 #' @param output Specify the format and class of the object to be returned, 
 #' dist for a object of class dist, matrix for an object of class matrix [default "dist"].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
@@ -43,6 +46,7 @@
 utils.dist.binary <- function(x,
                               method = "simple",
                               scale=FALSE,
+                              swap=FALSE,
                               output="dist",
                               verbose = NULL) {
     # SET VERBOSITY
@@ -86,6 +90,11 @@ utils.dist.binary <- function(x,
     # DO THE JOB
     
     mat <- as.matrix(x)
+    if(swap==TRUE){
+      mat[mat==0] <- -9
+      mat[mat==1] <- 0
+      mat[mat==-9] <- 1
+    }
     
     dd <- array(NA, c(nInd(x), nInd(x)))
     nI <- nInd(x)
