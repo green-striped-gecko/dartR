@@ -45,7 +45,8 @@
 #' @export
 #' @author Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' D <- gl.dist.ind(testset.gl, method='euclidean')
+#' D <- gl.dist.ind(testset.gl, method='euclidean',scale=TRUE)
+#' D <- gl.dist.ind(testset.gl, method='manhattan')
 #' D <- gl.dist.ind(testset.gs, method='Jaccard',swap=TRUE)
 
 gl.dist.ind <- function(x,
@@ -60,23 +61,23 @@ gl.dist.ind <- function(x,
                         verbose = NULL) {
     
     # CHECK IF PACKAGES ARE INSTALLED
-    pkg <- "rrBLUP"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package ",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
-    }
-    
-    pkg <- "poppr"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package ",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
-    }
+    # pkg <- "rrBLUP"
+    # if (!(requireNamespace(pkg, quietly = TRUE))) {
+    #     stop(error(
+    #         "Package ",
+    #         pkg,
+    #         " needed for this function to work. Please install it."
+    #     ))
+    # }
+    # 
+    # pkg <- "poppr"
+    # if (!(requireNamespace(pkg, quietly = TRUE))) {
+    #     stop(error(
+    #         "Package ",
+    #         pkg,
+    #         " needed for this function to work. Please install it."
+    #     ))
+    # }
     
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -106,15 +107,12 @@ gl.dist.ind <- function(x,
     if (!(
         method %in% c(
             "euclidean",
-            "locus.count",
-            "allele.count",
-            "relatedness",
             "simple",
+            "manhattan",
             "jaccard",
             "bray-curtis",
-            "sorenson",
             "czekanowski",
-            "phi"
+            "absolute"
         )
     )) {
         cat(
@@ -133,52 +131,70 @@ gl.dist.ind <- function(x,
     # DO THE JOB
     
     if (datatype == "SNP") {
-        # Calculate euclidean distance using dist {adegenet}
+        # Calculate euclidean distance using dist 
         if (method == "euclidean") {
-            dd <- stats::dist(x)
-            if (verbose >= 2) {
-                cat(report(
-                    "  Calculating Euclidean Distances between individuals\n"
-                ))
-            }
-        }
-        # Calculate the number of loci that are different between individuals using dist.gene {ape}
-        if (method == "locus.count") {
-            dd <-
-                ape::dist.gene(
-                    as.matrix(x),
-                    method = "pairwise",
-                    pairwise.deletion = FALSE,
-                    variance = FALSE
-                )
-            if (verbose >= 2) {
-                cat(report(
-                    "  Calculating number of loci for which individuals differ\n"
-                ))
+            if(scale==TRUE){
+                dd <- utils.dist.ind.snp(x, method='euclidean',scale=TRUE,verbose=0)
+                if (verbose >= 2) {
+                    cat(report("  Calculating scaled Euclidean Distances between individuals\n"))
+                }
+            } else {
+                dd <- utils.dist.ind.snp(x, method='euclidean',scale=FALSE,verbose=0)
+                if (verbose >= 2) {
+                    cat(report("  Calculating raw Euclidean Distances between individuals\n"))
+                }
             }
         }
         
-        # Calculate the number of allelic differences between individuals using dist.gene {poppr}
-        if (method == "allele.count") {
-            dd <- poppr::diss.dist(gl2gi(x), percent = FALSE, mat = FALSE)
-            if (verbose >= 2) {
-                cat(
-                    report(
-                        "  Calculating number of allelic differences between individuals\n"
-                    )
-                )
-            }
-        }
-        
-        # Calculate the genetic relatedness G matrix
-        if (method == "relatedness") {
-            dd <- rrBLUP::A.mat(as.matrix(x) - 1)
+        # Calculate simple matching distance
+        if (method == "simple") {
+            dd <- dd <- utils.dist.ind.snp(x, method='simple',verbose=0)
             if (verbose >= 2) {
                 cat(report(
-                    "  Calculating relatedness among individuals (G matrix)\n"
+                    "  Calculating simple matching distance\n"
                 ))
             }
         }
+        # Calculate absolute Manhattan distance
+        if (method == "manhattan") {
+            dd <- dd <- utils.dist.ind.snp(x, method='manhattan',verbose=0)
+            if (verbose >= 2) {
+                cat(report(
+                    "  Calculating Manhattan distance\n"
+                ))
+            }
+        }     
+        
+        # Calculate absolute Czekanowski distance
+        if (method == "czekanowski") {
+            dd <- dd <- utils.dist.ind.snp(x, method='czekanowski',verbose=0)
+            if (verbose >= 2) {
+                cat(report(
+                    "  Calculating Czekanowski distance\n"
+                ))
+            }
+        }        
+        
+        # Calculate absolute matching distance
+        if (method == "absolute") {
+            dd <- dd <- utils.dist.ind.snp(x, method='absolute',verbose=0)
+            if (verbose >= 2) {
+                cat(report(
+                    "  Calculating absolute matching distance\n"
+                ))
+            }
+        }        
+        
+        # 
+        # # Calculate the genetic relatedness G matrix
+        # if (method == "relatedness") {
+        #     dd <- rrBLUP::A.mat(as.matrix(x) - 1)
+        #     if (verbose >= 2) {
+        #         cat(report(
+        #             "  Calculating relatedness among individuals (G matrix)\n"
+        #         ))
+        #     }
+        # }
         dd <- as.dist(dd)
         
         # # Revert to original order ord <- rank(pop(x)) mat <- as.matrix(dd)[ord, ord] dd <- as.dist(mat)

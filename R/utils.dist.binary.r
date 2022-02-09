@@ -94,6 +94,7 @@ utils.dist.binary <- function(x,
       mat[mat==0] <- -9
       mat[mat==1] <- 0
       mat[mat==-9] <- 1
+      if(verbose >= 2){cat(report("  Reversing scores from presence[1]/absence[0] to presence[0]/absence[1]\n"))}
     }
     
     dd <- array(NA, c(nInd(x), nInd(x)))
