@@ -609,20 +609,7 @@ gl.report.hwe <- function(x,
         }
     }
     df <- df[order(df$Locus),]
-    cat("    Reporting significant departures from Hardy-Weinberg Equilibrium\n")
-    if (nrow(df) == 0) {
-        cat("    No significant departures\n")
-    } else {
-        cat("    NB: Departures significant at the alpha level of",
-            alpha_val,
-            "are listed\n")
-        cat(
-            important(
-                "    Adjustment of p-values for multiple comparisons vary with sample size\n"
-            )
-        )
-        print(df, row.names = FALSE)
-    }
+    
     
     # SAVE INTERMEDIATES TO TEMPDIR
     if (save2tmp) {
@@ -648,6 +635,20 @@ gl.report.hwe <- function(x,
     # FLAG SCRIPT END
     
     if (verbose >= 1) {
+        cat("    Reporting significant departures from Hardy-Weinberg Equilibrium\n")
+        if (nrow(df) == 0) {
+            cat("    No significant departures\n")
+        } else {
+            cat("    NB: Departures significant at the alpha level of",
+                alpha_val,
+                "are listed\n")
+            cat(
+                important(
+                    "    Adjustment of p-values for multiple comparisons vary with sample size\n"
+                )
+            )
+            print(df, row.names = FALSE)
+        }
         cat(report("\nCompleted:", funname, "\n"))
     }
     
