@@ -168,7 +168,7 @@ initialise <- function(pop_number,
                  size = 1,
                  prob = c(rep(1 / 2, 2)))
       }
-      if (!is.null(r_freq)) {
+      if (!is.na(r_freq)) {
         counter_msats <- 1
         for (element in 1:length(loc_exp_loci_2)) {
           substr(
