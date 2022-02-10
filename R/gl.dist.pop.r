@@ -47,7 +47,6 @@ gl.dist.pop <- function(x,
                         plot.out = TRUE,
                         scale = FALSE,
                         output="dist",
-                        p = NULL,
                         plot_theme = theme_dartR(),
                         plot_colors = two_colors,
                         save2tmp = FALSE,
@@ -128,20 +127,33 @@ gl.dist.pop <- function(x,
     if (method == "euclidean") {
         for (i in (1:(nP - 1))) {
             for (j in ((i + 1):nP)) {
-                row1 <- p[i,]
-                row2 <- p[j,]
-                sq <- (row1-row2)**2
+                p_ind1 <- p[i,]
+                p_ind2 <- p[j,]
+                sq <- (p_ind1-p_ind2)**2
                 sq <- sq[!is.na(sq)]
                 L <- length(sq)
                 if(scale==TRUE){
-                    dd[j,i] <- sqrt(sum(sq)/L)
+                    if(datatype=="SNP"){
+                      dd[j,i] <- 0.5*sqrt(sum(sq)/L)
+                    } else {
+                      dd[j,i] <- sqrt(sum(sq)/L)
+                    }
                 } else {
                     dd[j,i] <- sqrt(sum(sq))
                 }
             }
         }
     }
-    
+    # # Test code
+    # x <- dartR::gl2gi(testset.gl)
+    # x <- adegenet::genind2genpop(x)
+    # D_check <- adegenet::dist.genpop(x,4) # Rogers D
+    # hist(D_check,breaks=50)
+    # D <- dartR::gl.dist.pop(testset.gl, method='euclidean',output="matrix",scale=TRUE)
+    # D[upper.tri(D)] <- t(D)[upper.tri(D)]
+    # hist(D/2,breaks=50)
+    # #VALIDATED [with minor differences, missing handling?]
+
 # For DArTseq only
     if (method == "reynolds") {
         if(datatype=="SilicoDArT"){
@@ -151,31 +163,44 @@ gl.dist.pop <- function(x,
         for (i in (1:(nP - 1))) {
             for (j in ((i + 1):nP)) {
                 # Pull the loci for individuals i and j
-                prow1 <- p[i,]
-                prow2 <- p[j,]
+                pind1 <- p[i,]
+                pind2 <- p[j,]
                 # Delete the pairwise missing
-                tmp <- prow1+prow2
-                prow1 <- prow1[!is.na(tmp)]
-                prow2 <- prow2[!is.na(tmp)]
+                tmp <- pind1+pind2
+                pind1 <- pind1[!is.na(tmp)]
+                pind2 <- pind2[!is.na(tmp)]
                 # Squares
-                psq <- (prow1-prow2)**2
+                psq <- (pind1-pind2)**2
                 # Repeat for q
-                qrow1 <- 1-prow1
-                qrow2 <- 1-prow2
-                qsq <- (qrow1-qrow2)**2
+                qind1 <- 1-pind1
+                qind2 <- 1-pind2
+                qsq <- (qind1-qind2)**2
                 # Cross products
-                p12 <- prow1*prow2
-                q12 <- qrow1*qrow2
+                p12 <- pind1*pind2
+                q12 <- qind1*qind2
                 # Non-missing loci
-                L <- length(psq)
-                dd[j,i] <- sqrt(sum(psq+qsq)/(2*sum(1-p12-q12)))
+                #L <- length(psq)
+                
+                #dd[j,i] <- sqrt(sum(psq+qsq)/(2*sum(1-p12-q12)))
+                dd[j,i] <- -log(1-sqrt(sum(psq+qsq)/(2*sum(1-p12-q12))))
+                #dd[j,1] <- sqrt(sum(psq)/(sum(1-p12-q12)))
             }
         }
     }
+    # # Test code
+    # x <- dartR::gl2gi(testset.gl)
+    # x <- adegenet::genind2genpop(x)
+    # D_check <- adegenet::dist.genpop(x,3) # Reynolds in common use
+    # D_check <- -log(1-D_check) # Proportional to divergence time
+    # hist(D_check,breaks=50)
+    # D <- dartR::gl.dist.pop(testset.gl, method='reynolds',output='matrix',scale=TRUE)
+    # D[upper.tri(D)] <- t(D)[upper.tri(D)]
+    # hist(D,breaks=50)
+    # #VALIDATED [with minor difference, missing handling?]
     
     if (method == "nei") {
         if(datatype=="SilicoDArT"){
-            stop(error("Fatal Error: Nei Standard Distance is not available 
+            stop(error("Fatal Error: Nei Standard Distance is not available
                        for presence-absence data\n"))
         }
         for (i in (1:(nP - 1))) {
@@ -199,16 +224,24 @@ gl.dist.pop <- function(x,
                 p12 <- prow1*prow2
                 q12 <- qrow1*qrow2
                 # Number of non-missing loci
-                L <- length(p12)  
-                
-                dd[j,i] <- -log(sqrt(sum(p12+q12))/(sqrt(sum(p1sq+q1sq))*sqrt(sum(p2sq+q2sq))))
+                L <- length(p12)
+
+                dd[j,i] <- -log(sum(p12+q12)/(sqrt(sum(p1sq+q1sq))*sqrt(sum(p2sq+q2sq))))
             }
         }
     }
+    # # Test code
+    # x <- dartR::gl2gi(testset.gl)
+    # x <- adegenet::genind2genpop(x)
+    # D_check <- adegenet::dist.genpop(x,1) 
+    # hist(D_check,breaks=50)
+    # D <- dartR::gl.dist.pop(testset.gl, method='nei',output='matrix',scale=TRUE)
+    # hist(D,breaks=50)
+    # #VALIDATED [with minor difference, missing handling?]
     
     if (method == "chord") {
         if(datatype=="SilicoDArT"){
-            stop(error("Fatal Error: Czfordi-Edwards Chord Distance is not available 
+            stop(error("Fatal Error: Czfordi-Edwards Chord Distance is not available
                        for presence-absence data\n"))
         }
         for (i in (1:(nP - 1))) {
@@ -233,6 +266,17 @@ gl.dist.pop <- function(x,
             }
         }
     }
+    # # Test code
+    # x <- dartR::gl2gi(testset.gl)
+    # x <- adegenet::genind2genpop(x)
+    # D_check <- adegenet::dist.genpop(x,2) # Angular or Edwards?
+    # #D_check <- -log(1-D_check) # Proportional to divergence time
+    # hist(D_check,breaks=50)
+    # D <- dartR::gl.dist.pop(testset.gl, method='chord',output='matrix',scale=TRUE)
+    # D[upper.tri(D)] <- t(D)[upper.tri(D)]
+    # hist(D,breaks=50)
+    # #VALIDATED [with minor difference, missing handling?]
+
     if (method == "fixed-diff") {
         dd <- gl.fixed.diff(x, verbose = 0)[[3]]/100
         if (verbose >= 2) {
@@ -259,7 +303,9 @@ gl.dist.pop <- function(x,
                        " distance")
         }
         values <- NULL
-        df_plot <- data.frame(values = as.vector(dd))
+        val <- as.vector(dd)
+        val <- val[!is.na(val)]
+        df_plot <- data.frame(values = val)
         
         # Boxplot
         p1 <- ggplot(df_plot, aes(y = values)) +
@@ -276,7 +322,7 @@ gl.dist.pop <- function(x,
         p2 <- ggplot(df_plot, aes(x = values)) +
         geom_histogram(bins = 20,color = plot_colors[1], fill = plot_colors[2]) +
         xlim(min(df_plot$values, na.rm = TRUE), max(df_plot$values, na.rm = TRUE)) +
-        xlab("Distance") +
+        xlab("Distance Metric") +
         ylab("Count") +
         plot_theme
     }
@@ -290,9 +336,9 @@ gl.dist.pop <- function(x,
             nInd(x) / nPop(x),
             "\n")
         cat("    No. of loci =", nLoc(x), "\n")
-        cat("    Minimum Distance: ", round(min(dd), 2), "\n")
-        cat("    Maximum Distance: ", round(max(dd), 2), "\n")
-        cat("    Average Distance: ", round(mean(dd), 3), "\n")
+        cat("    Minimum Distance: ", round(min(dd,na.rm=TRUE), 2), "\n")
+        cat("    Maximum Distance: ", round(max(dd,na.rm=TRUE), 2), "\n")
+        cat("    Average Distance: ", round(mean(dd,na.rm=TRUE), 3), "\n")
     }
     
     # SAVE INTERMEDIATES TO TEMPDIR

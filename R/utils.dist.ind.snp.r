@@ -7,13 +7,13 @@
 #' @details
 #' The distance measure can be one of:
 #'  \itemize{
-#'   \item Euclidean -- Euclidean Distance applied to cartesian coordinates defined
+#'   \item Euclidean -- Euclidean Distance applied to Cartesian coordinates defined
 #'   by the loci, scored as 0, 1 or 2. 
 #'  \item Simple -- simple mismatch, 0 where no alleles are shared, 1 where one
 #'  allele is shared, 2 where both alleles are shared. 
 #'  \item Absolute -- absolute mismatch, 0 where no alleles are shared, 1 where
 #'  one or both alleles are shared.
-#'  \item Czekanowski (or Manhattan) calculates the "city block" metric distance
+#'  \item Czekanowski (or Manhattan) calculates the city block metric distance
 #'  by summing the scores on each axis (locus).
 #'
 #' @param x Name of the genlight containing the genotypes [required].

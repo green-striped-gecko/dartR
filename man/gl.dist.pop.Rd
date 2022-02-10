@@ -11,7 +11,6 @@ gl.dist.pop(
   plot.out = TRUE,
   scale = FALSE,
   output = "dist",
-  p = NULL,
   plot_theme = theme_dartR(),
   plot_colors = two_colors,
   save2tmp = FALSE,
