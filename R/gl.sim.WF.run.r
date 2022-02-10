@@ -1,16 +1,17 @@
 #' @export
 
-gl.sims <-
+gl.sim.WF.run <-
   function(file_var = system.file('extdata', 'sim_variables.csv', package =
                                     'dartR'),
            ref_table,
            number_iterations = 1,
            every_gen = 5,
-           interactive = TRUE,
+           interactive_vars = TRUE,
            seed = NULL,
            parallel = FALSE,
            n.cores = NULL,
            verbose = NULL) {
+    
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -26,17 +27,25 @@ gl.sims <-
       stop(error(
         "Package",
         pkg,
-        " needed for this function to work. Please install it."
+        "needed for this function to work. Please install it."
       ))
     }
     
-    if (interactive) {
+    if (interactive_vars) {
       pkg <- "shiny"
       if (!(requireNamespace(pkg, quietly = TRUE))) {
         stop(error(
           "Package",
           pkg,
-          " needed for this function to work. Please install it."
+          "needed for this function to work. Please install it."
+        ))
+      }
+      pkg <- "shinyBS"
+      if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(error(
+          "Package",
+          pkg,
+          "needed for this function to work. Please install it."
         ))
       }
     }
@@ -44,135 +53,32 @@ gl.sims <-
     # DO THE JOB
     
     ##### SIMULATIONS VARIABLES ######
-    if (interactive) {
+    if (interactive_vars) {
+      
       ui <- fluidPage(
-        titlePanel("Values for each locus"),
         
-        h3("Analysis values"),
-        
-        fluidRow(column(
-          3,
-          numericInput(
-            "Ne",
-            "Ne value to be used in the equation of rate of loss of heterozygosity",
-            value = 50,
-            min = 0
-          )
-        ),
-        
-        column(
-          3,
-          numericInput(
-            "Ne_fst",
-            "Ne value to be used in the equatio n of the expected FST",
-            value = 50,
-            min = 0
-          )
-        )),
-        
-        h3("Dispersal values"),
+        h5(em("Hover over input boxes to display more information about the variable")),
+
+        h3(strong("General variables")),
         
         fluidRow(
-          column(
-            3,
-            radioButtons(
-              "dispersal_dispersal",
-              "Whether dispersal occurs in the post-adaptation phase",
-              choices = list("TRUE" = TRUE, "FALSE" = FALSE),
-              selected = TRUE
-            )
-          ),
-          
-          column(
-            3,
-            radioButtons(
-              "dispersal_pre_adaptation",
-              "Whether dispersal occurs in the pre-adaptation phase",
-              choices = list("TRUE" = TRUE, "FALSE" = FALSE),
-              selected = FALSE
-            )
-          ),
-          
-          column(
-            3,
-            radioButtons(
-              "dispersal_type",
-              "Type of dispersal",
-              choices = list(
-                "All connected" = "all_connected",
-                "Circle" = "circle",
-                "Line" = "line"
-              ),
-              selected = "all_connected"
-            )
-          )
-        ),
-        
-        fluidRow(column(
-          3,
-          numericInput(
-            "number_transfers",
-            "Number of dispersing individuals",
-            value = 1,
-            min = 0
-          )
-        ),
-        
-        column(
-          3,
-          numericInput(
-            "transfer_each_gen",
-            "Interval of number of generations in which dispersal occurs",
-            value = 1,
-            min = 0
-          )
-        )),
-        
-        h3("General values"),
-        
-        fluidRow(
-          column(
-            3,
-            numericInput(
-              "gen_number_dispersal",
-              "Number of generations of the post-adaptation phase",
-              value = 100,
-              min = 0
-            )
-          ),
-          
-          column(
-            3,
-            numericInput(
-              "gen_number_pre_adaptation",
-              "Number of generations of the pre-adaptation phase",
-              value = 100,
-              min = 0
-            )
-          ),
           
           column(
             3,
             numericInput(
               "number_pops",
-              "Number of populations",
+              strong("Number of populations to simulate"),
               value = 2,
               min = 0
-            )
+            ),
+            bsTooltip(id = "number_pops", 
+                      title = "Here is some text with your instructions"),
           )
         ),
         
+        h4("Post-adaptation phase variables"),
+        
         fluidRow(
-          column(
-            3,
-            radioButtons(
-              "pre_adaptation",
-              "Whether pre-adaptation phase occur",
-              choices = list("TRUE" = TRUE,
-                             "FALSE" = FALSE),
-              selected = FALSE
-            )
-          ),
           
           column(
             3,
@@ -187,28 +93,80 @@ gl.sims <-
           column(
             3,
             numericInput(
-              "population_size_pre_adaptation",
-              "Census Population size of the pre-adaptation phase (must be even)",
+              "gen_number_dispersal",
+              strong("Number of generations of the post-adaptation phase"),
               value = 100,
               min = 0
             )
           )
         ),
         
-        fluidRow(column(
+        h4("Pre-adaptation phase variables"),
+        
+        fluidRow(
+          
+          column(
+            3,
+            radioButtons(
+              "pre_adaptation",
+              strong("Whether pre-adaptation phase occur"),
+              choices = list("TRUE" = TRUE,
+                             "FALSE" = FALSE),
+              selected = FALSE
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
+              "population_size_pre_adaptation",
+              "Census Population size of the pre-adaptation phase (must be even)",
+              value = 100,
+              min = 0
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
+              "gen_number_pre_adaptation",
+              "Number of generations of the pre-adaptation phase",
+              value = 100,
+              min = 0
+            )
+          )),
+        
+        fluidRow(
+          
+          column(
           3,
           radioButtons(
             "same_line",
-            "Whether the new formed populations are sampled from the same founding population or from different founding populations",
-            choices = list("TRUE" = TRUE,
-                           "FALSE" = FALSE),
+            "Whether the post-adaptation populations are sampled from the same pre-adaptation population or from different pre-adaptation populations",
+            choices = list("Same population" = TRUE,
+                           "Different populations" = FALSE),
             selected = FALSE
           )
-        )),
+        ),
         
-        h3("Initialisation values"),
+        column(
+          3,
+          radioButtons(
+            "dispersal_pre_adaptation",
+            "Whether dispersal occurs in the pre-adaptation phase",
+            choices = list("TRUE" = TRUE, "FALSE" = FALSE),
+            selected = FALSE
+          )
+        )
+        ),
         
-        fluidRow(column(
+        hr(),
+        
+        h3(strong("Initialisation variables")),
+        
+        fluidRow(
+          
+          column(
           3,
           textInput(
             "chromosome_name",
@@ -228,7 +186,90 @@ gl.sims <-
         )
         ),
         
-        h3("Recombination values"),
+        hr(),
+
+        h3(strong("Dispersal variables")),
+        
+        fluidRow(
+          
+          column(
+            3,
+            radioButtons(
+              "dispersal_dispersal",
+              strong("Whether dispersal occurs in the post-adaptation phase"),
+              choices = list("TRUE" = TRUE, "FALSE" = FALSE),
+              selected = TRUE
+            )
+          ),
+        
+        column(
+          3,
+          numericInput(
+            "number_transfers",
+            "Number of dispersing individuals in each dispersal event",
+            value = 1,
+            min = 0
+          )
+        ),
+        
+        column(
+          3,
+          numericInput(
+            "transfer_each_gen",
+            "Interval of number of generations in which a dispersal event occurs",
+            value = 1,
+            min = 0
+          )
+        )
+        ),
+        
+        fluidRow(
+          
+          column(
+            3,
+            radioButtons(
+              "dispersal_type",
+              "Type of dispersal",
+              choices = list(
+                "All connected" = "all_connected",
+                "Circle" = "circle",
+                "Line" = "line"
+              ),
+              selected = "all_connected"
+            )
+          )
+        ),
+        
+        hr(),
+        
+        h3(strong("Reproduction variables")),
+        
+        fluidRow(
+          
+          column(
+            3,
+            numericInput(
+              "number_offspring",
+              "Mean number offspring per mating",
+              value = 10,
+              min = 0
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
+              "variance_offspring",
+              "Coefficient that determines the variance in the number of offspring per mating",
+              value = 1000000,
+              min = 0
+            )
+          )
+        ),
+        
+        hr(),
+        
+        h3(strong("Recombination variables")),
         
         fluidRow(
           
@@ -255,42 +296,20 @@ gl.sims <-
           )
         ),
         
-        h3("Reproduction values"),
+        hr(),
+        
+        h3(strong("Selection variables")),
         
         fluidRow(
           
           column(
             3,
-            numericInput(
-              "number_offspring",
-              "Mean number offspring per mating",
-              value = 10,
-              min = 0
-            )
-          ),
-          
-          column(
-            3,
-            numericInput(
-              "variance_offspring",
-              "Coefficient that determines the variance in the number of offspring per mating",
-              value = 1000000,
-              min = 0
-            )
-          )
-        ),
-        
-        h3("Selection values"),
-        
-        fluidRow(
-          
-          column(
-            3,
-            numericInput(
-              "genetic_load",
-              "Approximation of the genetic load of the proportion of the genome that is simulated. This parameter is used in the absolute fitness model",
-              value = 0.8,
-              min = 0
+            radioButtons(
+              "selection",
+              "Whether selection occurs",
+              choices = list("TRUE" = TRUE,
+                             "FALSE" = FALSE),
+              selected = FALSE
             )
           ),
           
@@ -307,28 +326,56 @@ gl.sims <-
           
           column(
             3,
-            radioButtons(
-              "selection",
-              "Whether selection occurs",
-              choices = list("TRUE" = TRUE,
-                             "FALSE" = FALSE),
-              selected = FALSE
+            numericInput(
+              "genetic_load",
+              "Approximation of the genetic load of the proportion of the genome that is simulated. This variable is used in the absolute fitness model",
+              value = 0.8,
+              min = 0
             )
           )
           ),
         
         hr(),
         
-        fluidRow(column(
-          10,
+        h3(strong("Analysis variables")),
+        
+        fluidRow(
+          
+          column(
+            3,
+            numericInput(
+              "Ne",
+              "Ne value to be used in the equation of the expected rate of loss of heterozygosity",
+              value = 50,
+              min = 0
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
+              "Ne_fst",
+              "Ne value to be used in the equation of the expected FST",
+              value = 50,
+              min = 0
+            )
+          )
+          ),
+        
+        hr(),
+        
+        fluidRow(
+          column(
+          9,
           actionButton(
             "close",
-            label = strong("RUN"),
+            label = h4(strong("RUN")),
             icon = icon("play"),
-            width = "90%",
+            width = "100%",
             class = "btn-success"
           )
-        )),
+        )
+        ),
         
         br()
         
@@ -467,9 +514,6 @@ gl.sims <-
       
       runApp(shinyApp(ui = ui, server = server))
       
-      colnames(sim_vars) <- c("variable","value")
-      
-
     } else {
       sim_vars <- suppressWarnings(read.csv(file_var))
       sim_vars <- sim_vars[, 2:3]
@@ -484,7 +528,6 @@ gl.sims <-
     reference <- ref_table$reference
     ref_vars <- ref_table$ref_vars
     
-    
     # setting the seed
     if (!is.null(seed)) {
       set.seed(seed)
@@ -493,6 +536,7 @@ gl.sims <-
     if (pre_adaptation == F) {
       gen_number_pre_adaptation <- 0
     }
+    
     # This is the total number of generations
     number_generations <-
       gen_number_pre_adaptation + gen_number_dispersal
@@ -938,7 +982,14 @@ gl.sims <-
       }
     }
     
+    # naming list elements
+    names(final_res) <- paste0("iteration_",1:number_iterations)
     
+    final_res <- lapply(final_res,function(x){
+      names(x) <- paste0("generation_",gen_store)
+      return(x)
+      })
+
     # removing NA's from results
     final_res <- lapply(final_res, function(x)
       x[!is.na(x)])

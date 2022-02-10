@@ -73,7 +73,8 @@ Suggests:
     boot,
     hierfstat,
     gganimate,
-    shiny
+    shiny,
+    shinyBS
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2
