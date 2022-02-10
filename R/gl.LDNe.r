@@ -72,6 +72,10 @@ gl.LDNe <- function(x,
   datatype <- utils.check.datatype(x, verbose = verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
+
+  #works only with SNP data
+  if (datatype!="SNP") cat(error(
+    "Only SNPs (diploid data can be transformed into genepop format!\n" ))
   
   # DO THE JOB
   xx <- gl2genepop(x, outfile = "dummy.gen", outpath = tempdir())
@@ -79,6 +83,7 @@ gl.LDNe <- function(x,
   if (singleton.rm == TRUE){
     critical[length(critical) + 1] <- 1
   }
+
   #copy info file to tempdir
   info <- NA
   info[1] <- "1"
@@ -89,6 +94,7 @@ gl.LDNe <- function(x,
   info[6] <- outfile #output file
   info[7] <- length(critical)
   info[8] <- paste(critical, collapse = " ")
+
   mm <- pmatch(mating, c("random", "mono")) - 1
   if (mm == 0 | mm == 1){
     info[9] <- mm
@@ -270,3 +276,4 @@ gl.LDNe <- function(x,
   # RETURN
   return(pop_list)
 }
+
