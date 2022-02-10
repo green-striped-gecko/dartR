@@ -20,10 +20,10 @@ gl.LDNe(
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
-
+  
 \item{outfile}{File name of the output file [default 'genepopLD.txt'] with 
 all results from Neestimator 2.}
-
+  
 \item{outpath}{Path where to save the output file
 [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
  when calling this function to direct output files to your working directory.
@@ -57,6 +57,7 @@ progress log; 3, progress and results summary; 5, full report
 invisible results as table
 }
 \description{
+
 This function is basically a convinience function that runs the LD Ne
  estimator using Neestimator2 
  (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/}) 

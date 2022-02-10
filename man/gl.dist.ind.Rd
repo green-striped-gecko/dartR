@@ -2,12 +2,13 @@
 % Please edit documentation in R/gl.dist.ind.r
 \name{gl.dist.ind}
 \alias{gl.dist.ind}
-\title{Calculates a distance matrix for individuals defined in an \{adegenet\}
- genlight object}
+\title{Calculates a distance matrix for individuals defined in a genlight object}
 \usage{
 gl.dist.ind(
   x,
   method = NULL,
+  scale = FALSE,
+  output = "dist",
   plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colors = two_colors,
@@ -16,66 +17,59 @@ gl.dist.ind(
 )
 }
 \arguments{
-\item{x}{Name of the genlight containing the SNP genotypes [required].}
+\item{x}{Name of the genlight containing the SNP genotypes or presence-absence data [required].}
 
-\item{method}{Specify distance measure [SNP: Euclidean; P/A: Simple].}
+\item{method}{Specify distance measure [SNP: Euclidean; P/A: SMD].}
 
-\item{plot.out}{If TRUE, display a histogram and a boxplot of the genetic
-distances [TRUE].}
+\item{scale}{If TRUE, the distances are scaled to fall in the range [0,1] [default TRUE]}
+
+\item{output}{Specify the format and class of the object to be returned, 
+'dist' for a object of class dist, 'matrix' for an object of class matrix [default "dist"].}
+
+\item{plot.out}{If TRUE, display a histogram and a boxplot of the genetic distances [TRUE].}
 
 \item{plot_theme}{User specified theme [default theme_dartR].}
 
-\item{plot_colors}{Vector with two color names for the borders and fill
-[default two_colors].}
+\item{plot_colors}{Vector with two color names for the borders and fill [default two_colors].}
 
-\item{save2tmp}{If TRUE, saves any ggplots to the session temporary directory
-[default FALSE].}
+\item{save2tmp}{If TRUE, saves any ggplots to the session temporary directory [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-An object of class 'dist' giving distances between individuals
+An object of class 'matrix' or dist' giving distances between individuals
 }
 \description{
 This script calculates various distances between individuals based on allele
- frequencies. The distances are calculated by scripts in the {stats} or
- {vegan} libraries.
+ frequencies or presence-absence data
 }
 \details{
-The distance measure for SNP data can be one of:
+The distance measure for SNP genotypes can be one of:
 \itemize{
- \item 'Euclidean' -- Euclidean distance, as implemented in the function
- \link[stats]{dist} (package stats).
- \item 'locus.count' -- number of loci for which individuals differ, as
- implemented in the function \link[ape]{dist.gene} (package ape).
- \item 'allele.count' -- number of allelic differences between two
- individuals, as implemented in the function \link[poppr]{diss.dist}
- (package poppr).
- \item 'relatedness' -- genetic relatedness between individuals (G matrix),
-  as implemented in the function \link[rrBLUP]{A.mat} (package rrBLUP).
+ \item Euclidean Distance
+ \item Scaled Euclidean Distance
+ \item Simple Mismatch Distance
+ \item Absolute Mismatch Distance
+ \item Czekanowski (Manhattan) Distance
  }
 
-The distance measure for Tag P/A data (binary) can be one of:
+The distance measure for Sequence Tag Presence/Absence data (binary) can be one of:
 \itemize{
- \item 'Simple' -- simple matching, both 1 or both 0 = 0; one 1 and the other
-  0 = 1. Presence and absence equally weighted.
- \item 'Jaccard' -- ignores matching 0, both 1 = 0; one 1 and the other
- 0 = 1. Absences could be for different reasons.
- \item 'Dice' -- both 0 = 0; both 1 = 2; one 1 and the other 0 = 1. Absences
- could be for different reasons. Sometimes called the Czekanowski or Sorensen
- distance.
- \item 'Phi' -- binary analogue of the Pearson Correlation coefficient.
+ \item Euclidean Distance
+ \item Scaled Euclidean Distance
+ \item Simple Matching Distance
+ \item Jaccard Distance
+ \item Bray-Curtis Distance
  }
 
-Refer to the documentation in the relevant packages listed above.
+Refer to the dartR Technical Note on Distances in Genetics.
 }
 \examples{
 D <- gl.dist.ind(testset.gl, method='euclidean')
-D <- gl.dist.ind(testset.gs, method='euclidean')
+D <- gl.dist.ind.new(testset.gs, method='euclidean')
 }
 \author{
-Custodian: Arthur Georges -- Post to
-\url{https://groups.google.com/d/forum/dartr}
+Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}
 }

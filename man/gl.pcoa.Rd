@@ -152,10 +152,25 @@ modern reference is Jolliffe (2002). PCoA was developed by Gower (1966) while
 the best modern reference is Legendre & Legendre (1998).
 }
 \examples{
+# PCA (using SNP genlight object)
+pca <- gl.pcoa(testset.gl)
+gl.pcoa.plot(pca,testset.gl)
+
+# PCA (using SilicoDArT genlight object)
+pca <- gl.pcoa(testset.gs)
+gl.pcoa.plot(pca,testset.gs)
+
+# Collapsing pops to OTUs using Fixed Difference Analysis (using fd object)
 fd <- gl.fixed.diff(testset.gl)
 fd <- gl.collapse(fd)
 pca <- gl.pcoa(fd)
 gl.pcoa.plot(pca,fd$gl)
+
+# Using a distance matrix
+D <- gl.dist.ind(testset.gs, method='jaccard')
+pcoa <- gl.pcoa(D,correction="cailliez")
+gl.pcoa.plot(pcoa,testset.gs)
+
 }
 \references{
 \itemize{
@@ -184,7 +199,7 @@ points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp.
 \code{\link{gl.pcoa.plot}}
 }
 \author{
-Custodian: Arthur Georges (Post to
+Author(s): Arthur Georges. Custodian: Arthur Georges (Post to
 \url{https://groups.google.com/d/forum/dartr})
 
 Custodian: Arthur Georges -- Post to
