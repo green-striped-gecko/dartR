@@ -57,7 +57,6 @@ progress log; 3, progress and results summary; 5, full report
 invisible results as table
 }
 \description{
-
 This function is basically a convinience function that runs the LD Ne
  estimator using Neestimator2 
  (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/}) 
