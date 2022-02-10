@@ -1,15 +1,12 @@
+#' @export
 
-
-
-
-
-gl.sims.ref <-
+gl.sim.WF.table <-
   function(file_ref = system.file('extdata', 'ref_variables.csv', package =
                                     'dartR'),
-           x,
+           x = NULL,
            file_targets_sel = NULL,
            file_r_map = NULL,
-           interactive = TRUE,
+           interactive_vars = TRUE,
            verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -20,7 +17,7 @@ gl.sims.ref <-
                      build = "Jody",
                      verbosity = verbose)
     
-    if (interactive) {
+    if (interactive_vars) {
       pkg <- "shiny"
       if (!(requireNamespace(pkg, quietly = TRUE))) {
         stop(error(
@@ -29,223 +26,31 @@ gl.sims.ref <-
           " needed for this function to work. Please install it."
         ))
       }
+      pkg <- "shinyBS"
+      if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(error(
+          "Package",
+          pkg,
+          "needed for this function to work. Please install it."
+        ))
+      }
     }
     
     # DO THE JOB
     
     ##### SIMULATIONS VARIABLES ######
     
-    if (interactive) {
+    if (interactive_vars) {
+      
       ui <- fluidPage(
-        titlePanel("Values for each locus"),
         
-        h3("Selection values"),
-        
-        fluidRow(
-          column(
-            3,
-            sliderInput(
-              "dominance_mean",
-              "Mean of the normal distribution from where h values are sampled",
-              value = 0.25,
-              min = 0,
-              max = 1
-            )
-          ),
-          
-          column(
-            3,
-            numericInput(
-              "gamma_scale",
-              "Scale of the gamma distribution from where s values are sampled",
-              value = 0.03,
-              min = 0
-            )
-          ),
-          
-          column(
-            3,
-            numericInput(
-              "gamma_shape",
-              "Shape of the gamma distribution from where s values are sampled",
-              value = 0.25,
-              min = 0
-            )
+        h5(
+          em(
+            "Hover over input boxes to display more information about the variable"
           )
         ),
         
-        fluidRow(
-          column(
-            3,
-            sliderInput(
-              "h_gral",
-              "Dominance coefficient of deleterious alleles",
-              value = 0.25,
-              min = 0,
-              max = 1
-            )
-          ),
-          
-          column(
-            3,
-            sliderInput(
-              "intercept",
-              "Value for the intercept of the equation  to determine h (maximum value of h when s = 0)",
-              value = 0.5,
-              min = 0,
-              max = 1
-            )
-          ),
-          
-          column(
-            3,
-            numericInput(
-              "log_mean",
-              "Mean of the log normal distribution from where s values are sampled",
-              value = 0.002,
-              min = 0
-            )
-          )),
-
-        fluidRow(
-          
-          column(
-            3,
-            numericInput(
-              "rate",
-              "Value for the variable rate of the dominance equation to calculate h",
-              value = 500,
-              min = 0
-            )
-          ),
-          column(
-            3,
-            numericInput(
-              "log_sd",
-              "Standard deviation of the log normal distribution from where s values are sampled",
-              value = 4,
-              min = 0
-            )
-          ),
-          
-          column(
-            3,
-            numericInput(
-              "s_gral",
-              "Selection coefficient of deleterious alleles",
-              value = 0.001,
-              min = 0
-            )
-          )
-        ),
-        
-        h3("Locus values"),
-        
-        fluidRow(
-          column(
-            3,
-            numericInput(
-              "loci_number_to_simulate",
-              "Number of loci under selection",
-              value = 1000,
-              min = 0
-            )
-          ),
-          
-          column(
-            3,
-            numericInput(
-              "mutation_rate",
-              "Mutation rate per generation per site. Value only used in the equation to determine q",
-              value = 5 * 10 ^ -5
-            )
-          ),
-          
-          column(
-            3,
-            sliderInput(
-              "q_gral",
-              "Initial frequencies of deleterious alleles",
-              value = 0.15,
-              min = 0,
-              max = 1
-            )
-          )
-        ),
-        
-        fluidRow(
-          column(
-            3,
-            numericInput(
-              "real_freq",
-              "Frequency of each one of the alleles of the loci from a real dataset",
-              value = NA,
-              min = 0
-            )
-          ),
-          
-          column(
-            3,
-            sliderInput(
-              "q_neutral",
-              "Initial frequencies of neutral alleles",
-              value = 0.5,
-              min = 0,
-              max = 1
-            )
-          ),
-          
-          column(
-            3,
-            numericInput(
-              "targets_factor",
-              "Factor to sample the number of loci under selection from the input file 'targets_of_selection.csv'",
-              value = 0.05,
-              min = 0
-            )
-          )
-        ),
-        
-        fluidRow(
-          column(
-            3,
-            fileInput(
-              "upload_targets", NULL
-                        ))),
-        
-        
-        h3("Recombination values"),
-        
-        fluidRow(
-          column(
-            3,
-            numericInput(
-              "map_resolution",
-              "Resolution of the recombination map (bp)",
-              value = 100000,
-              min = 0
-            )
-          ),
-          
-          column(
-            3,
-            numericInput(
-              "real_loc",
-              "Locations of the loci from a real dataset",
-              value = NULL,
-              min = 0
-            )
-          ),
-          
-          column(
-            3,
-            textInput(
-              "chromosome_name",
-              "Name of the chromosome to be simulated",
-              value = "NA"
-            )
-          )
-        ),
+        h3(strong("General variables")),
         
         fluidRow(
           column(
@@ -261,6 +66,110 @@ gl.sims.ref <-
           column(
             3,
             numericInput(
+              "loci_number_to_simulate",
+              "Number of loci under selection",
+              value = 1000,
+              min = 0
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
+              "real_loc",
+              "Locations of the loci from a real dataset",
+              value = NULL,
+              min = 0
+            )
+          )
+        ),
+        
+        fluidRow(column(
+          3,
+          textInput(
+            "chromosome_name",
+            "Name of the chromosome to be simulated",
+            value = "NA"
+          )
+        )),
+        
+        hr(),
+        
+        h3(strong("Alelle frequency variables")),
+        
+        fluidRow(
+          column(
+            3,
+            sliderInput(
+              "q_neutral",
+              "Initial frequencies of neutral alleles",
+              value = 0.5,
+              min = 0,
+              max = 1
+            )
+          ),
+          
+          column(
+            3,
+            radioButtons(
+              "q_distribution",
+              strong(
+                "How the initial allele frequency of the deleterious allele (q) should be determined"
+              ),
+              choices = list("All equal" = "equal", "From equation" = "equation"),
+              selected = "equal"
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
+              "mutation_rate",
+              "Mutation rate per generation per site. Value only used in the equation to determine q",
+              value = 5 * 10 ^ -5
+            )
+          )
+        ),
+        
+        fluidRow(column(
+          3,
+          sliderInput(
+            "q_gral",
+            "Initial frequencies of deleterious alleles",
+            value = 0.15,
+            min = 0,
+            max = 1
+          )
+        ),
+        
+        column(
+          3,
+          numericInput(
+            "real_freq",
+            "Frequency of each one of the alleles of the loci from a real dataset",
+            value = NA,
+            min = 0
+          )
+        )),
+        
+        hr(),
+        
+        h3(strong("Recombination variables")),
+        
+        fluidRow(
+          column(
+            3,
+            numericInput(
+              "map_resolution",
+              "Resolution of the recombination map (bp)",
+              value = 100000,
+              min = 0
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
               "chunk_recombination",
               "Recombination rate (cM) per region of size chunk_number",
               value = 1,
@@ -268,153 +177,368 @@ gl.sims.ref <-
             )
           ),
           
-          column(
-            3,
-            fileInput("upload_r_map", NULL))
+          column(3,
+                 fileInput("upload_r_map", NULL))
         ),
         
         hr(),
         
+        h3(strong("Selection variables")),
+        
+        h4("Selection coefficient variables"),
+        
         fluidRow(
+          
           column(
-            10,
+            3,
+            radioButtons(
+              "s_distribution",
+              strong(
+                "Name of the distribution to use to sample the values of the selection coefficient (s) for each locus under selection"
+              ),
+              choices = list("All equal" = "equal", 
+                             "Gamma distribution" = "gamma",
+                             "Log normal distribution" = "log_normal"),
+              selected = "equal"
+            )
+          )
+          ),
+        
+        h5(strong("All equal variables")),
+        
+        fluidRow(
+          
+          column(
+            3,
+            numericInput(
+              "s_gral",
+              "Selection coefficient of deleterious alleles",
+              value = 0.001,
+              min = 0
+            )
+          )
+        ),
+        
+        h5(strong("Gamma distribution variables")),
+        
+        fluidRow(
+          
+          column(
+            3,
+            numericInput(
+              "gamma_scale",
+              "Scale of the gamma distribution",
+              value = 0.03,
+              min = 0
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
+              "gamma_shape",
+              "Shape of the gamma distribution",
+              value = 0.25,
+              min = 0
+            )
+          )
+          
+        ),
+        
+        h5(strong("Log normal distribution variables")),
+        
+        fluidRow(
+          
+          column(
+            3,
+            numericInput(
+              "log_mean",
+              "Mean of the log normal distribution",
+              value = 0.002,
+              min = 0
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
+              "log_sd",
+              "Standard deviation of the log normal distribution",
+              value = 4,
+              min = 0
+            )
+          )
+        ),
+        
+        hr(),
+        
+        h4("Dominance coefficient variables"),
+        
+        fluidRow(
+          
+          column(
+            3,
+            radioButtons(
+              "h_distribution",
+              strong(
+                "Name of the distribution to use to sample the values of the dominance coefficient (h) for each locus under selection"
+              ),
+              choices = list("All equal" = "equal", 
+                             "Normal distribution" = "normal",
+                             "From equation" = "equation"),
+              selected = "equal"
+            )
+          )
+        ),
+        
+        h5(strong("All equal variables")),
+        
+        fluidRow(
+        
+        column(
+          3,
+          sliderInput(
+            "h_gral",
+            "Dominance coefficient of deleterious alleles",
+            value = 0.25,
+            min = 0,
+            max = 1
+          )
+        )
+        ),
+        
+        h5(strong("Normal distribution variables")),
+        
+        fluidRow(
+          
+          column(
+            3,
+            sliderInput(
+              "dominance_mean",
+              "Mean of the normal distribution from where h values are sampled",
+              value = 0.25,
+              min = 0,
+              max = 1
+            )
+          )
+          ),
+          
+          h5(strong("Equation variables")),
+          
+        fluidRow(
+          
+          column(
+            3,
+            sliderInput(
+              "intercept",
+              "Value for the intercept of the equation",
+              value = 0.5,
+              min = 0,
+              max = 1
+            )
+          ),
+          
+          column(
+            3,
+            numericInput(
+              "rate",
+              "Value for the variable rate of the equation",
+              value = 500,
+              min = 0
+            )
+          )
+          ),
+        
+        hr(),
+        
+          h4("Targets of selection variables"),
+          
+          fluidRow(
+            
+            column(
+              3,
+              fileInput(
+                "upload_targets", NULL
+              )
+            ),
+            
+            column(
+            3,
+            numericInput(
+              "targets_factor",
+              "Factor to sample the number of loci under selection from the input file 'targets_of_selection.csv'",
+              value = 0.05,
+              min = 0
+            )
+          )
+          ),
+          
+          hr(),
+          
+          fluidRow(
+            column(
+            9,
             actionButton(
               "close",
-              label = strong("RUN"),
+              label = h4(strong("RUN")),
               icon = icon("play"),
-              width = "90%",
+              width = "100%",
               class = "btn-success"
-              ))),
-        
-        br()
-        
-      )
-      
-      server <- function(input, output) {
-        
-        observeEvent(input$loci_number_to_simulate, {
-          loci_number_to_simulate <<- input$loci_number_to_simulate
-        })
-        observeEvent(input$mutation_rate, {
-          mutation_rate <<- input$mutation_rate
-        })
-        observeEvent(input$map_resolution, {
-          map_resolution <<- input$map_resolution
-        })
-        observeEvent(input$dominance_mean, {
-          dominance_mean <<- input$dominance_mean
-        })
-        observeEvent(input$gamma_scale, {
-          gamma_scale <<- input$gamma_scale
-        })
-        observeEvent(input$gamma_shape, {
-          gamma_shape <<- input$gamma_shape
-        })
-        observeEvent(input$h_gral, {
-          h_gral <<- input$h_gral
-        })
-        observeEvent(input$intercept, {
-          intercept <<- input$intercept
-        })
-        observeEvent(input$log_mean, {
-          log_mean <<- input$log_mean
-        })
-        observeEvent(input$log_sd, {
-          log_sd <<- input$log_sd
-        })
-        observeEvent(input$q_gral, {
-          q_gral <<- input$q_gral
-        })
-        observeEvent(input$rate, {
-          rate <<- input$rate
-        })
-        observeEvent(input$s_gral, {
-          s_gral <<- input$s_gral
-        })
-        observeEvent(input$targets_factor, {
-          targets_factor <<- input$targets_factor
-        })
-        observeEvent(input$chromosome_name, {
-          chromosome_name <<- input$chromosome_name
-        })
-        observeEvent(input$chunk_number, {
-          chunk_number <<- input$chunk_number
-        })
-        observeEvent(input$chunk_recombination, {
-          chunk_recombination <<- input$chunk_recombination
-        })
-        observeEvent(input$real_loc, {
-          real_loc <<- input$real_loc
-        })
-        observeEvent(input$real_freq, {
-          real_freq <<- input$real_freq
-        })
-        observeEvent(input$upload_targets, {
-          upload_targets <<- input$upload_targets
-        })
-        observeEvent(input$upload_r_map, {
-          upload_r_map <<- input$upload_r_map
-        })
-        observeEvent(input$q_neutral, {
-          q_neutral <<- input$q_neutral
-        })
-      
-        observeEvent(input$close, {
-          ref_vars_temp <<- as.data.frame(cbind(
-            c("real_freq",
-              "real_loc",
-              "loci_number_to_simulate",
-              "mutation_rate",
-              "map_resolution",
-              "dominance_mean",
-              "gamma_scale",
-              "gamma_shape",
-              "h_gral",
-              "intercept",
-              "log_mean",
-              "log_sd",
-              "q_gral",
-              "rate",
-              "s_gral",
-              "targets_factor",
-              "chromosome_name",
-              "chunk_number",
-              "chunk_recombination",
-              "q_neutral"),
-            c(real_freq,
-              real_loc,
-              loci_number_to_simulate,
-              mutation_rate,
-              map_resolution,
-              dominance_mean,
-              gamma_scale,
-              gamma_shape,
-              h_gral,
-              intercept,
-              log_mean,
-              log_sd,
-              q_gral,
-              rate,
-              s_gral,
-              targets_factor,
-              chromosome_name,
-              chunk_number,
-              chunk_recombination,
-              q_neutral)
-          ))
+            )
+          )
+          ),
           
-          colnames(ref_vars_temp) <- c("variable","value")
+          br()
           
-          ref_vars <<- ref_vars_temp
-          
-          stopApp()
-          
-        })
+        )
         
-      }
-      
-      runApp(shinyApp(ui = ui, server = server))
-      
+        server <- function(input, output) {
+          observeEvent(input$loci_number_to_simulate, {
+            loci_number_to_simulate <<- input$loci_number_to_simulate
+          })
+          observeEvent(input$mutation_rate, {
+            mutation_rate <<- input$mutation_rate
+          })
+          observeEvent(input$map_resolution, {
+            map_resolution <<- input$map_resolution
+          })
+          observeEvent(input$dominance_mean, {
+            dominance_mean <<- input$dominance_mean
+          })
+          observeEvent(input$gamma_scale, {
+            gamma_scale <<- input$gamma_scale
+          })
+          observeEvent(input$gamma_shape, {
+            gamma_shape <<- input$gamma_shape
+          })
+          observeEvent(input$h_gral, {
+            h_gral <<- input$h_gral
+          })
+          observeEvent(input$intercept, {
+            intercept <<- input$intercept
+          })
+          observeEvent(input$log_mean, {
+            log_mean <<- input$log_mean
+          })
+          observeEvent(input$log_sd, {
+            log_sd <<- input$log_sd
+          })
+          observeEvent(input$q_gral, {
+            q_gral <<- input$q_gral
+          })
+          observeEvent(input$rate, {
+            rate <<- input$rate
+          })
+          observeEvent(input$s_gral, {
+            s_gral <<- input$s_gral
+          })
+          observeEvent(input$targets_factor, {
+            targets_factor <<- input$targets_factor
+          })
+          observeEvent(input$chromosome_name, {
+            chromosome_name <<- input$chromosome_name
+          })
+          observeEvent(input$chunk_number, {
+            chunk_number <<- input$chunk_number
+          })
+          observeEvent(input$chunk_recombination, {
+            chunk_recombination <<- input$chunk_recombination
+          })
+          observeEvent(input$real_loc, {
+            real_loc <<- input$real_loc
+          })
+          observeEvent(input$real_freq, {
+            real_freq <<- input$real_freq
+          })
+          observeEvent(input$upload_targets, {
+            upload_targets <<- input$upload_targets
+          })
+          observeEvent(input$upload_r_map, {
+            upload_r_map <<- input$upload_r_map
+          })
+          observeEvent(input$q_neutral, {
+            q_neutral <<- input$q_neutral
+          })
+          observeEvent(input$q_distribution, {
+            q_distribution <<- input$q_distribution
+          })
+          observeEvent(input$h_distribution, {
+            h_distribution <<- input$h_distribution
+          })
+          observeEvent(input$s_distribution, {
+            s_distribution <<- input$s_distribution
+          })
+
+          observeEvent(input$close, {
+            ref_vars_temp <<- as.data.frame(cbind(
+              c(
+                "real_freq",
+                "real_loc",
+                "loci_number_to_simulate",
+                "mutation_rate",
+                "map_resolution",
+                "dominance_mean",
+                "gamma_scale",
+                "gamma_shape",
+                "h_gral",
+                "intercept",
+                "log_mean",
+                "log_sd",
+                "q_gral",
+                "rate",
+                "s_gral",
+                "targets_factor",
+                "chromosome_name",
+                "chunk_number",
+                "chunk_recombination",
+                "q_neutral",
+                "q_distribution",
+                "h_distribution",
+                "s_distribution",
+                "upload_targets",
+                "upload_r_map"
+              ),
+              c(
+                real_freq,
+                real_loc,
+                loci_number_to_simulate,
+                mutation_rate,
+                map_resolution,
+                dominance_mean,
+                gamma_scale,
+                gamma_shape,
+                h_gral,
+                intercept,
+                log_mean,
+                log_sd,
+                q_gral,
+                rate,
+                s_gral,
+                targets_factor,
+                chromosome_name,
+                chunk_number,
+                chunk_recombination,
+                q_neutral,
+                q_distribution,
+                h_distribution,
+                s_distribution,
+                upload_targets,
+                upload_r_map
+              )
+            ))
+            
+            colnames(ref_vars_temp) <- c("variable", "value")
+            
+            ref_vars <<- ref_vars_temp
+            
+            stopApp()
+            
+          })
+          
+        }
+        
+        runApp(shinyApp(ui = ui, server = server))
+        
     } else{
       ref_vars <- suppressWarnings(read.csv(file_ref))
       ref_vars <- ref_vars[, 2:3]
@@ -426,15 +550,14 @@ gl.sims.ref <-
       eval(parse(text = vars_assign))
     }
     
-
     ###### input targets of selection
     if (!is.null(file_targets_sel)) {
       targets <- read.csv(file_targets_sel)
-    targets$chr_name <- as.character(targets$chr_name)
-    targets <-
-      targets[which(targets$chr_name == chromosome_name), ]
-    targets <- targets[!duplicated(targets$start), ]
-    targets <- targets[!duplicated(targets$end), ]
+      targets$chr_name <- as.character(targets$chr_name)
+      targets <-
+        targets[which(targets$chr_name == chromosome_name), ]
+      targets <- targets[!duplicated(targets$start), ]
+      targets <- targets[!duplicated(targets$end), ]
     }
     
     if (!is.null(file_r_map)) {
@@ -697,8 +820,8 @@ gl.sims.ref <-
       
     }
     
-    ref_res <- list(reference[,-1],ref_vars)
-    names(ref_res) <- c("reference","ref_vars")
+    ref_res <- list(reference[,-1], ref_vars)
+    names(ref_res) <- c("reference", "ref_vars")
     
     return(ref_res)
     
