@@ -20,10 +20,10 @@ gl.LDNe(
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
-
+  
 \item{outfile}{File name of the output file [default 'genepopLD.txt'] with 
 all results from Neestimator 2.}
-
+  
 \item{outpath}{Path where to save the output file
 [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
  when calling this function to direct output files to your working directory.
