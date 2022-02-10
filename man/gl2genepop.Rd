@@ -23,7 +23,12 @@ progress log; 3, progress and results summary; 5, full report
 invisible data frame in genepop format
 }
 \description{
-The genepop format is used by several external applications (for example Neestimator2 (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/}). So the main idea is to create the genepop file and then run the other software externally. As a feature the genepop file also returned as an invisible data.frame by the function.
+The genepop format is used by several external applications (for example
+Neestimator2
+(\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/}).
+So the main idea is to create the genepop file and then run the other
+software externally. As a feature the genepop file also returned as an
+invisible data.frame by the function.
 }
 \examples{
 \dontrun{

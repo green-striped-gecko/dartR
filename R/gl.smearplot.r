@@ -5,17 +5,17 @@
 #' and NA for presence/absence (SilicoDArT) data. Individual labels can be added
 #' and individuals can be grouped by population.
 #'
-#' If there are too many individuals, it is best to use ind_labels_size = 0.
+#' Plot may become cluttered if ind_labels If there are too many individuals, 
+#' it is best to use ind_labels_size = 0.
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence
 #'  (SilicoDArT) data [required].
-#' @param group_pop Group by population [default TRUE].
-#' @param ind_labels Labels for individuals [default indNames(x)].
-#' @param ind_labels_size Size of the individual labels, if individual labels
-#' are not required set this parameter to 0 [default 6].
+#' @param ind_labels If TRUE, individuals are labelled with indNames(x) [default FALSE].
+#' @param group_pop If ind_labels is TRUE, group by population [default TRUE].
+#' @param ind_labels_size Size of the individual labels [default 10].
 #' @param plot_colors Vector with four color names for homozygotes for the
 #' reference allele, heterozygotes, homozygotes for the alternative allele and
-#' for missing values (NA) [default four_colors].
+#' for missing values (NA), e.g. four_colours [default NULL].
 #' @param posi Position of the legend: “left”, “top”, “right”, “bottom” or
 #'  'none' [default = 'bottom'].
 #' @param save2tmp If TRUE, saves plot to the session temporary directory
@@ -27,69 +27,67 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' gl.smearplot(testset.gl[1:10,])
-#' gl.smearplot(testset.gs[1:10,])
+#' gl.smearplot(testset.gl,ind_labels=FALSE)
+#' gl.smearplot(testset.gs[1:10,],ind_labels=TRUE)
 #' @family Exploration/visualisation functions
 #' @export
 #'
 
 gl.smearplot <- function(x,
-                         group_pop = FALSE,
-                         ind_labels = indNames(x),
-                         ind_labels_size = 10,
-                         plot_colors = four_colors,
-                         posi = "bottom",
-                         save2tmp = FALSE,
-                         verbose = NULL) {
+                        ind_labels = FALSE,
+                        group_pop = FALSE, 
+                        ind_labels_size = 10,
+                        plot_colors = colorRampPalette(c("royalblue3", "firebrick1"))(3),
+                        posi = "bottom",
+                        save2tmp = FALSE,
+                        verbose = NULL) {
+    
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "reshape2"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
         stop(error(
             "Package ",
             pkg,
-            " needed for this function to work. Please install it."
+            " is needed for this function to work. Please install it."
         ))
     }
     
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
+    # CHECK DATATYPE
+    datatype <- utils.check.datatype(x, verbose = verbose) 
+    
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jackson",
+                     build = "Jody",
                      verbosity = verbose)
     
-    # CHECK DATATYPE
-    datatype <- utils.check.datatype(x, verbose = verbose)
+    # SCRIPT SPECIFIC CHECKS
     
-    # Set a population if none is specified (such as if the genlight object has been generated manually)
-    if (is.null(pop(x)) |
-        is.na(length(pop(x))) | length(pop(x)) <= 0) {
-        if (verbose >= 2) {
-            cat(
-                warn(
-                    "  No population assignments detected,
-                             individuals assigned to a single population labelled 'pop1'\n"
-                )
-            )
-        }
-        pop(x) <- array("pop1", dim = nInd(x))
-        pop(x) <- as.factor(pop(x))
+    if(is.null(plot_colors)){
+        plot_colors <- c("blue","magenta","red","beige") # = default for plot()
+    }
+    if(ind_labels == TRUE){
+        individuals <- indNames(x)
+    } else {
+        individuals <- seq(1:length(indNames(x)))
     }
     
     # DO THE JOB
     
     X_temp <- as.data.frame(as.matrix(x))
     colnames(X_temp) <- 1:nLoc(x)
+    X_temp$id <- individuals
     X_temp$pop <- pop(x)
-    X_temp$id <- ind_labels
+    
     X <- reshape2::melt(X_temp, id.vars = c("pop", "id"))
     X$value <- as.character(X$value)
-    
     colnames(X) <- c("pop", "id", "locus", "genotype")
     
     loc_labels <- pretty(1:nLoc(x), 5)
+    id_labels <- pretty(1:nInd(x), 5)
     
     locus <- id <- genotype <- NA
     
@@ -112,7 +110,8 @@ gl.smearplot <- function(x,
                 breaks = loc_labels,
                 labels = as.character(loc_labels),
                 name = "Loci"
-            ) + ylab("Individuals")
+            ) + 
+            ylab("Individuals")
     }
     
     if (datatype == "SNP") {
@@ -121,7 +120,8 @@ gl.smearplot <- function(x,
                 x = locus,
                 y = id,
                 fill = genotype
-            )) + geom_raster() + scale_fill_discrete(
+            )) + geom_raster() + 
+                scale_fill_discrete(
                 type = plot_colors,
                 na.value = plot_colors[4],
                 name = "Genotype",
@@ -133,11 +133,13 @@ gl.smearplot <- function(x,
             scale_x_discrete(
                 breaks = loc_labels,
                 labels = as.character(loc_labels),
-                name = "Loci"
-            ) + ylab("Individuals")
+                name = "Loci",
+                position="bottom"
+            ) + 
+        ylab("Individuals")
     }
     
-    if (group_pop == TRUE) {
+    if (ind_labels==TRUE & group_pop == TRUE) {
         p3 <- p3 + facet_wrap(~ pop,
                               ncol = 1,
                               dir = "v",

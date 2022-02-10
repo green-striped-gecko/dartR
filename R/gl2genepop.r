@@ -1,7 +1,12 @@
 #' @name gl2genepop
-#' @title Converts a genlight object to genepop format (and file) 
+#' @title Converts a genlight object to genepop format (and file)
 #' @description
-#' The genepop format is used by several external applications (for example Neestimator2 (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/}). So the main idea is to create the genepop file and then run the other software externally. As a feature the genepop file also returned as an invisible data.frame by the function.
+#' The genepop format is used by several external applications (for example
+#' Neestimator2
+#' (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/}).
+#' So the main idea is to create the genepop file and then run the other
+#' software externally. As a feature the genepop file also returned as an
+#' invisible data.frame by the function.
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param outfile File name of the output file [default 'genepop.gen'].
 #' @param outpath Path where to save the output file
@@ -21,11 +26,11 @@
 #' }
 #' @export
 
-gl2genepop <- function (x, 
-                        outfile = "genepop.gen", 
-                        outpath=tempdir(), 
-                        verbose=NULL) 
-{
+gl2genepop <- function (x,
+                        outfile = "genepop.gen",
+                        outpath = tempdir(),
+                        verbose = NULL) {
+
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
@@ -39,26 +44,26 @@ gl2genepop <- function (x,
   datatype <- utils.check.datatype(x, verbose = verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
-    #works only with SNP data
-  if (datatype!="SNP") cat(error(
-    "  Only SNPs (diploid data can be transformed into genepop format!\n" ))
-  
-  if (is.null(pop(x))) {
+
+  #works only with SNP data
+  if (datatype != "SNP") {
+    cat(error(
+      "  Only SNPs (diploid data can be transformed into genepop format!\n"
+    ))
+  }
+                           
+      if (is.null(pop(x))) {
     cat(important("Your genlight object does not have a population definition. Therefore the function assumes you the whole genlight object to be one population!\n"))
-    pop(x)<- rep("Pop1", nInd(x))
+    pop(x) <- rep("Pop1", nInd(x))
     }
   
-  
   # DO THE JOB
-  
   
   #convert to genind
   x<- x[order(pop(x)),]
   x <- gl2gi(x, verbose = 0,probar = FALSE)
   data <- as.matrix(x)
   pop_names <- x@pop
-  
-  
   
   if (all(unlist(unique(x@all.names)) %in% c("A", "T", 
                                              "C", "G"))) {
@@ -138,8 +143,18 @@ gl2genepop <- function (x,
   
     data_gpop2<- dummy
     utils::write.table(data_gpop2, file = file.path(outpath,outfile), quote = FALSE, row.names = FALSE, col.names = FALSE)
-    cat(message(paste0("The genepop file is saved as: ", file.path(outpath, outfile))))
+  cat(report(
+    "The genepop file is saved as: ", file.path(outpath, outfile,"\n")
+  ))
+                
+                  # FLAG SCRIPT END
+  
+  if (verbose >= 1) {
+    cat(report("Completed:", funname, "\n"))
+  }
+                
+                  # RETURN
+                
     invisible(data.frame(lines=data_gpop2))
     
 }
-

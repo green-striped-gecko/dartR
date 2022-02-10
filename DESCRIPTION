@@ -71,7 +71,10 @@ Suggests:
     fields,
     snpStats,
     boot,
-    hierfstat
+    hierfstat,
+    gganimate,
+    shiny,
+    shinyBS
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2

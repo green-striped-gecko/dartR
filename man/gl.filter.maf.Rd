@@ -5,13 +5,51 @@
 \title{Filters loci on the basis of minor allele frequency (MAF) in a genlight
  {adegenet} object}
 \usage{
-gl.filter.maf(x, threshold = 0.01, verbose = NULL)
+gl.filter.maf(
+  x,
+  threshold = 0.01,
+  by.pop = FALSE,
+  pop.limit = ceiling(nPop(x)/2),
+  ind.limit = 10,
+  recalc = FALSE,
+  plot.out = TRUE,
+  plot_theme = theme_dartR(),
+  plot_colors = two_colors,
+  bins = 25,
+  save2tmp = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
 \item{threshold}{Threshold MAF -- loci with a MAF less than the threshold
 will be removed [default 0.01].}
+
+\item{by.pop}{Whether MAF should be calculated by population [default FALSE].}
+
+\item{pop.limit}{Minimum number of populations in which MAF should be less 
+than the threshold for a loci to be filtered out. Only used if by.pop=TRUE. 
+The default value is half of the populations [default ceiling(nPop(x)/2)].}
+
+\item{ind.limit}{Minimum number of individuals that a population should 
+contain to calculate MAF. Only used if by.pop=TRUE [default 10].}
+
+\item{recalc}{Recalculate the locus metadata statistics if any individuals
+are deleted in the filtering [default FALSE].}
+
+\item{plot.out}{Specify if histograms of call rate, before and after, are to
+be produced [default TRUE].}
+
+\item{plot_theme}{User specified theme for the plot [default theme_dartR()].}
+
+\item{plot_colors}{List of two color names for the borders and fill of the
+plots [default two_colors].}
+
+\item{bins}{Number of bins to display in histograms [default 25].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -24,10 +62,6 @@ The reduced genlight dataset
 This script calculates the minor allele frequency for each locus and updates
 the locus metadata for FreqHomRef, FreqHomSnp, FreqHets and MAF (if it
 exists). It then uses the updated metadata for MAF to filter loci.
-
-Note the this filter applies to MAF calculated across all individuals,
- without regard to population structure. It is a means of removing overall
- rare alleles. To apply this to single populations, use seppop and lapply.
 }
 \examples{
 result <- gl.filter.monomorphs(testset.gl)

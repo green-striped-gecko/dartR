@@ -124,6 +124,10 @@ gl.pcoa.plot <- function(glPca,
                          axis.label.size = 1.5,
                          save2tmp = FALSE,
                          verbose = NULL) {
+    
+    hold_x <- x
+    hold_glPca <- glPca
+    
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -135,10 +139,10 @@ gl.pcoa.plot <- function(glPca,
     
     # CHECK DATATYPE
     datatype1 <-
-        utils.check.datatype(glPca, accept = "glPca", verbose = verbose)
+        utils.check.datatype(glPca, accept = c("glPca","list"), verbose = verbose)
     datatype2 <-
         utils.check.datatype(x,
-                             accept = c("SNP", "SilicoDArT", "fd", "dist"),
+                             accept = c("SNP", "SilicoDArT", "fd", "dist","list"),
                              verbose = verbose)
     
     # SCRIPT SPECIFIC ERROR CHECKING
@@ -154,6 +158,31 @@ gl.pcoa.plot <- function(glPca,
                 )
             )
         }
+    }
+    
+    if (datatype1=="list") {
+        pkg <- "gganimate"
+        if (!(requireNamespace(pkg, quietly = TRUE))) {
+            stop(
+                error(
+                    "Package ",
+                    pkg,
+                    " needed for this function to work. Please install it."
+                )
+            )
+        }
+        pkg <- "tibble"
+        if (!(requireNamespace(pkg, quietly = TRUE))) {
+            stop(
+                error(
+                    "Package ",
+                    pkg,
+                    " needed for this function to work. Please install it."
+                )
+            )
+        }
+        x <- x[[1]]
+        glPca <- glPca[[1]]
     }
     
     if (pop.labels != "none" &&
@@ -249,6 +278,39 @@ gl.pcoa.plot <- function(glPca,
     
     # DO THE JOB
     
+    if(datatype1=="list"){
+        gen_number <- length(hold_x)
+        df_sim <- as.data.frame(matrix(ncol = 5))
+        colnames(df_sim) <- c("PCoAx","PCoAy","ind","pop","gen")
+        for(sim_i in 1:gen_number){
+            glPca <- hold_glPca[[sim_i]]
+            x <- hold_x[[sim_i]]
+            m <- cbind(glPca$scores[, xaxis], glPca$scores[, yaxis])
+            df <- data.frame(m)
+            # Convert the eigenvalues to percentages
+            s <- sum(glPca$eig[glPca$eig >= 0])
+            e <- round(glPca$eig * 100 / s, 1)
+            # Labels for the axes and points
+                xlab <- paste("PCA Axis", xaxis)
+                ylab <- paste("PCA Axis", yaxis)
+                ind <- indNames(x)
+                pop <- factor(pop(x))
+                # gen <- unique(x$other$sim.vars$generation)
+                df <- cbind(df, ind, pop,unique(x$other$sim.vars$generation))
+                colnames(df) <- c("PCoAx", "PCoAy", "ind", "pop","gen")
+                df_sim <- rbind(df_sim,df)
+        }
+         df_sim <- as_tibble(df_sim)
+         df_sim <- df_sim[-1,]
+        
+        p  <- ggplot(df_sim, aes(PCoAx, PCoAy, colour = pop)) +
+            geom_point(size=3) +
+            labs(title = 'Generation: {frame_time}', x = xlab, y = ylab) +
+            transition_time(gen) +
+            ease_aes('linear')
+        return(p)
+        }
+    
     PCoAx <- PCoAy <- NULL
     
     # Create a dataframe to hold the required scores
@@ -312,8 +374,7 @@ gl.pcoa.plot <- function(glPca,
     }
     
     ####### 2D PLOT
-    if (is.null(zaxis))
-    {
+    if (is.null(zaxis)) {
         # If population labels
         
         if (pop.labels == "pop") {
@@ -355,29 +416,23 @@ gl.pcoa.plot <- function(glPca,
                                shape = pop
                            ))
             }
-            plott <-
-                plott + geom_point(size = pt.size, aes(color = pop)) + directlabels::geom_dl(aes(label = pop),
-                                                                                             method = list("smart.grid",
-                                                                                                           cex = label.size)) + theme(
-                                                                                                               axis.title = element_text(
-                                                                                                                   face = "bold.italic",
-                                                                                                                   size = axis.label.size,
-                                                                                                                   color = "black"
-                                                                                                               ),
-                                                                                                               axis.text.x = element_text(
-                                                                                                                   face = "bold",
-                                                                                                                   angle = 0,
-                                                                                                                   vjust = 0.5,
-                                                                                                                   size = axis.label.size
-                                                                                                               ),
-                                                                                                               axis.text.y = element_text(
-                                                                                                                   face = "bold",
-                                                                                                                   angle = 0,
-                                                                                                                   vjust = 0.5,
-                                                                                                                   size = axis.label.size
-                                                                                                               )
-                                                                                                           ) +
+            plott <- plott + geom_point(size = pt.size, aes(color = pop)) + 
+                directlabels::geom_dl(aes(label = pop),
+                                      method = list("smart.grid", 
+                                                    cex = label.size)) + 
+                theme(axis.title = element_text(face = "bold.italic", 
+                                                size = axis.label.size,
+                                                color = "black"),
+                      axis.text.x = element_text(face = "bold", 
+                                                 angle = 0,
+                                                 vjust = 0.5,
+                                                 size = axis.label.size),
+                      axis.text.y = element_text(face = "bold", 
+                                                 angle = 0,
+                                                 vjust = 0.5,
+                                                 size = axis.label.size)) +
                 labs(x = xlab, y = ylab)
+            
             if (!is.null(pt.shapes)) {
                 plott <- plott + scale_shape_manual(values = pt.shapes)
             }
@@ -385,7 +440,9 @@ gl.pcoa.plot <- function(glPca,
                 plott <- plott + scale_color_manual(values = pt.colors)
             }
             plott <-
-                plott + geom_hline(yintercept = 0) + geom_vline(xintercept = 0) + theme(legend.position = "none")
+                plott + geom_hline(yintercept = 0) + 
+                geom_vline(xintercept = 0) + 
+                theme(legend.position = "none")
             # Scale the axes in proportion to % explained, if requested if(scale==TRUE) { plott <- plott +
             # coord_fixed(ratio=e[yaxis]/e[xaxis]) }
             if (scale == TRUE) {

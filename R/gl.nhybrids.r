@@ -58,6 +58,9 @@
 #' heterozygotes and homozygous alternate (SNP) is produced for the F1
 #' individuals
 #' [default TRUE, applies only if both parental populations are specified].
+#' @param plot_theme User specified theme [default theme_dartR()].
+#' @param plot_colors Vector with two color names for the borders and fill
+#' [default two_colors].
 #' @param pprob Threshold level for assignment to likelihood bins
 #' [default 0.95, used only if plot=TRUE].
 #' @param method Specifies the method (random or AvgPIC) to select 200 loci for
@@ -105,6 +108,8 @@ gl.nhybrids <- function(gl,
                         threshold = 0,
                         method = "random",
                         plot = TRUE,
+                        plot_theme = theme_dartR(),
+                        plot_colors = two_colors,
                         pprob = 0.95,
                         nhyb.directory = NULL,
                         BurnIn = 10000,
@@ -776,7 +781,16 @@ gl.nhybrids <- function(gl,
                 length(as.character(F1.test$id)),
                 "F1 individuals\n")
         }
-        barplot(table(mat), col = "red", main = "F1 Genotypes")
+        mat_plot <- as.data.frame(table(mat))
+        colnames(mat_plot) <- c("Genotype","Count")
+        
+        print(
+          ggplot(mat_plot, aes(x= Genotype,y = Count)) +
+            geom_col(color = plot_colors[1], fill = plot_colors[2]) +
+            plot_theme +
+            theme(axis.text.y = element_blank(),axis.ticks.y = element_blank()) +
+            ggtitle("F1 Genotypes")
+        )
         # Report the results
         if (verbose >= 3) {
             cat("  No. of F1 individuals:",
