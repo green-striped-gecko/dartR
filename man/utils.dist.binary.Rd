@@ -9,6 +9,7 @@ utils.dist.binary(
   x,
   method = "simple",
   scale = FALSE,
+  swap = FALSE,
   output = "dist",
   verbose = NULL
 )
@@ -20,6 +21,10 @@ utils.dist.binary(
 
 \item{scale}{If TRUE and method='euclidean', the distance will be scaled to 
 fall in the range [0,1] [default FALSE].}
+
+\item{swap}{If TRUE and working with presence-absence data, then presence 
+(no disrupting mutation) is scored as 0 and absence (presence of a disrupting 
+mutation) is scored as 1 [default FALSE].}
 
 \item{output}{Specify the format and class of the object to be returned, 
 dist for a object of class dist, matrix for an object of class matrix [default "dist"].}
