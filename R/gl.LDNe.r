@@ -38,7 +38,7 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
-#' @return Dataframe with the efinvisible results as table
+#' @return Dataframe with the results as table
 #' @author Custodian: Bernd Gruber (Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -217,8 +217,11 @@ gl.LDNe <- function(x,
         as.numeric(CI_high_JackKnife[[i]])
       )
     ))
+    
+    df_temp <- df_temp[!duplicated(as.list(df_temp))]
+      
     colnames(df_temp) <-
-      c("Statistic", paste("Frequency", 1:length(freq)))
+      c("Statistic", paste("Frequency", 1:sum(!duplicated(freq))))
     rownames(df_temp) <- 1:nrow(df_temp)
     return(df_temp)
   })
@@ -252,7 +255,7 @@ gl.LDNe <- function(x,
     pop_list_plot <- as.data.frame(rbindlist(pop_list_plot))
     pop_list_plot$pop <- as.factor(pop_list_plot$pop)
     pop_list_plot[pop_list_plot == Inf] <- NA
-    pop_list_plot$color <- rep(colors_pops, each = length(freq))
+    pop_list_plot$color <- rep(colors_pops, each = sum(!duplicated(freq)))
     pop_list_plot$`CI low Parametric` <-
       as.numeric(pop_list_plot$`CI low Parametric`)
     pop_list_plot$`CI high Parametric` <-
@@ -356,5 +359,5 @@ gl.LDNe <- function(x,
   }
   
   # RETURN
-  return(pop_list)
+  return(invisible(pop_list))
 }
