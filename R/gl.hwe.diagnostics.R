@@ -88,7 +88,8 @@ gl.hwe.diagnostics <- function(x, alpha_val=0.05, brk = seq(0, 1, 1 / 20)) {
   suppressWarnings(
   hweout <- gl.report.hwe(x, sig_only = F, verbose = 0)
   )
-  print(hwe.dist.plot(hweout, brk))
+  
+  hwe_dist_plot <- hwe.dist.plot(hweout, brk)
   
   # Fst vs Fis scatter plot with linear regression
   # lpops <- seppop(x)
@@ -119,7 +120,7 @@ gl.hwe.diagnostics <- function(x, alpha_val=0.05, brk = seq(0, 1, 1 / 20)) {
   # Compile the data for the plot
   nTimesBypop.fin <- rbind(nTimesBypop.df, nullDist)
   names(nTimesBypop.fin)[1] <- "nPop"
-  print(nLoBynPop_plot(nTimesBypop.fin))
+  nTestByPops_plot <- nLoBynPop_plot(nTimesBypop.fin)
   
   # Collate HWE tests and Fis per locus and pop
   FisPops <- data.table(Fstats$Fis, keep.rownames = TRUE)
@@ -147,6 +148,8 @@ gl.hwe.diagnostics <- function(x, alpha_val=0.05, brk = seq(0, 1, 1 / 20)) {
   chsq <- hwe_Fis[, .(ChiSquare=-2*(sum(log(Prob)))), by= Population]
   chsq[, pvalue:=pchisq(ChiSquare, 2*nLoc(x), lower.tail = FALSE)]
   hwe_summary <- merge(hwe_summary, chsq, by = "Population")
-  return(hwe_summary)
+  res <- list(hwe_dist_plot, nTestByPops_plot, hwe_summary)
+  print(res)
+  return(res)
 }
 
