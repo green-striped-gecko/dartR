@@ -1,21 +1,21 @@
 #' @name gl2genepop
-#' @title Converts a genlight object to genepop format (and file)
+#' @title Converts a genlight object into genepop format (and file)
 #' @description
 #' The genepop format is used by several external applications (for example
 #' Neestimator2
 #' (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/}).
 #' So the main idea is to create the genepop file and then run the other
-#' software externally. As a feature the genepop file also returned as an
+#' software externally. As a feature, the genepop file is also returned as an
 #' invisible data.frame by the function.
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param outfile File name of the output file [default 'genepop.gen'].
-#' @param outpath Path where to save the output file
-#' [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
-#'  when calling this function to direct output files to your working directory.
+#' @param outpath Path where to save the output file. Use outpath=getwd() or
+#' outpath='.' when calling this function to direct output files to your working
+#'  directory [default tempdir(), mandated by CRAN].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
-#' @return invisible data frame in genepop format
+#' @return Invisible data frame in genepop format
 #' @author Custodian: Bernd Gruber (Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
@@ -43,25 +43,35 @@ gl2genepop <- function (x,
   datatype <- utils.check.datatype(x, verbose = verbose)
   
   # FUNCTION SPECIFIC ERROR CHECKING
+  
   #works only with SNP data
   if (datatype != "SNP") {
     cat(error(
       "  Only SNPs (diploid data can be transformed into genepop format!\n"
     ))
+    stop()
+  }
+  
+  if (is.null(pop(x))) {
+    cat(
+      important(
+        "Your genlight object does not have a population definition. Therefore the function assumes the whole genlight object has one population!\n"
+      )
+    )
+    pop(x) <- rep("Pop1", nInd(x))
   }
   
   # DO THE JOB
   
   #convert to genind
+  x <- x[order(pop(x)), ]
   x <- gl2gi(x, verbose = 0, probar = FALSE)
-  data <- as.matrix(x[order(pop(x)),])
-  
+  data <- as.matrix(x)
   pop_names <- x@pop
   
   if (all(unlist(unique(x@all.names)) %in% c("A", "T",
                                              "C", "G"))) {
     m_type <- "snp"
-
     colnames(data) <- gsub(colnames(data),
                            pattern = "\\.A",
                            replacement = ".01")
@@ -78,13 +88,13 @@ gl2genepop <- function (x,
   
   loci_names_l <- x@loc.fac
   loc_all <- data.frame(col = colnames(data))
-  if (all(stringr::str_count(colnames(data), "\\.") == 1) != TRUE) {
-    cat(
+  if (all(stringr::str_count(colnames(data), "\\.") ==
+          1) != TRUE) {
+    stop(
       error(
-        "The columns' names of x@tab must be of form 'locus.allele' with only 1\n '.' between locus and allele"
+        "The columns' names of x@tab must be of form 'locus.allele' with only 1\n'.' between locus and allele"
       )
     )
-    stop()
   }
   loc_all <- tidyr::separate(
     loc_all,
@@ -107,25 +117,21 @@ gl2genepop <- function (x,
       if (length(hom) != 0) {
         a[j] <- paste(loc_all[col_loc[hom], "allele"],
                       loc_all[col_loc[hom], "allele"], sep = "")
-      }
-      else if (length(het) != 0) {
+      } else if (length(het) != 0) {
         if (as.character(loc_all[col_loc[het[1]], "allele"]) <
             as.character(loc_all[col_loc[het[2]], "allele"])) {
           a[j] <- paste(loc_all[col_loc[het[1]], "allele"],
                         loc_all[col_loc[het[2]], "allele"],
                         sep = "")
-        }
-        else {
+        } else {
           a[j] <- paste(loc_all[col_loc[het[2]], "allele"],
                         loc_all[col_loc[het[1]], "allele"],
                         sep = "")
         }
-      }
-      else {
+      } else {
         if (nchar(loc_all[1, "allele"]) == 3) {
           a[j] <- "000000"
-        }
-        else {
+        } else {
           a[j] <- "0000"
         }
       }
@@ -133,8 +139,7 @@ gl2genepop <- function (x,
     data_gpop <- cbind(data_gpop, a)
   }
   colnames(data_gpop) <- c("ID", as.character(loci_names))
-  data_gpop[, ] <- apply(data_gpop, c(1, 2), as.character)
-  
+  data_gpop[,] <- apply(data_gpop, c(1, 2), as.character)
   
   dummy <-
     paste("Genepop output. Loci:", nLoc(x), "Populations:", nPop(x))
@@ -142,9 +147,11 @@ gl2genepop <- function (x,
   cs <- c(cumsum(table(pop(x))))
   from = c(1, (cs[-length(cs)] + 1))
   to = cs
+  
   for (i in 1:nPop(x)) {
-    da <- apply(data_gpop[from[i]:to[i],], 1, function(y)
-      paste(y, collapse = " "))
+    da <-
+      apply(data_gpop[from[i]:to[i], ], 1, function(y)
+        paste(y, collapse = " "))
     dummy <- c(dummy, "Pop", da)
   }
   
@@ -157,7 +164,8 @@ gl2genepop <- function (x,
     col.names = FALSE
   )
   cat(report(
-    "The genepop file is saved as: ", file.path(outpath, outfile,"\n")
+    "  The genepop file is saved as: ",
+    file.path(outpath, outfile, "\n")
   ))
   
   # FLAG SCRIPT END
@@ -167,7 +175,6 @@ gl2genepop <- function (x,
   }
   
   # RETURN
-  
-  invisible(return(data.frame(lines = data_gpop2)))
+  return(invisible(data.frame(lines = data_gpop2)))
   
 }

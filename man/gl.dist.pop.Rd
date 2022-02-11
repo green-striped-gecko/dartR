@@ -9,8 +9,8 @@ gl.dist.pop(
   x,
   method = "euclidean",
   plot.out = TRUE,
-  binary = FALSE,
-  p = NULL,
+  scale = FALSE,
+  output = "dist",
   plot_theme = theme_dartR(),
   plot_colors = two_colors,
   save2tmp = FALSE,
@@ -25,11 +25,11 @@ gl.dist.pop(
 \item{plot.out}{If TRUE, display a histogram of the genetic distances, and a
 whisker plot [default TRUE].}
 
-\item{binary}{Perform presence/absence standardization before analysis using
-decostand [default FALSE].}
+\item{scale}{If TRUE and method='Euclidean', the distance will be scaled to 
+fall in the range [0,1] [default FALSE].}
 
-\item{p}{The power of the Minkowski distance (typically a value ranging from
-0.25 to infinity) [default 0.5].}
+\item{output}{Specify the format and class of the object to be returned, 
+dist for a object of class dist, matrix for an object of class matrix [default "dist"].}
 
 \item{plot_theme}{User specified theme [default theme_dartR()].}
 
@@ -48,25 +48,27 @@ An object of class 'dist' giving distances between populations
 }
 \description{
 This script calculates various distances between populations based on allele
-frequencies. The distances are calculated by scripts in the {stats} or
-{vegan} libraries, with the exception of the pcfixed (percent fixed
- differences) distance.
+frequencies (SNP genotypes) or frequency of presences in presence-absence data 
+(Euclidean and Fixed-diff distances only).
 }
 \details{
-The distance measure can be one of 'manhattan', 'euclidean', 'pcfixed',
-canberra', 'bray', 'kulczynski', 'jaccard', 'gower', 'morisita', 'horn',
-'mountford', 'raup', 'binomial', 'chao', 'cao', 'mahalanobis', 'maximum',
- 'binary' or 'minkowski'. Refer to the documentation of functions
-  \link[stats]{dist} (package stat) or \link[vegan]{vegdist} (package vegan)
-  for definitions.
-
-Distance pcfixed calculates the pair-wise count of fixed allelic differences
-between populations.
+The distance measure can be one of 'euclidean', 'fixed-diff', 'reynolds',
+'nei' and 'chord'. Refer to the documentation of functions
+  described in the the dartR Distance Analysis tutorial for algorithms
+  and definitions.
 }
 \examples{
+# SNP genotypes
 D <- gl.dist.pop(testset.gl, method='euclidean')
+D <- gl.dist.pop(testset.gl, method='euclidean',scale=TRUE)
+D <- gl.dist.pop(testset.gl, method='nei')
+D <- gl.dist.pop(testset.gl, method='reynolds')
+D <- gl.dist.pop(testset.gl, method='chord')
+D <- gl.dist.pop(testset.gl, method='fixed-diff')
+#Presence-Absence data
+D <- gl.dist.pop(testset.gs, method='euclidean')
 }
 \author{
-Custodian: Arthur Georges -- Post to
+author(s): Arthur Georges. Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }

@@ -1,0 +1,26 @@
+process,variable,value,description,range_value
+frequency,mutation_rate,5*10^-5,Mutation rate per generation per site. Value only used in the equation to determine q,Defined by the user
+frequency,q_neutral,0.5,Initial frequencies of neutral alleles,Dependent on genomic resources
+frequency,q_gral,0.5,Initial frequencies of deleterious alleles,Defined by the user (must be character)
+frequency,real_freq,NULL,Frequency of each one of the alleles of the loci from a real dataset,0-1
+frequency,q_distribution,"""equal""",How the initial allele frequency of the deleterious allele (q) should be determined,"""equal"" or ""equation"""
+general,chromosome_name,NA,Name of the chromosome to be simulated,Defined by the user
+general,chunk_number,100,Number of rows of the recombination map,Not available
+general,loci_number_to_simulate,1000,Number of loci under selection,Dependent on computing resources
+general,real_loc,NULL,Locations of the loci from a real dataset,Defined by the user
+recombination,chunk_recombination,1,Recombination rate per region of size chunk_number,Defined by the user
+recombination,map_resolution,100000,Resolution of the recombination map (bp),0-1
+selection,dominance_mean,0.2,Mean of the normal distribution from where h values are sampled,0-1
+selection,gamma_scale,0.03,Scale of the gamma distribution from where s values are sampled,Defined by the user
+selection,gamma_shape,0.35,Shape of the gamma distribution from where s values are sampled,Defined by the user
+selection,h_distribution,"""equal""",Name of the distribution to use to sample the values of the dominance coefficient (h) for each locus under selection,"""equal"" or ""normal"" or ""equation"""
+selection,h_gral,0.5,h of deleterious alleles,0-1
+selection,intercept,0.5,Value for the intercept of the equation to determine h (maximum value of h when s = 0) ,Defined by the user
+selection,log_mean,0.002,Mean of the log normal distribution from where s values are sampled,0-1
+selection,log_sd,4,Standard deviation of the log normal distribution from where s values are sampled,Defined by the user
+selection,rate,500,Value for the variable rate of the dominance equation to calculate h,Defined by the user
+selection,s_distribution,"""equal""",Name of the distribution to use to sample the values of the selection coefficient (s) for each locus under selection,Defined by the user
+selection,s_gral,0.05,s of deleterious alleles,0-1
+selection,targets_factor,0.05,Factor to sample the number of loci under selection from the input file  “targets_of_selection.csv”,"""equal"" or ""gamma"" or ""log_normal"""
+selection,upload_targets,NULL,File with the targets of selection,
+recombination,upload_r_map,NULL,File of the recombination map ,
