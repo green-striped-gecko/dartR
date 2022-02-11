@@ -82,7 +82,7 @@ gl.hwe.diagnostics <- function(x,
   # 
   nLoBynPop_plot <- function(nTimes) {
     ggplot(nTimes, aes(nPop, Freq, col=Data, fill=Data)) + 
-      geom_histogram(stat="identity", position = "dodge") + 
+      geom_col(position = "dodge") + 
       scale_y_log10()
   }
   
