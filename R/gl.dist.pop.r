@@ -6,7 +6,7 @@
 #' frequencies (SNP genotypes) or frequency of presences in presence-absence data 
 #' (Euclidean and Fixed-diff distances only). 
 #' @details
-#' The distance measure can be one of 'euclidean', 'fixed-diff', 'Reynolds',
+#' The distance measure can be one of 'euclidean', 'fixed-diff', 'reynolds',
 #' 'nei' and 'chord'. Refer to the documentation of functions
 #'   described in the the dartR Distance Analysis tutorial for algorithms
 #'   and definitions.

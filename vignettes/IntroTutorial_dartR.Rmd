@@ -843,16 +843,16 @@ gg <- gl[1:7,1:100]
 gg@other$loc.metrics <- gg@other$loc.metrics[1:100,]
 
 gl.dist.pop(gg, method="euclidean")
-gl.dist.pop(gg, method="manhattan")
+gl.dist.pop(gg, method="reynolds")
 ```
 
 Distances available for computation include:
 
-method = "manhattan", "euclidean", "canberra", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis", "maximum", "binary" or "minkowski". 
+method = 'euclidean', 'fixed-diff', 'reynolds', 'nei' or 'chord'.
 
 Refer to the documentation for functions ?dist and ?vegdist for computational formulae.
 
-YOu have been wondering why there are only 3 pairs of distances calculated. This is because gl.dist.pop calculates distances using the population information in the genlight object. If someone wants to calculate distances between individuals we need to redefine the population information in the genlight object. A convinient way is to use the individuals identifier which is stored in the indNames slot.
+YOu have been wondering why there are only 3 pairs of distances calculated. This is because gl.dist.pop calculates distances using the population information in the genlight object. If someone wants to calculate distances between individuals we need to redefine the population information in the genlight object. A convenient way is to use the individuals identifier which is stored in the indNames slot.
 
 Here is an example how to calculate individuals based distances for the first 7 individuals based on all loci:
 
