@@ -50,7 +50,10 @@
 
 
 
-gl.hwe.diagnostics <- function(x, alpha_val=0.05, brk = seq(0, 1, 1 / 20)) {
+gl.hwe.diagnostics <- function(x, 
+                               alpha_val=0.05, 
+                               brk = seq(0, 1, 1 / 20), 
+                               verbose = NULL) {
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
