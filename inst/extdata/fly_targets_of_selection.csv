@@ -1,4 +1,4 @@
-,chr_name,start,end,transcript_size,CDS_length,number_exons,transcript_id,gene_id,ns,s
+,chr_name,start,end,transcript_size,CDS_length,number_exons,transcript_id,gene_id,targets,s
 1,2L,8366311,8369717,3406,1766,7,FBtr0005088,FBgn0260439,14,30
 2,2L,14617548,14618840,1292,813,3,FBtr0006151,FBgn0000056,9,13
 3,2L,4651490,4652773,1283,939,3,FBtr0077376,FBgn0031619,19,37
