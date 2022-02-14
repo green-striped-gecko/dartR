@@ -74,7 +74,9 @@ Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
 \details{
 \strong{Installing BLAST}
 
- You can download the BLAST installs from: \itemize{ \item For Mac:
+ You can download the BLAST installs from:
+  \itemize{ 
+  \item For Mac:
  \url{https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/ncbi-blast-2.11.0+.dmg}
   \item For Windows:
  \url{https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/ncbi-blast-2.11.0+-win64.exe}

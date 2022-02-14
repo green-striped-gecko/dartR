@@ -1,30 +1,87 @@
 #' @name gl.sim.WF.run
 #' @title Wright-Fisher simulations
 #' @description
-#' Forward simulattions
-#' @param file_var [required if interactive_vars = TRUE].
-#' @param ref_table [required].
-#' @param x Name of the genlight object containing the SNP data [default NULL].
-#' @param number_iterations [default 1].
-#' @param every_gen [default 5].
-#' @param store_phase1 [default FALSE].
-#' @param interactive_vars [default TRUE].
-#' @param seed [default NULL].
-#' @param parallel [default FALSE].
-#' @param n.cores [default NULL].
+#' This function simulates populations connected by gene flow, made up of 
+#' diploid organisms that reproduce in non-overlapping generations. Each 
+#' individual has a pair of homologous chromosomes that contains interspersed 
+#' selected and neutral loci. For the initial generation, the genotype for each 
+#' individual’s chromosomes is randomly drawn from distributions at linkage 
+#' equilibrium and in Hardy-Weinberg equilibrium. 
+#' 
+#' See Documentation and tutorial for a complete description of the simulations.
+#' documentation and tutorials can be accessed by typing in the R console:
+#' browseVignettes(package="dartR”)
+#' @param file_var Path of the variables file 'sim_variables.csv' (see details) 
+#' [required if interactive_vars = TRUE].
+#' @param ref_table Reference table created by the function 
+#' \code{\link{gl.sim.WF.table}} [required].
+#' @param x Name of the genlight object containing the SNP data to extract
+#' values for some simulation variables (see details) [default NULL].
+#' @param number_iterations Number of iterations of the simulations [default 1].
+#' @param every_gen Generation interval at which simulations should be stored in a genlight object [default 5].
+#' @param store_phase1 Whether to store simulations of phase 1 in genlight
+#'  objects [default FALSE].
+#' @param interactive_vars Run a shiny app to input interactively the values of
+#'  simulations variables [default TRUE].
+#' @param seed Set the seed for the simulations [default NULL].
+#' @param parallel Whether to use parallel package for computations 
+#' [default FALSE].
+#' @param n.cores Number of cores used by parallel package [default NULL].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
-#' 
 #' @details
+#' Values for simulation variables can be submitted into the function 
+#' interactively through a shiny app if interactive_vars = TRUE. Optionally, if 
+#' interactive_vars = FALSE, values for variables can be submitted by using the
+#' csv file 'sim_variables.csv' which can be found by typing in the R console:
+#'  system.file('extdata', 'sim_variables.csv', package ='dartR').
+#'  
+#' The values of the variables can be modified using the third column (“value”) 
+#' of this file. 
 #' 
-#' system.file('extdata', 'sim_variables.csv', package ='dartR')
+#' The output of the simulations can be analysed seemingly with other dartR 
+#' functions.
 #' 
-#' @return Returns unaltered genlight object
+#' If a genlight object is used as input for some of the simulation variables, 
+#' this function access the information stored in the slots x$position and 
+#' x$chromosome.
+#' 
+#' The main characteristics of the simulations are:
+#' \itemize{ 
+#' \item Simulations can be parameterised with real-life genetic 
+#' characteristics such as the number, location, allele frequency and the 
+#' distribution of fitness effects (selection coefficients and dominance) of 
+#' loci under selection. 
+#' \item Simulations can also replicate the number and location of recombination 
+#' events in specific chromosomes.
+#' \item Simulations can recreate specific life histories and demographics, such
+#'  as source populations, dispersal rate, number of generations, founder 
+#'  individuals, effective population size, census population size and number of
+#'   offspring.
+#' \item Each allele in each individual is an agent (i.e., each allele is 
+#' explicitly simulated), which provides a realistic approach.
+#' \item Each locus can be customisable regarding its allele frequencies, 
+#' selection coefficients, and dominance.
+#' \item The number of loci, individuals, and populations to be simulated is 
+#' only limited by computing resources.
+#' \item Recombination is accurately modeled, and it is possible to use real 
+#' recombination maps as input.
+#' \item The ratio between effective population size and census population size 
+#' can be easily controlled.
+#' \item The output of the simulations are genlight objects for each generation 
+#' or a subset of generations.
+#' \item Genlight objects can be used as input for some simulation variables.
+#' }
+#' @return Returns genlight objects with simulated data.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' 
+#' ref_table <- gl.sim.WF.table(file_var=system.file('extdata', 
+#' 'ref_variables.csv', package = 'dartR'),interactive_vars = FALSE)
+#' res_sim <- gl.sim.WF.run(file_var = system.file('extdata', 
+#' 'sim_variables.csv', package ='dartR'),ref_table=ref_table,
+#' interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.table}}
 #' @family simulation functions
 #' @import shiny
@@ -45,6 +102,7 @@ gl.sim.WF.run <-
            parallel = FALSE,
            n.cores = NULL,
            verbose = NULL) {
+    
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     

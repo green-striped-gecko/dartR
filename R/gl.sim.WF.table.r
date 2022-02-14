@@ -1,26 +1,68 @@
 #' @name gl.sim.WF.table
 #' @title Create reference table for running gl.sim.WF.run
 #' @description
-#' Reference table for gl.sim.WF.run
+#' This function creates a reference table to be used as input for the function
+#'  \code{\link{gl.sim.WF.run}}. The created table has seven columns with the 
+#'  following information for each locus to be simulated:
+#' \itemize{ 
+#' \item q - initial frequency.
+#' \item h - dominance coefficient.
+#' \item s - selection coefficient.
+#' \item c - recombination rate.
+#' \item loc_bp - chromosome location in base pairs.
+#' \item loc_cM - chromosome location in centiMorgans.
+#' \item chr_name - chromosome name.
+#' } 
 #' 
-#' @param file_var [required if interactive_vars = TRUE].
-#' @param x Name of the genlight object containing the SNP data [default NULL].
-#' @param file_targets_sel [default NULL].
-#' @param file_r_map [default NULL].
-#' @param interactive_vars [default TRUE].
+#' The reference table can be further modified as required. 
+#' 
+#' @param file_var Path of the variables file 'ref_variables.csv' (see details) 
+#' [required if interactive_vars = TRUE].
+#' @param x Name of the genlight object containing the SNP data to extract
+#' values for some simulation variables (see details) [default NULL].
+#' @param file_targets_sel Path of the file with the targets for selection (see 
+#' details)  [default NULL].
+#' @param file_r_map Path of the file with the recombination map (see details)
+#' [default NULL].
+#' @param interactive_vars Run a shiny app to input interactively the values of
+#'  simulations variables [default TRUE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
-#' 
 #' @details
+#' Values for the creation of the reference table can be submitted into the function 
+#' interactively through a shiny app if interactive_vars = TRUE. Optionally, if 
+#' interactive_vars = FALSE, values for variables can be submitted by using the
+#' csv file 'ref_variables.csv' which can be found by typing in the R console:
+#'  system.file('extdata', 'ref_variables.csv', package ='dartR').
+#'  
+#' The values of the variables can be modified using the third column (“value”) 
+#' of this file. 
 #' 
-#' system.file('extdata', 'ref_variables.csv', package = 'dartR')
+#' If a genlight object is used as input for some of the simulation variables, 
+#' this function access the information stored in the slots x$position and 
+#' x$chromosome.
 #' 
-#' @return Returns unaltered genlight object
+#' Examples of the format required for the recombination map file and the 
+#' targets for selection file can be found by typing in the R console:
+#' \itemize{ 
+#' \item system.file('extdata', 'fly_recom_map.csv', package ='dartR')
+#' \item system.file('extdata', 'fly_targets_of_selection.csv', package ='dartR')
+#' }
+#' 
+#' Functions to produce these files are gl.sim.create_rmap() and 
+#' gl.sim.create_targets().
+#' @return Returns a list with the reference table used as input for the function
+#'  \code{\link{gl.sim.WF.run}} and a table with the values variables used to 
+#'  create the reference table.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' 
+#' ref_table <- gl.sim.WF.table(file_var=system.file('extdata', 
+#' 'ref_variables.csv', package = 'dartR'),interactive_vars = FALSE)
+#' res_sim <- gl.sim.WF.run(file_var = system.file('extdata', 
+#' 'sim_variables.csv', package ='dartR'),ref_table=ref_table,
+#' interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.run}}
 #' @family simulation functions
 #' @import shiny
