@@ -7,6 +7,9 @@
 \format{
 genlight object
 }
+\usage{
+platypus.gl
+}
 \description{
 This is a test data set on platypus with 81 individuals, 3 populations and 
 1,000 binary SNPs.

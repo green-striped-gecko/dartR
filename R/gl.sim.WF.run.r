@@ -30,6 +30,7 @@
 #' @import shiny
 #' @import shinyBS
 #' @import shinythemes
+#' @import shinyjs
 #' @export
 
 gl.sim.WF.run <-
@@ -88,16 +89,22 @@ gl.sim.WF.run <-
           "needed for this function to work. Please install it."
         ))
       }
+      pkg <- "shinyjs"
+      if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(error(
+          "Package",
+          pkg,
+          "needed for this function to work. Please install it."
+        ))
+      }
     }
     
     # DO THE JOB
     
     ##### SIMULATIONS VARIABLES ######
-    
-# chromosome_name <- phase1  <- same_line <- number_pops_phase1 <-population_size_phase1 <-gen_number_phase1 <-dispersal_phase1 <- dispersal_type_phase1<-number_transfers_phase1 <-transfer_each_gen_phase1 <- variance_offspring_phase1 <- number_offspring_phase1 <-selection_phase1 <- Ne_phase1 <-Ne_fst_phase1 <-number_pops_phase2 <-population_size_phase2 <-gen_number_phase2 <- dispersal_phase2 <- dispersal_type_phase2 <- number_transfers_phase2 <- transfer_each_gen_phase2 <-variance_offspring_phase2 <-number_offspring_phase2 <-selection_phase2 <- Ne_phase2 <- Ne_fst_phase2 <-real_freq <- real_pop_size <- real_pops <-recombination <- recombination_males <- genetic_load <- natural_selection_model <- NA
-#     
+
     if (interactive_vars) {
-      interactive_sim_run()
+      interactive_sim_run( env_fun = environment())
       
     } else {
       sim_vars <- suppressWarnings(read.csv(file_var))
@@ -304,6 +311,11 @@ gl.sim.WF.run <-
         number_offspring <- number_offspring_phase1
         
         store_values <- store_phase1
+        
+        if(store_phase1==TRUE){
+        # counter to store values every generation
+        gen <- 0
+        }
         
         # pick which sex is going to be transferred first
         if (number_transfers >= 2) {

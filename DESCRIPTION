@@ -30,7 +30,7 @@ biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         SNPRelate, StAMPP, sp, PopGenReport, robustbase,
         gridExtra, foreach, dplyr, crayon, devtools, reshape2,
-        patchwork, raster, data.table, gganimate, shiny, shinyBS, shinythemes
+        patchwork, raster, data.table, gganimate, shiny, shinyBS, shinythemes,shinyjs
 Suggests: 
     tibble,
     HardyWeinberg,

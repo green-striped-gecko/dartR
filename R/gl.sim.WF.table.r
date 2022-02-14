@@ -26,6 +26,7 @@
 #' @import shiny
 #' @import shinyBS
 #' @import shinythemes
+#' @import shinyjs
 #' @export
 
 gl.sim.WF.table <-
@@ -69,14 +70,21 @@ gl.sim.WF.table <-
           "needed for this function to work. Please install it."
         ))
       }
+      pkg <- "shinyjs"
+      if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(error(
+          "Package",
+          pkg,
+          "needed for this function to work. Please install it."
+        ))
+      }
     }
-    
+
     # DO THE JOB
-    
     ##### SIMULATIONS VARIABLES ######
     
     if (interactive_vars) {
-      interactive_reference()
+      interactive_reference( env_fun = environment())
       
     } else{
       ref_vars <- suppressWarnings(read.csv(file_var))
@@ -94,7 +102,7 @@ gl.sim.WF.table <-
       map <- read.csv(file_r_map)
       map$Chr <- as.character(map$Chr)
       
-      if(!chromosome_name %in%   map$Chr ){
+      if(!chromosome_name %in% map$Chr){
         cat(error("Chromosome name is not in the recombination map file\n"))
         stop()
       }

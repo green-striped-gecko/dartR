@@ -8,7 +8,7 @@
 #' @author Luis Mijangos (bugs? Post to 
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
-NULL
+"platypus.gl"
 
 #' Experimental populations of Drosophila melanogaster 
 #'
@@ -19,7 +19,7 @@ NULL
 #' @author Luis Mijangos (bugs? Post to 
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
-NULL
+"drosophila.gl"
 
 #' A simulated genlight object created to run a landscape genetic example
 #'

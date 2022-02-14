@@ -7,6 +7,9 @@
 \format{
 genlight object
 }
+\usage{
+drosophila.gl
+}
 \description{
 Populations 25, 26 and 27 at the end of the experiment
 }
