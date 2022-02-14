@@ -461,10 +461,10 @@ store <-
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @param env_fun Environment of the calling function
-#' @import shiny
-#' @import shinyBS
-#' @import shinythemes
-#' @import shinyjs
+# @import shiny
+# @import shinyBS
+# @import shinythemes
+# @import shinyjs
 
 interactive_reference <- function(env_fun) {
   
@@ -515,7 +515,7 @@ interactive_reference <- function(env_fun) {
     
     h5(
       em(
-        "Click on the window and hover over an input box to display more information about the variable"
+        "Click on the window and hover over an input box to display more information about the variable. It might be necessary to call first: 'library(shinyBS)' for the information to be displayed"
       )
     ),
     
@@ -1177,10 +1177,10 @@ interactive_reference <- function(env_fun) {
 #' @param env_fun Environment of the calling function
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-#' @import shiny
-#' @import shinyBS
-#' @import shinythemes
-#' @import shinyjs
+# @import shiny
+# @import shinyBS
+# @import shinythemes
+# @import shinyjs
 
 interactive_sim_run <- function(env_fun) {
   
@@ -1223,7 +1223,7 @@ interactive_sim_run <- function(env_fun) {
     
     h5(
       em(
-        "Click on the window and hover over an input box to display more information about the variable"
+        "Click on the window and hover over an input box to display more information about the variable. It might be necessary to call first: 'library(shinyBS)' for the information to be displayed"
       )
     ),
     
@@ -2133,7 +2133,7 @@ interactive_sim_run <- function(env_fun) {
     })
     
   }
-
-   runApp(shinyApp(ui, server))
+  
+ runApp(shinyApp(ui, server))
   
 }

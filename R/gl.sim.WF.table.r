@@ -52,6 +52,10 @@
 #' 
 #' Functions to produce these files are gl.sim.create_rmap() and 
 #' gl.sim.create_targets().
+#' 
+#' To show further information of the variables in interactive mode, it might be
+#'  necessary to call first: 'library(shinyBS)' for the information to be 
+#'  displayed.
 #' @return Returns a list with the reference table used as input for the function
 #'  \code{\link{gl.sim.WF.run}} and a table with the values variables used to 
 #'  create the reference table.
@@ -65,10 +69,10 @@
 #' interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.run}}
 #' @family simulation functions
-#' @import shiny
-#' @import shinyBS
-#' @import shinythemes
-#' @import shinyjs
+# @import shiny
+# @import shinyBS
+# @import shinythemes
+# @import shinyjs
 #' @export
 
 gl.sim.WF.table <-

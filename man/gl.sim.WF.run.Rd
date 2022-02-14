@@ -81,6 +81,10 @@ If a genlight object is used as input for some of the simulation variables,
 this function access the information stored in the slots x$position and 
 x$chromosome.
 
+To show further information of the variables in interactive mode, it might be
+ necessary to call first: 'library(shinyBS)' for the information to be 
+ displayed.
+
 The main characteristics of the simulations are:
 \itemize{ 
 \item Simulations can be parameterised with real-life genetic 
