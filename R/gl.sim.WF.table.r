@@ -144,7 +144,7 @@ gl.sim.WF.table <-
       targets$targets <- loci_number_to_simulate / chunk_number
     }
     
-    targets$targets <- ceiling(targets$targets * targets_factor)
+    targets$targets <- ceiling(targets$targets * (targets_factor/100))
     
     location_targets <- NULL
     

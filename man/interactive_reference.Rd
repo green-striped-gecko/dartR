@@ -6,6 +6,9 @@
 \usage{
 interactive_reference(env_fun)
 }
+\arguments{
+\item{env_fun}{Environment of the calling function}
+}
 \description{
 Shiny app for the input of the reference table for the simulations
 }

@@ -6,6 +6,9 @@
 \usage{
 interactive_sim_run(env_fun)
 }
+\arguments{
+\item{env_fun}{Environment of the calling function}
+}
 \description{
 Shiny app for the input of the simulations variables
 }

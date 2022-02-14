@@ -454,7 +454,7 @@ store <-
   }
 
 ###############################################################################
-######### SHINY APP FOR THE VARIABLES OF THE REFRENCE TABLE ###################
+######### SHINY APP FOR THE VARIABLES OF THE REFERENCE TABLE ###################
 ###############################################################################
 #' @name interactive_reference
 #' @title Shiny app for the input of the reference table for the simulations
@@ -530,11 +530,26 @@ interactive_reference <- function(env_fun) {
     fluidRow(
       
       column(
-        4,
+        3,
+        textInput(
+          "chromosome_name", 
+          tags$div(tags$i(HTML("chromosome_name<br/>")),
+                   "Chromosome name from where to extract location, alllele frequency, recombination map and targets of selection (if provided)"),
+          value = "2L"
+        ),    
+        bsTooltip(id = "chromosome_name",
+                  title = "Information pending")
+      )
+      ),
+    
+    fluidRow(
+      
+      column(
+        3,
         numericInput(
           "chunk_number",  
           tags$div(tags$i(HTML("chunk_number<br/>")),
-            "Number of rows of recombination map"
+            "Number of chromosome chunks"
           ),
           value = 10,
           min = 0
@@ -544,11 +559,43 @@ interactive_reference <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
+        radioButtons(
+          "real_loc",
+          tags$div(tags$i(HTML("real_loc<br/>")),
+                   "Extract location of neutral loci from genlight object"
+          ) ,
+          choices = list("TRUE" = TRUE,
+                         "FALSE" = FALSE),
+          selected = FALSE
+        ),    
+        bsTooltip(id = "real_loc",
+                  title = "Information pending")
+      ),
+      
+      column(
+        3,
+        numericInput(
+          "neutral_loci_chunk",  
+          tags$div(tags$i(HTML("neutral_loci_chunk<br/>")),
+                   "Number of neutral loci per chromosome chunk"
+          ),
+          value = 1,
+          min = 0
+        ),    
+        bsTooltip(id = "neutral_loci_chunk",
+                  title = "Information pending")
+      )
+    ),
+    
+    fluidRow(
+      
+      column(
+        3,
         numericInput(
           "loci_number_to_simulate", 
           tags$div(tags$i(HTML("loci_number_to_simulate<br/>")),
-            "Number of loci under selection"
+            "Total number of loci under selection"
           ),
           value = 100,
           min = 0
@@ -557,55 +604,21 @@ interactive_reference <- function(env_fun) {
                          title = "Information pending")
       ),
       
+      
       column(
-        4,
-        radioButtons(
-          "real_loc",
-          tags$div(tags$i(HTML("real_loc<br/>")),
-            "Should the number and location of neutral loci be based on the genlight object?"
-          ) ,
-          choices = list("TRUE" = TRUE,
-                         "FALSE" = FALSE),
-          selected = FALSE
+        3,
+        numericInput(
+          "targets_factor",
+          tags$div(tags$i(HTML("targets_factor<br/>")),
+                   "Percentage of the number of loci under selection from the input file 'targets_of_selection.csv' to use"),
+          value = 5,
+          min = 0
         ),    
-        bsTooltip(id = "real_loc",
-                         title = "Information pending")
+        bsTooltip(id = "targets_factor",
+                  title = "Information pending")
       )
-    ),
-    
-    fluidRow(
       
-      column(
-      4,
-      numericInput(
-        "neutral_loci_chunk",  
-        tags$div(tags$i(HTML("neutral_loci_chunk<br/>")),
-        "Number of neutral loci per chromosome chunk"
       ),
-        value = 1,
-        min = 0
-      ),    
-      bsTooltip(id = "neutral_loci_chunk",
-                title = "Information pending")
-    )
-    
-    ),
-    
-    fluidRow(
-      
-      column(
-      4,
-      textInput(
-        "chromosome_name", 
-        tags$div(tags$i(HTML("chromosome_name<br/>")),
-        "Name of the chromosome to be simulated"),
-        value = "2L"
-      ),    
-      bsTooltip(id = "chromosome_name",
-                title = "Information pending")
-    )
-    
-    ),
     
     hr(),
     
@@ -614,25 +627,11 @@ interactive_reference <- function(env_fun) {
     fluidRow(
       
       column(
-        4,
-        sliderInput(
-          "q_neutral", 
-          tags$div(tags$i(HTML("q_neutral<br/>")),
-          "Initial frequencies of neutral alleles"),
-          value = 0.5,
-          min = 0,
-          max = 1
-        ),    
-        bsTooltip(id = "q_neutral",
-                  title = "Information pending")
-      ),
-      
-      column(
-        4,
+        3,
         radioButtons(
           "q_distribution",   
           tags$div(tags$i(HTML("q_distribution<br/>")),
-            "How the initial allele frequency of the deleterious allele (q) should be determined"),
+                   "How the initial allele frequency of the deleterious allele (q) should be determined"),
           choices = list("All equal" = "equal", "From equation" = "equation"),
           selected = "equal"
         ),    
@@ -641,50 +640,62 @@ interactive_reference <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
+        sliderInput(
+          "q_gral", 
+          tags$div(tags$i(HTML("q_gral<br/>")),
+                   "Initial frequencies of all deleterious alleles"),
+          value = 0.15,
+          min = 0,
+          max = 1
+        ),    
+        bsTooltip(id = "q_gral",
+                  title = "Information pending")
+      ),
+      
+      column(
+        3,
         numericInput(
           "mutation_rate", 
           tags$div(tags$i(HTML("mutation_rate<br/>")),
-          "Mutation rate per generation per site. Value only used in the equation to determine q"),
+                   "Mutation rate per generation per site. Value only used in the equation to determine q"),
           value = 5 * 10 ^ -5
         ),    
         bsTooltip(id = "mutation_rate",
                   title = "Information pending")
       )
-      
-    ),
+      ),
     
     fluidRow(
       
       column(
-      4,
-      sliderInput(
-        "q_gral", 
-        tags$div(tags$i(HTML("q_gral<br/>")),
-        "Initial frequencies of deleterious alleles"),
-        value = 0.15,
-        min = 0,
-        max = 1
-      ),    
-      bsTooltip(id = "q_gral",
-                title = "Information pending")
-    ),
+        3,
+        radioButtons(
+          "real_freq", 
+          tags$div(tags$i(HTML("real_freq<br/>")),
+                   "Extract allele frequencies of neutral loci from genlight object"),
+          choices = list("TRUE" = TRUE,
+                         "FALSE" = FALSE),
+          selected = FALSE
+        ),    
+        bsTooltip(id = "real_freq",
+                  title = "Information pending")
+      ),
     
-    column(
-      4,
-      radioButtons(
-        "real_freq", 
-        tags$div(tags$i(HTML("real_freq<br/>")),
-          "Should the allele frequency of neutral loci be based on the genlight object?"),
-        choices = list("TRUE" = TRUE,
-                       "FALSE" = FALSE),
-        selected = FALSE
-      ),    
-      bsTooltip(id = "real_freq",
-                title = "Information pending")
-    )
-    
-    ),
+      column(
+        3,
+        sliderInput(
+          "q_neutral", 
+          tags$div(tags$i(HTML("q_neutral<br/>")),
+          "Initial frequencies of all neutral alleles"),
+          value = 0.5,
+          min = 0,
+          max = 1
+        ),    
+        bsTooltip(id = "q_neutral",
+                  title = "Information pending")
+      )
+      ),
     
     hr(),
     
@@ -693,31 +704,30 @@ interactive_reference <- function(env_fun) {
     fluidRow(
       
       column(
-      4,
-      numericInput(
-        "map_resolution",
-        tags$div(tags$i(HTML("map_resolution<br/>")),
-        "Resolution of the recombination map (bp)"),
-        value = 100000,
-        min = 0
-      ),    
-      bsTooltip(id = "map_resolution",
-                title = "Information pending")
-    ),
-    
-    column(
-      4,
-      numericInput(
-        "chunk_recombination",
-        tags$div(tags$i(HTML("chunk_recombination<br/>")),
-        "Recombination rate (cM) per region of size chunk_number"),
-        value = 1,
-        min = 0
-      ),    
-      bsTooltip(id = "chunk_recombination",
-                title = "Information pending")
-    )
-    
+        3,
+        numericInput(
+          "chunk_recombination",
+          tags$div(tags$i(HTML("chunk_recombination<br/>")),
+                   "Recombination rate (cM) per chromosome chunk"),
+          value = 1,
+          min = 0
+        ),    
+        bsTooltip(id = "chunk_recombination",
+                  title = "Information pending")
+      ),
+      
+      column(
+        3,
+        numericInput(
+          "map_resolution",
+          tags$div(tags$i(HTML("map_resolution<br/>")),
+                   "Length of each chromosome chunk (bp) or the resolution of the recombination map (if provided)"),
+          value = 100000,
+          min = 0
+        ),    
+        bsTooltip(id = "map_resolution",
+                  title = "Information pending")
+      )
     ),
     
     hr(),
@@ -729,7 +739,7 @@ interactive_reference <- function(env_fun) {
     fluidRow(
       
       column(
-      4,
+      3,
       radioButtons(
         "s_distribution",
         tags$div(tags$i(HTML("s_distribution<br/>")),
@@ -744,19 +754,16 @@ interactive_reference <- function(env_fun) {
       bsTooltip(id = "s_distribution",
                 title = "Information pending")
     )
-    
     ),
-    
-    h5(strong("All equal variables")),
     
     fluidRow(
       
       column(
-      4,
+      3,
       numericInput(
         "s_gral",
         tags$div(tags$i(HTML("s_gral<br/>")),
-        "Selection coefficient"),
+        "Selection coefficient for all loci under selection"),
         value = 0.001,
         min = 0
       ),    
@@ -766,12 +773,10 @@ interactive_reference <- function(env_fun) {
     
     ),
     
-    h5(strong("Gamma distribution variables")),
-    
     fluidRow(
       
       column(
-      4,
+      3,
       numericInput(
         "gamma_scale",
         tags$div(tags$i(HTML("gamma_scale<br/>")),
@@ -784,7 +789,7 @@ interactive_reference <- function(env_fun) {
     ),
     
     column(
-      4,
+      3,
       numericInput(
         "gamma_shape",
         tags$div(tags$i(HTML("gamma_shape<br/>")),
@@ -798,12 +803,10 @@ interactive_reference <- function(env_fun) {
     
     ),
     
-    h5(strong("Log normal distribution variables")),
-    
     fluidRow(
       
       column(
-      4,
+      3,
       numericInput(
         "log_mean",
         tags$div(tags$i(HTML("log_mean<br/>")),
@@ -816,7 +819,7 @@ interactive_reference <- function(env_fun) {
     ),
     
     column(
-      4,
+      3,
       numericInput(
         "log_sd",
         tags$div(tags$i(HTML("log_sd<br/>")),
@@ -837,7 +840,7 @@ interactive_reference <- function(env_fun) {
     fluidRow(
       
       column(
-      4,
+      3,
       radioButtons(
         "h_distribution",
         tags$div(tags$i(HTML("h_distribution<br/>")),
@@ -855,16 +858,14 @@ interactive_reference <- function(env_fun) {
     
     ),
     
-    h5(strong("All equal variables")),
-    
     fluidRow(
       
       column(
-      4,
+      3,
       sliderInput(
         "h_gral",
         tags$div(tags$i(HTML("h_gral<br/>")),
-        "Dominance coefficient"),
+        "Dominance coefficient for all loci under selection"),
         value = 0.25,
         min = 0,
         max = 1
@@ -875,12 +876,10 @@ interactive_reference <- function(env_fun) {
     
     ),
     
-    h5(strong("Normal distribution variables")),
-    
     fluidRow(
       
       column(
-      4,
+      3,
       sliderInput(
         "dominance_mean",
         tags$div(tags$i(HTML("dominance_mean<br/>")),
@@ -894,7 +893,7 @@ interactive_reference <- function(env_fun) {
     ),
     
     column(
-      4,
+      3,
       numericInput(
         "dominance_sd",
         tags$div(tags$i(HTML("dominance_sd<br/>")),
@@ -908,12 +907,10 @@ interactive_reference <- function(env_fun) {
     
     ),
     
-    h5(strong("Equation variables")),
-    
     fluidRow(
       
       column(
-      4,
+      3,
       sliderInput(
         "intercept",
         tags$div(tags$i(HTML("intercept<br/>")),
@@ -927,7 +924,7 @@ interactive_reference <- function(env_fun) {
     ),
     
     column(
-      4,
+      3,
       numericInput(
         "rate",
         tags$div(tags$i(HTML("rate<br/>")),
@@ -940,32 +937,11 @@ interactive_reference <- function(env_fun) {
     )
     
     ),
-    
-    hr(),
-    
-    h4("Targets of selection variables"),
-    
-    fluidRow(
-      
-      column(
-      4,
-      numericInput(
-        "targets_factor",
-        tags$div(tags$i(HTML("targets_factor<br/>")),
-        "Factor to sample the number of loci under selection from the input file 'targets_of_selection.csv'"),
-        value = 0.01,
-        min = 0
-      ),    
-      bsTooltip(id = "targets_factor",
-                title = "Information pending")
-    )
-    
-    ),
-    
+
     hr(),
     
     fluidRow(column(
-      9,
+      12,
       actionButton(
         "close",
         label = h4(strong("RUN")),
@@ -975,7 +951,7 @@ interactive_reference <- function(env_fun) {
       )
     )),
     
-    br()
+    hr()
     
   )
   
@@ -1043,12 +1019,76 @@ interactive_reference <- function(env_fun) {
     })
     observeEvent(input$q_distribution, {
       assign("q_distribution",input$q_distribution,envir = env_fun)
+      
+      toggleElement(
+        id = "q_gral",
+        condition = input$q_distribution == "equal"
+      )
+      
+      toggleElement(
+        id = "mutation_rate",
+        condition = input$q_distribution == "equation"
+      )
+      
     })
     observeEvent(input$h_distribution, {
       assign("h_distribution",input$h_distribution,envir = env_fun)
+      
+      toggleElement(
+        id = "h_gral",
+        condition = input$h_distribution == "equal"
+      )
+      
+      toggleElement(
+        id = "dominance_mean",
+        condition = input$h_distribution == "normal"
+      )
+      
+      toggleElement(
+        id = "dominance_sd",
+        condition = input$h_distribution == "normal"
+      )
+      
+      toggleElement(
+        id = "intercept",
+        condition = input$h_distribution == "equation"
+      )
+      
+      toggleElement(
+        id = "rate",
+        condition = input$h_distribution == "equation"
+      )
+      
     })
     observeEvent(input$s_distribution, {
       assign("s_distribution",input$s_distribution,envir = env_fun)
+      
+      toggleElement(
+        id = "s_gral",
+        condition = input$s_distribution == "equal"
+      )
+      
+      toggleElement(
+        id = "gamma_scale",
+        condition = input$s_distribution == "gamma"
+      )
+      
+      toggleElement(
+        id = "gamma_shape",
+        condition = input$s_distribution == "gamma"
+      )
+      
+      toggleElement(
+        id = "log_mean",
+        condition = input$s_distribution == "log_normal"
+      )
+      
+      toggleElement(
+        id = "log_sd",
+        condition = input$s_distribution == "log_normal"
+      )
+      
+      
     })
     observeEvent(input$neutral_loci_chunk, {
       assign("neutral_loci_chunk",input$neutral_loci_chunk,envir = env_fun)
@@ -1126,8 +1166,7 @@ interactive_reference <- function(env_fun) {
   }
   
   runApp(shinyApp(ui, server))
-  # runGadget(shinyApp(ui, server), viewer =  paneViewer())
-  
+
 }
 
 ###############################################################################
@@ -1172,6 +1211,10 @@ interactive_sim_run <- function(env_fun) {
   
   ui <- fluidPage(
     
+    useShinyjs(),
+    
+    theme = shinytheme("darkly"),
+    
     h5(
       em(
         "Enlarge window for a better visualisation of the variables"
@@ -1190,17 +1233,34 @@ interactive_sim_run <- function(env_fun) {
       )
     ),
     
-    
     h3(strong("Real dataset variables")),
     
     fluidRow(
       
       column(
-        4,
+        3,
+        radioButtons(
+          "real_dataset",
+          tags$div(tags$i(HTML("real_dataset<br/>")),
+                   "Extract inputs from genlight object"),
+          choices = list("TRUE" = TRUE,
+                         "FALSE" = FALSE),
+          selected = FALSE
+        ),    
+        bsTooltip(id = "real_dataset",
+                  title = "Information pending")
+      )
+      
+      ),
+      
+      fluidRow(
+      
+      column(
+        3,
         radioButtons(
           "real_pops",
           tags$div(tags$i(HTML("real_pops<br/>")),
-            "Should the number of populations in the simulations be based on the genlight object?"),
+            "Extract number of populations from genlight object"),
           choices = list("TRUE" = TRUE,
                          "FALSE" = FALSE),
           selected = FALSE
@@ -1210,11 +1270,11 @@ interactive_sim_run <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
         radioButtons(
           "real_pop_size",
           tags$div(tags$i(HTML("real_pop_size<br/>")),
-            "Should the census population size in the simulations be based on the genlight object?"),
+            "Extract census population sizes from genlight object"),
           choices = list("TRUE" = TRUE,
                          "FALSE" = FALSE),
           selected = FALSE
@@ -1224,268 +1284,87 @@ interactive_sim_run <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
         radioButtons(
           "real_freq",
           tags$div(tags$i(HTML("real_freq<br/>")),
-            "Should the initial frequency of neutral alleles in the simulations be based on the genlight object?"),
+            "Extract allele frequencies for neutral loci from genlight object"),
           choices = list("TRUE" = TRUE,
                          "FALSE" = FALSE),
           selected = FALSE
         ),    
         bsTooltip(id = "real_freq",
                   title = "Information pending")
-      )
-      
-    ),
-    
-    hr(),
-    
-    h3(strong("Phase 2 variables")),
-    
-    fluidRow(
-      
-      column(
-        4,
-        numericInput(
-          "number_pops_phase2",
-          tags$div(tags$i(HTML(
-            "number_pops_phase2<br/>"
-          )),
-          "Number of populations in phase 2"),
-          value = 2,
-          min = 0
-        ),
-        bsTooltip(id = "number_pops_phase2",
-                  title = "Information pending")
       ),
       
       column(
-        4,
+        3,
         textInput(
-          "population_size_phase2",
-          tags$div(
-            tags$i(HTML("population_size_phase2<br/>")),
-            "Census population size of phase 2 (must be even and space delimited)"),
-          value = c("10", "10")
-        ),
-        bsTooltip(id = "population_size_phase2",
-                  title = "Information pending")
-      ),
-      
-      column(
-        4,
-        numericInput(
-          "gen_number_phase2",
-          tags$div(tags$i(HTML(
-            "gen_number_phase2<br/>"
-          )),
-          "Number of generations of phase 2"),
-          value = 10,
-          min = 0
-        ),
-        bsTooltip(id = "gen_number_phase2",
+          "chromosome_name",
+          tags$div(tags$i(HTML("chromosome_name<br/>")),
+                   "Chromosome name from where to extract allele frequencies"),
+          value = "2L"
+        ),    
+        bsTooltip(id = "chromosome_name",
                   title = "Information pending")
       )
-    ),
-    
-    fluidRow(
       
-      column(
-        4,
-        radioButtons(
-          "dispersal_phase2",
-          tags$div(tags$i(HTML(
-            "dispersal_phase2<br/>"
-          )),
-          "Whether dispersal occurs in phase 2"),
-          choices = list("TRUE" = TRUE, "FALSE" = FALSE),
-          selected = TRUE
-        ),
-        bsTooltip(id = "dispersal_phase2",
-                  title = "Dispersal between populations is symmetric and constant across generations. Dispersal rate (m) is the fraction of individuals in a population that is composed of dispersers or the probability that a randomly chosen individual in this generation came from a population different from the one in which it was found in the preceding generation (Holsinger, 2020, p. 93). Dispersal rate is calculated as (number_transfers / transfer_each_gen) / pop_size.")
-      ),
-      
-      column(
-        4,
-        radioButtons(
-          "dispersal_type_phase2",
-          tags$div(tags$i(HTML(
-            "dispersal_type_phase2<br/>"
-          )),
-          "Type of dispersal for phase 2"),
-          choices = list(
-            "All connected" = "all_connected",
-            "Circle" = "circle",
-            "Line" = "line"
-          ),
-          selected = "all_connected"
-        ),
-        bsTooltip(id = "dispersal_type_phase2",
-                  title = "Information pending")
-      ),
-      
-      column(
-        4,
-        numericInput(
-          "number_transfers_phase2",
-          tags$div(
-            tags$i(HTML("number_transfers_phase2<br/>")),
-            "Number of dispersing individuals in each dispersal event in phase 2"),
-          value = 1,
-          min = 0
-        ),
-        bsTooltip(id = "number_transfers_phase2",
-                  title = "Information pending")
-      )
-    ),
-    
-    fluidRow(
-      column(
-        4,
-        numericInput(
-          "transfer_each_gen_phase2",
-          tags$div(
-            tags$i(HTML("transfer_each_gen_phase2<br/>")),
-            "Interval of number of generations in which a dispersal event occurs in phase 2"),
-          value = 1,
-          min = 0
-        ),
-        bsTooltip(id = "transfer_each_gen_phase2",
-                  title = "Information pending")
-      ),
-      
-      column(
-        4,
-        numericInput(
-          "variance_offspring_phase2",
-          tags$div(
-            tags$i(HTML("variance_offspring_phase2<br/>")),
-            "Coefficient that determines the variance in the number of offspring per mating for phase 2"
-          ),
-          value = 1000000,
-          min = 0
-        ),
-        bsTooltip(id = "variance_offspring_phase2",
-                  title = "This variable controls the variance of the negative binomial distribution that is used to determine the number of offspring that each mating pair produces")
-      ),
-      
-      column(
-        4,
-        numericInput(
-          "number_offspring_phase2",
-          tags$div(tags$i(HTML(
-            "number_offspring_phase2<br/>"
-          )),
-          "Mean number offspring per mating in phase 2"),
-          value = 10,
-          min = 0
-        ),
-        bsTooltip(id = "number_offspring_phase2",
-                  title = "This variable controls the mean of the negative binomial distribution. This variable allows to control the number of offspring per mating which is convenient when there is a need that each pair of parents produce enough offspring in each generation for the population not to become extinct. However, in the simulations the mean number of offspring per mating each generation is effectively equal to two for two reasons: a) the population size remains constant from generation to generation, this means that  on average, across generations and replicates, two offspring per pair of parents are selected to become the parents of the next generation; and b) there is no variance in reproductive success (whether or not an individual gets to reproduce at all) because all individuals reproduce once")
-      )
-    ),
-    
-    fluidRow(
-      column(
-        4,
-        radioButtons(
-          "selection_phase2",
-          tags$div(tags$i(HTML(
-            "selection_phase2<br/>"
-          )),
-          "Whether selection occurs in phase 2"),
-          choices = list("TRUE" = TRUE,
-                         "FALSE" = FALSE),
-          selected = FALSE
-        ),
-        bsTooltip(id = "selection_phase2",
-                  title = "Selection is directional (replaces one allele by another) and multiplicative")
-      ),
-      
-      column(
-        4,
-        numericInput(
-          "Ne_phase2",
-          tags$div(
-            tags$i(HTML("Ne_phase2<br/>")),
-            "Ne value to be used in the equation of the expected rate of loss of heterozygosity for phase 2"
-          ),
-          value = 50,
-          min = 0
-        ),
-        bsTooltip(id = "Ne_phase2",
-                  title = "Equation: He_t = He_0 (1-1 / 2 * Ne)^t, where He_0 is heterozygosity at generation 0 and t is the number of generations")
-      ),
-      
-      column(
-        4,
-        numericInput(
-          "Ne_fst_phase2",
-          tags$div(
-            tags$i(HTML("Ne_fst_phase2<br/>")),
-            "Ne value to be used in the equation of the expected FST for phase 2"
-          ),
-          value = 50,
-          min = 0
-        ),
-        bsTooltip(id = "Ne_fst_phase2",
-                  title = "FST = 1/(4*Ne*m(n/(n-1))^2+1), where Ne is effective populations size of each individual subpopulation, m is dispersal rate and n the number of subpopulations (Takahata, 1983).")
-      )
     ),
     
     hr(),
+    
+    h5(
+      em(
+        "Simulations can have 2 phases (phase 1 and phase 2). Variable values are constant across generations in each phase but variable values can be different in each phase. The default is to run just phase 2, set phase1 to TRUE to run phase 1"
+      )
+    ),
     
     h3(strong("Phase 1 variables")),
     
     fluidRow(
       
       column(
-      4,
-      radioButtons(
-        "phase1",
-        tags$div(tags$i(HTML("phase1<br/>")),
-   "Whether phase 1 occur"),
-        choices = list("TRUE" = TRUE,
-                       "FALSE" = FALSE),
-        selected = FALSE
-      ),    
-   bsTooltip(id = "phase1",
-             title = "Information pending")
-    )
-   
+        3,
+        radioButtons(
+          "phase1",
+          tags$div(tags$i(HTML("phase1<br/>")),
+                   "Simulate phase 1"),
+          choices = list("TRUE" = TRUE,
+                         "FALSE" = FALSE),
+          selected = FALSE
+        ),    
+        bsTooltip(id = "phase1",
+                  title = "Information pending")
+      )
+      
     ),
     
     fluidRow(    
       
-    column(
-      4,
-      radioButtons(
-        "same_line",
-        tags$div(tags$i(HTML("same_line<br/>")),
-        "Whether phase 2 populations are sampled from the same phase 1 population or from different phase 1 populations"),
-        choices = list(
-          "Same population" = TRUE,
-          "Different populations" = FALSE
-        ),
-        selected = FALSE
-      ),    
-      bsTooltip(id = "same_line",
-                title = "Information pending")
-    )
-    
-    ),
-    
-    fluidRow(
+      column(
+        3,
+        radioButtons(
+          "same_line",
+          tags$div(tags$i(HTML("same_line<br/>")),
+                   "Sample phase 2 populations from the same phase 1 population or from different phase 1 populations"),
+          choices = list(
+            "Same population" = TRUE,
+            "Different populations" = FALSE
+          ),
+          selected = FALSE
+        ),    
+        bsTooltip(id = "same_line",
+                  title = "Information pending")
+      ),
       
       column(
-        4,
+        3,
         numericInput(
           "number_pops_phase1",
           tags$div(tags$i(HTML(
             "number_pops_phase1<br/>"
           )),
-          "Number of populations in phase 1"),
+          "Number of populations of phase 1 (must be the same as number of populations in phase 2)"),
           value = 2,
           min = 0
         ),
@@ -1494,21 +1373,21 @@ interactive_sim_run <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
         textInput(
           "population_size_phase1",
           tags$div(
             tags$i(HTML("population_size_phase1<br/>")),
-            "Census population size of phase 1 (must be even and space delimited)"
+            "Census population size of each population of phase 1 (must be even and space delimited)"
           ),
-          value = c("10", "10")
+          value = c("20", "20")
         ),
         bsTooltip(id = "population_size_phase1",
                   title = "Information pending")
       ),
       
       column(
-        4,
+        3,
         numericInput(
           "gen_number_phase1",
           tags$div(tags$i(HTML(
@@ -1521,18 +1400,19 @@ interactive_sim_run <- function(env_fun) {
         bsTooltip(id = "gen_number_phase1",
                   title = "Information pending")
       )
+      
     ),
     
     fluidRow(
       
       column(
-        4,
+        3,
         radioButtons(
           "dispersal_phase1",
           tags$div(tags$i(HTML(
             "dispersal_phase1<br/>"
           )),
-          "Whether dispersal occurs in phase 1"),
+          "Simulate dispersal in phase 1"),
           choices = list("TRUE" = TRUE, "FALSE" = FALSE),
           selected = TRUE
         ),
@@ -1541,7 +1421,7 @@ interactive_sim_run <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
         radioButtons(
           "dispersal_type_phase1",
           tags$div(tags$i(HTML(
@@ -1560,7 +1440,7 @@ interactive_sim_run <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
         numericInput(
           "number_transfers_phase1",
           tags$div(
@@ -1572,12 +1452,10 @@ interactive_sim_run <- function(env_fun) {
         ),
         bsTooltip(id = "number_transfers_phase1",
                   title = "Information pending")
-      )
-    ),
+      ),
     
-    fluidRow(
       column(
-        4,
+        3,
         numericInput(
           "transfer_each_gen_phase1",
           tags$div(
@@ -1589,10 +1467,13 @@ interactive_sim_run <- function(env_fun) {
         ),
         bsTooltip(id = "transfer_each_gen_phase1",
                   title = "Information pending")
+      )
       ),
-      
+    
+    fluidRow(
+    
       column(
-        4,
+        3,
         numericInput(
           "variance_offspring_phase1",
           tags$div(
@@ -1607,7 +1488,7 @@ interactive_sim_run <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
         numericInput(
           "number_offspring_phase1",
           tags$div(tags$i(HTML(
@@ -1623,8 +1504,9 @@ interactive_sim_run <- function(env_fun) {
     ),
     
     fluidRow(
+      
       column(
-        4,
+        3,
         radioButtons(
           "selection_phase1",
           tags$div(tags$i(HTML(
@@ -1640,7 +1522,7 @@ interactive_sim_run <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
         numericInput(
           "Ne_phase1",
           tags$div(
@@ -1655,7 +1537,7 @@ interactive_sim_run <- function(env_fun) {
       ),
       
       column(
-        4,
+        3,
         numericInput(
           "Ne_fst_phase1",
           tags$div(
@@ -1672,24 +1554,201 @@ interactive_sim_run <- function(env_fun) {
     
     hr(),
     
-    h3(strong("Initialisation variables")),
+    h3(strong("Phase 2 variables")),
     
     fluidRow(
       
       column(
-      4,
-      textInput(
-        "chromosome_name",
-        tags$div(tags$i(HTML("chromosome_name<br/>")),
-        "Name of the chromosome to be simulated"),
-        value = "2L"
-      ),    
-      bsTooltip(id = "chromosome_name",
-                title = "Information pending")
-    )
-    
+        3,
+        numericInput(
+          "number_pops_phase2",
+          tags$div(tags$i(HTML(
+            "number_pops_phase2<br/>"
+          )),
+          "Number of populations of phase 2 (must be the same as number of populations in phase 1)"),
+          value = 2,
+          min = 0
+        ),
+        bsTooltip(id = "number_pops_phase2",
+                  title = "Information pending")
+      ),
+      
+      column(
+        3,
+        textInput(
+          "population_size_phase2",
+          tags$div(
+            tags$i(HTML("population_size_phase2<br/>")),
+            "Census population size of each population of phase 2 (must be even and space delimited)"),
+          value = c("10", "10")
+        ),
+        bsTooltip(id = "population_size_phase2",
+                  title = "Information pending")
+      ),
+      
+      column(
+        3,
+        numericInput(
+          "gen_number_phase2",
+          tags$div(tags$i(HTML(
+            "gen_number_phase2<br/>"
+          )),
+          "Number of generations of phase 2"),
+          value = 10,
+          min = 0
+        ),
+        bsTooltip(id = "gen_number_phase2",
+                  title = "Information pending")
+      )
     ),
     
+    fluidRow(
+      
+      column(
+        3,
+        radioButtons(
+          "dispersal_phase2",
+          tags$div(tags$i(HTML(
+            "dispersal_phase2<br/>"
+          )),
+          "Simulate dispersal in phase 2"),
+          choices = list("TRUE" = TRUE, "FALSE" = FALSE),
+          selected = TRUE
+        ),
+        bsTooltip(id = "dispersal_phase2",
+                  title = "Dispersal between populations is symmetric and constant across generations. Dispersal rate (m) is the fraction of individuals in a population that is composed of dispersers or the probability that a randomly chosen individual in this generation came from a population different from the one in which it was found in the preceding generation (Holsinger, 2020, p. 93). Dispersal rate is calculated as (number_transfers / transfer_each_gen) / pop_size.")
+      ),
+      
+      column(
+        3,
+        radioButtons(
+          "dispersal_type_phase2",
+          tags$div(tags$i(HTML(
+            "dispersal_type_phase2<br/>"
+          )),
+          "Type of dispersal for phase 2"),
+          choices = list(
+            "All connected" = "all_connected",
+            "Circle" = "circle",
+            "Line" = "line"
+          ),
+          selected = "all_connected"
+        ),
+        bsTooltip(id = "dispersal_type_phase2",
+                  title = "Information pending")
+      ),
+      
+      column(
+        3,
+        numericInput(
+          "number_transfers_phase2",
+          tags$div(
+            tags$i(HTML("number_transfers_phase2<br/>")),
+            "Number of dispersing individuals in each dispersal event in phase 2"),
+          value = 1,
+          min = 0
+        ),
+        bsTooltip(id = "number_transfers_phase2",
+                  title = "Information pending")
+      ),
+    
+      column(
+        3,
+        numericInput(
+          "transfer_each_gen_phase2",
+          tags$div(
+            tags$i(HTML("transfer_each_gen_phase2<br/>")),
+            "Interval of number of generations in which a dispersal event occurs in phase 2"),
+          value = 1,
+          min = 0
+        ),
+        bsTooltip(id = "transfer_each_gen_phase2",
+                  title = "Information pending")
+      )
+      ),
+    
+    fluidRow(
+      
+      column(
+        3,
+        numericInput(
+          "variance_offspring_phase2",
+          tags$div(
+            tags$i(HTML("variance_offspring_phase2<br/>")),
+            "Coefficient that determines the variance in the number of offspring per mating for phase 2"
+          ),
+          value = 1000000,
+          min = 0
+        ),
+        bsTooltip(id = "variance_offspring_phase2",
+                  title = "This variable controls the variance of the negative binomial distribution that is used to determine the number of offspring that each mating pair produces")
+      ),
+      
+      column(
+        3,
+        numericInput(
+          "number_offspring_phase2",
+          tags$div(tags$i(HTML(
+            "number_offspring_phase2<br/>"
+          )),
+          "Mean number offspring per mating in phase 2"),
+          value = 10,
+          min = 0
+        ),
+        bsTooltip(id = "number_offspring_phase2",
+                  title = "This variable controls the mean of the negative binomial distribution. This variable allows to control the number of offspring per mating which is convenient when there is a need that each pair of parents produce enough offspring in each generation for the population not to become extinct. However, in the simulations the mean number of offspring per mating each generation is effectively equal to two for two reasons: a) the population size remains constant from generation to generation, this means that  on average, across generations and replicates, two offspring per pair of parents are selected to become the parents of the next generation; and b) there is no variance in reproductive success (whether or not an individual gets to reproduce at all) because all individuals reproduce once")
+      )
+    ),
+    
+    fluidRow(
+      
+      column(
+        3,
+        radioButtons(
+          "selection_phase2",
+          tags$div(tags$i(HTML(
+            "selection_phase2<br/>"
+          )),
+          "Whether selection occurs in phase 2"),
+          choices = list("TRUE" = TRUE,
+                         "FALSE" = FALSE),
+          selected = FALSE
+        ),
+        bsTooltip(id = "selection_phase2",
+                  title = "Selection is directional (replaces one allele by another) and multiplicative")
+      ),
+      
+      column(
+        3,
+        numericInput(
+          "Ne_phase2",
+          tags$div(
+            tags$i(HTML("Ne_phase2<br/>")),
+            "Ne value to be used in the equation of the expected rate of loss of heterozygosity for phase 2"
+          ),
+          value = 50,
+          min = 0
+        ),
+        bsTooltip(id = "Ne_phase2",
+                  title = "Equation: He_t = He_0 (1-1 / 2 * Ne)^t, where He_0 is heterozygosity at generation 0 and t is the number of generations")
+      ),
+      
+      column(
+        3,
+        numericInput(
+          "Ne_fst_phase2",
+          tags$div(
+            tags$i(HTML("Ne_fst_phase2<br/>")),
+            "Ne value to be used in the equation of the expected FST for phase 2"
+          ),
+          value = 50,
+          min = 0
+        ),
+        bsTooltip(id = "Ne_fst_phase2",
+                  title = "FST = 1/(4*Ne*m(n/(n-1))^2+1), where Ne is effective populations size of each individual subpopulation, m is dispersal rate and n the number of subpopulations (Takahata, 1983).")
+      )
+    ),
+  
     hr(),
     
     h3(strong("Recombination variables")),
@@ -1697,7 +1756,7 @@ interactive_sim_run <- function(env_fun) {
     fluidRow(
       
       column(
-      4,
+      3,
       radioButtons(
         "recombination",
         tags$div(tags$i(HTML("recombination<br/>")),
@@ -1711,7 +1770,7 @@ interactive_sim_run <- function(env_fun) {
     ),
     
     column(
-      4,
+      3,
       radioButtons(
         "recombination_males",
         tags$div(tags$i(HTML("recombination_males<br/>")),
@@ -1733,7 +1792,7 @@ interactive_sim_run <- function(env_fun) {
     fluidRow(
       
       column(
-      4,
+      3,
       radioButtons(
         "natural_selection_model",
         tags$div(tags$i(HTML("natural_selection_model<br/>")),
@@ -1747,7 +1806,7 @@ interactive_sim_run <- function(env_fun) {
     ),
     
     column(
-      4,
+      3,
       numericInput(
         "genetic_load",
         tags$div(tags$i(HTML("genetic_load<br/>")),
@@ -1764,7 +1823,7 @@ interactive_sim_run <- function(env_fun) {
     hr(),
     
     fluidRow(column(
-      9,
+      12,
       actionButton(
         "close",
         label = h4(strong("RUN")),
@@ -1931,6 +1990,31 @@ interactive_sim_run <- function(env_fun) {
     
     # real dataset
     
+    observeEvent(input$real_dataset, {
+      assign("real_dataset",input$real_dataset,envir = env_fun)
+      
+      toggleElement(
+        id = "real_pops",
+        condition = input$real_dataset == TRUE
+      )
+      
+      toggleElement(
+        id = "real_pop_size",
+        condition = input$real_dataset == TRUE
+      )
+      
+      toggleElement(
+        id = "real_freq",
+        condition = input$real_dataset == TRUE
+      )
+      
+      toggleElement(
+        id = "chromosome_name",
+        condition = input$real_dataset == TRUE
+      )
+      
+    })
+    
     observeEvent(input$real_pops, {
       assign("real_pops",input$real_pops,envir = env_fun)
     })
@@ -1939,6 +2023,9 @@ interactive_sim_run <- function(env_fun) {
     })
     observeEvent(input$real_freq, {
       assign("real_freq",input$real_freq,envir = env_fun)
+    })
+    observeEvent(input$chromosome_name, {
+      assign("chromosome_name",input$chromosome_name,envir = env_fun)
     })
     
     # recombination
@@ -1957,12 +2044,6 @@ interactive_sim_run <- function(env_fun) {
     })
     observeEvent(input$natural_selection_model, {
       assign("natural_selection_model",input$natural_selection_model,envir = env_fun)
-    })
-    
-    # intialisation
-    
-    observeEvent(input$chromosome_name, {
-      assign("chromosome_name",input$chromosome_name,envir = env_fun)
     })
     
     observeEvent(input$close, {
@@ -1994,6 +2075,7 @@ interactive_sim_run <- function(env_fun) {
           "Ne_fst_phase1",
           "phase1",
           "same_line",
+          "real_dataset",
           "real_freq",
           "real_pops",
           "real_pop_size",
@@ -2030,6 +2112,7 @@ interactive_sim_run <- function(env_fun) {
           input$Ne_fst_phase1,
           input$phase1,
           input$same_line,
+          input$real_dataset,
           input$real_freq,
           input$real_pops,
           input$real_pop_size,
@@ -2051,9 +2134,6 @@ interactive_sim_run <- function(env_fun) {
     
   }
 
-   # runGadget(shinyApp(ui, server), viewer =  paneViewer())
-  # runGadget(shinyApp(ui, server), viewer = dialogViewer("", width = 600, height = 600))
    runApp(shinyApp(ui, server))
   
-
 }
