@@ -45,7 +45,7 @@
 #' @seealso \code{\link{gl.report.hwe}}
 #' @family 
 #' @export
-#' @import data.table
+#' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @import ggplot2
 
 
