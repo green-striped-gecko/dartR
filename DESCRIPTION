@@ -29,10 +29,9 @@ Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2
 biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         SNPRelate, StAMPP, sp, PopGenReport, robustbase,
-        gridExtra, foreach, dplyr, crayon, devtools,reshape2,
-        patchwork, raster, data.table
+        gridExtra, foreach, dplyr, crayon, devtools, reshape2,
+        patchwork, raster, data.table, shiny, shinyBS, shinythemes, shinyjs, tibble, gganimate
 Suggests: 
-    tibble,
     HardyWeinberg,
     networkD3,
     tidyverse,
@@ -71,10 +70,7 @@ Suggests:
     fields,
     snpStats,
     boot,
-    hierfstat,
-    gganimate,
-    shiny,
-    shinyBS
+    hierfstat
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2
