@@ -20,7 +20,7 @@ gl.sim.WF.run(
 }
 \arguments{
 \item{file_var}{Path of the variables file 'sim_variables.csv' (see details) 
-[required if interactive_vars = TRUE].}
+[required if interactive_vars = FALSE].}
 
 \item{ref_table}{Reference table created by the function 
 \code{\link{gl.sim.WF.table}} [required].}
@@ -30,7 +30,8 @@ values for some simulation variables (see details) [default NULL].}
 
 \item{number_iterations}{Number of iterations of the simulations [default 1].}
 
-\item{every_gen}{Generation interval at which simulations should be stored in a genlight object [default 5].}
+\item{every_gen}{Generation interval at which simulations should be stored in
+a genlight object [default 5].}
 
 \item{store_phase1}{Whether to store simulations of phase 1 in genlight
 objects [default FALSE].}
@@ -60,8 +61,8 @@ selected and neutral loci. For the initial generation, the genotype for each
 individual’s chromosomes is randomly drawn from distributions at linkage 
 equilibrium and in Hardy-Weinberg equilibrium. 
 
-See Documentation and tutorial for a complete description of the simulations.
-documentation and tutorials can be accessed by typing in the R console:
+See documentation and tutorial for a complete description of the simulations.
+These documents can be accessed by typing in the R console:
 browseVignettes(package="dartR”)
 }
 \details{
