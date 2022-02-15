@@ -8,17 +8,18 @@
 #' individual’s chromosomes is randomly drawn from distributions at linkage 
 #' equilibrium and in Hardy-Weinberg equilibrium. 
 #' 
-#' See Documentation and tutorial for a complete description of the simulations.
-#' documentation and tutorials can be accessed by typing in the R console:
+#' See documentation and tutorial for a complete description of the simulations.
+#' These documents can be accessed by typing in the R console:
 #' browseVignettes(package="dartR”)
 #' @param file_var Path of the variables file 'sim_variables.csv' (see details) 
-#' [required if interactive_vars = TRUE].
+#' [required if interactive_vars = FALSE].
 #' @param ref_table Reference table created by the function 
 #' \code{\link{gl.sim.WF.table}} [required].
 #' @param x Name of the genlight object containing the SNP data to extract
 #' values for some simulation variables (see details) [default NULL].
 #' @param number_iterations Number of iterations of the simulations [default 1].
-#' @param every_gen Generation interval at which simulations should be stored in a genlight object [default 5].
+#' @param every_gen Generation interval at which simulations should be stored in
+#'  a genlight object [default 5].
 #' @param store_phase1 Whether to store simulations of phase 1 in genlight
 #'  objects [default FALSE].
 #' @param interactive_vars Run a shiny app to input interactively the values of

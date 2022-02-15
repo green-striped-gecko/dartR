@@ -1511,6 +1511,8 @@ interactive_sim_run <- function() {
             "Census population size of each population of phase 2 (must be even and space delimited)"),
           value = c("10", "10")
         ),
+        textOutput("equal"),
+        tags$head(tags$style("#equal{color: red}")),
         shinyBS::bsTooltip(id = "population_size_phase2",
                   title = "Information pending")
       ),
@@ -1768,6 +1770,13 @@ interactive_sim_run <- function() {
   
   server <- function(input, output, session) {
     
+    output$equal <- renderText({
+      req(input$population_size_phase2)
+      if (length(unlist(strsplit(input$population_size_phase2, " "))) != input$number_pops_phase2) {
+        validate("Number of population sizes is not equal to number of populations")
+      }
+    })
+
     observeEvent(input$phase1, {
 
       toggleElement(
