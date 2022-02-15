@@ -101,7 +101,8 @@
 #'
 #' @seealso \code{\link{gl.pcoa}}
 #' @family Exploration/visualisation functions
-#'
+#' @import tibble
+#' @import gganimate
 #' @export
 
 gl.pcoa.plot <- function(glPca,
