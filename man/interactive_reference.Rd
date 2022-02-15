@@ -4,10 +4,7 @@
 \alias{interactive_reference}
 \title{Shiny app for the input of the reference table for the simulations}
 \usage{
-interactive_reference(env_fun)
-}
-\arguments{
-\item{env_fun}{Environment of the calling function}
+interactive_reference()
 }
 \description{
 Shiny app for the input of the reference table for the simulations

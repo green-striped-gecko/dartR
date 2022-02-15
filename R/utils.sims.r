@@ -460,13 +460,12 @@ store <-
 #' @title Shiny app for the input of the reference table for the simulations
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-#' @param env_fun Environment of the calling function
-# @import shiny
-# @import shinyBS
-# @import shinythemes
-# @import shinyjs
+#' @import shiny
+#' @import shinyBS
+#' @import shinythemes
+#' @import shinyjs
 
-interactive_reference <- function(env_fun) {
+interactive_reference <- function() {
   
   pkg <- "shiny"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
@@ -537,7 +536,7 @@ interactive_reference <- function(env_fun) {
                    "Chromosome name from where to extract location, alllele frequency, recombination map and targets of selection (if provided)"),
           value = "2L"
         ),    
-        bsTooltip(id = "chromosome_name",
+        shinyBS::bsTooltip(id = "chromosome_name",
                   title = "Information pending")
       )
       ),
@@ -554,7 +553,7 @@ interactive_reference <- function(env_fun) {
           value = 10,
           min = 0
         ), 
-        bsTooltip(id = "chunk_number",
+        shinyBS::bsTooltip(id = "chunk_number",
                         title = "Information pending")
       ),
       
@@ -569,7 +568,7 @@ interactive_reference <- function(env_fun) {
                          "FALSE" = FALSE),
           selected = FALSE
         ),    
-        bsTooltip(id = "real_loc",
+        shinyBS::bsTooltip(id = "real_loc",
                   title = "Information pending")
       ),
       
@@ -583,7 +582,7 @@ interactive_reference <- function(env_fun) {
           value = 1,
           min = 0
         ),    
-        bsTooltip(id = "neutral_loci_chunk",
+        shinyBS::bsTooltip(id = "neutral_loci_chunk",
                   title = "Information pending")
       )
     ),
@@ -600,7 +599,7 @@ interactive_reference <- function(env_fun) {
           value = 100,
           min = 0
         ),     
-        bsTooltip(id = "loci_number_to_simulate",
+        shinyBS::bsTooltip(id = "loci_number_to_simulate",
                          title = "Information pending")
       ),
       
@@ -614,7 +613,7 @@ interactive_reference <- function(env_fun) {
           value = 5,
           min = 0
         ),    
-        bsTooltip(id = "targets_factor",
+        shinyBS::bsTooltip(id = "targets_factor",
                   title = "Information pending")
       )
       
@@ -635,7 +634,7 @@ interactive_reference <- function(env_fun) {
           choices = list("All equal" = "equal", "From equation" = "equation"),
           selected = "equal"
         ),    
-        bsTooltip(id = "q_distribution",
+        shinyBS::bsTooltip(id = "q_distribution",
                   title = "Information pending")
       ),
       
@@ -649,7 +648,7 @@ interactive_reference <- function(env_fun) {
           min = 0,
           max = 1
         ),    
-        bsTooltip(id = "q_gral",
+        shinyBS::bsTooltip(id = "q_gral",
                   title = "Information pending")
       ),
       
@@ -661,7 +660,7 @@ interactive_reference <- function(env_fun) {
                    "Mutation rate per generation per site. Value only used in the equation to determine q"),
           value = 5 * 10 ^ -5
         ),    
-        bsTooltip(id = "mutation_rate",
+        shinyBS::bsTooltip(id = "mutation_rate",
                   title = "Information pending")
       )
       ),
@@ -678,7 +677,7 @@ interactive_reference <- function(env_fun) {
                          "FALSE" = FALSE),
           selected = FALSE
         ),    
-        bsTooltip(id = "real_freq",
+        shinyBS::bsTooltip(id = "real_freq",
                   title = "Information pending")
       ),
     
@@ -692,7 +691,7 @@ interactive_reference <- function(env_fun) {
           min = 0,
           max = 1
         ),    
-        bsTooltip(id = "q_neutral",
+        shinyBS::bsTooltip(id = "q_neutral",
                   title = "Information pending")
       )
       ),
@@ -712,7 +711,7 @@ interactive_reference <- function(env_fun) {
           value = 1,
           min = 0
         ),    
-        bsTooltip(id = "chunk_recombination",
+        shinyBS::bsTooltip(id = "chunk_recombination",
                   title = "Information pending")
       ),
       
@@ -725,7 +724,7 @@ interactive_reference <- function(env_fun) {
           value = 100000,
           min = 0
         ),    
-        bsTooltip(id = "map_resolution",
+        shinyBS::bsTooltip(id = "map_resolution",
                   title = "Information pending")
       )
     ),
@@ -751,7 +750,7 @@ interactive_reference <- function(env_fun) {
         ),
         selected = "equal"
       ),    
-      bsTooltip(id = "s_distribution",
+      shinyBS::bsTooltip(id = "s_distribution",
                 title = "Information pending")
     )
     ),
@@ -767,7 +766,7 @@ interactive_reference <- function(env_fun) {
         value = 0.001,
         min = 0
       ),    
-      bsTooltip(id = "s_gral",
+      shinyBS::bsTooltip(id = "s_gral",
                 title = "Information pending")
     )
     
@@ -784,7 +783,7 @@ interactive_reference <- function(env_fun) {
         value = 0.03,
         min = 0
       ),    
-      bsTooltip(id = "gamma_scale",
+      shinyBS::bsTooltip(id = "gamma_scale",
                 title = "Information pending")
     ),
     
@@ -797,7 +796,7 @@ interactive_reference <- function(env_fun) {
         value = 0.25,
         min = 0
       ),    
-      bsTooltip(id = "gamma_shape",
+      shinyBS::bsTooltip(id = "gamma_shape",
                 title = "Information pending")
     )
     
@@ -814,7 +813,7 @@ interactive_reference <- function(env_fun) {
         value = 0.002,
         min = 0
       ),    
-      bsTooltip(id = "log_mean",
+      shinyBS::bsTooltip(id = "log_mean",
                 title = "Information pending")
     ),
     
@@ -827,7 +826,7 @@ interactive_reference <- function(env_fun) {
         value = 4,
         min = 0
       ),    
-      bsTooltip(id = "log_sd",
+      shinyBS::bsTooltip(id = "log_sd",
                 title = "Information pending")
     )
     
@@ -852,7 +851,7 @@ interactive_reference <- function(env_fun) {
         ),
         selected = "equal"
       ),    
-      bsTooltip(id = "h_distribution",
+      shinyBS::bsTooltip(id = "h_distribution",
                 title = "Information pending")
     )
     
@@ -870,7 +869,7 @@ interactive_reference <- function(env_fun) {
         min = 0,
         max = 1
       ),    
-      bsTooltip(id = "h_gral",
+      shinyBS::bsTooltip(id = "h_gral",
                 title = "Information pending")
     )
     
@@ -888,7 +887,7 @@ interactive_reference <- function(env_fun) {
         min = 0,
         max = 1
       ),    
-      bsTooltip(id = "dominance_mean",
+      shinyBS::bsTooltip(id = "dominance_mean",
                 title = "Information pending")
     ),
     
@@ -901,7 +900,7 @@ interactive_reference <- function(env_fun) {
         value = sqrt(0.001),
         min = 0
       ),    
-      bsTooltip(id = "dominance_sd",
+      shinyBS::bsTooltip(id = "dominance_sd",
                 title = "Information pending")
     )
     
@@ -919,7 +918,7 @@ interactive_reference <- function(env_fun) {
         min = 0,
         max = 1
       ),    
-      bsTooltip(id = "intercept",
+      shinyBS::bsTooltip(id = "intercept",
                 title = "Information pending")
     ),
     
@@ -932,7 +931,7 @@ interactive_reference <- function(env_fun) {
         value = 500,
         min = 0
       ),    
-      bsTooltip(id = "rate",
+      shinyBS::bsTooltip(id = "rate",
                 title = "Information pending")
     )
     
@@ -957,69 +956,8 @@ interactive_reference <- function(env_fun) {
   
   server <- function(input, output, session) {
     
-    observeEvent(input$loci_number_to_simulate, {
-      assign("loci_number_to_simulate",input$loci_number_to_simulate,envir = env_fun)
-    })
-    observeEvent(input$mutation_rate, {
-      assign("mutation_rate",input$mutation_rate,envir = env_fun)
-    })
-    observeEvent(input$map_resolution, {
-      assign("map_resolution",input$map_resolution,envir = env_fun)
-    })
-    observeEvent(input$dominance_mean, {
-      assign("dominance_mean",input$dominance_mean,envir = env_fun)
-    })
-    observeEvent(input$gamma_scale, {
-      assign("gamma_scale",input$gamma_scale,envir = env_fun)
-    })
-    observeEvent(input$gamma_shape, {
-      assign("gamma_shape",input$gamma_shape,envir = env_fun)
-    })
-    observeEvent(input$h_gral, {
-      assign("h_gral",input$h_gral,envir = env_fun)
-    })
-    observeEvent(input$intercept, {
-      assign("intercept",input$intercept,envir = env_fun)
-    })
-    observeEvent(input$log_mean, {
-      assign("log_mean",input$log_mean,envir = env_fun)
-    })
-    observeEvent(input$log_sd, {
-      assign("log_sd",input$log_sd,envir = env_fun)
-    })
-    observeEvent(input$q_gral, {
-      assign("q_gral",input$q_gral,envir = env_fun)
-    })
-    observeEvent(input$rate, {
-      assign("rate",input$rate,envir = env_fun)
-    })
-    observeEvent(input$s_gral, {
-      assign("s_gral",input$s_gral,envir = env_fun)
-    })
-    observeEvent(input$targets_factor, {
-      assign("targets_factor",input$targets_factor,envir = env_fun)
-    })
-    observeEvent(input$chromosome_name, {
-      assign("chromosome_name",input$chromosome_name,envir = env_fun)
-    })
-    observeEvent(input$chunk_number, {
-      assign("chunk_number",input$chunk_number,envir = env_fun)
-    })
-    observeEvent(input$chunk_recombination, {
-      assign("chunk_recombination",input$chunk_recombination,envir = env_fun)
-    })
-    observeEvent(input$real_loc, {
-      assign("real_loc",input$real_loc,envir = env_fun)
-    })
-    observeEvent(input$real_freq, {
-      assign("real_freq",input$real_freq,envir = env_fun)
-    })
-    observeEvent(input$q_neutral, {
-      assign("q_neutral",input$q_neutral,envir = env_fun)
-    })
     observeEvent(input$q_distribution, {
-      assign("q_distribution",input$q_distribution,envir = env_fun)
-      
+
       toggleElement(
         id = "q_gral",
         condition = input$q_distribution == "equal"
@@ -1031,9 +969,9 @@ interactive_reference <- function(env_fun) {
       )
       
     })
+    
     observeEvent(input$h_distribution, {
-      assign("h_distribution",input$h_distribution,envir = env_fun)
-      
+
       toggleElement(
         id = "h_gral",
         condition = input$h_distribution == "equal"
@@ -1060,9 +998,9 @@ interactive_reference <- function(env_fun) {
       )
       
     })
+    
     observeEvent(input$s_distribution, {
-      assign("s_distribution",input$s_distribution,envir = env_fun)
-      
+
       toggleElement(
         id = "s_gral",
         condition = input$s_distribution == "equal"
@@ -1088,17 +1026,11 @@ interactive_reference <- function(env_fun) {
         condition = input$s_distribution == "log_normal"
       )
       
-      
     })
-    observeEvent(input$neutral_loci_chunk, {
-      assign("neutral_loci_chunk",input$neutral_loci_chunk,envir = env_fun)
-    })
-    observeEvent(input$dominance_sd, {
-      assign("dominance_sd",input$dominance_sd,envir = env_fun)
-    })
-    
+ 
     observeEvent(input$close, {
-      assign("ref_vars_temp", as.data.frame(cbind(
+      
+      ref_vars_temp <- as.data.frame(cbind(
         c(
           "real_freq",
           "real_loc",
@@ -1153,13 +1085,11 @@ interactive_reference <- function(env_fun) {
           input$neutral_loci_chunk,
           input$dominance_sd
         )
-      )))
+      ))
       
       colnames(ref_vars_temp) <- c("variable", "value")
       
-      assign("ref_vars",ref_vars_temp,envir = env_fun)
-      
-      stopApp()
+      stopApp(ref_vars_temp)
       
     })
     
@@ -1174,15 +1104,14 @@ interactive_reference <- function(env_fun) {
 ###############################################################################
 #' @name interactive_sim_run
 #' @title Shiny app for the input of the simulations variables
-#' @param env_fun Environment of the calling function
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-# @import shiny
-# @import shinyBS
-# @import shinythemes
-# @import shinyjs
+#' @import shiny
+#' @import shinyBS
+#' @import shinythemes
+#' @import shinyjs
 
-interactive_sim_run <- function(env_fun) {
+interactive_sim_run <- function() {
   
   pkg <- "shiny"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
@@ -1247,7 +1176,7 @@ interactive_sim_run <- function(env_fun) {
                          "FALSE" = FALSE),
           selected = FALSE
         ),    
-        bsTooltip(id = "real_dataset",
+        shinyBS::bsTooltip(id = "real_dataset",
                   title = "Information pending")
       )
       
@@ -1265,7 +1194,7 @@ interactive_sim_run <- function(env_fun) {
                          "FALSE" = FALSE),
           selected = FALSE
         ),    
-        bsTooltip(id = "real_pops",
+        shinyBS::bsTooltip(id = "real_pops",
                   title = "Information pending")
       ),
       
@@ -1279,7 +1208,7 @@ interactive_sim_run <- function(env_fun) {
                          "FALSE" = FALSE),
           selected = FALSE
         ),    
-        bsTooltip(id = "real_pop_size",
+        shinyBS::bsTooltip(id = "real_pop_size",
                   title = "Information pending")
       ),
       
@@ -1293,7 +1222,7 @@ interactive_sim_run <- function(env_fun) {
                          "FALSE" = FALSE),
           selected = FALSE
         ),    
-        bsTooltip(id = "real_freq",
+        shinyBS::bsTooltip(id = "real_freq",
                   title = "Information pending")
       ),
       
@@ -1305,7 +1234,7 @@ interactive_sim_run <- function(env_fun) {
                    "Chromosome name from where to extract allele frequencies"),
           value = "2L"
         ),    
-        bsTooltip(id = "chromosome_name",
+        shinyBS::bsTooltip(id = "chromosome_name",
                   title = "Information pending")
       )
       
@@ -1333,7 +1262,7 @@ interactive_sim_run <- function(env_fun) {
                          "FALSE" = FALSE),
           selected = FALSE
         ),    
-        bsTooltip(id = "phase1",
+        shinyBS::bsTooltip(id = "phase1",
                   title = "Information pending")
       )
       
@@ -1353,7 +1282,7 @@ interactive_sim_run <- function(env_fun) {
           ),
           selected = FALSE
         ),    
-        bsTooltip(id = "same_line",
+        shinyBS::bsTooltip(id = "same_line",
                   title = "Information pending")
       ),
       
@@ -1368,7 +1297,7 @@ interactive_sim_run <- function(env_fun) {
           value = 2,
           min = 0
         ),
-        bsTooltip(id = "number_pops_phase1",
+        shinyBS::bsTooltip(id = "number_pops_phase1",
                   title = "Information pending")
       ),
       
@@ -1382,7 +1311,7 @@ interactive_sim_run <- function(env_fun) {
           ),
           value = c("20", "20")
         ),
-        bsTooltip(id = "population_size_phase1",
+        shinyBS::bsTooltip(id = "population_size_phase1",
                   title = "Information pending")
       ),
       
@@ -1397,7 +1326,7 @@ interactive_sim_run <- function(env_fun) {
           value = 10,
           min = 0
         ),
-        bsTooltip(id = "gen_number_phase1",
+        shinyBS::bsTooltip(id = "gen_number_phase1",
                   title = "Information pending")
       )
       
@@ -1416,7 +1345,7 @@ interactive_sim_run <- function(env_fun) {
           choices = list("TRUE" = TRUE, "FALSE" = FALSE),
           selected = TRUE
         ),
-        bsTooltip(id = "dispersal_phase1",
+        shinyBS::bsTooltip(id = "dispersal_phase1",
                   title = "Dispersal between populations is symmetric and constant across generations. Dispersal rate (m) is the fraction of individuals in a population that is composed of dispersers or the probability that a randomly chosen individual in this generation came from a population different from the one in which it was found in the preceding generation (Holsinger, 2020, p. 93). Dispersal rate is calculated as (number_transfers / transfer_each_gen) / pop_size.")
       ),
       
@@ -1435,7 +1364,7 @@ interactive_sim_run <- function(env_fun) {
           ),
           selected = "all_connected"
         ),
-        bsTooltip(id = "dispersal_type_phase1",
+        shinyBS::bsTooltip(id = "dispersal_type_phase1",
                   title = "Information pending")
       ),
       
@@ -1450,7 +1379,7 @@ interactive_sim_run <- function(env_fun) {
           value = 1,
           min = 0
         ),
-        bsTooltip(id = "number_transfers_phase1",
+        shinyBS::bsTooltip(id = "number_transfers_phase1",
                   title = "Information pending")
       ),
     
@@ -1465,7 +1394,7 @@ interactive_sim_run <- function(env_fun) {
           value = 1,
           min = 0
         ),
-        bsTooltip(id = "transfer_each_gen_phase1",
+        shinyBS::bsTooltip(id = "transfer_each_gen_phase1",
                   title = "Information pending")
       )
       ),
@@ -1483,7 +1412,7 @@ interactive_sim_run <- function(env_fun) {
           value = 1000000,
           min = 0
         ),
-        bsTooltip(id = "variance_offspring_phase1",
+        shinyBS::bsTooltip(id = "variance_offspring_phase1",
                   title = "This variable controls the variance of the negative binomial distribution that is used to determine the number of offspring that each mating pair produces")
       ),
       
@@ -1498,7 +1427,7 @@ interactive_sim_run <- function(env_fun) {
           value = 10,
           min = 0
         ),
-        bsTooltip(id = "number_offspring_phase1",
+        shinyBS::bsTooltip(id = "number_offspring_phase1",
                   title = "This variable controls the mean of the negative binomial distribution. This variable allows to control the number of offspring per mating which is convenient when there is a need that each pair of parents produce enough offspring in each generation for the population not to become extinct. However, in the simulations the mean number of offspring per mating each generation is effectively equal to two for two reasons: a) the population size remains constant from generation to generation, this means that  on average, across generations and replicates, two offspring per pair of parents are selected to become the parents of the next generation; and b) there is no variance in reproductive success (whether or not an individual gets to reproduce at all) because all individuals reproduce once")
       )
     ),
@@ -1517,7 +1446,7 @@ interactive_sim_run <- function(env_fun) {
                          "FALSE" = FALSE),
           selected = FALSE
         ),
-        bsTooltip(id = "selection_phase1",
+        shinyBS::bsTooltip(id = "selection_phase1",
                   title = "Selection is directional (replaces one allele by another) and multiplicative")
       ),
       
@@ -1532,7 +1461,7 @@ interactive_sim_run <- function(env_fun) {
           value = 50,
           min = 0
         ),
-        bsTooltip(id = "Ne_phase1",
+        shinyBS::bsTooltip(id = "Ne_phase1",
                   title = "Equation: He_t = He_0 (1-1 / 2 * Ne)^t, where He_0 is heterozygosity at generation 0 and t is the number of generations")
       ),
       
@@ -1547,7 +1476,7 @@ interactive_sim_run <- function(env_fun) {
           value = 50,
           min = 0
         ),
-        bsTooltip(id = "Ne_fst_phase1",
+        shinyBS::bsTooltip(id = "Ne_fst_phase1",
                   title = "FST = 1/(4*Ne*m(n/(n-1))^2+1), where Ne is effective populations size of each individual subpopulation, m is dispersal rate and n the number of subpopulations (Takahata, 1983).")
       )
     ),
@@ -1569,7 +1498,7 @@ interactive_sim_run <- function(env_fun) {
           value = 2,
           min = 0
         ),
-        bsTooltip(id = "number_pops_phase2",
+        shinyBS::bsTooltip(id = "number_pops_phase2",
                   title = "Information pending")
       ),
       
@@ -1582,7 +1511,7 @@ interactive_sim_run <- function(env_fun) {
             "Census population size of each population of phase 2 (must be even and space delimited)"),
           value = c("10", "10")
         ),
-        bsTooltip(id = "population_size_phase2",
+        shinyBS::bsTooltip(id = "population_size_phase2",
                   title = "Information pending")
       ),
       
@@ -1597,7 +1526,7 @@ interactive_sim_run <- function(env_fun) {
           value = 10,
           min = 0
         ),
-        bsTooltip(id = "gen_number_phase2",
+        shinyBS::bsTooltip(id = "gen_number_phase2",
                   title = "Information pending")
       )
     ),
@@ -1615,7 +1544,7 @@ interactive_sim_run <- function(env_fun) {
           choices = list("TRUE" = TRUE, "FALSE" = FALSE),
           selected = TRUE
         ),
-        bsTooltip(id = "dispersal_phase2",
+        shinyBS::bsTooltip(id = "dispersal_phase2",
                   title = "Dispersal between populations is symmetric and constant across generations. Dispersal rate (m) is the fraction of individuals in a population that is composed of dispersers or the probability that a randomly chosen individual in this generation came from a population different from the one in which it was found in the preceding generation (Holsinger, 2020, p. 93). Dispersal rate is calculated as (number_transfers / transfer_each_gen) / pop_size.")
       ),
       
@@ -1634,7 +1563,7 @@ interactive_sim_run <- function(env_fun) {
           ),
           selected = "all_connected"
         ),
-        bsTooltip(id = "dispersal_type_phase2",
+        shinyBS::bsTooltip(id = "dispersal_type_phase2",
                   title = "Information pending")
       ),
       
@@ -1648,7 +1577,7 @@ interactive_sim_run <- function(env_fun) {
           value = 1,
           min = 0
         ),
-        bsTooltip(id = "number_transfers_phase2",
+        shinyBS::bsTooltip(id = "number_transfers_phase2",
                   title = "Information pending")
       ),
     
@@ -1662,7 +1591,7 @@ interactive_sim_run <- function(env_fun) {
           value = 1,
           min = 0
         ),
-        bsTooltip(id = "transfer_each_gen_phase2",
+        shinyBS::bsTooltip(id = "transfer_each_gen_phase2",
                   title = "Information pending")
       )
       ),
@@ -1680,7 +1609,7 @@ interactive_sim_run <- function(env_fun) {
           value = 1000000,
           min = 0
         ),
-        bsTooltip(id = "variance_offspring_phase2",
+        shinyBS::bsTooltip(id = "variance_offspring_phase2",
                   title = "This variable controls the variance of the negative binomial distribution that is used to determine the number of offspring that each mating pair produces")
       ),
       
@@ -1695,7 +1624,7 @@ interactive_sim_run <- function(env_fun) {
           value = 10,
           min = 0
         ),
-        bsTooltip(id = "number_offspring_phase2",
+        shinyBS::bsTooltip(id = "number_offspring_phase2",
                   title = "This variable controls the mean of the negative binomial distribution. This variable allows to control the number of offspring per mating which is convenient when there is a need that each pair of parents produce enough offspring in each generation for the population not to become extinct. However, in the simulations the mean number of offspring per mating each generation is effectively equal to two for two reasons: a) the population size remains constant from generation to generation, this means that  on average, across generations and replicates, two offspring per pair of parents are selected to become the parents of the next generation; and b) there is no variance in reproductive success (whether or not an individual gets to reproduce at all) because all individuals reproduce once")
       )
     ),
@@ -1714,7 +1643,7 @@ interactive_sim_run <- function(env_fun) {
                          "FALSE" = FALSE),
           selected = FALSE
         ),
-        bsTooltip(id = "selection_phase2",
+        shinyBS::bsTooltip(id = "selection_phase2",
                   title = "Selection is directional (replaces one allele by another) and multiplicative")
       ),
       
@@ -1729,7 +1658,7 @@ interactive_sim_run <- function(env_fun) {
           value = 50,
           min = 0
         ),
-        bsTooltip(id = "Ne_phase2",
+        shinyBS::bsTooltip(id = "Ne_phase2",
                   title = "Equation: He_t = He_0 (1-1 / 2 * Ne)^t, where He_0 is heterozygosity at generation 0 and t is the number of generations")
       ),
       
@@ -1744,7 +1673,7 @@ interactive_sim_run <- function(env_fun) {
           value = 50,
           min = 0
         ),
-        bsTooltip(id = "Ne_fst_phase2",
+        shinyBS::bsTooltip(id = "Ne_fst_phase2",
                   title = "FST = 1/(4*Ne*m(n/(n-1))^2+1), where Ne is effective populations size of each individual subpopulation, m is dispersal rate and n the number of subpopulations (Takahata, 1983).")
       )
     ),
@@ -1765,7 +1694,7 @@ interactive_sim_run <- function(env_fun) {
                        "FALSE" = FALSE),
         selected = TRUE
       ),    
-      bsTooltip(id = "recombination",
+      shinyBS::bsTooltip(id = "recombination",
                 title = "Information pending")
     ),
     
@@ -1779,7 +1708,7 @@ interactive_sim_run <- function(env_fun) {
                        "FALSE" = FALSE),
         selected = TRUE
       ),    
-      bsTooltip(id = "recombination_males",
+      shinyBS::bsTooltip(id = "recombination_males",
                 title = "Information pending")
     )
     
@@ -1801,7 +1730,7 @@ interactive_sim_run <- function(env_fun) {
                        "Absolute" = "absolute"),
         selected = "relative"
       ),    
-      bsTooltip(id = "natural_selection_model",
+      shinyBS::bsTooltip(id = "natural_selection_model",
                 title = "Information pending")
     ),
     
@@ -1814,7 +1743,7 @@ interactive_sim_run <- function(env_fun) {
         value = 0.8,
         min = 0
       ),    
-      bsTooltip(id = "genetic_load",
+      shinyBS::bsTooltip(id = "genetic_load",
                 title = "Information pending")
     )
     
@@ -1838,50 +1767,9 @@ interactive_sim_run <- function(env_fun) {
   )
   
   server <- function(input, output, session) {
-    # phase 2
-    
-    observeEvent(input$number_pops_phase2, {
-      assign("number_pops_phase2",input$number_pops_phase2,envir = env_fun)
-    })
-    observeEvent(input$population_size_phase2, {
-      assign("population_size_phase2",input$population_size_phase2,envir = env_fun)
-    })
-    observeEvent(input$gen_number_phase2, {
-      assign("gen_number_phase2",input$gen_number_phase2,envir = env_fun)
-    })
-    observeEvent(input$dispersal_phase2, {
-      assign("dispersal_phase2",input$dispersal_phase2,envir = env_fun)
-    })
-    observeEvent(input$dispersal_type_phase2, {
-      assign("dispersal_type_phase2",input$dispersal_type_phase2,envir = env_fun)
-    })
-    observeEvent(input$number_transfers_phase2, {
-      assign("number_transfers_phase2",input$number_transfers_phase2,envir = env_fun)
-    })
-    observeEvent(input$transfer_each_gen_phase2, {
-      assign("transfer_each_gen_phase2",input$transfer_each_gen_phase2,envir = env_fun)
-    })
-    observeEvent(input$variance_offspring_phase2, {
-      assign("variance_offspring_phase2",input$variance_offspring_phase2,envir = env_fun)
-    })
-    observeEvent(input$number_offspring_phase2, {
-      assign("number_offspring_phase2",input$number_offspring_phase2,envir = env_fun)
-    })
-    observeEvent(input$selection_phase2, {
-      assign("selection_phase2",input$selection_phase2,envir = env_fun)
-    })
-    observeEvent(input$Ne_phase2, {
-      assign("Ne_phase2",input$Ne_phase2,envir = env_fun)
-    })
-    observeEvent(input$Ne_fst_phase2, {
-      assign("Ne_fst_phase2",input$Ne_fst_phase2,envir = env_fun)
-    })
-    
-    # phase 1
     
     observeEvent(input$phase1, {
-      assign("phase1",input$phase1,envir = env_fun)
-      
+
       toggleElement(
         id = "same_line",
         condition = input$phase1 == TRUE
@@ -1948,50 +1836,8 @@ interactive_sim_run <- function(env_fun) {
       )
       
     })
-    observeEvent(input$same_line, {
-      assign("same_line",input$same_line,envir = env_fun)
-    })
-    observeEvent(input$number_pops_phase1, {
-      assign("number_pops_phase1",input$number_pops_phase1,envir = env_fun)
-    })
-    observeEvent(input$population_size_phase1, {
-      assign("population_size_phase1",input$population_size_phase1,envir = env_fun)
-    })
-    observeEvent(input$gen_number_phase1, {
-      assign("gen_number_phase1",input$gen_number_phase1,envir = env_fun)
-    })
-    observeEvent(input$dispersal_phase1, {
-      assign("dispersal_phase1",input$dispersal_phase1,envir = env_fun)
-    })
-    observeEvent(input$dispersal_type_phase1, {
-      assign("dispersal_type_phase1",input$dispersal_type_phase1,envir = env_fun)
-    })
-    observeEvent(input$number_transfers_phase1, {
-      assign("number_transfers_phase1",input$number_transfers_phase1,envir = env_fun)
-    })
-    observeEvent(input$transfer_each_gen_phase1, {
-      assign("transfer_each_gen_phase1",input$transfer_each_gen_phase1,envir = env_fun)
-    })
-    observeEvent(input$variance_offspring_phase1, {
-      assign("variance_offspring_phase1",input$variance_offspring_phase1,envir = env_fun)
-    })
-    observeEvent(input$number_offspring_phase1, {
-      assign("number_offspring_phase1",input$number_offspring_phase1,envir = env_fun)
-    })
-    observeEvent(input$selection_phase1, {
-      assign("selection_phase1",input$selection_phase1,envir = env_fun)
-    })
-    observeEvent(input$Ne_phase1, {
-      assign("Ne_phase1",input$Ne_phase1,envir = env_fun)
-    })
-    observeEvent(input$Ne_fst_phase1, {
-      assign("Ne_fst_phase1",input$Ne_fst_phase1,envir = env_fun)
-    })
-    
-    # real dataset
     
     observeEvent(input$real_dataset, {
-      assign("real_dataset",input$real_dataset,envir = env_fun)
       
       toggleElement(
         id = "real_pops",
@@ -2014,40 +1860,10 @@ interactive_sim_run <- function(env_fun) {
       )
       
     })
-    
-    observeEvent(input$real_pops, {
-      assign("real_pops",input$real_pops,envir = env_fun)
-    })
-    observeEvent(input$real_pop_size, {
-      assign("real_pop_size",input$real_pop_size,envir = env_fun)
-    })
-    observeEvent(input$real_freq, {
-      assign("real_freq",input$real_freq,envir = env_fun)
-    })
-    observeEvent(input$chromosome_name, {
-      assign("chromosome_name",input$chromosome_name,envir = env_fun)
-    })
-    
-    # recombination
-    
-    observeEvent(input$recombination, {
-      assign("recombination",input$recombination,envir = env_fun)
-    })
-    observeEvent(input$recombination_males, {
-      assign("recombination_males",input$recombination_males,envir = env_fun)
-    })
-    
-    # selection
-    
-    observeEvent(input$genetic_load, {
-      assign("genetic_load",input$genetic_load,envir = env_fun)
-    })
-    observeEvent(input$natural_selection_model, {
-      assign("natural_selection_model",input$natural_selection_model,envir = env_fun)
-    })
-    
+
     observeEvent(input$close, {
-      assign("sim_vars_temp", as.data.frame(cbind(
+      
+      sim_vars_temp <- as.data.frame(cbind(
         c(
           "number_pops_phase2",
           "population_size_phase2",
@@ -2121,19 +1937,17 @@ interactive_sim_run <- function(env_fun) {
           input$genetic_load,
           input$natural_selection_model,
           input$chromosome_name
-        )
-      )))
+        )))
       
-      colnames(sim_vars_temp) <- c("variable", "value")
+      colnames(sim_vars_temp) <- c("variable","value")
       
-      assign("sim_vars",sim_vars_temp,envir = env_fun)
+      stopApp(sim_vars_temp)
       
-      stopApp()
-      
-    })
+    }
+  )
     
   }
-  
- runApp(shinyApp(ui, server))
+
+  runApp(shinyApp(ui, server))
   
 }

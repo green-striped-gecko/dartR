@@ -4,10 +4,7 @@
 \alias{interactive_sim_run}
 \title{Shiny app for the input of the simulations variables}
 \usage{
-interactive_sim_run(env_fun)
-}
-\arguments{
-\item{env_fun}{Environment of the calling function}
+interactive_sim_run()
 }
 \description{
 Shiny app for the input of the simulations variables

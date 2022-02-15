@@ -30,9 +30,8 @@ biocViews:
 Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
         SNPRelate, StAMPP, sp, PopGenReport, robustbase,
         gridExtra, foreach, dplyr, crayon, devtools, reshape2,
-        patchwork, raster, data.table
+        patchwork, raster, data.table, shiny, shinyBS, shinythemes, shinyjs, tibble, gganimate
 Suggests: 
-    tibble,
     HardyWeinberg,
     networkD3,
     tidyverse,
@@ -71,12 +70,7 @@ Suggests:
     fields,
     snpStats,
     boot,
-    hierfstat,
-    gganimate, 
-    shiny, 
-    shinyBS, 
-    shinythemes,
-    shinyjs
+    hierfstat
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2

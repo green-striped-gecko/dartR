@@ -88,10 +88,10 @@
 #' interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.table}}
 #' @family simulation functions
-# @import shiny
-# @import shinyBS
-# @import shinythemes
-# @import shinyjs
+#' @import shiny
+#' @import shinyBS
+#' @import shinythemes
+#' @import shinyjs
 #' @export
 
 gl.sim.WF.run <-
@@ -166,7 +166,34 @@ gl.sim.WF.run <-
     ##### SIMULATIONS VARIABLES ######
 
     if (interactive_vars) {
-      interactive_sim_run( env_fun = environment())
+      
+      sim_vars <- interactive_sim_run()
+      
+     sim_vars[sim_vars$variable=="population_size_phase2" ,"value"] <- 
+      paste0("'",sim_vars[sim_vars$variable=="population_size_phase2" ,"value"],"'")
+     
+     sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <- 
+       paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
+     
+     sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
+       paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
+     
+     sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"] <- 
+       paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"],"'")
+     
+     sim_vars[sim_vars$variable=="natural_selection_model" ,"value"] <- 
+       paste0("'",sim_vars[sim_vars$variable=="natural_selection_model" ,"value"],"'")
+     
+     sim_vars[sim_vars$variable=="chromosome_name" ,"value"] <- 
+       paste0("'",sim_vars[sim_vars$variable=="chromosome_name" ,"value"],"'")
+     
+     vars_assign <-
+       unlist(unname(
+         mapply(paste, sim_vars$variable, "<-",
+                sim_vars$value, SIMPLIFY = F)
+       ))
+     
+     eval(parse(text = vars_assign))
       
     } else {
       sim_vars <- suppressWarnings(read.csv(file_var))

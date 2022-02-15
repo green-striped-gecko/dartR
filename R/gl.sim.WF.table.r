@@ -69,10 +69,10 @@
 #' interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.run}}
 #' @family simulation functions
-# @import shiny
-# @import shinyBS
-# @import shinythemes
-# @import shinyjs
+#' @import shiny
+#' @import shinyBS
+#' @import shinythemes
+#' @import shinyjs
 #' @export
 
 gl.sim.WF.table <-
@@ -130,7 +130,28 @@ gl.sim.WF.table <-
     ##### SIMULATIONS VARIABLES ######
     
     if (interactive_vars) {
-      interactive_reference( env_fun = environment())
+      
+      ref_vars <- interactive_reference()
+      
+      ref_vars[ref_vars$variable=="h_distribution" ,"value"] <- 
+        paste0("'",ref_vars[ref_vars$variable=="h_distribution" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="chromosome_name" ,"value"] <- 
+        paste0("'",ref_vars[ref_vars$variable=="chromosome_name" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="s_distribution" ,"value"] <- 
+        paste0("'",ref_vars[ref_vars$variable=="s_distribution" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="q_distribution" ,"value"] <- 
+        paste0("'",ref_vars[ref_vars$variable=="q_distribution" ,"value"],"'")
+      
+      vars_assign <-
+        unlist(unname(
+          mapply(paste, ref_vars$variable, "<-",
+                 ref_vars$value, SIMPLIFY = F)
+        ))
+      
+      eval(parse(text = vars_assign))
       
     } else{
       ref_vars <- suppressWarnings(read.csv(file_var))
