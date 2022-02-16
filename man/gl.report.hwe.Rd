@@ -44,9 +44,10 @@ or 'Exact' [default 'Exact'].}
 Either 'dost','selome','midp' (see details) [default 'midp'].}
 
 \item{cc_val}{The continuity correction applied to the ChiSquare test
-[default 0.5].
-@param sig_only Whether the table returned should include loci with a 
-significant departure from Hardy-Weinberg proportions}
+[default 0.5].}
+
+\item{sig_only}{Whether the returned table should include loci with a 
+significant departure from Hardy-Weinberg proportions [default TRUE].}
 
 \item{min_sample_size}{Minimum number of individuals per population in which
 perform H-W tests [default 5].}
