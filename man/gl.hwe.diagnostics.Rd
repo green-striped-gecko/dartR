@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.hwe.diagnostics.r
 \name{gl.hwe.diagnostics}
 \alias{gl.hwe.diagnostics}
-\title{Provides descriptive stats and plots to diagnose potential problems 
+\title{Provides descriptive stats and plots to diagnose potential problems
 with Hardy-Weinberg proportions}
 \usage{
 gl.hwe.diagnostics(
@@ -42,7 +42,7 @@ progress log ; 3, progress and results summary; 5, full report
 A list with plots and table.
 }
 \description{
-Different causes may be responsible for lack of Hardy-Weinberg proportions. 
+Different causes may be responsible for lack of Hardy-Weinberg proportions.
 This function helps diagnose potential problems.
 }
 \details{
@@ -53,10 +53,10 @@ res <- gl.hwe.diagnostics(x = gl.filter.allna(platypus.gl))
 }
 \references{
 \itemize{
-\item De Meeûs, T., Guégan, J.-F., Teriokhin, A.T., 2009. MultiTest V.1.2, a 
-program to binomially combine independent tests and performance comparison 
+\item De Meeûs, T., Guégan, J.-F., Teriokhin, A.T., 2009. MultiTest V.1.2, a
+program to binomially combine independent tests and performance comparison
 with other related methods on proportional data. BMC Bioinformatics 10, 443-443.
-\item Fisher, R., 1970. Statistical methods for research workers Edinburgh: 
+\item Fisher, R., 1970. Statistical methods for research workers Edinburgh:
 Oliver and Boyd.
 \item Waples, R. S. (2015). Testing for Hardy–Weinberg proportions: have we
 lost the plot?. Journal of heredity, 106(1), 1-19.
