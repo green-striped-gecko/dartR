@@ -8,17 +8,18 @@
 #' individual’s chromosomes is randomly drawn from distributions at linkage 
 #' equilibrium and in Hardy-Weinberg equilibrium. 
 #' 
-#' See Documentation and tutorial for a complete description of the simulations.
-#' documentation and tutorials can be accessed by typing in the R console:
+#' See documentation and tutorial for a complete description of the simulations.
+#' These documents can be accessed by typing in the R console:
 #' browseVignettes(package="dartR”)
 #' @param file_var Path of the variables file 'sim_variables.csv' (see details) 
-#' [required if interactive_vars = TRUE].
+#' [required if interactive_vars = FALSE].
 #' @param ref_table Reference table created by the function 
 #' \code{\link{gl.sim.WF.table}} [required].
 #' @param x Name of the genlight object containing the SNP data to extract
 #' values for some simulation variables (see details) [default NULL].
 #' @param number_iterations Number of iterations of the simulations [default 1].
-#' @param every_gen Generation interval at which simulations should be stored in a genlight object [default 5].
+#' @param every_gen Generation interval at which simulations should be stored in
+#'  a genlight object [default 5].
 #' @param store_phase1 Whether to store simulations of phase 1 in genlight
 #'  objects [default FALSE].
 #' @param interactive_vars Run a shiny app to input interactively the values of
@@ -252,7 +253,7 @@ gl.sim.WF.run <-
     # value inserted in the last row of the recombination_map table, in the same
     # way as in the first case.
     # number of recombination events per meiosis
-    recom_event <- ceiling(sum(recombination_map[, "c"]))
+    recom_event <- ceiling(sum(recombination_map[, "c"],na.rm = TRUE))
     # filling the probability of recombination when the total recombination rate
     # is less than an integer (recom_event) and placing it at the end of the
     # recombination map
@@ -302,8 +303,6 @@ gl.sim.WF.run <-
       stop()
     }
     
-    
-    
     if (phase1 == TRUE & real_pops == FALSE) {
       number_pops <- number_pops_phase1
     }
@@ -331,8 +330,6 @@ gl.sim.WF.run <-
     } else{
       pop_list_freq <- rep(NA, number_pops)
     }
-    
-
     
     ##### ANALYSIS VARIABLES #####
     # This is to calculate the density of mutations per centimorgan. The density
@@ -415,13 +412,17 @@ gl.sim.WF.run <-
           femaletran <- FALSE
         }
         
-      } else{
+      } else {
+        
         if (real_pop_size == TRUE) {
-          population_size_phase2 <- unname(unlist(table(pop(x))))
-          population_size_phase2 <-
-            (population_size_phase2 %% 2 != 0) + population_size_phase2
+          
+          population_size <- unname(unlist(table(pop(x))))
+          population_size <- (population_size %% 2 != 0) + population_size
+          
         } else{
+          
           population_size <- population_size_phase2
+          
         }
         
       }
@@ -440,7 +441,8 @@ gl.sim.WF.run <-
           refer = reference,
           q_neu = q_neutral,
           n_l_loc = neutral_loci_location,
-          r_freq = pop_list_freq[[y]]
+          r_freq = pop_list_freq[[y]],
+          freq_real = real_freq
         )
       })
       # toc()
@@ -800,6 +802,13 @@ gl.sim.WF.run <-
               p_map = plink_map,
               s_vars = s_vars_temp
             )
+          
+          if(real_pops==TRUE){
+            
+           popNames(final_res[[iteration]][[count_store]]) <- popNames(x)
+            
+          }
+          
         }
         # toc()
       }

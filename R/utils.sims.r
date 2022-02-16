@@ -203,7 +203,8 @@ initialise <-
            refer,
            n_l_loc,
            r_freq,
-           q_neu) {
+           q_neu,
+           freq_real) {
     pop <- as.data.frame(matrix(ncol = 4, nrow = pop_size))
     pop[, 1] <- rep(c("Male", "Female"), each = pop_size / 2)
     pop[, 2] <- pop_number # second column stores population
@@ -212,37 +213,39 @@ initialise <-
         paste0(mapply(sample_alleles, q = refer$q,  USE.NAMES = F), collapse = "")
       chromosome2 <-
         paste0(mapply(sample_alleles, q = refer$q,  USE.NAMES = F), collapse = "")
-      for (element in n_l_loc) {
-        substr(chromosome1, start = element, stop = element) <-
-          sample(as.character(c(1:2)),
-                 size = 1,
-                 prob = c(q_neu, 1 - q_neu))
-        substr(chromosome2, start = element, stop = element) <-
-          sample(as.character(c(1:2)),
-                 size = 1,
-                 prob = c(q_neu, 1 - q_neu))
+      
+      if(freq_real==FALSE){
+        
+        for (element in n_l_loc) {
+          substr(chromosome1, start = element, stop = element) <-
+            sample(as.character(c(1:2)),
+                   size = 1,
+                   prob = c(q_neu, 1 - q_neu))
+          substr(chromosome2, start = element, stop = element) <-
+            sample(as.character(c(1:2)),
+                   size = 1,
+                   prob = c(q_neu, 1 - q_neu))
+        }
+        
       }
-      if (!anyNA(r_freq)) {
-        counter_snp <- 1
+      
+      if(freq_real==TRUE){
+        
         for (element in 1:nrow(r_freq)) {
-          substr(chromosome1,
-                 start = as.numeric(n_l_loc[element]),
-                 stop = as.numeric(n_l_loc[element])) <-
+          
+          substr(chromosome1, start = element, stop = element) <-
             sample(as.character(c(1:2)),
                    size = 1,
-                   prob = unname(unlist(r_freq[counter_snp,])))
+                   prob = c(unname(unlist(r_freq[element,]))))
           
-          substr(chromosome2,
-                 start = as.numeric(n_l_loc[element]),
-                 stop = as.numeric(n_l_loc[element])) <-
+          substr(chromosome2, start = element, stop = element) <-
             sample(as.character(c(1:2)),
                    size = 1,
-                   prob = unname(unlist(r_freq[counter_snp,])))
-          
-          counter_snp <- counter_snp + 1
+                   prob = c(unname(unlist(r_freq[element,]))))
           
         }
-      }
+      
+        }
       pop[individual_pop, 3] <- chromosome1
       pop[individual_pop, 4] <- chromosome2
     }
@@ -443,10 +446,9 @@ store <-
     misc.info$phenotype[misc.info$phenotype == 2] <- "case"
     misc.info$phenotype <- factor(misc.info$phenotype)
     res$other$ind.metrics <- as.data.frame(misc.info)
-    loc_metrics_temp <- as.data.frame(cbind(p_map, ref[, 2:5]))
-    colnames(loc_metrics_temp) <-
-      c("chr", "loc_id", "loc_cM", "loc_bp", "q", "h", "s", "selection")
-    res$other$loc.metrics <- loc_metrics_temp
+    res$other$loc.metrics <- ref
+    chromosome(res) <- res$other$loc.metrics$chr_name
+    position(res) <- res$other$loc.metrics$loc_bp
     res$other$sim.vars <- s_vars
     
     return(res)
@@ -592,14 +594,14 @@ interactive_reference <- function() {
       column(
         3,
         numericInput(
-          "loci_number_to_simulate", 
-          tags$div(tags$i(HTML("loci_number_to_simulate<br/>")),
+          "loci_under_selection", 
+          tags$div(tags$i(HTML("loci_under_selection<br/>")),
             "Total number of loci under selection"
           ),
           value = 100,
           min = 0
         ),     
-        shinyBS::bsTooltip(id = "loci_number_to_simulate",
+        shinyBS::bsTooltip(id = "loci_under_selection",
                          title = "Information pending")
       ),
       
@@ -718,13 +720,13 @@ interactive_reference <- function() {
       column(
         3,
         numericInput(
-          "map_resolution",
-          tags$div(tags$i(HTML("map_resolution<br/>")),
+          "chunk_bp",
+          tags$div(tags$i(HTML("chunk_bp<br/>")),
                    "Length of each chromosome chunk (bp) or the resolution of the recombination map (if provided)"),
           value = 100000,
           min = 0
         ),    
-        shinyBS::bsTooltip(id = "map_resolution",
+        shinyBS::bsTooltip(id = "chunk_bp",
                   title = "Information pending")
       )
     ),
@@ -1034,9 +1036,9 @@ interactive_reference <- function() {
         c(
           "real_freq",
           "real_loc",
-          "loci_number_to_simulate",
+          "loci_under_selection",
           "mutation_rate",
-          "map_resolution",
+          "chunk_bp",
           "dominance_mean",
           "gamma_scale",
           "gamma_shape",
@@ -1061,9 +1063,9 @@ interactive_reference <- function() {
         c(
           input$real_freq,
           input$real_loc,
-          input$loci_number_to_simulate,
+          input$loci_under_selection,
           input$mutation_rate,
-          input$map_resolution,
+          input$chunk_bp,
           input$dominance_mean,
           input$gamma_scale,
           input$gamma_shape,
@@ -1511,6 +1513,8 @@ interactive_sim_run <- function() {
             "Census population size of each population of phase 2 (must be even and space delimited)"),
           value = c("10", "10")
         ),
+        textOutput("equal"),
+        tags$head(tags$style("#equal{color: red}")),
         shinyBS::bsTooltip(id = "population_size_phase2",
                   title = "Information pending")
       ),
@@ -1768,6 +1772,13 @@ interactive_sim_run <- function() {
   
   server <- function(input, output, session) {
     
+    output$equal <- renderText({
+      req(input$population_size_phase2)
+      if (length(unlist(strsplit(input$population_size_phase2, " "))) != input$number_pops_phase2) {
+        validate("Number of population sizes is not equal to number of populations")
+      }
+    })
+
     observeEvent(input$phase1, {
 
       toggleElement(

@@ -15,7 +15,7 @@ gl.sim.WF.table(
 }
 \arguments{
 \item{file_var}{Path of the variables file 'ref_variables.csv' (see details) 
-[required if interactive_vars = TRUE].}
+[required if interactive_vars = FALSE].}
 
 \item{x}{Name of the genlight object containing the SNP data to extract
 values for some simulation variables (see details) [default NULL].}
@@ -52,11 +52,15 @@ This function creates a reference table to be used as input for the function
 \item chr_name - chromosome name.
 } 
 
-The reference table can be further modified as required.
+The reference table can be further modified as required. 
+
+See documentation and tutorial for a complete description of the simulations.
+These documents can be accessed by typing in the R console:
+browseVignettes(package="dartR”)
 }
 \details{
-Values for the creation of the reference table can be submitted into the function 
-interactively through a shiny app if interactive_vars = TRUE. Optionally, if 
+Values for the variables to create the reference table can be submitted into the function 
+interactively through a Shiny app if interactive_vars = TRUE. Optionally, if 
 interactive_vars = FALSE, values for variables can be submitted by using the
 csv file 'ref_variables.csv' which can be found by typing in the R console:
  system.file('extdata', 'ref_variables.csv', package ='dartR').
