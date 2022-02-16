@@ -65,12 +65,12 @@
 #'  create the reference table.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-# @examples
-# ref_table <- gl.sim.WF.table(file_var=system.file('extdata', 
-# 'ref_variables.csv', package = 'dartR'),interactive_vars = FALSE)
-# res_sim <- gl.sim.WF.run(file_var = system.file('extdata', 
-# 'sim_variables.csv', package ='dartR'),ref_table=ref_table,
-# interactive_vars = FALSE)
+#' @examples
+#' ref_table <- gl.sim.WF.table(file_var=system.file('extdata', 
+#' 'ref_variables.csv', package = 'dartR'),interactive_vars = FALSE)
+#' res_sim <- gl.sim.WF.run(file_var = system.file('extdata', 
+#' 'sim_variables.csv', package ='dartR'),ref_table=ref_table,
+#' interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.run}}
 #' @family simulation functions
 #' @rawNamespace import(fields, except = flame)

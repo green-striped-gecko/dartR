@@ -1,8 +1,8 @@
 process,variable,value,description,range_value
-real,real_dataset,TRUE,Extract inputs from genlight object,TRUE or FALSE
-real,real_pops,TRUE,Extract number of populations from genlight object,TRUE or FALSE
-real,real_pop_size,TRUE,Extract census population sizes from genlight object,TRUE or FALSE
-real,real_freq,TRUE,Extract allele frequencies for neutral loci from genlight object,TRUE or FALSE
+real,real_dataset,FALSE,Extract inputs from genlight object,TRUE or FALSE
+real,real_pops,FALSE,Extract number of populations from genlight object,TRUE or FALSE
+real,real_pop_size,FALSE,Extract census population sizes from genlight object,TRUE or FALSE
+real,real_freq,FALSE,Extract allele frequencies for neutral loci from genlight object,TRUE or FALSE
 real,chromosome_name,"""1""",Chromosome name from where to extract allele frequencies ,Defined by the user (must be character)
 phase1,phase1,FALSE,Simulate phase 1,TRUE or FALSE
 phase1,same_line,FALSE,Sample phase 2 populations from the same phase 1 population or from different phase 1 populations,TRUE or FALSE

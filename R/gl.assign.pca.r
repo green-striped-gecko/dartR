@@ -62,8 +62,9 @@
 #'
 #' @examples 
 #' #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
-#' x <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,verbose=3) 
-#' x <- gl.assign.pca(x, unknown='UC_00146', plevel=0.95, verbose=3)
+#' test <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,
+#' verbose=3) 
+#' test_2 <- gl.assign.pca(test, unknown='UC_00146', plevel=0.95, verbose=3)
 
 
 gl.assign.pca <- function(x,
