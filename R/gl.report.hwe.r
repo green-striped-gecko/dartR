@@ -19,8 +19,8 @@
 #' Either 'dost','selome','midp' (see details) [default 'midp'].
 #' @param cc_val The continuity correction applied to the ChiSquare test
 #'  [default 0.5].
-#'  @param sig_only Whether the table returned should include loci with a 
-#'  significant departure from Hardy-Weinberg proportions
+#' @param sig_only Whether the returned table should include loci with a 
+#'  significant departure from Hardy-Weinberg proportions [default TRUE].
 #' @param min_sample_size Minimum number of individuals per population in which
 #' perform H-W tests [default 5].
 #' @param plot.out If TRUE, will produce Ternary Plot(s) [default TRUE].
@@ -168,7 +168,7 @@ gl.report.hwe <- function(x,
                           alpha_val = 0.05,
                           pvalue_type = "midp",
                           cc_val = 0.5,
-                          sig_only=TRUE,
+                          sig_only = TRUE,
                           min_sample_size = 5,
                           plot.out = TRUE,
                           plot_colors = two_colors_contrast,
