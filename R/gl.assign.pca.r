@@ -79,23 +79,25 @@ gl.assign.pca <- function(x,
     utils.flag.start(func = funname,
                      build = "Jody",
                      verbosity = verbose)
-
-    # # CHECK PACKAGES
-    # pkg <- "SIBER"
-    # if (!(requireNamespace(pkg, quietly = TRUE))) {
-    #     stop(error(
-    #         "Package",
-    #         pkg,
-    #         " needed for this function to work. Please install it."
-    #     ))
-    # }
+    
+    
+    
+    # check if package is installed
+    pkg <- "SIBER"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(error(
+            "Package",
+            pkg,
+            "needed for this function to work. Please install it."
+        ))
+    }
 
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = 0)
     if (nPop(x) < 2) {
         stop(
             error(
-                "Fatal Error: Only one population, including the unknown, no putative source"
+                "Fatal Error: Only one population, including the unknown, no putative source\n"
             )
         )
     }
@@ -118,7 +120,7 @@ gl.assign.pca <- function(x,
 
     if (nLoc(x) < nPop(x)) {
         stop(error(
-            "Fatal Error: Number of loci less than number of populations"
+            "Fatal Error: Number of loci less than number of populations\n"
         ))
     }
 
