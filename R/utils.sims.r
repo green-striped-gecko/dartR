@@ -289,7 +289,7 @@ reproduction <-
       sample(rownames(pop[((pop_size / 2) + 1):pop_size,]), size = pop_size / 2)
     offspring <- NULL
     for (parent in 1:dim(parents_matrix)[1]) {
-      pairing_offspring <-  fields::rnbinom(1, size = var_off, mu = num_off)
+      pairing_offspring <-  rnbinom(1, size = var_off, mu = num_off)
       offspring_temp <-
         as.data.frame(matrix(nrow = pairing_offspring, ncol = 6))
       if (pairing_offspring < 1) {
@@ -303,8 +303,8 @@ reproduction <-
       female_chromosomes <-
         list(pop[parents_matrix[parent, 2], 3], pop[parents_matrix[parent, 2], 4])
       for (offs in 1:pairing_offspring) {
-        males_recom_events <- fields::rpois(1, r_event)
-        females_recom_events <- fields::rpois(1, r_event)
+        males_recom_events <- rpois(1, r_event)
+        females_recom_events <- rpois(1, r_event)
         #recombination in males
         if (recom == TRUE &
             r_males == TRUE & males_recom_events > 1) {

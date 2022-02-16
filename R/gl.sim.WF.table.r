@@ -65,14 +65,15 @@
 #'  create the reference table.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-#' @examples
-#' ref_table <- gl.sim.WF.table(file_var=system.file('extdata', 
-#' 'ref_variables.csv', package = 'dartR'),interactive_vars = FALSE)
-#' res_sim <- gl.sim.WF.run(file_var = system.file('extdata', 
-#' 'sim_variables.csv', package ='dartR'),ref_table=ref_table,
-#' interactive_vars = FALSE)
+# @examples
+# ref_table <- gl.sim.WF.table(file_var=system.file('extdata', 
+# 'ref_variables.csv', package = 'dartR'),interactive_vars = FALSE)
+# res_sim <- gl.sim.WF.run(file_var = system.file('extdata', 
+# 'sim_variables.csv', package ='dartR'),ref_table=ref_table,
+# interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.run}}
 #' @family simulation functions
+#' @rawNamespace import(fields, except = flame)
 #' @export
 
 gl.sim.WF.table <-
@@ -224,7 +225,9 @@ gl.sim.WF.table <-
     # (chunk_number + 1) * chunk_bp
     } else {
       
-      chr_length <- (chunk_number + 1) * chunk_bp
+      # chr_length <- (chunk_number + 1) * chunk_bp
+      chr_length <- chunk_number  * chunk_bp
+      
       
     }
     
@@ -363,11 +366,11 @@ gl.sim.WF.table <-
     }
     
     if (s_distribution == "gamma") {
-      s <- fields::rgamma(loci_number_to_simulate, shape = gamma_shape, scale = gamma_scale)
+      s <- rgamma(loci_number_to_simulate, shape = gamma_shape, scale = gamma_scale)
     }
     
     if (s_distribution == "log_normal") {
-      s <- fields::rlnorm(loci_number_to_simulate,
+      s <- rlnorm(loci_number_to_simulate,
                   meanlog = log(log_mean),
                   sdlog = log(log_sd))
     }
@@ -378,7 +381,7 @@ gl.sim.WF.table <-
     
     if (h_distribution == "normal") {
       h <-
-        fields::rnorm(loci_number_to_simulate, mean = dominance_mean, sd = dominance_sd)
+        rnorm(loci_number_to_simulate, mean = dominance_mean, sd = dominance_sd)
     }
     
     # the equation for dominance (h) was taken from Huber 2018 Nature
