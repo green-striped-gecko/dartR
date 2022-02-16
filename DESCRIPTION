@@ -27,9 +27,9 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2
 biocViews:
-Imports: stats, methods, utils, plyr, tidyr, MASS, stringr, ape, vegan,
-        SNPRelate, StAMPP, sp, PopGenReport, robustbase,
-        gridExtra, foreach, dplyr, crayon, devtools, reshape2,
+Imports: stats, methods, utils, plyr, tidyr,stringr, ape, vegan,
+        SNPRelate, sp, PopGenReport,
+        gridExtra, foreach, dplyr, crayon,reshape2,
         patchwork, raster, data.table, shiny, shinyBS, shinythemes, shinyjs, tibble, gganimate
 Suggests: 
     HardyWeinberg,
@@ -70,7 +70,11 @@ Suggests:
     fields,
     snpStats,
     boot,
-    hierfstat
+    hierfstat,
+    devtools,
+    robustbase,
+    MASS,
+    StAMPP
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2

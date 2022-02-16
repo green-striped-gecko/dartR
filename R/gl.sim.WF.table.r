@@ -73,10 +73,6 @@
 #' interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.run}}
 #' @family simulation functions
-#' @import shiny
-#' @import shinyBS
-#' @import shinythemes
-#' @import shinyjs
 #' @export
 
 gl.sim.WF.table <-
@@ -367,11 +363,11 @@ gl.sim.WF.table <-
     }
     
     if (s_distribution == "gamma") {
-      s <- rgamma(loci_number_to_simulate, shape = gamma_shape, scale = gamma_scale)
+      s <- fields::rgamma(loci_number_to_simulate, shape = gamma_shape, scale = gamma_scale)
     }
     
     if (s_distribution == "log_normal") {
-      s <- rlnorm(loci_number_to_simulate,
+      s <- fields::rlnorm(loci_number_to_simulate,
                   meanlog = log(log_mean),
                   sdlog = log(log_sd))
     }
@@ -382,7 +378,7 @@ gl.sim.WF.table <-
     
     if (h_distribution == "normal") {
       h <-
-        rnorm(loci_number_to_simulate, mean = dominance_mean, sd = dominance_sd)
+        fields::rnorm(loci_number_to_simulate, mean = dominance_mean, sd = dominance_sd)
     }
     
     # the equation for dominance (h) was taken from Huber 2018 Nature

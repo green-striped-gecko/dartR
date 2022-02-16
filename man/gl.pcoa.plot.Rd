@@ -84,7 +84,7 @@ mouse-over to identify points [default FALSE].}
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
  [default 2 or as specified using gl.set.verbosity].}
 }

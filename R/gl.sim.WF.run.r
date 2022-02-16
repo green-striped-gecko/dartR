@@ -92,7 +92,7 @@
 #' @import shiny
 #' @import shinyBS
 #' @import shinythemes
-#' @import shinyjs
+#' @rawNamespace import(shinyjs, except = c(reset,hidden,show,runExample))
 #' @export
 
 gl.sim.WF.run <-
@@ -118,15 +118,6 @@ gl.sim.WF.run <-
                      verbosity = verbose)
     
     # check if package is installed
-    pkg <- "data.table"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-      stop(error(
-        "Package",
-        pkg,
-        "needed for this function to work. Please install it."
-      ))
-    }
-    
     if (interactive_vars) {
       pkg <- "shiny"
       if (!(requireNamespace(pkg, quietly = TRUE))) {
@@ -670,7 +661,7 @@ gl.sim.WF.run <-
           
           s_vars_temp <- sim_vars
           s_vars_temp <-
-            setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
+            stats::setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
           s_vars_temp$generation <- generation
           s_vars_temp$iteration <- iteration
           s_vars_temp$seed <- seed

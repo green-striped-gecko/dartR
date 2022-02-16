@@ -68,7 +68,7 @@ fsc.multiple.estimate <- function(dir.in, n=500000, L=100, maf=TRUE, ncpu=0,
   
 }
 
-#' @name AIC
+#' @name aic
 #' @title Compute the AIC given the likelihood in log10 scale
 #' @description Compute the AIC given the likelihood in log10 scale (default fsc
 #'  output) and number of parameters, which is automatically read by the 
@@ -86,7 +86,8 @@ fsc.multiple.estimate <- function(dir.in, n=500000, L=100, maf=TRUE, ncpu=0,
 #' @references Excoffier L., Dupanloup I., Huerta-Sánchez E., Sousa V. C. and
 #'   Foll M. (2013) Robust demographic inference from genomic and SNP data. PLoS
 #'   genetics 9(10)
-AIC <- function(dir.in,
+
+aic <- function(dir.in,
                 k=NULL) {
   log10toln<-function(l10) {
     rlns=l10/log10(exp(1))
@@ -135,7 +136,7 @@ AIC <- function(dir.in,
 AIC_comp <- function(dir.in) {
   mod.nms <- list.dirs(dir.in, full.names=FALSE, recursive=FALSE)
   ld <- list.dirs(dir.in,full.names=TRUE, recursive=FALSE)
-  lAICs <- sapply(ld, AIC, USE.NAMES=FALSE)
+  lAICs <- sapply(ld, aic, USE.NAMES=FALSE)
   mod.rank <- rank(lAICs)
   return(data.frame(Model=mod.nms, AIC=lAICs, Delta=lAICs - min(lAICs), Rank=mod.rank))
 }

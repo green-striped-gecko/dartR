@@ -85,6 +85,9 @@ gl.LDNe <- function(x,
     ))
   
   # DO THE JOB
+  # Set NULL to variables to pass CRAN checks
+"Lowest Allele Frequency Used"<-"CI high Parametric"<-"CI low Parametric"<-"Estimated Ne^" <- NULL
+  
   xx <- gl2genepop(x, outfile = "dummy.gen", outpath = tempdir())
   
   if (singleton.rm == TRUE) {
@@ -243,7 +246,7 @@ gl.LDNe <- function(x,
     }
     
     pop_list_plot <- lapply(pop_list, function(x) {
-      setNames(data.frame(t(x[, -1])), x[, 1])
+      stats::setNames(data.frame(t(x[, -1])), x[, 1])
     })
     
     pop_list_plot <- lapply(1:length(pops), function(i) {

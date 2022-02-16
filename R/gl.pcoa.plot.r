@@ -69,7 +69,7 @@
 #' [default 1.5].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #'  [default 2 or as specified using gl.set.verbosity].
 #'
@@ -102,7 +102,9 @@
 #' @seealso \code{\link{gl.pcoa}}
 #' @family Exploration/visualisation functions
 #' @import tibble
-#' @import gganimate
+#' @rawNamespace import(data.table, except = c(melt,dcast))
+
+#' @rawNamespace import(gganimate, except = c(View))
 #' @export
 
 gl.pcoa.plot <- function(glPca,
@@ -278,6 +280,8 @@ gl.pcoa.plot <- function(glPca,
     axis.label.size <- axis.label.size * 10
     
     # DO THE JOB
+    # Set NULL to variables to pass CRAN checks
+    gen <- NULL  
     
     if(datatype1=="list"){
         gen_number <- length(hold_x)

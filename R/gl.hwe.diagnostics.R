@@ -12,7 +12,7 @@
 #' expected number of significant HWE tests [default two_colors_contrast].
 #' @param plot_theme User specified theme [default theme_dartR()].
 #' @details
-#'  This function initially runs \code{\link{gl.report.hwe}} and reports the
+#' This function initially runs \code{\link{gl.report.hwe}} and reports the
 #'  ternary plots. Remaining outputs follow the recommendations from Waples
 #'  (2015) paper. These include:
 #'  \enumerate{
@@ -35,7 +35,7 @@
 #'     p-value. Chisquare is computed following Fisher's procedure for a global
 #'     test. This basically tests whether there is at least one test that is
 #'     truly significant in the series of tests conducted (De Meeûs et al 2009).
-#'
+#'     }
 #' @return A list with plots and table.
 #' @author Custodian: Carlo Pacioni -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
@@ -53,10 +53,8 @@
 #' }
 #' @seealso \code{\link{gl.report.hwe}}
 #' @family reporting functions
-#' @export
 #' @rawNamespace import(data.table, except = c(melt,dcast))
-#' @import ggplot2
-#' @import data.table
+#' @export
 
 gl.hwe.diagnostics <- function(x,
                                alpha_val = 0.05,
@@ -79,6 +77,8 @@ gl.hwe.diagnostics <- function(x,
   datatype <- utils.check.datatype(x, verbose = verbose)
   
   # DO THE JOB
+  # Set NULL to variables to pass CRAN checks
+Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pvalue<-ChiSquare<-NULL
   
   # abandoned this for now
   # FstvsFis.plot <- function(Fstats) {
