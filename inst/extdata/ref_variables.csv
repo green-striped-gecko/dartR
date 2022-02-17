@@ -1,17 +1,17 @@
 process,variable,value,description,range_value
-general,chromosome_name,"""2L""","Chromosome name from where to extract location, alllele frequency, recombination map and targets of selection (if provided).",Defined by the user
+general,chromosome_name,"""1""","Chromosome name from where to extract location, alllele frequency, recombination map and targets of selection (if provided).",Defined by the user
 general,chunk_number,10,Number of chromosome chunks,Not available
 general,real_loc,FALSE,Extract location of neutral loci from genlight object,TRUE or FALSE
 general,neutral_loci_chunk,1,Number of neutral loci per chromosome chunk,Defined by the user
-general,loci_number_to_simulate,100,Total number of loci under selection,Dependent on computing resources
+general,loci_under_selection,100,Total number of loci under selection,Dependent on computing resources
 general,targets_factor,5,Percentage of the number of loci under selection from the input file 'targets_of_selection.csv' to use,Defined by the user
 frequency,q_distribution,"""equal""",How the initial allele frequency of the deleterious allele (q) should be determined,"""equal"" or ""equation"""
 frequency,q_gral,0.05,Initial frequencies of all deleterious alleles,Defined by the user (must be character)
 frequency,mutation_rate,5*10^-5,Mutation rate per generation per site. Value only used in the equation to determine q,Defined by the user
 frequency,q_neutral,0.25,Initial frequencies of all neutral alleles,Dependent on genomic resources
-frequency,real_freq,FALSE,Extract allele frequencies of neutral loci from genlight object,TRUE or FALSE
+frequency,real_freq,TRUE,Extract allele frequencies of neutral loci from genlight object,TRUE or FALSE
 recombination,chunk_recombination,1,Recombination rate (cM) per chromosome chunk,Defined by the user
-recombination,map_resolution,100000,Length of each chromosome chunk (bp) or the resolution of the recombination map (if provided),0-1
+recombination,chunk_bp,100000,Length of each chromosome chunk (bp) or the resolution of the recombination map (if provided),0-1
 selection,s_distribution,"""equal""",Distribution to sample selection coefficients,"""equal"" or ""gamma"" or ""log_normal"""
 selection,s_gral,0.05,Selection coefficient for all loci under selection,0-1
 selection,gamma_scale,0.03,Scale of the gamma distribution from where s values are sampled,Defined by the user
@@ -19,8 +19,8 @@ selection,gamma_shape,0.35,Shape of the gamma distribution from where s values a
 selection,log_mean,0.002,Mean of the log normal distribution from where s values are sampled,0-1
 selection,log_sd,4,Standard deviation of the log normal distribution from where s values are sampled,Defined by the user
 selection,h_distribution,"""equal""",Distribution to sample dominance coefficient,"""equal"" or ""normal"" or ""equation"""
-selection,h_gral,0.5,h of deleterious alleles,0-1
-selection,dominance_mean,0.2,Mean of the normal distribution from where h values are sampled,0-1
+selection,h_gral,0.25,h of deleterious alleles,0-1
+selection,dominance_mean,0.25,Mean of the normal distribution from where h values are sampled,0-1
 selection,dominance_sd,sqrt(0.001),Standard deviation of the normal distribution from where h values are sampled,Defined by the user
 selection,intercept,0.5,Value for the intercept of the equation to determine h (maximum value of h when s = 0) ,Defined by the user
 selection,rate,500,Value for the variable rate of the dominance equation to calculate h,Defined by the user

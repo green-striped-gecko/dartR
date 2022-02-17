@@ -49,7 +49,8 @@ the recalculated locus metadata.
  # SNP data
    gl2 <- gl.drop.pop(testset.gl,
    pop.list=c('EmsubRopeMata','EmvicVictJasp'),verbose=3)
-   gl2 <- gl.drop.pop(testset.gl, pop.list=c('EmsubRopeMata','EmvicVictJasp'),mono.rm=TRUE,recalc=TRUE)
+   gl2 <- gl.drop.pop(testset.gl, pop.list=c('EmsubRopeMata','EmvicVictJasp'),
+   mono.rm=TRUE,recalc=TRUE)
    gl2 <- gl.drop.pop(testset.gl, pop.list=c('Male','Unknown'),as.pop='sex')
  # Tag P/A data
    gs2 <- gl.drop.pop(testset.gs, pop.list=c('EmsubRopeMata','EmvicVictJasp'))

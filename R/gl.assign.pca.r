@@ -62,8 +62,9 @@
 #'
 #' @examples 
 #' #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
-#' x <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,verbose=3) 
-#' x <- gl.assign.pca(x, unknown='UC_00146', plevel=0.95, verbose=3)
+#' test <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,
+#' verbose=3) 
+#' test_2 <- gl.assign.pca(test, unknown='UC_00146', plevel=0.95, verbose=3)
 
 
 gl.assign.pca <- function(x,
@@ -78,23 +79,26 @@ gl.assign.pca <- function(x,
     utils.flag.start(func = funname,
                      build = "Jody",
                      verbosity = verbose)
-
-    # # CHECK PACKAGES
-    # pkg <- "SIBER"
-    # if (!(requireNamespace(pkg, quietly = TRUE))) {
-    #     stop(error(
-    #         "Package",
-    #         pkg,
-    #         " needed for this function to work. Please install it."
-    #     ))
-    # }
+    
+    
+    
+    # check if package is installed
+    pkg <- "SIBER"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(error(
+            "Package",
+            pkg,
+            "needed for this function to work. Please install it."
+        ))
+    }
+    requireNamespace(pkg, quietly = TRUE)
 
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = 0)
     if (nPop(x) < 2) {
         stop(
             error(
-                "Fatal Error: Only one population, including the unknown, no putative source"
+                "Fatal Error: Only one population, including the unknown, no putative source\n"
             )
         )
     }
@@ -117,7 +121,7 @@ gl.assign.pca <- function(x,
 
     if (nLoc(x) < nPop(x)) {
         stop(error(
-            "Fatal Error: Number of loci less than number of populations"
+            "Fatal Error: Number of loci less than number of populations\n"
         ))
     }
 

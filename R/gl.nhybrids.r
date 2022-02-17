@@ -162,6 +162,8 @@ gl.nhybrids <- function(gl,
     }
     
     # DO THE JOB
+    # Set NULL to variables to pass CRAN checks
+    Genotype <- Count <- NULL
     
     gl.tmp <- gl
     thold <- threshold

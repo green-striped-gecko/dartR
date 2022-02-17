@@ -48,7 +48,8 @@ the recalculated locus metadata.
 \examples{
  # SNP data
    gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'))
-   gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'),mono.rm=TRUE,recalc=TRUE)
+   gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'),
+   mono.rm=TRUE,recalc=TRUE)
    gl2 <- gl.keep.pop(testset.gl, pop.list=c('Female'),as.pop='sex')
  # Tag P/A data
    gs2 <- gl.keep.pop(testset.gs, pop.list=c('EmsubRopeMata','EmvicVictJasp'))

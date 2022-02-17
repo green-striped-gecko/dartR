@@ -69,7 +69,7 @@
 #' [default 1.5].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #'  [default 2 or as specified using gl.set.verbosity].
 #'
@@ -86,23 +86,29 @@
 #' # RUN PCA
 #' pca<-gl.pcoa(gl,nfactors=5)
 #' # VARIOUS EXAMPLES
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', axis.label.size=1, hadjust=1.5,vadjust=1)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', axis.label.size=1)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', axis.label.size=1.5,scale=TRUE)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, axis.label.size=1.2, xaxis=1, yaxis=3, scale=TRUE)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', 
+#' axis.label.size=1, hadjust=1.5,vadjust=1)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', 
+#' axis.label.size=1)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', 
+#' axis.label.size=1.5,scale=TRUE)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, axis.label.size=1.2, xaxis=1, yaxis=3, 
+#' scale=TRUE)
 #' gl.pcoa.plot(pca, gl, pop.labels='none',scale=TRUE)
 #' gl.pcoa.plot(pca, gl, axis.label.size=1.2, interactive=TRUE)
 #' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, xaxis=1, yaxis=2, zaxis=3)
 #' # color AND SHAPE ADJUSTMENTS
 #' shp <- gl.select.shapes(select=c(16,17,17,0,2))
-#' col <- gl.select.colors(library='brewer',palette='Spectral',ncolors=11,select=c(1,9,3,11,11))
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', pt.colors=col, pt.shapes=shp, axis.label.size=1, hadjust=1.5,vadjust=1)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', pt.colors=col, pt.shapes=shp, axis.label.size=1)
+#' col <- gl.select.colors(library='brewer',palette='Spectral',ncolors=11,
+#' select=c(1,9,3,11,11))
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', 
+#' pt.colors=col, pt.shapes=shp, axis.label.size=1, hadjust=1.5,vadjust=1)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend',
+#'  pt.colors=col, pt.shapes=shp, axis.label.size=1)
 #'
 #' @seealso \code{\link{gl.pcoa}}
 #' @family Exploration/visualisation functions
-#' @import tibble
-#' @import gganimate
+#' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @export
 
 gl.pcoa.plot <- function(glPca,
@@ -278,6 +284,8 @@ gl.pcoa.plot <- function(glPca,
     axis.label.size <- axis.label.size * 10
     
     # DO THE JOB
+    # Set NULL to variables to pass CRAN checks
+    gen <- NULL  
     
     if(datatype1=="list"){
         gen_number <- length(hold_x)
@@ -301,14 +309,14 @@ gl.pcoa.plot <- function(glPca,
                 colnames(df) <- c("PCoAx", "PCoAy", "ind", "pop","gen")
                 df_sim <- rbind(df_sim,df)
         }
-         df_sim <- as_tibble(df_sim)
+         df_sim <- tibble::as_tibble(df_sim)
          df_sim <- df_sim[-1,]
         
         p  <- ggplot(df_sim, aes(PCoAx, PCoAy, colour = pop)) +
             geom_point(size=3) +
             labs(title = 'Generation: {frame_time}', x = xlab, y = ylab) +
-            transition_time(gen) +
-            ease_aes('linear')
+            gganimate::transition_time(gen) +
+            gganimate::ease_aes('linear')
         return(p)
         }
     

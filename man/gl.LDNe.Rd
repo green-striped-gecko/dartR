@@ -32,7 +32,7 @@ outpath='.' when calling this function to direct output files to your working
 
 \item{neest.path}{Path to the folder of the NE2-1 file.
 Please note there are 3 different executables depending on your OS:
-Ne2-1.exe (=Windows), Ne2-1M (=Mac), Ne2-L (=Linux). You only need to point
+Ne2-1.exe (=Windows), Ne2-1M (=Mac), Ne2-1L (=Linux). You only need to point
 to the folder (the function will recognise which OS you are running)
 [default getwd()].}
 

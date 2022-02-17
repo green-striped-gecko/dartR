@@ -89,10 +89,8 @@
 #' interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.table}}
 #' @family simulation functions
+#' @import stats
 #' @import shiny
-#' @import shinyBS
-#' @import shinythemes
-#' @import shinyjs
 #' @export
 
 gl.sim.WF.run <-
@@ -116,51 +114,6 @@ gl.sim.WF.run <-
     utils.flag.start(func = funname,
                      build = "Jody",
                      verbosity = verbose)
-    
-    # check if package is installed
-    pkg <- "data.table"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-      stop(error(
-        "Package",
-        pkg,
-        "needed for this function to work. Please install it."
-      ))
-    }
-    
-    if (interactive_vars) {
-      pkg <- "shiny"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-      pkg <- "shinyBS"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-      pkg <- "shinythemes"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-      pkg <- "shinyjs"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-    }
     
     # DO THE JOB
     
@@ -670,7 +623,7 @@ gl.sim.WF.run <-
           
           s_vars_temp <- sim_vars
           s_vars_temp <-
-            setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
+            stats::setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
           s_vars_temp$generation <- generation
           s_vars_temp$iteration <- iteration
           s_vars_temp$seed <- seed

@@ -73,10 +73,7 @@
 #' interactive_vars = FALSE)
 #' @seealso \code{\link{gl.sim.WF.run}}
 #' @family simulation functions
-#' @import shiny
-#' @import shinyBS
-#' @import shinythemes
-#' @import shinyjs
+#' @rawNamespace import(fields, except = flame)
 #' @export
 
 gl.sim.WF.table <-
@@ -94,41 +91,6 @@ gl.sim.WF.table <-
     utils.flag.start(func = funname,
                      build = "Jody",
                      verbosity = verbose)
-    
-    if (interactive_vars) {
-      pkg <- "shiny"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          " needed for this function to work. Please install it."
-        ))
-      }
-      pkg <- "shinyBS"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-      pkg <- "shinythemes"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-      pkg <- "shinyjs"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-    }
 
     # DO THE JOB
     ##### SIMULATIONS VARIABLES ######
@@ -228,7 +190,9 @@ gl.sim.WF.table <-
     # (chunk_number + 1) * chunk_bp
     } else {
       
-      chr_length <- (chunk_number + 1) * chunk_bp
+      # chr_length <- (chunk_number + 1) * chunk_bp
+      chr_length <- chunk_number  * chunk_bp
+      
       
     }
     

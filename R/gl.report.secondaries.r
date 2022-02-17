@@ -97,7 +97,6 @@
 #' @family Filter reports functions
 #' @importFrom stats dpois
 #' @import patchwork
-#' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @export
 
 gl.report.secondaries <- function(x,

@@ -22,9 +22,8 @@ progress log; 3, progress and results summary; 5, full report
 }
 \description{
 The function converts a genlight object (SNP or presence/absence
- i.e. SilicoDArT data) into a file in the 'geno' for
-\link[LEA]{snmf} (package LEA) and the 'lfmm' format for \link[LEA]{lfmm}
-(package LEA).
+ i.e. SilicoDArT data) into a file in the 'geno' and the 'lfmm' formats from 
+ (package LEA).
 }
 \examples{
 # SNP data

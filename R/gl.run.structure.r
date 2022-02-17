@@ -75,6 +75,17 @@ gl.run.structure <- function(x,
                              plot_theme = theme_dartR(),
                              save2tmp = FALSE,
                              verbose = NULL) {
+    
+    pkg <- "devtools"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(
+            error(
+                "Package ",
+                pkg,
+                " needed for this function to work. Please install it using install.packages('devtools')."
+            )
+        )
+    }
     # check for strataG (currently not on CRAN) not already installed?
     if (!requireNamespace("strataG", quietly = TRUE)) {
         ap <- available.packages()  #check CRAN

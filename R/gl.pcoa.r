@@ -219,7 +219,7 @@ gl.pcoa <- function(x,
         if (nInd(x) < 2) {
         stop(
             error(
-                "Fatal Error: Only one individual or no individuals present in the dataset"
+                "Fatal Error: Only one individual or no individuals present in the dataset\n"
             )
         )
         }
@@ -227,7 +227,7 @@ gl.pcoa <- function(x,
         if (nLoc(x) < nInd(x)) {
         cat(
             warn(
-                "  Warning: Number of loci is less than the number of individuals to be represented"
+                "  Warning: Number of loci is less than the number of individuals to be represented\n"
             )
         )
         }
@@ -242,7 +242,7 @@ gl.pcoa <- function(x,
             if (verbose >= 2) {
                 cat(
                     warn(
-                        "  Warning: Correction if specified needs to be lingoes or cailliez, set to the default 'None'"
+                        "  Warning: Correction if specified needs to be lingoes or cailliez, set to the default 'None'\n"
                     )
                 )
             }

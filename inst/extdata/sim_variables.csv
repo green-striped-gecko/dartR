@@ -3,13 +3,13 @@ real,real_dataset,FALSE,Extract inputs from genlight object,TRUE or FALSE
 real,real_pops,FALSE,Extract number of populations from genlight object,TRUE or FALSE
 real,real_pop_size,FALSE,Extract census population sizes from genlight object,TRUE or FALSE
 real,real_freq,FALSE,Extract allele frequencies for neutral loci from genlight object,TRUE or FALSE
-real,chromosome_name,"""2L""",Chromosome name from where to extract allele frequencies ,Defined by the user (must be character)
+real,chromosome_name,"""1""",Chromosome name from where to extract allele frequencies ,Defined by the user (must be character)
 phase1,phase1,FALSE,Simulate phase 1,TRUE or FALSE
 phase1,same_line,FALSE,Sample phase 2 populations from the same phase 1 population or from different phase 1 populations,TRUE or FALSE
 phase1,number_pops_phase1,2,Number of populations of phase 1 (must be the same as number of populations in phase 2),Dependent on computing resources
 phase1,population_size_phase1,"""20 20""",Census population size of each population of phase 1 (must be even and space delimited),Dependent on computing resources
 phase1,gen_number_phase1,10,Number of generations of phase 1,Dependent on computing resources
-phase1,dispersal_phase1,TRUE,Simulate dispersal in phase 1,TRUE or FALSE
+phase1,dispersal_phase1,FALSE,Simulate dispersal in phase 1,TRUE or FALSE
 phase1,dispersal_type_phase1,"""all_connected""",Type of dispersal in phase 1,"""line"",""circle"",""all_connected"""
 phase1,number_transfers_phase1,1,Number of dispersing individuals in phase 1,< population size
 phase1,transfer_each_gen_phase1,1,Interval of number of generations in which dispersal occurs in phase 1,< number of generations
@@ -20,8 +20,8 @@ phase1,Ne_phase1,20,Ne value to be used in the equation of rate of loss of heter
 phase1,Ne_fst_phase1,20,Ne value to be used in the equation of the expected FST for phase 1,Defined by the user
 phase2,number_pops_phase2,2,Number of populations of phase 2 (must be the same as number of populations in phase 1),Dependent on computing resources
 phase2,population_size_phase2,"""10 10""",Census population size of each population of phase 2 (must be even and space delimited),Dependent on computing resources
-phase2,gen_number_phase2,10,Number of generations of phase 2,Dependent on computing resources
-phase2,dispersal_phase2,TRUE,Simulate dispersal in phase 2,TRUE or FALSE
+phase2,gen_number_phase2,1,Number of generations of phase 2,Dependent on computing resources
+phase2,dispersal_phase2,FALSE,Simulate dispersal in phase 2,TRUE or FALSE
 phase2,dispersal_type_phase2,"""all_connected""",Type of dispersal in phase 2,"""line"",""circle"",""all_connected"""
 phase2,number_transfers_phase2,1,Number of dispersing individuals in phase 2,< population size
 phase2,transfer_each_gen_phase2,1,Interval of number of generations in which dispersal occurs in phase 2,< number of generations
