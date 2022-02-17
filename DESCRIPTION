@@ -32,10 +32,9 @@ Encoding: UTF-8
 Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2
 biocViews:
 Imports: stats, methods, utils, plyr, tidyr,stringr, ape, vegan,
-        SNPRelate, sp, PopGenReport, devtools, MASS, StAMPP,
+        SNPRelate, sp, PopGenReport, MASS, StAMPP,
         gridExtra, foreach, dplyr, crayon,reshape2, fields,
-        patchwork, raster, data.table, shiny, shinyBS, shinythemes, shinyjs, 
-        tibble, gganimate
+        patchwork, raster, data.table, shiny
 Suggests: 
     HardyWeinberg,
     networkD3,
@@ -74,7 +73,13 @@ Suggests:
     SIBER,
     snpStats,
     boot,
-    hierfstat
+    hierfstat,
+    shinyBS, 
+    shinythemes, 
+    shinyjs, 
+    gganimate,
+    devtools,
+    tibble
 License: GPL-2
 LazyData: true
 RoxygenNote: 7.1.2

@@ -465,14 +465,6 @@ store <-
 
 interactive_reference <- function() {
   
-  pkg <- "shiny"
-  if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
-      "Package",
-      pkg,
-      "needed for this function to work. Please install it."
-    ))
-  }
   pkg <- "shinyBS"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop(error(
@@ -500,9 +492,9 @@ interactive_reference <- function() {
   
   ui <- fluidPage(
     
-    useShinyjs(),
+    shinyjs::useShinyjs(),
     
-    theme = shinytheme("darkly"),
+    theme = shinythemes::shinytheme("darkly"),
     
     h5(
       em(
@@ -956,12 +948,12 @@ interactive_reference <- function() {
     
     observeEvent(input$q_distribution, {
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "q_gral",
         condition = input$q_distribution == "equal"
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "mutation_rate",
         condition = input$q_distribution == "equation"
       )
@@ -970,27 +962,27 @@ interactive_reference <- function() {
     
     observeEvent(input$h_distribution, {
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "h_gral",
         condition = input$h_distribution == "equal"
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "dominance_mean",
         condition = input$h_distribution == "normal"
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "dominance_sd",
         condition = input$h_distribution == "normal"
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "intercept",
         condition = input$h_distribution == "equation"
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "rate",
         condition = input$h_distribution == "equation"
       )
@@ -999,27 +991,27 @@ interactive_reference <- function() {
     
     observeEvent(input$s_distribution, {
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "s_gral",
         condition = input$s_distribution == "equal"
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "gamma_scale",
         condition = input$s_distribution == "gamma"
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "gamma_shape",
         condition = input$s_distribution == "gamma"
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "log_mean",
         condition = input$s_distribution == "log_normal"
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "log_sd",
         condition = input$s_distribution == "log_normal"
       )
@@ -1107,14 +1099,6 @@ interactive_reference <- function() {
 
 interactive_sim_run <- function() {
   
-  pkg <- "shiny"
-  if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
-      "Package",
-      pkg,
-      "needed for this function to work. Please install it."
-    ))
-  }
   pkg <- "shinyBS"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     stop(error(
@@ -1131,12 +1115,20 @@ interactive_sim_run <- function() {
       "needed for this function to work. Please install it."
     ))
   }
+  pkg <- "shinyjs"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    stop(error(
+      "Package",
+      pkg,
+      "needed for this function to work. Please install it."
+    ))
+  }
   
   ui <- fluidPage(
     
-    useShinyjs(),
+    shinyjs::useShinyjs(),
     
-    theme = shinytheme("darkly"),
+    theme = shinythemes::shinytheme("darkly"),
     
     h5(
       em(
@@ -1773,67 +1765,67 @@ interactive_sim_run <- function() {
 
     observeEvent(input$phase1, {
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "same_line",
         condition = input$phase1 == TRUE
         )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "number_pops_phase1",
         condition = input$phase1 == TRUE
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "population_size_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "gen_number_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "dispersal_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "dispersal_type_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "number_transfers_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "transfer_each_gen_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "variance_offspring_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "number_offspring_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "selection_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "Ne_phase1",
         condition = input$phase1 == TRUE
       )
 
-      toggleElement(
+      shinyjs::toggleElement(
         id = "Ne_fst_phase1",
         condition = input$phase1 == TRUE
       )
@@ -1842,22 +1834,22 @@ interactive_sim_run <- function() {
     
     observeEvent(input$real_dataset, {
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "real_pops",
         condition = input$real_dataset == TRUE
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "real_pop_size",
         condition = input$real_dataset == TRUE
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "real_freq",
         condition = input$real_dataset == TRUE
       )
       
-      toggleElement(
+      shinyjs::toggleElement(
         id = "chromosome_name",
         condition = input$real_dataset == TRUE
       )

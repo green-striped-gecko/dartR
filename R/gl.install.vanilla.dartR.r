@@ -17,7 +17,6 @@
 #' @return Returns a message if the installation was successful/required.
 #' @export
 #' @importFrom stringr str_trim
-#' @importFrom devtools install_github
 #' @rawNamespace import(crayon, except = c(chr, '%+%'))
 #' @importFrom utils installed.packages install.packages available.packages
 #' @author Bernd Gruber (bugs? Post to

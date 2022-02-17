@@ -108,10 +108,7 @@
 #'
 #' @seealso \code{\link{gl.pcoa}}
 #' @family Exploration/visualisation functions
-#' @import tibble
 #' @rawNamespace import(data.table, except = c(melt,dcast))
-
-#' @rawNamespace import(gganimate, except = c(View))
 #' @export
 
 gl.pcoa.plot <- function(glPca,
@@ -312,14 +309,14 @@ gl.pcoa.plot <- function(glPca,
                 colnames(df) <- c("PCoAx", "PCoAy", "ind", "pop","gen")
                 df_sim <- rbind(df_sim,df)
         }
-         df_sim <- as_tibble(df_sim)
+         df_sim <- tibble::as_tibble(df_sim)
          df_sim <- df_sim[-1,]
         
         p  <- ggplot(df_sim, aes(PCoAx, PCoAy, colour = pop)) +
             geom_point(size=3) +
             labs(title = 'Generation: {frame_time}', x = xlab, y = ylab) +
-            transition_time(gen) +
-            ease_aes('linear')
+            gganimate::transition_time(gen) +
+            gganimate::ease_aes('linear')
         return(p)
         }
     

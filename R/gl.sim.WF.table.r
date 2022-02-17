@@ -91,41 +91,6 @@ gl.sim.WF.table <-
     utils.flag.start(func = funname,
                      build = "Jody",
                      verbosity = verbose)
-    
-    if (interactive_vars) {
-      pkg <- "shiny"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          " needed for this function to work. Please install it."
-        ))
-      }
-      pkg <- "shinyBS"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-      pkg <- "shinythemes"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-      pkg <- "shinyjs"
-      if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-          "Package",
-          pkg,
-          "needed for this function to work. Please install it."
-        ))
-      }
-    }
 
     # DO THE JOB
     ##### SIMULATIONS VARIABLES ######
