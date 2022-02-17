@@ -91,6 +91,7 @@ gl.assign.pca <- function(x,
             "needed for this function to work. Please install it."
         ))
     }
+    requireNamespace(pkg, quietly = TRUE)
 
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = 0)
