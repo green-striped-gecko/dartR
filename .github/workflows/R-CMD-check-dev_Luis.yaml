@@ -54,7 +54,10 @@ jobs:
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
+        env:
+          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |          
+          Rscript -e "remotes::install_github('EricArcher/strataG')"
           while read -r cmd
           do
             eval sudo $cmd
