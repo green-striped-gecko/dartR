@@ -17,6 +17,8 @@
 #' \code{\link{gl.sim.WF.table}} [required].
 #' @param x Name of the genlight object containing the SNP data to extract
 #' values for some simulation variables (see details) [default NULL].
+#' @param file_dispersal Path of the file with the dispersal table created with
+#'  the function \code{\link{gl.sim.create_dispersal}} [default NULL]. 
 #' @param number_iterations Number of iterations of the simulations [default 1].
 #' @param every_gen Generation interval at which simulations should be stored in
 #'  a genlight object [default 5].
@@ -97,6 +99,7 @@ gl.sim.WF.run <-
   function(file_var,
            ref_table,
            x = NULL,
+           file_dispersal = NULL,
            number_iterations = 1,
            every_gen = 5,
            store_phase1 = FALSE,
@@ -497,6 +500,9 @@ gl.sim.WF.run <-
         ##### DISPERSAL ######
         # dispersal is symmetrical
         if (dispersal == TRUE) {
+          
+          if(is.null(file_dispersal)){
+            
           if (dispersal_type == "all_connected") {
             dispersal_pairs <-
               as.data.frame(expand.grid(pops_vector, pops_vector))
@@ -525,6 +531,13 @@ gl.sim.WF.run <-
             )))
             colnames(dispersal_pairs) <- c("pop1", "pop2")
           }
+            
+          }
+          
+          # if dispersal file is provided
+          if(!is.null(file_dispersal)){
+            dispersal_pairs <- suppressWarnings(read.csv(file_dispersal))
+          }
           
           # defining the population size of each population
           if (real_pop_size == TRUE) {
@@ -545,10 +558,10 @@ gl.sim.WF.run <-
               gen = generation,
               size_pop1 = dispersal_pairs$size_pop1[dis_pair],
               size_pop2 = dispersal_pairs$size_pop2[dis_pair],
-              trans_gen = transfer_each_gen,
+              trans_gen = dispersal_pairs$transfer_each_gen[dis_pair],
+              n_transfer = dispersal_pairs$number_transfers[dis_pair],
               male_tran = maletran,
-              female_tran = femaletran,
-              n_transfer = number_transfers
+              female_tran = femaletran
             )
             
             pop_list[[dispersal_pairs[dis_pair, "pop1"]]] <-
@@ -600,66 +613,66 @@ gl.sim.WF.run <-
         # tic("sampling_next_gen")
         ##### SAMPLING NEXT GENERATION ########
         # testing whether any population became extinct, if so break the
-        test_extinction <- unlist(lapply(pops_vector, function(x) {
-          length(which(offspring_list[[x]]$V1 == "Male")) < population_size / 2 |
-            length(which(offspring_list[[x]]$V1 == "Female")) < population_size / 2
-        }))
-        
-        if (any(test_extinction == TRUE)) {
-          pops_extinct <- which(test_extinction == TRUE)
-          cat(
-            important(
-              "  Population",
-              pops_extinct,
-              "became EXTINCT at generation",
-              generation,
-              "\n"
-            )
-          )
-          cat(important(
-            "  Breaking this iteration and passing to the next iteration",
-            "\n"
-          ))
-          
-          s_vars_temp <- sim_vars
-          s_vars_temp <-
-            stats::setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
-          s_vars_temp$generation <- generation
-          s_vars_temp$iteration <- iteration
-          s_vars_temp$seed <- seed
-          s_vars_temp$del_ind_cM <- density_mutations_per_cm
-          
-          s_vars_temp$dispersal_rate_phase1 <-
-            paste(dispersal_rate_phase1, collapse = " ")
-          s_vars_temp$Fst_expected_phase1 <-
-            paste(Fst_expected_phase1, collapse = " ")
-          s_vars_temp$mi_expected_phase1 <-
-            paste(mi_expected_phase1, collapse = " ")
-          s_vars_temp$rate_of_loss_phase1 <- rate_of_loss_phase1
-          
-          s_vars_temp$dispersal_rate_phase2 <-
-            paste(dispersal_rate_phase2, collapse = " ")
-          s_vars_temp$Fst_expected_phase2 <-
-            paste(Fst_expected_phase2, collapse = " ")
-          s_vars_temp$mi_expected_phase2 <-
-            paste(mi_expected_phase2, collapse = " ")
-          s_vars_temp$rate_of_loss_phase2 <- rate_of_loss_phase2
-          
-          final_res[[iteration]][[count_store]] <-
-            store(
-              p_vector = pops_vector,
-              p_size = population_size,
-              p_list = pop_list,
-              n_loc_1 = loci_number,
-              paral = parallel,
-              n_cores = n.cores,
-              ref = reference,
-              p_map = plink_map,
-              s_vars = s_vars_temp
-            )
-          
-          break()
-        }
+        # test_extinction <- unlist(lapply(pops_vector, function(x) {
+        #   length(which(offspring_list[[x]]$V1 == "Male")) < population_size / 2 |
+        #     length(which(offspring_list[[x]]$V1 == "Female")) < population_size / 2
+        # }))
+        # 
+        # if (any(test_extinction == TRUE)) {
+        #   pops_extinct <- which(test_extinction == TRUE)
+        #   cat(
+        #     important(
+        #       "  Population",
+        #       pops_extinct,
+        #       "became EXTINCT at generation",
+        #       generation,
+        #       "\n"
+        #     )
+        #   )
+        #   cat(important(
+        #     "  Breaking this iteration and passing to the next iteration",
+        #     "\n"
+        #   ))
+        #   
+        #   s_vars_temp <- sim_vars
+        #   s_vars_temp <-
+        #     stats::setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
+        #   s_vars_temp$generation <- generation
+        #   s_vars_temp$iteration <- iteration
+        #   s_vars_temp$seed <- seed
+        #   s_vars_temp$del_ind_cM <- density_mutations_per_cm
+        #   
+        #   s_vars_temp$dispersal_rate_phase1 <-
+        #     paste(dispersal_rate_phase1, collapse = " ")
+        #   s_vars_temp$Fst_expected_phase1 <-
+        #     paste(Fst_expected_phase1, collapse = " ")
+        #   s_vars_temp$mi_expected_phase1 <-
+        #     paste(mi_expected_phase1, collapse = " ")
+        #   s_vars_temp$rate_of_loss_phase1 <- rate_of_loss_phase1
+        #   
+        #   s_vars_temp$dispersal_rate_phase2 <-
+        #     paste(dispersal_rate_phase2, collapse = " ")
+        #   s_vars_temp$Fst_expected_phase2 <-
+        #     paste(Fst_expected_phase2, collapse = " ")
+        #   s_vars_temp$mi_expected_phase2 <-
+        #     paste(mi_expected_phase2, collapse = " ")
+        #   s_vars_temp$rate_of_loss_phase2 <- rate_of_loss_phase2
+        #   
+        #   final_res[[iteration]][[count_store]] <-
+        #     store(
+        #       p_vector = pops_vector,
+        #       p_size = population_size,
+        #       p_list = pop_list,
+        #       n_loc_1 = loci_number,
+        #       paral = parallel,
+        #       n_cores = n.cores,
+        #       ref = reference,
+        #       p_map = plink_map,
+        #       s_vars = s_vars_temp
+        #     )
+        #   
+        #   break()
+        # }
         
         if (selection == FALSE) {
           pop_list <- lapply(pops_vector, function(x) {

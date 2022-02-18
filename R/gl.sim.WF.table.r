@@ -408,6 +408,14 @@ gl.sim.WF.table <-
     ref_res <- list(reference, ref_vars)
     names(ref_res) <- c("reference", "ref_vars")
     
-    return(ref_res)
+    # FLAG SCRIPT END
+    
+    if (verbose >= 1) {
+      cat(report("Completed:", funname, "\n"))
+    }
+    
+    # RETURN
+    
+    return(invisible(ref_res))
     
   }
