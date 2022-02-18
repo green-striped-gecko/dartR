@@ -74,9 +74,9 @@ Suggests:
     snpStats,
     boot,
     hierfstat,
-    shinyBS, 
-    shinythemes, 
-    shinyjs, 
+    shinyBS,
+    shinythemes,
+    shinyjs,
     gganimate,
     devtools,
     tibble
