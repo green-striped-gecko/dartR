@@ -80,12 +80,6 @@ gl.hwe.diagnostics <- function(x,
   
   # DO THE JOB
   
-  # abandoned this for now
-  # FstvsFis.plot <- function(Fstats) {
-  #   ggplot(Fstats, aes(Fst, Fis)) + geom_point() + geom_smooth(method = "lm") #+ facet_grid(~.id)
-  # }
-  #
-  
   # Distribution of p-values by equal bins
   suppressWarnings(hweout <-
                      gl.report.hwe(x, sig_only = F, verbose = 0))
@@ -115,8 +109,6 @@ gl.hwe.diagnostics <- function(x,
   # lFstats <- lapply(lFstats, "[[", "perloc")
   # Fstats <- rbindlist(l = lFstats, use.names = TRUE, idcol = TRUE)
   Fstats <- gl.basic.stats(x, verbose = 0)
-  # FstatsLoc <- Fstats$perloc
-  # print(FstvsFis.plot(FstatsLoc))
   
   # Number of loci out of HWE as a function of a population
   hweout.dt <- data.table(hweout)
@@ -159,7 +151,7 @@ gl.hwe.diagnostics <- function(x,
   # Collate HWE tests and Fis per locus and pop
   FisPops <- data.table(Fstats$Fis, keep.rownames = TRUE)
   
-  # fix the ehadings when there is only one pop
+  # fix the headings when there is only one pop
   if (length(levels(pop(x))) == 1) {
     FisPops[, dumpop := NULL]
     setnames(FisPops, "1", levels(pop(x)))
@@ -196,10 +188,18 @@ gl.hwe.diagnostics <- function(x,
   chsq[, pvalue := pchisq(ChiSquare, 2 * nLoc(x), lower.tail = FALSE)]
   hwe_summary <- merge(hwe_summary, chsq, by = "Population")
   
+  # Fis vs Fst plot
+  p3 <- ggplot(Fstats$perloc, aes(Fst, Fis)) + geom_point() + geom_smooth(method = "lm") +
+    xlab("Fst") +
+    ylab("Fis") +
+    ggtitle("Scatter plot of Fst vs Fis for each locus") +
+    plot_theme
+  print(p3)
+  
   # PRINTING OUTPUTS
   # using package patchwork
-  p3 <- (p1 / p2)
-  print(p3)
+ p4 <- (p1 / p2)
+  print(p4)
   
   print(hwe_summary, row.names = FALSE)
   
@@ -214,7 +214,7 @@ gl.hwe.diagnostics <- function(x,
              as.character(match.call()),
              collapse = "_")
     # saving to tempdir
-    saveRDS(list(match_call, p3), file = temp_plot)
+    saveRDS(list(match_call,p4), file = temp_plot)
     
     if (verbose >= 2) {
       cat(report("  Saving the ggplot to session tempfile\n"))
