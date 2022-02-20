@@ -26,7 +26,7 @@ utils.jackknife <- function(x,
                             unit="loc", 
                             recalc = FALSE, 
                             mono.rm = FALSE, 
-                            n.cores = 1,
+                            n.cores = "auto",
                             verbose = NULL, 
                             ...) {
   
@@ -69,13 +69,13 @@ utils.jackknife <- function(x,
   #subsetList.item <- subsetList[1]
   
   # PUT CHECKS HERE for correct unit and x and FUN is a char, and ... is a list
-  jacknife <- function(x, jckfun, subsetFUN, subsetList.item, rec = recalc, 
+  jacknife <- function(gl, jckfun, subsetFUN, subsetList.item, rec = recalc, 
                        mono = mono.rm, opt.argt=argmts) {
     xsub <- do.call(subsetFUN, 
                     args = if(subsetFUN == "gl.drop.loc") {
-                      list(x, subsetList.item, verbose=0)
+                      list(gl, subsetList.item, verbose=0)
                       } else {
-                        list(x, subsetList.item, recal=rec, mono.rm=mono, verbose=0)
+                        list(gl, subsetList.item, recal=rec, mono.rm=mono, verbose=0)
                       }
                     )
     oldVerb <- gl.check.verbosity()
@@ -85,7 +85,23 @@ utils.jackknife <- function(x,
     return(res)
   }
   
-  jck <- lapply(subsetList, jacknife, x=x, jckfun=FUN, subsetFUN = subsetFUN)
-  return(jck)
+  if(n.cores != 1) {
+    if(n.cores == "auto") n.cores <- parallel::detectCores() - 1
+    if(length(subsetList) < n.cores) n.cores <- length(subsetList)
+    cl <- parallel::makeCluster(n.cores)
+    on.exit(expr=parallel::stopCluster(cl))
+    catch <- parallel::clusterEvalQ(cl, library("dartR"))
+    parallel::clusterExport(cl, 
+                  varlist=c("subsetList", "x", "FUN", "subsetFUN"), 
+                  envir=environment()) 
+    
+    jck <- parallel::parLapply(cl = cl, X = subsetList, fun = jacknife, 
+                               gl=x, 
+                               jckfun=FUN, subsetFUN = subsetFUN)
+    
+  } else {
+    jck <- lapply(subsetList, jacknife, gl=x, jckfun=FUN, subsetFUN = subsetFUN)
+  }
+    return(jck)
   
 }
