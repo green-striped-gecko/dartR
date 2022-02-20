@@ -56,7 +56,7 @@
 #' @export
 #' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @import ggplot2
-#' @import data.table
+
 
 gl.hwe.diagnostics <- function(x,
                                alpha_val = 0.05,
@@ -158,7 +158,7 @@ gl.hwe.diagnostics <- function(x,
   }
   setnames(FisPops, "rn", "Locus")
   FisPopsLong <-
-    melt(
+    data.table::melt(
       FisPops,
       id.vars = "Locus",
       variable.name = "Population",
