@@ -19,6 +19,10 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
+#' platMod.gl <- gl.filter.allna(platypus.gl) # 81 inds, 994 loci
+#' chk.pop <- utils.jackknife(x=platMod.gl, FUN="gl.alf", unit="pop", 
+#' recalc = FALSE, mono.rm = FALSE, n.cores = 1,
+#' verbose=0))
 #' @export
 
 utils.jackknife <- function(x, 
