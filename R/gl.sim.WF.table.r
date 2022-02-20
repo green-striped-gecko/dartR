@@ -190,7 +190,7 @@ gl.sim.WF.table <-
     # (chunk_number + 1) * chunk_bp
     } else {
       
-      # chr_length <- (chunk_number + 1) * chunk_bp
+       # chr_length <- (chunk_number + 1) * chunk_bp
       chr_length <- chunk_number  * chunk_bp
       
       
