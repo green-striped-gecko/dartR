@@ -288,32 +288,66 @@ gl.pcoa.plot <- function(glPca,
     gen <- NULL  
     
     if(datatype1=="list"){
+        
         gen_number <- length(hold_x)
         df_sim <- as.data.frame(matrix(ncol = 5))
         colnames(df_sim) <- c("PCoAx","PCoAy","ind","pop","gen")
+        
+        test_pos_neg <- as.data.frame(matrix(nrow = gen_number,ncol = 3 ))
+        colnames(test_pos_neg) <- c("gen","test_x","test_y")
+        
+        # the direction of the PCA axes are chosen at random 
+        # this is to set the same direction in every generation
+        # first get the individual with more variance for axis x and y 
+        # for the first generation of the simulations
+        ind_x_axis <- which.max(abs(hold_glPca[[1]]$scores[,xaxis]))
+        ind_y_axis <- which.max(abs(hold_glPca[[1]]$scores[,yaxis]))
+        
+        # check whether is positive or negative
+        test_pos_neg[1, "test_x"] <- 
+            if(hold_glPca[[1]]$scores[ind_x_axis,xaxis]>=0)"positive"else"negative"
+        test_pos_neg[1, "test_y"]  <- 
+            if(hold_glPca[[1]]$scores[ind_y_axis,yaxis]>=0)"positive"else"negative"
         for(sim_i in 1:gen_number){
             glPca <- hold_glPca[[sim_i]]
             x <- hold_x[[sim_i]]
             m <- cbind(glPca$scores[, xaxis], glPca$scores[, yaxis])
             df <- data.frame(m)
             # Convert the eigenvalues to percentages
-            s <- sum(glPca$eig[glPca$eig >= 0])
-            e <- round(glPca$eig * 100 / s, 1)
+            # s <- sum(glPca$eig[glPca$eig >= 0])
+            # e <- round(glPca$eig * 100 / s, 1)
             # Labels for the axes and points
                 xlab <- paste("PCA Axis", xaxis)
                 ylab <- paste("PCA Axis", yaxis)
                 ind <- indNames(x)
                 pop <- factor(pop(x))
-                # gen <- unique(x$other$sim.vars$generation)
+                gen <- unique(x$other$sim.vars$generation)
                 df <- cbind(df, ind, pop,unique(x$other$sim.vars$generation))
                 colnames(df) <- c("PCoAx", "PCoAy", "ind", "pop","gen")
+
+                test_pos_neg[ sim_i, "test_x"] <- 
+                    if(hold_glPca[[sim_i]]$scores[ind_x_axis,xaxis]>=0)"positive"else"negative"
+                test_pos_neg[ sim_i, "test_y"]  <- 
+                    if(hold_glPca[[sim_i]]$scores[ind_y_axis,yaxis]>=0)"positive"else"negative"
+                
+        if(test_pos_neg[1, "test_x"] != test_pos_neg[ sim_i, "test_x"]){
+                    df$PCoAx <- df$PCoAx * -1
+                    # test_pos_neg[ sim_i, "test_x"] <- test_pos_neg[ axis_ind-1, "test_x"] 
+                }
+
+                if(test_pos_neg[ 1, "test_y"] != test_pos_neg[ sim_i, "test_y"]){
+                    df$PCoAy <- df$PCoAy * -1
+                    
+                    # test_pos_neg[ sim_i, "test_y"] <- test_pos_neg[ axis_ind-1, "test_y"] 
+                }
+
                 df_sim <- rbind(df_sim,df)
         }
          df_sim <- tibble::as_tibble(df_sim)
          df_sim <- df_sim[-1,]
         
         p  <- ggplot(df_sim, aes(PCoAx, PCoAy, colour = pop)) +
-            geom_point(size=3) +
+                        geom_point(size=3) +
             labs(title = 'Generation: {frame_time}', x = xlab, y = ylab) +
             gganimate::transition_time(gen) +
             gganimate::ease_aes('linear')

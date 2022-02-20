@@ -11,6 +11,7 @@ gl.sim.WF.run(
   file_dispersal = NULL,
   number_iterations = 1,
   every_gen = 5,
+  sample_percent = 50,
   store_phase1 = FALSE,
   interactive_vars = TRUE,
   seed = NULL,
@@ -36,6 +37,9 @@ the function \code{\link{gl.sim.create_dispersal}} [default NULL].}
 
 \item{every_gen}{Generation interval at which simulations should be stored in
 a genlight object [default 5].}
+
+\item{sample_percent}{Percentage of individuals, from the total population, 
+to sample and save in the genlight object every generation [default 50].}
 
 \item{store_phase1}{Whether to store simulations of phase 1 in genlight
 objects [default FALSE].}
