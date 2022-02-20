@@ -198,7 +198,7 @@ gl.hwe.diagnostics <- function(x,
   
   # PRINTING OUTPUTS
   # using package patchwork
- p4 <- (p1 / p2)
+ p4 <- (p1 / p2 / p3)
   print(p4)
   
   print(hwe_summary, row.names = FALSE)
