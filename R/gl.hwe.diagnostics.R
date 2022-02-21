@@ -190,11 +190,15 @@ gl.hwe.diagnostics <- function(x,
   
   # Fis vs Fst plot
   p3 <- ggplot(Fstats$perloc, aes(Fst, Fis)) + geom_point() + geom_smooth(method = "lm") +
+    annotate("text", x=max(Fstats$perloc$Fst, na.rm = TRUE) + 
+               (max(Fstats$perloc$Fst, na.rm = TRUE) - max(Fstats$perloc$Fst, na.rm = TRUE))*0.7, 
+             y = min(Fstats$perloc$Fis, na.rm = TRUE) +
+               (max(Fstats$perloc$Fis, na.rm = TRUE) - min(Fstats$perloc$Fis, na.rm = TRUE))*0.25, col="red",
+             label=paste("r = ", round(coef(lm(Fis ~ Fst, data = Fstats$perloc))[2], 3))) +
     xlab("Fst") +
     ylab("Fis") +
     ggtitle("Scatter plot of Fst vs Fis for each locus") +
     plot_theme
-  print(p3)
   
   # PRINTING OUTPUTS
   # using package patchwork
