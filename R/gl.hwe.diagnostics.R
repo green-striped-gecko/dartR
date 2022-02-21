@@ -86,10 +86,8 @@
 #' the plot?. Journal of heredity, 106(1), 1-19. }
 #' @seealso \code{\link{gl.report.hwe}}
 #' @family reporting functions
-#' @export
 #' @rawNamespace import(data.table, except = c(melt,dcast))
-#' @import ggplot2
-
+#' @export
 
 gl.hwe.diagnostics <- function(x,
                                alpha_val = 0.05,
@@ -113,6 +111,8 @@ gl.hwe.diagnostics <- function(x,
   datatype <- utils.check.datatype(x, verbose = verbose)
   
   # DO THE JOB
+  # Set NULL to variables to pass CRAN checks
+Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pvalue<-ChiSquare<-NULL
   
   # Helper function
   extractParam <- function(i, l, param) {

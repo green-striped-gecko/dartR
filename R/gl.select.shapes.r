@@ -31,8 +31,10 @@
 #' rep('MDB',8),rep('Coast',7),'Em.subglobosa','Em.victoriae')
 #' # EXAMPLES
 #' shapes <- gl.select.shapes() # Select and display available shapes
-#' shapes <- gl.select.shapes(select=c(1,1,1,5,8)) # Select and display a restricted set of shapes
-#' shapes <- gl.select.shapes(x=gl,select=c(1,1,1,5,8)) # Select set of shapes and check with no. of pops.
+#' # Select and display a restricted set of shapes
+#' shapes <- gl.select.shapes(select=c(1,1,1,5,8)) 
+#'  # Select set of shapes and check with no. of pops.
+#' shapes <- gl.select.shapes(x=gl,select=c(1,1,1,5,8))
 #' @seealso \code{\link{gl.select.colors}}
 #' @family Exploration/visualisation functions
 #' @export

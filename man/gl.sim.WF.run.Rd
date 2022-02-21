@@ -8,8 +8,10 @@ gl.sim.WF.run(
   file_var,
   ref_table,
   x = NULL,
+  file_dispersal = NULL,
   number_iterations = 1,
   every_gen = 5,
+  sample_percent = 50,
   store_phase1 = FALSE,
   interactive_vars = TRUE,
   seed = NULL,
@@ -28,10 +30,16 @@ gl.sim.WF.run(
 \item{x}{Name of the genlight object containing the SNP data to extract
 values for some simulation variables (see details) [default NULL].}
 
+\item{file_dispersal}{Path of the file with the dispersal table created with
+the function \code{\link{gl.sim.create_dispersal}} [default NULL].}
+
 \item{number_iterations}{Number of iterations of the simulations [default 1].}
 
 \item{every_gen}{Generation interval at which simulations should be stored in
 a genlight object [default 5].}
+
+\item{sample_percent}{Percentage of individuals, from the total population, 
+to sample and save in the genlight object every generation [default 50].}
 
 \item{store_phase1}{Whether to store simulations of phase 1 in genlight
 objects [default FALSE].}
@@ -124,7 +132,8 @@ interactive_vars = FALSE)
 \code{\link{gl.sim.WF.table}}
 
 Other simulation functions: 
-\code{\link{gl.sim.WF.table}()}
+\code{\link{gl.sim.WF.table}()},
+\code{\link{gl.sim.create_dispersal}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to

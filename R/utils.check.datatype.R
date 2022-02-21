@@ -75,14 +75,14 @@ utils.check.datatype <- function(x,
             if (nLoc(tmp) < nLoc(x)) {
                 cat(
                     warn(
-                        "  Warning: data include loci that are scored NA across all individuals. Consider filtering using gl <- gl.filter.allna(gl)\n"
+                        "  Warning: data include loci that are scored NA across all individuals.\n  Consider filtering using gl <- gl.filter.allna(gl)\n"
                     )
                 )
             }
             if (nInd(tmp) < nInd(x)) {
                 cat(
                     warn(
-                        "  Warning: data include individuals that are scored NA across all loci. Consider filtering using gl <- gl.filter.allna(gl)\n"
+                        "  Warning: data include loci that are scored NA across all individuals.\n  Consider filtering using gl <- gl.filter.allna(gl)\n"
                     )
                 )
             }

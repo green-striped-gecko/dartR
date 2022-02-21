@@ -97,7 +97,8 @@ interactive_vars = FALSE)
 \code{\link{gl.sim.WF.run}}
 
 Other simulation functions: 
-\code{\link{gl.sim.WF.run}()}
+\code{\link{gl.sim.WF.run}()},
+\code{\link{gl.sim.create_dispersal}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to

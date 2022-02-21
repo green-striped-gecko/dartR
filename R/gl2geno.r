@@ -2,9 +2,8 @@
 #' @title Converts a genlight object to geno format from package LEA
 #' @description
 #' The function converts a genlight object (SNP or presence/absence
-#'  i.e. SilicoDArT data) into a file in the 'geno' for
-#' \link[LEA]{snmf} (package LEA) and the 'lfmm' format for \link[LEA]{lfmm}
-#' (package LEA).
+#'  i.e. SilicoDArT data) into a file in the 'geno' and the 'lfmm' formats from 
+#'  (package LEA).
 #' @param x Name of the genlight object containing the SNP or presence/absence
 #'  (SilicoDArT) data [required].
 #' @param outfile File name of the output file [default 'gl_geno'].

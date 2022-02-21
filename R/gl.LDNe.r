@@ -17,7 +17,7 @@
 #'  directory [default tempdir(), mandated by CRAN].
 #' @param neest.path Path to the folder of the NE2-1 file.
 #'  Please note there are 3 different executables depending on your OS:
-#'  Ne2-1.exe (=Windows), Ne2-1M (=Mac), Ne2-L (=Linux). You only need to point
+#'  Ne2-1.exe (=Windows), Ne2-1M (=Mac), Ne2-1L (=Linux). You only need to point
 #'  to the folder (the function will recognise which OS you are running)
 #'  [default getwd()].
 #' @param critical (vector of) Critical values that are used to remove alleles
@@ -85,6 +85,9 @@ gl.LDNe <- function(x,
     ))
   
   # DO THE JOB
+  # Set NULL to variables to pass CRAN checks
+"Lowest Allele Frequency Used"<-"CI high Parametric"<-"CI low Parametric"<-"Estimated Ne^" <- NULL
+  
   xx <- gl2genepop(x, outfile = "dummy.gen", outpath = tempdir())
   
   if (singleton.rm == TRUE) {
@@ -243,7 +246,7 @@ gl.LDNe <- function(x,
     }
     
     pop_list_plot <- lapply(pop_list, function(x) {
-      setNames(data.frame(t(x[, -1])), x[, 1])
+      stats::setNames(data.frame(t(x[, -1])), x[, 1])
     })
     
     pop_list_plot <- lapply(1:length(pops), function(i) {

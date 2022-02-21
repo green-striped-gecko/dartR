@@ -125,13 +125,21 @@
 #'@author Author(s): Arthur Georges. Custodian: Arthur Georges (Post to
 #'\url{https://groups.google.com/d/forum/dartr})
 #'@examples
+#' gl <- testset.gl
+#' levels(pop(gl))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
+#' rep('MDB',8),rep('Coast',7),'Em.subglobosa','Em.victoriae')
+#' 
 #' # PCA (using SNP genlight object)
-#' pca <- gl.pcoa(testset.gl)
-#' gl.pcoa.plot(pca,testset.gl)
+#' pca <- gl.pcoa(gl)
+#' gl.pcoa.plot(pca,gl)
+#' 
+#' gs <- testset.gs
+#' levels(pop(gs))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
+#' rep('MDB',8),rep('Coast',6),'Em.subglobosa','Em.victoriae')
 #' 
 #' # PCA (using SilicoDArT genlight object)
-#' pca <- gl.pcoa(testset.gs)
-#' gl.pcoa.plot(pca,testset.gs)
+#' pca <- gl.pcoa(gs)
+#' gl.pcoa.plot(pca,gs)
 #' 
 #' # Collapsing pops to OTUs using Fixed Difference Analysis (using fd object)
 #' fd <- gl.fixed.diff(testset.gl)
@@ -142,7 +150,7 @@
 #' # Using a distance matrix
 #' D <- gl.dist.ind(testset.gs, method='jaccard')
 #' pcoa <- gl.pcoa(D,correction="cailliez")
-#' gl.pcoa.plot(pcoa,testset.gs)
+#' gl.pcoa.plot(pcoa,gs)
 #' 
 #'@references
 #'\itemize{
@@ -166,8 +174,6 @@
 #'points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp.
 #'559-572.
 #' }
-#' @author Custodian: Arthur Georges -- Post to
-#' \url{https://groups.google.com/d/forum/dartr}
 #' @seealso \code{\link{gl.pcoa.plot}}
 #' @family data exploration functions
 #' @importFrom ape pcoa
@@ -219,7 +225,7 @@ gl.pcoa <- function(x,
         if (nInd(x) < 2) {
         stop(
             error(
-                "Fatal Error: Only one individual or no individuals present in the dataset"
+                "Fatal Error: Only one individual or no individuals present in the dataset\n"
             )
         )
         }
@@ -227,7 +233,7 @@ gl.pcoa <- function(x,
         if (nLoc(x) < nInd(x)) {
         cat(
             warn(
-                "  Warning: Number of loci is less than the number of individuals to be represented"
+                "  Warning: Number of loci is less than the number of individuals to be represented\n"
             )
         )
         }
@@ -242,7 +248,7 @@ gl.pcoa <- function(x,
             if (verbose >= 2) {
                 cat(
                     warn(
-                        "  Warning: Correction if specified needs to be lingoes or cailliez, set to the default 'None'"
+                        "  Warning: Correction if specified needs to be lingoes or cailliez, set to the default 'None'\n"
                     )
                 )
             }

@@ -68,6 +68,18 @@ gl.plot.structure <- function(sr,
                               ...,
                               plot_theme,
                               verbose) {
+    
+    pkg <- "devtools"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(
+            error(
+                "Package ",
+                pkg,
+                " needed for this function to work. Please install it using install.packages('devtools')."
+            )
+        )
+    }
+    
     # IS strataG INSTALLED? not already installed?
     if (!requireNamespace("strataG", quietly = TRUE)) {
         ap <- available.packages()  #check CRAN
