@@ -254,8 +254,9 @@ gl.pcoa.plot <- function(glPca,
     }
     
     # Assign the new population list if as.pop is specified
-    pop.hold <- pop(x)
-    if (!is.null(as.pop)) {
+    if(datatype %in% c("SNP","SilicoDArT")){
+        pop.hold <- pop(x)
+        if (!is.null(as.pop)) {
         if (as.pop %in% names(x@other$ind.metrics)) {
             pop(x) <- as.matrix(x@other$ind.metrics[as.pop])
             if (verbose >= 2) {
@@ -273,6 +274,7 @@ gl.pcoa.plot <- function(glPca,
                     "Fatal Error: individual metric assigned to 'pop' does not exist. Check names(gl@other$loc.metrics) and select again\n"
                 )
             )
+        }
         }
     }
     
