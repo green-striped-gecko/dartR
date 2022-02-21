@@ -65,6 +65,7 @@ gl.hwe.diagnostics <- function(x,
                                colors_barplot = two_colors_contrast,
                                plot_theme = theme_dartR(),
                                save2tmp = FALSE,
+                               n.cores = "auto",
                                verbose = NULL) {
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -79,6 +80,11 @@ gl.hwe.diagnostics <- function(x,
   datatype <- utils.check.datatype(x, verbose = verbose)
   
   # DO THE JOB
+  
+  # Helper function
+  extractParam <- function(i, l, param) {
+    return(l[[i]][["overall"]][param])
+  }
   
   # Distribution of p-values by equal bins
   suppressWarnings(hweout <-
@@ -200,10 +206,23 @@ gl.hwe.diagnostics <- function(x,
     ggtitle("Scatter plot of Fst vs Fis for each locus") +
     plot_theme
   
-  # PRINTING OUTPUTS
+    jck <- utils.jackknife(x, FUN="gl.basic.stats", unit="loc", 
+                                   n.cores = n.cores,
+                                   verbose=0)
+  
+    
+   jckFst <- sapply(seq_len(nLoc(x)), extractParam, l=jck, param="Fst")
+   jckFis <- sapply(seq_len(nLoc(x)), extractParam, l=jck, param="Fis")
+   stdErrFst <- sqrt(var(jckFst)/nLoc(x))
+   stdErrFis <- sqrt(var(jckFis)/nLoc(x)) 
+   
+   report(paste0("The variation (measured as standard error withthe Jackknife method - see De Meeus 2018) of Fis and Fst, respectively is: ",
+                c(stdErrFis, stdErrFst), ". Fis vs Fst ratio is: ", stdErrFis/stdErrFst))
+  
+   # PRINTING OUTPUTS
   # using package patchwork
- p4 <- (p1 / p2 / p3)
-  print(p4)
+ p5 <- (p1 / p2 / p3)
+  print(p5)
   
   print(hwe_summary, row.names = FALSE)
   
@@ -218,7 +237,7 @@ gl.hwe.diagnostics <- function(x,
              as.character(match.call()),
              collapse = "_")
     # saving to tempdir
-    saveRDS(list(match_call,p4), file = temp_plot)
+    saveRDS(list(match_call,p5), file = temp_plot)
     
     if (verbose >= 2) {
       cat(report("  Saving the ggplot to session tempfile\n"))
