@@ -216,8 +216,10 @@ gl.hwe.diagnostics <- function(x,
    stdErrFst <- sqrt(var(jckFst)/nLoc(x))
    stdErrFis <- sqrt(var(jckFis)/nLoc(x)) 
    
-   report(paste0("The variation (measured as standard error withthe Jackknife method - see De Meeus 2018) of Fis and Fst, respectively is: ",
-                c(stdErrFis, stdErrFst), ". Fis vs Fst ratio is: ", stdErrFis/stdErrFst))
+   cat(report("The variation of Fis and Fst, respectively\n
+              (measured as standard error withthe Jackknife method - see De Meeus 2018) is:",
+                round(c(stdErrFis, stdErrFst), 2), "\n Fis vs Fst ratio is:", 
+              round(stdErrFis/stdErrFst, 2), "\n"))
   
    # PRINTING OUTPUTS
   # using package patchwork
