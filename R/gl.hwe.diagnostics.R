@@ -5,6 +5,8 @@
 #' proportions. This function helps diagnose potential problems.
 #' @inheritParams gl.report.hwe
 #' @inheritParams utils.jackknife
+#' @param n.cores The number of cores to use. If "auto" [default], it will 
+#' use all but one available cores.
 #' @param bins Number of bins to display in histograms [default 20].
 #' @param colors_hist List of two color names for the borders and fill of the
 #'   histogram [default two_colors].
@@ -61,13 +63,13 @@
 #' following Fisher's procedure for a global test (Fisher 1970). This basically
 #' tests whether there is at least one test that is truly significant in the
 #' series of tests conducted (De Meeûs et al 2009).
-#'
+#' }
 #' @return A list with two items: the table with the summary of the HWE tests and 
 #' a named vector wtih the StdErrFis and StdErrFst.
 #' @author Custodian: Carlo Pacioni -- Post to
 #'   \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' res <- gl.hwe.diagnostics(x = gl.filter.allna(platypus.gl[, 1:20]))
+#' res <- gl.hwe.diagnostics(x = gl.filter.allna(platypus.gl[, 1:20]),n.cores=1)
 #' @references \itemize{ 
 #' \item de Meeûs, T., McCoy, K.D., Prugnolle, F.,
 #' Chevillon, C., Durand, P., Hurtrez-Boussès, S., Renaud, F., 2007. Population
@@ -83,7 +85,8 @@
 #' Statistical methods for research workers Edinburgh: Oliver and Boyd. 
 #' \item
 #' Waples, R. S. (2015). Testing for Hardy–Weinberg proportions: have we lost
-#' the plot?. Journal of heredity, 106(1), 1-19. }
+#' the plot?. Journal of heredity, 106(1), 1-19.
+#'  }
 #' @seealso \code{\link{gl.report.hwe}}
 #' @family reporting functions
 #' @rawNamespace import(data.table, except = c(melt,dcast))
@@ -112,7 +115,7 @@ gl.hwe.diagnostics <- function(x,
   
   # DO THE JOB
   # Set NULL to variables to pass CRAN checks
-Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pvalue<-ChiSquare<-NULL
+Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pvalue<-ChiSquare<-Fst<-gen <-He <-value<- variable <-fst_obs<-NULL
   
   # Helper function
   extractParam <- function(i, l, param) {

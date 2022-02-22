@@ -699,19 +699,10 @@ gl.sim.WF.run <-
           
           s_vars_temp$dispersal_rate_phase1 <-
             paste(dispersal_rate_phase1, collapse = " ")
-          s_vars_temp$Fst_expected_phase1 <-
-            paste(Fst_expected_phase1, collapse = " ")
-          s_vars_temp$mi_expected_phase1 <-
-            paste(mi_expected_phase1, collapse = " ")
-          s_vars_temp$rate_of_loss_phase1 <- rate_of_loss_phase1
           
           s_vars_temp$dispersal_rate_phase2 <-
             paste(dispersal_rate_phase2, collapse = " ")
-          s_vars_temp$Fst_expected_phase2 <-
-            paste(Fst_expected_phase2, collapse = " ")
-          s_vars_temp$mi_expected_phase2 <-
-            paste(mi_expected_phase2, collapse = " ")
-          s_vars_temp$rate_of_loss_phase2 <- rate_of_loss_phase2
+         
           
           final_res[[iteration]][[count_store]] <-
             store(

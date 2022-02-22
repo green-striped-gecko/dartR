@@ -31,8 +31,7 @@
 #' @examples
 #' platMod.gl <- gl.filter.allna(platypus.gl) 
 #' chk.pop <- utils.jackknife(x=platMod.gl, FUN="gl.alf", unit="pop", 
-#' recalc = FALSE, mono.rm = FALSE, n.cores = 1,
-#' verbose=0))
+#' recalc = FALSE, mono.rm = FALSE, n.cores = 1, verbose=0)
 #' @export
 
 utils.jackknife <- function(x, 
