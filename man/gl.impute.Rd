@@ -7,9 +7,11 @@
 gl.impute(x, method = "HW", parallel = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required].}
+\item{x}{Name of the genlight object containing the SNP or presence-absence 
+data [required].}
 
-\item{method}{Imputation method, either "frequency" or "HW" [default "HW"].}
+\item{method}{Imputation method, either "frequency" or "HW" or "neighbour" 
+[default "HW"].}
 
 \item{parallel}{A logical indicating whether multiple cores -if available- 
 should be used for the computations (TRUE), or not (FALSE); requires the 
@@ -24,23 +26,36 @@ A genlight object with the missing data imputed.
 }
 \description{
 This function imputes genotypes on a population-by-population basis, where 
-populations can be considered panmictic.
+populations can be considered panmictic, or imputes the state for 
+presence-absence data.
 }
 \details{
-We advice that imputation should be performed on sampling locations, before 
-any aggregation. The imputation is achieved by replacing missing values using
+We recommend that imputation be performed on sampling locations, before 
+any aggregation. Imputation is achieved by replacing missing values using
 either of two methods:
 \itemize{
-\item "frequency" where allele frequencies for the population to which 
-the respective individual belongs are used as probabilities to sample 2 
-alleles for each missing data in each individual. 
-\item "HW" where the Hardy-Weinberg equation (p^2 + 2pq + q^2 = 1) within 
-each population is used to sample genotypes for each missing data in each 
-individual.
+\item If "frequency", genotypes scored as missing at a locus in an individual are imputed 
+using the average allele frequencies at that locus in the population
+from which the individual was drawn. 
+\item If "HW", genotypes scored as missing at a locus in an individual are imputed 
+by sampling at random assuming Hardy-Weinberg equilibrium. Applies only to 
+genotype data.
+\item If "neighbour", substitute the missing values for the focal individual
+ with the values taken from the nearest neighbour. Repeat with next nearest
+ and so on until all missing values are replaced.
 }
 
+  The nearest neighbour is the one with the smallest Euclidean distance in all 
+  the daataset.
+  
+  The advantage of this approach is that it works regardless of how many 
+  individuals are in the population to which the focal individual belongs, 
+  and the displacement of the individual is haphazard as opposed to
+  (a) Drawing the individual toward the population centroid (HW and Frequency)
+  (b) Drawing the individual toward the global centroid (glPCA).
+  
 Note that loci that have all the values missing are not imputed. Consider 
-using the function \code{\link{gl.filter.allna}}.
+using the function \code{\link{gl.filter.allna}} to remove them first.
 }
 \examples{
 gl <- gl.impute(platypus.gl)
