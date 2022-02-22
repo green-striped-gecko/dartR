@@ -106,9 +106,8 @@ gl.impute <-  function(x,
         q_allele <- glMean(y)
         pop_matrix <- as.matrix(y)
         loc_na <- which(is.na(pop_matrix), arr.ind = T)
-        pop_matrix[loc_na] <-
-          unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
-            sample_alleles(q = x)
+pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
+            return(as.numeric(s_alleles(q_freq = x)))
           })))
         y@gen <- matrix2gen(pop_matrix, parallel = parallel)
         pop_list <- c(pop_list, y)
@@ -139,7 +138,7 @@ gl.impute <-  function(x,
         loc_na <- which(is.na(pop_matrix), arr.ind = T)
         pop_matrix[loc_na] <-
           unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
-            sample_genotype(q = x)
+            return(sample_genotype(q_freq = x))
           })))
         y@gen <- matrix2gen(pop_matrix, parallel = parallel)
         pop_list <- c(pop_list, y)

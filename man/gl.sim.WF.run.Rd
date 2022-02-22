@@ -17,7 +17,8 @@ gl.sim.WF.run(
   seed = NULL,
   parallel = FALSE,
   n.cores = NULL,
-  verbose = NULL
+  verbose = NULL,
+  ...
 )
 }
 \arguments{
