@@ -67,6 +67,7 @@ Examples of other themes that can be used can be consulted in \itemize{
 }
 \seealso{
 Other reporting functions: 
+\code{\link{gl.hwe.diagnostics}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.heterozygosity}()},
 \code{\link{gl.report.parent.offspring}()},

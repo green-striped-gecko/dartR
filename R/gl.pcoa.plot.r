@@ -69,7 +69,7 @@
 #' [default 1.5].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #'  [default 2 or as specified using gl.set.verbosity].
 #'
@@ -86,22 +86,29 @@
 #' # RUN PCA
 #' pca<-gl.pcoa(gl,nfactors=5)
 #' # VARIOUS EXAMPLES
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', axis.label.size=1, hadjust=1.5,vadjust=1)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', axis.label.size=1)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', axis.label.size=1.5,scale=TRUE)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, axis.label.size=1.2, xaxis=1, yaxis=3, scale=TRUE)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', 
+#' axis.label.size=1, hadjust=1.5,vadjust=1)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', 
+#' axis.label.size=1)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', 
+#' axis.label.size=1.5,scale=TRUE)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, axis.label.size=1.2, xaxis=1, yaxis=3, 
+#' scale=TRUE)
 #' gl.pcoa.plot(pca, gl, pop.labels='none',scale=TRUE)
 #' gl.pcoa.plot(pca, gl, axis.label.size=1.2, interactive=TRUE)
 #' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, xaxis=1, yaxis=2, zaxis=3)
 #' # color AND SHAPE ADJUSTMENTS
 #' shp <- gl.select.shapes(select=c(16,17,17,0,2))
-#' col <- gl.select.colors(library='brewer',palette='Spectral',ncolors=11,select=c(1,9,3,11,11))
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', pt.colors=col, pt.shapes=shp, axis.label.size=1, hadjust=1.5,vadjust=1)
-#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', pt.colors=col, pt.shapes=shp, axis.label.size=1)
+#' col <- gl.select.colors(library='brewer',palette='Spectral',ncolors=11,
+#' select=c(1,9,3,11,11))
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', 
+#' pt.colors=col, pt.shapes=shp, axis.label.size=1, hadjust=1.5,vadjust=1)
+#' gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend',
+#'  pt.colors=col, pt.shapes=shp, axis.label.size=1)
 #'
 #' @seealso \code{\link{gl.pcoa}}
 #' @family Exploration/visualisation functions
-#'
+#' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @export
 
 gl.pcoa.plot <- function(glPca,
@@ -247,7 +254,7 @@ gl.pcoa.plot <- function(glPca,
     }
     
     # Assign the new population list if as.pop is specified
-    if(datatype %in% c("SNP","SilicoDArT")){
+    if(datatype1 %in% c("SNP","SilicoDArT")){
         pop.hold <- pop(x)
         if (!is.null(as.pop)) {
         if (as.pop %in% names(x@other$ind.metrics)) {
@@ -279,37 +286,73 @@ gl.pcoa.plot <- function(glPca,
     axis.label.size <- axis.label.size * 10
     
     # DO THE JOB
+    # Set NULL to variables to pass CRAN checks
+    gen <- NULL  
     
     if(datatype1=="list"){
+        
         gen_number <- length(hold_x)
         df_sim <- as.data.frame(matrix(ncol = 5))
         colnames(df_sim) <- c("PCoAx","PCoAy","ind","pop","gen")
+        
+        test_pos_neg <- as.data.frame(matrix(nrow = gen_number,ncol = 3 ))
+        colnames(test_pos_neg) <- c("gen","test_x","test_y")
+        
+        # the direction of the PCA axes are chosen at random 
+        # this is to set the same direction in every generation
+        # first get the individual with more variance for axis x and y 
+        # for the first generation of the simulations
+        ind_x_axis <- which.max(abs(hold_glPca[[1]]$scores[,xaxis]))
+        ind_y_axis <- which.max(abs(hold_glPca[[1]]$scores[,yaxis]))
+        
+        # check whether is positive or negative
+        test_pos_neg[1, "test_x"] <- 
+            if(hold_glPca[[1]]$scores[ind_x_axis,xaxis]>=0)"positive"else"negative"
+        test_pos_neg[1, "test_y"]  <- 
+            if(hold_glPca[[1]]$scores[ind_y_axis,yaxis]>=0)"positive"else"negative"
         for(sim_i in 1:gen_number){
             glPca <- hold_glPca[[sim_i]]
             x <- hold_x[[sim_i]]
             m <- cbind(glPca$scores[, xaxis], glPca$scores[, yaxis])
             df <- data.frame(m)
             # Convert the eigenvalues to percentages
-            s <- sum(glPca$eig[glPca$eig >= 0])
-            e <- round(glPca$eig * 100 / s, 1)
+            # s <- sum(glPca$eig[glPca$eig >= 0])
+            # e <- round(glPca$eig * 100 / s, 1)
             # Labels for the axes and points
                 xlab <- paste("PCA Axis", xaxis)
                 ylab <- paste("PCA Axis", yaxis)
                 ind <- indNames(x)
                 pop <- factor(pop(x))
-                # gen <- unique(x$other$sim.vars$generation)
+                gen <- unique(x$other$sim.vars$generation)
                 df <- cbind(df, ind, pop,unique(x$other$sim.vars$generation))
                 colnames(df) <- c("PCoAx", "PCoAy", "ind", "pop","gen")
+
+                test_pos_neg[ sim_i, "test_x"] <- 
+                    if(hold_glPca[[sim_i]]$scores[ind_x_axis,xaxis]>=0)"positive"else"negative"
+                test_pos_neg[ sim_i, "test_y"]  <- 
+                    if(hold_glPca[[sim_i]]$scores[ind_y_axis,yaxis]>=0)"positive"else"negative"
+                
+        if(test_pos_neg[1, "test_x"] != test_pos_neg[ sim_i, "test_x"]){
+                    df$PCoAx <- df$PCoAx * -1
+                    # test_pos_neg[ sim_i, "test_x"] <- test_pos_neg[ axis_ind-1, "test_x"] 
+                }
+
+                if(test_pos_neg[ 1, "test_y"] != test_pos_neg[ sim_i, "test_y"]){
+                    df$PCoAy <- df$PCoAy * -1
+                    
+                    # test_pos_neg[ sim_i, "test_y"] <- test_pos_neg[ axis_ind-1, "test_y"] 
+                }
+
                 df_sim <- rbind(df_sim,df)
         }
-         df_sim <- as_tibble(df_sim)
+         df_sim <- tibble::as_tibble(df_sim)
          df_sim <- df_sim[-1,]
         
         p  <- ggplot(df_sim, aes(PCoAx, PCoAy, colour = pop)) +
-            geom_point(size=3) +
+                        geom_point(size=3) +
             labs(title = 'Generation: {frame_time}', x = xlab, y = ylab) +
-            transition_time(gen) +
-            ease_aes('linear')
+            gganimate::transition_time(gen) +
+            gganimate::ease_aes('linear')
         return(p)
         }
     

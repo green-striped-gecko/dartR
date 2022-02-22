@@ -84,7 +84,7 @@ mouse-over to identify points [default FALSE].}
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
  [default 2 or as specified using gl.set.verbosity].}
 }
@@ -129,18 +129,25 @@ rep('MDB',8),rep('Coast',7),'Em.subglobosa','Em.victoriae')
 # RUN PCA
 pca<-gl.pcoa(gl,nfactors=5)
 # VARIOUS EXAMPLES
-gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', axis.label.size=1, hadjust=1.5,vadjust=1)
-gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', axis.label.size=1)
-gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', axis.label.size=1.5,scale=TRUE)
-gl.pcoa.plot(pca, gl, ellipse=TRUE, axis.label.size=1.2, xaxis=1, yaxis=3, scale=TRUE)
+gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', 
+axis.label.size=1, hadjust=1.5,vadjust=1)
+gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', 
+axis.label.size=1)
+gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', 
+axis.label.size=1.5,scale=TRUE)
+gl.pcoa.plot(pca, gl, ellipse=TRUE, axis.label.size=1.2, xaxis=1, yaxis=3, 
+scale=TRUE)
 gl.pcoa.plot(pca, gl, pop.labels='none',scale=TRUE)
 gl.pcoa.plot(pca, gl, axis.label.size=1.2, interactive=TRUE)
 gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, xaxis=1, yaxis=2, zaxis=3)
 # color AND SHAPE ADJUSTMENTS
 shp <- gl.select.shapes(select=c(16,17,17,0,2))
-col <- gl.select.colors(library='brewer',palette='Spectral',ncolors=11,select=c(1,9,3,11,11))
-gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', pt.colors=col, pt.shapes=shp, axis.label.size=1, hadjust=1.5,vadjust=1)
-gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend', pt.colors=col, pt.shapes=shp, axis.label.size=1)
+col <- gl.select.colors(library='brewer',palette='Spectral',ncolors=11,
+select=c(1,9,3,11,11))
+gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.95, pop.labels='pop', 
+pt.colors=col, pt.shapes=shp, axis.label.size=1, hadjust=1.5,vadjust=1)
+gl.pcoa.plot(pca, gl, ellipse=TRUE, plevel=0.99, pop.labels='legend',
+ pt.colors=col, pt.shapes=shp, axis.label.size=1)
 
 }
 \seealso{

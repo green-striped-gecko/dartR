@@ -8,7 +8,18 @@
 #' @author Luis Mijangos (bugs? Post to 
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @keywords datasets
-NULL
+"platypus.gl"
+
+#' Experimental populations of Drosophila melanogaster 
+#'
+#' Populations 25, 26 and 27 at the end of the experiment
+#' @name drosophila.gl
+#' @format genlight object
+#' @docType data
+#' @author Luis Mijangos (bugs? Post to 
+#' \url{https://groups.google.com/d/forum/dartr}
+#' @keywords datasets
+"drosophila.gl"
 
 #' A simulated genlight object created to run a landscape genetic example
 #'

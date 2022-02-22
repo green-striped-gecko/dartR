@@ -11,7 +11,7 @@
 #' will be removed [default 0.01].
 #' @param by.pop Whether MAF should be calculated by population [default FALSE].
 #' @param pop.limit Minimum number of populations in which MAF should be less 
-#' than the threshold for a loci to be filtered out. Only used if by.pop=TRUE. 
+#' than the threshold for a locus to be filtered out. Only used if by.pop=TRUE. 
 #' The default value is half of the populations [default ceiling(nPop(x)/2)].
 #' @param ind.limit Minimum number of individuals that a population should 
 #' contain to calculate MAF. Only used if by.pop=TRUE [default 10].
