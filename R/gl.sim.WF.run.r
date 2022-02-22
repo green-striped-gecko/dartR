@@ -110,7 +110,8 @@ gl.sim.WF.run <-
            seed = NULL,
            parallel = FALSE,
            n.cores = NULL,
-           verbose = NULL) {
+           verbose = NULL,
+           ...) {
     
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -164,6 +165,16 @@ gl.sim.WF.run <-
                  sim_vars$value, SIMPLIFY = F)
         ))
       eval(parse(text = vars_assign))
+    }
+    
+    input_list <- list(...)
+    
+    if(length(input_list>0)){
+    vars_assign <- unlist(unname(
+      mapply(paste, names(input_list), "<-",
+             input_list, SIMPLIFY = F)
+    ))
+    eval(parse(text = vars_assign))
     }
     
     reference <- ref_table$reference
@@ -494,6 +505,9 @@ gl.sim.WF.run <-
         
         # tic("dispersal")
         ##### DISPERSAL ######
+        if(number_pops==1){
+          dispersal <- FALSE
+        }
         # dispersal is symmetrical
         if (dispersal == TRUE) {
           
@@ -835,8 +849,10 @@ gl.sim.WF.run <-
           s_vars_temp$sample_percent <- sample_percent
           s_vars_temp$file_dispersal <- file_dispersal
           
+          if(dispersal==TRUE){
           s_vars_temp$number_transfers_phase2 <- paste(dispersal_pairs$number_transfers, collapse = " ")  
           s_vars_temp$transfer_each_gen_phase2 <- paste(dispersal_pairs$transfer_each_gen, collapse = " ") 
+          }
            
           final_res[[iteration]][[count_store]] <-
             store(
