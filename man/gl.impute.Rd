@@ -7,60 +7,63 @@
 gl.impute(x, method = "HW", parallel = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP or presence-absence 
+\item{x}{Name of the genlight object containing the SNP or presence-absence
 data [required].}
 
-\item{method}{Imputation method, either "frequency" or "HW" or "neighbour" 
+\item{method}{Imputation method, either "frequency" or "HW" or "neighbour"
 [default "HW"].}
 
-\item{parallel}{A logical indicating whether multiple cores -if available- 
-should be used for the computations (TRUE), or not (FALSE); requires the 
+\item{parallel}{A logical indicating whether multiple cores -if available-
+should be used for the computations (TRUE), or not (FALSE); requires the
 package parallel to be installed [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 A genlight object with the missing data imputed.
 }
 \description{
-This function imputes genotypes on a population-by-population basis, where 
-populations can be considered panmictic, or imputes the state for 
+This function imputes genotypes on a population-by-population basis, where
+populations can be considered panmictic, or imputes the state for
 presence-absence data.
 }
 \details{
-We recommend that imputation be performed on sampling locations, before 
+We recommend that imputation be performed on sampling locations, before
 any aggregation. Imputation is achieved by replacing missing values using
 either of two methods:
 \itemize{
-\item If "frequency", genotypes scored as missing at a locus in an individual are imputed 
-using the average allele frequencies at that locus in the population
-from which the individual was drawn. 
-\item If "HW", genotypes scored as missing at a locus in an individual are imputed 
-by sampling at random assuming Hardy-Weinberg equilibrium. Applies only to 
-genotype data.
+\item If "frequency", genotypes scored as missing at a locus in an individual
+ are imputed using the average allele frequencies at that locus in the 
+ population from which the individual was drawn.
+\item If "HW", genotypes scored as missing at a locus in an individual are 
+imputed by sampling at random assuming Hardy-Weinberg equilibrium. Applies 
+only to genotype data.
 \item If "neighbour", substitute the missing values for the focal individual
  with the values taken from the nearest neighbour. Repeat with next nearest
  and so on until all missing values are replaced.
 }
 
-  The nearest neighbour is the one with the smallest Euclidean distance in all 
-  the daataset.
-  
-  The advantage of this approach is that it works regardless of how many 
-  individuals are in the population to which the focal individual belongs, 
-  and the displacement of the individual is haphazard as opposed to
-  (a) Drawing the individual toward the population centroid (HW and Frequency)
+  The nearest neighbour is the one with the smallest Euclidean distance in 
+  all the dataset.
+
+  The advantage of this approach is that it works regardless of how many
+  individuals are in the population to which the focal individual belongs,
+  and the displacement of the individual is haphazard as opposed to:
+
+  (a) Drawing the individual toward the population centroid (HW and Frequency).
+
   (b) Drawing the individual toward the global centroid (glPCA).
-  
-Note that loci that have all the values missing are not imputed. Consider 
-using the function \code{\link{gl.filter.allna}} to remove them first.
+
+Note that loci that are missing for all individuals in a population are not 
+imputed with method 'frequency' or 'HW'. Consider using the function 
+\code{\link{gl.filter.allna}} with by.pop=TRUE to remove them first.
 }
 \examples{
-gl <- gl.impute(platypus.gl)
-
+gl <- gl.impute(gl.filter.allna(platypus.gl,verbose=0),method="neighbour")
 }
 \author{
-Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos 
+(Post to \url{https://groups.google.com/d/forum/dartr})
 }
