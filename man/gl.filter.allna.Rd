@@ -5,10 +5,13 @@
 \title{Removes loci that are all NA across individuals and/or individuals with
  all NA across loci}
 \usage{
-gl.filter.allna(x, verbose = NULL)
+gl.filter.allna(x, by.pop = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the input genlight object [required].}
+
+\item{by.pop}{If TRUE, loci that are all missing in any one population
+are deleted [default FALSE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -29,6 +32,10 @@ missing (NA) for a particular individual, but such loci can arise rarely when
  all loci, but such individuals may sneak in to the dataset when loci are
  deleted. Retaining individual or loci with all NAs can cause issues for
  several functions.
+ 
+ Also, on occasion an analysis will require that there are some loci scored
+ in each population. Setting by.pop=TRUE will result in removal of loci when
+ they are all missing in any one population.
 }
 \examples{
 # SNP data
@@ -52,7 +59,7 @@ Other filters and filter reports:
 \code{\link{gl.report.taglength}()}
 }
 \author{
-Custodian: Arthur Georges -- Post to
+Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters and filter reports}
