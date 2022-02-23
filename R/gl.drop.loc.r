@@ -39,7 +39,7 @@ gl.drop.loc <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -75,13 +75,14 @@ gl.drop.loc <- function(x,
     if (flag == "both" || flag == "list") {
         for (case in loc.list) {
             if (!(case %in% locNames(x))) {
-                cat(
+                if(verbose >= 2){
+                    cat(
                     warn(
                         "  Warning: Listed loci",
                         case,
                         "not present in the dataset -- ignored\n"
-                    )
-                )
+                    ))
+                }
                 loc.list <- loc.list[!(loc.list == case)]
             }
         }
