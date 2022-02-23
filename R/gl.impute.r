@@ -50,7 +50,14 @@
 #' @author Custodian: Luis Mijangos 
 #' (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl <- gl.impute(gl.filter.allna(platypus.gl,verbose=0),method="neighbour")
+#' # SNP genotype data
+#' gl <- gl.filter.callrate(platypus.gl,threshold=0.95)
+#' gl <- gl.filter.allna(gl)
+#' gl <- gl.impute(gl,method="neighbour")
+#' # Sequence Tag presence-absence data
+#' gs <- gl.filter.callrate(testset.gs,threshold=0.95)
+#' gl <- gl.filter.allna(gl)
+#' gs <- gl.impute(gs, method="neighbour")
 
 gl.impute <-  function(x,
                        method = "HW",
@@ -62,11 +69,17 @@ gl.impute <-  function(x,
   # FLAG SCRIPT START
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
-                   build = "Jody",
+                   build = "Josh",
                    verbosity = verbose)
   
   # CHECK DATATYPE
   datatype <- utils.check.datatype(x, verbose = verbose)
+  
+  # FUNCTION SPECIFIC ERROR CHECKING
+  
+    if(method=="neighbor"){
+      method <- "neighbour"
+    }
   
   # DO THE JOB
   
@@ -82,6 +95,9 @@ gl.impute <-  function(x,
       number_imputations <- nas_number - (loci_all_nas * nInd(y))
       
       if (method == "frequency") {
+        if (verbose >= 2){
+          cat(report("  Imputation based on average allele frequencies, population-wise\n"))
+        }
         if (verbose >= 2 & loci_all_nas >= 1) {
           cat(
             warn(
@@ -114,6 +130,9 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
       }
       
       if (method == "HW") {
+        if (verbose >= 2){
+          cat(report("  Imputation based on average allele HW sampling, population-wise\n"))
+        }
         if (verbose >= 2 & loci_all_nas >= 1) {
           cat(
             warn(
@@ -162,6 +181,9 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
   }
   
   if (method == "neighbour") {
+    if (verbose >= 2){
+      cat(report("  Imputation based on drawing from the nearest neighbour\n"))
+    }
     pop_list_temp <- seppop(x)
     pop_list <- list()
     
