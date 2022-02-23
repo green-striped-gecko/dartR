@@ -357,16 +357,19 @@ gl.dist.ind <- function(x,
     # FLAG SCRIPT END
     
     if(output=="matrix"){
-        if(verbose >= 2){cat(report("  Returning a square matrix\n"))}
-        return(mat)
-        if (verbose > 0) {
-            cat(report("Completed:", funname, "\n"))
+        if(verbose >= 2){
+            cat(report("  Returning a square matrix\n"))
         }
-    } else {
-        if(verbose >= 2){cat(report("  Returning a stat::dist object\n"))}
-        return(dd)
-        if (verbose > 0) {
-            cat(report("Completed:", funname, "\n"))
-        }
+        final <- mat
     }
-}
+    if(output!="matrix"){
+        if(verbose >= 2){
+            cat(report("  Returning a stat::dist object\n"))
+        }
+        final <- dd
+    }
+    if (verbose > 0) {
+            cat(report("Completed:", funname, "\n"))
+    }
+    return(final)
+ }

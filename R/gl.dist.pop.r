@@ -68,7 +68,7 @@ gl.dist.pop <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -333,7 +333,7 @@ gl.dist.pop <- function(x,
         cat("  Distance measure:", method, "\n")
         cat("    No. of populations =", nPop(x), "\n")
         cat("    Average no. of individuals per population =",
-            nInd(x) / nPop(x),
+            round(nInd(x) / nPop(x),1),
             "\n")
         cat("    No. of loci =", nLoc(x), "\n")
         cat("    Minimum Distance: ", round(min(dd,na.rm=TRUE), 2), "\n")
