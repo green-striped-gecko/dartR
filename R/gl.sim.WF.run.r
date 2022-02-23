@@ -35,6 +35,8 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
+#' @param ... Here you can add separately any variable and its value which will 
+#' be changed over the input value supplied by the csv file. See tutorial. 
 #' @details
 #' Values for simulation variables can be submitted into the function 
 #' interactively through a shiny app if interactive_vars = TRUE. Optionally, if 

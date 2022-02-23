@@ -10,8 +10,8 @@ gl.impute(x, method = "HW", parallel = FALSE, verbose = NULL)
 \item{x}{Name of the genlight object containing the SNP or presence-absence
 data [required].}
 
-\item{method}{Imputation method, either "frequency" or "HW" or "neighbour"
-[default "HW"].}
+\item{method}{Imputation method, either "frequency" or "HW" or "neighbour" 
+or "random" [default "HW"].}
 
 \item{parallel}{A logical indicating whether multiple cores -if available-
 should be used for the computations (TRUE), or not (FALSE); requires the
@@ -43,6 +43,7 @@ only to genotype data.
 \item If "neighbour", substitute the missing values for the focal individual
  with the values taken from the nearest neighbour. Repeat with next nearest
  and so on until all missing values are replaced.
+\item if "random, missing data are substituted by random values (0, 1 or 2). 
 }
 
   The nearest neighbour is the one with the smallest Euclidean distance in 

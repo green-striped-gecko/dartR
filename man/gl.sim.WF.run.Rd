@@ -58,6 +58,9 @@ simulations variables [default TRUE].}
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
+
+\item{...}{Here you can add separately any variable and its value which will 
+be changed over the input value supplied by the csv file. See tutorial.}
 }
 \value{
 Returns genlight objects with simulated data.
