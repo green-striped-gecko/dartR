@@ -12,6 +12,7 @@ gl.pcoa(
   mono.rm = TRUE,
   parallel = FALSE,
   n.cores = 16,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colors = two_colors,
   save2tmp = FALSE,
@@ -35,6 +36,10 @@ Windows) [default FALSE].}
 
 \item{n.cores}{Number of cores to use if parallel processing is requested
 [default 16].}
+
+\item{plot.out}{If TRUE, a diagnostic plot is displayed showing a scree plot
+for the "informative" axes and a histogram of eigenvalues of the remaining 
+"noise" axes [Default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}
@@ -157,7 +162,7 @@ levels(pop(gl))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
 rep('MDB',8),rep('Coast',7),'Em.subglobosa','Em.victoriae')
 
 # PCA (using SNP genlight object)
-pca <- gl.pcoa(gl)
+pca <- gl.pcoa(gl,verbose=2)
 gl.pcoa.plot(pca,gl)
 
 gs <- testset.gs

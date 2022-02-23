@@ -62,7 +62,14 @@ imputed with method 'frequency' or 'HW'. Consider using the function
 \code{\link{gl.filter.allna}} with by.pop=TRUE to remove them first.
 }
 \examples{
-gl <- gl.impute(gl.filter.allna(platypus.gl,verbose=0),method="neighbour")
+# SNP genotype data
+gl <- gl.filter.callrate(platypus.gl,threshold=0.95)
+gl <- gl.filter.allna(gl)
+gl <- gl.impute(gl,method="neighbour")
+# Sequence Tag presence-absence data
+gs <- gl.filter.callrate(testset.gs,threshold=0.95)
+gl <- gl.filter.allna(gl)
+gs <- gl.impute(gs, method="neighbour")
 }
 \author{
 Custodian: Luis Mijangos 
