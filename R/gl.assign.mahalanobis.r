@@ -68,6 +68,8 @@
 #' confidence ellipses [default 2]
 #' @param plevel Probability level for bounding ellipses
 #' [default 0.999].
+#' @param plot.out If TRUE, produces a plot showing the position of the 
+#' unknown in relation to putative source populations [default TRUE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
@@ -89,15 +91,19 @@
 gl.assign.mahalanobis <- function(x,
                                   dim.limit=2,
                                   plevel=0.999,
+                                  plot.out=TRUE,
                                   unknown,
                                   verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
+    if(verbose==0){
+      plot.out <- FALSE
+    }
     
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -153,8 +159,11 @@ gl.assign.mahalanobis <- function(x,
         df <- NULL
     } else {
         pcoa <- gl.pcoa(x,nfactors=dim.limit,verbose=0)
-        if(verbose>=1){
-            suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=plevel)))
+        if(plot.out==TRUE){
+          if(verbose >= 2){
+            cat(report("  Plotting the unknown against putative populations\n"))
+          }
+            suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=plevel,verbose=0)))
         }    
 
         # Determine the number of dimensions for confidence envelope (the ordination and dimension reduction) From the eigenvalue
@@ -255,14 +264,14 @@ gl.assign.mahalanobis <- function(x,
         best <- as.character(df[df$assign == "yes"][1,2])
        
         if (verbose >= 3) {
-            cat(
-                report(
-                    "  Best assignment is the population with the larges probability of assignment, in this case",
+            cat("  Best assignment is the population with the larges probability of assignment, in this case",
                     best,
                     "\n"
                 )
-            )
         }
+    }
+    if(verbose >= 2){
+      cat(report("  Returning a dataframe with the Mahalanobis Distances\n"))
     }
     
     # FLAG SCRIPT END
