@@ -6,8 +6,8 @@
 #' presence-absence data.
 #' @param x Name of the genlight object containing the SNP or presence-absence
 #' data [required].
-#' @param method Imputation method, either "frequency" or "HW" or "neighbour"
-#' [default "HW"].
+#' @param method Imputation method, either "frequency" or "HW" or "neighbour" 
+#' or "random" [default "HW"].
 #' @param parallel A logical indicating whether multiple cores -if available-
 #' should be used for the computations (TRUE), or not (FALSE); requires the
 #' package parallel to be installed [default FALSE].
@@ -28,6 +28,7 @@
 #' \item If "neighbour", substitute the missing values for the focal individual
 #'  with the values taken from the nearest neighbour. Repeat with next nearest
 #'  and so on until all missing values are replaced.
+#' \item if "random, missing data are substituted by random values (0, 1 or 2). 
 #' }
 #'
 #'   The nearest neighbour is the one with the smallest Euclidean distance in 
@@ -230,6 +231,44 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
       
     }
     
+    x3@gen <- matrix2gen(x_matrix, parallel = parallel)
+    
+  }
+  
+  if (method == "random") {
+    pop_list_temp <- seppop(x)
+    pop_list <- list()
+    
+    for (y in pop_list_temp) {
+      loci_all_nas <- sum(glNA(y) > nInd(y))
+      nas_number <- sum(glNA(y)) / 2
+      number_imputations <- nas_number - (loci_all_nas * nInd(y))
+    }
+    
+    if (verbose >= 2 & loci_all_nas >= 1) {
+      cat(
+        warn(
+          "  Warning: Population ",
+          popNames(y),
+          " has ",
+          loci_all_nas,
+          " loci with all missing values.\n"
+        )
+      )
+      if (verbose >= 3) {
+        cat(report(
+          "  Method= 'random':",
+          number_imputations,
+          "values imputed.\n"
+        ))
+      }
+    }
+
+    x3 <- x
+    
+    x_matrix <- as.matrix(x)
+    loc_na <- which(is.na(x_matrix), arr.ind = T)
+    x_matrix[loc_na] <- sample(c(0:2),size=nrow(loc_na),replace = T)
     x3@gen <- matrix2gen(x_matrix, parallel = parallel)
     
   }
