@@ -1,3 +1,9 @@
+#' @name gl.sim.diagnostics
+#' @title Function to diagnose simulations against theoretical expectations
+#' @param x [default ]
+#' @param iteration [default ]
+#' @param pop_he [default ]
+#' @param pops_fst [default ]
 #' @param plot_colors Vector with two color names for the significant and
 #' not-significant loci [default two_colors_contrast].
 #' @param plot_theme User specified theme [default theme_dartR()].
@@ -39,6 +45,8 @@ gl.sim.diagnostics <- function(x,
   # }
   
   # DO THE JOB
+  
+  gen<-He<-value<-variable<-fst_obs<- NULL
   
   
   x <- x[[iteration]]

@@ -240,7 +240,7 @@ gl.sim.WF.table <-
     location_targets <- NULL
     
     # resolution to sample loci under selection
-    sample_resolution <- mean(targets$distance)/max(targets$targets)
+    sample_resolution <- round(mean(targets$distance)/max(targets$targets))
     
     for (i in 1:nrow(targets)) {
       location_targets_temp <-
@@ -259,8 +259,18 @@ gl.sim.WF.table <-
         c(location_targets, location_targets_temp)
     }
     
+    
     # joining real neutral loci, real dataset loci and loci under selection
     location_targets <- c(location_targets, location_neutral_loci_real, location_neutral_loci_sim)
+    
+    # the number of loci available to mutation is the same as the total loci to
+    # simulate
+    if(mutation==T){ 
+      location_loci_mutation <- sample(1:chr_length,size = length(location_targets))
+      location_loci_mutation <- location_loci_mutation[order(location_loci_mutation)]
+      location_targets <- c(location_targets,location_loci_mutation)
+    }
+    
     location_targets <- location_targets[order(location_targets)]
     
     #this is to fix a bug that crashes the program because the last neutral
@@ -326,6 +336,29 @@ gl.sim.WF.table <-
     
     neutral_loci_location <- unname(unlist(neutral_loci_location))
     
+    if(mutation==T){ 
+      
+    mutation_loci_location_temp <- location_loci_mutation
+    mutation_loci_location_temp <- mutation_loci_location_temp[order(mutation_loci_location_temp)]
+    
+    mutation_loci_location <-
+      lapply(mutation_loci_location_temp, function(x) {
+        which(recombination_map$location_targets == x)
+      })
+    
+    mutation_loci_location <- unname(unlist(mutation_loci_location))
+      
+    }
+    
+    if(s_distribution== "exponential_gamma" ){
+      s_advantageous <- rexp(loci_number_to_simulate,rate = exp_rate) * -1
+      s_deleterious <- rgamma(loci_number_to_simulate, shape = gamma_shape, scale = gamma_scale)
+      s_temp <- c(sample(s_advantageous,size=round(loci_number_to_simulate*(percent_adv/100))),
+             sample(s_deleterious,size=round(loci_number_to_simulate*(1-percent_adv/100))))
+      s <- sample(s_temp,size =loci_number_to_simulate )
+      
+    }
+    
     if (s_distribution == "equal") {
       s <- s_gral
     }
@@ -351,7 +384,7 @@ gl.sim.WF.table <-
     
     # the equation for dominance (h) was taken from Huber 2018 Nature
     if (h_distribution == "equation") {
-      h <- 1 / ((1 / intercept) - (-1 * rate * s))
+      h <- 1 / ((1 / intercept) - (-1 * rate * abs(s)))
     }
     
     if (q_distribution == "equal") {
@@ -359,8 +392,8 @@ gl.sim.WF.table <-
     }
     
     if (q_distribution == "equation") {
-      a <- s * (1 - (2 * h))
-      b <- (h * s) * (1 + mutation_rate)
+      a <- abs(s) * (1 - (2 * h))
+      b <- (h * abs(s)) * (1 + mutation_rate)
       c <- rep.int(-(mutation_rate), times = loci_number_to_simulate)
       df_q <- as.data.frame(cbind(a, b, c))
       # q is based on the following equation: (s(1-2h)q^2) + (hs(1+u)q) - u = 0,
@@ -397,9 +430,18 @@ gl.sim.WF.table <-
     # the log normal distribution, with the parameters used in the simulations,
     # generates a few selection coefficients that are > 1. The maximum value of s
     # is set to 0.99
-    s_more_than_one <-
-      as.numeric(row.names(reference[reference$s > 1, ]))
+    s_more_than_one <- as.numeric(row.names(reference[reference$s > 1, ]))
     reference[s_more_than_one, "s"] <- 0.99
+    # the exponential distribution, with the parameters used in the simulations,
+    # generates a few selection coefficients that are < -1. The minimum value of s
+    # is set to -0.5
+    s_less_minus_one <- as.numeric(row.names(reference[reference$s < - 0.5, ]))
+    reference[s_less_minus_one, "s"] <- -0.5
+    
+    if(mutation==TRUE){
+    # setting q to 0 in loci available to mutation
+    reference[as.numeric(mutation_loci_location), "q"] <- 0
+    }
     
     reference <- reference[, -1]
     

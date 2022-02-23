@@ -10,14 +10,15 @@ gl.sim.WF.run(
   x = NULL,
   file_dispersal = NULL,
   number_iterations = 1,
-  every_gen = 5,
-  sample_percent = 50,
+  every_gen = 10,
+  sample_percent = 10,
   store_phase1 = FALSE,
   interactive_vars = TRUE,
   seed = NULL,
   parallel = FALSE,
   n.cores = NULL,
-  verbose = NULL
+  verbose = NULL,
+  ...
 )
 }
 \arguments{

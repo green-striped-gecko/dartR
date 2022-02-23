@@ -254,7 +254,7 @@ gl.pcoa.plot <- function(glPca,
     }
     
     # Assign the new population list if as.pop is specified
-    if(datatype %in% c("SNP","SilicoDArT")){
+    if(datatype1 %in% c("SNP","SilicoDArT")){
         pop.hold <- pop(x)
         if (!is.null(as.pop)) {
         if (as.pop %in% names(x@other$ind.metrics)) {

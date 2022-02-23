@@ -103,14 +103,15 @@ gl.sim.WF.run <-
            x = NULL,
            file_dispersal = NULL,
            number_iterations = 1,
-           every_gen = 5,
-           sample_percent = 50,
+           every_gen = 10,
+           sample_percent = 10,
            store_phase1 = FALSE,
            interactive_vars = TRUE,
            seed = NULL,
            parallel = FALSE,
            n.cores = NULL,
-           verbose = NULL) {
+           verbose = NULL,
+           ...) {
     
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -164,6 +165,16 @@ gl.sim.WF.run <-
                  sim_vars$value, SIMPLIFY = F)
         ))
       eval(parse(text = vars_assign))
+    }
+    
+    input_list <- list(...)
+    
+    if(length(input_list>0)){
+    vars_assign <- unlist(unname(
+      mapply(paste, names(input_list), "<-",
+             input_list, SIMPLIFY = F)
+    ))
+    eval(parse(text = vars_assign))
     }
     
     reference <- ref_table$reference
@@ -228,14 +239,27 @@ gl.sim.WF.run <-
     
     neutral_loci_location <- which(reference$s == 0)
     
-    reference$selection <- "under_selection"
-    reference[as.numeric(neutral_loci_location), "selection"] <-
-      "neutral"
+    mutation_loci_location <- which(reference$q == 0)
+    
+    mutation_loci_adv <- which(reference$q == 0 & reference$s <0)
+    
+    mutation_loci_del <- which(reference$q == 0 & reference$s >0)
+    
+    under_sel_loci_location <- which(reference$q > 0 & reference$s != 0 )
+    
+    deleterious <- which(reference$q > 0 & reference$s > 0 )
+    
+    advantageous <- which(reference$q > 0 & reference$s < 0 )
+    
+    reference[as.numeric(neutral_loci_location), "selection"] <- "neutral"
+    reference[as.numeric(mutation_loci_adv), "selection"] <- "mutation_adv"
+    reference[as.numeric(mutation_loci_del), "selection"] <- "mutation_del"
+    reference[as.numeric(deleterious), "selection"] <- "deleterious"
+    reference[as.numeric(advantageous), "selection"] <- "advantageous"
     
     # one is subtracted from the recombination map to account for the last row that
     # was added in the recombination map to avoid that the recombination function crashes
-    plink_map <-
-      as.data.frame(matrix(nrow = nrow(reference), ncol = 4))
+    plink_map <- as.data.frame(matrix(nrow = nrow(reference), ncol = 4))
     plink_map[, 1] <- reference$chr_name
     plink_map[, 2] <- rownames(reference)
     plink_map[, 3] <- reference$loc_cM
@@ -309,42 +333,7 @@ gl.sim.WF.run <-
     density_mutations_per_cm <-
       (freq_deleterious_b * nrow(freq_deleterious)) /
       (recombination_map[loci_number, "loc_cM"] * 100)
-    # 
-    # dispersal_rate_phase2 <-
-    #   (number_transfers_phase2 / transfer_each_gen_phase2) / (population_size_phase2)
-    # Fst_expected_phase2 <-
-    #   1 / ((4 * Ne_fst_phase2 * dispersal_rate_phase2) * ((2 / (2 - 1)) ^ 2) + 1)
-    # mi_expected_phase2 <-
-    #   (0.22 / (sqrt(
-    #     2 * Ne_fst_phase2 * dispersal_rate_phase2
-    #   ))) - (0.69 / ((2 * Ne_fst_phase2) * sqrt(dispersal_rate_phase2)))
-    # rate_of_loss_phase2 <- 1 - (1 / (2 * Ne_phase2))
-    # 
-    # dispersal_rate_phase1 <-
-    #   (number_transfers_phase1 / transfer_each_gen_phase1) / (population_size_phase1)
-    # Fst_expected_phase1 <-
-    #   1 / ((4 * Ne_fst_phase1 * dispersal_rate_phase1) * ((2 / (2 - 1)) ^ 2) + 1)
-    # mi_expected_phase1 <-
-    #   (0.22 / (sqrt(
-    #     2 * Ne_fst_phase1 * dispersal_rate_phase1
-    #   ))) - (0.69 / ((2 * Ne_fst_phase1) * sqrt(dispersal_rate_phase1)))
-    # rate_of_loss_phase1 <- 1 - (1 / (2 * Ne_phase1))
-    # 
-    
-    # number_transfers_phase2 <- 1
-    #   transfer_each_gen_phase2 <- 10
-    #   population_size_phase2 <- 200
-    #   Ne_phase2 <- 200
-    
-      # # dispersal_rate_phase2 <-
-      #   (number_transfers_phase2 / transfer_each_gen_phase2) / (population_size_phase2)
-    
-    # fst_equilibrium <- (log(1/2) / log( (1- dispersal_rate_phase2)^2 * (1-(1/(2*Ne_phase2))) )) * 2
-    
-    # fst_equilibrium
-    
-  
-    
+   
     ##### START ITERATION LOOP #####
     for (iteration in 1:number_iterations) {
       if (iteration %% 1 == 0) {
@@ -516,6 +505,9 @@ gl.sim.WF.run <-
         
         # tic("dispersal")
         ##### DISPERSAL ######
+        if(number_pops==1){
+          dispersal <- FALSE
+        }
         # dispersal is symmetrical
         if (dispersal == TRUE) {
           
@@ -616,6 +608,42 @@ gl.sim.WF.run <-
         })
         # toc()
         
+        # tic("mutation")
+        ##### MUTATION #####
+        if(mutation==T){
+          
+          for(offspring_pop in offspring_list){
+            
+            offspring_pop$runif <- runif(nrow(offspring_pop))
+            
+            for (offspring_ind in 1:nrow(offspring_pop)) {
+              
+              if (length(mutation_loci_location) == 0) {
+                cat(important("  No more locus to mutate\n"))
+                break()
+              }
+              
+              if (offspring_pop[offspring_ind, "runif"] < mut_rate) {
+                locus_to_mutate <- as.numeric(sample(mutation_loci_location, 1))
+                mutation_loci_location <-
+                  mutation_loci_location[-which(mutation_loci_location == as.character(locus_to_mutate))]
+                chromosomes <- c(offspring_pop[offspring_ind, 3], offspring_pop[offspring_ind, 4])
+                chr_to_mutate <- sample(1:2, 1)
+                chr_to_mutate_b <- chromosomes[chr_to_mutate]
+                substr(chr_to_mutate_b, locus_to_mutate, locus_to_mutate) <-
+                  "a"
+                chromosomes[chr_to_mutate] <- chr_to_mutate_b
+                offspring_pop[offspring_ind, 3] <- chromosomes[1]
+                offspring_pop[offspring_ind, 4] <- chromosomes[2]
+              } else{
+                next()
+              }
+            }
+            
+          }
+        }
+        # toc()
+        
         # tic("selection")
         ##### SELECTION #####
         if (selection == TRUE) {
@@ -675,8 +703,7 @@ gl.sim.WF.run <-
           # formatting the values of the variables to be saved in the genlight
           # object
           s_vars_temp <- rbind(ref_vars, sim_vars)
-          s_vars_temp <-
-            setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
+          s_vars_temp <- setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
           s_vars_temp$generation <- generation
           s_vars_temp$iteration <- iteration
           s_vars_temp$seed <- seed
@@ -686,19 +713,10 @@ gl.sim.WF.run <-
           
           s_vars_temp$dispersal_rate_phase1 <-
             paste(dispersal_rate_phase1, collapse = " ")
-          s_vars_temp$Fst_expected_phase1 <-
-            paste(Fst_expected_phase1, collapse = " ")
-          s_vars_temp$mi_expected_phase1 <-
-            paste(mi_expected_phase1, collapse = " ")
-          s_vars_temp$rate_of_loss_phase1 <- rate_of_loss_phase1
           
           s_vars_temp$dispersal_rate_phase2 <-
             paste(dispersal_rate_phase2, collapse = " ")
-          s_vars_temp$Fst_expected_phase2 <-
-            paste(Fst_expected_phase2, collapse = " ")
-          s_vars_temp$mi_expected_phase2 <-
-            paste(mi_expected_phase2, collapse = " ")
-          s_vars_temp$rate_of_loss_phase2 <- rate_of_loss_phase2
+         
           
           final_res[[iteration]][[count_store]] <-
             store(
@@ -718,8 +736,6 @@ gl.sim.WF.run <-
             popNames(final_res[[iteration]][[count_store]]) <- popNames(x)
             
           }
-
-
           break()
         }
         
@@ -776,6 +792,24 @@ gl.sim.WF.run <-
         }
         # toc()
         
+        # tic("mutation_2")
+        # making available to mutation those loci in which deleterious alleles 
+        # have been eliminated from all populations
+        if(mutation==T){
+          
+          pops_merge <- rbindlist(pop_list)
+          freq <- dplyr::bind_cols(apply(pops_merge, 1, ped_b, n_loc = loci_number),.name_repair="minimal")
+          lost_deleterious <- freq[-c(as.numeric(neutral_loci_location),under_sel_loci_location),]
+          lost_deleterious[lost_deleterious=="a"] <- 1
+          lost_deleterious[lost_deleterious=="A"] <- 0
+          lost_deleterious[] <- lapply(lost_deleterious, as.numeric)
+          lost_deleterious$fixation <- rowSums(lost_deleterious)
+          deleterious_eliminated <- rownames(lost_deleterious[lost_deleterious$fixation==0,])
+          mutation_loci_location <- union(mutation_loci_location,deleterious_eliminated)
+        
+        }
+        # toc()
+
         # tic("store")
         ##### STORE VALUES ########
         if (generation %in% gen_store & exists("count_store")) {
@@ -784,7 +818,7 @@ gl.sim.WF.run <-
           
           # subsampling individuals 
           
-          if (sample_percent != 100) {
+          if (sample_percent < 100) {
             
             population_size_temp <- round(population_size * (sample_percent/100))
             # Converting odd population sizes to even 
@@ -815,25 +849,11 @@ gl.sim.WF.run <-
           s_vars_temp$sample_percent <- sample_percent
           s_vars_temp$file_dispersal <- file_dispersal
           
+          if(dispersal==TRUE){
           s_vars_temp$number_transfers_phase2 <- paste(dispersal_pairs$number_transfers, collapse = " ")  
           s_vars_temp$transfer_each_gen_phase2 <- paste(dispersal_pairs$transfer_each_gen, collapse = " ") 
+          }
            
-          # s_vars_temp$dispersal_rate_phase1 <-
-          #   paste(dispersal_rate_phase1, collapse = " ")
-          # s_vars_temp$Fst_expected_phase1 <-
-          #   paste(Fst_expected_phase1, collapse = " ")
-          # s_vars_temp$mi_expected_phase1 <-
-          #   paste(mi_expected_phase1, collapse = " ")
-          # s_vars_temp$rate_of_loss_phase1 <- rate_of_loss_phase1
-          # 
-          # s_vars_temp$dispersal_rate_phase2 <-
-          #   paste(dispersal_rate_phase2, collapse = " ")
-          # s_vars_temp$Fst_expected_phase2 <-
-          #   paste(Fst_expected_phase2, collapse = " ")
-          # s_vars_temp$mi_expected_phase2 <-
-          #   paste(mi_expected_phase2, collapse = " ")
-          # s_vars_temp$rate_of_loss_phase2 <- rate_of_loss_phase2
-          
           final_res[[iteration]][[count_store]] <-
             store(
               p_vector = pops_vector,

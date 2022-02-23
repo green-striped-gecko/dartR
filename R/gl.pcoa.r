@@ -19,6 +19,9 @@
 #' Windows) [default FALSE].
 #' @param n.cores Number of cores to use if parallel processing is requested
 #' [default 16].
+#' @param plot.out If TRUE, a diagnostic plot is displayed showing a scree plot
+#' for the "informative" axes and a histogram of eigenvalues of the remaining 
+#' "noise" axes [Default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options
 #'  [default theme_dartR()].
 #' @param plot_colors List of two color names for the borders and fill of the
@@ -130,7 +133,7 @@
 #' rep('MDB',8),rep('Coast',7),'Em.subglobosa','Em.victoriae')
 #' 
 #' # PCA (using SNP genlight object)
-#' pca <- gl.pcoa(gl)
+#' pca <- gl.pcoa(gl,verbose=2)
 #' gl.pcoa.plot(pca,gl)
 #' 
 #' gs <- testset.gs
@@ -185,6 +188,7 @@ gl.pcoa <- function(x,
                     mono.rm = TRUE,
                     parallel = FALSE,
                     n.cores = 16,
+                    plot.out = TRUE,
                     plot_theme = theme_dartR(),
                     plot_colors = two_colors,
                     save2tmp = FALSE,
@@ -231,11 +235,11 @@ gl.pcoa <- function(x,
         }
    
         if (nLoc(x) < nInd(x)) {
-        cat(
+        if(verbose >=2){cat(
             warn(
                 "  Warning: Number of loci is less than the number of individuals to be represented\n"
             )
-        )
+        )}
         }
     }
     
@@ -413,26 +417,25 @@ gl.pcoa <- function(x,
     
     if (datatype == "SNP" || datatype == "SilicoDArT")
     {
-        if (verbose >= 2) {
-            if (datatype == "SNP") {
-                cat(
+        if (datatype == "SNP") {
+            if (verbose >= 2) {cat(
                     report(
                         "  Performing a PCA, individuals as entities, loci as attributes, SNP genotype as state\n"
                     )
-                )
+                )}
                 title <-
                     "PCA on SNP Genotypes\nScree Plot (informative axes only)"
             }
             if (datatype == "SilicoDArT") {
-                cat(
+                if (verbose >= 2) {cat(
                     report(
                         "  Performing a PCA, individuals as entities, loci as attributes, Tag P/A as state\n"
                     )
-                )
+                )}
                 title <-
                     "PCA on Tag P/A Data\nScree Plot (informative axes only)"
             }
-        }
+            
         pca <-
             glPca(x,
                   nf = nfactors,
@@ -556,7 +559,7 @@ gl.pcoa <- function(x,
     # printing outputs
     p3 <- (p1 / p2)
     if (verbose >= 1) {
-        print(p3)
+        if(plot.out){print(p3)}
     }
     
     # SAVE INTERMEDIATES TO TEMPDIR

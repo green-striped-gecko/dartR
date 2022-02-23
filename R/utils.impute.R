@@ -11,43 +11,47 @@ matrix2gen <- function(snp_matrix, parallel) {
 }
 
 # function to sample alleles using allele frequencies as probability
-sample_alleles <- function(alleles_list = c("a", "A"), q) {
-  if (is.na(q)) {
+s_alleles <- function(q_freq) {
+  if (is.na(q_freq)) {
     return(NA)
   }
   alleles_sampled <-
     paste0(sample(
-      alleles_list,
+      c("a", "A"),
       size = 2,
-      prob = c(q, 1 - q),
+      prob = c(q_freq, 1 - q_freq),
       replace = T
     ), collapse = "")
-  alleles_sampled
+  
   if (alleles_sampled == "AA") {
-    alleles_sampled <- 0
+    alleles_sam <- 0
   }
+  
   if (alleles_sampled == "aA") {
-    alleles_sampled <- 1
+    alleles_sam <- 1
   }
+  
   if (alleles_sampled == "Aa") {
-    alleles_sampled <- 1
+    alleles_sam <- 1
   }
+  
   if (alleles_sampled == "aa") {
-    alleles_sampled <- 2
+    alleles_sam <- 2
   }
-  return(alleles_sampled)
+  
+  return(as.numeric(alleles_sam))
 }
 
 # function to sample genotypes based on Hardy-Weinberg equation
-sample_genotype <- function(genotype_list = c(0, 1, 2), q) {
-  if (is.na(q)) {
+sample_genotype <- function(genotype_list = c(0, 1, 2), q_freq) {
+  if (is.na(q_freq)) {
     return(NA)
   }
   #genotype probabilities based on Hardy-Weinberg equation
   # p^2 + 2pq + q^2 = 1
-  geno_probs <- c(((1 - q) ^ 2), # homozygote for the reference allele
-                  (2 * (1 - q) * q), # heterozygote
-                  (q ^ 2)) # homozygote for the alternative allele)
+  geno_probs <- c(((1 - q_freq) ^ 2), # homozygote for the reference allele
+                  (2 * (1 - q_freq) * q_freq), # heterozygote
+                  (q_freq ^ 2)) # homozygote for the alternative allele)
   genotype_sampled <-
     sample(genotype_list, size = 1, prob = geno_probs)
   return(genotype_sampled)

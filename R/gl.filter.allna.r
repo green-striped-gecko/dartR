@@ -17,6 +17,10 @@
 #'  Also, on occasion an analysis will require that there are some loci scored
 #'  in each population. Setting by.pop=TRUE will result in removal of loci when
 #'  they are all missing in any one population.
+#'  
+#' Note that loci that are missing for all individuals in a population are
+#' not imputed with method 'frequency' or 'HW'. Consider 
+#' using the function \code{\link{gl.filter.allna}} with by.pop=TRUE.
 #'
 #' @param x Name of the input genlight object [required].
 #' @param by.pop If TRUE, loci that are all missing in any one population
