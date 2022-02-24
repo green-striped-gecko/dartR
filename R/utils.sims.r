@@ -433,6 +433,7 @@ store <-
     chromosome(res) <- res$other$loc.metrics$chr_name
     position(res) <- res$other$loc.metrics$loc_bp
     res$other$sim.vars <- s_vars
+    res <- utils.reset.flags(res,verbose=0)
     
     return(res)
     

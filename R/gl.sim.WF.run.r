@@ -115,6 +115,8 @@ gl.sim.WF.run <-
            verbose = NULL,
            ...) {
     
+    # tic("first_part")
+    
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -169,15 +171,15 @@ gl.sim.WF.run <-
       eval(parse(text = vars_assign))
     }
     
-    input_list <- list(...)
-    
-    if(length(input_list>0)){
-    vars_assign <- unlist(unname(
-      mapply(paste, names(input_list), "<-",
-             input_list, SIMPLIFY = F)
-    ))
-    eval(parse(text = vars_assign))
-    }
+    # input_list <- list(...)
+    # 
+    # if(length(input_list>0)){
+    # vars_assign <- unlist(unname(
+    #   mapply(paste, names(input_list), "<-",
+    #          input_list, SIMPLIFY = F)
+    # ))
+    # eval(parse(text = vars_assign))
+    # }
     
     reference <- ref_table$reference
     ref_vars <- ref_table$ref_vars
@@ -335,6 +337,11 @@ gl.sim.WF.run <-
     density_mutations_per_cm <-
       (freq_deleterious_b * nrow(freq_deleterious)) /
       (recombination_map[loci_number, "loc_cM"] * 100)
+    # toc()
+    # first_part: 0.101 sec elapsed
+    # first_part: 0.124 sec elapsed
+    # first_part: 0.081 sec elapsed
+    # first_part: 0.094 sec elapsed
    
     ##### START ITERATION LOOP #####
     for (iteration in 1:number_iterations) {
@@ -411,6 +418,8 @@ gl.sim.WF.run <-
         )
       })
       # toc()
+      # initialisation: 67.086 sec elapsed
+      # initialisation: 66.992 sec elapsed
       
       #if there is just one population set dispersal to FALSE
       if (length(pop_list) == 1) {
@@ -591,6 +600,7 @@ gl.sim.WF.run <-
           }
         }
         # toc()
+        # dispersal: 0.118 sec elapsed
         
         # tic(reproduction)
         ##### REPRODUCTION #########
@@ -609,12 +619,18 @@ gl.sim.WF.run <-
           )
         })
         # toc()
+        #  6.063 sec elapsed
+        # 5.838 sec elapsed
+        #  6.031 sec elapsed
+        # 5.635 sec elapsed
         
         # tic("mutation")
         ##### MUTATION #####
         if(mutation==T){
           
-          for(offspring_pop in offspring_list){
+          for(off_pop in 1:length(offspring_list)){
+            
+            offspring_pop <- offspring_list[[off_pop]]
             
             offspring_pop$runif <- runif(nrow(offspring_pop))
             
@@ -632,19 +648,20 @@ gl.sim.WF.run <-
                 chromosomes <- c(offspring_pop[offspring_ind, 3], offspring_pop[offspring_ind, 4])
                 chr_to_mutate <- sample(1:2, 1)
                 chr_to_mutate_b <- chromosomes[chr_to_mutate]
-                substr(chr_to_mutate_b, locus_to_mutate, locus_to_mutate) <-
-                  "a"
+                substr(chr_to_mutate_b, locus_to_mutate, locus_to_mutate) <- "a"
                 chromosomes[chr_to_mutate] <- chr_to_mutate_b
                 offspring_pop[offspring_ind, 3] <- chromosomes[1]
                 offspring_pop[offspring_ind, 4] <- chromosomes[2]
+                
               } else{
                 next()
               }
             }
-            
+            offspring_list[[off_pop]] <- offspring_pop
           }
         }
         # toc()
+        # mutation: 0.7 sec elapsed
         
         # tic("selection")
         ##### SELECTION #####
@@ -659,6 +676,9 @@ gl.sim.WF.run <-
           })
         }
         # toc()
+        # selection: 5.615 sec elapsed
+        # selection: 6.068 sec elapsed
+        # selection: 6.229 sec elapsed
         
         # tic("sampling_next_gen")
         ##### SAMPLING NEXT GENERATION ########
@@ -793,6 +813,8 @@ gl.sim.WF.run <-
           })
         }
         # toc()
+        # sampling_next_gen: 0.094 sec elapsed
+        # sampling_next_gen: 0.103 sec elapsed
         
         # tic("mutation_2")
         # making available to mutation those loci in which deleterious alleles 
@@ -811,6 +833,9 @@ gl.sim.WF.run <-
         
         }
         # toc()
+        # mutation_2: 3.871 sec elapsed
+        # mutation_2: 4.22 sec elapsed
+        # mutation_2: 3.205 sec elapsed
 
         # tic("store")
         ##### STORE VALUES ########
@@ -881,6 +906,10 @@ gl.sim.WF.run <-
           
         }
         # toc()
+        
+        # store: 21.763 sec elapsed
+        # store: 24.627 sec elapsed
+        # with parallel TRUE store: 30.117 sec elapsed
       }
     }
     
