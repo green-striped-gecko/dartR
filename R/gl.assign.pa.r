@@ -59,7 +59,7 @@ gl.assign.pa <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE

@@ -52,11 +52,14 @@ gl.filter.maf <- function(x,
     
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
+    if(verbose==0){
+        plot.out <- FALSE
+    }
     
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -105,7 +108,7 @@ gl.filter.maf <- function(x,
     # DO THE JOB
     
     if(by.pop){
-        if (verbose >= 3) {
+        if (verbose >= 2) {
             cat(report(
                 "  Removing loci with MAF <",threshold, "in at least",pop.limit,"populations and recalculating FreqHoms and FreqHets\n"
             ))
@@ -130,7 +133,7 @@ gl.filter.maf <- function(x,
         x2 <- utils.recalc.maf(x2, verbose = 0)
     }else{
         # Recalculate the relevant loc.metrics
-        if (verbose >= 3) {
+        if (verbose >= 2) {
             cat(report(
                 "  Removing loci with MAF <",threshold, "over all the dataset and recalculating FreqHoms and FreqHets\n"
             ))
