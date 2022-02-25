@@ -20,8 +20,10 @@
 #' @param plot.out Specify if histograms of call rate, before and after, are to
 #' be produced [default TRUE].
 #' @param plot_theme User specified theme for the plot [default theme_dartR()].
-#' @param plot_colors List of two color names for the borders and fill of the
-#' plots [default two_colors].
+#' @param plot_colors_pop A color palette for population plots
+#' [default discrete_palette].
+#' @param plot_colors_all List of two color names for the borders and fill of
+#' the overall plot [default two_colors].
 #' @param bins Number of bins to display in histograms [default 25].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #'  temporary directory (tempdir) [default FALSE].
@@ -39,12 +41,14 @@
 gl.filter.maf <- function(x,
                           threshold = 0.01,
                           by.pop = FALSE,
+                          maf.limit = 0.5,
                           pop.limit = ceiling(nPop(x)/2),
                           ind.limit = 10,
                           recalc = FALSE,
                           plot.out = TRUE,
                           plot_theme = theme_dartR(),
-                          plot_colors = two_colors,
+                          plot_colors_pop = discrete_palette,
+                          plot_colors_all = two_colors,
                           bins = 25,
                           save2tmp = FALSE,
                           verbose = NULL) {
@@ -115,6 +119,7 @@ gl.filter.maf <- function(x,
         }
         x <- utils.recalc.maf(x, verbose = 0)
         pop.list <- seppop(x)
+        
         # getting populations with more than ind.limit
         ind_per_pop <- which(unlist(lapply(pop.list, nInd))>=ind.limit)
         pop.list <- pop.list[ind_per_pop]
@@ -148,7 +153,7 @@ gl.filter.maf <- function(x,
         x2 <- utils.recalc.maf(x2, verbose = 0)
     }
     
-    if(plot.out){
+    if(plot.out & by.pop==FALSE){
         maf <- NULL
     # Plot a histogram of MAF
     maf_pre <- data.frame(x@other$loc.metrics$maf)
@@ -159,7 +164,7 @@ gl.filter.maf <- function(x,
     p1 <-
         ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
         geom_histogram(bins = bins,color = plot_colors[1],fill = plot_colors[2]) +
-        coord_cartesian(xlim = c(min, 1)) + 
+        coord_cartesian(xlim = c(min, 0.5)) + 
         geom_vline(xintercept = threshold,color = "red",size = 1) + 
         xlab("Pre-filter SNP MAF\nOver all populations") + 
         ylab("Count") +
@@ -173,11 +178,202 @@ gl.filter.maf <- function(x,
     p2 <-
         ggplot(as.data.frame(maf_post), aes(x = maf)) + 
         geom_histogram(bins = bins,color = plot_colors[1],fill = plot_colors[2]) +
-        coord_cartesian(xlim = c(min, 1)) + 
+        coord_cartesian(xlim = c(min, 0.5)) + 
         geom_vline(xintercept = threshold,color = "red", size = 1) + 
         xlab("Post-filter SNP MAF\nOver all populations") + 
         ylab("Count") +
         plot_theme
+    }
+    
+    if(plot.out & by.pop==TRUE){
+        
+        
+        # plots pre
+        pops_maf_pre <- seppop(x)
+        
+        mafs_plots_pre <- lapply(pops_maf_pre, function(z) {
+            pop_name <- popNames(z)
+            z$other$loc.metrics <- as.data.frame(z$other$loc.metrics)
+            z <- gl.filter.monomorphs(z, verbose = 0)
+            z <- gl.recalc.metrics(z, verbose = 0)
+            mafs_per_pop <- z$other$loc.metrics$maf
+            
+            p_temp <-
+                ggplot(as.data.frame(mafs_per_pop), aes(x = mafs_per_pop)) + 
+                geom_histogram(bins = bins, color = "black", fill = plot_colors_pop(bins)) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) +
+                xlab("Pre-filter SNP MAF") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme + 
+                ggtitle(paste(popNames(z), "n =", nInd(z)))
+            
+            return(p_temp)
+        })
+        
+        # plots post
+        pops_maf_post <- seppop(x2)
+        
+        mafs_plots_post <- lapply(pops_maf_post, function(z) {
+            pop_name <- popNames(z)
+            z$other$loc.metrics <- as.data.frame(z$other$loc.metrics)
+            z <- gl.filter.monomorphs(z, verbose = 0)
+            z <- gl.recalc.metrics(z, verbose = 0)
+            mafs_per_pop <- z$other$loc.metrics$maf
+            
+            p_temp <-
+                ggplot(as.data.frame(mafs_per_pop), aes(x = mafs_per_pop)) + 
+                geom_histogram(bins = bins, color = "black", fill = plot_colors_pop(bins)) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) + 
+                xlab("Post-filter SNP MAF\n") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme 
+
+            return(p_temp)
+        })
+        
+        plots_pops_merge <- lapply(1:length(pops_maf_pre),function(y){
+            plot_temp <- mafs_plots_pre[[y]] / mafs_plots_post[[y]]
+            return(plot_temp)
+        })
+        
+        # Check for status -- any populations with ind > ind.limit; and is nPop > 1
+        ind_per_pop <- unlist(lapply(pops_maf_pre, nInd))
+        
+        test_pop <-
+            as.data.frame(cbind(pop = names(ind_per_pop),ind_per_pop))
+        test_pop$ind_per_pop <- as.numeric(test_pop$ind_per_pop)
+        
+        maf_pre <- data.frame(x@other$loc.metrics$maf)
+        colnames(maf_pre) <- "maf"
+        
+        maf_post <- data.frame(x2@other$loc.metrics$maf)
+        colnames(maf_post) <- "maf"
+        
+        # testing which populations comply with thresholds
+        popn.hold <-
+            test_pop[which(test_pop$ind_per_pop >= ind.limit), "pop"]
+        
+        names(plots_pops_merge) <- popn.hold
+        
+        mafs_plots_print <- plots_pops_merge[popn.hold]
+        
+        if (length(popn.hold) > 1) {
+            
+            p_all_pre <-
+                ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
+                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) + 
+                xlab("Pre-filter SNP MAF\nOver all populations") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme
+            
+            p_all_post <-
+                ggplot(as.data.frame(maf_post), aes(x = maf)) + 
+                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) + 
+                xlab("Post-filter SNP MAF\nOver all populations") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme
+            
+            p2 <- p_all_pre / p_all_post
+            p3 <- mafs_plots_print
+        }
+        
+        if (length(popn.hold) == 0) {
+            if (verbose >= 1) {
+                cat(
+                    important(
+                        "  No populations met minimum limits on number of individuals or loci, reporting for overall\n"
+                    )
+                )
+            }
+            p_all_pre <-
+                ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
+                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) + 
+                xlab("Pre-filter SNP MAF\nOver all populations") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme
+            
+            p_all_post <-
+                ggplot(as.data.frame(maf_post), aes(x = maf)) + 
+                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) + 
+                xlab("Post-filter SNP MAF\nOver all populations") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme
+            
+            p3 <- p_all_pre / p_all_post
+        }
+        
+        if (length(popn.hold) == 1) {
+            if (verbose >= 3) {
+                cat(
+                    important(
+                        "  Only one population met minimum limits on number of individuals or loci\n"
+                    )
+                )
+            }
+            
+            p_all_pre <-
+                ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
+                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) + 
+                xlab("Pre-filter SNP MAF") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme
+            
+            p_all_post <-
+                ggplot(as.data.frame(maf_post), aes(x = maf)) + 
+                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) + 
+                xlab("Post-filter SNP MAF") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme
+            
+            p3 <- p_all_pre / p_all_post
+            
+        }
+        
+        if (nPop(x2) == 1) {
+            if (verbose >= 1) {
+                cat(important("  Only one population specified\n"))
+            }
+            title.str <-
+                paste("Minor Allele Frequency\n", pop(x2)[1])
+            
+            p_all_pre <-
+                ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
+                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) + 
+                xlab("Pre-filter SNP MAF") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme
+            
+            p_all_post <-
+                ggplot(as.data.frame(maf_post), aes(x = maf)) + 
+                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_vline(xintercept = threshold,color = "red",size = 1) + 
+                xlab("Post-filter SNP MAF") + 
+                ylab("Count") + 
+                xlim(0, 0.5) + 
+                plot_theme
+            
+            p3 <- p_all_pre / p_all_post
+            
+            
+        }
+        
+        
     }
     
     if (recalc) {
@@ -206,9 +402,14 @@ gl.filter.maf <- function(x,
     }
     
     # PRINTING OUTPUTS using package patchwork
-    p3 <- (p1 / p2) + plot_layout(heights = c(1, 1))
     if (plot.out) {
-        print(p3)
+        if (length(popn.hold) > 1) {
+            suppressWarnings(print(p2))
+            suppressWarnings(print(p3))
+            p3 <- c(p3,p2)
+        }else{
+            suppressWarnings(print(p3))
+        }
     }
     
     # SAVE INTERMEDIATES TO TEMPDIR

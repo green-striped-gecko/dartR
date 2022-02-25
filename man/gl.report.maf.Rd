@@ -8,11 +8,11 @@ gl.report.maf(
   x,
   maf.limit = 0.5,
   ind.limit = 5,
-  loc.limit = 30,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colors_pop = discrete_palette,
   plot_colors_all = two_colors,
+  bins = 25,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -25,9 +25,6 @@ gl.report.maf(
 \item{ind.limit}{Show histograms only for populations of size greater than
 ind.limit [default 5].}
 
-\item{loc.limit}{Show histograms only for populations with more than
-loc.limit polymorphic loci [default 30].}
-
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options
@@ -38,6 +35,8 @@ loc.limit polymorphic loci [default 30].}
 
 \item{plot_colors_all}{List of two color names for the borders and fill of
 the overall plot [default two_colors].}
+
+\item{bins}{Number of bins to display in histograms [default 25].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
