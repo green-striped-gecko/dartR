@@ -4,7 +4,7 @@
 \alias{gl.assign.pca}
 \title{Assign an individual of unknown provenance to population based on PCA}
 \usage{
-gl.assign.pca(x, unknown, plevel = 0.999, verbose = NULL)
+gl.assign.pca(x, unknown, plevel = 0.999, plot.out = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the input genlight object [required].}
@@ -14,6 +14,9 @@ unknown [required].}
 
 \item{plevel}{Probability level for bounding ellipses in the PCoA plot
 [default 0.999].}
+
+\item{plot.out}{If TRUE, plot the 2D PCA showing the position 
+of the unknown [default TRUE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report

@@ -9,6 +9,7 @@ gl.assign.mahalanobis(
   x,
   dim.limit = 2,
   plevel = 0.999,
+  plot.out = TRUE,
   unknown,
   verbose = NULL
 )
@@ -21,6 +22,9 @@ confidence ellipses [default 2]}
 
 \item{plevel}{Probability level for bounding ellipses
 [default 0.999].}
+
+\item{plot.out}{If TRUE, produces a plot showing the position of the 
+unknown in relation to putative source populations [default TRUE]}
 
 \item{unknown}{Identity label of the focal individual whose provenance is
 unknown [required].}
