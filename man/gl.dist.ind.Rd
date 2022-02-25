@@ -20,7 +20,7 @@ gl.dist.ind(
 \arguments{
 \item{x}{Name of the genlight containing the SNP genotypes or presence-absence data [required].}
 
-\item{method}{Specify distance measure [SNP: Euclidean; P/A: SMD].}
+\item{method}{Specify distance measure [SNP: Euclidean; P/A: Simple].}
 
 \item{scale}{If TRUE, the distances are scaled to fall in the range [0,1] [default TRUE]}
 
@@ -53,20 +53,20 @@ This script calculates various distances between individuals based on allele
 \details{
 The distance measure for SNP genotypes can be one of:
 \itemize{
- \item Euclidean Distance
- \item Scaled Euclidean Distance
- \item Simple Mismatch Distance
- \item Absolute Mismatch Distance
- \item Czekanowski (Manhattan) Distance
+ \item Euclidean Distance [method = "Euclidean"]
+ \item Scaled Euclidean Distance [method='Euclidean", scale=TRUE]
+ \item Simple Mismatch Distance [method="Simple"]
+ \item Absolute Mismatch Distance [method="Absolute"]
+ \item Czekanowski (Manhattan) Distance [method="Manhattan"]
  }
 
 The distance measure for Sequence Tag Presence/Absence data (binary) can be one of:
 \itemize{
- \item Euclidean Distance
- \item Scaled Euclidean Distance
- \item Simple Matching Distance
- \item Jaccard Distance
- \item Bray-Curtis Distance
+ \item Euclidean Distance [method = "Euclidean"]
+ \item Scaled Euclidean Distance [method='Euclidean", scale=TRUE]
+ \item Simple Matching Distance [method="Simple"]
+ \item Jaccard Distance [method="Jaccard"]
+ \item Bray-Curtis Distance [method="Bray-Curtis"]
  }
 
 Refer to the dartR Technical Note on Distances in Genetics.

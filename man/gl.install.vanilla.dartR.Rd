@@ -5,30 +5,32 @@
 \title{Installs all required packages for using all functions
 available in dartR}
 \usage{
-gl.install.vanilla.dartR(flavour = NULL, verbose = TRUE)
+gl.install.vanilla.dartR(flavour = NULL, verbose = NULL)
 }
 \arguments{
-\item{flavour}{If and which version of R you want to install. If NULL
-then only needed packages for the current version will be installed. If
+\item{flavour}{The version of R you want to install. If NULL
+then only packages needed for the current version will be installed. If
 'CRAN' current CRAN version will be installed. 'master' installs the GitHub
-master branch and 'dev' installs the experimental development branch from
+master branch, 'beta' installs the latest stable version, and 'dev' installs 
+the experimental development branch from
 GitHub [default NULL].}
 
-\item{verbose}{Returns information on packages and dartR versions
-[default TRUE].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 Returns a message if the installation was successful/required.
 }
 \description{
 The function compares the installed packages with the the currently available
-ones on cran. Be aware this function only works if a version of dartR is
+ones on CRAN. Be aware this function only works if a version of dartR is
 already installed on your system. You can choose if you also want to have a
-specific version of dartR installed ('CRAN', 'master' or 'dev' ). 'master'
-and 'dev' are installed from Github. Be aware the dev version from github is
+specific version of dartR installed ('CRAN', 'master', 'beta' or 'dev' ). 'master'
+, 'beta' and 'dev' are installed from Github. Be aware that the dev version from github is
  not fully tested and most certainly will contain untested functions.
 }
 \author{
-Bernd Gruber (bugs? Post to
+Custodian: Bernd Gruber (Post to
 \url{https://groups.google.com/d/forum/dartr})
 }
