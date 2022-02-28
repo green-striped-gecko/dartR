@@ -33,6 +33,8 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
+#' @param ... Here you can add separately any variable and its value which will 
+#' be changed over the input value supplied by the csv file. See tutorial. 
 #' @details
 #' Values for the variables to create the reference table can be submitted into the function 
 #' interactively through a Shiny app if interactive_vars = TRUE. Optionally, if 
@@ -82,7 +84,8 @@ gl.sim.WF.table <-
            file_targets_sel = NULL,
            file_r_map = NULL,
            interactive_vars = TRUE,
-           verbose = NULL) {
+           verbose = NULL,
+           ...) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -127,6 +130,16 @@ gl.sim.WF.table <-
           mapply(paste, ref_vars$variable, "<-",
                  ref_vars$value, SIMPLIFY = F)
         ))
+      eval(parse(text = vars_assign))
+    }
+    
+    input_list <- list(...)
+    
+    if(length(input_list>0)){
+      vars_assign <- unlist(unname(
+        mapply(paste, names(input_list), "<-",
+               input_list, SIMPLIFY = F)
+      ))
       eval(parse(text = vars_assign))
     }
     
@@ -177,6 +190,20 @@ gl.sim.WF.table <-
       
     } 
     
+    # these are the location of the neutral loci in the simulations
+    # if real_loc is FALSE and real_freq is TRUE
+    if (real_loc == FALSE & !is.null(x) & real_freq == TRUE) {
+
+      location_neutral_loci_real_temp <-
+        round(seq(
+        chunk_bp / (nLoc(x) + 1),
+        (chunk_number * chunk_bp),
+        chunk_bp / nLoc(x)
+      ))
+      
+      location_neutral_loci_real <- sample(location_neutral_loci_real_temp,size =nLoc(x))
+    } 
+    
     # this is the length of the chromosome
     # if real locations are supplied, the length of the chromosome is the last 
     # SNP of the genlight object
@@ -196,15 +223,13 @@ gl.sim.WF.table <-
       
     }
     
-    # This are the locations of neutral loci of the simulations
-  
+    # These are the locations of neutral loci of the simulations
       location_neutral_loci_sim <-
         round(seq(
           chunk_bp / (neutral_loci_chunk + 1),
           (chunk_number * chunk_bp),
           chunk_bp / neutral_loci_chunk
         ))
-      
       
     # if the targets of selection file is provided
     if (!is.null(file_targets_sel)) {
@@ -240,19 +265,19 @@ gl.sim.WF.table <-
     location_targets <- NULL
     
     # resolution to sample loci under selection
-    sample_resolution <- round(mean(targets$distance)/max(targets$targets))
+    sample_resolution <- round(mean(targets$distance)/max(targets$targets))/10
     
     for (i in 1:nrow(targets)) {
-      location_targets_temp <-
-        unlist(mapply(
-          FUN = function(a, b) {
-            seq(from = a,
-                to = b,
-                by = sample_resolution)
+      location_targets_temp <- mapply(
+        FUN = function(a, b) {
+          seq(from = a,
+              to = b,
+              by = sample_resolution)
           },
           a = unname(unlist(targets[i, "start"])),
           b = unname(unlist(targets[i, "end"]))
-        ))
+        )
+      location_targets_temp <- as.vector(round(location_targets_temp))
       location_targets_temp <-
         sample(location_targets_temp, size = targets[i, "targets"])
       location_targets <-
@@ -279,7 +304,7 @@ gl.sim.WF.table <-
     # different transcripts can be located in the same genome location. So,
     # repeated deleterious mutations are deleted
     location_targets <- unique(location_targets)
-    
+  
     loci_number_to_simulate <- length(location_targets)
     
     # the recombination map is produced by cross multiplication. the following
@@ -297,10 +322,8 @@ gl.sim.WF.table <-
     # recombination map are assigned to row 0, to correct this, they
     # are reassigned to row number 1
     recombination_temp[recombination_temp == 0] <- 1
-    recombination_2 <-
-      recombination_map_temp[recombination_temp, "cM"]
-    recombination_map <-
-      as.data.frame(cbind(location_targets, recombination_2))
+    recombination_2 <- recombination_map_temp[recombination_temp, "cM"]
+    recombination_map <- as.data.frame(cbind(location_targets, recombination_2))
     recombination_map$c <- NA
     # the recombination map is produced by cross multiplication
     #not taking in account the last row for the loop to work
@@ -308,54 +331,50 @@ gl.sim.WF.table <-
       recombination_map[target_row, "c"] <-
         ((recombination_map[target_row + 1, "location_targets"] - recombination_map[target_row, "location_targets"]) * recombination_map[target_row, "recombination_2"]) / chunk_bp
     }
-    # The last element of the recombination column must be zero, otherwise the recombination function crashes. 
-    recombination_map[nrow(recombination_map),"c"] <- 0 
-    
-    # In order for the recombination rate to be accurate, we must account for
-    # the case when the probability of the total recombination rate is less than 1
-    # (i.e. < 100 cM). For this end, the program subtracts from 1 the sum of all
-    # the recombination rates and this value inserted in the last row of the
-    # recombination_map table. If this row is chosen as the recombination point,
-    # recombination does not occur. For example, if a chromosome of 20 cM’s is
-    # simulated, the last row of the recombination_map will have a value of 0.8
-    # and therefore 80% of the times recombination will not occur.
-    # number of recombination events per meiosis
-    recom_event <- ceiling(sum(recombination_map[, "c"],na.rm = TRUE))
-    recombination_map[loci_number_to_simulate + 1, "c"] <- recom_event - sum(recombination_map[, "c"])
-    recombination_map[loci_number_to_simulate + 1, "location_targets"] <- recombination_map[loci_number_to_simulate, "location_targets"]
-    recombination_map[loci_number_to_simulate + 1, "recombination_2"] <- recombination_map[loci_number_to_simulate, "recombination_2"]
+    # The last element of the recombination rate column must be zero,
+    # otherwise the recombination function crashes.
+    recombination_map[nrow(recombination_map), "c"] <- 0
     recombination_map$accum <- cumsum(recombination_map[, "c"])
-    
-    neutral_loci_location_temp <- c(location_neutral_loci_real,location_neutral_loci_sim)
-    neutral_loci_location_temp <- neutral_loci_location_temp[order(neutral_loci_location_temp)]
-    
-    neutral_loci_location <-
-      lapply(neutral_loci_location_temp, function(x) {
-        which(recombination_map$location_targets == x)
+    # neutral loci location simulated
+    neutral_loci_location_sim_t <- location_neutral_loci_sim
+    neutral_loci_location_sim_t <- neutral_loci_location_sim_t[order(neutral_loci_location_sim_t)]
+    neutral_loci_location_sim <- lapply(neutral_loci_location_sim_t, function(x) {
+      which(recombination_map$location_targets == x)
       })
+    neutral_loci_location_sim <- unname(unlist(neutral_loci_location_sim))
+    neutral_loci_location <- neutral_loci_location_sim
     
-    neutral_loci_location <- unname(unlist(neutral_loci_location))
+    if(real_loc==TRUE | real_freq == TRUE){
+      # neutral loci location real
+      neutral_loci_location_real_t <- location_neutral_loci_real
+      neutral_loci_location_real_t <- 
+        neutral_loci_location_real_t[order(neutral_loci_location_real_t)]
+      neutral_loci_location_real <-
+        lapply(neutral_loci_location_real_t, function(x) {
+          which(recombination_map$location_targets == x)
+        })
+      neutral_loci_location_real <- unname(unlist(neutral_loci_location_real))
+      neutral_loci_location <- c(neutral_loci_location_real,neutral_loci_location_sim)
+    }
     
     if(mutation==T){ 
-      
     mutation_loci_location_temp <- location_loci_mutation
     mutation_loci_location_temp <- mutation_loci_location_temp[order(mutation_loci_location_temp)]
-    
     mutation_loci_location <-
       lapply(mutation_loci_location_temp, function(x) {
         which(recombination_map$location_targets == x)
       })
-    
     mutation_loci_location <- unname(unlist(mutation_loci_location))
-      
     }
     
     if(s_distribution== "exponential_gamma" ){
       s_advantageous <- rexp(loci_number_to_simulate,rate = exp_rate) * -1
       s_deleterious <- rgamma(loci_number_to_simulate, shape = gamma_shape, scale = gamma_scale)
-      s_temp <- c(sample(s_advantageous,size=round(loci_number_to_simulate*(percent_adv/100))),
-             sample(s_deleterious,size=round(loci_number_to_simulate*(1-percent_adv/100))))
-      s <- sample(s_temp,size =loci_number_to_simulate )
+      s_temp <- c(sample(s_advantageous,
+                         size=round(loci_number_to_simulate*(percent_adv/100))),
+             sample(s_deleterious
+                    ,size=round(loci_number_to_simulate*(1-percent_adv/100))))
+      s <- sample(s_temp,size =loci_number_to_simulate,replace = T )
       
     }
     
@@ -445,7 +464,23 @@ gl.sim.WF.table <-
     
     reference <- reference[, -1]
     
-    reference <- reference[complete.cases(reference),]
+    neutral_loci_location <- which(reference$s == 0)
+    mutation_loci_location <- which(reference$q == 0)
+    mutation_loci_adv <- which(reference$q == 0 & reference$s <0)
+    mutation_loci_del <- which(reference$q == 0 & reference$s >0)
+    under_sel_loci_location <- which(reference$q > 0 & reference$s != 0 )
+    deleterious <- which(reference$q > 0 & reference$s > 0 )
+    advantageous <- which(reference$q > 0 & reference$s < 0 )
+    
+    reference[as.numeric(neutral_loci_location), "selection"] <- "neutral"
+    reference[as.numeric(mutation_loci_adv), "selection"] <- "mutation_adv"
+    reference[as.numeric(mutation_loci_del), "selection"] <- "mutation_del"
+    reference[as.numeric(deleterious), "selection"] <- "deleterious"
+    reference[as.numeric(advantageous), "selection"] <- "advantageous"
+    
+    if(real_loc ==TRUE | real_freq == TRUE ){
+      reference[as.numeric(neutral_loci_location_real), "selection"] <- "real"
+    }
     
     ref_res <- list(reference, ref_vars)
     names(ref_res) <- c("reference", "ref_vars")

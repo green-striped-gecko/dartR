@@ -10,7 +10,8 @@ gl.sim.WF.table(
   file_targets_sel = NULL,
   file_r_map = NULL,
   interactive_vars = TRUE,
-  verbose = NULL
+  verbose = NULL,
+  ...
 )
 }
 \arguments{
@@ -32,6 +33,9 @@ simulations variables [default TRUE].}
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
+
+\item{...}{Here you can add separately any variable and its value which will 
+be changed over the input value supplied by the csv file. See tutorial.}
 }
 \value{
 Returns a list with the reference table used as input for the function

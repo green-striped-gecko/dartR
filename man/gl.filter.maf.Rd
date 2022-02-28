@@ -9,7 +9,6 @@ gl.filter.maf(
   x,
   threshold = 0.01,
   by.pop = FALSE,
-  maf.limit = 0.5,
   pop.limit = ceiling(nPop(x)/2),
   ind.limit = 10,
   recalc = FALSE,

@@ -19,81 +19,6 @@ q_equilibrium <- function(a, b, c) {
 }
 
 ###############################################################################
-########################## POP INITIALISATION #################################
-###############################################################################
-
-initialise <-
-  function(pop_number,
-           pop_size,
-           refer,
-           n_l_loc,
-           r_freq,
-           q_neu,
-           freq_real,
-           mut,
-           mut_loci) {
-    pop <- as.data.frame(matrix(ncol = 4, nrow = pop_size))
-    pop[, 1] <- rep(c("Male", "Female"), each = pop_size / 2)
-    pop[, 2] <- pop_number # second column stores population
-    for (individual_pop in 1:pop_size) {
-      chromosome1 <-
-        paste0(mapply(sample_alleles, q = refer$q,  USE.NAMES = F), collapse = "")
-      chromosome2 <-
-        paste0(mapply(sample_alleles, q = refer$q,  USE.NAMES = F), collapse = "")
-      
-      if(freq_real==FALSE){
-        
-        for (element in n_l_loc) {
-          substr(chromosome1, start = element, stop = element) <-
-            sample(as.character(c(1:2)),
-                   size = 1,
-                   prob = c(q_neu, 1 - q_neu))
-          substr(chromosome2, start = element, stop = element) <-
-            sample(as.character(c(1:2)),
-                   size = 1,
-                   prob = c(q_neu, 1 - q_neu))
-        }
-        
-      }
-      
-      if(freq_real==TRUE){
-        
-        for (element in 1:nrow(r_freq)) {
-          
-          substr(chromosome1, start = element, stop = element) <-
-            sample(as.character(c(1:2)),
-                   size = 1,
-                   prob = c(unname(unlist(r_freq[element,]))))
-          
-          substr(chromosome2, start = element, stop = element) <-
-            sample(as.character(c(1:2)),
-                   size = 1,
-                   prob = c(unname(unlist(r_freq[element,]))))
-          
-        }
-        
-      }
-      
-      pop[individual_pop, 3] <- chromosome1
-      pop[individual_pop, 4] <- chromosome2
-    }
-    
-    return(pop)
-    
-  }
-
-###############################################################################
-########################## SAMPLE ALLELES #####################################
-###############################################################################
-
-sample_alleles <- function(alleles = c("a", "A"), q) {
-  s_alleles <- sample(alleles, size = 1, prob = c(q, 1 - q))
-  
-  return(s_alleles)
-  
-}
-
-###############################################################################
 ################################ MIGRATION ####################################
 ###############################################################################
 
@@ -260,13 +185,19 @@ recomb <- function(r_chromosome1, r_chromosome2, r_map, loci) {
     as.numeric(sample(row.names(r_map), size = 1, prob = r_map[, "c"]))
   if (chiasma < (loci + 1)) {
     split_seqs <- strsplit(c(r_chromosome1, r_chromosome2), split = "")
-    r_chr1 <-
-      paste0(c(split_seqs[[1]][1:chiasma], split_seqs[[2]][(chiasma + 1):loci]), collapse = "")
-    r_chr2 <-
-      paste0(c(split_seqs[[2]][1:chiasma], split_seqs[[1]][(chiasma + 1):loci]), collapse = "")
+    r_chr1 <- paste0(c(split_seqs[[1]][1:chiasma],
+                       split_seqs[[2]][(chiasma + 1):loci]), 
+                     collapse = "")
+    r_chr2 <- paste0(c(split_seqs[[2]][1:chiasma],
+                       split_seqs[[1]][(chiasma + 1):loci]), 
+                     collapse = "")
+    
     return(list(r_chr1, r_chr2))
+    
   } else{
+    
     return(list(r_chromosome1, r_chromosome2))
+    
   }
 }
 
@@ -279,21 +210,16 @@ selection_fun <-
            reference_pop,
            sel_model,
            g_load) {
-    offspring$fitness <-
-      apply(offspring, 1, fitness, ref = reference_pop)
+    offspring$fitness <- apply(offspring[,3:4], 1, fitness, ref = reference_pop)
     if (sel_model == "absolute") {
-      offspring$random_deviate <-
-        runif(nrow(offspring), min = 0, max = g_load)
-      offspring$alive <-
-        offspring$fitness > offspring$random_deviate
+      offspring$random_deviate <- runif(nrow(offspring), min = 0, max = g_load)
+      offspring$alive <- offspring$fitness > offspring$random_deviate
       offspring <- offspring[which(offspring$alive == TRUE),]
     }
     if (sel_model == "relative") {
       fitnes_proportion <- sum(offspring$fitness)
-      offspring$relative_fitness <-
-        offspring$fitness / fitnes_proportion
-      offspring$relative_fitness[offspring$relative_fitness < 0] <-
-        0
+      offspring$relative_fitness <- offspring$fitness / fitnes_proportion
+      offspring$relative_fitness[offspring$relative_fitness < 0] <- 0
     }
     
     return(offspring)
@@ -305,23 +231,14 @@ selection_fun <-
 ###############################################################################
 
 fitness <- function(df_fitness, ref) {
-  #remove neutral loci from chromosomes
-  chromosome1 <- gsub("[-^1-9]", "0", df_fitness[3])
-  chromosome2 <- gsub("[-^1-9]", "0", df_fitness[4])
-  split_seqs <- strsplit(c(chromosome1, chromosome2), split = "")
-  ref$hom <-
-    (split_seqs[[1]] == split_seqs[[2]] & split_seqs[[1]] == "a")
-  ref$het_chr1 <- (split_seqs[[1]] == "a" & split_seqs[[2]] == "A")
-  ref$het_chr2 <- (split_seqs[[1]] == "A" & split_seqs[[2]] == "a")
-  ref$hom <- as.numeric(ref$hom)
-  sum_hom <- sum(as.numeric(ref$hom))
-  ref$het_chr1 <- as.numeric(ref$het_chr1)
-  ref$het_chr2 <- as.numeric(ref$het_chr2)
-  ref$het_sel_chr1 <- ref$h * ref$s * ref$het_chr1
-  ref$het_sel_chr2 <- ref$h * ref$s * ref$het_chr2
-  ref$hom_sel <- ref$s * ref$hom
-  ref$tot_sel <- ref$het_sel_chr1 + ref$het_sel_chr2 + ref$hom_sel
-  ref$fitness <- 1 - (ref$tot_sel)
+  
+  ref$chr_1 <- as.numeric(unlist(strsplit(df_fitness[1], split = "")))
+  ref$chr_2 <- as.numeric(unlist(strsplit(df_fitness[2], split = "")))
+  ref$geno <- ref$chr_1 + ref$chr_2
+  ref$s_coe[ref$geno==1] <- ref$h[ref$geno==1] * ref$s[ref$geno==1] * ref$geno[ref$geno==1]
+  ref$s_coe[ref$geno==2] <- ref$s[ref$geno==2] * (ref$geno[ref$geno==2]/2)
+  ref$s_coe[ref$geno==0] <- ref$s[ref$geno==0] * ref$geno[ref$geno==0]
+  ref$fitness <- 1 - (ref$s_coe)
   net_fitness <- prod(ref$fitness)
   
   return(net_fitness)
@@ -354,17 +271,17 @@ store <-
       })))
     plink_ped <- apply(df_genotypes, 1, ped, n_loc = n_loc_1)
     # converting allele names to numbers
-    plink_ped <- gsub("a", "1", plink_ped)
-    plink_ped <- gsub("A", "2", plink_ped)
+    # plink_ped <- gsub("a", "1", plink_ped)
+    # plink_ped <- gsub("A", "2", plink_ped)
     plink_ped <-
       lapply(plink_ped, function(x) {
         gsub(" ", "", strsplit(x, '(?<=([^ ]\\s){2})', perl = TRUE)[[1]])
       })
     plink_ped_2 <- lapply(plink_ped, function(x) {
-      x[x == "22"] <- 2
-      x[x == "11"] <- 0
-      x[x == "21"] <- 1
-      x[x == "12"] <- 1
+      x[x == "11"] <- 2
+      x[x == "00"] <- 0
+      x[x == "01"] <- 1
+      x[x == "10"] <- 1
       
       return(x)
       
@@ -595,6 +512,20 @@ interactive_reference <- function() {
         ),    
         shinyBS::bsTooltip(id = "neutral_loci_chunk",
                   title = "Information pending")
+      ),
+      
+      column(
+        3,
+        radioButtons(
+          "real_freq",
+          tags$div(tags$i(HTML("real_freq<br/>")),
+                   "Extract allele frequencies for neutral loci from genlight object"),
+          choices = list("TRUE" = TRUE,
+                         "FALSE" = FALSE),
+          selected = FALSE
+        ),    
+        shinyBS::bsTooltip(id = "real_freq",
+                           title = "Information pending")
       )
     ),
     
@@ -677,20 +608,6 @@ interactive_reference <- function() {
       ),
     
     fluidRow(
-      
-      column(
-        3,
-        radioButtons(
-          "real_freq", 
-          tags$div(tags$i(HTML("real_freq<br/>")),
-                   "Extract allele frequencies of neutral loci from genlight object"),
-          choices = list("TRUE" = TRUE,
-                         "FALSE" = FALSE),
-          selected = FALSE
-        ),    
-        shinyBS::bsTooltip(id = "real_freq",
-                  title = "Information pending")
-      ),
     
       column(
         3,
@@ -1092,9 +1009,7 @@ interactive_reference <- function() {
     observeEvent(input$close, {
       
       ref_vars_temp <- as.data.frame(cbind(
-        c(
-          "real_freq",
-          "real_loc",
+        c("real_loc",
           "loci_under_selection",
           "mutation_rate",
           "chunk_bp",
@@ -1120,11 +1035,10 @@ interactive_reference <- function() {
           "dominance_sd",
           "mutation",
           "exp_rate",
-          "percent_adv"
+          "percent_adv",
+          "real_freq"
         ),
-        c(
-          input$real_freq,
-          input$real_loc,
+        c(input$real_loc,
           input$loci_under_selection,
           input$mutation_rate,
           input$chunk_bp,
@@ -1150,7 +1064,8 @@ interactive_reference <- function() {
           input$dominance_sd,
           input$mutation,
           input$exp_rate,
-          input$percent_adv
+          input$percent_adv,
+          input$real_freq
         )
       ))
       
@@ -1301,6 +1216,23 @@ interactive_sim_run <- function() {
                   title = "Information pending")
       )
       
+    ),
+    
+    fluidRow(
+    column(
+      3,
+      radioButtons(
+        "real_loc",
+        tags$div(tags$i(HTML("real_loc<br/>")),
+                 "Extract location for neutral loci from genlight object"),
+        choices = list("TRUE" = TRUE,
+                       "FALSE" = FALSE),
+        selected = FALSE
+      ),    
+      shinyBS::bsTooltip(id = "real_loc",
+                         title = "Information pending")
+    )
+    
     ),
     
     hr(),
@@ -1964,6 +1896,11 @@ interactive_sim_run <- function() {
         condition = input$real_dataset == TRUE
       )
       
+      shinyjs::toggleElement(
+        id = "real_loc",
+        condition = input$real_dataset == TRUE
+      )
+      
     })
 
     observeEvent(input$close, {
@@ -2006,7 +1943,8 @@ interactive_sim_run <- function() {
           "natural_selection_model",
           "chromosome_name",
           "mutation",
-          "mut_rate"
+          "mut_rate",
+          "real_loc"
         ),
         c(
           input$number_pops_phase2,
@@ -2045,7 +1983,8 @@ interactive_sim_run <- function() {
           input$natural_selection_model,
           input$chromosome_name,
           input$mutation,
-          input$mut_rate
+          input$mut_rate,
+          input$real_loc
         )))
       
       colnames(sim_vars_temp) <- c("variable","value")

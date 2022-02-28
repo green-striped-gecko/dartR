@@ -1,20 +1,20 @@
 process,variable,value,description,range_value
 general,chromosome_name,"""1""","Chromosome name from where to extract location, alllele frequency, recombination map and targets of selection (if provided).",Defined by the user
-general,chunk_number,100,Number of chromosome chunks,Not available
+general,chunk_number,10,Number of chromosome chunks,Not available
 general,real_loc,FALSE,Extract location of neutral loci from genlight object,TRUE or FALSE
+general,real_freq,FALSE,Extract allele frequencies of neutral loci from genlight object,
 general,neutral_loci_chunk,1,Number of neutral loci per chromosome chunk,Defined by the user
-general,loci_under_selection,100,Total number of loci under selection,Dependent on computing resources
-general,targets_factor,5,Percentage of the number of loci under selection from the input file 'targets_of_selection.csv' to use,Defined by the user
-frequency,q_distribution,"""equal""",How the initial allele frequency of the deleterious allele (q) should be determined,"""equal"" or ""equation"""
-frequency,q_gral,0.5,Initial frequencies of all deleterious alleles,Defined by the user (must be character)
+general,loci_under_selection,1000,Total number of loci under selection,Dependent on computing resources
+general,targets_factor,1,Percentage of the number of loci under selection from the input file 'targets_of_selection.csv' to use,Defined by the user
+frequency,q_distribution,"""equation""",How the initial allele frequency of the deleterious allele (q) should be determined,"""equal"" or ""equation"""
+frequency,q_gral,0.15,Initial frequencies of all deleterious alleles,Defined by the user (must be character)
 frequency,mutation_rate,5*10^-5,Mutation rate per generation per site. Value only used in the equation to determine q,Defined by the user
 frequency,q_neutral,0.5,Initial frequencies of all neutral alleles,Dependent on genomic resources
-frequency,real_freq,FALSE,Extract allele frequencies of neutral loci from genlight object,TRUE or FALSE
 recombination,chunk_recombination,1,Recombination rate (cM) per chromosome chunk,Defined by the user
 recombination,chunk_bp,10000,Length of each chromosome chunk (bp) or the resolution of the recombination map (if provided),0-1
-selection,s_distribution,"""equal""",Distribution to sample selection coefficients,"""equal"" or ""gamma"" or ""log_normal"" or ""exponential_gamma"""
-selection,percent_adv,2,Percentage of beneficial mutations ,
-selection,exp_rate,100,Mean of the exponential distribution of advantageous alleles,
+selection,s_distribution,"""exponential_gamma""",Distribution to sample selection coefficients,"""equal"" or ""gamma"" or ""log_normal"" or ""exponential_gamma"""
+selection,percent_adv,50,Percentage of beneficial mutations ,
+selection,exp_rate,16,Mean of the exponential distribution of advantageous alleles,
 selection,s_gral,0.05,Selection coefficient for all loci under selection,0-1
 selection,gamma_scale,0.03,Scale of the gamma distribution from where s values are sampled,Defined by the user
 selection,gamma_shape,0.4,Shape of the gamma distribution from where s values are sampled,Defined by the user
