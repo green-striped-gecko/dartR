@@ -259,8 +259,8 @@ store <-
            ref,
            p_map,
            s_vars) {
-    pop_names <- rep(paste0("pop", p_vector), p_size)
-    pop_names <- pop_names[order(pop_names)]
+    pop_names <- rep(as.character(p_vector), p_size)
+    # pop_names <- pop_names[order(pop_names)]
     df_genotypes <- rbindlist(p_list)
     df_genotypes$V1[df_genotypes$V1 == "Male"]   <- 1
     df_genotypes$V1[df_genotypes$V1 == "Female"] <- 2
@@ -270,9 +270,6 @@ store <-
         1:x
       })))
     plink_ped <- apply(df_genotypes, 1, ped, n_loc = n_loc_1)
-    # converting allele names to numbers
-    # plink_ped <- gsub("a", "1", plink_ped)
-    # plink_ped <- gsub("A", "2", plink_ped)
     plink_ped <-
       lapply(plink_ped, function(x) {
         gsub(" ", "", strsplit(x, '(?<=([^ ]\\s){2})', perl = TRUE)[[1]])
@@ -293,19 +290,17 @@ store <-
     
     loc.names <- 1:nrow(ref)
     n.loc <- length(loc.names)
-    misc.info <- lapply(1:6, function(i)
-      NULL)
-    names(misc.info) <-
-      c("FID", "IID", "PAT", "MAT", "SEX", "PHENOTYPE")
+    misc.info <- lapply(1:6, function(i){NULL})
+    names(misc.info) <- c("FID", "IID", "PAT", "MAT", "SEX", "PHENOTYPE")
     res <- list()
     temp <-
       as.data.frame(
         cbind(
-          df_genotypes[, 2],
-          df_genotypes[, 7],
-          df_genotypes[, 5],
-          df_genotypes[, 6],
-          df_genotypes[, 1],
+          df_genotypes[, "V2"],
+          df_genotypes[, "id"],
+          df_genotypes[, "V5"],
+          df_genotypes[, "V6"],
+          df_genotypes[, "V1"],
           1
         )
       )

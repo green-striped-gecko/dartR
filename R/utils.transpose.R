@@ -7,8 +7,7 @@ utils.transpose <- function(x,
   indNames(x) <- locNames(hold)
   locNames(x) <- indNames(hold)
   # This is just a dummy vector to comply with the attributes of a genlight object
-  alleles(x) <-
-    paste(rep("A", nInd(hold)), rep("A", nInd(hold)), sep = "/")
+  alleles(x) <- paste(rep("A", nInd(hold)), rep("A", nInd(hold)), sep = "/")
   ploidy(x) <- unique(ploidy(hold))
   pop(x) <- rep("NA", nLoc(hold))
   x@other$loc.metrics <- hold@other$ind.metrics

@@ -153,6 +153,8 @@ gl.filter.maf <- function(x,
     }
     
     if(plot.out & by.pop==FALSE){
+        
+        popn.hold <- FALSE
         maf <- NULL
     # Plot a histogram of MAF
     maf_pre <- data.frame(x@other$loc.metrics$maf)
@@ -398,11 +400,12 @@ gl.filter.maf <- function(x,
     
     # PRINTING OUTPUTS using package patchwork
     if (plot.out) {
-        if (length(popn.hold) > 1) {
+        if (length(popn.hold) > 1 & by.pop==TRUE) {
             suppressWarnings(print(p2))
             suppressWarnings(print(p3))
             p3 <- c(p3,p2)
         }else{
+            p3 <- (p1 / p2) + plot_layout(heights = c(1, 1))
             suppressWarnings(print(p3))
         }
     }

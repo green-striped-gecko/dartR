@@ -124,7 +124,7 @@ gl.sim.WF.run <-
                      build = "Jody",
                      verbosity = verbose)
     
-    # check if package is installed
+    # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "stringi"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
       stop(error(
@@ -464,12 +464,12 @@ NumericVector prob = NumericVector::create(q[z],1-q[z]);
           q_prob_t2 <- cbind(q_prob_t,1-q_prob_t)
           q_prob <- split(q_prob_t2, row(q_prob_t2))
 
-          stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
+          stringi::stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
               mapply(function(y){sample(x=c(0,1),size=1,prob=y,replace=FALSE)},
                      q_prob,
                      USE.NAMES = FALSE)
             
-          stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
+          stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
             mapply(function(y){sample(x=c(0,1),size=1,prob=y,replace=FALSE)},
                    q_prob,
                    USE.NAMES = FALSE)
@@ -483,12 +483,12 @@ NumericVector prob = NumericVector::create(q[z],1-q[z]);
             q_prob_t2 <- cbind(q_prob_t,1-q_prob_t)
             q_prob <- split(q_prob_t2, row(q_prob_t2))
             
-            stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
+            stringi::stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
               mapply(function(y){sample(x=c(0,1),size=1,prob=y,replace=FALSE)},
                      q_prob,
                      USE.NAMES = FALSE)
             
-            stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
+            stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
               mapply(function(y){sample(x=c(0,1),size=1,prob=y,replace=FALSE)},
                      q_prob,
                      USE.NAMES = FALSE)

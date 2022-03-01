@@ -28,7 +28,7 @@
 #' \item If "neighbour", substitute the missing values for the focal individual
 #'  with the values taken from the nearest neighbour. Repeat with next nearest
 #'  and so on until all missing values are replaced.
-#' \item if "random, missing data are substituted by random values (0, 1 or 2). 
+#' \item if "random", missing data are substituted by random values (0, 1 or 2). 
 #' }
 #'
 #'   The nearest neighbour is the one with the smallest Euclidean distance in 
@@ -220,6 +220,7 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
                   method = "Euclidean",
                   verbose = 0,
                   plot.out = FALSE)
+    
     pw_dis <- as.data.frame(as.table(as.matrix(eucl_dis)))
     
     x_matrix <- as.matrix(x)
