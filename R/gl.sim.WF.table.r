@@ -224,12 +224,16 @@ gl.sim.WF.table <-
     }
     
     # These are the locations of neutral loci of the simulations
+    if(neutral_loci_chunk>0){
       location_neutral_loci_sim <-
         round(seq(
           chunk_bp / (neutral_loci_chunk + 1),
           (chunk_number * chunk_bp),
           chunk_bp / neutral_loci_chunk
         ))
+    }else{
+      location_neutral_loci_sim <- NULL
+    }
       
     # if the targets of selection file is provided
     if (!is.null(file_targets_sel)) {
@@ -291,7 +295,7 @@ gl.sim.WF.table <-
     # the number of loci available to mutation is the same as the total loci to
     # simulate
     if(mutation==T){ 
-      location_loci_mutation <- sample(1:chr_length,size = length(location_targets))
+      location_loci_mutation <- sample(1:chr_length,size = loci_mutation)
       location_loci_mutation <- location_loci_mutation[order(location_loci_mutation)]
       location_targets <- c(location_targets,location_loci_mutation)
     }
@@ -300,7 +304,7 @@ gl.sim.WF.table <-
     
     #this is to fix a bug that crashes the program because the last neutral
     # locus sometimes could be located farther than the last deleterious mutation
-    location_targets <- c(location_targets, chr_length)
+    # location_targets <- c(location_targets, chr_length)
     # different transcripts can be located in the same genome location. So,
     # repeated deleterious mutations are deleted
     location_targets <- unique(location_targets)
@@ -337,7 +341,9 @@ gl.sim.WF.table <-
     recombination_map$accum <- cumsum(recombination_map[, "c"])
     # neutral loci location simulated
     neutral_loci_location_sim_t <- location_neutral_loci_sim
-    neutral_loci_location_sim_t <- neutral_loci_location_sim_t[order(neutral_loci_location_sim_t)]
+    if(neutral_loci_chunk>0){
+      neutral_loci_location_sim_t <- neutral_loci_location_sim_t[order(neutral_loci_location_sim_t)]
+    }
     neutral_loci_location_sim <- lapply(neutral_loci_location_sim_t, function(x) {
       which(recombination_map$location_targets == x)
       })

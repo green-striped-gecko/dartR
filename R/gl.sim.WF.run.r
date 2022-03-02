@@ -429,19 +429,20 @@ gl.sim.WF.run <-
         'StringVector make_chr(int j, NumericVector q) {
     StringVector out(j);
     int size = 1;
-    NumericVector x = NumericVector::create(0,1);
-    
+    IntegerVector x = IntegerVector::create(1,0);
+    bool rep = false;
 for (int i = 0; i < j; i++) {
 std::ostringstream temp;
 for (int z = 0; z < q.length(); z++) {
-NumericVector prob = NumericVector::create(q[z],1-q[z]);
-   temp << sample(x,size,prob);
+NumericVector p = NumericVector::create(q[z],1-q[z]);
+   temp << sample(x, size, rep, p);
   }
       out[i] = temp.str();
     }
     return out;
   }'
       )
+      
       chr_temp <- make_chr(j=sum(population_size)*2,q=reference$q)
       chr_pops_temps <- split(chr_temp, rep(1:number_pops, 
                                             (c(population_size)*2)))
@@ -465,12 +466,12 @@ NumericVector prob = NumericVector::create(q[z],1-q[z]);
           q_prob <- split(q_prob_t2, row(q_prob_t2))
 
           stringi::stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
-              mapply(function(y){sample(x=c(0,1),size=1,prob=y,replace=FALSE)},
+              mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
                      q_prob,
                      USE.NAMES = FALSE)
             
           stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
-            mapply(function(y){sample(x=c(0,1),size=1,prob=y,replace=FALSE)},
+            mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
                    q_prob,
                    USE.NAMES = FALSE)
             
@@ -484,12 +485,12 @@ NumericVector prob = NumericVector::create(q[z],1-q[z]);
             q_prob <- split(q_prob_t2, row(q_prob_t2))
             
             stringi::stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
-              mapply(function(y){sample(x=c(0,1),size=1,prob=y,replace=FALSE)},
+              mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
                      q_prob,
                      USE.NAMES = FALSE)
             
             stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
-              mapply(function(y){sample(x=c(0,1),size=1,prob=y,replace=FALSE)},
+              mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
                      q_prob,
                      USE.NAMES = FALSE)
             
@@ -720,13 +721,13 @@ NumericVector prob = NumericVector::create(q[z],1-q[z]);
               }
               
               if (offspring_pop[offspring_ind, "runif"] < mut_rate) {
-                locus_to_mutate <- as.numeric(sample(mutation_loci_location, 1))
+                locus_to_mutate <- sample(mutation_loci_location, 1)
                 mutation_loci_location <-
-                  mutation_loci_location[-which(mutation_loci_location == as.character(locus_to_mutate))]
+                  mutation_loci_location[-which(mutation_loci_location == locus_to_mutate)]
                 chromosomes <- c(offspring_pop[offspring_ind, 3], offspring_pop[offspring_ind, 4])
                 chr_to_mutate <- sample(1:2, 1)
                 chr_to_mutate_b <- chromosomes[chr_to_mutate]
-                substr(chr_to_mutate_b, locus_to_mutate, locus_to_mutate) <- "1"
+                substr(chr_to_mutate_b, as.numeric(locus_to_mutate), as.numeric(locus_to_mutate)) <- "1"
                 chromosomes[chr_to_mutate] <- chr_to_mutate_b
                 offspring_pop[offspring_ind, 3] <- chromosomes[1]
                 offspring_pop[offspring_ind, 4] <- chromosomes[2]
@@ -902,7 +903,7 @@ NumericVector prob = NumericVector::create(q[z],1-q[z]);
           pops_merge <- rbindlist(pop_list)
           freq <- dplyr::bind_cols(apply(pops_merge, 1, ped_b, n_loc = loci_number),
                                    .name_repair="minimal")
-          lost_deleterious <- freq[mutation_loci_location,]
+          lost_deleterious <- freq[as.numeric(mutation_loci_location),]
           lost_deleterious[] <- lapply(lost_deleterious, as.numeric)
           deleterious_eliminated_t <- rowSums(lost_deleterious)
           deleterious_eliminated <- names(deleterious_eliminated_t[deleterious_eliminated_t==0])
