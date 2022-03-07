@@ -211,6 +211,7 @@ selection_fun <-
            sel_model,
            g_load) {
     offspring$fitness <- apply(offspring[,3:4], 1, fitness, ref = reference_pop)
+    
     if (sel_model == "absolute") {
       offspring$random_deviate <- runif(nrow(offspring), min = 0, max = g_load)
       offspring$alive <- offspring$fitness > offspring$random_deviate
@@ -254,8 +255,6 @@ store <-
            p_size,
            p_list,
            n_loc_1,
-           paral,
-           n_cores,
            ref,
            p_map,
            s_vars) {
@@ -269,11 +268,41 @@ store <-
       paste0(unlist(unname(df_genotypes[, 2])), "_", unlist(lapply(p_size, function(x) {
         1:x
       })))
-    plink_ped <- apply(df_genotypes, 1, ped, n_loc = n_loc_1)
-    plink_ped <-
-      lapply(plink_ped, function(x) {
-        gsub(" ", "", strsplit(x, '(?<=([^ ]\\s){2})', perl = TRUE)[[1]])
-      })
+    
+    # make genotypes
+    #to hack package checking...
+    make_geno <- function(){}  
+    
+    Rcpp::cppFunction(plugins="cpp11",
+                      
+                      'List make_geno(StringMatrix mat) {
+    int ind = mat.nrow();
+    int loc = strlen(mat(0,0));
+    List out(ind);
+for (int i = 0; i < ind; i++) {
+ std::string chr1 (mat(i,0));
+ std::string chr2 (mat(i,1));
+ StringVector temp(loc);
+for (int j = 0; j < loc; j++) {
+ StringVector geno = StringVector::create(chr1[j],chr2[j]);
+    temp[j] = collapse(geno);
+  }
+      out[i] = temp;
+    }
+    return out;
+  }'
+    )
+    
+    plink_temp <- as.matrix(df_genotypes[,3:4])
+    
+    plink_ped <- make_geno(plink_temp)
+    
+    # plink_ped <- apply(df_genotypes, 1, ped, n_loc = n_loc_1)
+    # plink_ped <-
+    #   lapply(plink_ped, function(x) {
+    #     gsub(" ", "", strsplit(x, '(?<=([^ ]\\s){2})', perl = TRUE)[[1]])
+    #   })
+    
     plink_ped_2 <- lapply(plink_ped, function(x) {
       x[x == "11"] <- 2
       x[x == "00"] <- 0
@@ -283,10 +312,6 @@ store <-
       return(x)
       
     })
-    
-    if (paral && is.null(n_cores)) {
-      n_cores <- parallel::detectCores()
-    }
     
     loc.names <- 1:nrow(ref)
     n.loc <- length(loc.names)
@@ -311,23 +336,13 @@ store <-
     txt <-
       lapply(plink_ped_2, function(e)
         suppressWarnings(as.integer(e)))
-    if (paral) {
-      res <-
-        c(
-          res,
-          parallel::mclapply(txt, function(e)
-            new("SNPbin", snp = e, ploidy = 2L), mc.cores = n_cores,
-            mc.silent = TRUE, mc.cleanup = TRUE, mc.preschedule = FALSE)
-        )
-    } else {
       res <-
         c(res, lapply(txt, function(e)
           new(
             "SNPbin", snp = e, ploidy = 2L
           )))
-    }
     
-    res <- new("genlight", res, ploidy = 2L, parallel = paral)
+    res <- new("genlight", res, ploidy = 2L)
     
     indNames(res) <- misc.info$IID
     pop(res) <- misc.info$FID

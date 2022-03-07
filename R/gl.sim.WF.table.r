@@ -12,6 +12,7 @@
 #' \item loc_bp - chromosome location in base pairs.
 #' \item loc_cM - chromosome location in centiMorgans.
 #' \item chr_name - chromosome name.
+#' \item selection - SNP type.
 #' } 
 #' 
 #' The reference table can be further modified as required. 
@@ -78,14 +79,14 @@
 #' @rawNamespace import(fields, except = flame)
 #' @export
 
-gl.sim.WF.table <-
-  function(file_var,
-           x = NULL,
-           file_targets_sel = NULL,
-           file_r_map = NULL,
-           interactive_vars = TRUE,
-           verbose = NULL,
-           ...) {
+gl.sim.WF.table <- function(file_var, 
+                            x = NULL, 
+                            file_targets_sel = NULL, 
+                            file_r_map = NULL,
+                            interactive_vars = TRUE, 
+                            verbose = NULL,
+                            ...) {
+  
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -94,9 +95,9 @@ gl.sim.WF.table <-
     utils.flag.start(func = funname,
                      build = "Jody",
                      verbosity = verbose)
-
+    
     # DO THE JOB
-    ##### SIMULATIONS VARIABLES ######
+    ##### LOADING VARIABLES ######
     
     if (interactive_vars) {
       
@@ -136,252 +137,306 @@ gl.sim.WF.table <-
     input_list <- list(...)
     
     if(length(input_list>0)){
-      vars_assign <- unlist(unname(
-        mapply(paste, names(input_list), "<-",
-               input_list, SIMPLIFY = F)
-      ))
+      
+      val_change <- which(ref_vars$variable %in% names(input_list))
+      
+      ref_vars[val_change,"value"] <- list(input_list)
+      vars_assign <-
+        unlist(unname(
+          mapply(paste, ref_vars$variable, "<-",
+                 ref_vars$value, SIMPLIFY = F)
+        ))
       eval(parse(text = vars_assign))
     }
     
-    # if the recombination map is provided
+    ##### LOADING INFORMATION #######
+    # recombination map
     if (!is.null(file_r_map)) {
       map <- read.csv(file_r_map)
       map$Chr <- as.character(map$Chr)
       
       if(!chromosome_name %in% map$Chr){
-        cat(error("Chromosome name is not in the recombination map file\n"))
+        cat(error("  Chromosome name is not in the recombination map file\n"))
         stop()
       }
-      
       map <- map[which(map$Chr == chromosome_name),]
       #### double check this line #####
-      map <- as.data.frame(map$cM / 100)
-      # map <- as.data.frame(map$cM / 1000)
-      colnames(map) <- "cM"
+      map$cM <- map$cM / 100
       # if there are NA's values converted them to 0
       map[is.na(map$cM),] <- 0
-      # if the recombination map is not provided
-    } else{
+    }else{
       map <- as.data.frame(matrix(nrow = chunk_number))
-      map[, 1] <- chunk_recombination / 100
+      map[, 1] <- chunk_cM / 100
       colnames(map) <- "cM"
     }
-    
-    # these are the location of the neutral loci in the simulations
-    # if real locations are used
-    location_neutral_loci_real <- NULL
-    if (real_loc == TRUE & !is.null(x)) {
-      location_neutral_loci_real_temp <-
-        as.data.frame(cbind(as.character(x$chromosome), x$position))
-      colnames(location_neutral_loci_real_temp) <-
-        c("chr", "pos")
+    # targets of selection 
+    targets_temp <- NULL
+    if (!is.null(file_targets_sel)) {
+      targets_temp <- read.csv(file_targets_sel)
+      targets_temp$chr_name <- as.character(targets_temp$chr_name)
       
-      if(!chromosome_name %in% location_neutral_loci_real_temp$chr ){
-        cat(error("Chromosome name is not in the genlight object\n"))
+      if(!chromosome_name %in% targets_temp$chr_name ){
+        cat(error("  Chromosome name is not in the targets of selection file\n"))
         stop()
       }
       
-      location_neutral_loci_real_temp <-
-        location_neutral_loci_real_temp[location_neutral_loci_real_temp$chr == chromosome_name, ]
-      location_neutral_loci_real <-
-        as.numeric(location_neutral_loci_real_temp[, "pos"])
-      # ordering the snps by position
-      location_neutral_loci_real <- location_neutral_loci_real[order(location_neutral_loci_real)]
+      targets_temp <- targets_temp[which(targets_temp$chr_name == chromosome_name),]
+    }
+    # real dataset 
+    location_real_temp <- NULL
+    if (real_loc == TRUE & !is.null(x)) {
+      location_real_temp <-
+        as.data.frame(cbind(as.character(x$chromosome), x$position))
+      colnames(location_real_temp) <- c("chr", "pos")
       
+      if(!chromosome_name %in% location_real_temp$chr ){
+        cat(error("  Chromosome name is not in the genlight object\n"))
+        stop()
+      }
+      
+      location_real_temp <-
+        location_real_temp[location_real_temp$chr == chromosome_name, ]
+      location_real_temp <- 
+        as.numeric(location_real_temp[, "pos"])
+      
+      location_real_temp <- location_real_temp[order(location_real_temp)]
+    }
+    
+    ##### CHROMOSOME LENGTH ####
+    if (!is.null(file_r_map)) {
+      chr_length <- tail(map$to,1)
+    }else{
+      chr_length <- chunk_number  * chunk_bp
+    }
+    
+    # if real locations are provided, it is necessary to change the bp per 
+    # chromosome chunk. 
+    if (real_loc == TRUE & !is.null(x) & is.null(file_r_map)) {
+       chr_length <- tail(location_real_temp,1)
+       chunk_bp <- chr_length / chunk_number
+    }
+    
+    # if real locations are provided, it is necessary to change the bp per 
+    # chromosome chunk. 
+    if (!is.null(file_targets_sel) & is.null(file_r_map)) {
+      chr_length <- tail(targets_temp$end,1)
+      chunk_bp <- chr_length / chunk_number
+    }
+      
+    ##### LOCATIONS ##########
+    # real dataset
+    location_real_bp <- NULL
+    if (real_loc == TRUE & !is.null(x)) {
+      location_real_bp <- location_real_temp
+      location_real_bp <- location_real_bp[order(location_real_bp)]
+      # real locations are rounded to the ten digits and 1 is added to each location
+      location_real_bp <- round(location_real_bp,-1)
+      location_real_bp <- location_real_bp + 1
     } 
     
-    # these are the location of the neutral loci in the simulations
-    # if real_loc is FALSE and real_freq is TRUE
-    if (real_loc == FALSE & !is.null(x) & real_freq == TRUE) {
-
-      location_neutral_loci_real_temp <-
+    if (real_loc == FALSE & real_freq == TRUE & !is.null(x)) {
+      location_real_temp <-
         round(seq(
         chunk_bp / (nLoc(x) + 1),
         (chunk_number * chunk_bp),
         chunk_bp / nLoc(x)
       ))
       
-      location_neutral_loci_real <- sample(location_neutral_loci_real_temp,size =nLoc(x))
-    } 
-    
-    # this is the length of the chromosome
-    # if real locations are supplied, the length of the chromosome is the last 
-    # SNP of the genlight object
-    if (real_loc == TRUE & !is.null(x)) {
-      
-      chr_length <- tail(location_neutral_loci_real,1)  
-      
-      chunk_bp <- chr_length / chunk_number
-        
-    # if real locations are not supplied,  the length of the chromosome is 
-    # (chunk_number + 1) * chunk_bp
-    } else {
-      
-       # chr_length <- (chunk_number + 1) * chunk_bp
-      chr_length <- chunk_number  * chunk_bp
-      
-      
+      location_real_bp <- sample(location_real_temp,size =nLoc(x))
+      location_real_bp <- location_real_bp[order(location_real_bp)]
+      # real locations are rounded to the ten digits and 1 is added to each location
+      location_real_bp <- round(location_real_bp,-1)
+      location_real_bp <- location_real_bp + 1
     }
     
-    # These are the locations of neutral loci of the simulations
+    # neutral loci simulations
+    location_neutral_bp <- NULL
     if(neutral_loci_chunk>0){
-      location_neutral_loci_sim <-
+      location_neutral_bp <-
         round(seq(
           chunk_bp / (neutral_loci_chunk + 1),
           (chunk_number * chunk_bp),
           chunk_bp / neutral_loci_chunk
         ))
-    }else{
-      location_neutral_loci_sim <- NULL
+      
+      # neutral loci locations are rounded to the ten digits and 2 is added to each location
+      location_neutral_bp <- round(location_neutral_bp,-1)
+      location_neutral_bp <- location_neutral_bp + 2
     }
-      
-    # if the targets of selection file is provided
+    
+    # loci under selection
+    location_targets_bp <- NULL
+    if (!is.null(file_targets_sel) | loci_under_selection>0) {
     if (!is.null(file_targets_sel)) {
-      
-      targets <- read.csv(file_targets_sel)
-      targets$chr_name <- as.character(targets$chr_name)
-      
-      if(!chromosome_name %in% targets$chr_name ){
-        cat(error("Chromosome name is not in the targets of selection file\n"))
-        stop()
-      }
-      
-      targets <-
-        targets[which(targets$chr_name == chromosome_name),]
-      targets <- targets[!duplicated(targets$start),]
-      targets <- targets[!duplicated(targets$end),]
-      # subsampling targets for selection
+      targets <- targets_temp
       targets$targets <- ceiling(targets$targets * (targets_factor/100))
       targets$distance <-  targets$end - targets$start
-      
-      # if the targets of selection file is not provided
-    } else{
+    } 
+    # if the targets of selection file is not provided
+    if (is.null(file_targets_sel) ) {
       targets <- as.data.frame(matrix(nrow = chunk_number, ncol = 3))
       colnames(targets) <- c("start", "end", "targets")
       targets$start <- seq(1, chr_length, (chr_length/chunk_number))
-      targets$end <- seq((chr_length/chunk_number), chr_length, (chr_length/chunk_number))
+      targets$end <- seq((chr_length/chunk_number), chr_length, 
+                         (chr_length/chunk_number))
       targets$targets <- round(loci_under_selection / chunk_number)
       targets$distance <-  targets$end - targets$start
     }
     
-    # The location of loci under selection is sampled randomly within each 
-    # chromosome chunk
-    location_targets <- NULL
-    
-    # resolution to sample loci under selection
-    sample_resolution <- round(mean(targets$distance)/max(targets$targets))/10
-    
+      sample_resolution <- round(mean(targets$distance)/max(targets$targets)/10)
+      
     for (i in 1:nrow(targets)) {
       location_targets_temp <- mapply(
         FUN = function(a, b) {
           seq(from = a,
               to = b,
               by = sample_resolution)
-          },
-          a = unname(unlist(targets[i, "start"])),
-          b = unname(unlist(targets[i, "end"]))
-        )
+        },
+        a = unname(unlist(targets[i, "start"])),
+        b = unname(unlist(targets[i, "end"]))
+      )
       location_targets_temp <- as.vector(round(location_targets_temp))
-      location_targets_temp <-
-        sample(location_targets_temp, size = targets[i, "targets"])
-      location_targets <-
-        c(location_targets, location_targets_temp)
+      location_targets_temp <- sample(location_targets_temp, 
+                                      size = targets[i, "targets"])
+      location_targets_bp <- c(location_targets_bp, location_targets_temp)
+    }
+      location_targets_bp <- location_targets_bp[order(location_targets_bp)]
+    # loci under selection locations are rounded to the ten digits and 3 is added to each location
+      location_targets_bp <- round(location_targets_bp,-1)
+    location_targets_bp <- location_targets_bp + 3
     }
     
+    # mutations 
+    location_mutations_bp <- NULL
+    if (!is.null(file_targets_sel) | (loci_mutation > 0 & mutation == TRUE)) {
+    # if the targets of selection file is provided
+    if (!is.null(file_targets_sel)) {
+      mutations <- targets_temp
+      mutations$targets <- ceiling(mutations$targets * (mutations_factor/100))
+      mutations$distance <-  mutations$end - mutations$start
+      # if the targets of selection file is not provided
+    }else{
+      mutations <- as.data.frame(matrix(nrow = chunk_number, ncol = 3))
+      colnames(mutations) <- c("start", "end", "targets")
+      mutations$start <- seq(1, chr_length, (chr_length/chunk_number))
+      mutations$end <- seq((chr_length/chunk_number), chr_length,
+                           (chr_length/chunk_number))
+      mutations$targets <- round(loci_mutation / chunk_number)
+      mutations$distance <-  mutations$end - mutations$start
+    }
+    # the resolution to sample mutations is different to the resolution to sample
+    # targets for slection to avoid averlapping locations
+    sample_resolution <- round(mean(mutations$distance)/max(mutations$targets)/15)
     
-    # joining real neutral loci, real dataset loci and loci under selection
-    location_targets <- c(location_targets, location_neutral_loci_real, location_neutral_loci_sim)
-    
-    # the number of loci available to mutation is the same as the total loci to
-    # simulate
-    if(mutation==T){ 
-      location_loci_mutation <- sample(1:chr_length,size = loci_mutation)
-      location_loci_mutation <- location_loci_mutation[order(location_loci_mutation)]
-      location_targets <- c(location_targets,location_loci_mutation)
+    for (i in 1:nrow(mutations)) {
+      location_mutations_temp <- mapply(
+        FUN = function(a, b) {
+          seq(from = a,
+              to = b,
+              by = sample_resolution)
+        },
+        a = unname(unlist(mutations[i, "start"])),
+        b = unname(unlist(mutations[i, "end"]))
+      )
+      location_mutations_temp <- as.vector(round(location_mutations_temp))
+      
+      location_mutations_temp <- sample(location_mutations_temp, size = mutations[i, "targets"])
+      location_mutations_bp <- c(location_mutations_bp, location_mutations_temp)
+    }
+    location_mutations_bp <- location_mutations_bp[order(location_mutations_bp)]
+    # mutation locations are rounded to the ten digits and 4 is added to each location
+    location_mutations_bp <- round(location_mutations_bp,-1)
+    location_mutations_bp <- location_mutations_bp + 4
     }
     
-    location_targets <- location_targets[order(location_targets)]
+    location_loci_bp <- c(location_real_bp, location_neutral_bp,
+                       location_targets_bp, location_mutations_bp)
     
-    #this is to fix a bug that crashes the program because the last neutral
-    # locus sometimes could be located farther than the last deleterious mutation
-    # location_targets <- c(location_targets, chr_length)
-    # different transcripts can be located in the same genome location. So,
-    # repeated deleterious mutations are deleted
-    location_targets <- unique(location_targets)
+    location_loci_bp <- location_loci_bp[order(location_loci_bp)]
+    
+    if(chunk_number > length(location_loci_bp)){
+      cat(error("  Number of loci should be more than the number of genome chunks\n"))
+      stop()
+    }
   
-    loci_number_to_simulate <- length(location_targets)
+    total_loci <- length(location_loci_bp)
     
+    ##### RECOMBINATION MAP #####
     # the recombination map is produced by cross multiplication. the following
     # lines are the input for doing the cross multiplication.
     recombination_map_temp <- map
-    
-    recombination_map_temp$midpoint <- seq(chunk_bp / 2, chr_length, chunk_bp)
-    
+    recombination_map_temp$midpoint <- seq(chunk_bp / 2, 
+                                           chr_length, 
+                                           chunk_bp)[1:nrow(recombination_map_temp)]
     recombination_temp <-
-      unlist(lapply(location_targets, findInterval, vec = as.numeric(paste(
+      unlist(lapply(location_loci_bp, findInterval, vec = as.numeric(paste(
         unlist(recombination_map_temp$midpoint)
       ))))
     
-    # deleterious mutations located below the location in the first row of the
+    # loci located below the location in the first row of the
     # recombination map are assigned to row 0, to correct this, they
     # are reassigned to row number 1
     recombination_temp[recombination_temp == 0] <- 1
     recombination_2 <- recombination_map_temp[recombination_temp, "cM"]
-    recombination_map <- as.data.frame(cbind(location_targets, recombination_2))
+    recombination_map <- as.data.frame(cbind(location_loci_bp, recombination_2))
     recombination_map$c <- NA
     # the recombination map is produced by cross multiplication
     #not taking in account the last row for the loop to work
     for (target_row in 1:(nrow(recombination_map) - 1)) {
       recombination_map[target_row, "c"] <-
-        ((recombination_map[target_row + 1, "location_targets"] - recombination_map[target_row, "location_targets"]) * recombination_map[target_row, "recombination_2"]) / chunk_bp
+        ((recombination_map[target_row + 1, "location_loci_bp"] - recombination_map[target_row, "location_loci_bp"]) * recombination_map[target_row, "recombination_2"]) / chunk_bp
     }
     # The last element of the recombination rate column must be zero,
     # otherwise the recombination function crashes.
     recombination_map[nrow(recombination_map), "c"] <- 0
     recombination_map$accum <- cumsum(recombination_map[, "c"])
-    # neutral loci location simulated
-    neutral_loci_location_sim_t <- location_neutral_loci_sim
+    
+    # getting the row of the recombination map for neutral loci
+    location_neutral_row <- NULL
     if(neutral_loci_chunk>0){
-      neutral_loci_location_sim_t <- neutral_loci_location_sim_t[order(neutral_loci_location_sim_t)]
-    }
-    neutral_loci_location_sim <- lapply(neutral_loci_location_sim_t, function(x) {
-      which(recombination_map$location_targets == x)
+    location_neutral_row <- lapply(location_neutral_bp, function(x) {
+      which(recombination_map$location_loci == x)
       })
-    neutral_loci_location_sim <- unname(unlist(neutral_loci_location_sim))
-    neutral_loci_location <- neutral_loci_location_sim
+    location_neutral_row <- unname(unlist(location_neutral_row))
+    }
     
+    # getting the row of the recombination map for real loci
+    location_real_row <- NULL
     if(real_loc==TRUE | real_freq == TRUE){
-      # neutral loci location real
-      neutral_loci_location_real_t <- location_neutral_loci_real
-      neutral_loci_location_real_t <- 
-        neutral_loci_location_real_t[order(neutral_loci_location_real_t)]
-      neutral_loci_location_real <-
-        lapply(neutral_loci_location_real_t, function(x) {
-          which(recombination_map$location_targets == x)
+      location_real_row <- lapply(location_real_bp, function(x) {
+        which(recombination_map$location_loci == x)
         })
-      neutral_loci_location_real <- unname(unlist(neutral_loci_location_real))
-      neutral_loci_location <- c(neutral_loci_location_real,neutral_loci_location_sim)
+      location_real_row <- unname(unlist(location_real_row))
     }
     
-    if(mutation==T){ 
-    mutation_loci_location_temp <- location_loci_mutation
-    mutation_loci_location_temp <- mutation_loci_location_temp[order(mutation_loci_location_temp)]
-    mutation_loci_location <-
-      lapply(mutation_loci_location_temp, function(x) {
-        which(recombination_map$location_targets == x)
+    # getting the row of the recombination map for loci under selection
+    location_targets_row <- NULL
+    if(neutral_loci_chunk>0){
+      location_targets_row <- lapply(location_targets_bp, function(x) {
+        which(recombination_map$location_loci == x)
       })
-    mutation_loci_location <- unname(unlist(mutation_loci_location))
+      location_targets_row <- unname(unlist(location_targets_row))
     }
     
+    # getting the row of the recombination map for mutations
+    location_mutations_row <- NULL
+    if(mutation==T){
+      location_mutations_row  <- lapply(location_mutations_bp, function(x) {
+        which(recombination_map$location_loci == x)
+      })
+      location_mutations_row <- unname(unlist(location_mutations_row))
+    }
+    
+    ##### REFERENCE TABLE ########
+    # selection coefficient
     if(s_distribution== "exponential_gamma" ){
-      s_advantageous <- rexp(loci_number_to_simulate,rate = exp_rate) * -1
-      s_deleterious <- rgamma(loci_number_to_simulate, shape = gamma_shape, scale = gamma_scale)
+      s_advantageous <- rexp(total_loci,rate = exp_rate) * -1
+      s_deleterious <- rgamma(total_loci, shape = gamma_shape, scale = gamma_scale)
       s_temp <- c(sample(s_advantageous,
-                         size=round(loci_number_to_simulate*(percent_adv/100))),
+                         size=round(total_loci*(percent_adv/100))),
              sample(s_deleterious
-                    ,size=round(loci_number_to_simulate*(1-percent_adv/100))))
-      s <- sample(s_temp,size =loci_number_to_simulate,replace = T )
-      
+                    ,size=round(total_loci*(1-percent_adv/100))))
+      s <- sample(s_temp,size =total_loci,replace = T )
     }
     
     if (s_distribution == "equal") {
@@ -389,22 +444,22 @@ gl.sim.WF.table <-
     }
     
     if (s_distribution == "gamma") {
-      s <- rgamma(loci_number_to_simulate, shape = gamma_shape, scale = gamma_scale)
+      s <- rgamma(total_loci, shape = gamma_shape, scale = gamma_scale)
     }
     
     if (s_distribution == "log_normal") {
-      s <- rlnorm(loci_number_to_simulate,
+      s <- rlnorm(total_loci,
                   meanlog = log(log_mean),
                   sdlog = log(log_sd))
     }
     
+    # dominance
     if (h_distribution == "equal") {
       h <- h_gral
     }
     
     if (h_distribution == "normal") {
-      h <-
-        rnorm(loci_number_to_simulate, mean = dominance_mean, sd = dominance_sd)
+      h <- rnorm(total_loci, mean = dominance_mean, sd = dominance_sd)
     }
     
     # the equation for dominance (h) was taken from Huber 2018 Nature
@@ -412,6 +467,7 @@ gl.sim.WF.table <-
       h <- 1 / ((1 / intercept) - (-1 * rate * abs(s)))
     }
     
+    # initial frequency
     if (q_distribution == "equal") {
       q <- q_gral
     }
@@ -419,7 +475,7 @@ gl.sim.WF.table <-
     if (q_distribution == "equation") {
       a <- abs(s) * (1 - (2 * h))
       b <- (h * abs(s)) * (1 + mutation_rate)
-      c <- rep.int(-(mutation_rate), times = loci_number_to_simulate)
+      c <- rep.int(-(mutation_rate), times = total_loci)
       df_q <- as.data.frame(cbind(a, b, c))
       # q is based on the following equation: (s(1-2h)q^2) + (hs(1+u)q) - u = 0,
       # where u is the mutation rate per generation per site. Taken from Crow &
@@ -434,23 +490,25 @@ gl.sim.WF.table <-
         )
     }
     
-    reference <- as.data.frame(matrix(nrow = loci_number_to_simulate))
+    reference <- as.data.frame(matrix(nrow = total_loci))
     reference$q <- q
     reference$h <- h
     reference$s <- s
-    reference$c <- recombination_map[1:loci_number_to_simulate, "c"]
-    reference$loc_bp <-
-      recombination_map[1:loci_number_to_simulate, "location_targets"]
-    reference$loc_cM <- recombination_map[1:loci_number_to_simulate, "accum"]
+    reference$c <- recombination_map[1:total_loci, "c"]
+    reference$loc_bp <- recombination_map[1:total_loci, "location_loci_bp"]
+    reference$loc_cM <- recombination_map[1:total_loci, "accum"]
     reference$chr_name <- chromosome_name
-    # setting h and s to 0 in neutral loci
-    reference[as.numeric(neutral_loci_location), "s"] <- 0
-    reference[as.numeric(neutral_loci_location), "h"] <- 0
-    reference[as.numeric(neutral_loci_location), "q"] <- q_neutral
+    
+    # setting h and s to 0 in neutral loci and loci from real dataset
+    reference[as.numeric(location_real_row), "s"] <- 0
+    reference[as.numeric(location_real_row), "h"] <- 0
+    reference[as.numeric(location_real_row), "q"] <- q_neutral
+    reference[as.numeric(location_neutral_row), "s"] <- 0
+    reference[as.numeric(location_neutral_row), "h"] <- 0
+    reference[as.numeric(location_neutral_row), "q"] <- q_neutral
     # NS with very small s have a q > 1. Therefore, we set a maximum q value of
     # 0.5.
-    q_more_than_point5 <-
-      as.numeric(row.names(reference[reference$q > 0.5, ]))
+    q_more_than_point5 <- as.numeric(row.names(reference[reference$q > 0.5, ]))
     reference[q_more_than_point5, "q"] <- 0.5
     # the log normal distribution, with the parameters used in the simulations,
     # generates a few selection coefficients that are > 1. The maximum value of s
@@ -462,34 +520,27 @@ gl.sim.WF.table <-
     # is set to -0.5
     s_less_minus_one <- as.numeric(row.names(reference[reference$s < - 0.5, ]))
     reference[s_less_minus_one, "s"] <- -0.5
-    
-    if(mutation==TRUE){
+
     # setting q to 0 in loci available to mutation
-    reference[as.numeric(mutation_loci_location), "q"] <- 0
-    }
-    
+    reference[location_mutations_row, "q"] <- 0
+  
     reference <- reference[, -1]
     
-    neutral_loci_location <- which(reference$s == 0)
-    mutation_loci_location <- which(reference$q == 0)
     mutation_loci_adv <- which(reference$q == 0 & reference$s <0)
     mutation_loci_del <- which(reference$q == 0 & reference$s >0)
-    under_sel_loci_location <- which(reference$q > 0 & reference$s != 0 )
     deleterious <- which(reference$q > 0 & reference$s > 0 )
     advantageous <- which(reference$q > 0 & reference$s < 0 )
-    
-    reference[as.numeric(neutral_loci_location), "selection"] <- "neutral"
-    reference[as.numeric(mutation_loci_adv), "selection"] <- "mutation_adv"
-    reference[as.numeric(mutation_loci_del), "selection"] <- "mutation_del"
-    reference[as.numeric(deleterious), "selection"] <- "deleterious"
-    reference[as.numeric(advantageous), "selection"] <- "advantageous"
-    
-    if(real_loc ==TRUE | real_freq == TRUE ){
-      reference[as.numeric(neutral_loci_location_real), "selection"] <- "real"
-    }
-    
+
+    reference[location_neutral_row, "selection"] <- "neutral"
+    reference[location_real_row, "selection"] <- "real"
+    reference[mutation_loci_adv, "selection"] <- "mutation_adv"
+    reference[mutation_loci_del, "selection"] <- "mutation_del"
+    reference[deleterious, "selection"] <- "deleterious"
+    reference[advantageous, "selection"] <- "advantageous"
+  
     ref_res <- list(reference, ref_vars)
     names(ref_res) <- c("reference", "ref_vars")
+    ##### END ######
     
     # FLAG SCRIPT END
     

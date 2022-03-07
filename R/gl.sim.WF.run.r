@@ -29,9 +29,6 @@
 #' @param interactive_vars Run a shiny app to input interactively the values of
 #'  simulations variables [default TRUE].
 #' @param seed Set the seed for the simulations [default NULL].
-#' @param parallel Whether to use parallel package for computations 
-#' [default FALSE].
-#' @param n.cores Number of cores used by parallel package [default NULL].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -110,8 +107,6 @@ gl.sim.WF.run <-
            store_phase1 = FALSE,
            interactive_vars = TRUE,
            seed = NULL,
-           parallel = FALSE,
-           n.cores = NULL,
            verbose = NULL,
            ...) {
     
@@ -182,11 +177,17 @@ gl.sim.WF.run <-
     input_list <- list(...)
 
     if(length(input_list>0)){
-    vars_assign <- unlist(unname(
-      mapply(paste, names(input_list), "<-",
-             input_list, SIMPLIFY = F)
-    ))
-    eval(parse(text = vars_assign))
+      
+      val_change <- which(ref_vars$variable %in% names(input_list))
+      
+      ref_vars[val_change,"value"] <- list(input_list)
+      vars_assign <-
+        unlist(unname(
+          mapply(paste, ref_vars$variable, "<-",
+                 ref_vars$value, SIMPLIFY = F)
+        ))
+      eval(parse(text = vars_assign))
+      
     }
     
     reference <- ref_table$reference
@@ -414,8 +415,8 @@ gl.sim.WF.run <-
         stop()
       }
       
-      # tic("initialisation")
       ##### INITIALISE POPS #####
+      #tic("initialisation")
       if (verbose >= 2) {
         cat(report("  Initialising populations\n"))
       }
@@ -424,8 +425,8 @@ gl.sim.WF.run <-
       #to hack package checking...
       make_chr <- function(){}  
       
-      Rcpp::cppFunction(
-        
+      Rcpp::cppFunction(plugins="cpp11",
+                        
         'StringVector make_chr(int j, NumericVector q) {
     StringVector out(j);
     int size = 1;
@@ -504,6 +505,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
       if (length(pop_list) == 1) {
         dispersal <- FALSE
       }
+      #toc()
       
       ##### START GENERATION LOOP #####
       for (generation in 1:number_generations) {
@@ -593,8 +595,8 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
           gen <- gen + 1
         }
         
-        # tic("dispersal")
         ##### DISPERSAL ######
+        #tic("dispersal")
         if(number_pops==1){
           dispersal <- FALSE
         }
@@ -678,11 +680,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             femaletran <- res[[4]]
           }
         }
-        # toc()
-        # dispersal: 0.118 sec elapsed
-        
-        # tic(reproduction)
+        #toc()
+
         ##### REPRODUCTION #########
+        #tic("reproduction")
         offspring_list <- lapply(pops_vector, function(x) {
           reproduction(
             pop = pop_list[[x]],
@@ -697,14 +698,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             n_loc = loci_number
           )
         })
-        # toc()
-        #  6.063 sec elapsed
-        # 5.838 sec elapsed
-        #  6.031 sec elapsed
-        # 5.635 sec elapsed
-        
-        # tic("mutation")
+        #toc()
+
         ##### MUTATION #####
+        #tic("mutation")
         if(mutation==T){
           
           for(off_pop in 1:length(offspring_list)){
@@ -739,11 +736,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             offspring_list[[off_pop]] <- offspring_pop
           }
         }
-        # toc()
-        # mutation: 0.7 sec elapsed
-        
-        # tic("selection")
+        #toc()
+
         ##### SELECTION #####
+        #tic("selection")
         if (selection == TRUE) {
           offspring_list <- lapply(pops_vector, function(x) {
             selection_fun(
@@ -754,13 +750,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             )
           })
         }
-        # toc()
-        # selection: 5.615 sec elapsed
-        # selection: 6.068 sec elapsed
-        # selection: 6.229 sec elapsed
+        #toc()
         
-        # tic("sampling_next_gen")
         ##### SAMPLING NEXT GENERATION ########
+        #tic("sampling_next_gen")
         # testing whether any population became extinct, if so break the
         # iteration and pass to the next 
         test_extinction <- unlist(lapply(pops_vector, function(x) {
@@ -825,8 +818,6 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
               p_size = population_size_temp,
               p_list = pop_list_temp,
               n_loc_1 = loci_number,
-              paral = parallel,
-              n_cores = n.cores,
               ref = reference,
               p_map = plink_map,
               s_vars = s_vars_temp
@@ -891,32 +882,50 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             ), ])
           })
         }
-        # toc()
-        # sampling_next_gen: 0.094 sec elapsed
-        # sampling_next_gen: 0.103 sec elapsed
-        
-        # tic("mutation_2")
+        #toc()
+
+        ##### RECYCLE MUTATIONS ###########
+        #tic("mutation_2")
         # making available to mutation those loci in which deleterious alleles 
         # have been eliminated from all populations
         if(mutation==T){
           
           pops_merge <- rbindlist(pop_list)
-          freq <- dplyr::bind_cols(apply(pops_merge, 1, ped_b, n_loc = loci_number),
-                                   .name_repair="minimal")
-          lost_deleterious <- freq[as.numeric(mutation_loci_location),]
-          lost_deleterious[] <- lapply(lost_deleterious, as.numeric)
-          deleterious_eliminated_t <- rowSums(lost_deleterious)
-          deleterious_eliminated <- names(deleterious_eliminated_t[deleterious_eliminated_t==0])
+          pops_seqs <- c(pops_merge$V3,pops_merge$V4)
+          
+          # make frequencies
+          #to hack package checking...
+          freq_table <- function(){}  
+
+Rcpp::cppFunction(plugins="cpp11",
+                  
+"NumericVector freq_table(StringVector seqs) {
+  int seqN = seqs.length();
+  int locN = strlen(seqs(0));
+  NumericMatrix freq_mat = NumericMatrix(seqN,locN);
+  NumericVector out(locN);
+  for (int i = 0; i < seqN; i++) {
+    for (int j = 0; j < locN; j++) {
+      freq_mat(i,j) = seqs(i)[j] - '0';
+    }
+  }
+     for (int y = 0; y < locN; y++){
+          out[y] = sum(freq_mat(_,y));
+          }
+  return out;
+}"
+                  
+)
+
+          freqs <- freq_table(pops_seqs)
+          deleterious_eliminated <- which(freqs==0)
           mutation_loci_location <- union(mutation_loci_location,deleterious_eliminated)
         
         }
-        # toc()
-        # mutation_2: 3.871 sec elapsed
-        # mutation_2: 4.22 sec elapsed
-        # mutation_2: 3.205 sec elapsed
+        #toc()
 
-        # tic("store")
         ##### STORE VALUES ########
+        #tic("store")
         if (generation %in% gen_store & exists("count_store")) {
           # counter to store genlight objects
           count_store <- count_store + 1
@@ -945,8 +954,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
           # formatting the values of the variables to be saved in the genlight
           # object
           s_vars_temp <- rbind(ref_vars, sim_vars)
-          s_vars_temp <-
-            setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
+          s_vars_temp <- setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
           s_vars_temp$generation <- generation
           s_vars_temp$iteration <- iteration
           s_vars_temp$seed <- seed
@@ -965,8 +973,6 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
               p_size = population_size_temp,
               p_list = pop_list_temp,
               n_loc_1 = loci_number,
-              paral = parallel,
-              n_cores = n.cores,
               ref = reference,
               p_map = plink_map,
               s_vars = s_vars_temp
@@ -983,11 +989,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
           }
           
         }
-        # toc()
-        
-        # store: 21.763 sec elapsed
-        # store: 24.627 sec elapsed
-        # with parallel TRUE store: 30.117 sec elapsed
+        #toc()
       }
     }
     
@@ -1000,8 +1002,9 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
     })
     
     # removing NA's from results
-    final_res <- lapply(final_res, function(x)
-      x[!is.na(x)])
+    final_res <- lapply(final_res, function(x){
+      x[!is.na(x)]
+      })
     
     # FLAG SCRIPT END
     

@@ -37,9 +37,10 @@ code <- crayon::cyan
 
 # SET GLOBAL VARIABLES FOR SIMULATION FUNCTIONS
 # for gl.sim.WF.table
-utils::globalVariables(c("mutation_rate","q_distribution","q_gral","q_neutral","chromosome_name","chunk_number","loci_under_selection","neutral_loci_chunk","real_loc","chunk_recombination","map_resolution","dominance_mean","dominance_sd","gamma_scale","gamma_shape","h_distribution","h_gral","intercept","log_mean","log_sd","rate","s_distribution","s_gral","targets_factor","mutation" ,"exp_rate", "percent_adv"))
+utils::globalVariables(c("mutation_rate","q_distribution","q_gral","q_neutral","chromosome_name","chunk_number","loci_under_selection","neutral_loci_chunk","real_loc","chunk_recombination","map_resolution","dominance_mean","dominance_sd","gamma_scale","gamma_shape","h_distribution","h_gral","intercept","log_mean","log_sd","rate","s_distribution","s_gral","targets_factor","mutation","exp_rate","percent_adv","chunk_cM","loci_mutation","mutations_factor"))
 # for gl.sim.WF.run
 utils::globalVariables(c("chromosome_name","phase1","same_line","number_pops_phase1","population_size_phase1","gen_number_phase1","dispersal_phase1","dispersal_type_phase1","number_transfers_phase1","transfer_each_gen_phase1","variance_offspring_phase1","number_offspring_phase1","selection_phase1","Ne_phase1","Ne_fst_phase1","number_pops_phase2","population_size_phase2","gen_number_phase2","dispersal_phase2","dispersal_type_phase2","number_transfers_phase2","transfer_each_gen_phase2","variance_offspring_phase2","number_offspring_phase2","selection_phase2","Ne_phase2","Ne_fst_phase2","real_freq","real_pop_size","real_pops","recombination","recombination_males","genetic_load","natural_selection_model","mutation","mut_rate","dispersal_rate_phase1","dispersal_rate_phase2"))
+
 # defining function "dot" from data.table package to pass CRAN checks
 `.` <- list
 
@@ -82,9 +83,7 @@ viridis_palette <-
 two_colors <- c("#3B9AB2", "#78B7C5")
 two_colors_contrast <- c("deeppink", "chartreuse3")
 three_colors <- c("#3B9AB2", "deeppink", "lemonchiffon")
-# four_colors <- c( '#DED1AD' ,'#5401E0', '#16E03D' ,'deeppink')
-four_colors <-
-    c("lemonchiffon", "deeppink", "dodgerblue", "chartreuse3")
+four_colors <- c("lemonchiffon", "deeppink", "dodgerblue", "chartreuse3")
 
 # SET THEME FOR PLOTS
 #' dartR theme
