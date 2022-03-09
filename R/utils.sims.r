@@ -204,7 +204,6 @@ recomb <- function(r_chromosome1, r_chromosome2, r_map, loci) {
 
 selection_fun <-
   function(offspring,
-           reference_pop,
            h,
            s,
            sel_model,
@@ -281,7 +280,7 @@ store <-
     
     Rcpp::cppFunction(plugins="cpp11",
                       
-                      'List make_geno(StringMatrix mat) {
+'List make_geno(StringMatrix mat) {
     int ind = mat.nrow();
     int loc = strlen(mat(0,0));
     List out(ind);

@@ -416,7 +416,7 @@ gl.sim.WF.run <-
       }
       
       ##### INITIALISE POPS #####
-      #tic("initialisation")
+     tic("initialisation")
       if (verbose >= 2) {
         cat(report("  Initialising populations\n"))
       }
@@ -505,7 +505,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
       if (length(pop_list) == 1) {
         dispersal <- FALSE
       }
-      #toc()
+     toc()
       
       ##### START GENERATION LOOP #####
       for (generation in 1:number_generations) {
@@ -596,7 +596,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
         }
         
         ##### DISPERSAL ######
-        #tic("dispersal")
+       tic("dispersal")
         if(number_pops==1){
           dispersal <- FALSE
         }
@@ -680,10 +680,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             femaletran <- res[[4]]
           }
         }
-        #toc()
+       toc()
 
         ##### REPRODUCTION #########
-        #tic("reproduction")
+       tic("reproduction")
         offspring_list <- lapply(pops_vector, function(x) {
           reproduction(
             pop = pop_list[[x]],
@@ -698,10 +698,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             n_loc = loci_number
           )
         })
-        #toc()
+       toc()
 
         ##### MUTATION #####
-        #tic("mutation")
+       tic("mutation")
         if(mutation==T){
           
           for(off_pop in 1:length(offspring_list)){
@@ -736,14 +736,13 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             offspring_list[[off_pop]] <- offspring_pop
           }
         }
-        #toc()
+       toc()
 
         ##### SELECTION #####
-        #tic("selection")
+       tic("selection")
         if (selection == TRUE) {
           offspring_list <- lapply(pops_vector, function(x) {
             selection_fun(
-              reference_pop = reference,
               offspring = offspring_list[[x]],
               h = reference[,"h"],
               s = reference[,"s"],
@@ -752,10 +751,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             )
           })
         }
-        #toc()
+       toc()
         
         ##### SAMPLING NEXT GENERATION ########
-        #tic("sampling_next_gen")
+        tic("sampling_next_gen")
         # testing whether any population became extinct, if so break the
         # iteration and pass to the next 
         test_extinction <- unlist(lapply(pops_vector, function(x) {
@@ -884,10 +883,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             ), ])
           })
         }
-        #toc()
+       toc()
 
         ##### RECYCLE MUTATIONS ###########
-        #tic("mutation_2")
+        tic("mutation_2")
         # making available to mutation those loci in which deleterious alleles 
         # have been eliminated from all populations
         if(mutation==T){
@@ -924,10 +923,10 @@ Rcpp::cppFunction(plugins="cpp11",
           mutation_loci_location <- union(mutation_loci_location,deleterious_eliminated)
         
         }
-        #toc()
+       toc()
 
         ##### STORE VALUES ########
-        #tic("store")
+        tic("store")
         if (generation %in% gen_store & exists("count_store")) {
           # counter to store genlight objects
           count_store <- count_store + 1
@@ -1007,7 +1006,7 @@ Rcpp::cppFunction(plugins="cpp11",
           }
           
         }
-        #toc()
+       toc()
       }
     }
     
