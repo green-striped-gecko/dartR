@@ -111,23 +111,20 @@ reproduction <-
            r_males,
            r_map_1,
            n_loc) {
-    parents_matrix <-
-      as.data.frame(matrix(nrow = pop_size / 2, ncol = 2))
-    male_pool <-
-      sample(rownames(pop[1:(pop_size / 2),]), size = pop_size / 2)
-    parents_matrix[, 1] <- sample(male_pool, size = pop_size / 2)
-    parents_matrix[, 2] <-
-      sample(rownames(pop[((pop_size / 2) + 1):pop_size,]), size = pop_size / 2)
+    parents_matrix <- as.data.frame(matrix(nrow = pop_size / 2, ncol = 2))
+    parents_matrix[, 1] <- sample(rownames(pop[1:(pop_size / 2),]), size = pop_size / 2)
+    parents_matrix[, 2] <- sample(rownames(pop[((pop_size / 2) + 1):pop_size,]),
+                                  size = pop_size / 2)
     offspring <- NULL
     for (parent in 1:dim(parents_matrix)[1]) {
-      pairing_offspring <-  rnbinom(1, size = var_off, mu = num_off)
-      offspring_temp <-
-        as.data.frame(matrix(nrow = pairing_offspring, ncol = 6))
+      pairing_offspring <- rnbinom(1, size = var_off, mu = num_off)
+      offspring_temp <- as.data.frame(matrix(nrow = pairing_offspring, ncol = 6))
       if (pairing_offspring < 1) {
         next
       }
-      offspring_temp[, 1] <-
-        sample(c("Male", "Female"), size = pairing_offspring, replace = TRUE) # sex
+      offspring_temp[, 1] <- sample(c("Male", "Female"), 
+                                    size = pairing_offspring, 
+                                    replace = TRUE) # sex
       offspring_temp[, 2] <- pop_number # source population
       male_chromosomes <-
         list(pop[parents_matrix[parent, 1], 3], pop[parents_matrix[parent, 1], 4])
@@ -208,10 +205,39 @@ recomb <- function(r_chromosome1, r_chromosome2, r_map, loci) {
 selection_fun <-
   function(offspring,
            reference_pop,
+           h,
+           s,
            sel_model,
            g_load) {
-    offspring$fitness <- apply(offspring[,3:4], 1, fitness, ref = reference_pop)
     
+    
+    # make genotypes
+    #to hack package checking...
+    make_fit <- function(){}  
+    
+    Rcpp::cppFunction(plugins="cpp11",
+                      
+"NumericVector make_fit(StringMatrix seqs, NumericVector h, NumericVector s){
+int loc_number = strlen(seqs(0,0));
+int indN = seqs.nrow();
+NumericVector out(indN);
+for (int i = 0; i < indN; i++) {
+NumericVector fit_ind(loc_number);
+fit_ind.fill(1);
+  for (int loc = 0; loc < loc_number; loc++){
+    char chr1 = seqs(i,0)[loc], chr2 = seqs(i,1)[loc];
+    if (chr1 == chr2 && chr1=='1')
+    fit_ind[loc] = 1 - s[loc];
+    if (chr1 != chr2)
+    fit_ind[loc] = 1 - (h[loc] * s[loc]);
+  }
+  out[i] = algorithm::prod(fit_ind.begin(), fit_ind.end());
+}
+  return(out);
+}"
+    )
+
+    offspring$fitness <- make_fit(as.matrix(offspring[,3:4]),h,s)
     if (sel_model == "absolute") {
       offspring$random_deviate <- runif(nrow(offspring), min = 0, max = g_load)
       offspring$alive <- offspring$fitness > offspring$random_deviate
@@ -228,25 +254,6 @@ selection_fun <-
   }
 
 ###############################################################################
-########################## FITNESS ############################################
-###############################################################################
-
-fitness <- function(df_fitness, ref) {
-  
-  ref$chr_1 <- as.numeric(unlist(strsplit(df_fitness[1], split = "")))
-  ref$chr_2 <- as.numeric(unlist(strsplit(df_fitness[2], split = "")))
-  ref$geno <- ref$chr_1 + ref$chr_2
-  ref$s_coe[ref$geno==1] <- ref$h[ref$geno==1] * ref$s[ref$geno==1] * ref$geno[ref$geno==1]
-  ref$s_coe[ref$geno==2] <- ref$s[ref$geno==2] * (ref$geno[ref$geno==2]/2)
-  ref$s_coe[ref$geno==0] <- ref$s[ref$geno==0] * ref$geno[ref$geno==0]
-  ref$fitness <- 1 - (ref$s_coe)
-  net_fitness <- prod(ref$fitness)
-  
-  return(net_fitness)
-  
-}
-
-###############################################################################
 ########################## STORE GENLIGHT #####################################
 ###############################################################################
 
@@ -259,7 +266,6 @@ store <-
            p_map,
            s_vars) {
     pop_names <- rep(as.character(p_vector), p_size)
-    # pop_names <- pop_names[order(pop_names)]
     df_genotypes <- rbindlist(p_list)
     df_genotypes$V1[df_genotypes$V1 == "Male"]   <- 1
     df_genotypes$V1[df_genotypes$V1 == "Female"] <- 2
@@ -294,15 +300,7 @@ for (int j = 0; j < loc; j++) {
     )
     
     plink_temp <- as.matrix(df_genotypes[,3:4])
-    
     plink_ped <- make_geno(plink_temp)
-    
-    # plink_ped <- apply(df_genotypes, 1, ped, n_loc = n_loc_1)
-    # plink_ped <-
-    #   lapply(plink_ped, function(x) {
-    #     gsub(" ", "", strsplit(x, '(?<=([^ ]\\s){2})', perl = TRUE)[[1]])
-    #   })
-    
     plink_ped_2 <- lapply(plink_ped, function(x) {
       x[x == "11"] <- 2
       x[x == "00"] <- 0
@@ -365,43 +363,6 @@ for (int j = 0; j < loc; j++) {
     return(res)
     
   }
-
-###############################################################################
-######################## CONVERT TO PED FORMAT ################################
-###############################################################################
-
-ped <- function(df_ped, n_loc) {
-  chromosome1 <- df_ped[3]
-  chromosome2 <- df_ped[4]
-  split_seqs <- strsplit(c(chromosome1, chromosome2), split = "")
-  genotypes <- as.data.frame(matrix(nrow = n_loc, ncol = 2))
-  genotypes$V1 <- split_seqs[[1]]
-  genotypes$V2 <- split_seqs[[2]]
-  genotypes_final <-
-    paste0(paste(genotypes[, 1], genotypes[, 2]), collapse = " ")
-  
-  return(genotypes_final)
-  
-}
-
-ped_b <- function(df_ped, n_loc){
-  chromosome1 <- df_ped[3]
-  chromosome2 <- df_ped[4]
-  split_seqs <- strsplit(c(chromosome1, chromosome2), split = "")
-  genotypes <- as.data.frame(matrix(nrow = n_loc ,ncol =2 ))
-  genotypes$V1 <-split_seqs[[1]]
-  genotypes$V2 <-split_seqs[[2]]
-  
-  return(genotypes)
-}
-
-# ped <- function(df_ped, n_loc) {
-#   
-#   genotypes_final <-
-#     paste0(paste(strsplit(df_ped[3], split = ""), strsplit(df_ped[4], split = "")), collapse = " ")
-#   
-# 
-# }
 
 ###############################################################################
 ######### SHINY APP FOR THE VARIABLES OF THE REFERENCE TABLE ###################

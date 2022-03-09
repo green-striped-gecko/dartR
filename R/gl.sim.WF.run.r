@@ -178,13 +178,13 @@ gl.sim.WF.run <-
 
     if(length(input_list>0)){
       
-      val_change <- which(ref_vars$variable %in% names(input_list))
+      val_change <- which(sim_vars$variable %in% names(input_list))
       
-      ref_vars[val_change,"value"] <- list(input_list)
+      sim_vars[val_change,"value"] <- list(input_list)
       vars_assign <-
         unlist(unname(
-          mapply(paste, ref_vars$variable, "<-",
-                 ref_vars$value, SIMPLIFY = F)
+          mapply(paste, sim_vars$variable, "<-",
+                 sim_vars$value, SIMPLIFY = F)
         ))
       eval(parse(text = vars_assign))
       
@@ -743,8 +743,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
         if (selection == TRUE) {
           offspring_list <- lapply(pops_vector, function(x) {
             selection_fun(
-              offspring = offspring_list[[x]],
               reference_pop = reference,
+              offspring = offspring_list[[x]],
+              h = reference[,"h"],
+              s = reference[,"s"],
               sel_model = natural_selection_model,
               g_load = genetic_load
             )
@@ -895,11 +897,11 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
           
           # make frequencies
           #to hack package checking...
-          freq_table <- function(){}  
+          make_freqs <- function(){}  
 
 Rcpp::cppFunction(plugins="cpp11",
                   
-"NumericVector freq_table(StringVector seqs) {
+"NumericVector make_freqs(StringVector seqs) {
   int seqN = seqs.length();
   int locN = strlen(seqs(0));
   NumericMatrix freq_mat = NumericMatrix(seqN,locN);
@@ -917,7 +919,7 @@ Rcpp::cppFunction(plugins="cpp11",
                   
 )
 
-          freqs <- freq_table(pops_seqs)
+          freqs <- make_freqs(pops_seqs)
           deleterious_eliminated <- which(freqs==0)
           mutation_loci_location <- union(mutation_loci_location,deleterious_eliminated)
         
@@ -966,7 +968,9 @@ Rcpp::cppFunction(plugins="cpp11",
           s_vars_temp$number_transfers_phase2 <- paste(dispersal_pairs$number_transfers, collapse = " ")  
           s_vars_temp$transfer_each_gen_phase2 <- paste(dispersal_pairs$transfer_each_gen, collapse = " ") 
           }
-           
+          
+          # if(generation==1){
+          
           final_res[[iteration]][[count_store]] <-
             store(
               p_vector = pops_vector,
@@ -977,6 +981,20 @@ Rcpp::cppFunction(plugins="cpp11",
               p_map = plink_map,
               s_vars = s_vars_temp
             )
+          # }else{
+          #   
+          #   final_res[[iteration]][[count_store]] <-
+          #     store(
+          #       p_vector = pops_vector,
+          #       p_size = population_size_temp,
+          #       p_list = pop_list_temp,
+          #       n_loc_1 = loci_number,
+          #       ref = NA,
+          #       p_map = plink_map,
+          #       s_vars = s_vars_temp
+          #     )
+          #   
+          # }
           
           if(real_pops==TRUE){
             
