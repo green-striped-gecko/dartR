@@ -112,7 +112,8 @@ reproduction <-
            r_map_1,
            n_loc) {
     parents_matrix <- as.data.frame(matrix(nrow = pop_size / 2, ncol = 2))
-    parents_matrix[, 1] <- sample(rownames(pop[1:(pop_size / 2),]), size = pop_size / 2)
+    parents_matrix[, 1] <- sample(rownames(pop[1:(pop_size / 2),]), 
+                                  size = pop_size / 2)
     parents_matrix[, 2] <- sample(rownames(pop[((pop_size / 2) + 1):pop_size,]),
                                   size = pop_size / 2)
     offspring <- NULL
@@ -138,13 +139,13 @@ reproduction <-
             r_males == TRUE & males_recom_events > 1) {
           for (event in males_recom_events) {
             male_chromosomes <-
-              recomb(male_chromosomes[[1]],
-                     male_chromosomes[[2]],
-                     r_map = r_map_1,
-                     loci = n_loc)
+              recomb(
+                chr1 = male_chromosomes[[1]],
+                chr2 = male_chromosomes[[2]],
+                r_map = r_map_1,
+                loci = n_loc)
           }
-          offspring_temp[offs, 3] <-
-            male_chromosomes[[sample(c(1, 2), 1)]]
+          offspring_temp[offs, 3] <- male_chromosomes[[sample(c(1, 2), 1)]]
         } else{
           offspring_temp[offs, 3] <- male_chromosomes[[sample(c(1, 2), 1)]]
         }
@@ -153,14 +154,13 @@ reproduction <-
           for (event in females_recom_events) {
             female_chromosomes <-
               recomb(
-                female_chromosomes[[1]],
-                female_chromosomes[[2]],
+                chr1 = female_chromosomes[[1]],
+                chr2 = female_chromosomes[[2]],
                 r_map = r_map_1,
                 loci = n_loc
               )
           }
-          offspring_temp[offs, 4] <-
-            female_chromosomes[[sample(c(1, 2), 1)]]
+          offspring_temp[offs, 4] <- female_chromosomes[[sample(c(1, 2), 1)]]
         } else{
           offspring_temp[offs, 4] <- female_chromosomes[[sample(c(1, 2), 1)]]
         }
@@ -169,7 +169,6 @@ reproduction <-
       offspring_temp[, 6] <- parents_matrix[parent, 2] #id mother
       offspring <- rbind(offspring, offspring_temp)
     }
-    
     return(offspring)
   }
 
@@ -177,24 +176,17 @@ reproduction <-
 ########################## RECOMBINATION ######################################
 ###############################################################################
 
-recomb <- function(r_chromosome1, r_chromosome2, r_map, loci) {
-  chiasma <-
-    as.numeric(sample(row.names(r_map), size = 1, prob = r_map[, "c"]))
+recomb <- function(chr1, 
+                   chr2,
+                   r_map, 
+                   loci) {
+  chiasma <- as.numeric(sample(row.names(r_map), size = 1, prob = r_map[, "c"]))
   if (chiasma < (loci + 1)) {
-    split_seqs <- strsplit(c(r_chromosome1, r_chromosome2), split = "")
-    r_chr1 <- paste0(c(split_seqs[[1]][1:chiasma],
-                       split_seqs[[2]][(chiasma + 1):loci]), 
-                     collapse = "")
-    r_chr2 <- paste0(c(split_seqs[[2]][1:chiasma],
-                       split_seqs[[1]][(chiasma + 1):loci]), 
-                     collapse = "")
-    
+    r_chr1 <- paste0(substr(chr1,1,chiasma), substr(chr2, chiasma + 1,loci))
+    r_chr2 <- paste0(substr(chr2,1,chiasma), substr(chr1, chiasma + 1,loci))
     return(list(r_chr1, r_chr2))
-    
   } else{
-    
-    return(list(r_chromosome1, r_chromosome2))
-    
+    return(list(chr1, chr2))
   }
 }
 
@@ -263,7 +255,8 @@ store <-
            n_loc_1,
            ref,
            p_map,
-           s_vars) {
+           s_vars,
+           g) {
     pop_names <- rep(as.character(p_vector), p_size)
     df_genotypes <- rbindlist(p_list)
     df_genotypes$V1[df_genotypes$V1 == "Male"]   <- 1

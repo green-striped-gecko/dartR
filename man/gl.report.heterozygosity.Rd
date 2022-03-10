@@ -128,7 +128,7 @@ gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
 \code{\link{gl.filter.heterozygosity}}
 
 Other reporting functions: 
-\code{\link{gl.hwe.diagnostics}()},
+\code{\link{gl.diagnostics.hwe}()},
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.parent.offspring}()},

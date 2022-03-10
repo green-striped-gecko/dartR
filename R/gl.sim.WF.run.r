@@ -200,29 +200,25 @@ gl.sim.WF.run <-
     mutation_loci_location <- c(mutation_loci_adv,mutation_loci_del)
     mutation_loci_location <- mutation_loci_location[order(mutation_loci_location)]
     
-    under_sel_loci_location <- which(reference$selection == "deleterious" |
-                                       reference$selection == "advantageous")
-    deleterious <- which(reference$selection == "deleterious")
-    advantageous <- which(reference$selection == "advantageous")
     real <- which(reference$selection == "real")
     
     q_neutral <- as.numeric(ref_vars[ref_vars$variable=="q_neutral","value"])
     
-    # this is th option of mutation from the reference table 
+    # this is the option of mutation from the reference table 
     mut_table <- ref_vars[ref_vars$variable=="mutation","value"]
     if(mut_table != mutation){
       cat(error("The value for the mutation parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
       stop()
     }
     
-    # this is th option of real_freq from the reference table 
+    # this is the option of real_freq from the reference table 
     real_freq_table <- ref_vars[ref_vars$variable=="real_freq","value"]
     if(real_freq_table != real_freq){
       cat(error("The value for the real_freq parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
       stop()
     }
     
-    # this is th option of real_loc from the reference table 
+    # this is the option of real_loc from the reference table 
     real_loc_table <- ref_vars[ref_vars$variable=="real_loc","value"]
     if(real_loc_table != real_loc){
       cat(error("The value for the real_loc parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
@@ -239,8 +235,7 @@ gl.sim.WF.run <-
     }
     
     # This is the total number of generations
-    number_generations <-
-      gen_number_phase1 + gen_number_phase2
+    number_generations <- gen_number_phase1 + gen_number_phase2
     
     # This is the list to store the final genlight objects
     gen_store <-
@@ -401,22 +396,22 @@ gl.sim.WF.run <-
       }
       
       if(phase1 == TRUE & number_pops_phase1!=number_pops_phase2 ){
-        cat(error("Number of populations in phase 1 and phase 2 must be the same\n"))
+        cat(error("  Number of populations in phase 1 and phase 2 must be the same\n"))
         stop()
       }
       
       if(length(population_size_phase2)!=number_pops_phase2){
-        cat(error("Number of entries for population sizes do not agree with the number of populations for phase 2\n"))
+        cat(error("  Number of entries for population sizes do not agree with the number of populations for phase 2\n"))
         stop()
       }
       
       if(length(population_size_phase1)!=number_pops_phase1 & phase1==TRUE){
-        cat(error("Number of entries for population sizes do not agree with the number of populations for phase 1\n"))
+        cat(error("  Number of entries for population sizes do not agree with the number of populations for phase 1\n"))
         stop()
       }
       
       ##### INITIALISE POPS #####
-     tic("initialisation")
+     #tic("initialisation")
       if (verbose >= 2) {
         cat(report("  Initialising populations\n"))
       }
@@ -505,7 +500,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
       if (length(pop_list) == 1) {
         dispersal <- FALSE
       }
-     toc()
+     #toc()
       
       ##### START GENERATION LOOP #####
       for (generation in 1:number_generations) {
@@ -513,7 +508,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
           cat(report(" Starting phase 1\n"))
         }
         
-        if (generation %% 5 == 0) {
+        if (generation %% 10 == 0) {
           cat(report("  Starting generation =", generation, "\n"))
         }
         
@@ -596,7 +591,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
         }
         
         ##### DISPERSAL ######
-       tic("dispersal")
+       #tic("dispersal")
         if(number_pops==1){
           dispersal <- FALSE
         }
@@ -680,10 +675,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             femaletran <- res[[4]]
           }
         }
-       toc()
+       #toc()
 
         ##### REPRODUCTION #########
-       tic("reproduction")
+       #tic("reproduction")
         offspring_list <- lapply(pops_vector, function(x) {
           reproduction(
             pop = pop_list[[x]],
@@ -698,10 +693,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             n_loc = loci_number
           )
         })
-       toc()
+       #toc()
 
         ##### MUTATION #####
-       tic("mutation")
+       #tic("mutation")
         if(mutation==T){
           
           for(off_pop in 1:length(offspring_list)){
@@ -736,10 +731,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             offspring_list[[off_pop]] <- offspring_pop
           }
         }
-       toc()
+       #toc()
 
         ##### SELECTION #####
-       tic("selection")
+       #tic("selection")
         if (selection == TRUE) {
           offspring_list <- lapply(pops_vector, function(x) {
             selection_fun(
@@ -751,10 +746,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             )
           })
         }
-       toc()
+       #toc()
         
         ##### SAMPLING NEXT GENERATION ########
-        tic("sampling_next_gen")
+        #tic("sampling_next_gen")
         # testing whether any population became extinct, if so break the
         # iteration and pass to the next 
         test_extinction <- unlist(lapply(pops_vector, function(x) {
@@ -883,10 +878,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             ), ])
           })
         }
-       toc()
+       #toc()
 
         ##### RECYCLE MUTATIONS ###########
-        tic("mutation_2")
+        #tic("mutation_2")
         # making available to mutation those loci in which deleterious alleles 
         # have been eliminated from all populations
         if(mutation==T){
@@ -923,10 +918,10 @@ Rcpp::cppFunction(plugins="cpp11",
           mutation_loci_location <- union(mutation_loci_location,deleterious_eliminated)
         
         }
-       toc()
+       #toc()
 
         ##### STORE VALUES ########
-        tic("store")
+        #tic("store")
         if (generation %in% gen_store & exists("count_store")) {
           # counter to store genlight objects
           count_store <- count_store + 1
@@ -968,8 +963,6 @@ Rcpp::cppFunction(plugins="cpp11",
           s_vars_temp$transfer_each_gen_phase2 <- paste(dispersal_pairs$transfer_each_gen, collapse = " ") 
           }
           
-          # if(generation==1){
-          
           final_res[[iteration]][[count_store]] <-
             store(
               p_vector = pops_vector,
@@ -978,22 +971,9 @@ Rcpp::cppFunction(plugins="cpp11",
               n_loc_1 = loci_number,
               ref = reference,
               p_map = plink_map,
-              s_vars = s_vars_temp
+              s_vars = s_vars_temp,
+              g = generation
             )
-          # }else{
-          #   
-          #   final_res[[iteration]][[count_store]] <-
-          #     store(
-          #       p_vector = pops_vector,
-          #       p_size = population_size_temp,
-          #       p_list = pop_list_temp,
-          #       n_loc_1 = loci_number,
-          #       ref = NA,
-          #       p_map = plink_map,
-          #       s_vars = s_vars_temp
-          #     )
-          #   
-          # }
           
           if(real_pops==TRUE){
             
@@ -1006,7 +986,7 @@ Rcpp::cppFunction(plugins="cpp11",
           }
           
         }
-       toc()
+       #toc()
       }
     }
     
