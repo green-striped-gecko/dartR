@@ -29,9 +29,6 @@
 #' @param interactive_vars Run a shiny app to input interactively the values of
 #'  simulations variables [default TRUE].
 #' @param seed Set the seed for the simulations [default NULL].
-#' @param parallel Whether to use parallel package for computations 
-#' [default FALSE].
-#' @param n.cores Number of cores used by parallel package [default NULL].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -110,12 +107,8 @@ gl.sim.WF.run <-
            store_phase1 = FALSE,
            interactive_vars = TRUE,
            seed = NULL,
-           parallel = FALSE,
-           n.cores = NULL,
            verbose = NULL,
            ...) {
-    
-    # tic("first_part")
     
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -125,6 +118,16 @@ gl.sim.WF.run <-
     utils.flag.start(func = funname,
                      build = "Jody",
                      verbosity = verbose)
+    
+    # CHECK IF PACKAGES ARE INSTALLED
+    pkg <- "stringi"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+      stop(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it."
+      ))
+    }
     
     # DO THE JOB
     
@@ -171,21 +174,57 @@ gl.sim.WF.run <-
       eval(parse(text = vars_assign))
     }
     
-    # input_list <- list(...)
-    # 
-    # if(length(input_list>0)){
-    # vars_assign <- unlist(unname(
-    #   mapply(paste, names(input_list), "<-",
-    #          input_list, SIMPLIFY = F)
-    # ))
-    # eval(parse(text = vars_assign))
-    # }
+    input_list <- list(...)
+
+    if(length(input_list>0)){
+      
+      val_change <- which(sim_vars$variable %in% names(input_list))
+      
+      sim_vars[val_change,"value"] <- list(input_list)
+      vars_assign <-
+        unlist(unname(
+          mapply(paste, sim_vars$variable, "<-",
+                 sim_vars$value, SIMPLIFY = F)
+        ))
+      eval(parse(text = vars_assign))
+      
+    }
     
     reference <- ref_table$reference
     ref_vars <- ref_table$ref_vars
     
+    neutral_loci_location <- which(reference$selection == "neutral" |
+                                     reference$selection == "real")
+    mutation_loci_adv <- which(reference$selection == "mutation_adv" )
+    mutation_loci_del <- which(reference$selection == "mutation_del")
+    mutation_loci_location <- c(mutation_loci_adv,mutation_loci_del)
+    mutation_loci_location <- mutation_loci_location[order(mutation_loci_location)]
+    
+    real <- which(reference$selection == "real")
+    
     q_neutral <- as.numeric(ref_vars[ref_vars$variable=="q_neutral","value"])
     
+    # this is the option of mutation from the reference table 
+    mut_table <- ref_vars[ref_vars$variable=="mutation","value"]
+    if(mut_table != mutation){
+      cat(error("The value for the mutation parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
+      stop()
+    }
+    
+    # this is the option of real_freq from the reference table 
+    real_freq_table <- ref_vars[ref_vars$variable=="real_freq","value"]
+    if(real_freq_table != real_freq){
+      cat(error("The value for the real_freq parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
+      stop()
+    }
+    
+    # this is the option of real_loc from the reference table 
+    real_loc_table <- ref_vars[ref_vars$variable=="real_loc","value"]
+    if(real_loc_table != real_loc){
+      cat(error("The value for the real_loc parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
+      stop()
+    }
+
     # setting the seed
     if (!is.null(seed)) {
       set.seed(seed)
@@ -196,8 +235,7 @@ gl.sim.WF.run <-
     }
     
     # This is the total number of generations
-    number_generations <-
-      gen_number_phase1 + gen_number_phase2
+    number_generations <- gen_number_phase1 + gen_number_phase2
     
     # This is the list to store the final genlight objects
     gen_store <-
@@ -209,9 +247,6 @@ gl.sim.WF.run <-
     
     loci_number <- nrow(reference)
     recombination_map <- reference[, c("c", "loc_bp", "loc_cM")]
-    # The last element of the first column must be zero, otherwise the
-    # recombination function crashes.
-    recombination_map[nrow(recombination_map), 1] <- 0
     # In order for the recombination rate to be accurate, we must account for
     # the case when the probability of the total recombination rate is less than
     # 1 (i.e. < 100 cM) or more than 1 (> 100 cM). For the first case, the program
@@ -231,35 +266,10 @@ gl.sim.WF.run <-
     # filling the probability of recombination when the total recombination rate
     # is less than an integer (recom_event) and placing it at the end of the
     # recombination map
-    
-    recombination_map$loc_cM <- cumsum(recombination_map$c)
-    
-    recombination_map[loci_number + 1, 1] <-
-      recom_event - sum(recombination_map[, 1])
-    recombination_map[loci_number + 1, 2] <-
-      recombination_map[loci_number, 2]
-    recombination_map[loci_number + 1, 3] <-
-      recombination_map[loci_number, 3]
-    
-    neutral_loci_location <- which(reference$s == 0)
-    
-    mutation_loci_location <- which(reference$q == 0)
-    
-    mutation_loci_adv <- which(reference$q == 0 & reference$s <0)
-    
-    mutation_loci_del <- which(reference$q == 0 & reference$s >0)
-    
-    under_sel_loci_location <- which(reference$q > 0 & reference$s != 0 )
-    
-    deleterious <- which(reference$q > 0 & reference$s > 0 )
-    
-    advantageous <- which(reference$q > 0 & reference$s < 0 )
-    
-    reference[as.numeric(neutral_loci_location), "selection"] <- "neutral"
-    reference[as.numeric(mutation_loci_adv), "selection"] <- "mutation_adv"
-    reference[as.numeric(mutation_loci_del), "selection"] <- "mutation_del"
-    reference[as.numeric(deleterious), "selection"] <- "deleterious"
-    reference[as.numeric(advantageous), "selection"] <- "advantageous"
+
+    recombination_map[loci_number + 1, 1] <- recom_event - sum(recombination_map[, 1])
+    recombination_map[loci_number + 1, 2] <- recombination_map[loci_number, 2]
+    recombination_map[loci_number + 1, 3] <- recombination_map[loci_number, 3]
     
     # one is subtracted from the recombination map to account for the last row that
     # was added in the recombination map to avoid that the recombination function crashes
@@ -287,23 +297,8 @@ gl.sim.WF.run <-
     if (phase1 == FALSE & real_pops == TRUE & !is.null(x)) {
       number_pops <- number_pops_phase2 <- nPop(x)
     }
-    
-    if(phase1 == TRUE & number_pops_phase1!=number_pops_phase2 ){
-      cat(error("Number of populations in phase 1 and phase 2 must be the same\n"))
-      stop()
-    }
-    
-    if(length(population_size_phase2)!=number_pops_phase2){
-      cat(error("Number of entries for population sizes do not agree with the number of populations for phase 2\n"))
-      stop()
-    }
-    
-    if(length(population_size_phase1)!=number_pops_phase1 & phase1==TRUE){
-      cat(error("Number of entries for population sizes do not agree with the number of populations for phase 1\n"))
-      stop()
-    }
   
-    if (real_freq == TRUE & !is.null(x)) {
+    if (real_freq == TRUE & !is.null(x) & real_loc == TRUE) {
       pop_list_freq_temp <- seppop(x)
       loc_to_keep <-
         locNames(pop_list_freq_temp[[1]])[which(pop_list_freq_temp[[1]]$chromosome == chromosome_name)]
@@ -314,10 +309,17 @@ gl.sim.WF.run <-
                verbose = 0)
       pop_list_freq <- lapply(pop_list_freq_temp, gl.alf)
       
-    } else{
+    } 
+    
+    if (real_freq == TRUE & !is.null(x) & real_loc == FALSE) {
+      pop_list_freq_temp <- seppop(x)
+      pop_list_freq <- lapply(pop_list_freq_temp, gl.alf)
+      }
+    
+    if (real_freq == FALSE) {
       pop_list_freq <- rep(NA, number_pops)
     }
-    
+
     ##### ANALYSIS VARIABLES #####
     # This is to calculate the density of mutations per centimorgan. The density
     # is based on the number of heterozygous loci in each individual. Based on HW
@@ -330,18 +332,10 @@ gl.sim.WF.run <-
     # arm 2L has 17% of the total number of non-synonymous mutations and is 55/2
     # cM long (cM are divided by two because there is no recombination in males),
     # with these parameters the density per cM is (5000*0.17)/(55/2) = 30.9
-    freq_deleterious <-
-      reference[-as.numeric(neutral_loci_location),]
-    freq_deleterious_b <-
-      mean(2 * (freq_deleterious$q) * (1 - freq_deleterious$q))
-    density_mutations_per_cm <-
-      (freq_deleterious_b * nrow(freq_deleterious)) /
+    freq_deleterious <- reference[-as.numeric(neutral_loci_location),]
+    freq_deleterious_b <- mean(2 * (freq_deleterious$q) * (1 - freq_deleterious$q))
+    density_mutations_per_cm <- (freq_deleterious_b * nrow(freq_deleterious)) /
       (recombination_map[loci_number, "loc_cM"] * 100)
-    # toc()
-    # first_part: 0.101 sec elapsed
-    # first_part: 0.124 sec elapsed
-    # first_part: 0.081 sec elapsed
-    # first_part: 0.094 sec elapsed
    
     ##### START ITERATION LOOP #####
     for (iteration in 1:number_iterations) {
@@ -386,11 +380,13 @@ gl.sim.WF.run <-
         
       } else {
         
-        if (real_pop_size == TRUE) {
-          
-          population_size <- unname(unlist(table(pop(x))))
-          population_size <- (population_size %% 2 != 0) + population_size
-          
+        if (real_pop_size == TRUE & !is.null(x)) {
+          population_size_phase2 <- unname(unlist(table(pop(x))))
+          # converting odd population sizes to even
+          population_size_phase2 <-
+            (population_size_phase2 %% 2 != 0) + population_size_phase2
+          population_size <- population_size_phase2
+
         } else{
           
           population_size <- population_size_phase2
@@ -399,32 +395,112 @@ gl.sim.WF.run <-
         
       }
       
-      # tic("initialisation")
+      if(phase1 == TRUE & number_pops_phase1!=number_pops_phase2 ){
+        cat(error("  Number of populations in phase 1 and phase 2 must be the same\n"))
+        stop()
+      }
+      
+      if(length(population_size_phase2)!=number_pops_phase2){
+        cat(error("  Number of entries for population sizes do not agree with the number of populations for phase 2\n"))
+        stop()
+      }
+      
+      if(length(population_size_phase1)!=number_pops_phase1 & phase1==TRUE){
+        cat(error("  Number of entries for population sizes do not agree with the number of populations for phase 1\n"))
+        stop()
+      }
+      
       ##### INITIALISE POPS #####
+     #tic("initialisation")
       if (verbose >= 2) {
         cat(report("  Initialising populations\n"))
       }
       
+      # make chromosomes
+      #to hack package checking...
+      make_chr <- function(){}  
+      
+      Rcpp::cppFunction(plugins="cpp11",
+                        
+        'StringVector make_chr(int j, NumericVector q) {
+    StringVector out(j);
+    int size = 1;
+    IntegerVector x = IntegerVector::create(1,0);
+    bool rep = false;
+for (int i = 0; i < j; i++) {
+std::ostringstream temp;
+for (int z = 0; z < q.length(); z++) {
+NumericVector p = NumericVector::create(q[z],1-q[z]);
+   temp << sample(x, size, rep, p);
+  }
+      out[i] = temp.str();
+    }
+    return out;
+  }'
+      )
+      
+      chr_temp <- make_chr(j=sum(population_size)*2,q=reference$q)
+      chr_pops_temps <- split(chr_temp, rep(1:number_pops, 
+                                            (c(population_size)*2)))
+      chr_pops <- lapply(chr_pops_temps,split,c(1:2))
+       
       pops_vector <- 1:number_pops
-      pop_list <- lapply(pops_vector, function(y) {
-        initialise(
-          pop_number = y,
-          pop_size = population_size[y],
-          refer = reference,
-          q_neu = q_neutral,
-          n_l_loc = neutral_loci_location,
-          r_freq = pop_list_freq[[y]],
-          freq_real = real_freq
-        )
-      })
-      # toc()
-      # initialisation: 67.086 sec elapsed
-      # initialisation: 66.992 sec elapsed
+      
+      pop_list <- as.list(pops_vector)
+      
+      for(pop_n in pops_vector){
+        pop <- as.data.frame(matrix(ncol = 4, nrow = population_size[pop_n]))
+        pop[, 1] <- rep(c("Male", "Female"), each = population_size[pop_n] / 2)
+        pop[, 2] <- pop_n # second column stores population number
+        pop[, 3] <- chr_pops[[pop_n]][1]
+        pop[, 4] <- chr_pops[[pop_n]][2]
+     
+        if(real_freq == TRUE & real_loc == TRUE){
+        for (individual_pop in 1:population_size[pop_n]) {
+          q_prob_t <- pop_list_freq[[pop_n]]$alf1
+          q_prob_t2 <- cbind(q_prob_t,1-q_prob_t)
+          q_prob <- split(q_prob_t2, row(q_prob_t2))
+
+          stringi::stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
+              mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
+                     q_prob,
+                     USE.NAMES = FALSE)
+            
+          stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
+            mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
+                   q_prob,
+                   USE.NAMES = FALSE)
+            
+          }
+        }
+        
+        if(real_freq == TRUE & real_loc == FALSE){
+          for (individual_pop in 1:population_size[pop_n]) {
+            q_prob_t <- pop_list_freq[[pop_n]]$alf1
+            q_prob_t2 <- cbind(q_prob_t,1-q_prob_t)
+            q_prob <- split(q_prob_t2, row(q_prob_t2))
+            
+            stringi::stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
+              mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
+                     q_prob,
+                     USE.NAMES = FALSE)
+            
+            stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
+              mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
+                     q_prob,
+                     USE.NAMES = FALSE)
+            
+          }
+        }
+        
+        pop_list[[pop_n]] <- pop
+      }
       
       #if there is just one population set dispersal to FALSE
       if (length(pop_list) == 1) {
         dispersal <- FALSE
       }
+     #toc()
       
       ##### START GENERATION LOOP #####
       for (generation in 1:number_generations) {
@@ -432,7 +508,7 @@ gl.sim.WF.run <-
           cat(report(" Starting phase 1\n"))
         }
         
-        if (generation %% 5 == 0) {
+        if (generation %% 10 == 0) {
           cat(report("  Starting generation =", generation, "\n"))
         }
         
@@ -514,8 +590,8 @@ gl.sim.WF.run <-
           gen <- gen + 1
         }
         
-        # tic("dispersal")
         ##### DISPERSAL ######
+       #tic("dispersal")
         if(number_pops==1){
           dispersal <- FALSE
         }
@@ -599,11 +675,10 @@ gl.sim.WF.run <-
             femaletran <- res[[4]]
           }
         }
-        # toc()
-        # dispersal: 0.118 sec elapsed
-        
-        # tic(reproduction)
+       #toc()
+
         ##### REPRODUCTION #########
+       #tic("reproduction")
         offspring_list <- lapply(pops_vector, function(x) {
           reproduction(
             pop = pop_list[[x]],
@@ -618,14 +693,10 @@ gl.sim.WF.run <-
             n_loc = loci_number
           )
         })
-        # toc()
-        #  6.063 sec elapsed
-        # 5.838 sec elapsed
-        #  6.031 sec elapsed
-        # 5.635 sec elapsed
-        
-        # tic("mutation")
+       #toc()
+
         ##### MUTATION #####
+       #tic("mutation")
         if(mutation==T){
           
           for(off_pop in 1:length(offspring_list)){
@@ -642,13 +713,13 @@ gl.sim.WF.run <-
               }
               
               if (offspring_pop[offspring_ind, "runif"] < mut_rate) {
-                locus_to_mutate <- as.numeric(sample(mutation_loci_location, 1))
+                locus_to_mutate <- sample(mutation_loci_location, 1)
                 mutation_loci_location <-
-                  mutation_loci_location[-which(mutation_loci_location == as.character(locus_to_mutate))]
+                  mutation_loci_location[-which(mutation_loci_location == locus_to_mutate)]
                 chromosomes <- c(offspring_pop[offspring_ind, 3], offspring_pop[offspring_ind, 4])
                 chr_to_mutate <- sample(1:2, 1)
                 chr_to_mutate_b <- chromosomes[chr_to_mutate]
-                substr(chr_to_mutate_b, locus_to_mutate, locus_to_mutate) <- "a"
+                substr(chr_to_mutate_b, as.numeric(locus_to_mutate), as.numeric(locus_to_mutate)) <- "1"
                 chromosomes[chr_to_mutate] <- chr_to_mutate_b
                 offspring_pop[offspring_ind, 3] <- chromosomes[1]
                 offspring_pop[offspring_ind, 4] <- chromosomes[2]
@@ -660,28 +731,25 @@ gl.sim.WF.run <-
             offspring_list[[off_pop]] <- offspring_pop
           }
         }
-        # toc()
-        # mutation: 0.7 sec elapsed
-        
-        # tic("selection")
+       #toc()
+
         ##### SELECTION #####
+       #tic("selection")
         if (selection == TRUE) {
           offspring_list <- lapply(pops_vector, function(x) {
             selection_fun(
               offspring = offspring_list[[x]],
-              reference_pop = reference,
+              h = reference[,"h"],
+              s = reference[,"s"],
               sel_model = natural_selection_model,
               g_load = genetic_load
             )
           })
         }
-        # toc()
-        # selection: 5.615 sec elapsed
-        # selection: 6.068 sec elapsed
-        # selection: 6.229 sec elapsed
+       #toc()
         
-        # tic("sampling_next_gen")
         ##### SAMPLING NEXT GENERATION ########
+        #tic("sampling_next_gen")
         # testing whether any population became extinct, if so break the
         # iteration and pass to the next 
         test_extinction <- unlist(lapply(pops_vector, function(x) {
@@ -746,8 +814,6 @@ gl.sim.WF.run <-
               p_size = population_size_temp,
               p_list = pop_list_temp,
               n_loc_1 = loci_number,
-              paral = parallel,
-              n_cores = n.cores,
               ref = reference,
               p_map = plink_map,
               s_vars = s_vars_temp
@@ -812,33 +878,50 @@ gl.sim.WF.run <-
             ), ])
           })
         }
-        # toc()
-        # sampling_next_gen: 0.094 sec elapsed
-        # sampling_next_gen: 0.103 sec elapsed
-        
-        # tic("mutation_2")
+       #toc()
+
+        ##### RECYCLE MUTATIONS ###########
+        #tic("mutation_2")
         # making available to mutation those loci in which deleterious alleles 
         # have been eliminated from all populations
         if(mutation==T){
           
           pops_merge <- rbindlist(pop_list)
-          freq <- dplyr::bind_cols(apply(pops_merge, 1, ped_b, n_loc = loci_number),.name_repair="minimal")
-          lost_deleterious <- freq[-c(as.numeric(neutral_loci_location),under_sel_loci_location),]
-          lost_deleterious[lost_deleterious=="a"] <- 1
-          lost_deleterious[lost_deleterious=="A"] <- 0
-          lost_deleterious[] <- lapply(lost_deleterious, as.numeric)
-          lost_deleterious$fixation <- rowSums(lost_deleterious)
-          deleterious_eliminated <- rownames(lost_deleterious[lost_deleterious$fixation==0,])
+          pops_seqs <- c(pops_merge$V3,pops_merge$V4)
+          
+          # make frequencies
+          #to hack package checking...
+          make_freqs <- function(){}  
+
+Rcpp::cppFunction(plugins="cpp11",
+                  
+"NumericVector make_freqs(StringVector seqs) {
+  int seqN = seqs.length();
+  int locN = strlen(seqs(0));
+  NumericMatrix freq_mat = NumericMatrix(seqN,locN);
+  NumericVector out(locN);
+  for (int i = 0; i < seqN; i++) {
+    for (int j = 0; j < locN; j++) {
+      freq_mat(i,j) = seqs(i)[j] - '0';
+    }
+  }
+     for (int y = 0; y < locN; y++){
+          out[y] = sum(freq_mat(_,y));
+          }
+  return out;
+}"
+                  
+)
+
+          freqs <- make_freqs(pops_seqs)
+          deleterious_eliminated <- which(freqs==0)
           mutation_loci_location <- union(mutation_loci_location,deleterious_eliminated)
         
         }
-        # toc()
-        # mutation_2: 3.871 sec elapsed
-        # mutation_2: 4.22 sec elapsed
-        # mutation_2: 3.205 sec elapsed
+       #toc()
 
-        # tic("store")
         ##### STORE VALUES ########
+        #tic("store")
         if (generation %in% gen_store & exists("count_store")) {
           # counter to store genlight objects
           count_store <- count_store + 1
@@ -867,8 +950,7 @@ gl.sim.WF.run <-
           # formatting the values of the variables to be saved in the genlight
           # object
           s_vars_temp <- rbind(ref_vars, sim_vars)
-          s_vars_temp <-
-            setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
+          s_vars_temp <- setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
           s_vars_temp$generation <- generation
           s_vars_temp$iteration <- iteration
           s_vars_temp$seed <- seed
@@ -880,18 +962,17 @@ gl.sim.WF.run <-
           s_vars_temp$number_transfers_phase2 <- paste(dispersal_pairs$number_transfers, collapse = " ")  
           s_vars_temp$transfer_each_gen_phase2 <- paste(dispersal_pairs$transfer_each_gen, collapse = " ") 
           }
-           
+          
           final_res[[iteration]][[count_store]] <-
             store(
               p_vector = pops_vector,
               p_size = population_size_temp,
               p_list = pop_list_temp,
               n_loc_1 = loci_number,
-              paral = parallel,
-              n_cores = n.cores,
               ref = reference,
               p_map = plink_map,
-              s_vars = s_vars_temp
+              s_vars = s_vars_temp,
+              g = generation
             )
           
           if(real_pops==TRUE){
@@ -905,11 +986,7 @@ gl.sim.WF.run <-
           }
           
         }
-        # toc()
-        
-        # store: 21.763 sec elapsed
-        # store: 24.627 sec elapsed
-        # with parallel TRUE store: 30.117 sec elapsed
+       #toc()
       }
     }
     
@@ -922,8 +999,9 @@ gl.sim.WF.run <-
     })
     
     # removing NA's from results
-    final_res <- lapply(final_res, function(x)
-      x[!is.na(x)])
+    final_res <- lapply(final_res, function(x){
+      x[!is.na(x)]
+      })
     
     # FLAG SCRIPT END
     

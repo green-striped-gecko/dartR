@@ -32,7 +32,7 @@ Encoding: UTF-8
 Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2
 biocViews:
 Imports: stats, methods, utils, plyr, tidyr,stringr, ape, vegan,
-        SNPRelate, sp, PopGenReport, MASS, StAMPP,
+        sp, PopGenReport, MASS, StAMPP,SNPRelate,
         gridExtra, foreach, dplyr, crayon,reshape2, fields,
         patchwork, raster, data.table, shiny
 Suggests: 
@@ -79,7 +79,8 @@ Suggests:
     shinyjs,
     gganimate,
     devtools,
-    tibble
+    tibble,
+    stringi
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.1.2

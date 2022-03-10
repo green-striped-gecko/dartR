@@ -1,4 +1,4 @@
-#' @name gl.hwe.diagnostics
+#' @name gl.diagnostics.hwe
 #' @title Provides descriptive stats and plots to diagnose potential problems
 #'   with Hardy-Weinberg proportions
 #' @description Different causes may be responsible for lack of Hardy-Weinberg
@@ -69,7 +69,7 @@
 #' @author Custodian: Carlo Pacioni -- Post to
 #'   \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' res <- gl.hwe.diagnostics(x = gl.filter.allna(platypus.gl[, 1:20]),n.cores=1)
+#' res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]),n.cores=1)
 #' @references \itemize{ 
 #' \item de Meeûs, T., McCoy, K.D., Prugnolle, F.,
 #' Chevillon, C., Durand, P., Hurtrez-Boussès, S., Renaud, F., 2007. Population
@@ -92,7 +92,7 @@
 #' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @export
 
-gl.hwe.diagnostics <- function(x,
+gl.diagnostics.hwe <- function(x,
                                alpha_val = 0.05,
                                bins = 20,
                                colors_hist = two_colors,
@@ -115,7 +115,7 @@ gl.hwe.diagnostics <- function(x,
   
   # DO THE JOB
   # Set NULL to variables to pass CRAN checks
-Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pvalue<-ChiSquare<-Fst<-gen <-He <-value<- variable <-fst_obs<-NULL
+  Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pvalue<-ChiSquare<-Fst<-gen <-He <-value<- variable <-fst_obs<-NULL
   
   # Helper function
   extractParam <- function(i, l, param) {
@@ -123,8 +123,7 @@ Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pv
   }
   
   # Distribution of p-values by equal bins
-  suppressWarnings(hweout <-
-                     gl.report.hwe(x, sig_only = F, verbose = 0))
+  suppressWarnings(hweout <- gl.report.hwe(x, sig_only = F, verbose = 0))
   
   p1 <-   ggplot(hweout, aes(Prob)) +
     geom_histogram(bins = bins,
@@ -147,10 +146,10 @@ Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pv
   
   # Fst vs Fis scatter plot with linear regression
   # lpops <- seppop(x)
-  # lFstats <- lapply(lpops, gl.basic.stats, verbose = 0)
+  # lFstats <- lapply(lpops, utils.basic.stats, verbose = 0)
   # lFstats <- lapply(lFstats, "[[", "perloc")
   # Fstats <- rbindlist(l = lFstats, use.names = TRUE, idcol = TRUE)
-  Fstats <- gl.basic.stats(x, verbose = 0)
+  Fstats <- utils.basic.stats(x)
   
   # Number of loci out of HWE as a function of a population
   hweout.dt <- data.table(hweout)
@@ -179,16 +178,15 @@ Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pv
   
   p2 <- ggplot(nTimesBypop.fin, aes(nPop, Freq, fill = Data)) +
     geom_col(position = "dodge2",
-             alpha = 0.9,
+             alpha = 0.85,
              color = "black") +
     scale_fill_manual(values = c("Observed" = colors_barplot[1],
                                  "Null expectation" = colors_barplot[2])) +
     scale_y_log10() +
     xlab("Number of populations in which loci depart from HWE") +
     ylab("Count") +
-    ggtitle("Number of significant HWE tests for the same locus in multiple populations") +
-    plot_theme +
-    theme(legend.title = element_blank())
+    ggtitle(label =  "Number of significant HWE tests for\nthe same locus in multiple populations")+
+    plot_theme 
   
   # Collate HWE tests and Fis per locus and pop
   FisPops <- data.table(Fstats$Fis, keep.rownames = TRUE)
@@ -206,10 +204,9 @@ Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pv
       variable.name = "Population",
       value.name = "Fis"
     )
-  FisPopsLong[, Locus := sub("^X", "", Locus)]
-  hweout.dt[, Locus := gsub("-|/", replacement = ".", x = Locus)]
-  hwe_Fis <-
-    merge(hweout.dt, FisPopsLong, by = c("Locus", "Population"))
+  #  FisPopsLong[, Locus := sub("^X", "", Locus)]
+  # hweout.dt[, Locus := gsub("-|/", replacement = ".", x = Locus)]
+  hwe_Fis <- merge(hweout.dt, FisPopsLong, by = c("Locus", "Population"))
   hwe_Fis[, Deficiency := Fis > 0]
   hwe_Fis[,  Excess := Fis < 0]
   setkey(hwe_Fis, Sig)
@@ -231,34 +228,41 @@ Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pv
   hwe_summary <- merge(hwe_summary, chsq, by = "Population")
   
   # Fis vs Fst plot
-  p3 <- ggplot(Fstats$perloc, aes(Fst, Fis)) + geom_point() + geom_smooth(method = "lm") +
-    annotate("text", x=min(Fstats$perloc$Fst, na.rm = TRUE) + 
-               (max(Fstats$perloc$Fst, na.rm = TRUE) - min(Fstats$perloc$Fst, na.rm = TRUE))*0.75, 
+  
+  corr <- round(cor(Fstats$perloc$Fis, Fstats$perloc$Fst, "pairwise.complete.obs"), 3)
+  p3 <- ggplot(Fstats$perloc, aes(Fst, Fis)) + 
+    geom_point(size=2,color=colors_barplot[1],alpha=0.6) + 
+    geom_smooth(method = "lm",color=colors_barplot[2],fill=colors_barplot[2],size=1) +
+    annotate("text", 
+             x=min(Fstats$perloc$Fst, na.rm = TRUE) +
+               (max(Fstats$perloc$Fst, na.rm = TRUE) - 
+                  min(Fstats$perloc$Fst, na.rm = TRUE))*0.75, 
              y = min(Fstats$perloc$Fis, na.rm = TRUE) +
-               (max(Fstats$perloc$Fis, na.rm = TRUE) - min(Fstats$perloc$Fis, na.rm = TRUE))*0.25, col="red",
-             label=paste("r = ", round(cor(Fstats$perloc$Fis, Fstats$perloc$Fst, "pairwise.complete.obs"), 2))) +
+               (max(Fstats$perloc$Fis, na.rm = TRUE) -
+                  min(Fstats$perloc$Fis, na.rm = TRUE))*0.25, 
+             col="black",
+             label= paste("R^2: ", corr,sep=""),parse=TRUE,
+             size=4) +
     xlab("Fst") +
     ylab("Fis") +
-    ggtitle("Scatter plot of Fst vs Fis for each locus") +
+    ggtitle("Fst vs Fis by locus") +
     plot_theme
   
-    jck <- utils.jackknife(x, FUN="gl.basic.stats", unit="loc", 
-                                   n.cores = n.cores,
-                                   verbose=0)
+  jck <- utils.jackknife(x, FUN="utils.basic.stats", unit="loc", 
+                         n.cores = n.cores)
   
-    
-   jckFst <- sapply(seq_len(nLoc(x)), extractParam, l=jck, param="Fst")
-   jckFis <- sapply(seq_len(nLoc(x)), extractParam, l=jck, param="Fis")
-   stdErrFst <- sqrt(var(jckFst)/nLoc(x))
-   stdErrFis <- sqrt(var(jckFis)/nLoc(x)) 
-   
-   cat(report("The variation of Fis and Fst, respectively\n (measured as standard error withthe Jackknife method - see De Meeus 2018) is:",
-                paste(c(stdErrFis, stdErrFst), collapse = ", "), "\n Fis vs Fst ratio is:", 
-              round(stdErrFis/stdErrFst, 2), "\n"))
+  jckFst <- sapply(seq_len(nLoc(x)), extractParam, l=jck, param="Fst")
+  jckFis <- sapply(seq_len(nLoc(x)), extractParam, l=jck, param="Fis")
+  stdErrFst <- sqrt(var(jckFst)/nLoc(x))
+  stdErrFis <- sqrt(var(jckFis)/nLoc(x)) 
   
-   # PRINTING OUTPUTS
+  cat(report("The variation of Fis and Fst, respectively\n (measured as standard error withthe Jackknife method - see De Meeus 2018) is:",
+             paste(c(stdErrFis, stdErrFst), collapse = ", "), "\n Fis vs Fst ratio is:", 
+             round(stdErrFis/stdErrFst, 2), "\n"))
+  
+  # PRINTING OUTPUTS
   # using package patchwork
- p5 <- (p1 / p2 / p3)
+  p5 <- (p1 / p2 / p3)
   print(p5)
   
   print(hwe_summary, row.names = FALSE)

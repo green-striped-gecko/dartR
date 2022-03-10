@@ -87,7 +87,7 @@ out <- gl.report.sexlinked(testset.gs)
 }
 \seealso{
 Other reporting functions: 
-\code{\link{gl.hwe.diagnostics}()},
+\code{\link{gl.diagnostics.hwe}()},
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.heterozygosity}()},

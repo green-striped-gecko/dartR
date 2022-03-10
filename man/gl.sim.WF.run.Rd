@@ -15,8 +15,6 @@ gl.sim.WF.run(
   store_phase1 = FALSE,
   interactive_vars = TRUE,
   seed = NULL,
-  parallel = FALSE,
-  n.cores = NULL,
   verbose = NULL,
   ...
 )
@@ -49,11 +47,6 @@ objects [default FALSE].}
 simulations variables [default TRUE].}
 
 \item{seed}{Set the seed for the simulations [default NULL].}
-
-\item{parallel}{Whether to use parallel package for computations 
-[default FALSE].}
-
-\item{n.cores}{Number of cores used by parallel package [default NULL].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report

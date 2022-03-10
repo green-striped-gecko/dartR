@@ -19,81 +19,6 @@ q_equilibrium <- function(a, b, c) {
 }
 
 ###############################################################################
-########################## POP INITIALISATION #################################
-###############################################################################
-
-initialise <-
-  function(pop_number,
-           pop_size,
-           refer,
-           n_l_loc,
-           r_freq,
-           q_neu,
-           freq_real,
-           mut,
-           mut_loci) {
-    pop <- as.data.frame(matrix(ncol = 4, nrow = pop_size))
-    pop[, 1] <- rep(c("Male", "Female"), each = pop_size / 2)
-    pop[, 2] <- pop_number # second column stores population
-    for (individual_pop in 1:pop_size) {
-      chromosome1 <-
-        paste0(mapply(sample_alleles, q = refer$q,  USE.NAMES = F), collapse = "")
-      chromosome2 <-
-        paste0(mapply(sample_alleles, q = refer$q,  USE.NAMES = F), collapse = "")
-      
-      if(freq_real==FALSE){
-        
-        for (element in n_l_loc) {
-          substr(chromosome1, start = element, stop = element) <-
-            sample(as.character(c(1:2)),
-                   size = 1,
-                   prob = c(q_neu, 1 - q_neu))
-          substr(chromosome2, start = element, stop = element) <-
-            sample(as.character(c(1:2)),
-                   size = 1,
-                   prob = c(q_neu, 1 - q_neu))
-        }
-        
-      }
-      
-      if(freq_real==TRUE){
-        
-        for (element in 1:nrow(r_freq)) {
-          
-          substr(chromosome1, start = element, stop = element) <-
-            sample(as.character(c(1:2)),
-                   size = 1,
-                   prob = c(unname(unlist(r_freq[element,]))))
-          
-          substr(chromosome2, start = element, stop = element) <-
-            sample(as.character(c(1:2)),
-                   size = 1,
-                   prob = c(unname(unlist(r_freq[element,]))))
-          
-        }
-        
-      }
-      
-      pop[individual_pop, 3] <- chromosome1
-      pop[individual_pop, 4] <- chromosome2
-    }
-    
-    return(pop)
-    
-  }
-
-###############################################################################
-########################## SAMPLE ALLELES #####################################
-###############################################################################
-
-sample_alleles <- function(alleles = c("a", "A"), q) {
-  s_alleles <- sample(alleles, size = 1, prob = c(q, 1 - q))
-  
-  return(s_alleles)
-  
-}
-
-###############################################################################
 ################################ MIGRATION ####################################
 ###############################################################################
 
@@ -186,23 +111,21 @@ reproduction <-
            r_males,
            r_map_1,
            n_loc) {
-    parents_matrix <-
-      as.data.frame(matrix(nrow = pop_size / 2, ncol = 2))
-    male_pool <-
-      sample(rownames(pop[1:(pop_size / 2),]), size = pop_size / 2)
-    parents_matrix[, 1] <- sample(male_pool, size = pop_size / 2)
-    parents_matrix[, 2] <-
-      sample(rownames(pop[((pop_size / 2) + 1):pop_size,]), size = pop_size / 2)
+    parents_matrix <- as.data.frame(matrix(nrow = pop_size / 2, ncol = 2))
+    parents_matrix[, 1] <- sample(rownames(pop[1:(pop_size / 2),]), 
+                                  size = pop_size / 2)
+    parents_matrix[, 2] <- sample(rownames(pop[((pop_size / 2) + 1):pop_size,]),
+                                  size = pop_size / 2)
     offspring <- NULL
     for (parent in 1:dim(parents_matrix)[1]) {
-      pairing_offspring <-  rnbinom(1, size = var_off, mu = num_off)
-      offspring_temp <-
-        as.data.frame(matrix(nrow = pairing_offspring, ncol = 6))
+      pairing_offspring <- rnbinom(1, size = var_off, mu = num_off)
+      offspring_temp <- as.data.frame(matrix(nrow = pairing_offspring, ncol = 6))
       if (pairing_offspring < 1) {
         next
       }
-      offspring_temp[, 1] <-
-        sample(c("Male", "Female"), size = pairing_offspring, replace = TRUE) # sex
+      offspring_temp[, 1] <- sample(c("Male", "Female"), 
+                                    size = pairing_offspring, 
+                                    replace = TRUE) # sex
       offspring_temp[, 2] <- pop_number # source population
       male_chromosomes <-
         list(pop[parents_matrix[parent, 1], 3], pop[parents_matrix[parent, 1], 4])
@@ -216,13 +139,13 @@ reproduction <-
             r_males == TRUE & males_recom_events > 1) {
           for (event in males_recom_events) {
             male_chromosomes <-
-              recomb(male_chromosomes[[1]],
-                     male_chromosomes[[2]],
-                     r_map = r_map_1,
-                     loci = n_loc)
+              recomb(
+                chr1 = male_chromosomes[[1]],
+                chr2 = male_chromosomes[[2]],
+                r_map = r_map_1,
+                loci = n_loc)
           }
-          offspring_temp[offs, 3] <-
-            male_chromosomes[[sample(c(1, 2), 1)]]
+          offspring_temp[offs, 3] <- male_chromosomes[[sample(c(1, 2), 1)]]
         } else{
           offspring_temp[offs, 3] <- male_chromosomes[[sample(c(1, 2), 1)]]
         }
@@ -231,14 +154,13 @@ reproduction <-
           for (event in females_recom_events) {
             female_chromosomes <-
               recomb(
-                female_chromosomes[[1]],
-                female_chromosomes[[2]],
+                chr1 = female_chromosomes[[1]],
+                chr2 = female_chromosomes[[2]],
                 r_map = r_map_1,
                 loci = n_loc
               )
           }
-          offspring_temp[offs, 4] <-
-            female_chromosomes[[sample(c(1, 2), 1)]]
+          offspring_temp[offs, 4] <- female_chromosomes[[sample(c(1, 2), 1)]]
         } else{
           offspring_temp[offs, 4] <- female_chromosomes[[sample(c(1, 2), 1)]]
         }
@@ -247,7 +169,6 @@ reproduction <-
       offspring_temp[, 6] <- parents_matrix[parent, 2] #id mother
       offspring <- rbind(offspring, offspring_temp)
     }
-    
     return(offspring)
   }
 
@@ -255,18 +176,17 @@ reproduction <-
 ########################## RECOMBINATION ######################################
 ###############################################################################
 
-recomb <- function(r_chromosome1, r_chromosome2, r_map, loci) {
-  chiasma <-
-    as.numeric(sample(row.names(r_map), size = 1, prob = r_map[, "c"]))
+recomb <- function(chr1, 
+                   chr2,
+                   r_map, 
+                   loci) {
+  chiasma <- as.numeric(sample(row.names(r_map), size = 1, prob = r_map[, "c"]))
   if (chiasma < (loci + 1)) {
-    split_seqs <- strsplit(c(r_chromosome1, r_chromosome2), split = "")
-    r_chr1 <-
-      paste0(c(split_seqs[[1]][1:chiasma], split_seqs[[2]][(chiasma + 1):loci]), collapse = "")
-    r_chr2 <-
-      paste0(c(split_seqs[[2]][1:chiasma], split_seqs[[1]][(chiasma + 1):loci]), collapse = "")
+    r_chr1 <- paste0(substr(chr1,1,chiasma), substr(chr2, chiasma + 1,loci))
+    r_chr2 <- paste0(substr(chr2,1,chiasma), substr(chr1, chiasma + 1,loci))
     return(list(r_chr1, r_chr2))
   } else{
-    return(list(r_chromosome1, r_chromosome2))
+    return(list(chr1, chr2))
   }
 }
 
@@ -276,57 +196,53 @@ recomb <- function(r_chromosome1, r_chromosome2, r_map, loci) {
 
 selection_fun <-
   function(offspring,
-           reference_pop,
+           h,
+           s,
            sel_model,
            g_load) {
-    offspring$fitness <-
-      apply(offspring, 1, fitness, ref = reference_pop)
+    
+    
+    # make genotypes
+    #to hack package checking...
+    make_fit <- function(){}  
+    
+    Rcpp::cppFunction(plugins="cpp11",
+                      
+"NumericVector make_fit(StringMatrix seqs, NumericVector h, NumericVector s){
+int loc_number = strlen(seqs(0,0));
+int indN = seqs.nrow();
+NumericVector out(indN);
+for (int i = 0; i < indN; i++) {
+NumericVector fit_ind(loc_number);
+fit_ind.fill(1);
+  for (int loc = 0; loc < loc_number; loc++){
+    char chr1 = seqs(i,0)[loc], chr2 = seqs(i,1)[loc];
+    if (chr1 == chr2 && chr1=='1')
+    fit_ind[loc] = 1 - s[loc];
+    if (chr1 != chr2)
+    fit_ind[loc] = 1 - (h[loc] * s[loc]);
+  }
+  out[i] = algorithm::prod(fit_ind.begin(), fit_ind.end());
+}
+  return(out);
+}"
+    )
+
+    offspring$fitness <- make_fit(as.matrix(offspring[,3:4]),h,s)
     if (sel_model == "absolute") {
-      offspring$random_deviate <-
-        runif(nrow(offspring), min = 0, max = g_load)
-      offspring$alive <-
-        offspring$fitness > offspring$random_deviate
+      offspring$random_deviate <- runif(nrow(offspring), min = 0, max = g_load)
+      offspring$alive <- offspring$fitness > offspring$random_deviate
       offspring <- offspring[which(offspring$alive == TRUE),]
     }
     if (sel_model == "relative") {
       fitnes_proportion <- sum(offspring$fitness)
-      offspring$relative_fitness <-
-        offspring$fitness / fitnes_proportion
-      offspring$relative_fitness[offspring$relative_fitness < 0] <-
-        0
+      offspring$relative_fitness <- offspring$fitness / fitnes_proportion
+      offspring$relative_fitness[offspring$relative_fitness < 0] <- 0
     }
     
     return(offspring)
     
   }
-
-###############################################################################
-########################## FITNESS ############################################
-###############################################################################
-
-fitness <- function(df_fitness, ref) {
-  #remove neutral loci from chromosomes
-  chromosome1 <- gsub("[-^1-9]", "0", df_fitness[3])
-  chromosome2 <- gsub("[-^1-9]", "0", df_fitness[4])
-  split_seqs <- strsplit(c(chromosome1, chromosome2), split = "")
-  ref$hom <-
-    (split_seqs[[1]] == split_seqs[[2]] & split_seqs[[1]] == "a")
-  ref$het_chr1 <- (split_seqs[[1]] == "a" & split_seqs[[2]] == "A")
-  ref$het_chr2 <- (split_seqs[[1]] == "A" & split_seqs[[2]] == "a")
-  ref$hom <- as.numeric(ref$hom)
-  sum_hom <- sum(as.numeric(ref$hom))
-  ref$het_chr1 <- as.numeric(ref$het_chr1)
-  ref$het_chr2 <- as.numeric(ref$het_chr2)
-  ref$het_sel_chr1 <- ref$h * ref$s * ref$het_chr1
-  ref$het_sel_chr2 <- ref$h * ref$s * ref$het_chr2
-  ref$hom_sel <- ref$s * ref$hom
-  ref$tot_sel <- ref$het_sel_chr1 + ref$het_sel_chr2 + ref$hom_sel
-  ref$fitness <- 1 - (ref$tot_sel)
-  net_fitness <- prod(ref$fitness)
-  
-  return(net_fitness)
-  
-}
 
 ###############################################################################
 ########################## STORE GENLIGHT #####################################
@@ -337,13 +253,11 @@ store <-
            p_size,
            p_list,
            n_loc_1,
-           paral,
-           n_cores,
            ref,
            p_map,
-           s_vars) {
-    pop_names <- rep(paste0("pop", p_vector), p_size)
-    pop_names <- pop_names[order(pop_names)]
+           s_vars,
+           g) {
+    pop_names <- rep(as.character(p_vector), p_size)
     df_genotypes <- rbindlist(p_list)
     df_genotypes$V1[df_genotypes$V1 == "Male"]   <- 1
     df_genotypes$V1[df_genotypes$V1 == "Female"] <- 2
@@ -352,43 +266,56 @@ store <-
       paste0(unlist(unname(df_genotypes[, 2])), "_", unlist(lapply(p_size, function(x) {
         1:x
       })))
-    plink_ped <- apply(df_genotypes, 1, ped, n_loc = n_loc_1)
-    # converting allele names to numbers
-    plink_ped <- gsub("a", "1", plink_ped)
-    plink_ped <- gsub("A", "2", plink_ped)
-    plink_ped <-
-      lapply(plink_ped, function(x) {
-        gsub(" ", "", strsplit(x, '(?<=([^ ]\\s){2})', perl = TRUE)[[1]])
-      })
+    
+    # make genotypes
+    #to hack package checking...
+    make_geno <- function(){}  
+    
+    Rcpp::cppFunction(plugins="cpp11",
+                      
+'List make_geno(StringMatrix mat) {
+    int ind = mat.nrow();
+    int loc = strlen(mat(0,0));
+    List out(ind);
+for (int i = 0; i < ind; i++) {
+ std::string chr1 (mat(i,0));
+ std::string chr2 (mat(i,1));
+ StringVector temp(loc);
+for (int j = 0; j < loc; j++) {
+ StringVector geno = StringVector::create(chr1[j],chr2[j]);
+    temp[j] = collapse(geno);
+  }
+      out[i] = temp;
+    }
+    return out;
+  }'
+    )
+    
+    plink_temp <- as.matrix(df_genotypes[,3:4])
+    plink_ped <- make_geno(plink_temp)
     plink_ped_2 <- lapply(plink_ped, function(x) {
-      x[x == "22"] <- 2
-      x[x == "11"] <- 0
-      x[x == "21"] <- 1
-      x[x == "12"] <- 1
+      x[x == "11"] <- 2
+      x[x == "00"] <- 0
+      x[x == "01"] <- 1
+      x[x == "10"] <- 1
       
       return(x)
       
     })
     
-    if (paral && is.null(n_cores)) {
-      n_cores <- parallel::detectCores()
-    }
-    
     loc.names <- 1:nrow(ref)
     n.loc <- length(loc.names)
-    misc.info <- lapply(1:6, function(i)
-      NULL)
-    names(misc.info) <-
-      c("FID", "IID", "PAT", "MAT", "SEX", "PHENOTYPE")
+    misc.info <- lapply(1:6, function(i){NULL})
+    names(misc.info) <- c("FID", "IID", "PAT", "MAT", "SEX", "PHENOTYPE")
     res <- list()
     temp <-
       as.data.frame(
         cbind(
-          df_genotypes[, 2],
-          df_genotypes[, 7],
-          df_genotypes[, 5],
-          df_genotypes[, 6],
-          df_genotypes[, 1],
+          df_genotypes[, "V2"],
+          df_genotypes[, "id"],
+          df_genotypes[, "V5"],
+          df_genotypes[, "V6"],
+          df_genotypes[, "V1"],
           1
         )
       )
@@ -399,23 +326,13 @@ store <-
     txt <-
       lapply(plink_ped_2, function(e)
         suppressWarnings(as.integer(e)))
-    if (paral) {
-      res <-
-        c(
-          res,
-          parallel::mclapply(txt, function(e)
-            new("SNPbin", snp = e, ploidy = 2L), mc.cores = n_cores,
-            mc.silent = TRUE, mc.cleanup = TRUE, mc.preschedule = FALSE)
-        )
-    } else {
       res <-
         c(res, lapply(txt, function(e)
           new(
             "SNPbin", snp = e, ploidy = 2L
           )))
-    }
     
-    res <- new("genlight", res, ploidy = 2L, parallel = paral)
+    res <- new("genlight", res, ploidy = 2L)
     
     indNames(res) <- misc.info$IID
     pop(res) <- misc.info$FID
@@ -438,43 +355,6 @@ store <-
     return(res)
     
   }
-
-###############################################################################
-######################## CONVERT TO PED FORMAT ################################
-###############################################################################
-
-ped <- function(df_ped, n_loc) {
-  chromosome1 <- df_ped[3]
-  chromosome2 <- df_ped[4]
-  split_seqs <- strsplit(c(chromosome1, chromosome2), split = "")
-  genotypes <- as.data.frame(matrix(nrow = n_loc, ncol = 2))
-  genotypes$V1 <- split_seqs[[1]]
-  genotypes$V2 <- split_seqs[[2]]
-  genotypes_final <-
-    paste0(paste(genotypes[, 1], genotypes[, 2]), collapse = " ")
-  
-  return(genotypes_final)
-  
-}
-
-ped_b <- function(df_ped, n_loc){
-  chromosome1 <- df_ped[3]
-  chromosome2 <- df_ped[4]
-  split_seqs <- strsplit(c(chromosome1, chromosome2), split = "")
-  genotypes <- as.data.frame(matrix(nrow = n_loc ,ncol =2 ))
-  genotypes$V1 <-split_seqs[[1]]
-  genotypes$V2 <-split_seqs[[2]]
-  
-  return(genotypes)
-}
-
-# ped <- function(df_ped, n_loc) {
-#   
-#   genotypes_final <-
-#     paste0(paste(strsplit(df_ped[3], split = ""), strsplit(df_ped[4], split = "")), collapse = " ")
-#   
-# 
-# }
 
 ###############################################################################
 ######### SHINY APP FOR THE VARIABLES OF THE REFERENCE TABLE ###################
@@ -595,6 +475,20 @@ interactive_reference <- function() {
         ),    
         shinyBS::bsTooltip(id = "neutral_loci_chunk",
                   title = "Information pending")
+      ),
+      
+      column(
+        3,
+        radioButtons(
+          "real_freq",
+          tags$div(tags$i(HTML("real_freq<br/>")),
+                   "Extract allele frequencies for neutral loci from genlight object"),
+          choices = list("TRUE" = TRUE,
+                         "FALSE" = FALSE),
+          selected = FALSE
+        ),    
+        shinyBS::bsTooltip(id = "real_freq",
+                           title = "Information pending")
       )
     ),
     
@@ -677,20 +571,6 @@ interactive_reference <- function() {
       ),
     
     fluidRow(
-      
-      column(
-        3,
-        radioButtons(
-          "real_freq", 
-          tags$div(tags$i(HTML("real_freq<br/>")),
-                   "Extract allele frequencies of neutral loci from genlight object"),
-          choices = list("TRUE" = TRUE,
-                         "FALSE" = FALSE),
-          selected = FALSE
-        ),    
-        shinyBS::bsTooltip(id = "real_freq",
-                  title = "Information pending")
-      ),
     
       column(
         3,
@@ -1092,9 +972,7 @@ interactive_reference <- function() {
     observeEvent(input$close, {
       
       ref_vars_temp <- as.data.frame(cbind(
-        c(
-          "real_freq",
-          "real_loc",
+        c("real_loc",
           "loci_under_selection",
           "mutation_rate",
           "chunk_bp",
@@ -1120,11 +998,10 @@ interactive_reference <- function() {
           "dominance_sd",
           "mutation",
           "exp_rate",
-          "percent_adv"
+          "percent_adv",
+          "real_freq"
         ),
-        c(
-          input$real_freq,
-          input$real_loc,
+        c(input$real_loc,
           input$loci_under_selection,
           input$mutation_rate,
           input$chunk_bp,
@@ -1150,7 +1027,8 @@ interactive_reference <- function() {
           input$dominance_sd,
           input$mutation,
           input$exp_rate,
-          input$percent_adv
+          input$percent_adv,
+          input$real_freq
         )
       ))
       
@@ -1301,6 +1179,23 @@ interactive_sim_run <- function() {
                   title = "Information pending")
       )
       
+    ),
+    
+    fluidRow(
+    column(
+      3,
+      radioButtons(
+        "real_loc",
+        tags$div(tags$i(HTML("real_loc<br/>")),
+                 "Extract location for neutral loci from genlight object"),
+        choices = list("TRUE" = TRUE,
+                       "FALSE" = FALSE),
+        selected = FALSE
+      ),    
+      shinyBS::bsTooltip(id = "real_loc",
+                         title = "Information pending")
+    )
+    
     ),
     
     hr(),
@@ -1964,6 +1859,11 @@ interactive_sim_run <- function() {
         condition = input$real_dataset == TRUE
       )
       
+      shinyjs::toggleElement(
+        id = "real_loc",
+        condition = input$real_dataset == TRUE
+      )
+      
     })
 
     observeEvent(input$close, {
@@ -2006,7 +1906,8 @@ interactive_sim_run <- function() {
           "natural_selection_model",
           "chromosome_name",
           "mutation",
-          "mut_rate"
+          "mut_rate",
+          "real_loc"
         ),
         c(
           input$number_pops_phase2,
@@ -2045,7 +1946,8 @@ interactive_sim_run <- function() {
           input$natural_selection_model,
           input$chromosome_name,
           input$mutation,
-          input$mut_rate
+          input$mut_rate,
+          input$real_loc
         )))
       
       colnames(sim_vars_temp) <- c("variable","value")

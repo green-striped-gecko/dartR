@@ -41,7 +41,6 @@
 gl.filter.maf <- function(x,
                           threshold = 0.01,
                           by.pop = FALSE,
-                          maf.limit = 0.5,
                           pop.limit = ceiling(nPop(x)/2),
                           ind.limit = 10,
                           recalc = FALSE,
@@ -154,6 +153,8 @@ gl.filter.maf <- function(x,
     }
     
     if(plot.out & by.pop==FALSE){
+        
+        popn.hold <- FALSE
         maf <- NULL
     # Plot a histogram of MAF
     maf_pre <- data.frame(x@other$loc.metrics$maf)
@@ -163,7 +164,7 @@ gl.filter.maf <- function(x,
  
     p1 <-
         ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
-        geom_histogram(bins = bins,color = plot_colors[1],fill = plot_colors[2]) +
+        geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
         coord_cartesian(xlim = c(min, 0.5)) + 
         geom_vline(xintercept = threshold,color = "red",size = 1) + 
         xlab("Pre-filter SNP MAF\nOver all populations") + 
@@ -177,7 +178,7 @@ gl.filter.maf <- function(x,
 
     p2 <-
         ggplot(as.data.frame(maf_post), aes(x = maf)) + 
-        geom_histogram(bins = bins,color = plot_colors[1],fill = plot_colors[2]) +
+        geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
         coord_cartesian(xlim = c(min, 0.5)) + 
         geom_vline(xintercept = threshold,color = "red", size = 1) + 
         xlab("Post-filter SNP MAF\nOver all populations") + 
@@ -369,11 +370,7 @@ gl.filter.maf <- function(x,
                 plot_theme
             
             p3 <- p_all_pre / p_all_post
-            
-            
         }
-        
-        
     }
     
     if (recalc) {
@@ -403,11 +400,12 @@ gl.filter.maf <- function(x,
     
     # PRINTING OUTPUTS using package patchwork
     if (plot.out) {
-        if (length(popn.hold) > 1) {
+        if (length(popn.hold) > 1 & by.pop==TRUE) {
             suppressWarnings(print(p2))
             suppressWarnings(print(p3))
             p3 <- c(p3,p2)
         }else{
+            p3 <- (p1 / p2) + plot_layout(heights = c(1, 1))
             suppressWarnings(print(p3))
         }
     }

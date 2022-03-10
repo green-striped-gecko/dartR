@@ -55,14 +55,17 @@ utils.jackknife <- function(x,
   # CHECK DATATYPE
   datatype <- utils.check.datatype(x, verbose = verbose)
   
-  # FUNCTION SPECIFIC ERROR CHECKING check if packages are installed
-  if(!is.character(unit)) stop(error("The argument 'unit' should be character vector"))
+  # FUNCTION SPECIFIC ERROR CHECKING
+  if(!is.character(unit)){
+    stop(error("  The argument 'unit' should be character vector"))
+  } 
+  
   if(length(unit == 1)) {
     if(!unit %in% c("loc", "ind", "pop")) {
-      stop(error('The argument "unit" should one of the following: "loc", "ind", "pop"'))
+      stop(error('  The argument "unit" should one of the following: "loc", "ind", "pop"'))
     }
     } else {
-      stop(error('The argument "unit" should be of length 1'))
+      stop(error('  The argument "unit" should be of length 1'))
   }
   
   # set variables based on unit
@@ -99,11 +102,18 @@ utils.jackknife <- function(x,
   }
   
   if(n.cores != 1) {
-    if(n.cores == "auto") n.cores <- parallel::detectCores() - 1
-    if(length(subsetList) < n.cores) n.cores <- length(subsetList)
+    if(n.cores == "auto"){
+      n.cores <- parallel::detectCores() - 1
+    }
+    
+    if(length(subsetList) < n.cores){
+      n.cores <- length(subsetList)
+    } 
+    
     cl <- parallel::makeCluster(n.cores)
     on.exit(expr=parallel::stopCluster(cl))
     catch <- parallel::clusterEvalQ(cl, library("dartR"))
+    
     parallel::clusterExport(cl, 
                   varlist=c("subsetList", "x", "FUN", "subsetFUN"), 
                   envir=environment()) 
