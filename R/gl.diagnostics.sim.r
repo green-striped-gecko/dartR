@@ -1,4 +1,4 @@
-#' @name gl.sim.diagnostics
+#' @name gl.diagnostics.sim
 #' @title Function to diagnose simulations against theoretical expectations
 #' @param x [default ]
 #' @param iteration [default ]
@@ -14,7 +14,9 @@
 #' [default NULL, unless specified using gl.set.verbosity].
 #' @export
 
-gl.sim.diagnostics <- function(x,
+gl.diagnostics.sim <- function(x,
+                               Ne,
+                               Ne_fst,
                                iteration=1,
                                pop_he = 1 ,
                                pops_fst= c(1,2),
@@ -64,14 +66,13 @@ gl.sim.diagnostics <- function(x,
     return(temp)
   })
   
-  he_pop <- rbindlist(he_pop)
-  
-  Ne_temp <- x[[1]]$other$sim.vars$Ne_phase2
-  Ne_temp <- gsub('\"', "", Ne_temp , fixed = TRUE)
-  Ne_temp <- stringr::str_split(Ne_temp,pattern=" ")[[1]]
-  Ne_temp <- as.numeric(Ne_temp)[pop_he]
+   he_pop <- rbindlist(he_pop)
+  # 
+  Ne <- gsub('\"', "", Ne , fixed = TRUE)
+  Ne <- stringr::str_split(Ne,pattern=" ")[[1]]
+  Ne <- as.numeric(Ne)[pop_he]
 
-  Ne <- seq(Ne_temp[1],Ne_temp[1]*2, Ne_temp[1]/4)
+  Ne <- seq(Ne[1],Ne[1]*2, Ne[1]/4)
   
   rate_loss <-  1 - (1 / (2 * Ne))
   generations_sim <- unlist(lapply(x,function(y){y$other$sim.vars$generation}))
@@ -102,7 +103,6 @@ gl.sim.diagnostics <- function(x,
   labels_together <- c(labels_plot_ne,labels_plot_he)
   colors_together <- c(colors_plot_ne,colors_plot_he)
   
-
   p1 <- ggplot() +
                 geom_line(data=expected_het_3, aes(x=gen,y=He,color=Ne),size=0.75,linetype = "dashed") +
     geom_line(data=he_pop, aes(x=gen,y=value,color=variable),size=1.5) +
@@ -132,8 +132,6 @@ gl.sim.diagnostics <- function(x,
     y[lower.tri(y)]
   })))
   
-
-  Ne_fst <- x[[1]]$other$sim.vars$Ne_fst_phase2
   Ne_fst <- gsub('\"', "", Ne_fst , fixed = TRUE)
   Ne_fst <- stringr::str_split(Ne_fst,pattern=" ")[[1]]
   Ne_fst <- as.numeric(Ne_fst)[pops_fst]
@@ -149,18 +147,14 @@ gl.sim.diagnostics <- function(x,
   transfer_each_gen <- as.numeric(transfer_each_gen)[pops_fst]
  
   population_size <- x[[1]]$other$sim.vars$population_size_phase2
-  population_size <- gsub('\"', "", population_size , fixed = TRUE)
-  population_size <- stringr::str_split(population_size,pattern=" ")[[1]]
-  population_size <- as.numeric(population_size)[pops_fst]
+  population_size <- gsub("'", "", population_size , fixed = TRUE)
+  population_size <- as.numeric(unlist(strsplit(population_size, " ")))[pops_fst]
   
   dispersal_rate <- (number_transfers / transfer_each_gen) / (population_size)
   
-  Fst_expected <-
-    1 / ((4 * Ne_fst * dispersal_rate) * ((2 / (2 - 1)) ^ 2) + 1)
+  Fst_expected <- 1 / ((4 * Ne_fst * dispersal_rate) * ((2 / (2 - 1)) ^ 2) + 1)
   
-  
-  fst_equilibrium <- (log(1/2) / log( (1- dispersal_rate)^2 * (1-(1/(2*Ne_temp))) )) * 2
-  
+  fst_equilibrium <- (log(1/2) / log( (1- dispersal_rate)^2 * (1-(1/(2*Ne[1]))) )) * 2
   
   generations_fst <- data.frame("gen"=generations_sim,"fst_obs"=fst_gen)
   # generations_het$Fst_expected <- Fst_expected[1]
