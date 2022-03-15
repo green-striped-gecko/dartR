@@ -175,6 +175,7 @@ gl.diagnostics.hwe <- function(x,
   # Compile the data for the plot
   nTimesBypop.fin <- rbind(nTimesBypop.df, nullDist)
   names(nTimesBypop.fin)[1] <- "nPop"
+  nTimesBypop.fin$nPop <- factor(as.integer(nTimesBypop.fin$nPop))
   
   p2 <- ggplot(nTimesBypop.fin, aes(nPop, Freq, fill = Data)) +
     geom_col(position = "dodge2",
@@ -241,7 +242,7 @@ gl.diagnostics.hwe <- function(x,
                (max(Fstats$perloc$Fis, na.rm = TRUE) -
                   min(Fstats$perloc$Fis, na.rm = TRUE))*0.25, 
              col="black",
-             label= paste("R^2: ", corr,sep=""),parse=TRUE,
+             label= paste("r: ", corr,sep=""),parse=TRUE,
              size=4) +
     xlab("Fst") +
     ylab("Fis") +
@@ -256,7 +257,7 @@ gl.diagnostics.hwe <- function(x,
   stdErrFst <- sqrt(var(jckFst)/nLoc(x))
   stdErrFis <- sqrt(var(jckFis)/nLoc(x)) 
   
-  cat(report("The variation of Fis and Fst, respectively\n (measured as standard error withthe Jackknife method - see De Meeus 2018) is:",
+  cat(report("The variation of Fis and Fst, respectively\n (measured as standard error with the Jackknife method - see De Meeus 2018) is:",
              paste(c(stdErrFis, stdErrFst), collapse = ", "), "\n Fis vs Fst ratio is:", 
              round(stdErrFis/stdErrFst, 2), "\n"))
   
