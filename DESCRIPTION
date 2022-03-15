@@ -80,7 +80,8 @@ Suggests:
     gganimate,
     devtools,
     tibble,
-    stringi
+    stringi,
+    shinyWidgets
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.1.2

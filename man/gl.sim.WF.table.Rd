@@ -54,7 +54,7 @@ This function creates a reference table to be used as input for the function
 \item loc_bp - chromosome location in base pairs.
 \item loc_cM - chromosome location in centiMorgans.
 \item chr_name - chromosome name.
-\item selection - SNP type.
+\item type - SNP type.
 } 
 
 The reference table can be further modified as required. 
