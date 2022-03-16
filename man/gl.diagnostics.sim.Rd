@@ -20,6 +20,10 @@ gl.diagnostics.sim(
 \arguments{
 \item{x}{[default ]}
 
+\item{Ne}{[required]}
+
+\item{Ne_fst}{[required]}
+
 \item{iteration}{[default ]}
 
 \item{pop_he}{[default ]}

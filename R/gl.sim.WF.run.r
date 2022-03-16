@@ -190,9 +190,18 @@ gl.sim.WF.run <-
       
       sim_vars[sim_vars$variable=="population_size_phase2" ,"value"] <-
         paste0("'",sim_vars[sim_vars$variable=="population_size_phase2" ,"value"],"'")
-
+      
       sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <-
         paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
+      
+      sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
+        paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
+      
+      sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"] <- 
+        paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"],"'")
+      
+      sim_vars[sim_vars$variable=="natural_selection_model" ,"value"] <- 
+        paste0("'",sim_vars[sim_vars$variable=="natural_selection_model" ,"value"],"'")
       
       vars_assign <-
         unlist(unname(
@@ -287,6 +296,11 @@ gl.sim.WF.run <-
     plink_map[, 3] <- reference$loc_cM
     plink_map[, 4] <- reference$loc_bp
     
+    dispersal_type_phase2 <- gsub('\"', "", dispersal_type_phase2, fixed = TRUE)
+    dispersal_type_phase1 <- gsub('\"', "", dispersal_type_phase1, fixed = TRUE)
+    natural_selection_model <- gsub('\"', "", natural_selection_model, fixed = TRUE)
+    chromosome_name <- gsub('\"', "", chromosome_name, fixed = TRUE)
+
     population_size_phase2 <- gsub('\"', "", population_size_phase2, fixed = TRUE)
     
     population_size_phase2 <- as.numeric(unlist(strsplit(population_size_phase2, " ")))

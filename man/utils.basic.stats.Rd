@@ -18,7 +18,7 @@ Calculates mean observed heterozygosity, mean expected heterozygosity and Fis
  per population and Fst across all populations
 }
 \examples{
-out <- utils.basic.stats(testset.gl)
+out <- utils.basic.stats(platypus.gl)
 }
 \author{
 Luis Mijangos (bugs? Post to
