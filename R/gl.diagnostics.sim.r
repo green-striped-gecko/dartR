@@ -2,6 +2,8 @@
 #' @title Function to diagnose simulations against theoretical expectations
 #' @param x [default ]
 #' @param iteration [default ]
+#' @param Ne [required]
+#' @param Ne_fst [required]
 #' @param pop_he [default ]
 #' @param pops_fst [default ]
 #' @param plot_colors Vector with two color names for the significant and

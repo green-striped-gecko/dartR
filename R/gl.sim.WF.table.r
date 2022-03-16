@@ -160,6 +160,27 @@ gl.sim.WF.table <- function(file_var,
       
       ref_vars[val_change,"value"] <- unlist(input_list)
       
+      ref_vars[ref_vars$variable=="chromosome_name" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="chromosome_name" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="h_distribution_del" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="h_distribution_del" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="s_distribution_del" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="s_distribution_del" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="q_distribution_del" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="q_distribution_del" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="h_distribution_adv" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="h_distribution_adv" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="s_distribution_adv" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="s_distribution_adv" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="q_distribution_adv" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="q_distribution_adv" ,"value"],"'")
+      
       vars_assign <-
         unlist(unname(
           mapply(paste, ref_vars$variable, "<-",
@@ -167,6 +188,13 @@ gl.sim.WF.table <- function(file_var,
         ))
       eval(parse(text = vars_assign))
     }
+    
+    s_distribution_del <- gsub('\"', "", s_distribution_del, fixed = TRUE)
+    s_distribution_adv <- gsub('\"', "", s_distribution_adv, fixed = TRUE)
+    h_distribution_del <- gsub('\"', "", h_distribution_del, fixed = TRUE)
+    h_distribution_adv <- gsub('\"', "", h_distribution_adv, fixed = TRUE)
+    q_distribution_del <- gsub('\"', "", q_distribution_del, fixed = TRUE)
+    q_distribution_adv <- gsub('\"', "", q_distribution_adv, fixed = TRUE)
     
     ##### LOADING INFORMATION #######
     # recombination map
@@ -328,6 +356,7 @@ gl.sim.WF.table <- function(file_var,
     # deleterious loci locations are rounded to the ten digits and 3 is added to each location
       location_deleterious_bp <- round(location_deleterious_bp,-1)
     location_deleterious_bp <- location_deleterious_bp + 3
+    loci_deleterious <- length(location_deleterious_bp)
     }
       
     # advantageous loci
@@ -386,6 +415,15 @@ gl.sim.WF.table <- function(file_var,
     location_mutations_bp <- location_mutations_bp[sample(1:length(location_mutations_bp),size=loci_mutation)]
     }
     
+    location_deleterious_bp <- unique(location_deleterious_bp)
+    loci_deleterious <- length(location_deleterious_bp)
+    
+    location_advantageous_bp <- unique(location_advantageous_bp)
+    loci_advantageous <- length(location_advantageous_bp)
+    
+    location_mutations_bp <- unique(location_mutations_bp)
+    loci_mutation <- length(location_mutations_bp)
+
     location_loci_bp <- c(location_real_bp, location_neutral_bp,
                        location_deleterious_bp, location_advantageous_bp,
                        location_mutations_bp)
