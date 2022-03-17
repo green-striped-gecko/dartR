@@ -31,6 +31,7 @@
 #' [default NULL].
 #' @param interactive_vars Run a shiny app to input interactively the values of
 #'  simulations variables [default TRUE].
+#' @param seed Set the seed for the simulations [default NULL].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -84,8 +85,14 @@ gl.sim.WF.table <- function(file_var,
                             file_targets_sel = NULL, 
                             file_r_map = NULL,
                             interactive_vars = TRUE, 
+                            seed = NULL,
                             verbose = NULL,
                             ...) {
+  
+  # setting the seed
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
   
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)

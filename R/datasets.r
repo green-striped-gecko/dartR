@@ -10,24 +10,25 @@
 #' @keywords datasets
 "platypus.gl"
 
-#' Experimental populations of Drosophila melanogaster 
-#' Populations 25, 26 and 27 at the end of the experiment (T2)
-#' @name drosophila_T2.gl
-#' @format genlight object
-#' @docType data
-#' @author Luis Mijangos (bugs? Post to 
-#' \url{https://groups.google.com/d/forum/dartr}
-#' @keywords datasets
-NULL
-#' Experimental populations of Drosophila melanogaster 
-#' Populations 1, 13 and 27 at the beginning of the experiment (T0)
-#' @name drosophila_T0.gl
-#' @format genlight object
-#' @docType data
-#' @author Luis Mijangos (bugs? Post to 
-#' \url{https://groups.google.com/d/forum/dartr}
-#' @keywords datasets
-NULL
+# Experimental populations of Drosophila melanogaster 
+# Population 27 at the end of the experiment (T2)
+# @name pop27_T2.rda
+# @format genlight object
+# @docType data
+# @author Luis Mijangos (bugs? Post to 
+# \url{https://groups.google.com/d/forum/dartr}
+# @keywords datasets
+# NULL
+
+# Experimental populations of Drosophila melanogaster 
+# Population 27 at the beginning of the experiment (T0)
+# @name pop27_T0.rda
+# @format genlight object
+# @docType data
+# @author Luis Mijangos (bugs? Post to 
+# \url{https://groups.google.com/d/forum/dartr}
+# @keywords datasets
+# NULL
 
 #' A simulated genlight object created to run a landscape genetic example
 #'
