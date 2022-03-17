@@ -110,6 +110,11 @@ gl.sim.WF.run <-
            verbose = NULL,
            ...) {
     
+    # setting the seed
+    if (!is.null(seed)) {
+      set.seed(seed)
+    }
+    
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -244,11 +249,6 @@ gl.sim.WF.run <-
     if( (real_pops ==TRUE | real_pop_size ==TRUE | real_loc ==TRUE | real_freq==TRUE) && is.null(x)){
       cat(error(" The real dataset to extract information is missing\n"))
       stop()
-    }
-
-    # setting the seed
-    if (!is.null(seed)) {
-      set.seed(seed)
     }
     
     if (phase1 == FALSE) {

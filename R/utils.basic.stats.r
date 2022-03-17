@@ -11,26 +11,48 @@
 
 utils.basic.stats <- function(x) {
   
+  n.ind <- table(pop(x))
+  
+    if(any(n.ind <= 1)){
+    cat(error(" There are populations with one individual. Please remove populations with one individual or merged them with other populations fot his function to work"))
+    }
+  
   pop.names <- popNames(x)
   sgl_mat <- lapply(seppop(x),as.matrix)
   pop.vec <- 1:nPop(x)
-  n.ind <- table(pop(x))
-  if(any(n.ind <= 1)){
-    cat(error(" There are populations with one individual. Please remove populations with one individual or merged them with other populations fot his function to work"))
-  }
-  h_mean <- 1/mean(1/n.ind)
-  n.pop <- length(pop.names)
   
+  n.pop <- lapply(pop.vec,function(y){
+    apply(sgl_mat[[y]], 2, function(x){
+      all(is.na(x))
+    })
+  })    
+  
+  n.pop <- Reduce("+",n.pop)
+  n.pop <- nPop(x) - n.pop
+  
+  np <- lapply(pop.vec,function(y){
+    colSums(!is.na(sgl_mat[[y]])) 
+  })
+  
+  np <- Reduce(cbind,np)
+  
+  mn <- apply(np,1,function(y){
+    1/mean(1/y)
+  })
+
   Ho <- lapply(pop.vec,function(y){
-    colMeans(sgl_mat[[y]] == 1, na.rm = T)
+    colMeans(sgl_mat[[y]] == 1, na.rm = TRUE)
   })
   Ho <- Reduce(cbind,Ho)
   colnames(Ho) <- pop.names
-  mHo <- rowMeans(Ho,na.rm=TRUE) 
+  mHo <- rowMeans(Ho, na.rm=TRUE) 
   
+  q <- lapply(pop.vec,function(y){
+    colMeans(sgl_mat[[y]], na.rm = T)/2
+  })
+
   Hs <- lapply(pop.vec,function(y){
-    q <- colMeans(sgl_mat[[y]], na.rm = T)/2
-    He <- 2 * (1-q) * q 
+    He <- 2 * (1-q[[y]]) * q[[y]] 
     n <- nrow(sgl_mat[[y]]) - colSums(apply(sgl_mat[[y]],2,is.na))
     n_factor <- (2 * n) / ((2 * n ) - 1 ) 
     return(n_factor * He)
@@ -38,16 +60,15 @@ utils.basic.stats <- function(x) {
   Hs <- Reduce(cbind,Hs)
   colnames(Hs) <- pop.names
   mHs <- rowMeans(Hs,na.rm=TRUE)
-
-  q_tmp <- colMeans(as.matrix(x), na.rm = T)/2
-  Ht <- 2 * (1-q_tmp) * q_tmp
   
-  Ht <- Ht + (mHs/(h_mean*n.pop)) - (mHo/(2*h_mean*n.pop))
+  q_mean <- rowMeans(Reduce(cbind,q),na.rm = T)
+  Ht <- 2 * (1-q_mean) * q_mean
+  Ht <- Ht + mHs/mn/n.pop - mHo/2/mn/n.pop
   
   Dst <- Ht - mHs
-  
+
   Fst <- Dst / Ht
-  
+
   Fis <- 1 - (Ho/Hs)
 
   mFis <- 1 - (mHo/mHs)

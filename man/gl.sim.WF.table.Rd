@@ -10,6 +10,7 @@ gl.sim.WF.table(
   file_targets_sel = NULL,
   file_r_map = NULL,
   interactive_vars = TRUE,
+  seed = NULL,
   verbose = NULL,
   ...
 )
@@ -29,6 +30,8 @@ details)  [default NULL].}
 
 \item{interactive_vars}{Run a shiny app to input interactively the values of
 simulations variables [default TRUE].}
+
+\item{seed}{Set the seed for the simulations [default NULL].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
