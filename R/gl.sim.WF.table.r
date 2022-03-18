@@ -666,7 +666,7 @@ gl.sim.WF.table <- function(file_var,
         h[location_mut_del_row] <- h_del
       }
       if (h_distribution_del == "normal") {
-        h[location_mut_del_row] <- rnorm(loci_mut_neu, 
+        h[location_mut_del_row] <- rnorm(loci_mut_del, 
                                              mean = h_mean_del,
                                              sd = h_sd_del)
       }

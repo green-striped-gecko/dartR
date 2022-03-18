@@ -147,13 +147,7 @@ gl.sim.WF.run <-
 
      sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <-
        paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
-     
-     sim_vars[sim_vars$variable=="local_adap" ,"value"] <-
-       paste0("'",sim_vars[sim_vars$variable=="local_adap" ,"value"],"'")
-     
-     sim_vars[sim_vars$variable=="clinal_adap" ,"value"] <-
-       paste0("'",sim_vars[sim_vars$variable=="clinal_adap" ,"value"],"'")
-     
+
      sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
        paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
      
@@ -204,12 +198,6 @@ gl.sim.WF.run <-
       
       sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <-
         paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
-      
-      sim_vars[sim_vars$variable=="local_adap" ,"value"] <-
-        paste0("'",sim_vars[sim_vars$variable=="local_adap" ,"value"],"'")
-      
-      sim_vars[sim_vars$variable=="clinal_adap" ,"value"] <-
-        paste0("'",sim_vars[sim_vars$variable=="clinal_adap" ,"value"],"'")
       
       sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
         paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
