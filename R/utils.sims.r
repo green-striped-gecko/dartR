@@ -1802,6 +1802,49 @@ interactive_sim_run <- function() {
       
     ),
     
+    fluidRow(
+      
+      column(
+        4,
+        textInput(
+          "local_adap",
+          tags$div(
+            tags$i(HTML("local_adap<br/>")),
+            "Populations in which local adaptation occurs (must be space delimited)"),
+          value = NULL
+        ),
+        shinyBS::bsTooltip(id = "local_adap",
+                           title = "Selection coefficients are set to 0 in loci and mutations that are advantageous in populations in which local adpatation does not occur")
+      ),
+      
+      column(
+        4,
+        textInput(
+          "clinal_adap",
+          tags$div(
+            tags$i(HTML("clinal_adap<br/>")),
+            "Starting and ending populations in which clinal adaptation occurs (two values must be provided and be space delimited)"),
+          value = NULL
+        ),
+        shinyBS::bsTooltip(id = "clinal_adap",
+                           title = "Selection coefficient is decreased in loci and mutations that are advantageous by population along the cline")
+      ),
+      
+      column(
+        4,
+        numericInput(
+          "clinal_strength",
+          tags$div(tags$i(HTML("clinal_strength<br/>")),
+                   "Percentage of the decrease of the selection coefficient along the cline"),
+          value = 10,
+          min = 0
+        ),    
+        shinyBS::bsTooltip(id = "clinal_strength",
+                           title = "Selection coefficient is decreased in loci and mutations that are advantageous by population along the cline")
+      )
+      
+    ),
+    
     hr(),
     
     fluidRow(
@@ -2305,6 +2348,21 @@ interactive_sim_run <- function() {
         condition = input$selection_phase2 == TRUE
       )
       
+      shinyjs::toggleElement(
+        id = "local_adap",
+        condition = input$selection_phase2 == TRUE
+      )
+      
+      shinyjs::toggleElement(
+        id = "clinal_adap",
+        condition = input$selection_phase2 == TRUE
+      )
+      
+      shinyjs::toggleElement(
+        id = "clinal_strength",
+        condition = input$selection_phase2 == TRUE
+      )
+      
     })
     
     observeEvent(input$mutation, {
@@ -2353,7 +2411,10 @@ interactive_sim_run <- function() {
           "chromosome_name",
           "mutation",
           "mut_rate",
-          "real_loc"
+          "real_loc",
+          "clinal_strength",
+          "clinal_adap",
+          "local_adap"
         ),
         c(
           input$number_pops_phase2,
@@ -2389,7 +2450,10 @@ interactive_sim_run <- function() {
           input$chromosome_name,
           input$mutation,
           input$mut_rate,
-          input$real_loc
+          input$real_loc,
+          input$clinal_strength,
+          input$clinal_adap,
+          input$local_adap
         )))
       
       colnames(sim_vars_temp) <- c("variable","value")
