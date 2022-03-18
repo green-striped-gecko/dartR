@@ -148,6 +148,12 @@ gl.sim.WF.run <-
      sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <-
        paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
      
+     sim_vars[sim_vars$variable=="local_adap" ,"value"] <-
+       paste0("'",sim_vars[sim_vars$variable=="local_adap" ,"value"],"'")
+     
+     sim_vars[sim_vars$variable=="clinal_adap" ,"value"] <-
+       paste0("'",sim_vars[sim_vars$variable=="clinal_adap" ,"value"],"'")
+     
      sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
        paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
      
@@ -199,6 +205,12 @@ gl.sim.WF.run <-
       sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <-
         paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
       
+      sim_vars[sim_vars$variable=="local_adap" ,"value"] <-
+        paste0("'",sim_vars[sim_vars$variable=="local_adap" ,"value"],"'")
+      
+      sim_vars[sim_vars$variable=="clinal_adap" ,"value"] <-
+        paste0("'",sim_vars[sim_vars$variable=="clinal_adap" ,"value"],"'")
+      
       sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
         paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
       
@@ -221,6 +233,7 @@ gl.sim.WF.run <-
     
     neutral_loci_location <- which(reference$type == "neutral" |
                                      reference$type == "real")
+    adv_loci <- which(reference$type=="mutation_adv" | reference$type=="advantageous")
     mutation_loci_adv <- which(reference$type == "mutation_adv" )
     mutation_loci_del <- which(reference$type == "mutation_del")
     mutation_loci_neu <- which(reference$type == "mutation_neu")
@@ -308,6 +321,14 @@ gl.sim.WF.run <-
     population_size_phase1 <- gsub('\"', "", population_size_phase1, fixed = TRUE)
     
     population_size_phase1 <- as.numeric(unlist(strsplit(population_size_phase1, " ")))
+    
+    local_adap <- gsub('\"', "", local_adap, fixed = TRUE)
+    
+    local_adap <- as.numeric(unlist(strsplit(local_adap, " ")))
+    
+    clinal_adap <- gsub('\"', "", clinal_adap, fixed = TRUE)
+    
+    clinal_adap <- as.numeric(unlist(strsplit(clinal_adap, " ")))
 
     if (phase1 == TRUE & real_pops == FALSE) {
       number_pops <- number_pops_phase1
@@ -756,6 +777,48 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
         ##### SELECTION #####
        #tic("selection")
         if (selection == TRUE) {
+          if(!is.null(local_adap)){
+            pops_local <- setdiff(pops_vector, local_adap)
+            reference_local <- replicate(length(pops_vector), reference[,c("s","h")], simplify = FALSE)
+            
+            reference_local[pops_local] <- lapply(reference_local[pops_local], function(y){
+              y[adv_loci,"s"] <- 0
+              return(y)
+            })
+
+            offspring_list <- lapply(pops_vector, function(x) {
+              selection_fun(
+                offspring = offspring_list[[x]],
+                h = reference_local[[x]][,"h"],
+                s = reference_local[[x]][,"s"],
+                sel_model = natural_selection_model,
+                g_load = genetic_load
+              )
+            })
+            
+          } else if(!is.null(clinal_adap)){
+            pops_clinal <- seq(clinal_adap[1],clinal_adap[2],1)
+            reference_clinal_temp <- replicate(length(pops_vector), reference[,c("s","h")], simplify = FALSE)
+            
+            clinal_s <- 1 - c(0,(1:(length(pops_clinal)-1)*(clinal_strength/100)))
+            
+            reference_clinal <- lapply(pops_clinal,function(y){
+              reference_clinal_temp[[y]][adv_loci,"s"] <-  
+                reference_clinal_temp[[y]][adv_loci,"s"] * clinal_s[y]
+              return(reference_clinal_temp[[y]])
+            })
+            
+            offspring_list <- lapply(pops_vector, function(x) {
+              selection_fun(
+                offspring = offspring_list[[x]],
+                h = reference_clinal[[x]][,"h"],
+                s = reference_clinal[[x]][,"s"],
+                sel_model = natural_selection_model,
+                g_load = genetic_load
+              )
+            })
+            
+          } else {
           offspring_list <- lapply(pops_vector, function(x) {
             selection_fun(
               offspring = offspring_list[[x]],
@@ -765,6 +828,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
               g_load = genetic_load
             )
           })
+          }
         }
        #toc()
         
