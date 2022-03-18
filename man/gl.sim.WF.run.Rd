@@ -11,7 +11,7 @@ gl.sim.WF.run(
   file_dispersal = NULL,
   number_iterations = 1,
   every_gen = 10,
-  sample_percent = 10,
+  sample_percent = 50,
   store_phase1 = FALSE,
   interactive_vars = TRUE,
   seed = NULL,

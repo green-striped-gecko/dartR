@@ -103,12 +103,17 @@ gl.sim.WF.run <-
            file_dispersal = NULL,
            number_iterations = 1,
            every_gen = 10,
-           sample_percent = 10,
+           sample_percent = 50,
            store_phase1 = FALSE,
            interactive_vars = TRUE,
            seed = NULL,
            verbose = NULL,
            ...) {
+    
+    # setting the seed
+    if (!is.null(seed)) {
+      set.seed(seed)
+    }
     
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -133,14 +138,14 @@ gl.sim.WF.run <-
     
     ##### SIMULATIONS VARIABLES ######
 
-    if (interactive_vars) {
+    if (interactive_vars==TRUE) {
       
       sim_vars <- interactive_sim_run()
       
-     sim_vars[sim_vars$variable=="population_size_phase2" ,"value"] <- 
+     sim_vars[sim_vars$variable=="population_size_phase2" ,"value"] <-
       paste0("'",sim_vars[sim_vars$variable=="population_size_phase2" ,"value"],"'")
-     
-     sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <- 
+
+     sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <-
        paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
      
      sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
@@ -152,8 +157,7 @@ gl.sim.WF.run <-
      sim_vars[sim_vars$variable=="natural_selection_model" ,"value"] <- 
        paste0("'",sim_vars[sim_vars$variable=="natural_selection_model" ,"value"],"'")
      
-     sim_vars[sim_vars$variable=="chromosome_name" ,"value"] <- 
-       paste0("'",sim_vars[sim_vars$variable=="chromosome_name" ,"value"],"'")
+     sim_vars <- sim_vars[order(sim_vars$variable),]
      
      vars_assign <-
        unlist(unname(
@@ -166,6 +170,9 @@ gl.sim.WF.run <-
     } else {
       sim_vars <- suppressWarnings(read.csv(file_var))
       sim_vars <- sim_vars[, 2:3]
+      
+      sim_vars <- sim_vars[order(sim_vars$variable),]
+      
       vars_assign <-
         unlist(unname(
           mapply(paste, sim_vars$variable, "<-",
@@ -175,59 +182,73 @@ gl.sim.WF.run <-
     }
     
     input_list <- list(...)
-
-    if(length(input_list>0)){
+    
+    if(length(input_list)>0){
+      
+      sim_vars <- sim_vars[order(sim_vars$variable),]
+      
+      input_list <- input_list[order(names(input_list))]
       
       val_change <- which(sim_vars$variable %in% names(input_list))
       
-      sim_vars[val_change,"value"] <- list(input_list)
+      sim_vars[val_change,"value"] <- unlist(input_list)
+      
+      sim_vars[sim_vars$variable=="population_size_phase2" ,"value"] <-
+        paste0("'",sim_vars[sim_vars$variable=="population_size_phase2" ,"value"],"'")
+      
+      sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <-
+        paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
+      
+      sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
+        paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
+      
+      sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"] <- 
+        paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"],"'")
+      
+      sim_vars[sim_vars$variable=="natural_selection_model" ,"value"] <- 
+        paste0("'",sim_vars[sim_vars$variable=="natural_selection_model" ,"value"],"'")
+      
       vars_assign <-
         unlist(unname(
           mapply(paste, sim_vars$variable, "<-",
                  sim_vars$value, SIMPLIFY = F)
         ))
       eval(parse(text = vars_assign))
-      
     }
     
     reference <- ref_table$reference
     ref_vars <- ref_table$ref_vars
     
-    neutral_loci_location <- which(reference$selection == "neutral" |
-                                     reference$selection == "real")
-    mutation_loci_adv <- which(reference$selection == "mutation_adv" )
-    mutation_loci_del <- which(reference$selection == "mutation_del")
-    mutation_loci_location <- c(mutation_loci_adv,mutation_loci_del)
+    neutral_loci_location <- which(reference$type == "neutral" |
+                                     reference$type == "real")
+    mutation_loci_adv <- which(reference$type == "mutation_adv" )
+    mutation_loci_del <- which(reference$type == "mutation_del")
+    mutation_loci_neu <- which(reference$type == "mutation_neu")
+    
+    mutation_loci_location <- c(mutation_loci_adv,mutation_loci_del,mutation_loci_neu)
     mutation_loci_location <- mutation_loci_location[order(mutation_loci_location)]
     
-    real <- which(reference$selection == "real")
+    real <- which(reference$type == "real")
     
     q_neutral <- as.numeric(ref_vars[ref_vars$variable=="q_neutral","value"])
-    
-    # this is the option of mutation from the reference table 
-    mut_table <- ref_vars[ref_vars$variable=="mutation","value"]
-    if(mut_table != mutation){
-      cat(error("The value for the mutation parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
-      stop()
-    }
     
     # this is the option of real_freq from the reference table 
     real_freq_table <- ref_vars[ref_vars$variable=="real_freq","value"]
     if(real_freq_table != real_freq){
-      cat(error("The value for the real_freq parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
+      cat(error("  The value for the real_freq parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
       stop()
     }
     
     # this is the option of real_loc from the reference table 
     real_loc_table <- ref_vars[ref_vars$variable=="real_loc","value"]
     if(real_loc_table != real_loc){
-      cat(error("The value for the real_loc parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
+      cat(error("  The value for the real_loc parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
       stop()
     }
-
-    # setting the seed
-    if (!is.null(seed)) {
-      set.seed(seed)
+    
+    if( (real_pops ==TRUE | real_pop_size ==TRUE | real_loc ==TRUE | real_freq==TRUE) && is.null(x)){
+      cat(error(" The real dataset to extract information is missing\n"))
+      stop()
     }
     
     if (phase1 == FALSE) {
@@ -238,12 +259,8 @@ gl.sim.WF.run <-
     number_generations <- gen_number_phase1 + gen_number_phase2
     
     # This is the list to store the final genlight objects
-    gen_store <-
-      c(seq(1, number_generations, every_gen), number_generations)
-    final_res <-
-      rep(list(as.list(rep(
-        NA, length(gen_store)
-      ))), number_iterations)
+    gen_store <- c(seq(1, number_generations, every_gen), number_generations)
+    final_res <- rep(list(as.list(rep(NA, length(gen_store)))), number_iterations)
     
     loci_number <- nrow(reference)
     recombination_map <- reference[, c("c", "loc_bp", "loc_cM")]
@@ -279,12 +296,19 @@ gl.sim.WF.run <-
     plink_map[, 3] <- reference$loc_cM
     plink_map[, 4] <- reference$loc_bp
     
-    population_size_phase2 <-
-      as.numeric(unlist(strsplit(population_size_phase2, " ")))
+    dispersal_type_phase2 <- gsub('\"', "", dispersal_type_phase2, fixed = TRUE)
+    dispersal_type_phase1 <- gsub('\"', "", dispersal_type_phase1, fixed = TRUE)
+    natural_selection_model <- gsub('\"', "", natural_selection_model, fixed = TRUE)
+    chromosome_name <- gsub('\"', "", chromosome_name, fixed = TRUE)
+
+    population_size_phase2 <- gsub('\"', "", population_size_phase2, fixed = TRUE)
     
-    population_size_phase1 <-
-      as.numeric(unlist(strsplit(population_size_phase1, " ")))
+    population_size_phase2 <- as.numeric(unlist(strsplit(population_size_phase2, " ")))
+      
+    population_size_phase1 <- gsub('\"', "", population_size_phase1, fixed = TRUE)
     
+    population_size_phase1 <- as.numeric(unlist(strsplit(population_size_phase1, " ")))
+
     if (phase1 == TRUE & real_pops == FALSE) {
       number_pops <- number_pops_phase1
     }
@@ -320,7 +344,6 @@ gl.sim.WF.run <-
       pop_list_freq <- rep(NA, number_pops)
     }
 
-    ##### ANALYSIS VARIABLES #####
     # This is to calculate the density of mutations per centimorgan. The density
     # is based on the number of heterozygous loci in each individual. Based on HW
     # equation (p^2+2pq+q^2), the proportion of heterozygotes (2pq) for each locus
@@ -342,7 +365,6 @@ gl.sim.WF.run <-
       if (iteration %% 1 == 0) {
         cat(report(" Starting iteration =", iteration, "\n"))
       }
-      
       ##### VARIABLES PHASE 1 #######
       if (phase1 == TRUE) {
         if (real_pop_size == TRUE & !is.null(x)) {
@@ -507,11 +529,9 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
         if (phase1 == TRUE & generation == 1) {
           cat(report(" Starting phase 1\n"))
         }
-        
         if (generation %% 10 == 0) {
           cat(report("  Starting generation =", generation, "\n"))
         }
-        
         ##### VARIABLES PHASE 2 #######
         if (generation == (gen_number_phase1 + 1)) {
           cat(report(" Starting phase 2\n"))

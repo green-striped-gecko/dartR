@@ -12,7 +12,7 @@
 #' \item loc_bp - chromosome location in base pairs.
 #' \item loc_cM - chromosome location in centiMorgans.
 #' \item chr_name - chromosome name.
-#' \item selection - SNP type.
+#' \item type - SNP type.
 #' } 
 #' 
 #' The reference table can be further modified as required. 
@@ -31,6 +31,7 @@
 #' [default NULL].
 #' @param interactive_vars Run a shiny app to input interactively the values of
 #'  simulations variables [default TRUE].
+#' @param seed Set the seed for the simulations [default NULL].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -84,8 +85,14 @@ gl.sim.WF.table <- function(file_var,
                             file_targets_sel = NULL, 
                             file_r_map = NULL,
                             interactive_vars = TRUE, 
+                            seed = NULL,
                             verbose = NULL,
                             ...) {
+  
+  # setting the seed
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
   
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -99,21 +106,32 @@ gl.sim.WF.table <- function(file_var,
     # DO THE JOB
     ##### LOADING VARIABLES ######
     
-    if (interactive_vars) {
+    if (interactive_vars==TRUE) {
       
       ref_vars <- interactive_reference()
       
-      ref_vars[ref_vars$variable=="h_distribution" ,"value"] <- 
-        paste0("'",ref_vars[ref_vars$variable=="h_distribution" ,"value"],"'")
-      
-      ref_vars[ref_vars$variable=="chromosome_name" ,"value"] <- 
+      ref_vars[ref_vars$variable=="chromosome_name" ,"value"] <-
         paste0("'",ref_vars[ref_vars$variable=="chromosome_name" ,"value"],"'")
       
-      ref_vars[ref_vars$variable=="s_distribution" ,"value"] <- 
-        paste0("'",ref_vars[ref_vars$variable=="s_distribution" ,"value"],"'")
+      ref_vars[ref_vars$variable=="h_distribution_del" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="h_distribution_del" ,"value"],"'")
+
+      ref_vars[ref_vars$variable=="s_distribution_del" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="s_distribution_del" ,"value"],"'")
+
+      ref_vars[ref_vars$variable=="q_distribution_del" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="q_distribution_del" ,"value"],"'")
       
-      ref_vars[ref_vars$variable=="q_distribution" ,"value"] <- 
-        paste0("'",ref_vars[ref_vars$variable=="q_distribution" ,"value"],"'")
+      ref_vars[ref_vars$variable=="h_distribution_adv" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="h_distribution_adv" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="s_distribution_adv" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="s_distribution_adv" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="q_distribution_adv" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="q_distribution_adv" ,"value"],"'")
+
+      ref_vars <- ref_vars[order(ref_vars$variable),]
       
       vars_assign <-
         unlist(unname(
@@ -123,9 +141,12 @@ gl.sim.WF.table <- function(file_var,
       
       eval(parse(text = vars_assign))
       
-    } else{
+    } else {
       ref_vars <- suppressWarnings(read.csv(file_var))
       ref_vars <- ref_vars[, 2:3]
+      
+      ref_vars <- ref_vars[order(ref_vars$variable),]
+      
       vars_assign <-
         unlist(unname(
           mapply(paste, ref_vars$variable, "<-",
@@ -136,11 +157,37 @@ gl.sim.WF.table <- function(file_var,
     
     input_list <- list(...)
     
-    if(length(input_list>0)){
+    if(length(input_list)>0){
+      
+      ref_vars <- ref_vars[order(ref_vars$variable),]
+      
+      input_list <- input_list[order(names(input_list))]
       
       val_change <- which(ref_vars$variable %in% names(input_list))
       
-      ref_vars[val_change,"value"] <- list(input_list)
+      ref_vars[val_change,"value"] <- unlist(input_list)
+      
+      ref_vars[ref_vars$variable=="chromosome_name" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="chromosome_name" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="h_distribution_del" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="h_distribution_del" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="s_distribution_del" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="s_distribution_del" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="q_distribution_del" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="q_distribution_del" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="h_distribution_adv" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="h_distribution_adv" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="s_distribution_adv" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="s_distribution_adv" ,"value"],"'")
+      
+      ref_vars[ref_vars$variable=="q_distribution_adv" ,"value"] <-
+        paste0("'",ref_vars[ref_vars$variable=="q_distribution_adv" ,"value"],"'")
+      
       vars_assign <-
         unlist(unname(
           mapply(paste, ref_vars$variable, "<-",
@@ -148,6 +195,13 @@ gl.sim.WF.table <- function(file_var,
         ))
       eval(parse(text = vars_assign))
     }
+    
+    s_distribution_del <- gsub('\"', "", s_distribution_del, fixed = TRUE)
+    s_distribution_adv <- gsub('\"', "", s_distribution_adv, fixed = TRUE)
+    h_distribution_del <- gsub('\"', "", h_distribution_del, fixed = TRUE)
+    h_distribution_adv <- gsub('\"', "", h_distribution_adv, fixed = TRUE)
+    q_distribution_del <- gsub('\"', "", q_distribution_del, fixed = TRUE)
+    q_distribution_adv <- gsub('\"', "", q_distribution_adv, fixed = TRUE)
     
     ##### LOADING INFORMATION #######
     # recombination map
@@ -183,6 +237,10 @@ gl.sim.WF.table <- function(file_var,
       targets_temp <- targets_temp[which(targets_temp$chr_name == chromosome_name),]
     }
     # real dataset 
+    if( (real_loc==TRUE | real_freq==TRUE) && is.null(x)){
+      cat(error(" The real dataset to extract information is missing\n"))
+      stop()
+    }
     location_real_temp <- NULL
     if (real_loc == TRUE & !is.null(x)) {
       location_real_temp <-
@@ -194,11 +252,8 @@ gl.sim.WF.table <- function(file_var,
         stop()
       }
       
-      location_real_temp <-
-        location_real_temp[location_real_temp$chr == chromosome_name, ]
-      location_real_temp <- 
-        as.numeric(location_real_temp[, "pos"])
-      
+      location_real_temp <- location_real_temp[location_real_temp$chr == chromosome_name, ]
+      location_real_temp <- as.numeric(location_real_temp[, "pos"])
       location_real_temp <- location_real_temp[order(location_real_temp)]
     }
     
@@ -251,12 +306,12 @@ gl.sim.WF.table <- function(file_var,
     
     # neutral loci simulations
     location_neutral_bp <- NULL
-    if(neutral_loci_chunk>0){
+    if(chunk_neutral_loci>0){
       location_neutral_bp <-
         round(seq(
-          chunk_bp / (neutral_loci_chunk + 1),
+          chunk_bp / (chunk_neutral_loci + 1),
           (chunk_number * chunk_bp),
-          chunk_bp / neutral_loci_chunk
+          chunk_bp / chunk_neutral_loci
         ))
       
       # neutral loci locations are rounded to the ten digits and 2 is added to each location
@@ -264,51 +319,68 @@ gl.sim.WF.table <- function(file_var,
       location_neutral_bp <- location_neutral_bp + 2
     }
     
-    # loci under selection
-    location_targets_bp <- NULL
-    if (!is.null(file_targets_sel) | loci_under_selection>0) {
+    # deleterious loci
+    location_deleterious_bp <- NULL
+    if (!is.null(file_targets_sel) | loci_deleterious>0) {
     if (!is.null(file_targets_sel)) {
-      targets <- targets_temp
-      targets$targets <- ceiling(targets$targets * (targets_factor/100))
-      targets$distance <-  targets$end - targets$start
+      del <- targets_temp
+      del$targets <- ceiling(del$targets * (deleterious_factor/100))
+      del$distance <-  del$end - del$start
     } 
     # if the targets of selection file is not provided
     if (is.null(file_targets_sel) ) {
-      targets <- as.data.frame(matrix(nrow = chunk_number, ncol = 3))
-      colnames(targets) <- c("start", "end", "targets")
-      targets$start <- seq(1, chr_length, (chr_length/chunk_number))
-      targets$end <- seq((chr_length/chunk_number), chr_length, 
+      del <- as.data.frame(matrix(nrow = chunk_number, ncol = 3))
+      colnames(del) <- c("start", "end", "targets")
+      del$start <- seq(1, chr_length, (chr_length/chunk_number))
+      del$end <- seq((chr_length/chunk_number), chr_length, 
                          (chr_length/chunk_number))
-      targets$targets <- round(loci_under_selection / chunk_number)
-      targets$distance <-  targets$end - targets$start
+      if(loci_deleterious<chunk_number){
+        row_targets <- sample(1:chunk_number,size = loci_deleterious)
+        del[row_targets,"targets"] <- 1
+        del[is.na(del$targets),"targets"] <- 0
+      }else{
+        del$targets <- round(loci_deleterious / chunk_number)
+      }
+      del$distance <-  del$end - del$start
     }
-    
-      sample_resolution <- round(mean(targets$distance)/max(targets$targets)/10)
-      
-    for (i in 1:nrow(targets)) {
-      location_targets_temp <- mapply(
+        sample_resolution <- round(mean(del$distance)/max(del$targets)/10)
+    for (i in 1:nrow(del)) {
+      location_deleterious_temp <- mapply(
         FUN = function(a, b) {
           seq(from = a,
               to = b,
               by = sample_resolution)
         },
-        a = unname(unlist(targets[i, "start"])),
-        b = unname(unlist(targets[i, "end"]))
+        a = unname(unlist(del[i, "start"])),
+        b = unname(unlist(del[i, "end"]))
       )
-      location_targets_temp <- as.vector(round(location_targets_temp))
-      location_targets_temp <- sample(location_targets_temp, 
-                                      size = targets[i, "targets"])
-      location_targets_bp <- c(location_targets_bp, location_targets_temp)
+      location_deleterious_temp <- as.vector(round(location_deleterious_temp))
+      location_deleterious_temp <- sample(location_deleterious_temp, 
+                                      size = del[i, "targets"])
+      location_deleterious_bp <- c(location_deleterious_bp, location_deleterious_temp)
     }
-      location_targets_bp <- location_targets_bp[order(location_targets_bp)]
-    # loci under selection locations are rounded to the ten digits and 3 is added to each location
-      location_targets_bp <- round(location_targets_bp,-1)
-    location_targets_bp <- location_targets_bp + 3
+      location_deleterious_bp <- location_deleterious_bp[order(location_deleterious_bp)]
+    # deleterious loci locations are rounded to the ten digits and 3 is added to each location
+      location_deleterious_bp <- round(location_deleterious_bp,-1)
+    location_deleterious_bp <- location_deleterious_bp + 3
+    loci_deleterious <- length(location_deleterious_bp)
+    }
+      
+    # advantageous loci
+    location_advantageous_bp <- NULL
+    if (loci_advantageous>0) {
+      location_advantageous_bp <- sample(1:chr_length,loci_advantageous)
+      location_advantageous_bp <- location_advantageous_bp[order(location_advantageous_bp)]
+       # advantageous loci locations are rounded to the ten digits and 4 is added to each location
+        location_advantageous_bp <- round(location_advantageous_bp,-1)
+        location_advantageous_bp <- location_advantageous_bp + 4
     }
     
     # mutations 
+    loci_mutation <- loci_mut_neu + loci_mut_del + loci_mut_adv
+    
     location_mutations_bp <- NULL
-    if (!is.null(file_targets_sel) | (loci_mutation > 0 & mutation == TRUE)) {
+    if (!is.null(file_targets_sel) | (loci_mutation > 0)) {
     # if the targets of selection file is provided
     if (!is.null(file_targets_sel)) {
       mutations <- targets_temp
@@ -321,12 +393,12 @@ gl.sim.WF.table <- function(file_var,
       mutations$start <- seq(1, chr_length, (chr_length/chunk_number))
       mutations$end <- seq((chr_length/chunk_number), chr_length,
                            (chr_length/chunk_number))
-      mutations$targets <- round(loci_mutation / chunk_number)
+      mutations$targets <- ceiling(loci_mutation / chunk_number)
       mutations$distance <-  mutations$end - mutations$start
     }
     # the resolution to sample mutations is different to the resolution to sample
-    # targets for slection to avoid averlapping locations
-    sample_resolution <- round(mean(mutations$distance)/max(mutations$targets)/15)
+    # deleterious and advantageous loci to avoid overlapping locations
+    sample_resolution <- round(mean(mutations$distance)/max(mutations$targets)/20)
     
     for (i in 1:nrow(mutations)) {
       location_mutations_temp <- mapply(
@@ -344,13 +416,24 @@ gl.sim.WF.table <- function(file_var,
       location_mutations_bp <- c(location_mutations_bp, location_mutations_temp)
     }
     location_mutations_bp <- location_mutations_bp[order(location_mutations_bp)]
-    # mutation locations are rounded to the ten digits and 4 is added to each location
+    # mutation locations are rounded to the ten digits and 5 is added to each location
     location_mutations_bp <- round(location_mutations_bp,-1)
-    location_mutations_bp <- location_mutations_bp + 4
+    location_mutations_bp <- location_mutations_bp + 5
+    location_mutations_bp <- location_mutations_bp[sample(1:length(location_mutations_bp),size=loci_mutation)]
     }
     
+    location_deleterious_bp <- unique(location_deleterious_bp)
+    loci_deleterious <- length(location_deleterious_bp)
+    
+    location_advantageous_bp <- unique(location_advantageous_bp)
+    loci_advantageous <- length(location_advantageous_bp)
+    
+    location_mutations_bp <- unique(location_mutations_bp)
+    loci_mutation <- length(location_mutations_bp)
+
     location_loci_bp <- c(location_real_bp, location_neutral_bp,
-                       location_targets_bp, location_mutations_bp)
+                       location_deleterious_bp, location_advantageous_bp,
+                       location_mutations_bp)
     
     location_loci_bp <- location_loci_bp[order(location_loci_bp)]
     
@@ -393,7 +476,7 @@ gl.sim.WF.table <- function(file_var,
     
     # getting the row of the recombination map for neutral loci
     location_neutral_row <- NULL
-    if(neutral_loci_chunk>0){
+    if(chunk_neutral_loci>0){
     location_neutral_row <- lapply(location_neutral_bp, function(x) {
       which(recombination_map$location_loci == x)
       })
@@ -409,18 +492,27 @@ gl.sim.WF.table <- function(file_var,
       location_real_row <- unname(unlist(location_real_row))
     }
     
-    # getting the row of the recombination map for loci under selection
-    location_targets_row <- NULL
-    if(neutral_loci_chunk>0){
-      location_targets_row <- lapply(location_targets_bp, function(x) {
+    # getting the row of the recombination map for deleterious loci
+    location_deleterious_row <- NULL
+    if(loci_deleterious>0){
+      location_deleterious_row <- lapply(location_deleterious_bp, function(x) {
         which(recombination_map$location_loci == x)
       })
-      location_targets_row <- unname(unlist(location_targets_row))
+      location_deleterious_row <- unname(unlist(location_deleterious_row))
+    }
+    
+    # getting the row of the recombination map for deleterious loci
+    location_advantageous_row <- NULL
+    if(loci_advantageous>0){
+      location_advantageous_row <- lapply(location_advantageous_bp, function(x) {
+        which(recombination_map$location_loci == x)
+      })
+      location_advantageous_row <- unname(unlist(location_advantageous_row))
     }
     
     # getting the row of the recombination map for mutations
     location_mutations_row <- NULL
-    if(mutation==T){
+    if(loci_mutation>0){
       location_mutations_row  <- lapply(location_mutations_bp, function(x) {
         which(recombination_map$location_loci == x)
       })
@@ -428,68 +520,252 @@ gl.sim.WF.table <- function(file_var,
     }
     
     ##### REFERENCE TABLE ########
-    # selection coefficient
-    if(s_distribution== "exponential_gamma" ){
-      s_advantageous <- rexp(total_loci,rate = exp_rate) * -1
-      s_deleterious <- rgamma(total_loci, shape = gamma_shape, scale = gamma_scale)
-      s_temp <- c(sample(s_advantageous,
-                         size=round(total_loci*(percent_adv/100))),
-             sample(s_deleterious
-                    ,size=round(total_loci*(1-percent_adv/100))))
-      s <- sample(s_temp,size =total_loci,replace = T )
+    mut_tmp <- location_mutations_row
+    if(loci_mut_neu>0){
+    neu_tmp <- sample(1:length(mut_tmp),size=loci_mut_neu)
+    location_mut_neu_row <- mut_tmp[neu_tmp]
+    location_mut_neu_row <- location_mut_neu_row[order(location_mut_neu_row)]
+    mut_tmp <- mut_tmp[-neu_tmp]
     }
     
-    if (s_distribution == "equal") {
-      s <- s_gral
+    if(loci_mut_del>0){
+    del_tmp <- sample(1:length(mut_tmp),size=loci_mut_del)
+    location_mut_del_row <- mut_tmp[del_tmp]
+    location_mut_del_row <- location_mut_del_row[order(location_mut_del_row)]
+    mut_tmp <- mut_tmp[-del_tmp]
     }
     
-    if (s_distribution == "gamma") {
-      s <- rgamma(total_loci, shape = gamma_shape, scale = gamma_scale)
+    if(loci_mut_adv>0){
+    adv_tmp <- sample(1:length(mut_tmp),size=loci_mut_adv)
+    location_mut_adv_row <- mut_tmp[adv_tmp]
+    location_mut_adv_row <- location_mut_adv_row[order(location_mut_adv_row)]
+    mut_tmp <- mut_tmp[-adv_tmp]
     }
     
-    if (s_distribution == "log_normal") {
-      s <- rlnorm(total_loci,
+    s <- rep(NA,total_loci)
+    h <- rep(NA,total_loci)
+    q <- rep(NA,total_loci)
+    
+    ##### SELECTION COEFFICIENT
+    # neutral loci simulations
+    if(chunk_neutral_loci>0){
+      s[location_neutral_row] <- 0
+    }
+    #real locations
+    if(real_loc == TRUE){
+    s[location_real_row] <- 0
+    }
+    # deleterious
+    if(loci_deleterious>0){
+    if (s_distribution_del == "equal") {
+      s[location_deleterious_row] <- s_del
+    }
+    
+    if (s_distribution_del == "gamma") {
+      s[location_deleterious_row] <- rgamma(loci_deleterious, 
+                                            shape = gamma_shape, 
+                                            scale = gamma_scale)
+    }
+    
+    if (s_distribution_del == "log_normal") {
+      s[location_deleterious_row] <- rlnorm(loci_deleterious,
                   meanlog = log(log_mean),
                   sdlog = log(log_sd))
     }
-    
-    # dominance
-    if (h_distribution == "equal") {
-      h <- h_gral
+    }
+    #advantageous
+    if(loci_advantageous>0){
+      if (s_distribution_adv == "equal") {
+        s[location_advantageous_row] <- s_adv * -1
+      }
+      if(s_distribution_adv=="exponential"){
+        s[location_advantageous_row] <- rexp(loci_advantageous,
+                                             rate = exp_rate) * -1
+      }
+    }
+    # neutral mutations 
+    if(loci_mut_neu>0){
+      s[location_mut_neu_row] <- 0
+    }
+    # deleterious mutations
+    if(loci_mut_del>0){
+      if (s_distribution_del == "equal") {
+        s[location_mut_del_row] <- s_del
+      }
+      
+      if (s_distribution_del == "gamma") {
+        s[location_mut_del_row] <- rgamma(loci_mut_del, 
+                                              shape = gamma_shape, 
+                                              scale = gamma_scale)
+      }
+      
+      if (s_distribution_del == "log_normal") {
+        s[location_mut_del_row] <- rlnorm(loci_mut_del,
+                                              meanlog = log(log_mean),
+                                              sdlog = log(log_sd))
+      }
+    }
+    # advantageous mutations
+    if(loci_mut_adv>0){
+      if (s_distribution_adv == "equal") {
+        s[location_mut_adv_row] <- s_adv * -1
+      }
+      if(s_distribution_adv=="exponential"){
+        s[location_mut_adv_row] <- rexp(loci_mut_adv,
+                                             rate = exp_rate) * -1
+      }
+      
+    }
+
+    ##### DOMINANCE
+    # neutral loci simulations
+    if(chunk_neutral_loci>0){
+      h[location_neutral_row] <- 0
+    }
+    #real locations
+    if(real_loc == TRUE){
+      h[location_real_row] <- 0
+    }
+    # deleterious
+    if(loci_deleterious>0){
+      if (h_distribution_del == "equal") {
+        h[location_deleterious_row] <- h_del
+      }
+      if (h_distribution_del == "normal") {
+        h[location_deleterious_row] <- rnorm(loci_deleterious, 
+                                             mean = h_mean_del,
+                                             sd = h_sd_del)
+      }
+      # the equation for dominance (h) was taken from Huber 2018 Nature
+      if (h_distribution_del == "equation") {
+        h[location_deleterious_row] <- 1 / ((1 / h_intercept_del) - (-1 * h_rate_del * abs(s[location_deleterious_row])))
+      }
+    }
+    #advantageous
+    if(loci_advantageous>0){
+      if (h_distribution_adv == "equal") {
+        h[location_advantageous_row] <- h_adv
+      }
+      if (h_distribution_adv == "normal") {
+        h[location_advantageous_row] <- rnorm(loci_advantageous, 
+                                             mean = h_mean_adv,
+                                             sd = h_sd_adv)
+      }
+      # the equation for dominance (h) was taken from Huber 2018 Nature
+      if (h_distribution_adv == "equation") {
+        h[location_advantageous_row] <- 1 / ((1 / h_intercept_adv) - (-1 * h_rate_adv * abs(s[location_advantageous_row])))
+      }
+    }
+    # neutral mutations 
+    if(loci_mut_neu>0){
+      h[location_mut_neu_row] <- 0
+    }
+    # deleterious mutations
+    if(loci_mut_del>0){
+      if (h_distribution_del == "equal") {
+        h[location_mut_del_row] <- h_del
+      }
+      if (h_distribution_del == "normal") {
+        h[location_mut_del_row] <- rnorm(loci_mut_neu, 
+                                             mean = h_mean_del,
+                                             sd = h_sd_del)
+      }
+      # the equation for dominance (h) was taken from Huber 2018 Nature
+      if (h_distribution_del == "equation") {
+        h[location_mut_del_row] <- 1 / ((1 / h_intercept_del) - (-1 * h_rate_del * abs(s[location_mut_del_row])))
+      }
+    }
+    # advantageous mutations
+    if(loci_mut_adv>0){
+      if (h_distribution_adv == "equal") {
+        h[location_mut_adv_row] <- h_adv
+      }
+      if (h_distribution_adv == "normal") {
+        h[location_mut_adv_row] <- rnorm(loci_mut_adv, 
+                                              mean = h_mean_adv,
+                                              sd = h_sd_adv)
+      }
+      # the equation for dominance (h) was taken from Huber 2018 Nature
+      if (h_distribution_adv == "equation") {
+        h[location_mut_adv_row] <- 1 / ((1 / h_intercept_adv) - (-1 * h_rate_adv * abs(s[location_mut_adv_row])))
+      }
+    }
+
+    ###### INITIAL FREQUENCY
+    # neutral loci simulations
+    if(chunk_neutral_loci>0){
+      q[location_neutral_row] <- q_neutral
+    }
+    # real locations 
+    # the initial frequency of real locations is set in the function
+    # gl.sim.WF.run
+    if(real_loc==TRUE){
+      q[location_real_row] <- q_neutral
+    }
+    # deleterious
+    if(loci_deleterious>0){
+      if (q_distribution_del == "equal") {
+        q[location_deleterious_row] <- q_del
+      }
+      if (q_distribution_del == "equation") {
+        a <- abs(s[location_deleterious_row]) * 
+          (1 - (2 * h[location_deleterious_row]))
+        b <- (h[location_deleterious_row] * 
+                abs(s[location_deleterious_row])) * 
+          (1 + q_equation_del)
+        c <- rep.int(-(q_equation_del), times = loci_deleterious)
+        df_q <- as.data.frame(cbind(a, b, c))
+        # q is based on the following equation: (s(1-2h)q^2) + (hs(1+u)q) - u = 0,
+        # where u is the mutation rate per generation per site. Taken from Crow &
+        # Kimura page 260
+        q[location_deleterious_row] <-
+          mapply(
+            q_equilibrium,
+            a = df_q$a,
+            b = df_q$b,
+            c = df_q$c,
+            USE.NAMES = F
+          )
+      }
+    }
+    # advantageous
+    if(loci_advantageous>0){
+      if (q_distribution_adv == "equal") {
+        q[location_advantageous_row] <- q_adv
+      }
+      if (q_distribution_adv == "equation") {
+        a <- abs(s[location_advantageous_row]) * 
+          (1 - (2 * h[location_advantageous_row]))
+        b <- (h[location_advantageous_row] * 
+                abs(s[location_advantageous_row])) * 
+          (1 + q_equation_adv)
+        c <- rep.int(-(q_equation_adv), times = loci_advantageous)
+        df_q <- as.data.frame(cbind(a, b, c))
+        # q is based on the following equation: (s(1-2h)q^2) + (hs(1+u)q) - u = 0,
+        # where u is the mutation rate per generation per site. Taken from Crow &
+        # Kimura page 260
+        q[location_advantageous_row] <-
+          mapply(
+            q_equilibrium,
+            a = df_q$a,
+            b = df_q$b,
+            c = df_q$c,
+            USE.NAMES = F
+          )
+      }
+    }
+    #neutral mutations
+    if(loci_mut_neu>0){
+      q[location_mut_neu_row] <- 0
+    }
+    if(loci_mut_del>0){
+      q[location_mut_del_row] <- 0
+    }
+    if(loci_mut_adv>0){
+      q[location_mut_adv_row] <- 0 
     }
     
-    if (h_distribution == "normal") {
-      h <- rnorm(total_loci, mean = dominance_mean, sd = dominance_sd)
-    }
-    
-    # the equation for dominance (h) was taken from Huber 2018 Nature
-    if (h_distribution == "equation") {
-      h <- 1 / ((1 / intercept) - (-1 * rate * abs(s)))
-    }
-    
-    # initial frequency
-    if (q_distribution == "equal") {
-      q <- q_gral
-    }
-    
-    if (q_distribution == "equation") {
-      a <- abs(s) * (1 - (2 * h))
-      b <- (h * abs(s)) * (1 + mutation_rate)
-      c <- rep.int(-(mutation_rate), times = total_loci)
-      df_q <- as.data.frame(cbind(a, b, c))
-      # q is based on the following equation: (s(1-2h)q^2) + (hs(1+u)q) - u = 0,
-      # where u is the mutation rate per generation per site. Taken from Crow &
-      # Kimura page 260
-      q <-
-        mapply(
-          q_equilibrium,
-          a = df_q$a,
-          b = df_q$b,
-          c = df_q$c,
-          USE.NAMES = F
-        )
-    }
-    
+    # Producing reference table 
     reference <- as.data.frame(matrix(nrow = total_loci))
     reference$q <- q
     reference$h <- h
@@ -498,21 +774,43 @@ gl.sim.WF.table <- function(file_var,
     reference$loc_bp <- recombination_map[1:total_loci, "location_loci_bp"]
     reference$loc_cM <- recombination_map[1:total_loci, "accum"]
     reference$chr_name <- chromosome_name
+    reference$type <- NA
     
-    # setting h and s to 0 in neutral loci and loci from real dataset
-    reference[as.numeric(location_real_row), "s"] <- 0
-    reference[as.numeric(location_real_row), "h"] <- 0
-    reference[as.numeric(location_real_row), "q"] <- q_neutral
-    reference[as.numeric(location_neutral_row), "s"] <- 0
-    reference[as.numeric(location_neutral_row), "h"] <- 0
-    reference[as.numeric(location_neutral_row), "q"] <- q_neutral
+    reference <- reference[, -1]
+    
+    if(real_loc==TRUE){
+      reference[location_real_row, "type"] <- "real"
+    }
+    if(chunk_neutral_loci>0){
+      reference[location_neutral_row, "type"] <- "neutral"
+    }
+    if(loci_deleterious>0){
+      reference[location_deleterious_row, "type"] <- "deleterious"
+    }
+    if(loci_advantageous>0){
+      reference[location_advantageous_row, "type"] <- "advantageous"
+    }
+    if(loci_mut_neu>0){
+      reference[location_mut_neu_row, "type"] <- "mutation_neu"
+    }
+    if(loci_mut_del>0){
+      reference[location_mut_del_row, "type"] <- "mutation_del"
+    }
+    if(loci_mut_adv>0){
+      reference[location_mut_adv_row, "type"] <- "mutation_adv"
+    }
+    
     # NS with very small s have a q > 1. Therefore, we set a maximum q value of
     # 0.5.
+    if(q_distribution_del != "equal"){
     q_more_than_point5 <- as.numeric(row.names(reference[reference$q > 0.5, ]))
     reference[q_more_than_point5, "q"] <- 0.5
+    }
+    
     # the log normal distribution, with the parameters used in the simulations,
     # generates a few selection coefficients that are > 1. The maximum value of s
     # is set to 0.99
+    if(s_distribution_del != "equal"){
     s_more_than_one <- as.numeric(row.names(reference[reference$s > 1, ]))
     reference[s_more_than_one, "s"] <- 0.99
     # the exponential distribution, with the parameters used in the simulations,
@@ -520,24 +818,8 @@ gl.sim.WF.table <- function(file_var,
     # is set to -0.5
     s_less_minus_one <- as.numeric(row.names(reference[reference$s < - 0.5, ]))
     reference[s_less_minus_one, "s"] <- -0.5
-
-    # setting q to 0 in loci available to mutation
-    reference[location_mutations_row, "q"] <- 0
-  
-    reference <- reference[, -1]
+    }
     
-    mutation_loci_adv <- which(reference$q == 0 & reference$s <0)
-    mutation_loci_del <- which(reference$q == 0 & reference$s >0)
-    deleterious <- which(reference$q > 0 & reference$s > 0 )
-    advantageous <- which(reference$q > 0 & reference$s < 0 )
-
-    reference[location_neutral_row, "selection"] <- "neutral"
-    reference[location_real_row, "selection"] <- "real"
-    reference[mutation_loci_adv, "selection"] <- "mutation_adv"
-    reference[mutation_loci_del, "selection"] <- "mutation_del"
-    reference[deleterious, "selection"] <- "deleterious"
-    reference[advantageous, "selection"] <- "advantageous"
-  
     ref_res <- list(reference, ref_vars)
     names(ref_res) <- c("reference", "ref_vars")
     ##### END ######
