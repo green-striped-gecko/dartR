@@ -54,7 +54,7 @@ jobs:
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
-        run: |
+        run: |          
           while read -r cmd
           do
             eval sudo $cmd
@@ -68,7 +68,7 @@ jobs:
           ))
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
-          remotes::install_github('EricArcher/strataG')
+          remotes::install_github("EricArcher/strataG")
         shell: Rscript {0}
 
       - name: Check

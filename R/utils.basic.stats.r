@@ -1,9 +1,15 @@
 #' Calculates mean observed heterozygosity, mean expected heterozygosity and Fis
-#'  per population and Fst across all populations 
+#'  per locus, per population and Fst across all populations 
+#'  
+#'  This is a re-implementation of \code{hierfstat::basics.stats} specifically 
+#'  for genlight objects. Formula (and hence results) match exactly the original 
+#' version of \code{hierfstat::basics.stats} (although Dstp and Fstp are not 
+#' currently computed) but it is much faster.
+#' 
 #' @param x A genlight object containing the SNP genotypes [required].
 #' @return A list with with the statistics for each population
 #' @export
-#' @author Luis Mijangos (bugs? Post to
+#' @author Luis Mijangos and carlo Pacioni (bugs? Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' out <- utils.basic.stats(platypus.gl)
@@ -52,14 +58,18 @@ utils.basic.stats <- function(x) {
   })
 
   Hs <- lapply(pop.vec,function(y){
-    He <- 2 * (1-q[[y]]) * q[[y]] 
     n <- nrow(sgl_mat[[y]]) - colSums(apply(sgl_mat[[y]],2,is.na))
-    n_factor <- (2 * n) / ((2 * n ) - 1 ) 
-    return(n_factor * He)
+    Hs <- 2 * (1-q[[y]]) * q[[y]] - Ho[,y]/2/n
+    #n_factor <- (2 * n) / ((2 * n ) - 1 ) 
+    return(n/(n - 1) * Hs)
   })
   Hs <- Reduce(cbind,Hs)
   colnames(Hs) <- pop.names
-  mHs <- rowMeans(Hs,na.rm=TRUE)
+  #mHs <- rowMeans(Hs,na.rm=TRUE)
+  q_m <- Reduce(cbind, q)
+  sd2 <- q_m^2 + (1 - q_m)^2
+  msp2 <- rowMeans(sd2, na.rm = TRUE)
+  mHs <- mn/(mn - 1) * (1 - msp2 - mHo/2/mn)
   
   q_mean <- rowMeans(Reduce(cbind,q),na.rm = T)
   Ht <- 2 * (1-q_mean) * q_mean
