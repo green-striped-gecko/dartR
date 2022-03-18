@@ -94,7 +94,6 @@ gl.diagnostics.sim <- function(x,
   colors_plot_ne <- discrete_palette(length(unique(expected_het_3$Ne)))
   labels_plot_ne <- paste("Ne ",Ne)
   
-  
   he_pop$gen <- generations_sim
   colnames(he_pop) <- c(paste0("pop",pop_he),"gen")
   he_pop <- reshape2::melt(he_pop,id="gen")
