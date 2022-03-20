@@ -9,7 +9,7 @@
 #' @param x A genlight object containing the SNP genotypes [required].
 #' @return A list with with the statistics for each population
 #' @export
-#' @author Luis Mijangos and carlo Pacioni (bugs? Post to
+#' @author Luis Mijangos and Carlo Pacioni (bugs? Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' out <- utils.basic.stats(platypus.gl)
@@ -20,7 +20,7 @@ utils.basic.stats <- function(x) {
   n.ind <- table(pop(x))
   
     if(any(n.ind <= 1)){
-    cat(error(" There are populations with one individual. Please remove populations with one individual or merged them with other populations fot his function to work"))
+    cat(error(" There are populations with one individual. Please remove populations with one individual or merged them with other populations for his function to work\n"))
     }
   
   pop.names <- popNames(x)
@@ -54,7 +54,7 @@ utils.basic.stats <- function(x) {
   mHo <- rowMeans(Ho, na.rm=TRUE) 
   
   q <- lapply(pop.vec,function(y){
-    colMeans(sgl_mat[[y]], na.rm = T)/2
+    colMeans(sgl_mat[[y]], na.rm = TRUE)/2
   })
 
   Hs <- lapply(pop.vec,function(y){

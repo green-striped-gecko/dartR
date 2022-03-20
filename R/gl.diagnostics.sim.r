@@ -18,7 +18,6 @@
 
 gl.diagnostics.sim <- function(x,
                                Ne,
-                               Ne_fst,
                                iteration=1,
                                pop_he = 1 ,
                                pops_fst= c(1,2),
@@ -27,7 +26,7 @@ gl.diagnostics.sim <- function(x,
                                save2tmp = FALSE,
                                verbose = NULL){
   
-  
+  Ne_hold <- Ne
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
@@ -52,11 +51,9 @@ gl.diagnostics.sim <- function(x,
   
   gen<-He<-value<-variable<-fst_obs<- NULL
   
-  
   x <- x[[iteration]]
   sep_pops <- lapply(x,seppop)
-  
-  
+
   ####################### He #######################
   
   he_pop_temp <- lapply(sep_pops,"[",pop_he)
@@ -68,8 +65,8 @@ gl.diagnostics.sim <- function(x,
     return(temp)
   })
   
-   he_pop <- rbindlist(he_pop)
-  # 
+  he_pop <- rbindlist(he_pop)
+
   Ne <- gsub('\"', "", Ne , fixed = TRUE)
   Ne <- stringr::str_split(Ne,pattern=" ")[[1]]
   Ne <- as.numeric(Ne)[pop_he]
@@ -90,27 +87,29 @@ gl.diagnostics.sim <- function(x,
     
   })
   
-  expected_het_3 <- Reduce(rbind,expected_het_2)
-  colors_plot_ne <- discrete_palette(length(unique(expected_het_3$Ne)))
-  labels_plot_ne <- paste("Ne ",Ne)
+  colors_plot_ne <- discrete_palette(length(expected_het_2))
   
+  for(i in 1:length(colors_plot_ne)){
+    expected_het_2[[i]]$col <- colors_plot_ne[i]
+  }
+  
+  expected_het_3 <- Reduce(rbind,expected_het_2)
+  expected_het_3$lab <- paste("Ne ",expected_het_3$Ne)
+
   he_pop$gen <- generations_sim
   colnames(he_pop) <- c(paste0("pop",pop_he),"gen")
   he_pop <- reshape2::melt(he_pop,id="gen")
-
-  colors_plot_he <- suppressWarnings(gl.select.colors(library='brewer',palette='Dark2',ncolors=length(unique(he_pop$variable)),verbose=0))
-  labels_plot_he <- paste("pop",pop_he)
   
-  labels_together <- c(labels_plot_ne,labels_plot_he)
-  colors_together <- c(colors_plot_ne,colors_plot_he)
+  expected_het_3$lab <- factor(expected_het_3$lab, levels = unique(expected_het_3$lab))
   
-  p1 <- ggplot() +
-                geom_line(data=expected_het_3, aes(x=gen,y=He,color=Ne),size=0.75,linetype = "dashed") +
-    geom_line(data=he_pop, aes(x=gen,y=value,color=variable),size=1.5) +
-    
-                labs(x="Generations", y="He", title=paste("Rate of loss of heterozygosity across generations population",paste(pop_he,collapse = " ") ))+ 
-                scale_color_manual(values = colors_together,labels=labels_together) +
-                plot_theme +
+  p1 <- ggplot(data=expected_het_3, aes(x=gen,y=He,color=lab)) +
+    geom_line(size=0.75,linetype = "dashed") +
+    geom_line(data=he_pop,aes(x=gen,y=value,color=variable),size=1.5) +
+    labs(x="Generations",
+         y="He", 
+         title=paste("Rate of loss of heterozygosity\nacross generations population",
+                     paste(pop_he,collapse = " ") ))+ 
+    plot_theme +
     theme(legend.title=element_blank())
   
   ####################### FST #######################
@@ -133,7 +132,7 @@ gl.diagnostics.sim <- function(x,
     y[lower.tri(y)]
   })))
   
-  Ne_fst <- gsub('\"', "", Ne_fst , fixed = TRUE)
+  Ne_fst <- gsub('\"', "", Ne_hold, fixed = TRUE)
   Ne_fst <- stringr::str_split(Ne_fst,pattern=" ")[[1]]
   Ne_fst <- as.numeric(Ne_fst)[pops_fst]
   
@@ -158,9 +157,6 @@ gl.diagnostics.sim <- function(x,
   fst_equilibrium <- (log(1/2) / log( (1- dispersal_rate)^2 * (1-(1/(2*Ne[1]))) )) * 2
   
   generations_fst <- data.frame("gen"=generations_sim,"fst_obs"=fst_gen)
-  # generations_het$Fst_expected <- Fst_expected[1]
-  # generations_het$fst_equilibrium <- fst_equilibrium[1]
-  # 
 
   p2 <- ggplot(generations_fst) +
     geom_line(aes(x=gen,y=fst_obs,color="brown"),size=1) +
@@ -170,10 +166,6 @@ gl.diagnostics.sim <- function(x,
     scale_color_manual(values = c(plot_colors[1],"blue","chartreuse4"),labels=c("Fst observed", "Fst equilibrium" ,"Fst expected")) +
     plot_theme +
     theme(legend.title=element_blank())
-
-  
-  # generations_het generations_fst
-  
   
   # PRINTING OUTPUTS
   # using package patchwork

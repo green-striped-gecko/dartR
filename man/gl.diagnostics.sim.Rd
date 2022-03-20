@@ -7,7 +7,6 @@
 gl.diagnostics.sim(
   x,
   Ne,
-  Ne_fst,
   iteration = 1,
   pop_he = 1,
   pops_fst = c(1, 2),
@@ -21,8 +20,6 @@ gl.diagnostics.sim(
 \item{x}{[default ]}
 
 \item{Ne}{[required]}
-
-\item{Ne_fst}{[required]}
 
 \item{iteration}{[default ]}
 
@@ -41,6 +38,8 @@ temporary directory (tempdir) [default FALSE].}
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report
 [default NULL, unless specified using gl.set.verbosity].}
+
+\item{Ne_fst}{[required]}
 }
 \description{
 Function to diagnose simulations against theoretical expectations
