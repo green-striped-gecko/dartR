@@ -3,7 +3,7 @@
 \name{gl.filter.taglength}
 \alias{gl.filter.taglength}
 \title{Filters loci in a genlight \{adegenet\} object based on sequence tag
-length}
+ length}
 \usage{
 gl.filter.taglength(x, lower = 20, upper = 69, verbose = NULL)
 }

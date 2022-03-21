@@ -3,7 +3,7 @@
 \name{gl.report.overshoot}
 \alias{gl.report.overshoot}
 \title{Reports loci for which the SNP has been trimmed from the sequence tag
-along with the adaptor}
+ along with the adaptor}
 \usage{
 gl.report.overshoot(x, save2tmp = FALSE, verbose = NULL)
 }

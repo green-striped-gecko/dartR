@@ -232,7 +232,7 @@ gl.diagnostics.hwe <- function(x,
   
   corr <- round(cor(Fstats$perloc$Fis, Fstats$perloc$Fst, "pairwise.complete.obs"), 3)
   p3 <- ggplot(Fstats$perloc, aes(Fst, Fis)) + 
-    geom_point(size=2,color=colors_barplot[1],alpha=0.6) + 
+    geom_point(size=2,color=colors_barplot[1],alpha=0.5) + 
     geom_smooth(method = "lm",color=colors_barplot[2],fill=colors_barplot[2],size=1) +
     annotate("text", 
              x=min(Fstats$perloc$Fst, na.rm = TRUE) +

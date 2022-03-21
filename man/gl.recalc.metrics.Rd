@@ -3,7 +3,7 @@
 \name{gl.recalc.metrics}
 \alias{gl.recalc.metrics}
 \title{Recalculates locus metrics when individuals or populations are deleted from a
-genlight \{adegenet\} object}
+ genlight \{adegenet\} object}
 \usage{
 gl.recalc.metrics(x, mono.rm = FALSE, verbose = NULL)
 }

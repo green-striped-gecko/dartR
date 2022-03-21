@@ -1,4 +1,4 @@
-#' Isolation by distance
+#' Performs isolation by distance analysis
 #'
 #' This function performs an isolation by distance analysis based on a Mantel
 #' test and also produces an isolation by distance plot. If a genlight object

@@ -3,7 +3,7 @@
 \name{gl.propShared}
 \alias{gl.propShared}
 \title{Calculates a similarity (distance) matrix for individuals on the proportion of
-shared alleles}
+ shared alleles}
 \usage{
 gl.propShared(x)
 }

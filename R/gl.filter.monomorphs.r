@@ -1,5 +1,5 @@
 #' @name gl.filter.monomorphs
-#' @title Removes monomorphic loci, including those with all NAs
+#' @title Filters monomorphic loci, including those with all NAs
 #' @description
 #' This script deletes monomorphic loci from a genlight \{adegenet\} object
 #'

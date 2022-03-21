@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.genleastcost.r
 \name{gl.genleastcost}
 \alias{gl.genleastcost}
-\title{Least-cost path analysis based on a friction matrix}
+\title{Performs least-cost path analysis based on a friction matrix}
 \usage{
 gl.genleastcost(
   x,

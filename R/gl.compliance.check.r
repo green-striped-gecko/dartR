@@ -1,6 +1,6 @@
 #' @name gl.compliance.check
 #' @title Checks a genlight object to see if it complies with dartR
-#' expectations and amends it to comply if necessary
+#'  expectations and amends it to comply if necessary
 #' @description
 #' This function will check to see that the genlight object conforms to
 #' expectation in regard to dartR requirements (see details), and if it does

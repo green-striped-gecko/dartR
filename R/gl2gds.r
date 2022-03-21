@@ -1,5 +1,5 @@
 #' @name gl2gds
-#' @title Converts a genlight object to gds format
+#' @title Converts a genlight object into gds format
 #' @description
 #' Package SNPRelate relies on a bit-level representation of a SNP dataset that
 #' competes with \{adegenet\} genlight objects and associated files. This

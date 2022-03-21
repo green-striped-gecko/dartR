@@ -3,7 +3,7 @@
 \name{gl.test.heterozygosity}
 \alias{gl.test.heterozygosity}
 \title{Tests the difference in heterozygosity between populations taken
-pairwise}
+ pairwise}
 \usage{
 gl.test.heterozygosity(
   x,

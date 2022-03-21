@@ -1,6 +1,6 @@
 #' @name gl.filter.allna
-#' @title Removes loci that are all NA across individuals and/or individuals with
-#'  all NA across loci
+#' @title Filters loci that are all NA across individuals and/or populations 
+#' with all NA across loci
 #'
 #' @description
 #' This script deletes deletes loci or individuals with all calls missing (NA),

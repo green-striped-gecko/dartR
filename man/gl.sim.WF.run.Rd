@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.sim.WF.run.r
 \name{gl.sim.WF.run}
 \alias{gl.sim.WF.run}
-\title{Wright-Fisher simulations}
+\title{Runs Wright-Fisher simulations}
 \usage{
 gl.sim.WF.run(
   file_var,

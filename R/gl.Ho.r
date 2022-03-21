@@ -1,4 +1,4 @@
-#' A very simple function to report observed Heterozygosity
+#' Estimates observed Heterozygosity
 #'
 #' @param gl A genlight object [required]
 #' @return A simple vector whit Ho for each loci

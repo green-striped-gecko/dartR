@@ -2,8 +2,8 @@
 % Please edit documentation in R/gl.blast.r
 \name{gl.blast}
 \alias{gl.blast}
-\title{Alignment of nucleotides sequences against those present in a target
- database using blastn}
+\title{Aligns nucleotides sequences against those present in a target database 
+using blastn}
 \usage{
 gl.blast(
   x,

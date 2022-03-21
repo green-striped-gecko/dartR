@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.ibd.r
 \name{gl.ibd}
 \alias{gl.ibd}
-\title{Isolation by distance}
+\title{Performs isolation by distance analysis}
 \usage{
 gl.ibd(
   x = NULL,

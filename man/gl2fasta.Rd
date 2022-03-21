@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2fasta.r
 \name{gl2fasta}
 \alias{gl2fasta}
-\title{Concatenates DArT trimmed sequences and outputs a FASTA file.}
+\title{Concatenates DArT trimmed sequences and outputs a FASTA file}
 \usage{
 gl2fasta(
   x,

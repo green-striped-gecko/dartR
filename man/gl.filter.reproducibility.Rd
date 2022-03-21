@@ -3,7 +3,7 @@
 \name{gl.filter.reproducibility}
 \alias{gl.filter.reproducibility}
 \title{Filters loci in a genlight \{adegenet\} object based on average
-repeatability of alleles at a locus}
+ repeatability of alleles at a locus}
 \usage{
 gl.filter.reproducibility(
   x,

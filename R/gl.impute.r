@@ -1,5 +1,5 @@
 #' @name gl.impute
-#' @title Imputation of missing data
+#' @title Imputates missing data
 #' @description
 #' This function imputes genotypes on a population-by-population basis, where
 #' populations can be considered panmictic, or imputes the state for

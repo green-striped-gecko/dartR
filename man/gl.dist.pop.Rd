@@ -3,7 +3,7 @@
 \name{gl.dist.pop}
 \alias{gl.dist.pop}
 \title{Calculates a distance matrix for populations with SNP genotypes in a
-genlight object}
+ genlight object}
 \usage{
 gl.dist.pop(
   x,

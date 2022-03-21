@@ -1,9 +1,8 @@
 #' @name gl.diagnostics.sim
-#' @title Function to diagnose simulations against theoretical expectations
+#' @title Comparing simulations against theoretical expectations
 #' @param x [default ]
 #' @param iteration [default ]
 #' @param Ne [required]
-#' @param Ne_fst [required]
 #' @param pop_he [default ]
 #' @param pops_fst [default ]
 #' @param plot_colors Vector with two color names for the significant and
@@ -49,7 +48,7 @@ gl.diagnostics.sim <- function(x,
   
   # DO THE JOB
   
-  gen<-He<-value<-variable<-fst_obs<- NULL
+  lab<-gen<-He<-value<-variable<-fst_obs<- NULL
   
   x <- x[[iteration]]
   sep_pops <- lapply(x,seppop)

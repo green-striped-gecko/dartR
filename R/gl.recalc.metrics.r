@@ -1,5 +1,5 @@
 #' Recalculates locus metrics when individuals or populations are deleted from a
-#' genlight \{adegenet\} object
+#'  genlight \{adegenet\} object
 #'
 #' When individuals,or populations, are deleted from a genlight object, the
 #' locus metrics no longer apply. For example, the Call Rate may be different

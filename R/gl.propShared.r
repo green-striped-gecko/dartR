@@ -1,5 +1,5 @@
 #' Calculates a similarity (distance) matrix for individuals on the proportion of
-#' shared alleles
+#'  shared alleles
 #'
 #' This script calculates an individual based distance matrix. It uses an C++
 #'  implementation, so package Rcpp needs to be installed and it is therefore
