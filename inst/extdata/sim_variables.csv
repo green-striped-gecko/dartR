@@ -3,11 +3,11 @@ Basic,number_pops_phase2,1,Number of populations of phase 2 (must be the same as
 Basic,gen_number_phase2,10,Number of generations of phase 2,Dependent on computing resources
 Genetic drift,population_size_phase2,"""50""","Census population size of each population of phase 2 (must be even, space delimited and in quotes)",Dependent on computing resources
 Genetic drift,variance_offspring_phase2,1000000,Coefficient that determines the variance in the number of offspring per mating for phase 2,Defined by the user
-Genetic drift,number_offspring_phase2,5,Mean number offspring per mating for phase 2,Dependent on computing resources
+Genetic drift,number_offspring_phase2,10,Mean number offspring per mating for phase 2,Dependent on computing resources
 Gene flow,dispersal_phase2,FALSE,Simulate dispersal in phase 2,TRUE or FALSE
 Gene flow,dispersal_type_phase2,"""all_connected""",Type of dispersal in phase 2,"""line"",""circle"",""all_connected"""
 Gene flow,number_transfers_phase2,1,Number of dispersing individuals in phase 2,< population size
-Gene flow,transfer_each_gen_phase2,1,Interval of number of generations in which dispersal occurs in phase 2,< number of generations
+Gene flow,transfer_each_gen_phase2,2,Interval of number of generations in which dispersal occurs in phase 2,< number of generations
 Natural selection,selection_phase2,FALSE,Simulate selection in phase 2,TRUE or FALSE
 Natural selection,natural_selection_model,"""relative""",Selection model to use,ÒrelativeÓ or ÒabsoluteÓ
 Natural selection,genetic_load,0.8,Approximation of the genetic load of the proportion of the genome that is simulated. This parameter is used in the absolute fitness model,Defined by the user
