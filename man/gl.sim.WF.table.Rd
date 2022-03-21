@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.sim.WF.table.r
 \name{gl.sim.WF.table}
 \alias{gl.sim.WF.table}
-\title{Create reference table for running gl.sim.WF.run}
+\title{Creates the reference table for running gl.sim.WF.run}
 \usage{
 gl.sim.WF.table(
   file_var,

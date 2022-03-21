@@ -3,7 +3,7 @@
 \name{gl.sim.offspring}
 \alias{gl.sim.offspring}
 \title{Simulates a specified number of offspring based on alleles provided by
-potential father(s) and mother(s)}
+ potential father(s) and mother(s)}
 \usage{
 gl.sim.offspring(fathers, mothers, noffpermother, sexratio = 0.5)
 }

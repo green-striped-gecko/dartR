@@ -1,5 +1,5 @@
 #' @name gl.LDNe
-#' @title Estimate effective population size using the Linkage Disequilibrium
+#' @title Estimates effective population size using the Linkage Disequilibrium
 #' method based on NeEstimator (V2)
 #' @description
 #' This function is basically a convenience function that runs the LD Ne

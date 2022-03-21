@@ -1,5 +1,5 @@
 #' @name gl.sim.WF.run
-#' @title Wright-Fisher simulations
+#' @title Runs Wright-Fisher simulations
 #' @description
 #' This function simulates populations connected by gene flow, made up of 
 #' diploid organisms that reproduce in non-overlapping generations. Each 

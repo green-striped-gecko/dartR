@@ -1,6 +1,6 @@
 #' @name gl.nhybrids
-#' @title Creates an input file for the program NewHybrids and runs it if
-#'  NewHybrids is installed
+#' @title Creates an input file for the program NewHybrids and runs it if 
+#' NewHybrids is installed
 #' @description
 #' This function compares two sets of parental populations to identify loci that
 #' exhibit a fixed difference, returns an genlight object with the reduced

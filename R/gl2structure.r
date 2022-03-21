@@ -1,4 +1,4 @@
-#' Converts genlight objects to STRUCTURE formated files
+#' Converts a genlight object to STRUCTURE formated files
 #'
 #' This function exports genlight objects to STRUCTURE formatted files (be aware
 #' there is a gl2faststructure version as well). It is based on the code

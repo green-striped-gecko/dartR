@@ -1,6 +1,6 @@
 #' @name gl.filter.heterozygosity
 #' @title Filters individuals with average heterozygosity greater than a
-#' specified upper threshold or less than a specified lower threshold.
+#'  specified upper threshold or less than a specified lower threshold
 #' @description
 #' Calculates the observed heterozygosity for each individual in a genlight
 #' object and filters individuals based on specified threshold values.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2hiphop.r
 \name{gl2hiphop}
 \alias{gl2hiphop}
-\title{Converts genlight objects to hiphop format}
+\title{Converts a genlight objects into hiphop format}
 \usage{
 gl2hiphop(x, verbose = NULL)
 }

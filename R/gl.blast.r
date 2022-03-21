@@ -1,7 +1,7 @@
 #'@name gl.blast
 #'
-#'@title Alignment of nucleotides sequences against those present in a target
-#'  database using blastn
+#'@title Aligns nucleotides sequences against those present in a target database 
+#'using blastn
 #'
 #'@description Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
 #'  1997) is a sequence comparison algorithm optimized for speed used to search

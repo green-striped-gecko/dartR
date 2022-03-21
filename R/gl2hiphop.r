@@ -1,4 +1,4 @@
-#' Converts genlight objects to hiphop format
+#' Converts a genlight objects into hiphop format
 #'
 #' This function exports genlight objects to the format used by the parentage
 #' assignment R package hiphop. Hiphop can be used for paternity and maternity

@@ -1,5 +1,5 @@
 #' @name gl.diagnostics.sim
-#' @title Function to diagnose simulations against theoretical expectations
+#' @title Comparing simulations against theoretical expectations
 #' @param x [default ]
 #' @param iteration [default ]
 #' @param Ne [required]

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.impute.r
 \name{gl.impute}
 \alias{gl.impute}
-\title{Imputation of missing data}
+\title{Imputates missing data}
 \usage{
 gl.impute(x, method = "HW", parallel = FALSE, verbose = NULL)
 }

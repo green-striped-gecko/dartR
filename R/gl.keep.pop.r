@@ -1,6 +1,5 @@
 #' @name gl.keep.pop
-#' @title Removes all but specified populations from a genlight \{adegenet\}
-#' object
+#' @title Removes all but the specified populations from a genlight object
 #' @description
 #' Individuals are assigned to populations based on the specimen metadata data
 #' file (csv) used with gl.read.dart().

@@ -3,7 +3,7 @@
 \name{gl.pcoa.plot}
 \alias{gl.pcoa.plot}
 \title{Bivariate or trivariate plot of the results of an ordination generated
-using gl.pcoa()}
+ using gl.pcoa()}
 \usage{
 gl.pcoa.plot(
   glPca,

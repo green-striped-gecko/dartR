@@ -1,6 +1,6 @@
 #'@name gl.read.dart
 #'
-#'@title Imports DarT data into R and converts it into a genlight object
+#'@title Imports DArT data into dartR and converts it into a genlight object
 #'
 #'@description
 #'This function is a wrapper function that allows you to convert your DArT file

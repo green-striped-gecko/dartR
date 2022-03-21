@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.diagnostics.sim.r
 \name{gl.diagnostics.sim}
 \alias{gl.diagnostics.sim}
-\title{Function to diagnose simulations against theoretical expectations}
+\title{Comparing simulations against theoretical expectations}
 \usage{
 gl.diagnostics.sim(
   x,
@@ -42,5 +42,5 @@ progress log ; 3, progress and results summary; 5, full report
 \item{Ne_fst}{[required]}
 }
 \description{
-Function to diagnose simulations against theoretical expectations
+Comparing simulations against theoretical expectations
 }

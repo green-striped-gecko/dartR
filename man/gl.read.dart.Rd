@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.read.dart.r
 \name{gl.read.dart}
 \alias{gl.read.dart}
-\title{Imports DarT data into R and converts it into a genlight object}
+\title{Imports DArT data into dartR and converts it into a genlight object}
 \usage{
 gl.read.dart(
   filename,

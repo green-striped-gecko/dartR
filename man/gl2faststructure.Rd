@@ -2,8 +2,8 @@
 % Please edit documentation in R/gl2faststructure.r
 \name{gl2faststructure}
 \alias{gl2faststructure}
-\title{Exports DArT genlight object \{adegenet\} to faststructure format (to run
- faststructure elsewhere)}
+\title{Converts a genlight object into faststructure format (to run faststructure
+ elsewhere)}
 \usage{
 gl2faststructure(
   x,

@@ -1,6 +1,6 @@
 #' @name gl.filter.locmetrics
 #' @title Filters loci on the basis of numeric information stored in
-#' other$loc.metrics in a genlight \{adegenet\} object
+#'  other$loc.metrics in a genlight \{adegenet\} object
 #' @description
 #' This script uses any field with numeric values stored in $other$loc.metrics
 #' to filter loci. The loci to keep can be within the upper and lower thresholds

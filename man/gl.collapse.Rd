@@ -3,7 +3,7 @@
 \name{gl.collapse}
 \alias{gl.collapse}
 \title{Collapses a distance matrix by amalgamating populations with pairwise
-fixed difference count less that a threshold}
+ fixed difference count less that a threshold}
 \usage{
 gl.collapse(fd, tpop = 0, tloc = 0, pb = FALSE, verbose = NULL)
 }

@@ -3,7 +3,7 @@
 \name{gl.fixed.diff}
 \alias{gl.fixed.diff}
 \title{Generates a matrix of fixed differences and associated statistics for
-populations taken pairwise}
+ populations taken pairwise}
 \usage{
 gl.fixed.diff(
   x,

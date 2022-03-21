@@ -1,5 +1,6 @@
 #' @name gl.report.ld.map
-#' @title Calculates pairwise linkage disequilibrium
+#' @title Calculates pairwise linkage disequilibrium in SNPs mapped to a 
+#' reference genome
 #' @description
 #' This function calculates pairwise linkage disequilibrium (LD) within each 
 #' chromosome and by population using the function \link[snpStats]{ld} 

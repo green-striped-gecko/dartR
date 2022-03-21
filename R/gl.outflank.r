@@ -1,5 +1,5 @@
 #' Identifies loci under selection per population using the outflank
-#' method of Whitlock and Lotterhos (2015)
+#'  method of Whitlock and Lotterhos (2015)
 #'
 #' @param gi A genlight or genind object, with a defined population structure
 #' [required].

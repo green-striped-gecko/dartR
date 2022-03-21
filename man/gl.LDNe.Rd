@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.LDNe.r
 \name{gl.LDNe}
 \alias{gl.LDNe}
-\title{Estimate effective population size using the Linkage Disequilibrium
+\title{Estimates effective population size using the Linkage Disequilibrium
 method based on NeEstimator (V2)}
 \usage{
 gl.LDNe(

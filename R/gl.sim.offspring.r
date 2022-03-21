@@ -1,5 +1,5 @@
 #' Simulates a specified number of offspring based on alleles provided by
-#' potential father(s) and mother(s)
+#'  potential father(s) and mother(s)
 #'
 #' This takes a population (or a single individual) of fathers (provided as a
 #' genlight object) and mother(s) and simulates offspring based on 'random'
