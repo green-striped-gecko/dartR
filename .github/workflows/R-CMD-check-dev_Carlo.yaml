@@ -54,7 +54,7 @@ jobs:
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
-        run: |          
+        run: |
           while read -r cmd
           do
             eval sudo $cmd
