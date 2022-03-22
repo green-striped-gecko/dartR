@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.genleastcost.r
 \name{gl.genleastcost}
 \alias{gl.genleastcost}
-\title{Least-cost path analysis based on a friction matrix}
+\title{Performs least-cost path analysis based on a friction matrix}
 \usage{
 gl.genleastcost(
   x,
@@ -11,51 +11,94 @@ gl.genleastcost(
   NN = NULL,
   pathtype = "leastcost",
   plotpath = TRUE,
-  theta = 1
+  theta = 1,
+  verbose = NULL
 )
 }
 \arguments{
-\item{x}{a spatial genind object. see ?popgenreport how to provide coordinates in genind objects}
+\item{x}{A spatial genind object. See ?popgenreport how to provide
+coordinates in genind objects [required].}
 
-\item{fric.raster}{a friction matrix}
+\item{fric.raster}{A friction matrix [required].}
 
-\item{gen.distance}{specification which genetic distance method should be used to calculate pairwise genetic distances between populations ( "D", "Gst.Nei", "Gst.Hedrick") or individuals ("Smouse", "Kosman", "propShared")}
+\item{gen.distance}{Specification which genetic distance method should be
+used to calculate pairwise genetic distances between populations ( 'D',
+'Gst.Nei', 'Gst.Hedrick') or individuals ('Smouse', 'Kosman', 'propShared')
+ [required].}
 
-\item{NN}{Number of neighbours used when calculating the cost distance (possible values 4,8 or 16). As the default is NULL a value has to be provided if pathtype='leastcost'. NN=8 is most commonly used. Be aware that linear structures may cause artefacts in the least-cost paths, therefore inspect the actual least-cost paths in the provided output.}
+\item{NN}{Number of neighbours used when calculating the cost distance
+(possible values 4, 8 or 16). As the default is NULL a value has to be
+provided if pathtype='leastcost'. NN=8 is most commonly used. Be aware that
+ linear structures may cause artefacts in the least-cost paths, therefore
+ inspect the actual least-cost paths in the provided output [default NULL].}
 
-\item{pathtype}{Type of cost distance to be calculated (based on function in the \code{gdistance} package. Available distances are 'leastcost', 'commute' or 'rSPDistance'. See functions in the gdistance package for futher explanations. If the path type is set to 'leastcost' then paths and also pathlength are returned.}
+\item{pathtype}{Type of cost distance to be calculated (based on function in
+the \code{gdistance} package. Available distances are 'leastcost', 'commute'
+ or 'rSPDistance'. See functions in the gdistance package for futher
+ explanations. If the path type is set to 'leastcost' then paths and also
+ pathlength are returned [default 'leastcost'].}
 
-\item{plotpath}{switch if least cost paths should be plotted (works only if pathtype='leastcost'. Be aware this slows down the computation, but it is recommended to do this to check least cost paths visually.}
+\item{plotpath}{switch if least cost paths should be plotted (works only if
+pathtype='leastcost'. Be aware this slows down the computation, but it is
+recommended to do this to check least cost paths visually.}
 
-\item{theta}{value needed for rSPDistance function. see \code{\link[gdistance]{rSPDistance}} in package \code{gdistance}.}
+\item{theta}{value needed for rSPDistance function. See
+\code{\link[gdistance]{rSPDistance}} in package \code{gdistance} [default 1].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-returns a list that consists of four pairwise distance matrixes (Euclidean, Cost, length of path and genetic) and the actual paths as spatial line objects.
+Returns a list that consists of four pairwise distance matrices
+(Euclidean, Cost, length of path and genetic) and the actual paths as spatial
+ line objects.
 }
 \description{
-This function calculates the pairwise distances (Euclidean, cost path distances and genetic distances) of populations using a friction matrix and a spatial genind object. The genind object needs to have coordinates in the same projected coordinate system as the friction matrix. The friction matrixcan be either a single raster of a stack of several layers. If a stack is provided the specified cost distance is calculated for each layer in the stack. The output of this function can be used with the functions \code{\link[PopGenReport]{wassermann}} or \code{\link[PopGenReport]{lgrMMRR}} to test for the significance of a layer on the genetic structure.
+This function calculates the pairwise distances (Euclidean, cost path
+ distances and genetic distances) of populations using a friction matrix and
+  a spatial genind object. The genind object needs to have coordinates in the
+  same projected coordinate system as the friction matrix. The friction
+  matrix can be either a single raster of a stack of several layers. If a
+  stack is provided the specified cost distance is calculated for each layer
+   in the stack. The output of this function can be used with the functions
+   \code{\link[PopGenReport]{wassermann}} or
+   \code{\link[PopGenReport]{lgrMMRR}} to test for the significance of a
+   layer on the genetic structure.
 }
 \examples{
 \dontrun{
 data(possums.gl)
 library(raster)  #needed for that example
-landscape.sim <- readRDS(system.file("extdata","landscape.sim.rdata", package="dartR"))
-glc <- gl.genleastcost(x=possums.gl,fric.raster=landscape.sim , 
-gen.distance = "D", NN=8, pathtype = "leastcost",plotpath = TRUE)
+landscape.sim <- readRDS(system.file('extdata','landscape.sim.rdata', 
+package='dartR'))
+glc <- gl.genleastcost(x=possums.gl,fric.raster=landscape.sim ,
+gen.distance = 'D', NN=8, pathtype = 'leastcost',plotpath = TRUE)
 library(PopGenReport)
-PopGenReport::wassermann(eucl.mat = glc$eucl.mat, cost.mat = glc$cost.mats,  gen.mat = glc$gen.mat)
-lgrMMRR(gen.mat = glc$gen.mat, cost.mats = glc$cost.mats,  eucl.mat = glc$eucl.mat)
+PopGenReport::wassermann(eucl.mat = glc$eucl.mat, cost.mat = glc$cost.mats, 
+ gen.mat = glc$gen.mat)
+lgrMMRR(gen.mat = glc$gen.mat, cost.mats = glc$cost.mats,  
+eucl.mat = glc$eucl.mat)
 }
-
 }
 \references{
-Cushman, S., Wasserman, T., Landguth, E. and Shirk, A. (2013). Re-Evaluating Causal Modeling with Mantel Tests in Landscape Genetics. Diversity, 5(1), 51-72.
-Landguth, E. L., Cushman, S. A., Schwartz, M. K., McKelvey, K. S., Murphy, M. and Luikart, G. (2010). Quantifying the lag time to detect barriers in landscape genetics. Molecular ecology, 4179-4191.
-Wasserman, T. N., Cushman, S. A., Schwartz, M. K. and Wallin, D. O. (2010). Spatial scaling and multi-model inference in landscape genetics: Martes americana in northern Idaho. Landscape Ecology, 25(10), 1601-1612.
+\itemize{
+\item Cushman, S., Wasserman, T., Landguth, E. and Shirk, A. (2013).
+Re-Evaluating Causal Modeling with Mantel Tests in Landscape Genetics.
+Diversity, 5(1), 51-72.
+\item Landguth, E. L., Cushman, S. A., Schwartz, M. K., McKelvey, K. S.,
+Murphy, M. and Luikart, G. (2010). Quantifying the lag time to detect
+barriers in landscape genetics. Molecular ecology, 4179-4191.
+\item Wasserman, T. N., Cushman, S. A., Schwartz, M. K. and Wallin, D. O.
+ (2010). Spatial scaling and multi-model inference in landscape genetics:
+ Martes americana in northern Idaho. Landscape Ecology, 25(10), 1601-1612.
+ }
 }
 \seealso{
-\code{\link{landgenreport}}, \code{\link{popgenreport}}, \code{\link{wassermann}}, \code{\link{lgrMMRR}}
+\code{\link{landgenreport}}, \code{\link{popgenreport}},
+ \code{\link{wassermann}}, \code{\link{lgrMMRR}}
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber (bugs? Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

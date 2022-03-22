@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.fdsim.r
 \name{gl.fdsim}
 \alias{gl.fdsim}
-\title{Estimate the rate of false positives in a fixed difference analysis}
+\title{Estimates the rate of false positives in a fixed difference analysis}
 \usage{
 gl.fdsim(
   x,
@@ -15,42 +15,53 @@ gl.fdsim(
 )
 }
 \arguments{
-\item{x}{-- name of the genlight containing the SNP genotypes [required]}
+\item{x}{Name of the genlight containing the SNP genotypes [required].}
 
-\item{poppair}{-- labels of two populations for comparison in the form c(popA,popB) [required]}
+\item{poppair}{Labels of two populations for comparison in the form
+c(popA,popB) [required].}
 
-\item{obs}{-- observed number of fixed differences between the two populations [NULL]}
+\item{obs}{Observed number of fixed differences between the two populations
+[default NULL].}
 
-\item{sympatric}{-- if TRUE, the two populations are sympatric, if FALSE then allopatric [FALSE]}
+\item{sympatric}{If TRUE, the two populations are sympatric, if FALSE then
+allopatric [default FALSE].}
 
-\item{reps}{-- number of replications to undertake in the simulation [default 1000]}
+\item{reps}{Number of replications to undertake in the simulation
+[default 1000].}
 
-\item{delta}{-- the threshold value for the minor allele frequency to regard the difference between two populations to be fixed [default 0.02]}
+\item{delta}{The threshold value for the minor allele frequency to regard the
+difference between two populations to be fixed [default 0.02].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report [default 2].}
 }
 \value{
-A list containing the following square matricies
+A list containing the following square matrices
         [[1]] observed fixed differences;
         [[2]] mean expected number of false positives for each comparison;
-        [[3]] standard deviation of the no. of false positives for each comparison;
-        [[4]] probability the observed fixed differences arose by chance for each comparison.
+        [[3]] standard deviation of the no. of false positives for each
+        comparison;
+        [[4]] probability the observed fixed differences arose by chance for
+        each comparison.
 }
 \description{
-This function takes two populations and generates allele frequency profiles for them. It then 
-samples an allele frequency for each, at random, and estimates a sampling distribution 
-for those two allele frequencies. Drawing two samples from those sampling distributions, 
-it calculates whether or not they represent a fixed difference. This is applied to all loci, 
-and the number of fixed differences so generated are counted, as an expectation. The script 
-distinguished between true fixed differences (with a tolerance of delta), and false positives. 
-The simulation is repeated a given number of times (default=1000) to provide an expectation 
-of the number of false positives, given the observed allele frequency profiles and the 
-sample sizes. The probability of the observed count of fixed differences is greater than 
+This function takes two populations and generates allele frequency profiles
+for them. It then samples an allele frequency for each, at random, and
+estimates a sampling distribution for those two allele frequencies. Drawing
+two samples from those sampling distributions, it calculates whether or not
+they represent a fixed difference. This is applied to all loci, and the
+number of fixed differences so generated are counted, as an expectation. The
+script distinguished between true fixed differences (with a tolerance of
+delta), and false positives. The simulation is repeated a given number of
+times (default=1000) to provide an expectation of the number of false
+positives, given the observed allele frequency profiles and the sample sizes.
+ The probability of the observed count of fixed differences is greater than
 the expected number of false positives is calculated.
 }
 \examples{
-fd <- gl.fdsim(testset.gl,poppair=c("EmsubRopeMata","EmmacBurnBara"),sympatric=TRUE,verbose=3)
+fd <- gl.fdsim(testset.gl,poppair=c('EmsubRopeMata','EmmacBurnBara'),sympatric=TRUE,verbose=3)
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to
+ \url{https://groups.google.com/d/forum/dartr})
 }

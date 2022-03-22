@@ -2,8 +2,8 @@
 % Please edit documentation in R/gl.blast.r
 \name{gl.blast}
 \alias{gl.blast}
-\title{Alignment of nucleotides sequences against those present in a target
- database using blastn}
+\title{Aligns nucleotides sequences against those present in a target database 
+using blastn}
 \usage{
 gl.blast(
   x,
@@ -13,7 +13,7 @@ gl.blast(
   Percentage_overlap = 0.8,
   bitscore = 50,
   number_of_threads = 2,
-  verbose = 2
+  verbose = NULL
 )
 }
 \arguments{
@@ -29,7 +29,7 @@ query sequences [required].}
 similar sequences (e.g, sequencing errors), 2) “dc-megablast”, typically
 used for inter-species comparisons, 3) “blastn”, the traditional program
 used for inter-species comparisons, 4) “blastn-short”, optimized for
-sequences less than 30 nucleotides [default: 'megablast'].}
+sequences less than 30 nucleotides [default 'megablast'].}
 
 \item{Percentage_identity}{Not a very sensitive or reliable measure of
 sequence similarity, however it is a reasonable proxy for evolutionary
@@ -37,24 +37,26 @@ distance. The evolutionary distance associated with a 10 percent change in
 Percentage_identity is much greater at longer distances. Thus, a change from
 80 – 70 percent identity might reflect divergence 200 million years earlier
 in time, but the change from 30 percent to 20 percent might correspond to a
-billion year divergence time change [default: 70].}
+billion year divergence time change [default 70].}
 
 \item{Percentage_overlap}{Calculated as alignment length divided by the
 query length or subject length (whichever is shortest of the two lengths,
-i.e.  length / min(qlen,slen) ) [default: 0.8].}
+i.e.  length / min(qlen,slen) ) [default 0.8].}
 
 \item{bitscore}{A rule-of-thumb for inferring homology, a bit score of 50
-is almost always significant [default: 50].}
+is almost always significant [default 50].}
 
 \item{number_of_threads}{Number of threads (CPUs) to use in blastn search
-[default: 2].}
+[default 2].}
 
-\item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 If the input is a genlight object: returns a genlight object with one
- hit per sequence merged to the slot $other$loc.metrics. If the input is a fasta file: returns a dataframe
- with one hit per sequence.
+ hit per sequence merged to the slot $other$loc.metrics. If the input is a
+ fasta file: returns a dataframe with one hit per sequence.
 }
 \description{
 Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
@@ -72,7 +74,9 @@ Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
 \details{
 \strong{Installing BLAST}
 
- You can download the BLAST installs from: \itemize{ \item For Mac:
+ You can download the BLAST installs from:
+  \itemize{ 
+  \item For Mac:
  \url{https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/ncbi-blast-2.11.0+.dmg}
   \item For Windows:
  \url{https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/ncbi-blast-2.11.0+-win64.exe}
@@ -122,7 +126,12 @@ Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
  \item PercentageOverlap - length / min(qlen,slen) }
 
  Databases containing unfiltered aligned sequences, filtered aligned
- sequences and one hit per sequence are saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
+ sequences and one hit per sequence are saved to the temporal directory
+ (tempdir) and can be accessed with the function
+ \code{\link{gl.print.reports}} and listed with the function
+ \code{\link{gl.list.reports}}. Note that they can be accessed only in the
+ current R session because tempdir is cleared each time that the R session is
+ closed.
 
  \strong{BLAST filtering}
 
@@ -136,7 +145,7 @@ Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
 res <- gl.blast(x= testset.gl,ref_genome = 'sequence.fasta')
 # display of reports saved in the temporal directory
 gl.list.reports()
-# open the reports saved in the temporal directory 
+# open the reports saved in the temporal directory
 blast_databases <- gl.print.reports(1)
 }
 

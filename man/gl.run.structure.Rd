@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.run.structure.r
 \name{gl.run.structure}
 \alias{gl.run.structure}
-\title{Run a STRUCTURE analysis using a genlight object}
+\title{Runs a STRUCTURE analysis using a genlight object}
 \usage{
 gl.run.structure(
   x,
@@ -17,40 +17,42 @@ gl.run.structure(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{...}{Parameters to specify the STRUCTURE run (check \code{structureRun} 
-for more details). Parameters are passed to the \code{structureRun} function. 
-For example you need to set the k.range and the type of model you would like 
-to run (noadmix, locprior) etc. If those parameter names do not tell you 
-anything, please make sure you familiarize with the STRUCTURE program 
+\item{...}{Parameters to specify the STRUCTURE run (check \code{structureRun}
+for more details). Parameters are passed to the \code{structureRun} function.
+For example you need to set the k.range and the type of model you would like
+to run (noadmix, locprior) etc. If those parameter names do not tell you
+anything, please make sure you familiarize with the STRUCTURE program
 (Pritchard 2000).}
 
-\item{exec}{Full path and name+extension where the structure executable is 
-located. E.g. \code{"c:/structure/structure.exe"} under Windows. For Mac and 
-Linux it might be something like \code{"./structure/structure"} if the 
-executable is in a subfolder 'structure' in your home directory.}
+\item{exec}{Full path and name+extension where the structure executable is
+located. E.g. \code{'c:/structure/structure.exe'} under Windows. For Mac and
+Linux it might be something like \code{'./structure/structure'} if the
+executable is in a subfolder 'structure' in your home directory
+[default working directory "."].}
 
-\item{plot.out}{Create an Evanno plot once finished. Be aware k.range needs 
+\item{plot.out}{Create an Evanno plot once finished. Be aware k.range needs
 to be at least three different k steps [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See details for options
+[default theme_dartR()].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
-temporary directory (tempdir) [default FALSE]}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{set verbosity for this function (though structure output 
-cannot be switched off currently).}
+\item{verbose}{Set verbosity for this function (though structure output
+cannot be switched off currently) [default NULL]}
 }
 \value{
 An sr object (structure.result list output). Each list entry is a
-single structurerun output (there are k.range * num.k.rep number of runs). 
+single structurerun output (there are k.range * num.k.rep number of runs).
 For example the summary output of the first run can be accessed via
-\code{sr[[1]]$summary} or the q-matrix of the third run via 
-\code{sr[[3]]$q.mat}. To conveniently summarise the outputs across runs 
-(clumpp) you need to run gl.plot.structure on the returned sr object. For 
+\code{sr[[1]]$summary} or the q-matrix of the third run via
+\code{sr[[3]]$q.mat}. To conveniently summarise the outputs across runs
+(clumpp) you need to run gl.plot.structure on the returned sr object. For
 Evanno plots run gl.evanno on your sr object.
 }
 \description{
-This function takes a genlight object and runs a STRUCTURE analysis based on 
+This function takes a genlight object and runs a STRUCTURE analysis based on
 functions from \code{strataG}
 }
 \details{
@@ -58,25 +60,28 @@ The function is basically a convenient wrapper around the beautiful
 strataG function \code{structureRun} (Archer et al. 2016). For a detailed
 description please refer to this package (see references below).
 To make use of this function you need to download STRUCTURE for you system
-(\bold{non GUI version}) from here 
+(\bold{non GUI version}) from here
 \href{https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
 }
 \examples{
 \dontrun{
 #CLUMPP needs to be installed to be able to run the example
 #bc <- bandicoot.gl[,1:100]
-#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = './structure.exe')
 #ev <- gl.evanno(sr)
 #ev
-#qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
 #head(qmat)
 #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 }
 }
 \references{
 \itemize{
-\item Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
-\item Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package for manipulating, summarizing and analysing population genetic data. Mol Ecol Resour. doi:10.1111/1755-0998.12559
+\item Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of
+population structure using multilocus genotype data. Genetics 155, 945-959.
+\item Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R
+package for manipulating, summarizing and analysing population genetic data.
+ Mol Ecol Resour. doi:10.1111/1755-0998.12559
 }
 }
 \author{

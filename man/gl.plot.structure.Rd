@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.plot.structure.r
 \name{gl.plot.structure}
 \alias{gl.plot.structure}
-\title{Plot a STRUCTURE analysis using a genlight object}
+\title{Plots a STRUCTURE analysis using a genlight object}
 \usage{
 gl.plot.structure(sr, k, sort = NULL, CLUMPP = "./", ..., plot_theme, verbose)
 }
@@ -47,19 +47,27 @@ The function outputs a barplot which is the typical output of
 \dontrun{
 #CLUMPP needs to be installed to be able to run the example
 #bc <- bandicoot.gl[,1:100]
-#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = "./structure.exe")
+#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = './structure.exe')
 #ev <- gl.evanno(sr)
 #ev
-#qmat <- gl.plot.structure(sr, k=3, CLUMPP="d:/structure/")
+#qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
 #head(qmat)
 #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 }
 }
 \references{
-Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of population structure using multilocus genotype data. Genetics 155, 945-959.
-Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R package for manipulating, summarizing and analysing population genetic data. Mol Ecol Resour. doi:10.1111/1755-0998.12559
-
-Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster matching and permutation program for dealing with label switching and multimodality in analysis of population structure. Bioinformatics 23(14):1801-1806. Available at \href{http://web.stanford.edu/group/rosenberglab/clumppDownload.html}{clumpp}
+\itemize{
+\item Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of
+population structure using multilocus genotype data. Genetics 155, 945-959.
+\item Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R
+package for manipulating, summarizing and analysing population genetic data.
+Mol Ecol Resour. doi:10.1111/1755-0998.12559
+\item Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster
+matching and permutation program for dealing with label switching and
+multimodality in analysis of population structure. Bioinformatics
+23(14):1801-1806. Available at
+\href{http://web.stanford.edu/group/rosenberglab/clumppDownload.html}{clumpp}
+}
 }
 \seealso{
 \code{\link{gl.run.structure}},  \link[strataG]{clumpp}, \code{\link{gl.plot.structure}}

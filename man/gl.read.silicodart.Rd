@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.read.silicodart.r
 \name{gl.read.silicodart}
 \alias{gl.read.silicodart}
-\title{Import presence/absence data from SilicoDArT to genlight \{agegenet\} format (ploidy=1)}
+\title{Imports presence/absence data from SilicoDArT to genlight \{agegenet\}
+format (ploidy=1)}
 \usage{
 gl.read.silicodart(
   filename,
@@ -15,54 +16,70 @@ gl.read.silicodart(
 )
 }
 \arguments{
-\item{filename}{-- name of csv file containing the SilicoDArT data [required]}
+\item{filename}{Name of csv file containing the SilicoDArT data [required].}
 
-\item{ind.metafile}{-- name of csv file containing metadata assigned to each entity (individual) [default NULL]}
+\item{ind.metafile}{Name of csv file containing metadata assigned to each
+entity (individual) [default NULL].}
 
-\item{nas}{-- missing data character [default "-"]}
+\item{nas}{Missing data character [default '-'].}
 
-\item{topskip}{-- number of rows to skip before the header row (containing the specimen identities) [optional]}
+\item{topskip}{Number of rows to skip before the header row (containing the
+specimen identities) [optional].}
 
-\item{lastmetric}{-- specifies the last non genetic column (Default is "Reproducibility"). Be sure to check if that is true, otherwise the number of individuals will not match. You can also specify the last column by a number. [default Reproducibility]}
+\item{lastmetric}{Specifies the last non genetic column (Default is
+'Reproducibility'). Be sure to check if that is true, otherwise the number of
+individuals will not match. You can also specify the last column by a number
+ [default "Reproducibility"].}
 
-\item{probar}{show progress bar}
+\item{probar}{Show progress bar [default TRUE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, or as set by gl.set.verbose()]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, or as set by gl.set.verbose()].}
 }
 \value{
-An object of class \code{genlight} with ploidy set to 1, containing the presence/absence data, and locus and individual metadata
+An object of class \code{genlight} with ploidy set to 1, containing
+the presence/absence data, and locus and individual metadata.
 }
 \description{
-DaRT provide the data as a matrix of entities (individual animals) across the top and
-attributes (P/A of sequenced fragment) down the side in a format that is unique to DArT. This program
-reads the data in to adegenet format for consistency with
-other programming activity. The script may require modification as DArT modify their
-data formats from time to time.
+DaRT provide the data as a matrix of entities (individual animals) across the
+ top and attributes (P/A of sequenced fragment) down the side in a format
+ that is unique to DArT. This program reads the data in to adegenet format
+ for consistency with other programming activity. The script may require
+ modification as DArT modify their data formats from time to time.
 }
 \details{
-gl.read.silicodart() opens the data file (csv comma delimited) and skips the first n=topskip lines. The script assumes
-that the next line contains the entity labels (specimen ids) followed immediately by the SNP data for the first locus.
-It reads the presence/absence data into a matrix of 1s and 0s,
-and inputs the locus metadata and specimen metadata. The locus metadata comprises a series of columns of values for
-each locus including the essential columns of CloneID and the desirable variables Reproducibility and PIC.
-Refer to documentation provide by DArT for an explanation of these columns.
+gl.read.silicodart() opens the data file (csv comma delimited) and skips the
+first n=topskip lines. The script assumes that the next line contains the
+entity labels (specimen ids) followed immediately by the SNP data for the
+first locus.
 
-The specimen metadata provides the opportunity
-to reassign specimens to populations, and to add other data relevant to the specimen. The key variables are id (specimen identity
-which must be the same and in the same order as the SilicoDArT file, each unique), pop (population assignment), lat (latitude, optional)
-and lon (longitude, optional). id, pop, lat, lon are the column headers in the csv file. Other optional columns can be added.
+It reads the presence/absence data into a matrix of 1s and 0s, and inputs the
+ locus metadata and specimen metadata. The locus metadata comprises a series
+ of columns of values for each locus including the essential columns of
+ CloneID and the desirable variables Reproducibility and PIC. Refer to
+  documentation provide by DArT for an explanation of these columns.
 
-The data matrix, locus names (forced to be unique), locus metadata, specimen names,
-specimen metadata are combined into a genInd object. Refer to the documentation for \{adegenet\} for further details.
+The specimen metadata provides the opportunity to reassign specimens to
+ populations, and to add other data relevant to the specimen. The key
+ variables are id (specimen identity which must be the same and in the same
+ order as the SilicoDArT file, each unique), pop (population assignment), lat
+ (latitude, optional) and lon (longitude, optional). id, pop, lat, lon are
+ the column headers in the csv file. Other optional columns can be added.
+
+The data matrix, locus names (forced to be unique), locus metadata, specimen
+ names, specimen metadata are combined into a genind object. Refer to the
+ documentation for \{adegenet\} for further details.
 }
 \examples{
-silicodartfile <- system.file("extdata","testset_SilicoDArT.csv", package="dartR")
-metadata <- system.file("extdata",ind.metafile ="testset_metadata_silicodart.csv", package="dartR")
+silicodartfile <- system.file('extdata','testset_SilicoDArT.csv', package='dartR')
+metadata <- system.file('extdata',ind.metafile ='testset_metadata_silicodart.csv', package='dartR')
 testset.gs <- gl.read.silicodart(filename = silicodartfile, ind.metafile = metadata)
 }
 \seealso{
 \code{\link{gl.read.dart}}
 }
 \author{
-Custodian: Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Bernd Gruber -- Post to
+ \url{https://groups.google.com/d/forum/dartr}
 }

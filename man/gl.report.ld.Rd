@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.report.ld.r
 \name{gl.report.ld}
 \alias{gl.report.ld}
-\title{Calculates pairwise population based Linkage Disequilibirum across all loci using the specifyied number of cores}
+\title{Calculates pairwise population based Linkage Disequilibrium across all loci
+ using the specified number of cores}
 \usage{
 gl.report.ld(
   x,
@@ -17,29 +18,46 @@ gl.report.ld(
 )
 }
 \arguments{
-\item{x}{a genlight or genind object created (genlight objects are internally converted via \code{\link{gl2gi}} to genind)}
+\item{x}{A genlight or genind object created (genlight objects are internally
+converted via \code{\link{gl2gi}} to genind) [required].}
 
-\item{name}{character string for rdata file. If not given genind object name is used}
+\item{name}{Character string for rdata file. If not given genind object name
+is used [default NULL].}
 
-\item{save}{switch if results are saved in a file}
+\item{save}{Switch if results are saved in a file [default TRUE].}
 
-\item{outpath}{folder where chunks and results are saved (if save=TRUE). Default it tempdir()}
+\item{outpath}{Folder where chunks and results are saved (if save=TRUE)
+[default tempdir()].}
 
-\item{nchunks}{how many subchunks will be used (the less the faster, but if the routine crashes more bits are lost}
+\item{nchunks}{How many subchunks will be used (the less the faster, but if
+the routine crashes more bits are lost) [default 2].}
 
-\item{ncores}{how many cores should be used}
+\item{ncores}{How many cores should be used [default 1].}
 
-\item{chunkname}{the name of the chunks for saving [default is NULL]}
+\item{chunkname}{The name of the chunks for saving [default NULL].}
 
-\item{probar}{if TRUE, a progress bar is displayed for long loops [default = TRUE]}
+\item{probar}{if TRUE, a progress bar is displayed for long loops
+[default = TRUE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-returns calculation of pairwise LD across all loci between subpopulation. This functions uses if specified many cores on your computer to speed up. And if save is used can restart (if save=TRUE is used) with the same command starting where it crashed. The final output is a data frame that holds all statistics of pairwise LD between loci. (See ?LD in package genetics for details).
+Returns calculation of pairwise LD across all loci between
+subpopulations. This functions uses if specified many cores on your computer
+to speed up. And if save is used can restart (if save=TRUE is used) with the
+same command starting where it crashed. The final output is a data frame that
+ holds all statistics of pairwise LD between loci. (See ?LD in package
+ genetics for details).
 }
 \description{
-this function is implemented in a parallel fashion to speed up the process. There is also the ability to restart the function if crashed by specifying the chunkfile names or restarting the function exactly in the same way as in the first run. This is implemented as sometimes due to connectivity loss between cores the function my crash half way. Also remove loci with have only missing value before running the function.
+This function is implemented in a parallel fashion to speed up the process.
+There is also the ability to restart the function if crashed by specifying
+the chunk file names or restarting the function exactly in the same way as in
+the first run. This is implemented as sometimes due to connectivity loss
+between cores the function my crash half way. Also remove loci with have only
+ missing value before running the function.
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

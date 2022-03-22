@@ -2,37 +2,44 @@
 % Please edit documentation in R/gl.drop.loc.r
 \name{gl.drop.loc}
 \alias{gl.drop.loc}
-\title{Remove specified loci from a genelight \{adegenet\} object}
+\title{Removes specified loci from a genlight \{adegenet\} object}
 \usage{
 gl.drop.loc(x, loc.list = NULL, first = NULL, last = NULL, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or presence/absence data [required]}
+\item{x}{Name of the genlight object containing SNP genotypes or
+presence/absence data [required].}
 
-\item{loc.list}{-- a list of loci to be deleted [required, if loc.range not specified]}
+\item{loc.list}{A list of loci to be deleted
+[required, if loc.range not specified].}
 
-\item{first}{-- first of a range of loci to be deleted [required, if loc.list not specified]}
+\item{first}{First of a range of loci to be deleted
+[required, if loc.list not specified].}
 
-\item{last}{-- last of a range of loci to be deleted [if not specified, last locus in the dataset]}
+\item{last}{Last of a range of loci to be deleted
+[if not specified, last locus in the dataset].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A genlight object with the reduced data
+A genlight object with the reduced data.
 }
 \description{
 The script returns a genlight object with specified loci deleted.
 }
 \examples{
 # SNP data
-  gl2 <- gl.drop.loc(testset.gl, loc.list=c("100051468|42-A/T", "100049816-51-A/G"),verbose=3)
+  gl2 <- gl.drop.loc(testset.gl, loc.list=c('100051468|42-A/T', '100049816-51-A/G'),verbose=3)
 # Tag P/A data
-  gs2 <- gl.drop.loc(testset.gs, loc.list=c("20134188","19249144"),verbose=3)
-  
+  gs2 <- gl.drop.loc(testset.gs, loc.list=c('20134188','19249144'),verbose=3)
+
 }
 \seealso{
 \code{\link{gl.keep.loc}} to keep rather than drop specified loci
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

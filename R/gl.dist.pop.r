@@ -1,256 +1,395 @@
-#' Calculate a distance matrix for populations defined in an \{adegenet\} genlight object
+#' @name gl.dist.pop
+#' @title Calculates a distance matrix for populations with SNP genotypes in a
+#'  genlight object
+#' @description
+#' This script calculates various distances between populations based on allele
+#' frequencies (SNP genotypes) or frequency of presences in presence-absence data 
+#' (Euclidean and Fixed-diff distances only). 
+#' @details
+#' The distance measure can be one of 'euclidean', 'fixed-diff', 'reynolds',
+#' 'nei' and 'chord'. Refer to the documentation of functions
+#'   described in the the dartR Distance Analysis tutorial for algorithms
+#'   and definitions.
 #'
-#' This script calculates various distances between populations based on allele frequencies. The distances are
-#' calculated by scripts in the {stats} or {vegan} libraries, with the exception of the pcfixed (percent fixed
-#' differences) distance.
-#' 
-#' The distance measure can be one of "manhattan", "euclidean", "pcfixed", "pa", canberra", "bray", 
-#' "kulczynski", "jaccard", "gower", "morisita", "horn", "mountford", "raup" , 
-#' "binomial", "chao", "cao", "mahalanobis", "maximum", "binary" or "minkowski". Refer to the documentation for
-#' dist stats or vegdist vegan for definitions. 
-#' 
-#' Distance pcfixed calculates the pair-wise count of fixed allelic differences between populations.
-#'
-#' @param x -- name of the genlight containing the SNP genotypes [required]
-#' @param method -- Specify distance measure [euclidean]
-#' @param plot -- if TRUE, display a histogram of the genetic distances, and a whisker plot [TRUE]
-#' @param boxplot -- if 'standard', plots a standard box and whisker plot; if 'adjusted',
-#' plots a boxplot adjusted for skewed distributions ['standard']
-#' @param range -- specifies the range for delimiting outliers [1.5 interquartile ranges]
-#' @param binary -- Perform presence/absence standardization before analysis using decostand [FALSE]
-#' @param p -- The power of the Minkowski distance (typically a value ranging from 0.25 to infinity) [0.5]
-#' @param verbose -- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]
+#' @param x Name of the genlight containing the SNP genotypes [required].
+#' @param method Specify distance measure [default euclidean].
+#' @param plot.out If TRUE, display a histogram of the genetic distances, and a
+#'  whisker plot [default TRUE].
+#' @param scale If TRUE and method='Euclidean', the distance will be scaled to 
+#'  fall in the range [0,1] [default FALSE].
+#' @param output Specify the format and class of the object to be returned, 
+#' dist for a object of class dist, matrix for an object of class matrix [default "dist"].
+#' @param plot_theme User specified theme [default theme_dartR()].
+#' @param plot_colors Vector with two color names for the borders and fill
+#' [default two_colors].
+#' @param save2tmp If TRUE, saves any ggplots and listings to the session
+#'  temporary directory (tempdir) [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#'  progress log ; 3, progress and results summary; 5, full report
+#'   [default 2 or as specified using gl.set.verbosity].
 #' @return An object of class 'dist' giving distances between populations
-#' @importFrom stats dist
-#' @importFrom vegan vegdist
-#' @importFrom grDevices rainbow
-#' @importFrom graphics par boxplot hist
 #' @export
-#' @author Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author author(s): Arthur Georges. Custodian: Arthur Georges -- Post to
+#' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' gl.dist.pop(testset.gl, method="euclidean")
+#' # SNP genotypes
+#' D <- gl.dist.pop(testset.gl, method='euclidean')
+#' D <- gl.dist.pop(testset.gl, method='euclidean',scale=TRUE)
+#' D <- gl.dist.pop(testset.gl, method='nei')
+#' D <- gl.dist.pop(testset.gl, method='reynolds')
+#' D <- gl.dist.pop(testset.gl, method='chord')
+#' D <- gl.dist.pop(testset.gl, method='fixed-diff')
+#' #Presence-Absence data
+#' D <- gl.dist.pop(testset.gs, method='euclidean')
 
-gl.dist.pop <- function(x, method="euclidean", plot=TRUE, boxplot="standard", range=1.5, binary=FALSE, p=NULL, verbose=NULL) {
+gl.dist.pop <- function(x,
+                        method = "euclidean",
+                        plot.out = TRUE,
+                        scale = FALSE,
+                        output="dist",
+                        plot_theme = theme_dartR(),
+                        plot_colors = two_colors,
+                        save2tmp = FALSE,
+                        verbose = NULL) {
 
-# CHECK IF PACKAGES ARE INSTALLED
-  # CHECK IF PACKAGES ARE INSTALLED
-  pkg <- "reshape2"
-  if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop("Package",pkg," needed for this function to work. Please   install it.")} else {
-  
-  
-# TRAP COMMAND, SET VERSION
-  
-  funname <- match.call()[[1]]
-  build <- "Jacob"
-  
-# SET VERBOSITY
-  
-  if (is.null(verbose)){ 
-    if(!is.null(x@other$verbose)){ 
-      verbose <- x@other$verbose
-    } else { 
-      verbose <- 2
+    # CHECK IF PACKAGES ARE INSTALLED
+    pkg <- "reshape2"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(error(
+            "Package",
+            pkg,
+            " needed for this function to work. Please install it."
+        ))
     }
-  } 
-  
-  if (verbose < 0 | verbose > 5){
-    cat(paste("  Warning: Parameter 'verbose' must be an integer between 0 [silent] and 5 [full report], set to 2\n"))
-    verbose <- 2
-  }
-  
-# FLAG SCRIPT START
-  
-  if (verbose >= 1){
-    if(verbose==5){
-      cat("Starting",funname,"[ Build =",build,"]\n")
-    } else {
-      cat("Starting",funname,"\n")
+    
+    # SET VERBOSITY
+    verbose <- gl.check.verbosity(verbose)
+    
+    # FLAG SCRIPT START
+    funname <- match.call()[[1]]
+    utils.flag.start(func = funname,
+                     build = "Josh",
+                     verbosity = verbose)
+    
+    # CHECK DATATYPE
+    datatype <-
+        utils.check.datatype(x, accept = c("SNP","SilicoDArT"), verbose = verbose)
+    
+    # FUNCTION SPECIFIC ERROR CHECKING
+    
+    # DO THE JOB
+    
+    available_methods <-
+        c(
+            "euclidean",
+            "nei",
+            "reynolds",
+            "chord",
+            "fixed-diff"
+        )
+
+    if (!(method %in% available_methods)) {
+        cat(error("Fatal Error: Specified distance method is not among those 
+                available.\n"))
+            stop("Specify one of ",paste(available_methods, 
+                collapse = ", ")," or fixed-diff.\n")
     }
-  }
-  
-# STANDARD ERROR CHECKING
-  
-  if(class(x)!="genlight") {
-    stop("Fatal Error: genlight object required!\n")
-  }
-  
-  if (all(x@ploidy == 1)){
-    if (verbose >= 2){cat("  Processing  Presence/Absence (SilicoDArT) data\n")}
-    data.type <- "SilicoDArT"
-  } else if (all(x@ploidy == 2)){
-    if (verbose >= 2){cat("  Processing a SNP dataset\n")}
-    data.type <- "SNP"
-  } else {
-    stop("Fatal Error: Ploidy must be universally 1 (fragment P/A data) or 2 (SNP data)")
-  }
-  
-# FUNCTION SPECIFIC ERROR CHECKING
+    # hard.min.p <- 0.25
 
-# DO THE JOB
-
-  veganmethod <- c("bray", 
-                   "kulczynski", "jaccard", "gower", "morisita", "horn", "mountford", "raup" , 
-                   "binomial", "chao", "cao", "mahalanobis")
-  distmethod <- c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski", "Chebyshev")
-
-  if (!(method%in%veganmethod || method%in%distmethod || method=="pcfixed")){
-    stop("Fatal Error: Specified distance method is not among those available\n  Specify one of",veganmethod, distmethod,"or 'pcfixed'\n")
-  }
-  hard.min.p <- 0.25
-
-  m <- method
-  b <- binary
-  pr <- p
-  u <- TRUE
-  d <- TRUE
-  
-  # Calculate allele frequencies for each population and locus
-    f <- gl.percent.freq(x,verbose=0)
-  # Select only pop, locus, frequency columns  
-    f <- f[,c(1,2,6)]
-  # Convert to a pop x locus matrix
-    f <- reshape2::dcast(f, popn ~ locus, value.var="frequency")
-  # Reassign names to the populations, and convert from percentages to proportions 
-    row.names(f)=f[,1]
+    nI <- nInd(x)
+    nL <- nLoc(x)
+    nP <- nPop(x)
+    dd <- array(NA, c(nPop(x), nPop(x)))
+    
+    # Calculate distances 
+    # if (method %in% distmethod) {
+        if (verbose >= 2) {
+            cat(report(paste(
+                "  Calculating distances: ", method, "\n"
+            )))
+            cat(report(
+                "  Refer to the dartR Distance Analysis tutorial for algorithms\n"
+            ))
+        }
+    
+    # Calculate allele frequencies for each population and locus
+    f <- gl.percent.freq(x, verbose = 0)
+    # Select only pop, locus, frequency columns
+    f <- f[, c(1, 2, 6)]
+    # Convert to a pop x locus matrix
+    f <- reshape2::dcast(f, popn ~ locus, value.var = "frequency")
+    # Reassign names to the populations, and convert from percentages to proportions
+    row.names(f) = f[, 1]
     f <- f[,-c(1)]
-    f <- f/100
-    
-  # Calculate distance using dist {stat}
-    if (m %in% distmethod) {
-      if (verbose >= 2) {
-        cat(paste("  Calculating distances: ",m,"\n"))
-        cat("  Refer to dist {stats} documentation for algorithm\n")
-      }  
-      if (method == "minkowski"){
-        if (pr < 0.25) {
-          if (verbose >= 0){cat("  Warning:",hard.min.p,"is the practical minimum for Minkowski distance, set to,",hard.min.p,"\n\n")}
-          pr <- hard.min.p
-        }
-        if (pr == 1) {
-          if (verbose >= 2) {cat("  Note: for p = 1, Minkowski distance is equivalent to Manhattan distance\n\n")}
-        }
-        if (pr == 2) {
-          if (verbose >= 2) {cat("  Note: for p = 2, Minkowski distance is equivalent to Euclidean distance\n\n")}
-        }
-        if (pr >= 30) {
-          if (verbose >= 2) {cat("  Note: for large p, Minkowski distance is equivalent to the Maxiumum Metric distance\n\n")}
-        }
-        if (pr < 1) {
-          if (verbose >= 2) {cat("  Note: for p < 1, Minkowski distance is not a metric distance, and so should be considered a measure of dissimilarity\n\n")}
-        }
-      }
-      dd <- stats::dist(f, method=m, diag=d, upper=u, p=pr)
-    }
-    
-    # Calculate distance using vegdist {vegan}
-    if (m %in% veganmethod) {
-      dd <- vegan::vegdist(f, method=m, binary=b, diag=d, upper=u, na.rm=TRUE)
-      if (verbose >= 2) {
-        cat(paste("  Calculating distances: ",m,"\n"))
-        cat("    Refer to vegdist {vegan} documentation for algorithm\n")
-      }
-      if (method == "bray"){
-        if (verbose >= 2) {cat("  Note: the Bray-Curtis distance is non-metric, and so should be considered a dissimilarity measure. A metric alternative is the Jaccard distance.\n\n")}
-      }
-    }
-    
-    if (m == "pcfixed"){
-      dd <- gl.fixed.diff(x,verbose=0)[[3]]
-      if (verbose >= 2) {
-        cat("  Calculating percent fixed differences\n")
-        cat("Note: this distance may be non-metric, and so should be considered a dissimilarity measure\n")
-      }  
-    }
-    # if (m == "pa"){
-    #   dd <- gl.report.pa.pop(x)
-    #   dd <- dd[,c(3,4,10)]
-    #   tmp <- dd
-    #   tmp2 <- dd$pop1
-    #   dd$pop1 <- dd$pop2
-    #   dd$pop2 <- tmp2
-    #   dd <- rbind(dd,tmp)
-    #   dd <- dcast(dd, pop1 ~ pop2, value.var="totalpriv")
-    #   row.names(dd) <- dd[,1]
-    #   dd <- dd[,2:length(dd[1,])]
-    #   dd <- dd[order(row.names(dd)),]
-    #   dd <- dd[,order(colnames(dd))]
-    #   if (verbose >= 2) {
-    #     cat("  Calculating total private alleles\n")
-    #     cat("  Note: this distance may be non-metric, and so should be considered a dissimilarity measure\n")
-    #   }
-    # }
-    
-    dd <- as.dist(dd) 
-    
-  # Revert to original order  
-    ord <- rank(popNames(x))
-    mat <- as.matrix(dd)[ord, ord]
-    dd <- as.dist(mat)
-    
-# PLOT
-  if (plot){
-    
-    # Save the prior settings for mfrow, oma, mai and pty, and reassign
-    op <- par(mfrow = c(2, 1), oma=c(1,1,1,1), mai=c(0.5,0.5,0.5,0.5),pty="m")
-    
-    # Set margins for first plot
-    par(mai=c(1,0.5,0.5,0.5))
-    
-    # Plot Box-Whisker plot
-    if (all(x@ploidy==2)){
-      title <- paste0("SNP data (DArTSeq)\nPopulation ",method," Distances")
-    } else {
-      title <- paste0("Tag P/A data (SilicoDArT)\nPopulation ",method," Distances")
-    }  
-    
-    if (boxplot == "standard"){
-      boxplot(dd, horizontal=TRUE, col='red', range=range, main = title)
-      cat("  Standard boxplot, no adjustment for skewness\n")
-    } else {
-      robustbase::adjbox(dd,
-                         horizontal = TRUE,
-                         col='red',
-                         range=range,
-                         main = title)
-      cat("  Boxplot adjusted to account for skewness\n")
-    }  
-    
-    # Set margins for second plot
-    par(mai=c(0.5,0.5,0,0.5))
-    hist(dd, 
-         main="", 
-         xlab="", 
-         border="blue", 
-         col="red",
-         xlim=c(min(dd),max(dd)),
-         breaks=100)
-  }  
-  
-# SUMMARY 
-    # Print out some statistics
-  if(verbose >= 2){
-    cat("\n  Reporting inter-population distances\n")
-    cat("  Distance measure:",method,"\n")
-    cat("    No. of populations =", nPop(x), "\n")
-    cat("    Average no. of individuals per population =", nInd(x)/nPop(x), "\n")
-    cat("    No. of loci =", nLoc(x), "\n")
-    cat("    Miniumum Distance: ",round(min(dd),2),"\n")
-    cat("    Maximum Distance: ",round(max(dd),2),"\n")
-    cat("    Average Distance: ",round(mean(dd),3),"\n\n")
-  }  
-    
-# FLAG SCRIPT END
+    p <- f / 100
 
-  if (plot){
-    # Reset the par options    
-    par(op)
-  }
+# For both DArTseq and SilicoDArT
+    if (method == "euclidean") {
+        for (i in (1:(nP - 1))) {
+            for (j in ((i + 1):nP)) {
+                p_ind1 <- p[i,]
+                p_ind2 <- p[j,]
+                sq <- (p_ind1-p_ind2)**2
+                sq <- sq[!is.na(sq)]
+                L <- length(sq)
+                if(scale==TRUE){
+                    if(datatype=="SNP"){
+                      dd[j,i] <- 0.5*sqrt(sum(sq)/L)
+                    } else {
+                      dd[j,i] <- sqrt(sum(sq)/L)
+                    }
+                } else {
+                    dd[j,i] <- sqrt(sum(sq))
+                }
+            }
+        }
+    }
+    # # Test code
+    # x <- dartR::gl2gi(testset.gl)
+    # x <- adegenet::genind2genpop(x)
+    # D_check <- adegenet::dist.genpop(x,4) # Rogers D
+    # hist(D_check,breaks=50)
+    # D <- dartR::gl.dist.pop(testset.gl, method='euclidean',output="matrix",scale=TRUE)
+    # D[upper.tri(D)] <- t(D)[upper.tri(D)]
+    # hist(D/2,breaks=50)
+    # #VALIDATED [with minor differences, missing handling?]
+
+# For DArTseq only
+    if (method == "reynolds") {
+        if(datatype=="SilicoDArT"){
+            stop(error("Fatal Error: Reynolds Distance is not available 
+                       for presence-absence data\n"))
+        }
+        for (i in (1:(nP - 1))) {
+            for (j in ((i + 1):nP)) {
+                # Pull the loci for individuals i and j
+                pind1 <- p[i,]
+                pind2 <- p[j,]
+                # Delete the pairwise missing
+                tmp <- pind1+pind2
+                pind1 <- pind1[!is.na(tmp)]
+                pind2 <- pind2[!is.na(tmp)]
+                # Squares
+                psq <- (pind1-pind2)**2
+                # Repeat for q
+                qind1 <- 1-pind1
+                qind2 <- 1-pind2
+                qsq <- (qind1-qind2)**2
+                # Cross products
+                p12 <- pind1*pind2
+                q12 <- qind1*qind2
+                # Non-missing loci
+                #L <- length(psq)
+                
+                #dd[j,i] <- sqrt(sum(psq+qsq)/(2*sum(1-p12-q12)))
+                dd[j,i] <- -log(1-sqrt(sum(psq+qsq)/(2*sum(1-p12-q12))))
+                #dd[j,1] <- sqrt(sum(psq)/(sum(1-p12-q12)))
+            }
+        }
+    }
+    # # Test code
+    # x <- dartR::gl2gi(testset.gl)
+    # x <- adegenet::genind2genpop(x)
+    # D_check <- adegenet::dist.genpop(x,3) # Reynolds in common use
+    # D_check <- -log(1-D_check) # Proportional to divergence time
+    # hist(D_check,breaks=50)
+    # D <- dartR::gl.dist.pop(testset.gl, method='reynolds',output='matrix',scale=TRUE)
+    # D[upper.tri(D)] <- t(D)[upper.tri(D)]
+    # hist(D,breaks=50)
+    # #VALIDATED [with minor difference, missing handling?]
     
-  if (verbose > 0) {
-    cat("Completed:",funname,"\n")
-  }
+    if (method == "nei") {
+        if(datatype=="SilicoDArT"){
+            stop(error("Fatal Error: Nei Standard Distance is not available
+                       for presence-absence data\n"))
+        }
+        for (i in (1:(nP - 1))) {
+            for (j in ((i + 1):nP)) {
+                # Pull the loci for individuals i and j
+                prow1 <- p[i,]
+                prow2 <- p[j,]
+                # Delete the pairwise missing
+                tmp <- prow1+prow2
+                prow1 <- prow1[!is.na(tmp)]
+                prow2 <- prow2[!is.na(tmp)]
+                # Squares
+                p1sq <- prow1*prow1
+                p2sq <- prow2*prow2
+                # Repeat for q=1-p
+                qrow1 <- 1-prow1
+                qrow2 <- 1-prow2
+                q1sq <- qrow1*qrow1
+                q2sq <- qrow2*qrow2
+                # Cross products
+                p12 <- prow1*prow2
+                q12 <- qrow1*qrow2
+                # Number of non-missing loci
+                L <- length(p12)
+
+                dd[j,i] <- -log(sum(p12+q12)/(sqrt(sum(p1sq+q1sq))*sqrt(sum(p2sq+q2sq))))
+            }
+        }
+    }
+    # # Test code
+    # x <- dartR::gl2gi(testset.gl)
+    # x <- adegenet::genind2genpop(x)
+    # D_check <- adegenet::dist.genpop(x,1) 
+    # hist(D_check,breaks=50)
+    # D <- dartR::gl.dist.pop(testset.gl, method='nei',output='matrix',scale=TRUE)
+    # hist(D,breaks=50)
+    # #VALIDATED [with minor difference, missing handling?]
     
+    if (method == "chord") {
+        if(datatype=="SilicoDArT"){
+            stop(error("Fatal Error: Czfordi-Edwards Chord Distance is not available
+                       for presence-absence data\n"))
+        }
+        for (i in (1:(nP - 1))) {
+            for (j in ((i + 1):nP)) {
+                # Pull the loci for individuals i and j
+                prow1 <- p[i,]
+                prow2 <- p[j,]
+                # Delete the pairwise missing
+                tmp <- prow1+prow2
+                prow1 <- prow1[!is.na(tmp)]
+                prow2 <- prow2[!is.na(tmp)]
+                # create proportions for allele 2
+                qrow1 <- 1-prow1
+                qrow2 <- 1-prow2
+                # Cross products
+                p12 <- prow1*prow2
+                q12 <- qrow1*qrow2
+                # Non-missing Loci
+                L <- length(p12)
+
+                dd[j,i] <- (2/pi)*sqrt(2*(1 - (sum(sqrt(p12))/L + sum(sqrt(q12)/L))))
+            }
+        }
+    }
+    # # Test code
+    # x <- dartR::gl2gi(testset.gl)
+    # x <- adegenet::genind2genpop(x)
+    # D_check <- adegenet::dist.genpop(x,2) # Angular or Edwards?
+    # #D_check <- -log(1-D_check) # Proportional to divergence time
+    # hist(D_check,breaks=50)
+    # D <- dartR::gl.dist.pop(testset.gl, method='chord',output='matrix',scale=TRUE)
+    # D[upper.tri(D)] <- t(D)[upper.tri(D)]
+    # hist(D,breaks=50)
+    # #VALIDATED [with minor difference, missing handling?]
+
+    if (method == "fixed-diff") {
+        dd <- gl.fixed.diff(x, verbose = 0)[[3]]/100
+        if (verbose >= 2) {
+            cat(report("  Calculating proportion of fixed differences\n"))
+            cat(
+                warn(
+                    "Note: this distance may be non-metric, and so should be considered a dissimilarity measure\n"
+                )
+            )
+        }
+    }
+
+    # # Revert to original order ord <- rank(popNames(x)) mat <- as.matrix(dd)[ord, ord] dd <- as.dist(mat)
+
+    # PLOT Plot Box-Whisker plot
+    
+    if (plot.out) {
+        if (datatype == "SNP") {
+            title_plot <- paste0("SNP data\nUsing ", method, " distance")
+        } else {
+            title_plot <-
+                paste0("Tag P/A data (SilicoDArT)\nUsing ",
+                       method,
+                       " distance")
+        }
+        values <- NULL
+        val <- as.vector(dd)
+        val <- val[!is.na(val)]
+        df_plot <- data.frame(values = val)
+        
+        # Boxplot
+        p1 <- ggplot(df_plot, aes(y = values)) +
+        geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) +
+        coord_flip()  +
+        plot_theme  +
+        xlim(range = c(-1,1)) + 
+        ylim(min(df_plot$values, na.rm = TRUE),max(df_plot$values, na.rm = TRUE)) + 
+        ylab(" ") + 
+        theme(axis.text.y = element_blank(),axis.ticks.y = element_blank()) + 
+        ggtitle(title_plot)
+        
+        # Histogram
+        p2 <- ggplot(df_plot, aes(x = values)) +
+        geom_histogram(bins = 20,color = plot_colors[1], fill = plot_colors[2]) +
+        xlim(min(df_plot$values, na.rm = TRUE), max(df_plot$values, na.rm = TRUE)) +
+        xlab("Distance Metric") +
+        ylab("Count") +
+        plot_theme
+    }
+    
+    # SUMMARY Print out some statistics
+    if (verbose >= 3) {
+        cat("  Reporting inter-population distances\n")
+        cat("  Distance measure:", method, "\n")
+        cat("    No. of populations =", nPop(x), "\n")
+        cat("    Average no. of individuals per population =",
+            round(nInd(x) / nPop(x),1),
+            "\n")
+        cat("    No. of loci =", nLoc(x), "\n")
+        cat("    Minimum Distance: ", round(min(dd,na.rm=TRUE), 2), "\n")
+        cat("    Maximum Distance: ", round(max(dd,na.rm=TRUE), 2), "\n")
+        cat("    Average Distance: ", round(mean(dd,na.rm=TRUE), 3), "\n")
+    }
+    
+    # SAVE INTERMEDIATES TO TEMPDIR
+    
+    # creating temp file names
+    if (save2tmp) {
+        if (plot.out) {
+            temp_plot <- tempfile(pattern = "Plot_")
+            match_call <-
+                paste0(names(match.call()),
+                       "_",
+                       as.character(match.call()),
+                       collapse = "_")
+            # saving to tempdir
+            saveRDS(list(match_call, p3), file = temp_plot)
+            if (verbose >= 2) {
+                cat(report("  Saving the ggplot to session tempfile\n"))
+            }
+        }
+        temp_table <- tempfile(pattern = "Table_")
+        saveRDS(list(match_call, dd), file = temp_table)
+        if (verbose >= 2) {
+            cat(report("  Saving tabulation to session tempfile\n"))
+            cat(
+                report(
+                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                )
+            )
+        }
+    }
+    
+    # PRINTING OUTPUTS
+    if (plot.out) {
+        # using package patchwork
+        p3 <- (p1 / p2) + plot_layout(heights = c(1, 4))
+        suppressWarnings(print(p3))
+    }
+    
+    if(output=="dist"){
+        dd <- as.dist(dd)
+        if(verbose >= 2){cat(report("  Returning a stats::dist object\n"))}
+    } else {
+        dd <- as.matrix(dd)
+        if(verbose >= 2){cat(report("  Returning a square matrix object\n"))}
+    }
+    
+    # FLAG SCRIPT END
+    
+    if (verbose > 0) {
+        cat(report("Completed:", funname, "\n"))
+    }
+   
     return(dd)
-  }
 }

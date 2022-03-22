@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.pcoa.r
 \name{gl.pcoa}
 \alias{gl.pcoa}
-\title{Ordination applied to genotypes in a genlight object (PCA), in an fd object, or to a distance matrix (PCoA)}
+\title{Ordination applied to genotypes in a genlight object (PCA), in an fd
+object, or to a distance matrix (PCoA)}
 \usage{
 gl.pcoa(
   x,
@@ -11,125 +12,207 @@ gl.pcoa(
   mono.rm = TRUE,
   parallel = FALSE,
   n.cores = 16,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{Name of the genlight object or fd object containing the SNP data, or a distance matrix of type dist [required].}
+\item{x}{Name of the genlight object or fd object containing the SNP data, or
+a distance matrix of type dist [required].}
 
-\item{nfactors}{Number of axes to retain in the output of factor scores [default 5].}
+\item{nfactors}{Number of axes to retain in the output of factor scores
+[default 5].}
 
-\item{correction}{Method applied to correct for negative eigenvalues, either 'lingoes' or 'cailliez' [Default NULL].}
+\item{correction}{Method applied to correct for negative eigenvalues, either
+'lingoes' or 'cailliez' [Default NULL].}
 
 \item{mono.rm}{If TRUE, remove monomorphic loci [default TRUE].}
 
-\item{parallel}{TRUE if parallel processing is required (does fail under Windows) [default FALSE].}
+\item{parallel}{TRUE if parallel processing is required (does fail under
+Windows) [default FALSE].}
 
-\item{n.cores}{Number of cores to use if parallel processing is requested [default 16].}
+\item{n.cores}{Number of cores to use if parallel processing is requested
+[default 16].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot.out}{If TRUE, a diagnostic plot is displayed showing a scree plot
+for the "informative" axes and a histogram of eigenvalues of the remaining 
+"noise" axes [Default TRUE].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the plot [default two_colors].}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default theme_dartR()].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session temporary directory (tempdir) [default FALSE]}
+\item{plot_colors}{List of two color names for the borders and fill of the
+plot [default two_colors].}
 
-\item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity].}
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{verbose= 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 An object of class pcoa containing the eigenvalues and factor scores
 }
 \description{
-This function takes the genotypes for individuals and undertakes a Pearson Principal Component analysis (PCA) on SNP or Tag P/A (SilicoDArT) 
-data; it undertakes a Gower Principal Coordinate analysis (PCoA) if supplied with a distance matrix. Technically, any distance matrix can 
-be represented in an ordinated space using PCoA.
+This function takes the genotypes for individuals and undertakes a Pearson
+Principal Component analysis (PCA) on SNP or Tag P/A (SilicoDArT) data; it
+undertakes a Gower Principal Coordinate analysis (PCoA) if supplied with a
+distance matrix. Technically, any distance matrix can be represented in an
+ordinated space using PCoA.
 }
 \details{
-The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\} 
-with default settings apart from those specified as parameters in this function.
+The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\}
+with default settings apart from those specified as parameters in this
+function.
 \strong{ Sources of stress in the visual representation }
 
-While, technically, any distance matrix can be represented in an ordinated space, the representation will not typically be exact.There are three 
-major sources of stress in a reduced-representation of distances or dissimilarities among entities using PCA or PCoA. By far the greatest
-source comes from the decision to select only the top two or three axes from the ordinated set of axes derived from the PCA or PCoA. The representation of
-the entities such a heavily reduced space will not faithfully represent the distances in the input distance matrix simply because of the loss of information
-in deeper informative dimensions. For this reason, it is not sensible to be too precious about managing the other two sources of stress in
-the visual representation.
+While, technically, any distance matrix can be represented in an ordinated
+space, the representation will not typically be exact.There are three major
+sources of stress in a reduced-representation of distances or dissimilarities
+among entities using PCA or PCoA. By far the greatest source comes from the
+decision to select only the top two or three axes from the ordinated set of
+axes derived from the PCA or PCoA. The representation of the entities such a
+heavily reduced space will not faithfully represent the distances in the
+input distance matrix simply because of the loss of information in deeper
+informative dimensions. For this reason, it is not sensible to be too
+precious about managing the other two sources of stress in the visual
+representation.
 
-The measure of distance between entities in a PCA is the Pearson Correlation Coefficent, essentially a standardized Euclidean distance. This is both a 
-metric distance and a Euclidean distance. In PCoA, the second source of stress is the choice of distance measure or dissimilarity measure. While any 
-distance or dissimilarity matrix can be represented in an ordinated space, the distances between entities can be faithfully represented 
-in that space (that is, without stress) only if the distances are metric. Furthermore, for distances between entities to be faithfully 
-represented in a rigid Cartesian space, the distance measure needs to be Euclidean. If this is not the case, 
-the distances between the entities in the ordinated visualized space will not exactly represent the distances in the input matrix 
-(stress will be non-zero). This source of stress will be evident as negative eigenvalues in the deeper dimensions. 
+The measure of distance between entities in a PCA is the Pearson Correlation
+Coefficent, essentially a standardized Euclidean distance. This is both a
+metric distance and a Euclidean distance. In PCoA, the second source of
+stress is the choice of distance measure or dissimilarity measure. While any
+distance or dissimilarity matrix can be represented in an ordinated space,
+the distances between entities can be faithfully represented in that space
+(that is, without stress) only if the distances are metric. Furthermore, for
+distances between entities to be faithfully represented in a rigid Cartesian
+space, the distance measure needs to be Euclidean. If this is not the case,
+the distances between the entities in the ordinated visualized space will not
+exactly represent the distances in the input matrix (stress will be non-zero).
+This source of stress will be evident as negative eigenvalues in the deeper
+ dimensions.
 
-A third source of stress arises from having a sparse dataset, one with missing values. This affects both PCA and PCoA. If the original data matrix 
-is not fully populated, that is, if there are missing values, then even a Euclidean distance matrix will not necessarily be 'positive definite'. 
-It follows that some of the eigenvalues may be negative, even though the distance metric is Euclidean. This issue is exacerbated when the number 
-of loci greatly exceeds the number of individuals, as is typically the case when working with SNP data. The impact of missing values can be minimized 
-by stringently filtering on Call Rate, albeit with loss of data. An alternative is given in a paper 'Honey, I shrunk the sample covariance matrix' 
-and more recently by Ledoit and Wolf (2018), but their approach has not been implemented here. 
+A third source of stress arises from having a sparse dataset, one with
+missing values. This affects both PCA and PCoA. If the original data matrix
+is not fully populated, that is, if there are missing values, then even a
+Euclidean distance matrix will not necessarily be 'positive definite'. It
+follows that some of the eigenvalues may be negative, even though the
+distance metric is Euclidean. This issue is exacerbated when the number of
+loci greatly exceeds the number of individuals, as is typically the case when
+working with SNP data. The impact of missing values can be minimized by
+stringently filtering on Call Rate, albeit with loss of data. An alternative
+is given in a paper 'Honey, I shrunk the sample covariance matrix' and more
+recently by Ledoit and Wolf (2018), but their approach has not been
+ implemented here.
 
-The good news is that, unless the sum of the negative eigenvalues, arising from a non-Euclidean distance measure or from missing values, approaches those 
-of the final PCA or PCoA axes to be displayed, the distortion is probably of no practical consequence and certainly not comparable to the stress arising from
-selecting only two or three final dimensions out of several informative dimensions for the visual representation.
+The good news is that, unless the sum of the negative eigenvalues, arising
+from a non-Euclidean distance measure or from missing values, approaches
+those of the final PCA or PCoA axes to be displayed, the distortion is
+probably of no practical consequence and certainly not comparable to the
+stress arising from selecting only two or three final dimensions out of
+several informative dimensions for the visual representation.
 
 \strong{ Function's output }
 
-Two diagnostic plots are produced. The first is a Scree Plot, showing the percentage variation explained by each of the PCA or PCoA axes, for those axes that 
-explain more than the original variables (loci) on average. That is, only informative axes are displayed. The scree plot informs the number of dimensions
-to be retained in the visual summaries. As a rule of thumb, axes with more than 10% of variation explained should be included.
+Two diagnostic plots are produced. The first is a Scree Plot, showing the
+percentage variation explained by each of the PCA or PCoA axes, for those
+axes that explain more than the original variables (loci) on average. That
+is, only informative axes are displayed. The scree plot informs the number of
+dimensions to be retained in the visual summaries. As a rule of thumb, axes
+with more than 10% of variation explained should be included.
 
-The second graph shows the distribution of eigenvalues for the remaining uninformative (noise) axes, including those with negative eigenvalues. 
-Action is recommended (verbose >= 2) if the negative eigenvalues are dominant, their sum approaching in magnitude the eigenvalues for axes selected for 
-the final visual solution. 
+The second graph shows the distribution of eigenvalues for the remaining
+uninformative (noise) axes, including those with negative eigenvalues.
 
-Output is a glPca object conforming to adegenet::glPca but with only the following retained.
-\itemize{ 
+Action is recommended (verbose >= 2) if the negative eigenvalues are
+dominant, their sum approaching in magnitude the eigenvalues for axes
+selected for the final visual solution.
+
+Output is a glPca object conforming to adegenet::glPca but with only the
+following retained.
+\itemize{
 \item  $call - The call that generated the PCA/PCoA
 \item  $eig - Eigenvalues -- All eigenvalues (positive, null, negative).
 \item  $scores - Scores (coefficients) for each individual
-\item  $loadings - Loadings of each SNP for each principal component  
+\item  $loadings - Loadings of each SNP for each principal component
    }
 
-Plots and table were saved to the temporal directory (tempdir) and can be accessed with the function \code{\link{gl.print.reports}} and listed with the function \code{\link{gl.list.reports}}. Note that they can be accessed only in the current R session because tempdir is cleared each time that the R session is closed.
-  
+Plots and table were saved to the temporal directory (tempdir) and can be
+accessed with the function \code{\link{gl.print.reports}} and listed with
+the function \code{\link{gl.list.reports}}. Note that they can be accessed
+only in the current R session because tempdir is cleared each time that the R
+session is closed.
+
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
  }
 
-PCA was developed by Pearson (1901) and Hotelling (1933), whilst the best modern reference is Jolliffe (2002). PCoA was developed by Gower (1966) while the
-best modern reference is Legendre & Legendre (1998).
+PCA was developed by Pearson (1901) and Hotelling (1933), whilst the best
+modern reference is Jolliffe (2002). PCoA was developed by Gower (1966) while
+the best modern reference is Legendre & Legendre (1998).
 }
 \examples{
+gl <- testset.gl
+levels(pop(gl))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
+rep('MDB',8),rep('Coast',7),'Em.subglobosa','Em.victoriae')
+
+# PCA (using SNP genlight object)
+pca <- gl.pcoa(gl,verbose=2)
+gl.pcoa.plot(pca,gl)
+
+gs <- testset.gs
+levels(pop(gs))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
+rep('MDB',8),rep('Coast',6),'Em.subglobosa','Em.victoriae')
+
+# PCA (using SilicoDArT genlight object)
+pca <- gl.pcoa(gs)
+gl.pcoa.plot(pca,gs)
+
+# Collapsing pops to OTUs using Fixed Difference Analysis (using fd object)
 fd <- gl.fixed.diff(testset.gl)
 fd <- gl.collapse(fd)
-#pca <- gl.pcoa(fd)
-#gl.pcoa.plot(pca,fd$gl)
+pca <- gl.pcoa(fd)
+gl.pcoa.plot(pca,fd$gl)
+
+# Using a distance matrix
+D <- gl.dist.ind(testset.gs, method='jaccard')
+pcoa <- gl.pcoa(D,correction="cailliez")
+gl.pcoa.plot(pcoa,gs)
 
 }
 \references{
-\itemize{ 
-\item Cailliez, F. (1983) The analytical solution of the additive constant problem. Psychometrika, 48, 305-308.
-\item Gower, J. C. (1966) Some distance properties of latent root and vector methods used in multivariate analysis. Biometrika, 53, 325-338.
-\item Hotelling, H., 1933. Analysis of a complex of statistical variables into Principal Components. Journal of Educational Psychology 24:417-441, 498-520.
-\item Jolliffe, I. (2002) Principal Component Analysis. 2nd Edition, Springer, New York. 
-\item Ledoit, O. and Wolf, M. (2018). Analytical nonlinear shrinkage of large-dimensional covariance matrices. University of Zurich, Department of Economics, Working Paper No. 264, Revised version. Available at SSRN: https://ssrn.com/abstract=3047302 or http://dx.doi.org/10.2139/ssrn.3047302 
-\item Legendre, P. and Legendre, L. (1998). Numerical Ecology, Volume 24, 2nd Edition. Elsevier Science, NY.
-\item Lingoes, J. C. (1971) Some boundary conditions for a monotone analysis of symmetric matrices. Psychometrika, 36, 195-203.
-\item Pearson, K. (1901). On lines and planes of closest fit to systems of points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp. 559-572.
+\itemize{
+\item Cailliez, F. (1983) The analytical solution of the additive constant
+problem. Psychometrika, 48, 305-308.
+\item Gower, J. C. (1966) Some distance properties of latent root and vector
+methods used in multivariate analysis. Biometrika, 53, 325-338.
+\item Hotelling, H., 1933. Analysis of a complex of statistical variables into
+Principal Components. Journal of Educational Psychology 24:417-441, 498-520.
+\item Jolliffe, I. (2002) Principal Component Analysis. 2nd Edition, Springer,
+New York.
+\item Ledoit, O. and Wolf, M. (2018). Analytical nonlinear shrinkage of
+large-dimensional covariance matrices. University of Zurich, Department of
+Economics, Working Paper No. 264, Revised version. Available at SSRN:
+https://ssrn.com/abstract=3047302 or http://dx.doi.org/10.2139/ssrn.3047302
+\item Legendre, P. and Legendre, L. (1998). Numerical Ecology, Volume 24, 2nd
+Edition. Elsevier Science, NY.
+\item Lingoes, J. C. (1971) Some boundary conditions for a monotone analysis
+of symmetric matrices. Psychometrika, 36, 195-203.
+\item Pearson, K. (1901). On lines and planes of closest fit to systems of
+points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp.
+559-572.
 }
 }
 \seealso{
 \code{\link{gl.pcoa.plot}}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
-
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Author(s): Arthur Georges. Custodian: Arthur Georges (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }
 \concept{data exploration functions}

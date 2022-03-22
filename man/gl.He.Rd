@@ -2,18 +2,18 @@
 % Please edit documentation in R/gl.He.r
 \name{gl.He}
 \alias{gl.He}
-\title{A very simple function to report expected Heterozygosity}
+\title{Estimates expected Heterozygosity}
 \usage{
 gl.He(gl)
 }
 \arguments{
-\item{gl}{-- a genlight object}
+\item{gl}{A genlight object [required]}
 }
 \value{
-a simple vector wiht Ho for each loci
+A simple vector whit Ho for each loci
 }
 \description{
-A very simple function to report expected Heterozygosity
+Estimates expected Heterozygosity
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

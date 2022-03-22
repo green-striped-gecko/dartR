@@ -2,18 +2,18 @@
 % Please edit documentation in R/gl.save.r
 \name{gl.save}
 \alias{gl.save}
-\title{Save an object in compressed binary format for later rapid retrieval}
+\title{Saves an object in compressed binary format for later rapid retrieval}
 \usage{
 gl.save(x, file, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the genlight object containing SNP genotypes [required].}
 
-\item{file}{Name of the file to receive the binary version of the object 
+\item{file}{Name of the file to receive the binary version of the object
 [required].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
@@ -21,17 +21,17 @@ The input object
 }
 \description{
 This is a wrapper for saveRDS().
-}
-\details{
-The script saves the object to the current workspace and returns the input gl
- object.
+
+The script saves the object in binary form to the current workspace and
+returns the input gl object.
 }
 \examples{
-gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
+gl.save(testset.gl,file.path(tempdir(),'testset.rds'))
 }
 \seealso{
 \code{\link{gl.load}}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

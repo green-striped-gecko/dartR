@@ -843,16 +843,16 @@ gg <- gl[1:7,1:100]
 gg@other$loc.metrics <- gg@other$loc.metrics[1:100,]
 
 gl.dist.pop(gg, method="euclidean")
-gl.dist.pop(gg, method="manhattan")
+gl.dist.pop(gg, method="reynolds")
 ```
 
 Distances available for computation include:
 
-method = "manhattan", "euclidean", "canberra", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis", "maximum", "binary" or "minkowski". 
+method = 'euclidean', 'fixed-diff', 'reynolds', 'nei' or 'chord'.
 
 Refer to the documentation for functions ?dist and ?vegdist for computational formulae.
 
-YOu have been wondering why there are only 3 pairs of distances calculated. This is because gl.dist.pop calculates distances using the population information in the genlight object. If someone wants to calculate distances between individuals we need to redefine the population information in the genlight object. A convinient way is to use the individuals identifier which is stored in the indNames slot.
+YOu have been wondering why there are only 3 pairs of distances calculated. This is because gl.dist.pop calculates distances using the population information in the genlight object. If someone wants to calculate distances between individuals we need to redefine the population information in the genlight object. A convenient way is to use the individuals identifier which is stored in the indNames slot.
 
 Here is an example how to calculate individuals based distances for the first 7 individuals based on all loci:
 
@@ -943,7 +943,7 @@ gl.pcoa.plot(pc, gl, pop.labels="pop", xaxis=1, yaxis=2)
 
 ```
 
-You can see that this plot is very busy, and that the many labels are displaced quite some distance from their associated points.  This is because there is a tradeoff between avoiding overlap of the labels and proximity of the labels - you can use colour to identify which labels go with which points. 
+You can see that this plot is very busy, and that the many labels are displaced quite some distance from their associated points.  This is because there is a tradeoff between avoiding overlap of the labels and proximity of the labels - you can use color to identify which labels go with which points. 
 More sensibly, recoding populations would be in order. We could use
 
 ```{r,eval=FALSE}
@@ -983,7 +983,7 @@ ggplotly()
 
 ```
 
-will plot the individuals in the top two dimensions of the ordinated space, colour the points in accordance to the population to which they belong, and allow points to be identified interactively using the mouse.
+will plot the individuals in the top two dimensions of the ordinated space, color the points in accordance to the population to which they belong, and allow points to be identified interactively using the mouse.
 
 \includegraphics{figures/ggplotly.png}
 
@@ -1237,7 +1237,7 @@ If we are worried that the 1 locus with a private allele out of 255 loci for pop
 
 
 ```{r, fig.height=4}
-x <- gl.assign.pca(x, unknown ="UC_00146", alpha=0.05)
+#x <- gl.assign.pca(x, unknown ="UC_00146", plevel=0.95)
 ```
 
 The plot allows us to eliminate populations EmmacRichCasi and EmmacBurnBara from consideration as the unknown individual does not fall within or near their confidence ellipses. EmmacTweeUki and EmmacMaclGeor remain in contention.

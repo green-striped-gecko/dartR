@@ -2,36 +2,36 @@
 % Please edit documentation in R/gl.report.overshoot.r
 \name{gl.report.overshoot}
 \alias{gl.report.overshoot}
-\title{Reports loci for which the SNP has been trimmed from the sequence tag 
-along with the adaptor}
+\title{Reports loci for which the SNP has been trimmed from the sequence tag
+ along with the adaptor}
 \usage{
 gl.report.overshoot(x, save2tmp = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the genlight object [required].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report 
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
 [default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 An unaltered genlight object
 }
 \description{
-This function checks the position of the SNP within the trimmed sequence tag 
-and identifies those for which the SNP position is outside the trimmed 
-sequence tag. This can happen, rarely, when the sequence containing the SNP 
+This function checks the position of the SNP within the trimmed sequence tag
+and identifies those for which the SNP position is outside the trimmed
+sequence tag. This can happen, rarely, when the sequence containing the SNP
 resembles the adaptor.
 }
 \details{
-The SNP genotype can still be used in most analyses, but functions like 
-gl2fasta() will present challenges if the SNP has been trimmed from
-the sequence tag.
- 
-Resultant ggplot(s) and the tabulation(s) are saved to the session's 
+The SNP genotype can still be used in most analyses, but functions like
+gl2fasta() will present challenges if the SNP has been trimmed from the 
+sequence tag.
+
+Resultant ggplot(s) and the tabulation(s) are saved to the session's
 temporary directory.
 }
 \examples{
@@ -41,6 +41,7 @@ gl.report.overshoot(testset.gl)
 \code{\link{gl.filter.overshoot}}
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to 
+\url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filter report functions}

@@ -2,31 +2,36 @@
 % Please edit documentation in R/gl.load.r
 \name{gl.load}
 \alias{gl.load}
-\title{Load an object from compressed binary format produced by gl.save().}
+\title{Loads an object from compressed binary format produced by gl.save()}
 \usage{
 gl.load(file, verbose = NULL)
 }
 \arguments{
-\item{file}{-- name of the file to receive the binary version of the object [required]}
+\item{file}{Name of the file to receive the binary version of the object
+[required].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-the loaded object
+The loaded object
 }
 \description{
-This is a wrapper for readRDS().
+This is a wrapper for readRDS()
 }
 \details{
-The script loads the object from the current workspace and returns the gl object.
+The script loads the object from the current workspace and returns the
+ gl object.
 }
 \examples{
-gl.save(testset.gl,file.path(tempdir(),"testset.rds"))
-gl <- gl.load(file.path(tempdir(),"testset.rds"))
+gl.save(testset.gl,file.path(tempdir(),'testset.rds'))
+gl <- gl.load(file.path(tempdir(),'testset.rds'))
 }
 \seealso{
 \code{\link{gl.save}}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

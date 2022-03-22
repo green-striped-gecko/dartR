@@ -7,10 +7,15 @@
 \format{
 genlight object
 }
+\usage{
+platypus.gl
+}
 \description{
-This is a test data set on platypus with 81 individuals, 3 populations and 1,000 binary SNPs.
+This is a test data set on platypus with 81 individuals, 3 populations and 
+1,000 binary SNPs.
 }
 \author{
-Luis Mijangos (bugs? Post to \url{https://groups.google.com/d/forum/dartr}
+Luis Mijangos (bugs? Post to 
+\url{https://groups.google.com/d/forum/dartr}
 }
 \keyword{datasets}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.parent.offspring.r
 \name{gl.report.parent.offspring}
 \alias{gl.report.parent.offspring}
-\title{Identify putative parent offspring within a population}
+\title{Identifies putative parent offspring within a population}
 \usage{
 gl.report.parent.offspring(
   x,
@@ -11,7 +11,7 @@ gl.report.parent.offspring(
   range = 1.5,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colours = two_colors,
+  plot_colors = two_colors,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -21,78 +21,84 @@ gl.report.parent.offspring(
 
 \item{min.rdepth}{Minimum read depth to include in analysis [default 12].}
 
-\item{min.reproducibility}{Minimum reproducibility to include in analysis [default 1].}
+\item{min.reproducibility}{Minimum reproducibility to include in analysis
+[default 1].}
 
-\item{range}{Specifies the range to extend beyond the interquartile range for 
+\item{range}{Specifies the range to extend beyond the interquartile range for
 delimiting outliers [default 1.5 interquartile ranges].}
 
-\item{plot.out}{Creates a plot that shows the sex linked markers [default TRUE].}
+\item{plot.out}{Creates a plot that shows the sex linked markers
+[default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See Details for options [default theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default theme_dartR()].}
 
-\item{plot_colours}{List of two color names for the borders and fill of the
+\item{plot_colors}{List of two color names for the borders and fill of the
 plots [default two_colors].}
 
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session 
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
-progress log ; 3, progress and results summary; 5, full report [default NULL, unless specified using gl.set.verbosity].}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-A set of individuals in parent-offspring relationship. NULL if no 
+A set of individuals in parent-offspring relationship. NULL if no
 parent-offspring relationships were found.
 }
 \description{
 This script examines the frequency of pedigree inconsistent loci, that is,
 those loci that are homozygotes in the parent for the reference allele, and
 homozygous in the offspring for the alternate allele. This condition is not
-consistent with any pedigree, regardless of the (unknown) genotype of the other
-parent. The pedigree inconsistent loci are counted as an indication of whether
-or not it is reasonable to propose the two individuals are in a parent-offspring
-relationship.
+consistent with any pedigree, regardless of the (unknown) genotype of the
+other parent. The pedigree inconsistent loci are counted as an indication of
+whether or not it is reasonable to propose the two individuals are in a
+parent-offspring relationship.
 }
 \details{
-If two individuals are in a parent offspring relationship, the true
-number of pedigree inconsistent loci should be zero, but SNP calling is not 
-infallible. Some loci will be miss-called. The problem thus becomes one of determining
-if the two focal individuals have a count of pedigree inconsistent loci less than
-would be expected of typical unrelated individuals. There are some quite sophisticated
-software packages available to formally apply likelihoods to the decision, but we
-use a simple outlier comparison.
+If two individuals are in a parent offspring relationship, the true number of
+pedigree inconsistent loci should be zero, but SNP calling is not infallible.
+Some loci will be miss-called. The problem thus becomes one of determining
+if the two focal individuals have a count of pedigree inconsistent loci less
+than would be expected of typical unrelated individuals. There are some quite
+sophisticated software packages available to formally apply likelihoods to
+the decision, but we use a simple outlier comparison.
 
-To reduce the frequency of miss-calls, and so emphasize the difference between true
-parent-offspring pairs and unrelated pairs, the data can be filtered on read depth.
-Typically minimum read depth is set to 5x, but you can examine the distribution
-of read depths with the function \code{\link{gl.report.rdepth}} and push this up 
-with an acceptable loss of loci. 12x might be a good minimum for this particular
-analysis. It is sensible also to push the minimum reproducibility up to 1, if 
-that does not result in an unacceptable loss of loci. Reproducibility is stored 
-in the slot \code{@other$loc.metrics$RepAvg} and is defined as the proportion 
-of technical replicate assay pairs for which the marker score is consistent. 
-You can examine the distribution of reproducibility with the function 
-\code{\link{gl.report.reproducibility}}.
+To reduce the frequency of miss-calls, and so emphasize the difference
+between true parent-offspring pairs and unrelated pairs, the data can be
+filtered on read depth.
 
-Note that the null expectation is not well defined, and the power reduced, if the
-population from which the putative parent-offspring pairs are drawn contains 
-many sibs. Note also that if an individual has been genotyped twice in the dataset, 
-the replicate pair will be assessed by this script as being in a parent-offspring 
-relationship.
+Typically minimum read depth is set to 5x, but you can examine the
+distribution of read depths with the function \code{\link{gl.report.rdepth}}
+and push this up with an acceptable loss of loci. 12x might be a good minimum
+for this particular analysis. It is sensible also to push the minimum
+reproducibility up to 1, if that does not result in an unacceptable loss of
+loci. Reproducibility is stored in the slot \code{@other$loc.metrics$RepAvg}
+and is defined as the proportion of technical replicate assay pairs for which
+the marker score is consistent. You can examine the distribution of
+ reproducibility with the function \code{\link{gl.report.reproducibility}}.
 
-The function \code{\link{gl.filter.parent.offspring}} will filter out those 
-individuals in a parent offspring relationship.  
+Note that the null expectation is not well defined, and the power reduced, if
+the population from which the putative parent-offspring pairs are drawn
+contains many sibs. Note also that if an individual has been genotyped twice
+in the dataset, the replicate pair will be assessed by this script as being
+in a parent-offspring relationship.
 
-Note that if your dataset does not contain RepAvg or rdepth among the locus 
-metrics, the filters for reproducibility and read depth are no used. 
+The function \code{\link{gl.filter.parent.offspring}} will filter out those
+individuals in a parent offspring relationship.
+
+Note that if your dataset does not contain RepAvg or rdepth among the locus
+metrics, the filters for reproducibility and read depth are no used.
 
 \strong{ Function's output }
 
- Plots and table are saved to the temporal directory (tempdir) and can be 
- accessed with the function \code{\link{gl.print.reports}} and listed with 
- the function \code{\link{gl.list.reports}}. Note that they can be accessed 
+ Plots and table are saved to the temporal directory (tempdir) and can be
+ accessed with the function \code{\link{gl.print.reports}} and listed with
+ the function \code{\link{gl.list.reports}}. Note that they can be accessed
  only in the current R session because tempdir is cleared each time that the
   R session is closed.
-  
+
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
@@ -100,7 +106,6 @@ metrics, the filters for reproducibility and read depth are no used.
 }
 \examples{
 out <- gl.report.parent.offspring(testset.gl[1:10])
-
 }
 \seealso{
 \code{\link{gl.list.reports}}, \code{\link{gl.report.rdepth}} ,
@@ -108,6 +113,7 @@ out <- gl.report.parent.offspring(testset.gl[1:10])
  \code{\link{gl.filter.parent.offspring}}
 
 Other reporting functions: 
+\code{\link{gl.diagnostics.hwe}()},
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.heterozygosity}()},
@@ -115,6 +121,7 @@ Other reporting functions:
 \code{\link{gl.report.sexlinked}()}
 }
 \author{
-Custodian: Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }
 \concept{reporting functions}

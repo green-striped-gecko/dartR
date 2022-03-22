@@ -4,14 +4,17 @@
 \alias{gl2gi}
 \title{Converts a genlight object to genind object}
 \usage{
-gl2gi(gl, probar = FALSE, verbose = NULL)
+gl2gi(x, probar = FALSE, verbose = NULL)
 }
 \arguments{
-\item{gl}{-- a genlight object}
+\item{x}{A genlight object [required].}
 
-\item{probar}{-- if TRUE, a progress bar will be displayed for long loops [default = TRUE]}
+\item{probar}{If TRUE, a progress bar will be displayed for long loops
+[default TRUE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 A genind object, with all slots filled.
@@ -20,7 +23,8 @@ A genind object, with all slots filled.
 Converts a genlight object to genind object
 }
 \details{
-this function uses a faster version of df2genind (from the adgegenet package)
+This function uses a faster version of df2genind (from the adegenet
+ package)
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
