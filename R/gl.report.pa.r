@@ -447,7 +447,11 @@ gl.report.pa <- function(x,
         # using package patchwork
         print(p3)
     }
-    print(df)
+    
+    if(verbose>0){
+        print(df)
+    }
+    
     if (verbose >= 2) {
         cat(report(
             "  Table of private alleles and fixed differences returned\n"

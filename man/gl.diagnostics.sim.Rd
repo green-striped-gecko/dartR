@@ -38,8 +38,6 @@ temporary directory (tempdir) [default FALSE].}
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report
 [default NULL, unless specified using gl.set.verbosity].}
-
-\item{Ne_fst}{[required]}
 }
 \description{
 Comparing simulations against theoretical expectations
