@@ -1,26 +1,57 @@
 #' @name gl.diagnostics.sim
 #' @title Comparing simulations against theoretical expectations
-#' @param x [default ]
-#' @param iteration [default ]
-#' @param Ne [required]
-#' @param pop_he [default ]
-#' @param pops_fst [default ]
-#' @param plot_colors Vector with two color names for the significant and
-#' not-significant loci [default two_colors_contrast].
+#' @param x Output from function \code{\link{gl.sim.WF.run}} [required].
+#' @param iteration Iteration number to analyse [default 1].
+#' @param Ne Effective population size to use as input to compare theoretical 
+#' expectations [required].
+#' @param pop_he Population name in which the rate of loss of heterozygosity is
+#'  going to be compared against theoretical expectations [default 1].
+#' @param pops_fst Pair of populations in which FST is going to be compared 
+#' against theoretical expectations [default c(1,2)].
 #' @param plot_theme User specified theme [default theme_dartR()].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log ; 3, progress and results summary; 5, full report
 #' [default NULL, unless specified using gl.set.verbosity].
+#' @details
+#' Two plots are presented comparing the simulations against theoretical 
+#' expectations:
+#' 
+#' \enumerate{
+#' \item Expected heterozygosity under neutrality (Crow & Kimura, 1970, p. 329) is 
+#'  calculated as:
+#'  
+#' Het = He0(1-(1/2Ne))^t,
+#' 
+#' where Ne is effective population size, He0  is heterozygosity at generation 0
+#'  and t is the number of generations.
+#' 
+#' \item Expected FST under neutrality (Takahata, 1983) is calculated as:
+#' 
+#' FST=1/(4Nem(n/(n-1))^2+1),
+#' 
+#' where Ne is effective populations size of each individual subpopulation, m is
+#' dispersal rate and n the number of subpopulations (always 2).
+#' }
+#' @return Returns plots comparing simulations against theoretical expectations 
+#' @author Custodian: Luis Mijangos -- Post to
+#' \url{https://groups.google.com/d/forum/dartr}
+#'@references
+#'\itemize{
+#'\item Crow JF, Kimura M. An introduction to population genetics theory. An 
+#'introduction to population genetics theory. 1970.
+#'\item Takahata N. Gene identity and genetic differentiation of populations in 
+#'the finite island model. Genetics. 1983;104(3):497-512.
+#'  }
+#' @seealso \code{\link{gl.filter.callrate}}
 #' @export
 
 gl.diagnostics.sim <- function(x,
                                Ne,
-                               iteration=1,
+                               iteration =1,
                                pop_he = 1 ,
-                               pops_fst= c(1,2),
-                               plot_colors = two_colors_contrast,
+                               pops_fst = c(1,2),
                                plot_theme = theme_dartR(),
                                save2tmp = FALSE,
                                verbose = NULL){
@@ -34,18 +65,7 @@ gl.diagnostics.sim <- function(x,
   utils.flag.start(func = funname,
                    build = "Jody",
                    verbosity = verbose)
-  
-  # CHECK DATATYPE
-  # datatype <- utils.check.datatype(x, verbose = verbose)
-  
-  # FUNCTION SPECIFIC ERROR CHECKING
-  
-  # Check that call rate is up to date and recalculate if necessary
-  
-  # if (!x@other$loc.metrics.flags$CallRate) {
-  # x <- utils.recalc.callrate(x, verbose = 0)
-  # }
-  
+
   # DO THE JOB
   
   lab<-gen<-He<-value<-variable<-fst_obs<- NULL
@@ -162,7 +182,7 @@ gl.diagnostics.sim <- function(x,
     geom_hline(aes(yintercept = Fst_expected[1],color="Fst expected"),size=1)+
     geom_vline(aes(xintercept = fst_equilibrium[1],color="Fst equilibrium"),size=1)+
     labs(x="Generations", y="Fst", title=paste("Fst between populations:",paste(pops_fst,collapse = " ")))+ 
-    scale_color_manual(values = c(plot_colors[1],"blue","chartreuse4"),labels=c("Fst observed", "Fst equilibrium" ,"Fst expected")) +
+    scale_color_manual(values = c("deeppink","blue","chartreuse4"),labels=c("Fst observed", "Fst equilibrium" ,"Fst expected")) +
     plot_theme +
     theme(legend.title=element_blank())
   
@@ -171,38 +191,32 @@ gl.diagnostics.sim <- function(x,
   p3 <- (p1 / p2)
   print(p3)
   
-  # print(hwe_summary, row.names = FALSE)
-  
   # SAVE INTERMEDIATES TO TEMPDIR
   
-  # # creating temp file names
-  # if (save2tmp) {
-  #   temp_plot <- tempfile(pattern = "Plot_")
-  #   match_call <-
-  #     paste0(names(match.call()),
-  #            "_",
-  #            as.character(match.call()),
-  #            collapse = "_")
-  #   # saving to tempdir
-  #   saveRDS(list(match_call, p3), file = temp_plot)
-  #   
-  #   if (verbose >= 2) {
-  #     cat(report("  Saving the ggplot to session tempfile\n"))
-  #   }
-  #   
-  #   temp_table <- tempfile(pattern = "Table_")
-  #   saveRDS(list(match_call, hwe_summary), file = temp_table)
-  #   
-  #   if (verbose >= 2) {
-  #     cat(report("  Saving tabulation to session tempfile\n"))
-  #     cat(
-  #       report(
-  #         "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
-  #       )
-  #     )
-  #   }
-  # }
-  # 
+  # creating temp file names
+  if (save2tmp) {
+    temp_plot <- tempfile(pattern = "Plot_")
+    match_call <-
+      paste0(names(match.call()),
+             "_",
+             as.character(match.call()),
+             collapse = "_")
+    # saving to tempdir
+    saveRDS(list(match_call, p3), file = temp_plot)
+
+    if (verbose >= 2) {
+      cat(report("  Saving the ggplot to session tempfile\n"))
+    }
+
+    if (verbose >= 2) {
+      cat(
+        report(
+          "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+        )
+      )
+    }
+  }
+
   # FLAG SCRIPT END
   
   if (verbose >= 1) {
@@ -211,8 +225,6 @@ gl.diagnostics.sim <- function(x,
   
   # RETURN
   
-  # return(invisible(hwe_summary))
-  
-
+   return(invisible(p3))
   
 }
