@@ -18,7 +18,7 @@ gl.diagnostics.sim(
 \arguments{
 \item{x}{Output from function \code{\link{gl.sim.WF.run}} [required].}
 
-\item{Ne}{Effective population size to use as input to test theoretical 
+\item{Ne}{Effective population size to use as input to compare theoretical 
 expectations [required].}
 
 \item{iteration}{Iteration number to analyse [default 1].}
