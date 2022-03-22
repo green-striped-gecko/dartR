@@ -100,16 +100,23 @@ gl.report.reproducibility <- function(x,
     # Boxplot
     if (plot.out) {
         p1 <-
-            ggplot(repeatability_plot, aes(y = repeatability)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + coord_flip() +
-            plot_theme + ylim(c(min(repeatability), 1)) + ylab(" ") + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+            ggplot(repeatability_plot, aes(y = repeatability)) +
+            geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+            coord_flip() +
+            plot_theme + 
+            ylim(c(min(repeatability), 1)) + 
+            ylab(" ") + 
+            theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
             ggtitle(title)
         
         # Histogram
         p2 <-
-            ggplot(repeatability_plot, aes(x = repeatability)) + geom_histogram(bins = 50,
-                                                                                color = plot_colors[1],
-                                                                                fill = plot_colors[2]) +
-            coord_cartesian(xlim = c(min(repeatability), 1)) + xlab("Repeatability") + ylab("Count") + plot_theme
+            ggplot(repeatability_plot, aes(x = repeatability)) +
+            geom_histogram(bins = 50, color = plot_colors[1],fill = plot_colors[2]) +
+            coord_cartesian(xlim = c(min(repeatability), 1)) + 
+            xlab("Repeatability") + 
+            ylab("Count") + 
+            plot_theme
     }
     
     # Print out some statistics
@@ -128,8 +135,7 @@ gl.report.reproducibility <- function(x,
     ))) / (nLoc(x) * nInd(x)), 2), "\n\n")
     
     # Determine the loss of loci for a given threshold using quantiles
-    quantile_res <-
-        quantile(repeatability, probs = seq(0, 1, 1 / 20),type=1)
+    quantile_res <- quantile(repeatability, probs = seq(0, 1, 1 / 20),type=1)
     retained <- unlist(lapply(quantile_res, function(y) {
         res <- length(repeatability[repeatability >= y])
     }))

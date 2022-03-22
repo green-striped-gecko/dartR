@@ -10,25 +10,24 @@ gl.diagnostics.sim(
   iteration = 1,
   pop_he = 1,
   pops_fst = c(1, 2),
-  plot_colors = two_colors_contrast,
   plot_theme = theme_dartR(),
   save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{[default ]}
+\item{x}{Output from function \code{\link{gl.sim.WF.run}} [required].}
 
-\item{Ne}{[required]}
+\item{Ne}{Effective population size to use as input to test theoretical 
+expectations [required].}
 
-\item{iteration}{[default ]}
+\item{iteration}{Iteration number to analyse [default 1].}
 
-\item{pop_he}{[default ]}
+\item{pop_he}{Population name in which the rate of loss of heterozygosity is
+going to be compared against theoretical expectations [default 1].}
 
-\item{pops_fst}{[default ]}
-
-\item{plot_colors}{Vector with two color names for the significant and
-not-significant loci [default two_colors_contrast].}
+\item{pops_fst}{Pair of populations in which FST is going to be compared 
+against theoretical expectations [default c(1,2)].}
 
 \item{plot_theme}{User specified theme [default theme_dartR()].}
 
@@ -39,6 +38,45 @@ temporary directory (tempdir) [default FALSE].}
 progress log ; 3, progress and results summary; 5, full report
 [default NULL, unless specified using gl.set.verbosity].}
 }
+\value{
+Returns plots comparing simulations against theoretical expectations
+}
 \description{
 Comparing simulations against theoretical expectations
+}
+\details{
+Two plots are presented comparing the simulations against theoretical 
+expectations:
+
+\enumerate{
+\item Expected heterozygosity under neutrality (Crow & Kimura, 1970, p. 329) is 
+ calculated as:
+ 
+Het = He0(1-(1/2Ne))^t,
+
+where Ne is effective population size, He0  is heterozygosity at generation 0
+ and t is the number of generations.
+
+\item Expected FST under neutrality (Takahata, 1983) is calculated as:
+
+FST=1/(4Nem(n/(n-1))^2+1),
+
+where Ne is effective populations size of each individual subpopulation, m is
+dispersal rate and n the number of subpopulations (always 2).
+}
+}
+\references{
+\itemize{
+\item Crow JF, Kimura M. An introduction to population genetics theory. An 
+introduction to population genetics theory. 1970.
+\item Takahata N. Gene identity and genetic differentiation of populations in 
+the finite island model. Genetics. 1983;104(3):497-512.
+ }
+}
+\seealso{
+\code{\link{gl.filter.callrate}}
+}
+\author{
+Custodian: Luis Mijangos -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

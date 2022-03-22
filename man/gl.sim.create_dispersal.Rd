@@ -42,7 +42,7 @@ Writes csv file containing the dispersal variables for each pair of
 populations to be used as input for the function \code{\link{gl.sim.WF.run}}.
 }
 \description{
-This function writes a csv file called ""dispersal_table.csv" which contains
+This function writes a csv file called "dispersal_table.csv" which contains
  the dispersal variables for each pair of populations to be used as input for
   the function \code{\link{gl.sim.WF.run}}.
 

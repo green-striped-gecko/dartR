@@ -23,13 +23,13 @@ gl.sim.WF.table(
 values for some simulation variables (see details) [default NULL].}
 
 \item{file_targets_sel}{Path of the file with the targets for selection (see 
-details)  [default NULL].}
+details) [default NULL].}
 
 \item{file_r_map}{Path of the file with the recombination map (see details)
 [default NULL].}
 
 \item{interactive_vars}{Run a shiny app to input interactively the values of
-simulations variables [default TRUE].}
+simulation variables [default TRUE].}
 
 \item{seed}{Set the seed for the simulations [default NULL].}
 
@@ -37,8 +37,9 @@ simulations variables [default TRUE].}
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 
-\item{...}{Here you can add separately any variable and its value which will 
-be changed over the input value supplied by the csv file. See tutorial.}
+\item{...}{Any variable and its value can be added separately within the 
+function, will be changed over the input value supplied by the csv file. See 
+tutorial.}
 }
 \value{
 Returns a list with the reference table used as input for the function
@@ -63,14 +64,14 @@ This function creates a reference table to be used as input for the function
 The reference table can be further modified as required. 
 
 See documentation and tutorial for a complete description of the simulations.
-These documents can be accessed by typing in the R console:
-browseVignettes(package="dartR”)
+These documents can be accessed at http://georges.biomatix.org/dartR
 }
 \details{
-Values for the variables to create the reference table can be submitted into the function 
-interactively through a Shiny app if interactive_vars = TRUE. Optionally, if 
-interactive_vars = FALSE, values for variables can be submitted by using the
-csv file 'ref_variables.csv' which can be found by typing in the R console:
+Values for the variables to create the reference table can be submitted into 
+the function interactively through a Shiny app if interactive_vars = TRUE. 
+Optionally, if interactive_vars = FALSE, values for variables can be 
+submitted by using the csv file 'ref_variables.csv' which can be found by 
+typing in the R console:
  system.file('extdata', 'ref_variables.csv', package ='dartR').
  
 The values of the variables can be modified using the third column (“value”) 
@@ -86,9 +87,6 @@ targets for selection file can be found by typing in the R console:
 \item system.file('extdata', 'fly_recom_map.csv', package ='dartR')
 \item system.file('extdata', 'fly_targets_of_selection.csv', package ='dartR')
 }
-
-Functions to produce these files are gl.sim.create_rmap() and 
-gl.sim.create_targets().
 
 To show further information of the variables in interactive mode, it might be
  necessary to call first: 'library(shinyBS)' for the information to be 
