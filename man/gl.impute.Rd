@@ -4,7 +4,13 @@
 \alias{gl.impute}
 \title{Imputates missing data}
 \usage{
-gl.impute(x, method = "HW", parallel = FALSE, verbose = NULL)
+gl.impute(
+  x,
+  method = "neighbour",
+  fill.residual = TRUE,
+  parallel = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP or presence-absence
@@ -12,6 +18,10 @@ data [required].}
 
 \item{method}{Imputation method, either "frequency" or "HW" or "neighbour" 
 or "random" [default "HW"].}
+
+\item{fill.residual}{Should any residual missing values remaining after 
+imputation be set to 0, 1, 2 at random, taking into account global allele 
+frequencies at the particular locus [default TRUE].}
 
 \item{parallel}{A logical indicating whether multiple cores -if available-
 should be used for the computations (TRUE), or not (FALSE); requires the

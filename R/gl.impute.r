@@ -8,6 +8,9 @@
 #' data [required].
 #' @param method Imputation method, either "frequency" or "HW" or "neighbour" 
 #' or "random" [default "HW"].
+#' @param fill.residual Should any residual missing values remaining after 
+#' imputation be set to 0, 1, 2 at random, taking into account global allele 
+#' frequencies at the particular locus [default TRUE].
 #' @param parallel A logical indicating whether multiple cores -if available-
 #' should be used for the computations (TRUE), or not (FALSE); requires the
 #' package parallel to be installed [default FALSE].
@@ -61,9 +64,13 @@
 #' gs <- gl.impute(gs, method="neighbour")
 
 gl.impute <-  function(x,
-                       method = "HW",
+                       method = "neighbour",
+                       fill.residual = TRUE,
                        parallel = FALSE,
                        verbose = NULL) {
+  
+  x_hold <- x
+  
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
@@ -296,6 +303,21 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
     
   }
   
+  if(fill.residual==TRUE){
+    
+    q_allele <- glMean(x3)
+    pop_matrix <- as.matrix(x3)
+    loc_na <- which(is.na(pop_matrix), arr.ind = T)
+    pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
+      return(as.numeric(s_alleles(q_freq = x)))
+    })))
+    x3@gen <- matrix2gen(pop_matrix, parallel = parallel)
+
+    if(verbose>=2){
+    cat(report("  Residual missing values were filled randomly drawing from the global allele profiles by locus\n"))
+    }
+  }
+  
   x3$chromosome <- x@chromosome
   x3$position <- x$position
   x3$ploidy <- x$ploidy
@@ -305,6 +327,32 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
   
   x3 <- gl.compliance.check(x3, verbose = 0)
   
+  if(verbose>=3){
+    
+    pop_list_before <- seppop(x_hold)
+    all_nas_before <- sum(unlist(lapply(pop_list_before,function(y){
+       sum(glNA(y) > nInd(y))
+    })))
+    x_matrix_before <- as.matrix(x_hold)
+    nas_before <- sum(is.na(x_matrix_before))
+    
+    pop_list_after <- seppop(x3)
+    all_nas_after <- sum(unlist(lapply(pop_list_after,function(y){
+      sum(glNA(y) > nInd(y))
+    })))
+
+    x_matrix_after <- as.matrix(x3)
+    nas_after <- sum(is.na(x_matrix_after))
+    imputed <- nas_before - nas_after
+    
+    cat("  Imputation method:",method,"\n")
+    cat("  No. of missing values before imputation:",nas_before,"\n")
+    cat("  No. of loci with all NA's for any one population before imputation:",all_nas_before,"\n")
+    cat("  No. of values imputed:",imputed,"\n")
+    cat("  No. of missing values after imputation:",nas_after,"\n")
+    cat("  No. of loci with all NA's for any one population after imputation:",all_nas_after,"\n")
+  }
+
   # ADD TO HISTORY
   x3@other$history <- x@other$history
   nh <- length(x3@other$history)
