@@ -96,17 +96,24 @@ gl.report.callrate <- function(x,
                 
                 # Boxplot
                 p1 <-
-                    ggplot(data.frame(callrate), aes(y = callrate)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + coord_flip() +
-                    plot_theme + xlim(range = c(-1, 1)) + ylim(min, 1) + ylab(" ") + theme(axis.text.y = element_blank(),
-                                                                                           axis.ticks.y = element_blank()) +
+                    ggplot(data.frame(callrate), aes(y = callrate)) + 
+                    geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+                    coord_flip() +
+                    plot_theme + 
+                    xlim(range = c(-1, 1)) + 
+                    ylim(min, 1) + 
+                    ylab(" ") + 
+                    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
                     ggtitle(title1)
                 
                 # Histogram
                 p2 <-
-                    ggplot(data.frame(callrate), aes(x = callrate)) + geom_histogram(bins = 100,
-                                                                                     color = plot_colors[1],
-                                                                                     fill = plot_colors[2]) +
-                    coord_cartesian(xlim = c(min, 1)) + xlab("Call rate") + ylab("Count") + plot_theme
+                    ggplot(data.frame(callrate), aes(x = callrate)) +
+                    geom_histogram(bins = 100,color = plot_colors[1],fill = plot_colors[2]) +
+                    coord_cartesian(xlim = c(min, 1)) +
+                    xlab("Call rate") +
+                    ylab("Count") + 
+                    plot_theme
         }
 
             

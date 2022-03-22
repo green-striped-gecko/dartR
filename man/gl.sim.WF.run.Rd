@@ -35,7 +35,7 @@ the function \code{\link{gl.sim.create_dispersal}} [default NULL].}
 \item{number_iterations}{Number of iterations of the simulations [default 1].}
 
 \item{every_gen}{Generation interval at which simulations should be stored in
-a genlight object [default 5].}
+a genlight object [default 10].}
 
 \item{sample_percent}{Percentage of individuals, from the total population, 
 to sample and save in the genlight object every generation [default 50].}
@@ -52,23 +52,23 @@ simulations variables [default TRUE].}
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 
-\item{...}{Here you can add separately any variable and its value which will 
-be changed over the input value supplied by the csv file. See tutorial.}
+\item{...}{Any variable and its value can be added separately within the 
+function, will be changed over the input value supplied by the csv file. See 
+tutorial.}
 }
 \value{
 Returns genlight objects with simulated data.
 }
 \description{
-This function simulates populations connected by gene flow, made up of 
-diploid organisms that reproduce in non-overlapping generations. Each 
-individual has a pair of homologous chromosomes that contains interspersed 
-selected and neutral loci. For the initial generation, the genotype for each 
-individual’s chromosomes is randomly drawn from distributions at linkage 
-equilibrium and in Hardy-Weinberg equilibrium. 
+This function simulates populations made up of diploid organisms that 
+reproduce in non-overlapping generations. Each individual has a pair of 
+homologous chromosomes that contains interspersed selected and neutral loci. 
+For the initial generation, the genotype for each individual’s chromosomes is
+ randomly drawn from distributions at linkage equilibrium and in 
+ Hardy-Weinberg equilibrium. 
 
 See documentation and tutorial for a complete description of the simulations.
-These documents can be accessed by typing in the R console:
-browseVignettes(package="dartR”)
+These documents can be accessed at http://georges.biomatix.org/dartR
 }
 \details{
 Values for simulation variables can be submitted into the function 
@@ -97,14 +97,11 @@ The main characteristics of the simulations are:
 characteristics such as the number, location, allele frequency and the 
 distribution of fitness effects (selection coefficients and dominance) of 
 loci under selection. 
-\item Simulations can also replicate the number and location of recombination 
-events in specific chromosomes.
 \item Simulations can recreate specific life histories and demographics, such
  as source populations, dispersal rate, number of generations, founder 
- individuals, effective population size, census population size and number of
-  offspring.
+ individuals, effective population size and census population size.
 \item Each allele in each individual is an agent (i.e., each allele is 
-explicitly simulated), which provides a realistic approach.
+explicitly simulated).
 \item Each locus can be customisable regarding its allele frequencies, 
 selection coefficients, and dominance.
 \item The number of loci, individuals, and populations to be simulated is 
