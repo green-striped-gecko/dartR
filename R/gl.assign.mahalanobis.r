@@ -83,10 +83,12 @@
 #' Post to \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples 
+#' \dontrun{
 #' #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
 #' test <- gl.assign.pa(testset.gl, unknown='UC_01044', nmin=10, threshold=1,verbose=3) 
 #' test_2  <- gl.assign.pca(test, unknown='UC_01044', plevel=0.95, verbose=3)
 #' df <- gl.assign.mahalanobis(test_2, unknown='UC_01044', verbose=3)
+#' }
 
 gl.assign.mahalanobis <- function(x,
                                   dim.limit=2,

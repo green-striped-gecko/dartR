@@ -28,7 +28,7 @@ dissimilarity matrix. This function is a wrapper for
    gl <- testset.gl[1:10,]
    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
    gl.plot.heatmap(D)
-   D2 <- gl.dist.pop(testset.gl)
+   D2 <- gl.dist.pop(possums.gl)
    gl.plot.heatmap(D2)
    D3 <- gl.fixed.diff(testset.gl)
    gl.plot.heatmap(D3)
