@@ -21,7 +21,7 @@ be within you simulated range of k's in your sr structure run object.}
 macos and linux: CLUMPP (no exe).}
 
 \item{...}{additional parameter passed to the clumpp function within
-package strataG (\link[strataG]{clumpp}).}
+package strataG (\code{clumpp}).}
 
 \item{plot_theme}{Theme for the plot. See details for options [default
 theme_dartR()].}
@@ -70,7 +70,7 @@ multimodality in analysis of population structure. Bioinformatics
 }
 }
 \seealso{
-\code{\link{gl.run.structure}},  \link[strataG]{clumpp}, \code{\link{gl.plot.structure}}
+\code{gl.run.structure},  \code{clumpp}, \code{gl.plot.structure}
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

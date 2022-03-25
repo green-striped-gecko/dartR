@@ -7,7 +7,7 @@
 #' @param plot.out TRUE: all four plots are shown. FALSE: all four plots are
 #' returned as a ggplot but not shown [default TRUE].
 #' @details The function is basically a convenient wrapper around the beautiful
-#' strataG function \link[strataG]{evanno} (Archer et al. 2016). For a detailed
+#' strataG function \code{evanno} (Archer et al. 2016). For a detailed
 #' description please refer to this package (see references below).
 #' @return An Evanno plot is created and a list of all four plots is returned.
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
@@ -25,7 +25,7 @@
 #' @import patchwork
 ### @importFrom strataG genind2gtypes structureRun
 #' @export
-#' @seealso \code{\link{gl.run.structure}},  \link[strataG]{clumpp},
+#' @seealso \code{\link{gl.run.structure}},  \code{clumpp},
 #' @references
 #' \itemize{
 #' \item Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of
@@ -38,49 +38,10 @@
 #'   Molecular Ecology 14:2611-2620.
 #' }
 
-gl.evanno <- function(sr,
-                      plot.out = TRUE) {
-    
-    pkg <- "devtools"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(
-            error(
-                "Package ",
-                pkg,
-                " needed for this function to work. Please install it using install.packages('devtools')."
-            )
-        )
-    }
-    
-    # check for strataG (currently not on CRAN)
-    if (!requireNamespace("strataG", quietly = TRUE)) {
-        ap <- available.packages()  #check CRAN
-        
-        oncran <- match("strataG", ap)
-        if (is.na(oncran)) {
-            warning(
-                warn(
-                    "package strataG needs to be installed. It is currently not on CRAN, hence you need to install it manually via Github using devtools:\n  devtools::install_github('EricArcher/strataG')\n. Do you want to install strataG from github now? (Y/N)+Enter\n"
-                )
-            )
-            line <- readline()
-            if (substr(line, 1, 1) == "Y") {
-                cat(report("\nInstalling strataG from Github...\n"))
-                flush.console()
-                devtools::install_github("EricArcher/strataG")
-            } else{
-                stop(
-                    error(
-                        "Package strataG is necessary to run structure. Check the help page for references ?gl.run.structure. Aborting now."
-                    )
-                )
-            }
-            
-        }
-    } else {
-        evno <- strataG::evanno(sr, plot = plot.out)
+gl.evanno <- function(sr, plot.out = TRUE) {
+        evno <- utils.structure.evanno(sr, plot = plot.out)
         # for (i in 1:4) evno$plots[[i]] <- evno$plots[[i]]+theme_dartR()
         
         return(evno)
-    }
 }
+

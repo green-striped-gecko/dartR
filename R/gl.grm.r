@@ -111,11 +111,11 @@ gl.grm <- function(x,
     # DO THE JOB
     
     # assigning colors to populations
-    if (class(palette_discrete) == "function") {
+    if (is(palette_discrete, "function")) {
         colors_pops <- palette_discrete(length(levels(pop(x))))
     }
     
-    if (class(palette_discrete) != "function") {
+    if (!is(palette_discrete, "function")) {
         colors_pops <- palette_discrete
     }
     

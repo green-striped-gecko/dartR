@@ -208,7 +208,7 @@ gl.grm.network <- function(G,
     plotcord$pop <- as.factor(plotcord$pop)
     
     # assigning colors to populations
-    if (class(palette_discrete) == "function") {
+    if (is(palette_discrete, "function")) {
         colors_pops <- palette_discrete(length(levels(pop(x))))
     }
     

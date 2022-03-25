@@ -247,11 +247,11 @@ gl.report.pa <- function(x,
             nodes$name <- gsub("trgt_", "", nodes$name)
             
             # assigning colors to populations
-            if (class(palette_discrete) == "function") {
+            if (is(palette_discrete, "function")) {
                 colors_pops <- palette_discrete(length(levels(pop(x))))
             }
             
-            if (class(palette_discrete) != "function") {
+            if (is(palette_discrete, "function")) {
                 colors_pops <- palette_discrete
                 if (!any(grepl("#", colors_pops))) {
                     colors_pops <- gplots::col2hex(colors_pops)
@@ -357,11 +357,11 @@ gl.report.pa <- function(x,
         
         if (plot.out) {
             # assigning colors to populations
-            if (class(palette_discrete) == "function") {
+            if (is(palette_discrete, "function")) {
                 colors_pops <- palette_discrete(length(levels(pop(x))) + 1)
             }
             
-            if (class(palette_discrete) != "function") {
+            if (!is(palette_discrete, "function")) {
                 colors_pops <- palette_discrete
             }
             

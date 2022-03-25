@@ -464,11 +464,11 @@ gl.report.diversity <- function(x,
     colnames(fs_final) <- c("pop", "q", "value", "up", "low")
     
     # printing plots and reports assigning colors to populations
-    if (class(plot_colors) == "function") {
+    if (is(plot_colors, "function")) {
         colors_pops <- plot_colors(length(levels(pop(x))))
     }
     
-    if (class(plot_colors) != "function") {
+    if (!is(plot_colors, "function")) {
         colors_pops <- plot_colors
     }
     

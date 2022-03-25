@@ -56,6 +56,7 @@
 #' }
 #' @import patchwork
 ### @importFrom strataG genind2gtypes structureRun
+#' @importFrom dplyr bind_rows mutate_at vars starts_with mutate group_by ungroup arrange n rename select everything n_distinct bind_rows starts_with
 #'
 #' @export
 ### @seealso \code{structureRun}
@@ -86,30 +87,6 @@ gl.run.structure <- function(x,
             )
         )
     }
-    # check for strataG (currently not on CRAN) not already installed?
-    if (!requireNamespace("strataG", quietly = TRUE)) {
-        ap <- available.packages()  #check CRAN
-        oncran <- match("strataG", ap)
-        if (is.na(oncran)) {
-            cat(
-                warn(
-                    "Package strataG needs to be installed. It is currently not on CRAN, hence you need to install it manually via Github using devtools:\n  devtools::install_github('EricArcher/strataG')\n. Do you want to install strataG from github now? (Y/N)+Enter\n"
-                )
-            )
-            line <- readline()
-            if (substr(line, 1, 1) == "Y") {
-                cat(report("\nInstalling strataG from Github...\n"))
-                flush.console()
-                devtools::install_github("EricArcher/strataG")
-            } else {
-                stop(
-                    error(
-                        "Package strataG is necessary to run structure. Check the help page for references ?gl.run.structure. Aborting now."
-                    )
-                )
-            }
-        }
-    } else {
         # check that Structure is installed
         structure <- file.exists(exec)
         
@@ -141,11 +118,11 @@ gl.run.structure <- function(x,
         }
         
         # DO THE JOB
-        gg <- strataG::genind2gtypes(gl2gi(x, verbose = 0))
+        gg <- utils.structure.genind2gtypes(gl2gi(x, verbose = 0))
         
-        sr <- strataG::structureRun(gg, exec = exec, ...)
+        sr <- utils.structure.structureRun(gg, exec = exec, ...)
         
-        ev <- strataG::evanno(sr)
+        ev <- utils.structure.evanno(sr)
         pa <-
             ((ev$plots$mean.ln.k + ev$plots$mean.ln.k) / (ev$plots$ln.ppk + ev$plots$delta.k)
             ) + plot_theme
@@ -192,5 +169,5 @@ gl.run.structure <- function(x,
         
         # RETURN
         return(sr)
-    }
+    
 }

@@ -102,7 +102,7 @@ multimodality in analysis of population structure. Bioinformatics
 }
 }
 \seealso{
-\code{\link{gl.run.structure}},  \link[strataG]{clumpp},
+\code{\link{gl.run.structure}},  \code{clumpp},
 \code{\link{gl.plot.structure}}
 }
 \author{
