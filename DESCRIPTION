@@ -30,12 +30,12 @@ Description: Functions are provided that facilitate the import and analysis of
     faststructure packages.
 VignetteBuilder: knitr
 Encoding: UTF-8
-Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2
+Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2, dplyr
 biocViews:
 Imports: stats, methods, utils, plyr, tidyr,stringr, ape, vegan,
         sp, PopGenReport, MASS, StAMPP,SNPRelate,
-        gridExtra, foreach, dplyr, crayon,reshape2, fields,
-        patchwork, raster, data.table, shiny, purrr
+        gridExtra, foreach, crayon, reshape2, fields,
+        patchwork, raster, data.table, shiny
 Suggests: 
     HardyWeinberg,
     networkD3,
@@ -81,7 +81,8 @@ Suggests:
     devtools,
     tibble,
     stringi,
-    shinyWidgets
+    shinyWidgets,
+    purrr
 Additional_repositories: https://github.com/EricArcher/strataG 
 License: GPL (>= 3)
 LazyData: true
@@ -95,5 +96,5 @@ Author: Bernd Gruber [aut, cre],
   Peter J. Unmack [ctb],
   Oliver Berry [ctb],
   Lindsay V. Clark [ctb],
-  Floriaan Devloo-Delva [ctb]
+  Floriaan Devloo-Delva [ctb],
   Eric Archer [ctb]
