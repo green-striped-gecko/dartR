@@ -15,49 +15,6 @@
 #' @param delete.files logical. Delete all files when STRUCTURE is finished?
 #' @param exec name of executable for STRUCTURE. Defaults to "structure".
 #' @param ... arguments to be passed to \code{structureWrite}.
-#' @param maxpops number of groups.
-#' @param burnin number of iterations for MCMC burnin.
-#' @param numreps number of MCMC replicates.
-#' @param noadmix logical. No admixture?
-#' @param freqscorr logical. Correlated frequencies?
-#' @param randomize randomize.
-#' @param seed set random seed.
-#' @param pop.prior a character specifying which population prior model to use:
-#'   "locprior" or "usepopinfo".
-#' @param locpriorinit parameterizes locprior parameter \emph{r} - how
-#'   informative the populations are. Only used when \code{pop.prior} =
-#'   "locprior".
-#' @param maxlocprior specifies range of locprior parameter \emph{r}. Only used
-#'   when \code{pop.prior} = "locprior".
-#' @param gensback integer defining the number of generations back to test for
-#'   immigrant ancestry. Only used when \code{pop.prior} = "usepopinfo".
-#' @param migrprior numeric between 0 and 1 listing migration prior. Only used
-#'   when \code{pop.prior} = "usepopinfo".
-#' @param pfrompopflagonly logical. update allele frequencies from individuals
-#'   specified by \code{popflag}. Only used when \code{pop.prior} =
-#'   "usepopinfo".
-#' @param popflag a vector of integers (0, 1) or logicals identifiying whether
-#'   or not to use strata information. Only used when \code{pop.prior} =
-#'   "usepopinfo".
-#' @param inferalpha logical. Infer the value of the model parameter # from the
-#'   data; otherwise is fixed at the value \code{alpha} which is chosen by the
-#'   user. This option is ignored under the NOADMIX model. Small \code{alpha}
-#'   implies that most individuals are essentially from one population or
-#'   another, while \code{alpha} > 1 implies that most individuals are admixed.)
-#' @param alpha Dirichlet parameter for degree of admixture. This is the initial
-#'   value if \code{inferalpha = TRUE}.
-#' @param unifprioralpha logical. Assume a uniform prior for \code{alpha} which
-#'   runs between 0 and \code{alphamax}. This model seems to work fine; the
-#'   alternative model (when \code{unfprioralpha = 0}) is to take \code{alpha}
-#'   as having a Gamma prior, with mean \code{alphapriora × alphapriorb}, and
-#'   variance \code{alphapriora × alphapriorb^2}.
-#' @param alphamax maximum for uniform prior on \code{alpha} when
-#'   \code{unifprioralpha = TRUE}.
-#' @param alphapriora,alphapriorb parameters of Gamma prior on \code{alpha} when
-#'   \code{unifprioralpha = FALSE}.
-#' @param file name of the output file from STRUCTURE.
-#' @param pops vector of population labels to be used in place of numbers in
-#'   STRUCTURE file.
 #'
 #' @return \describe{ \item{\code{structureRun}}{a list where each element is a
 #' list with results from \code{structureRead} and a vector of the filenames
@@ -70,9 +27,8 @@
 #' input and output files used by STRUCTURE} \item{\code{label}}{label for the
 #' run} } } }
 
-utils.structure.structureRun <- 
-  function (g, k.range = NULL, num.k.rep = 1, label = NULL, delete.files = TRUE, 
-            exec = "structure", ...) 
+utils.structure.run <- 
+  function (g, k.range = NULL, num.k.rep = 1, label = NULL, delete.files = TRUE, exec = "structure", ...) 
   {
 ################################################################
     .structureParseQmat <-    function (q.mat.txt, pops) 
@@ -105,7 +61,8 @@ utils.structure.structureRun <-
       g@data %>% dplyr::group_by(.data$locus) %>% dplyr::mutate(allele = min.val - 
                                                                   1 + as.integer(factor(.data$allele))) %>% dplyr::ungroup()
     }    
-  
+################################################################
+
 ################################################################
     .stackedAlleles <-    function (g, alleles2integer = FALSE, na.val = NULL, ...) 
     {
@@ -114,8 +71,8 @@ utils.structure.structureRun <-
       else g@data
       if (!is.null(na.val)) 
         x$allele[is.na(x$allele)] <- na.val
-      x %>% dplyr::arrange(.data$id, .data$locus) %>% dplyr::mutate(a = rep(1:getPloidy(g), 
-                                                                            dplyr::n()/getPloidy(g))) %>% tidyr::spread(.data$locus, 
+      x %>% dplyr::arrange(.data$id, .data$locus) %>% dplyr::mutate(a = rep(1:g@ploidy, 
+                                                                            dplyr::n()/g@ploidy)) %>% tidyr::spread(.data$locus, 
                                                                                                                         .data$allele) %>% dplyr::rename(allele = "a") %>% 
         dplyr::select(.data$id, .data$stratum, .data$allele, 
                       dplyr::everything())
@@ -124,7 +81,7 @@ utils.structure.structureRun <-
 ####################################################    
     .getFileLabel <- function (g, label = NULL) 
     {
-      desc <- getDescription(g)
+      desc <- g@description
       label <- if (!is.null(label)) {
         label
       }
@@ -149,15 +106,15 @@ utils.structure.structureRun <-
         }
       }
       if (is.null(popflag)) 
-        popflag <- rep(1, getNumInd(g))
-      if (length(popflag) != getNumInd(g)) {
+        popflag <- rep(1, length(unique(g@data$id)))
+      if (length(popflag) != length(unique(g@data$id))) {
         stop("'popflag' should be the same length as the number of individuals in 'g'.")
       }
       if (!all(popflag %in% c(0, 1))) {
         stop("all values in 'popflag' must be 0 or 1.")
       }
       if (is.null(names(popflag))) 
-        names(popflag) <- getIndNames(g)
+        names(popflag) <- unique(g@data$id)
       in.file <- ifelse(is.null(label), "data", paste(label, 
                                                       "data", sep = "_"))
       out.file <- ifelse(is.null(label), "out", paste(label, 
@@ -172,7 +129,7 @@ utils.structure.structureRun <-
                                                        popflag = popflag[.data$id]) %>% dplyr::select(.data$id, 
                                                                                                       .data$stratum, .data$popflag, dplyr::everything()) %>% 
         as.matrix()
-      write(paste(getLociNames(g), collapse = " "), file = in.file)
+      write(paste(  sort(unique(g@data[["locus"]])), collapse = " "), file = in.file)
       for (i in 1:nrow(mat)) {
         write(paste(mat[i, ], collapse = " "), file = in.file, 
               append = TRUE)
@@ -181,7 +138,7 @@ utils.structure.structureRun <-
                        paste("BURNIN", as.integer(burnin)), paste("NUMREPS", 
                                                                   as.integer(numreps)), paste("INFILE", in.file), 
                        paste("OUTFILE", out.file), paste("NUMINDS", 
-                                                         getNumInd(g)), paste("NUMLOCI", getNumLoci(g)), 
+                                                         length(unique(g@data$id))), paste("NUMLOCI", length(unique(g@data$locus))), 
                        "MISSING -9", "LABEL 1", "POPDATA 1", 
                        "POPFLAG 1", "LOCDATA 0", "PHENOTYPE 0", 
                        "EXTRACOLS 0", "MARKERNAMES 1")
@@ -216,7 +173,7 @@ utils.structure.structureRun <-
       extra.params <- paste("#define", extra.params)
       write(extra.params, file = extra.file)
       invisible(list(files = c(data = in.file, mainparams = main.file, 
-                               extraparams = extra.file, out = out.file), pops = getStrataNames(g)))
+                               extraparams = extra.file, out = out.file), pops = sort(unique(g@data$stratum))))
     }
 ###########################################################
     structureRead <-    function (file, pops = NULL) 

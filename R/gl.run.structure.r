@@ -7,7 +7,7 @@
 #' functions from \code{strataG}
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
-#' @param ... Parameters to specify the STRUCTURE run (check \code{structureRun}
+#' @param ... Parameters to specify the STRUCTURE run (check \code{structureRun} within strataG.
 #' for more details). Parameters are passed to the \code{structureRun} function.
 #' For example you need to set the k.range and the type of model you would like
 #' to run (noadmix, locprior) etc. If those parameter names do not tell you
@@ -120,7 +120,7 @@ gl.run.structure <- function(x,
         # DO THE JOB
         gg <- utils.structure.genind2gtypes(gl2gi(x, verbose = 0))
         
-        sr <- utils.structure.structureRun(gg, exec = exec, ...)
+        sr <- utils.structure.run(gg, exec = exec, ...)
         
         ev <- utils.structure.evanno(sr)
         pa <-
