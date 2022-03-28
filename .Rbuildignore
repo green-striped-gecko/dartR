@@ -4,5 +4,4 @@
 ^\.Rproj\.user$
 README.md
 ^\.github$
-binaries/*
-Tutorials/*
+^LICENSE\.md$

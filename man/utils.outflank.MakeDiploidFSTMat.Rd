@@ -7,14 +7,21 @@
 utils.outflank.MakeDiploidFSTMat(SNPmat, locusNames, popNames)
 }
 \arguments{
-\item{SNPmat}{This is an array of genotypes with a row for each individual. There should be a column for each SNP, with the number of copies of the focal allele (0, 1, or 2) for that individual. If that individual is missing data for that SNP, there should be a 9, instead.}
+\item{SNPmat}{This is an array of genotypes with a row for each individual.
+There should be a column for each SNP, with the number of copies of the focal
+ allele (0, 1, or 2) for that individual. If that individual is missing data
+ for that SNP, there should be a 9, instead.}
 
-\item{locusNames}{A list of names for each SNP locus. There should be the same number of locus names as there are columns in SNPmat.}
+\item{locusNames}{A list of names for each SNP locus. There should be the
+same number of locus names as there are columns in SNPmat.}
 
-\item{popNames}{A list of population names to give location for each individual. Typically multiple individuals will have the same popName. The list popNames should have the same length as the number of rows in SNPmat.}
+\item{popNames}{A list of population names to give location for each
+individual. Typically multiple individuals will have the same popName. The
+list popNames should have the same length as the number of rows in SNPmat.}
 }
 \value{
-Returns a data frame in the form needed for the main OutFLANK function.
+Returns a data frame in the form needed for the main OutFLANK
+function.
 }
 \description{
 Creates OutFLANK input file from individual genotype info.

@@ -2,29 +2,30 @@
 % Please edit documentation in R/gl.set.verbosity.r
 \name{gl.set.verbosity}
 \alias{gl.set.verbosity}
-\title{Set the default verbosity level}
+\title{Sets the default verbosity level}
 \usage{
-gl.set.verbosity(x, value = 2, verbose = NULL)
+gl.set.verbosity(value = 2)
 }
 \arguments{
-\item{x}{name of the genlight object containing the SNP data, or the genind object containing the SilocoDArT data [required]}
-
-\item{value}{-- set the default verbosity to be this value: 0, silent only fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
-
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{value}{Set the default verbosity to be this value: 0, silent only fatal
+errors; 1, begin and end; 2, progress log; 3, progress and results summary;
+5, full report [default 2]}
 }
 \value{
-The genlight with the verbosity flag reset
+verbosity value [set for all functions]
 }
 \description{
-dartR functions have a verbosity parameter that sets the level of reporting during the execution of the function. The verbosity level,
-set by parameter 'verbose' can be one of verbose 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary;
-5, full report. The default value for verbosity is stored as a flag in the gl@loc.metrics.flags slot of each genelight object. This script 
-sets the value of the flag.
+dartR functions have a verbosity parameter that sets the level of reporting
+ during the execution of the function. The verbosity level, set by parameter
+ 'verbose' can be one of verbose 0, silent or fatal errors; 1, begin and end;
+ 2, progress log; 3, progress and results summary; 5, full report. The
+ default value for verbosity is stored in the r environment. This script sets
+ the default value.
 }
 \examples{
-gl <- gl.set.verbosity(testset.gl, value=2)
+gl <- gl.set.verbosity(value=2)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

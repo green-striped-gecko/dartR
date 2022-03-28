@@ -2,33 +2,45 @@
 % Please edit documentation in R/utils.recalc.freqhomref.r
 \name{utils.recalc.freqhomref}
 \alias{utils.recalc.freqhomref}
-\title{A utility script to recalculate the the frequency of the homozygous reference SNP by locus after some populations have been deleted}
+\title{A utility script to recalculate the frequency of the homozygous reference
+SNP by locus after some populations have been deleted}
 \usage{
 utils.recalc.freqhomref(x, verbose = NULL)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report [default 2].}
 }
 \value{
 The modified genlight object
 }
 \description{
-The locus metadata supplied by DArT has FreqHomRef included,
-but the frequency of the homozygous reference will change when some individuals are removed from the dataset. 
-This script recalculates the FreqHomRef and places these recalculated values in the appropriate place in the genlight object.
-Note that the frequency of the homozygote reference SNPS is calculated from the individuals that could be scored.
+The locus metadata supplied by DArT has FreqHomRef included, but the
+frequency of the homozygous reference will change when some individuals are
+removed from the dataset.
+}
+\details{
+This script recalculates the FreqHomRef and places these recalculated values
+in the appropriate place in the genlight object.
+
+Note that the frequency of the homozygote reference SNPS is calculated from
+the individuals that could be scored.
 }
 \examples{
 #result <- utils.recalc.freqhomref(testset.gl)
 }
 \seealso{
-\code{utils.recalc.metrics} for recalculating all metrics, \code{utils.recalc.callrate} for recalculating CallRate,
-\code{utils.recalc.avgpic} for recalculating AvgPIC, \code{utils.recalc.freqhomsnp} for recalculating frequency of homozygous alternate,
-\code{utils.recalc.freqhet} for recalculating frequency of heterozygotes, \code{gl.recalc.maf} for recalculating minor allele frequency,
+\code{utils.recalc.metrics} for recalculating all metrics,
+ \code{utils.recalc.callrate} for recalculating CallRate,
+\code{utils.recalc.avgpic} for recalculating AvgPIC,
+ \code{utils.recalc.freqhomsnp} for recalculating frequency of homozygous
+ alternate, \code{utils.recalc.freqhet} for recalculating frequency of
+ heterozygotes, \code{gl.recalc.maf} for recalculating minor allele frequency,
 \code{gl.recalc.rdepth} for recalculating average read depth
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

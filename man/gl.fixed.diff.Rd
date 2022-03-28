@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.fixed.diff.r
 \name{gl.fixed.diff}
 \alias{gl.fixed.diff}
-\title{Generate a matrix of fixed differences}
+\title{Generates a matrix of fixed differences and associated statistics for
+ populations taken pairwise}
 \usage{
 gl.fixed.diff(
   x,
@@ -12,83 +13,106 @@ gl.fixed.diff(
   alpha = 0.05,
   reps = 1000,
   mono.rm = TRUE,
-  pb = TRUE,
+  pb = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing SNP genotypes or tag P/A data (SilicoDArT) 
-or an object of class 'fd' [required]}
+\item{x}{Name of the genlight object containing SNP genotypes or tag P/A data
+(SilicoDArT) or an object of class 'fd' [required].}
 
-\item{tloc}{-- threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs 5:95 is fixed) 
-[default 0]}
+\item{tloc}{Threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs
+5:95 is fixed) [default 0].}
 
-\item{test}{-- if TRUE, calculate p values for the observed fixed differences [default FALSE]}
+\item{test}{If TRUE, calculate p values for the observed fixed differences
+[default FALSE].}
 
-\item{delta}{-- threshold value for the true population minor allele frequency (MAF) from which 
-resultant sample fixed differences are considered true positives [default 0.02]}
+\item{delta}{Threshold value for the true population minor allele frequency
+(MAF) from which resultant sample fixed differences are considered true
+positives [default 0.02].}
 
-\item{alpha}{-- level of significance used to display non-significant differences between
-populations as they are compared pairwise [default 0.05]}
+\item{alpha}{Level of significance used to display non-significant
+differences between populations as they are compared pairwise [default 0.05].}
 
-\item{reps}{-- number of replications to undertake in the simulation to estimate probability 
-of false positives [default 1000]}
+\item{reps}{Number of replications to undertake in the simulation to estimate
+probability of false positives [default 1000].}
 
-\item{mono.rm}{-- if TRUE, loci that are monomorphic across all individuals are removed before 
-beginning computations [default TRUE]}
+\item{mono.rm}{If TRUE, loci that are monomorphic across all individuals are
+removed before beginning computations [default TRUE].}
 
-\item{pb}{-- if TRUE, show a progress bar on time consuming loops [default FALSE]}
+\item{pb}{If TRUE, show a progress bar on time consuming loops
+[default FALSE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 
-3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A list of Class "fd" containing the gl object and square matricies, as follows
-        [[1]] $gl -- the output genlight object;
-        [[2]] $fd -- raw fixed differences;
-        [[3]] $pcfd -- percent fixed differences;
-        [[4]] $nobs -- mean no. of individuals used in each comparison;
-        [[5]] $nloc -- total number of loci used in each comparison;
-        [[6]] $expfpos -- if test=TRUE, the expected count of false positives for each comparison [by simulation];
-        [[7]] $sdfpos -- if test=TRUE, the standard deviation of the count of false positives for each comparison [by simulation];
-        [[8]] $prob -- if test=TRUE, the significance of the count of fixed differences [by simulation])
+A list of Class 'fd' containing the gl object and square matrices,
+as follows:
+\enumerate{
+       \item $gl -- the output genlight object;
+       \item $fd -- raw fixed differences;
+       \item $pcfd -- percent fixed differences;
+       \item $nobs -- mean no. of individuals used in each comparison;
+       \item $nloc -- total number of loci used in each comparison;
+       \item $expfpos -- if test=TRUE, the expected count of false positives
+       for each comparison [by simulation];
+       \item $sdfpos -- if test=TRUE, the standard deviation of the count of
+       false positives for each comparison [by simulation];
+       \item $prob -- if test=TRUE, the significance of the count of fixed
+       differences [by simulation])
+        }
 }
 \description{
-This script takes SNP data or sequence tag P/A data grouped into populations in a genlight object (DArTSeq)
-and generates a matrix of fixed differences between populations taken pairwise
+This script takes SNP data or sequence tag P/A data grouped into populations
+in a genlight object (DArTSeq) and generates a matrix of fixed differences
+between populations taken pairwise
 }
 \details{
-A fixed difference at a locus occurs when two populations share no alleles or where all members 
-of one population has a sequence tag scored, and all members of the other population has 
-the sequence tag absent. The challenge with this approach is that when sample sizes are finite, 
-fixed differences will occur through sampling error, compounded when many loci are examined. 
-Simulations suggest that sample sizes of n1=5 and n2=5 are adequate to reduce the probability 
-of [experiment-wide] type 1 error to negligible levels [ploidy=2]. A warning is issued if 
-comparison between two populations involves sample sizes less than 5, taking into account 
-allele drop-out.
+A fixed difference at a locus occurs when two populations share no alleles or
+where all members of one population has a sequence tag scored, and all
+members of the other population has the sequence tag absent. The challenge
+with this approach is that when sample sizes are finite, fixed differences
+will occur through sampling error, compounded when many loci are examined.
+Simulations suggest that sample sizes of n1=5 and n2=5 are adequate to reduce
+the probability of [experiment-wide] type 1 error to negligible levels
+[ploidy=2]. A warning is issued if comparison between two populations
+involves sample sizes less than 5, taking into account allele drop-out.
 
-Optionally, if test=TRUE, the script will test the fixed differences between final OTUs for statistical significance,
-using simulation, and then further amalgamate populations that for which there are no significant fixed differences at 
-a specified level of significance (alpha). To avoid conflation of true fixed differences with false positives in the
-simulations, it is necessary to decide a threshold value (delta) for extreme true allele frequencies that will be considered
-fixed for practical purposes. That is, fixed differences in the sample set will be considered to be positives (not false positives)
-if they arise from true allele frequencies of less than 1-delta in one or both populations.  The parameter
-delta is typically set to be small (e.g. delta = 0.02).
+Optionally, if test=TRUE, the script will test the fixed differences between
+final OTUs for statistical significance, using simulation, and then further
+amalgamate populations that for which there are no significant fixed
+differences at a specified level of significance (alpha). To avoid conflation
+of true fixed differences with false positives in the simulations, it is
+necessary to decide a threshold value (delta) for extreme true allele
+frequencies that will be considered fixed for practical purposes. That is,
+fixed differences in the sample set will be considered to be positives (not
+false positives) if they arise from true allele frequencies of less than
+1-delta in one or both populations.  The parameter delta is typically set to
+be small (e.g. delta = 0.02).
 
-An absolute fixed difference is as defined above. However, one might wish to score fixed differences at some lower
-level of allele frequency difference, say where percent allele fequencies are 95,5 and 5,95 rather than 100:0 and 0:100.
-This adjustment can be done with the tloc parameter. For example, tloc=0.05 means that SNP allele frequencies of 
-95,5 and 5,95 percent will be regarded as fixed when comparing two populations at a locus.
+NOTE: The above test will only be calculated if tloc=0, that is, for analyses
+of absolute fixed differences. The test applies in comparisons of allopatric
+ populations only. For sympatric populations, use gl.pval.sympatry().
+
+An absolute fixed difference is as defined above. However, one might wish to
+score fixed differences at some lower level of allele frequency difference,
+say where percent allele frequencies are 95,5 and 5,95 rather than 100:0 and
+0:100. This adjustment can be done with the tloc parameter. For example,
+tloc=0.05 means that SNP allele frequencies of 95,5 and 5,95 percent will be
+regarded as fixed when comparing two populations at a locus.
 }
 \examples{
 \donttest{
-fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=2 )
-fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, verbose=1 )
+fd <- gl.fixed.diff(testset.gl, tloc=0, verbose=3 )
+fd <- gl.fixed.diff(testset.gl, tloc=0, test=TRUE, delta=0.02, reps=100, verbose=3 )
 }
 }
 \seealso{
 \code{\link{is.fixed}}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

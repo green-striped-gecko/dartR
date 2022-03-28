@@ -2,28 +2,34 @@
 % Please edit documentation in R/is.fixed.r
 \name{is.fixed}
 \alias{is.fixed}
-\title{Test to see if two populations are fixed at a given locus}
+\title{Tests if two populations are fixed at a given locus}
 \usage{
 is.fixed(s1, s2, tloc = 0)
 }
 \arguments{
-\item{s1}{-- percentage SNP allele or sequence tag frequency for the first population [required]}
+\item{s1}{Percentage SNP allele or sequence tag frequency for the first 
+population [required].}
 
-\item{s2}{-- percentage SNP allele or sequence tag frequency for the second population [required]}
+\item{s2}{Percentage SNP allele or sequence tag frequency for the second 
+population [required].}
 
-\item{tloc}{-- threshold value for tolerance in when a difference is regarded as fixed [default 0]}
+\item{tloc}{Threshold value for tolerance in when a difference is regarded as
+fixed [default 0].}
 }
 \value{
-TRUE (fixed difference) or FALSE (alleles shared) or NA (one or both s1 or s2 missing)
+TRUE (fixed difference) or FALSE (alleles shared) or NA (one or both 
+s1 or s2 missing)
 }
 \description{
 This script compares two percent allele frequencies
 and reports TRUE if they represent a fixed difference, FALSE otherwise.
 }
 \details{
-A fixed difference at a locus occurs when two populations share no alleles, noting that SNPs are biallelic (ploidy=2).
-Tollerance in the definition of a fixed difference is provided by the t parameter. For example, t=0.05 means
-that SNP allele frequencies of 95,5 and 5,95 percent will be reported as fixed (TRUE).
+A fixed difference at a locus occurs when two populations share no alleles,
+ noting that SNPs are biallelic (ploidy=2).
+Tolerance in the definition of a fixed difference is provided by the t
+ parameter. For example, t=0.05 means that SNP allele frequencies of 95,5 and
+ 5,95 percent will be reported as fixed (TRUE).
 }
 \examples{
 is.fixed(s1=100, s2=0, tloc=0)
@@ -33,5 +39,6 @@ is.fixed(96, 4, tloc=0.05)
 \code{\link{gl.fixed.diff}}
 }
 \author{
-Arthur Georges (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges (bugs? Post to
+ \url{https://groups.google.com/d/forum/dartr})
 }

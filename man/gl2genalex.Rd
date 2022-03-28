@@ -2,31 +2,48 @@
 % Please edit documentation in R/gl2genalex.r
 \name{gl2genalex}
 \alias{gl2genalex}
-\title{Convert a genlight object to format suitable for input to genalex}
+\title{Converts a genlight object into a format suitable for input to genalex}
 \usage{
-gl2genalex(x, outfile = "genalex.csv", outpath = tempdir(), verbose = NULL)
+gl2genalex(
+  x,
+  outfile = "genalex.csv",
+  outpath = tempdir(),
+  overwrite = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{outfile}{-- file name of the output file (including extension) [default 'genalex.csv']}
+\item{outfile}{File name of the output file (including extension)
+[default 'genalex.csv'].}
 
-\item{outpath}{-- path where to save the output file [default tempdir()]}
+\item{outpath}{Path where to save the output file [default tempdir()].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{overwrite}{If FALSE and filename exists, then the file will not be
+overwritten. Set this option to TRUE to overwrite the file [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end;
+2, progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \description{
-The output csv file contains the snp data and other relevant lines suitable for genalex. This script is a wrapper for genind2genalex {poppr}
-}
-\details{
-Reference: Peakall, R. and Smouse P.E. (2012) GenAlEx 6.5: genetic analysis in Excel. Population genetic software for teaching and research-an update. Bioinformatics 28, 2537-2539.
-http://bioinformatics.oxfordjournals.org/content/28/19/2537
+The output csv file contains the snp data and other relevant lines suitable
+ for genalex. This script is a wrapper for  \link[poppr]{genind2genalex}
+ (package poppr).
 }
 \examples{
 \donttest{
-gl2genalex(testset.gl, outfile="testset.csv")
+gl2genalex(testset.gl, outfile='testset.csv')
 }
+}
+\references{
+Peakall, R. and Smouse P.E. (2012) GenAlEx 6.5: genetic analysis
+in Excel. Population genetic software for teaching and research-an update.
+Bioinformatics 28, 2537-2539.
+http://bioinformatics.oxfordjournals.org/content/28/19/2537
 }
 \author{
-Katrin Hohwieler, wrapper Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos, Author: Katrin Hohwieler, wrapper Arthur
+Georges (Post to \url{https://groups.google.com/d/forum/dartr})
 }

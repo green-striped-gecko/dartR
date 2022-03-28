@@ -2,24 +2,29 @@
 % Please edit documentation in R/gl2demerelate.r
 \name{gl2demerelate}
 \alias{gl2demerelate}
-\title{Create a dataframe suitable for input to package \{Demerelate\} from a genlight \{adegenet\} object}
+\title{Creates a dataframe suitable for input to package \{Demerelate\} from a
+genlight \{adegenet\} object}
 \usage{
-gl2demerelate(gl, verbose = NULL)
+gl2demerelate(x, verbose = NULL)
 }
 \arguments{
-\item{gl}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity]}
 }
 \value{
 A dataframe suitable as input to package \{Demerelate\}
 }
 \description{
-Create a dataframe suitable for input to package \{Demerelate\} from a genlight \{adegenet\} object
+Creates a dataframe suitable for input to package \{Demerelate\} from a
+genlight \{adegenet\} object
 }
 \examples{
 df <- gl2demerelate(testset.gl)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

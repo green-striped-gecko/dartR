@@ -2,33 +2,43 @@
 % Please edit documentation in R/utils.dart2genlight.r
 \name{utils.dart2genlight}
 \alias{utils.dart2genlight}
-\title{Convert DarT to genlight}
+\title{Converts DarT to genlight}
 \usage{
 utils.dart2genlight(
   dart,
   ind.metafile = NULL,
   covfilename = NULL,
   probar = TRUE,
-  verbose = 2
+  verbose = NULL
 )
 }
 \arguments{
-\item{dart}{a dart object created via read.dart}
+\item{dart}{A dart object created via read.dart [required].}
 
-\item{ind.metafile}{optional file in csv format with metadata for each individual (see details for explanation)}
+\item{ind.metafile}{Optional file in csv format with metadata for each
+individual (see details for explanation) [default NULL].}
 
-\item{covfilename}{depreciated, use parameter ind.metafile}
+\item{covfilename}{Depreciated, use parameter ind.metafile.}
 
-\item{probar}{show progress bar}
+\item{probar}{Show progress bar [default TRUE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report [default NULL].}
 }
 \value{
-a genlight object is returned. Including all available slots are filled. loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
+A genlight object. Including all available slots are filled.
+loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
 }
 \description{
-converts a dart file (read via \code{read.dart}) into an genlight object \code{\link{adegenet}}. Internal function called by gl.read.dart
+Converts a DArT file (read via \code{read.dart}) into an
+genlight object \code{\link{adegenet}}. Internal function called by
+gl.read.dart
 }
 \details{
-the ind.metadata file needs to have very specific headings. First an heading called id. Here the ids have to match the ids in the dart object \code{colnames(dart[[4]])}. The following column headings are optional. pop: specifies the population membership of each individual. lat and lon specify spatial coordinates (perferable in decimal degrees WGS1984 format). Additional columns with individual metadata can be imported (e.g. age, gender).
+The ind.metadata file needs to have very specific headings. First a heading
+called id. Here the ids have to match the ids in the dart object
+\code{colnames(dart[[4]])}. The following column headings are optional.
+pop: specifies the population membership of each individual. lat and lon
+specify spatial coordinates (in decimal degrees WGS1984 format). Additional
+columns with individual metadata can be imported (e.g. age, gender).
 }

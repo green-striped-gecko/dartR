@@ -2,45 +2,80 @@
 % Please edit documentation in R/gl.report.bases.r
 \name{gl.report.bases}
 \alias{gl.report.bases}
-\title{Summary of base pair frequencies}
+\title{Reports summary of base pair frequencies}
 \usage{
-gl.report.bases(x, plot = TRUE, verbose = NULL)
+gl.report.bases(
+  x,
+  plot.out = TRUE,
+  plot_theme = theme_dartR(),
+  plot_colors = two_colors,
+  save2tmp = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP or presence/absence data [required]}
+\item{x}{Name of the genlight object containing the SNP or presence/absence
+(SilicoDArT) data [required].}
 
-\item{plot}{-- if TRUE, histograms of base composition are produced [default TRUE]}
+\item{plot.out}{If TRUE, histograms of base composition are produced
+[default TRUE].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default theme_dartR()].}
+
+\item{plot_colors}{List of two color names for the borders and fill of the
+plots [default two_colors].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE]}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+ [default NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-returns a matrix containing the percent frequencies of each base (A,C,T,G) and the transition and transversion frequencies.
-
-returns a named vector of base frequencies and the transversion and transitions. I also returns the plot as an ggplot object, which can be further customised. See example.
+The unchanged genlight object
 }
 \description{
-This script calculates the frequencies of the four bases, and the frequency of transitions and
-transversions in a DArT genlight object.
+This script calculates the frequencies of the four DNA nucleotide bases:
+adenine (A), cytosine (C), 'guanine (G) and thymine (T), and the frequency of
+transitions (Ts) and transversions (Tv) in a DArT genlight object.
 }
 \details{
-The script checks if trimmed sequences are included in the locus metadata, and if so, tallies up
-the numbers of A,T,G and C bases. Only the reference state at the SNP locus is counted. Counts of transitions
-and transversions assume that there is no directionality, that is C>T is the same as T>C, because
-the reference state is arbitrary.
+The script checks first if trimmed sequences are included in the
+locus metadata (@other$loc.metrics$TrimmedSequence), and if so, tallies up
+the numbers of A, T, G and C bases. Only the reference state at the SNP locus
+is counted. Counts of transitions (Ts) and transversions (Tv) assume that
+there is no directionality, that is C->T is the same as T->C, because the
+reference state is arbitrary.
 
-For presence/absence data (SilicoDArT), it is not possible to count transitions and tranversions or tv/ts ratio
-because the SNP data is not available, only a single sequence tag.
+For presence/absence data (SilicoDArT), it is not possible to count
+transversions or transitions or transversions/transitions ratio because the
+ SNP data is not available, only a single sequence tag.
+
+Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
 # SNP data
   out <- gl.report.bases(testset.gl)
-  out$freq
-  out$plotbases
-  out$plottvts
-# Tag P/A data
+  #' # Tag P/A data
   out <- gl.report.bases(testset.gs)
-  out
+
+}
+\seealso{
+Other reporting functions: 
+\code{\link{gl.diagnostics.hwe}()},
+\code{\link{gl.report.diversity}()},
+\code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.parent.offspring}()},
+\code{\link{gl.report.pa}()},
+\code{\link{gl.report.sexlinked}()}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }
+\concept{reporting functions}

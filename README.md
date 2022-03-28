@@ -134,6 +134,8 @@ install_github("green-striped-gecko/dartR@dev")
 Have fun working with dartR! Any issues you encounter please use the issues tab on github or contact us via email under glbugs@aerg.canberra.edu.au
 
 
-Cheers, Bernd & Arthur
+Cheers, 
+
+Bernd, Arthur, Luis & Carlo
 
 [id]: vignettes/figures/dartRlogo.png ""

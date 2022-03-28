@@ -2,30 +2,35 @@
 % Please edit documentation in R/gl.filter.heterozygosity.r
 \name{gl.filter.heterozygosity}
 \alias{gl.filter.heterozygosity}
-\title{Filters individuals with average heterozygosity greater than a specified upper threshold or less than a specified lower threshold.}
+\title{Filters individuals with average heterozygosity greater than a
+ specified upper threshold or less than a specified lower threshold}
 \usage{
 gl.filter.heterozygosity(x, t.upper = 0.7, t.lower = 0, verbose = NULL)
 }
 \arguments{
-\item{x}{-- a genlight object containing the SNP genotypes [Required]}
+\item{x}{A genlight object containing the SNP genotypes [required].}
 
-\item{t.upper}{-- filter individuals > the threshold [default 0.7]}
+\item{t.upper}{Filter individuals > the threshold [default 0.7].}
 
-\item{t.lower}{-- filter individuals < the threshold [default 0]}
+\item{t.lower}{Filter individuals < the threshold [default 0].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2, unless specified using gl.set.verbosity]}
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-the filtered genlight object
+The filtered genlight object.
 }
 \description{
-Calculates the observed heterozyosity for each individual in a genlight object and filters individuals based on specified threshold values.
+Calculates the observed heterozygosity for each individual in a genlight
+object and filters individuals based on specified threshold values.
 Use gl.report.heterozygosity to determine the appropriate thresholds.
 }
 \examples{
  result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
- tmp <- gl.report.heterozygosity(result,method="ind")
+ tmp <- gl.report.heterozygosity(result,method='ind')
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos -- Post to
+\url{https://groups.google.com/d/forum/dartr}
 }

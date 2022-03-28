@@ -2,28 +2,77 @@
 % Please edit documentation in R/gl2gds.r
 \name{gl2gds}
 \alias{gl2gds}
-\title{Convert a genlight object to gds format}
+\title{Converts a genlight object into gds format}
 \usage{
-gl2gds(x, outfile = "gl2gds.gds", outpath = tempdir(), verbose = NULL)
+gl2gds(
+  x,
+  outfile = "gl_gds.gds",
+  outpath = tempdir(),
+  snp_pos = "0",
+  snp_chr = "0",
+  chr_format = "character",
+  verbose = NULL
+)
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{outfile}{-- file name of the output file (including extension) [default gl2gds.gds]}
+\item{outfile}{File name of the output file (including extension)
+[default 'gl_gds.gds'].}
 
-\item{outpath}{-- path where to save the output file [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath="." when calling this function to direct output files to your working directory.}
+\item{outpath}{Path where to save the output file
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
+ when calling this function to direct output files to your working directory.}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{snp_pos}{Field name from the slot loc.metrics where the SNP position is
+stored [default '0'].}
+
+\item{snp_chr}{Field name from the slot loc.metrics where the chromosome of
+each is stored [default '0'].}
+
+\item{chr_format}{Whether chromosome information is stored as 'numeric' or as
+'character', see details [default 'character'].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity].}
 }
 \description{
-Package SNPRelate relies on a bit-level representation of a SNP dataset that competes with \{adegenet\} genlight
-objects and associated files. This function saves a genlight object to a gds format file.
+Package SNPRelate relies on a bit-level representation of a SNP dataset that
+competes with \{adegenet\} genlight objects and associated files. This
+function converts a genlight object to a gds format file.
+}
+\details{
+This function orders the SNPS by chromosome and by position before converting
+to SNPRelate format, as required by this package.
+
+The chromosome of each SNP can be a character or numeric, as described in the
+vignette of SNPRelate:
+'snp.chromosome, an integer or character mapping for each chromosome.
+Integer: numeric values 1-26, mapped in order from 1-22, 23=X, 24=XY
+(the pseudoautosomal region), 25=Y, 26=M (the mitochondrial probes), and 0
+for probes with unknown positions; it does not allow NA. Character: “X”,
+ “XY”, “Y” and “M” can be used here, and a blank string indicating unknown
+ position.'
+
+When using some functions from package SNPRelate with datasets other than
+humans it might be necessary to use the option autosome.only=FALSE to avoid
+detecting chromosome coding. So, it is important to read the documentation of
+the function before using it.
+
+The chromosome information for unmapped SNPS is coded as 0, as required by
+SNPRelate.
+
+Remember to close the GDS file before working in a different GDS object with
+the function \link[SNPRelate]{snpgdsClose} (package SNPRelate).
 }
 \examples{
 \donttest{
-gl2gds(testset.gl)
+gl2gds(platypus.gl,snp_pos='ChromPos_Platypus_Chrom_NCBIv1',
+snp_chr = 'Chrom_Platypus_Chrom_NCBIv1')
 }
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Luis Mijangos (Post to
+\url{https://groups.google.com/d/forum/dartr})
 }

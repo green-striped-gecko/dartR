@@ -2,67 +2,108 @@
 % Please edit documentation in R/gl.report.hamming.r
 \name{gl.report.hamming}
 \alias{gl.report.hamming}
-\title{Calculates the pairwise Hamming distance between DArT trimmed DNA sequences}
+\title{Calculates the pairwise Hamming distance between DArT trimmed DNA
+sequences}
 \usage{
 gl.report.hamming(
   x,
   rs = 5,
-  boxplot = "adjusted",
-  range = 1.5,
   threshold = 3,
   taglength = 69,
+  plot.out = TRUE,
+  plot_theme = theme_dartR(),
+  plot_colors = two_colors,
   probar = FALSE,
-  verbose = 2
+  save2tmp = FALSE,
+  verbose = NULL
 )
 }
 \arguments{
-\item{x}{-- name of the genlight object containing the SNP data [required]}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{rs}{-- number of bases in the restriction enzyme recognition sequence [default 5]}
+\item{rs}{Number of bases in the restriction enzyme recognition sequence
+[default 5].}
 
-\item{boxplot}{-- if 'standard', plots a standard box and whisker plot; 
-if 'adjusted', plots a boxplot adjusted for skewed distributions [default 'adjusted']}
+\item{threshold}{Minimum acceptable base pair difference for display on the
+boxplot and histogram [default 3].}
 
-\item{range}{-- specifies the range for delimiting outliers [default = 1.5 interquartile ranges]}
+\item{taglength}{Typical length of the sequence tags [default 69].}
 
-\item{threshold}{minimum acceptable base pair difference for display on the whisker plot and histogram [default 3 bp]}
+\item{plot.out}{specify if plot is to be produced [default TRUE].}
 
-\item{taglength}{-- typical length of the sequence tags [default 69]}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default theme_dartR()].}
 
-\item{probar}{-- if TRUE, then a progress bar is desplayed on long loops [default TRUE]}
+\item{plot_colors}{List of two color names for the borders and fill of the
+plots [default two_colors].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2 or as specified using gl.set.verbosity]}
+\item{probar}{If TRUE, then a progress bar is displayed on long loops
+[default TRUE].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-Tabulation of loc that will be lost on filtering, against values of the threshold
+Returns unaltered genlight object
 }
 \description{
-Hamming distance is calculated as the number of base differences between two 
-sequences which can be expressed as a count or a proportion. Typically, it is
-calculated between two sequences of equal length. In the context of DArT
-trimmed sequences, which differ in length but which are anchored to the left
-by the restriction enzyme recognition sequence, it is sensible to compare the
-two trimmed sequences starting from immediately after the common recognition
-sequence and terminating at the last base of the shorter sequence.
+Hamming distance is calculated as the number of base differences
+between two sequences which can be expressed as a count or a proportion.
+Typically, it is calculated between two sequences of equal length. In the
+context of DArT trimmed sequences, which differ in length but which are
+anchored to the left by the restriction enzyme recognition sequence, it is
+sensible to compare the two trimmed sequences starting from immediately after
+the common recognition sequence and terminating at the last base of the
+shorter sequence.
 }
 \details{
-Hamming distance can be computed by exploiting the fact that the dot product 
-of two binary vectors x and (1-y) counts the corresponding elements that are 
-different between x and y. This approach can also be used for vectors that 
+The function \code{\link{gl.filter.hamming}} will filter out one of
+two loci if their Hamming distance is less than a specified percentage
+
+Hamming distance can be computed by exploiting the fact that the dot product
+of two binary vectors x and (1-y) counts the corresponding elements that are
+different between x and y. This approach can also be used for vectors that
 contain more than two possible values at each position (e.g. A, C, T or G).
 
 If a pair of DNA sequences are of differing length, the longer is truncated.
 
-The algorithm is that of Johann de Jong 
+The algorithm is that of Johann de Jong
 \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
-as implimented in utils.hamming.r
+as implemented in \code{\link{utils.hamming}}
 
-A histogram and whiskerplot can be requested. Both display a user specified value
-for the minumum acceptable Hamming distance.
+ Plots and table are saved to the session's temporary directory (tempdir)
+
+ Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
-out <- gl.report.hamming(testset.gl)
+gl.report.hamming(testset.gl[,1:100])
+gl.report.hamming(testset.gs[,1:100])
+
+}
+\seealso{
+\code{\link{gl.filter.hamming}}
+
+Other filters and filter reports: 
+\code{\link{gl.filter.allna}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.filter.secondaries}()},
+\code{\link{gl.report.callrate}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr})
+Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{filters and filter reports}

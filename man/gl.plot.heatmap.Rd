@@ -2,27 +2,38 @@
 % Please edit documentation in R/gl.plot.heatmap.r
 \name{gl.plot.heatmap}
 \alias{gl.plot.heatmap}
-\title{Represent a distance matrix as a heatmap}
+\title{Represents a distance matrix as a heatmap}
 \usage{
-gl.plot.heatmap(D, verbose = NULL)
+gl.plot.heatmap(D, palette_divergent = diverging_palette, verbose = NULL, ...)
 }
 \arguments{
-\item{D}{-- name of the distance matrix or class fd object [required]}
+\item{D}{Name of the distance matrix or class fd object [required].}
 
-\item{verbose}{-- verbosity: 0, silent or fatal errors; 1, begin and end; 2, progress log ; 3, progress and results summary; 5, full report [default 2]}
+\item{palette_divergent}{A divergent palette for the distance values
+[default diverging_palette].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log; 3, progress and results summary; 5, full report
+[default 2 or as specified using gl.set.verbosity]}
+
+\item{...}{Parameters passed to function
+\link[gplots]{heatmap.2} (package gplots)}
 }
 \description{
-The script plots a heat map to represent the distances in the distance or dissimilarity matrix
+The script plots a heat map to represent the distances in the distance or
+dissimilarity matrix. This function is a wrapper for
+\link[gplots]{heatmap.2} (package gplots).
 }
 \examples{
    gl <- testset.gl[1:10,]
    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
    gl.plot.heatmap(D)
-   D2 <- gl.dist.pop(testset.gl)
+   D2 <- gl.dist.pop(possums.gl)
    gl.plot.heatmap(D2)
    D3 <- gl.fixed.diff(testset.gl)
    gl.plot.heatmap(D3)
 }
 \author{
-Arthur Georges (Post to \url{https://groups.google.com/d/forum/dartr}) as a wrapper for pheatmap by Raivo Kolde.
+Custodian: Luis Mijangos -- Post to
+\url{https://groups.google.com/d/forum/dartr})
 }
