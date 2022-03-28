@@ -6,27 +6,30 @@
 #' @details
 #' The distance measure for SNP genotypes can be one of:
 #' \itemize{
-#'  \item Euclidean Distance
-#'  \item Scaled Euclidean Distance
-#'  \item Simple Mismatch Distance
-#'  \item Absolute Mismatch Distance
-#'  \item Czekanowski (Manhattan) Distance
+#'  \item Euclidean Distance [method = "Euclidean"]
+#'  \item Scaled Euclidean Distance [method='Euclidean", scale=TRUE]
+#'  \item Simple Mismatch Distance [method="Simple"]
+#'  \item Absolute Mismatch Distance [method="Absolute"]
+#'  \item Czekanowski (Manhattan) Distance [method="Manhattan"]
 #'  }
 #'
 #' The distance measure for Sequence Tag Presence/Absence data (binary) can be one of:
 #' \itemize{
-#'  \item Euclidean Distance
-#'  \item Scaled Euclidean Distance
-#'  \item Simple Matching Distance
-#'  \item Jaccard Distance
-#'  \item Bray-Curtis Distance
+#'  \item Euclidean Distance [method = "Euclidean"]
+#'  \item Scaled Euclidean Distance [method='Euclidean", scale=TRUE]
+#'  \item Simple Matching Distance [method="Simple"]
+#'  \item Jaccard Distance [method="Jaccard"]
+#'  \item Bray-Curtis Distance [method="Bray-Curtis"]
 #'  }
 #'
 #' Refer to the dartR Technical Note on Distances in Genetics.
 #'
 #' @param x Name of the genlight containing the SNP genotypes or presence-absence data [required].
-#' @param method Specify distance measure [SNP: Euclidean; P/A: SMD].
+#' @param method Specify distance measure [SNP: Euclidean; P/A: Simple].
 #' @param scale If TRUE, the distances are scaled to fall in the range [0,1] [default TRUE]
+#' @param swap If TRUE and working with presence-absence data, then presence 
+#' (no disrupting mutation) is scored as 0 and absence (presence of a disrupting 
+#' mutation) is scored as 1 [default FALSE].
 #' @param output Specify the format and class of the object to be returned, 
 #' 'dist' for a object of class dist, 'matrix' for an object of class matrix [default "dist"].
 #' @param plot.out If TRUE, display a histogram and a boxplot of the genetic distances [TRUE].
@@ -42,12 +45,14 @@
 #' @export
 #' @author Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' D <- gl.dist.ind(testset.gl, method='euclidean')
-#' D <- gl.dist.ind.new(testset.gs, method='euclidean')
+#' D <- gl.dist.ind(testset.gl, method='euclidean',scale=TRUE)
+#' D <- gl.dist.ind(testset.gl, method='manhattan')
+#' D <- gl.dist.ind(testset.gs, method='Jaccard',swap=TRUE)
 
 gl.dist.ind <- function(x,
                         method = NULL,
                         scale = FALSE,
+                        swap=FALSE,
                         output="dist",
                         plot.out = TRUE,
                         plot_theme = theme_dartR(),
@@ -56,23 +61,23 @@ gl.dist.ind <- function(x,
                         verbose = NULL) {
     
     # CHECK IF PACKAGES ARE INSTALLED
-    pkg <- "rrBLUP"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package ",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
-    }
-    
-    pkg <- "poppr"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package ",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
-    }
+    # pkg <- "rrBLUP"
+    # if (!(requireNamespace(pkg, quietly = TRUE))) {
+    #     stop(error(
+    #         "Package ",
+    #         pkg,
+    #         " needed for this function to work. Please install it."
+    #     ))
+    # }
+    # 
+    # pkg <- "poppr"
+    # if (!(requireNamespace(pkg, quietly = TRUE))) {
+    #     stop(error(
+    #         "Package ",
+    #         pkg,
+    #         " needed for this function to work. Please install it."
+    #     ))
+    # }
     
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -102,15 +107,12 @@ gl.dist.ind <- function(x,
     if (!(
         method %in% c(
             "euclidean",
-            "locus.count",
-            "allele.count",
-            "relatedness",
             "simple",
+            "manhattan",
             "jaccard",
             "bray-curtis",
-            "sorenson",
             "czekanowski",
-            "phi"
+            "absolute"
         )
     )) {
         cat(
@@ -129,52 +131,70 @@ gl.dist.ind <- function(x,
     # DO THE JOB
     
     if (datatype == "SNP") {
-        # Calculate euclidean distance using dist {adegenet}
+        # Calculate euclidean distance using dist 
         if (method == "euclidean") {
-            dd <- stats::dist(x)
-            if (verbose >= 2) {
-                cat(report(
-                    "  Calculating Euclidean Distances between individuals\n"
-                ))
-            }
-        }
-        # Calculate the number of loci that are different between individuals using dist.gene {ape}
-        if (method == "locus.count") {
-            dd <-
-                ape::dist.gene(
-                    as.matrix(x),
-                    method = "pairwise",
-                    pairwise.deletion = FALSE,
-                    variance = FALSE
-                )
-            if (verbose >= 2) {
-                cat(report(
-                    "  Calculating number of loci for which individuals differ\n"
-                ))
+            if(scale==TRUE){
+                dd <- utils.dist.ind.snp(x, method='euclidean',scale=TRUE,verbose=0)
+                if (verbose >= 2) {
+                    cat(report("  Calculating scaled Euclidean Distances between individuals\n"))
+                }
+            } else {
+                dd <- utils.dist.ind.snp(x, method='euclidean',scale=FALSE,verbose=0)
+                if (verbose >= 2) {
+                    cat(report("  Calculating raw Euclidean Distances between individuals\n"))
+                }
             }
         }
         
-        # Calculate the number of allelic differences between individuals using dist.gene {poppr}
-        if (method == "allele.count") {
-            dd <- poppr::diss.dist(gl2gi(x), percent = FALSE, mat = FALSE)
-            if (verbose >= 2) {
-                cat(
-                    report(
-                        "  Calculating number of allelic differences between individuals\n"
-                    )
-                )
-            }
-        }
-        
-        # Calculate the genetic relatedness G matrix
-        if (method == "relatedness") {
-            dd <- rrBLUP::A.mat(as.matrix(x) - 1)
+        # Calculate simple matching distance
+        if (method == "simple") {
+            dd <- dd <- utils.dist.ind.snp(x, method='simple',verbose=0)
             if (verbose >= 2) {
                 cat(report(
-                    "  Calculating relatedness among individuals (G matrix)\n"
+                    "  Calculating simple matching distance\n"
                 ))
             }
         }
+        # Calculate absolute Manhattan distance
+        if (method == "manhattan") {
+            dd <- dd <- utils.dist.ind.snp(x, method='manhattan',verbose=0)
+            if (verbose >= 2) {
+                cat(report(
+                    "  Calculating Manhattan distance\n"
+                ))
+            }
+        }     
+        
+        # Calculate absolute Czekanowski distance
+        if (method == "czekanowski") {
+            dd <- dd <- utils.dist.ind.snp(x, method='czekanowski',verbose=0)
+            if (verbose >= 2) {
+                cat(report(
+                    "  Calculating Czekanowski distance\n"
+                ))
+            }
+        }        
+        
+        # Calculate absolute matching distance
+        if (method == "absolute") {
+            dd <- dd <- utils.dist.ind.snp(x, method='absolute',verbose=0)
+            if (verbose >= 2) {
+                cat(report(
+                    "  Calculating absolute matching distance\n"
+                ))
+            }
+        }        
+        
+        # 
+        # # Calculate the genetic relatedness G matrix
+        # if (method == "relatedness") {
+        #     dd <- rrBLUP::A.mat(as.matrix(x) - 1)
+        #     if (verbose >= 2) {
+        #         cat(report(
+        #             "  Calculating relatedness among individuals (G matrix)\n"
+        #         ))
+        #     }
+        # }
         dd <- as.dist(dd)
         
         # # Revert to original order ord <- rank(pop(x)) mat <- as.matrix(dd)[ord, ord] dd <- as.dist(mat)
@@ -216,8 +236,12 @@ gl.dist.ind <- function(x,
         #         ))
         #     }
         # }
-        mat <-
-            utils.dist.binary(x, method = method, output="matrix", scale = scale, verbose = 0)
+        mat <- utils.dist.binary(x, 
+                                 method = method, 
+                                 swap=swap, 
+                                 output="matrix", 
+                                 scale = scale, 
+                                 verbose = 0)
         dd <- as.dist(mat)
     }
     
@@ -232,17 +256,20 @@ gl.dist.ind <- function(x,
             if(method=="euclidean" && scale == TRUE){
                 title_plot <-
                 paste0(
-                    "Presence/Absence data (SilicoDArT)\nInter-individual scaled ",
+                    "Presence[1]/Absence[0] data (SilicoDArT)\nInter-individual scaled ",
                     method,
                     " distance"
                 )
             } else {
-                title_plot <-
-                    paste0(
-                        "Presence/Absence data (SilicoDArT)\nInter-individual ",
-                        method,
-                        " distance"
-                    )
+                if(swap==TRUE){
+                    title_plot <- paste0(
+                        "Presence[0]/Absence[1] data (SilicoDArT swapped)\nInter-individual ",
+                        method, " distance")
+                } else {
+                    title_plot <- paste0(
+                        "Presence[1]/Absence[0] data (SilicoDArT)\nInter-individual ",
+                        method, " distance")
+                }
             }
         }
         values <- NULL
@@ -330,16 +357,19 @@ gl.dist.ind <- function(x,
     # FLAG SCRIPT END
     
     if(output=="matrix"){
-        if(verbose >= 2){cat(report("  Returning a square matrix\n"))}
-        return(mat)
-        if (verbose > 0) {
-            cat(report("Completed:", funname, "\n"))
+        if(verbose >= 2){
+            cat(report("  Returning a square matrix\n"))
         }
-    } else {
-        if(verbose >= 2){cat(report("  Returning a stat::dist object\n"))}
-        return(dd)
-        if (verbose > 0) {
-            cat(report("Completed:", funname, "\n"))
-        }
+        final <- mat
     }
-}
+    if(output!="matrix"){
+        if(verbose >= 2){
+            cat(report("  Returning a stat::dist object\n"))
+        }
+        final <- dd
+    }
+    if (verbose > 0) {
+            cat(report("Completed:", funname, "\n"))
+    }
+    return(final)
+ }

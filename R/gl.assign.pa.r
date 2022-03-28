@@ -41,7 +41,8 @@
 #' @author Custodian: Arthur Georges -- Post to #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
-#'   x <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,verbose=3)
+#'   test <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,
+#'   verbose=3)
 #'
 #' @seealso \code{\link{gl.assign.pca}}
 
@@ -58,7 +59,7 @@ gl.assign.pa <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE

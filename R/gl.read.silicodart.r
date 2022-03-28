@@ -150,7 +150,7 @@ gl.read.silicodart <- function(filename,
     stdmetricscols <- 1:lmet
     
     if (verbose >= 2) {
-        cat("  Added the following locus metrics:\n")
+        cat("    Added the following locus metrics:\n")
         cat(paste(paste(names(snpraw)[stdmetricscols], collapse = " "), ".\n"))
     }
     covmetrics <- snpraw[, stdmetricscols]
@@ -282,7 +282,7 @@ gl.read.silicodart <- function(filename,
             cat(warn("  Warning: Created pop column with NAs\n"))
         } else {
             pop(glout) <- as.factor(ind.cov[ord, pop.col])
-            cat(warn("  Warning: Added pop factor.\n"))
+            cat(report("    Added pop factor.\n"))
         }
         
         lat.col = match("lat", names(ind.cov))
@@ -297,7 +297,7 @@ gl.read.silicodart <- function(filename,
         if (!is.na(lat.col) & !is.na(lon.col)) {
             glout@other$latlon <- ind.cov[ord, c(lat.col, lon.col)]
             rownames(glout@other$latlon) <- ind.cov[ord, id.col]
-            cat(warn("  Warning: Added latlon data.\n"))
+            cat(report("    Added latlon data.\n"))
         }
         
         # known.col <- names( ind.cov) %in% c('id','pop', 'lat', 'lon') known.col <- ifelse(is.na(known.col), , known.col) other.col <-
@@ -307,9 +307,9 @@ gl.read.silicodart <- function(filename,
             glout@other$ind.metrics <- ind.cov[ord, other.col, drop = FALSE]
             rownames(glout@other$ind.metrics) <-
                 ind.cov[ord, id.col]
-            cat(warn(
+            cat(report(
                 paste(
-                    "  Warning: Added ",
+                    "    Added ",
                     other.col,
                     " to the other$ind.metrics slot.\n"
                 )

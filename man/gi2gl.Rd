@@ -2,7 +2,7 @@
 % Please edit documentation in R/gi2gl.R
 \name{gi2gl}
 \alias{gi2gl}
-\title{Converts a genind object to genlight object}
+\title{Converts a genind object into a genlight object}
 \usage{
 gi2gl(gi, parallel = FALSE, verbose = NULL)
 }
@@ -19,7 +19,7 @@ progress log ; 3, progress and results summary; 5, full report [default 2].}
 A genlight object, with all slots filled.
 }
 \description{
-Converts a genind object to genlight object
+Converts a genind object into a genlight object
 }
 \details{
 Be aware due to ambiguity which one is the reference allele a combination of

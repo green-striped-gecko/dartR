@@ -48,6 +48,8 @@
 #' unknown [required].
 #' @param plevel Probability level for bounding ellipses in the PCoA plot
 #' [default 0.999].
+#' @param plot.out If TRUE, plot the 2D PCA showing the position 
+#' of the unknown [default TRUE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
@@ -59,42 +61,50 @@
 #' @export
 #'
 #' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
-#'
 #' @examples 
+#' \dontrun{
 #' #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
-#' x <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,verbose=3) 
-#' x <- gl.assign.pca(x, unknown='UC_00146', plevel=0.95, verbose=3)
-
+#' test <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,
+#' verbose=3) 
+#' test_2 <- gl.assign.pca(test, unknown='UC_00146', plevel=0.95, verbose=3)
+#' }
 
 gl.assign.pca <- function(x,
                           unknown,
                           plevel = 0.999,
+                          plot.out=TRUE,
                           verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
+    if(verbose==0){
+        plot.out <- FALSE
+    }
 
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
-
-    # # CHECK PACKAGES
-    # pkg <- "SIBER"
-    # if (!(requireNamespace(pkg, quietly = TRUE))) {
-    #     stop(error(
-    #         "Package",
-    #         pkg,
-    #         " needed for this function to work. Please install it."
-    #     ))
-    # }
+    
+    
+    
+    # check if package is installed
+    pkg <- "SIBER"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+        stop(error(
+            "Package",
+            pkg,
+            "needed for this function to work. Please install it."
+        ))
+    }
+    requireNamespace(pkg, quietly = TRUE)
 
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = 0)
     if (nPop(x) < 2) {
         stop(
             error(
-                "Fatal Error: Only one population, including the unknown, no putative source"
+                "Fatal Error: Only one population, including the unknown, no putative source\n"
             )
         )
     }
@@ -117,7 +127,7 @@ gl.assign.pca <- function(x,
 
     if (nLoc(x) < nPop(x)) {
         stop(error(
-            "Fatal Error: Number of loci less than number of populations"
+            "Fatal Error: Number of loci less than number of populations\n"
         ))
     }
 
@@ -127,11 +137,14 @@ gl.assign.pca <- function(x,
     pop(x) <- as.factor(vec)
     
     # Ordinate a reduced space of 2 dimensions
+    if (verbose >= 2){
+        cat(report("  Calculating a PCA to represent the unknown in the context of putative sources\n"))
+    }
     pcoa <- gl.pcoa(x, nfactors = 2, verbose = 0)
     # Plot
-    if (verbose >= 3) {
+    if (verbose >= 0 && plot.out==TRUE) {
         suppressWarnings(suppressMessages(gl.pcoa.plot(
-            pcoa, x, ellipse = TRUE, plevel = plevel
+            pcoa, x, ellipse = TRUE, plevel = plevel, verbose=0
         )))  # Because the unknown pop throws an ellipse error
     }
     # Combine Pop names and pca scores
@@ -158,6 +171,9 @@ gl.assign.pca <- function(x,
     names(result) <- c("pop", "hit")
     nhits <- length(result$pop[result$hit])
     nohits <- length(result$pop[!result$hit])
+    if(verbose >= 2){
+        cat(report("  Eliminating populations for which the unknown is outside their confidence envelope\n"))
+    }
     if (verbose >= 3) {
         if (nhits > 0) {
             cat("  Putative source populations:",
@@ -182,128 +198,9 @@ gl.assign.pca <- function(x,
         x2 <-
             gl.drop.pop(x, pop.list = result[result$hit == FALSE, "pop"], verbose = 0)
     }
-    
-    # # Re-run the pcoa on the reduced set
-    # hard.limit <- 8
-    # if (nInd(x2) < 2) {
-    #     if (verbose >= 2) {
-    #         cat(warn("  Warning: No putative populations identified\n"))
-    #     }
-    #     df <- NULL
-    # } else {
-    #     # pcoa <- gl.pcoa(x2,nfactors=hard.limit,verbose=0)
-    #     # suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x2,ellipse=TRUE,plevel=plevel)))
-    #     
-    #     # Determine the number of dimensions for confidence envelope (the ordination and dimension reduction) From the eigenvalue
-    #     # distribution
-    #     s <- sum(pcoa$eig)
-    #     e <- round(pcoa$eig * 100 / s, 1)
-    #     e <- e[e > mean(e)]
-    #     first.est <- length(e)
-    #     # From the number of populations, including the unknown sec.est <- nPop(x2)
-    #     
-    #     # cat(' Number of populations, including the unknown:',sec.est,'\n')
-    #     if (verbose >= 2) {
-    #         cat(
-    #             report(
-    #                 "  Number of dimensions with substantial eigenvalues:",
-    #                 first.est,
-    #                 ". Hardwired limit",
-    #                 hard.limit,
-    #                 "\n"
-    #             )
-    #         )
-    #         cat(report("    Selecting the smallest of the two\n"))
-    #     }
-    #     dim <- min(first.est, hard.limit)
-    #     if (verbose >= 2) {
-    #         cat(report("    Dimension of confidence envelope set at", dim, "\n"))
-    #     }
-    #     pcoa$scores <- pcoa$scores[, 1:dim]
-    #     
-    #     # Add population names to the scores
-    #     c <-
-    #         data.frame(cbind(pcoa$scores, as.character(pop(x2))), stringsAsFactors = FALSE)
-    #     colnames(c)[dim + 1] <- "pop"
-    #     
-    #     # Create a set of data without the unknown
-    #     clouds <- c[c[, "pop"] != "unknown",]
-    #     Unknown <- c[c[, "pop"] == "unknown",]
-    #     # Unknown[1:dim] <- as.numeric(Unknown[1:dim])
-    #     
-    #     
-    #     if (verbose >= 3) {
-    #         cat(
-    #             "  Likelihood Index for assignment of unknown",
-    #             unknown,
-    #             "to putative source populations\n"
-    #         )
-    #     }
-    #     # For each population
-    #     p <- as.factor(unique(clouds[, "pop"]))
-    #     for (i in 1:length(levels(p))) {
-    #         # Pull out population i
-    #         m <- clouds[clouds[, "pop"] == levels(p)[i],]
-    #         # Discard the population labels
-    #         m <- m[, 1:dim]
-    #         row.names(m) <- NULL
-    #         Unknown <- Unknown[1:dim]
-    #         row.names(Unknown) <- NULL
-    #         # Convert to numeric, and reformat as a matrix
-    #         n <- as.matrix(sapply(m, as.numeric))
-    #         Unknown <- as.numeric(Unknown)
-    #         # Calculate statistics for each dimension
-    #         means <- colMeans(n)
-    #         N <- nrow(n)
-    #         sd <-
-    #             sqrt(N / (N - 1) * (colMeans(n * n) - colMeans(n) ^ 2))
-    #         # Standardise the unknown
-    #         std.unknown <- abs((Unknown - means)) / sd
-    #         std.boundary <- rep(qnorm((1 - plevel / 2), 0, 1), dim)
-    #         # Calculate log likelihoods
-    #         li <- dnorm(std.unknown, 0, 1)
-    #         li <- log(li)
-    #         li.boundary <- dnorm(std.boundary, 0, 1)
-    #         li.boundary <- log(li.boundary)
-    #         # Weight by eigenvalues
-    #         li <- li * pcoa$eig[1:dim]
-    #         li.boundary <- li.boundary * pcoa$eig[1:dim]
-    #         # Calculate an assignment index
-    #         index <- round(sum(li), 4)
-    #         index.boundary <- round(sum(li.boundary), 4)
-    #         # Calculate an index
-    #         idx <- round(index / index.boundary, 2)
-    #         # Print out the result for population i
-    #         assign <- "no"
-    #         if (idx <= 1) {
-    #             assign <- "yes"
-    #         }
-    #         tmp <-
-    #             data.frame(levels(p)[i], index, index.boundary, idx, assign)
-    #         if (i == 1) {
-    #             df <- tmp
-    #         } else {
-    #             df <- rbind(df, tmp)
-    #         }
-    #     }
-    #     colnames(df) <-
-    #         c("Population", "Wt", "CE", "Index", "Assign")
-    #     df <- df[order(df$Index),]
-    #     if (verbose >= 3) {
-    #         print(df)
-    #     }
-    #     best <- as.character(df$Population[df$Assign == "yes"][1])
-    #     
-    #     if (verbose >= 3) {
-    #         cat(
-    #             report(
-    #                 "  Best assignment is the population with the smallest value of the Index, in this case",
-    #                 best,
-    #                 "\n"
-    #             )
-    #         )
-    #     }
-    # }
+    if(verbose >= 2){
+        cat(report("  Returning a genlight object with remaining putative source populations plus the unknown\n"))
+    }
     
     # FLAG SCRIPT END
     

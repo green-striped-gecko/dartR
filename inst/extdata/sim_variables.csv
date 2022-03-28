@@ -1,24 +1,37 @@
-process,variable,value,,description,range_value
-analysis,Ne,50,,Ne value to be used in the equation of rate of loss of heterozygosity ,Defined by the user
-analysis,Ne_fst,50,,Ne value to be used in the equatio n of the expected FST ,Defined by the user
-dispersal,dispersal_dispersal,TRUE,,Whether dispersal occurs in the post-adaptation phase,TRUE or FALSE
-dispersal,dispersal_pre_adaptation,FALSE,,Whether dispersal occurs in the pre-adaptation phase,TRUE or FALSE
-dispersal,dispersal_type,"""circle""",,Type of dispersal,"""line"",""circle"",""all_connected"""
-dispersal,number_transfers,1,,Number of dispersing individuals,< population size
-dispersal,transfer_each_gen,1,,Interval of number of generations in which dispersal occurs,< number of generations
-general,gen_number_dispersal,100,,Number of generations of the post-adaptation phase,Dependent on computing resources
-general,gen_number_pre_adaptation,5,,Number of generations of the pre-adaptation phase,Dependent on computing resources
-general,number_pops,4,,Number of populations,Dependent on computing resources
-general,population_size_dispersal,100,,Census Population size of the post-adaptation phase (must be even),Dependent on computing resources
-general,population_size_pre_adaptation,100,,Census Population size of the pre-adaptation phase (must be even),Dependent on computing resources
-general,pre_adaptation,FALSE,,Whether pre-adaptation phase occur,TRUE or FALSE
-general,same_line,FALSE,,Whether the new formed populations are sampled from the same founding population or from different founding populations,TRUE or FALSE
-initialisation,chromosome_name,NULL,,Name of the chromosome to be simulated,Defined by the user (must be character)
-initialisation,real_freq,NULL,,Frequency of each one of the alleles of the loci from a real dataset,Defined by the user
-recombination,recombination,TRUE,,Whether recombination occurs,TRUE or FALSE
-recombination,recombination_males,TRUE,,Whether recombination occurs in males and females (or only females),TRUE or FALSE
-reproduction,number_offspring,10,,Mean number offspring per mating,Dependent on computing resources
-reproduction,variance_offspring,1000000,,Coefficient that determines the variance in the number of offspring per mating,Defined by the user
-selection,genetic_load,0.8,,Approximation of the genetic load of the proportion of the genome that is simulated. This parameter is used in the absolute fitness model,Defined by the user
-selection,natural_selection_model,"""relative""",,Selection model to use,“relative” or “absolute”
-selection,selection,FALSE,,Whether selection occurs,TRUE or FALSE
+process,variable,value,description,range_value
+Basic,number_pops_phase2,1,Number of populations of phase 2 (must be the same as number of populations in phase 1),Dependent on computing resources
+Basic,gen_number_phase2,10,Number of generations of phase 2,Dependent on computing resources
+Genetic drift,population_size_phase2,"""50""","Census population size of each population of phase 2 (must be even, space delimited and in quotes)",Dependent on computing resources
+Genetic drift,variance_offspring_phase2,1000000,Coefficient that determines the variance in the number of offspring per mating for phase 2,Defined by the user
+Genetic drift,number_offspring_phase2,10,Mean number offspring per mating for phase 2,Dependent on computing resources
+Gene flow,dispersal_phase2,FALSE,Simulate dispersal in phase 2,TRUE or FALSE
+Gene flow,dispersal_type_phase2,"""all_connected""",Type of dispersal in phase 2,"""line"",""circle"",""all_connected"""
+Gene flow,number_transfers_phase2,1,Number of dispersing individuals in phase 2,< population size
+Gene flow,transfer_each_gen_phase2,2,Interval of number of generations in which dispersal occurs in phase 2,< number of generations
+Natural selection,selection_phase2,FALSE,Simulate selection in phase 2,TRUE or FALSE
+Natural selection,natural_selection_model,"""relative""",Selection model to use,“relative” or “absolute”
+Natural selection,genetic_load,0.8,Approximation of the genetic load of the proportion of the genome that is simulated. This parameter is used in the absolute fitness model,Defined by the user
+Natural selection,local_adap,NULL,Populations in which local adaptation occurs (must be space delimited and in quotes),Defined by the user (must be character)
+Natural selection,clinal_adap,NULL,"Starting and ending populations in which clinal adaptation occurs (two values must be provided, be space delimited and in quotes)",Defined by the user (must be character)
+Natural selection,clinal_strength,10,Percentage of the decrease of the selection coefficient along the cline,0-100
+Mutation,mutation,FALSE,Simulate mutation ,TRUE or FALSE
+Mutation,mut_rate,0.1,Mutation rate,Defined by the user
+Recombination,recombination,TRUE,Whether recombination occurs,TRUE or FALSE
+Recombination,recombination_males,TRUE,Whether recombination occurs in males and females (or only females),TRUE or FALSE
+phase1,phase1,FALSE,Simulate phase 1,TRUE or FALSE
+phase1,number_pops_phase1,1,Number of populations of phase 1 (must be the same as number of populations in phase 2),Dependent on computing resources
+phase1,gen_number_phase1,10,Number of generations of phase 1,Dependent on computing resources
+phase1,population_size_phase1,"""100""","Census population size of each population of phase 1 (must be even, space delimited and in quotes)",Dependent on computing resources
+phase1,same_line,FALSE,Sample phase 2 populations from the same phase 1 population or from different phase 1 populations,TRUE or FALSE
+phase1,variance_offspring_phase1,1000000,Coefficient that determines the variance in the number of offspring per mating for phase 1,Defined by the user
+phase1,number_offspring_phase1,5,Mean number offspring per mating for phase 1,Dependent on computing resources
+phase1,dispersal_phase1,FALSE,Simulate dispersal in phase 1,TRUE or FALSE
+phase1,dispersal_type_phase1,"""all_connected""",Type of dispersal in phase 1,"""line"",""circle"",""all_connected"""
+phase1,number_transfers_phase1,1,Number of dispersing individuals in phase 1,< population size
+phase1,transfer_each_gen_phase1,1,Interval of number of generations in which dispersal occurs in phase 1,< number of generations
+phase1,selection_phase1,FALSE,Simulate selection in phase 1,TRUE or FALSE
+Real information,real_pops,FALSE,Extract number of populations from genlight object,TRUE or FALSE
+Real information,real_pop_size,FALSE,Extract census population sizes from genlight object,TRUE or FALSE
+Real information,real_loc,FALSE,Extract location for neutral loci from genlight object,TRUE or FALSE
+Real information,real_freq,FALSE,Extract allele frequencies for neutral loci from genlight object,TRUE or FALSE
+Real information,chromosome_name,"""1""",Chromosome name from where to extract allele frequencies ,Defined by the user (must be character)

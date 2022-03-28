@@ -58,7 +58,7 @@ gl.amova <- function(x,
     else
         dd <- distance
     
-    if (class(x) == "genlight") {
+    if (is(x,"genlight")) {
         geno2 <- x
         geno <- as.matrix(geno2)
         sample <- row.names(geno)

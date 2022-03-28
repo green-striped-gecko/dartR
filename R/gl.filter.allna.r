@@ -1,6 +1,6 @@
 #' @name gl.filter.allna
-#' @title Removes loci that are all NA across individuals and/or individuals with
-#'  all NA across loci
+#' @title Filters loci that are all NA across individuals and/or populations 
+#' with all NA across loci
 #'
 #' @description
 #' This script deletes deletes loci or individuals with all calls missing (NA),
@@ -13,15 +13,25 @@
 #'  all loci, but such individuals may sneak in to the dataset when loci are
 #'  deleted. Retaining individual or loci with all NAs can cause issues for
 #'  several functions.
+#'  
+#'  Also, on occasion an analysis will require that there are some loci scored
+#'  in each population. Setting by.pop=TRUE will result in removal of loci when
+#'  they are all missing in any one population.
+#'  
+#' Note that loci that are missing for all individuals in a population are
+#' not imputed with method 'frequency' or 'HW'. Consider 
+#' using the function \code{\link{gl.filter.allna}} with by.pop=TRUE.
 #'
 #' @param x Name of the input genlight object [required].
+#' @param by.pop If TRUE, loci that are all missing in any one population
+#' are deleted [default FALSE]
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
 #' @return A genlight object having removed individuals that are scored NA
 #' across all loci, or loci that are scored NA across all individuals.
 #'
-#' @author Custodian: Arthur Georges -- Post to
+#' @author Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # SNP data
@@ -34,6 +44,7 @@
 #' @export
 
 gl.filter.allna <- function(x,
+                            by.pop=FALSE,
                             verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -41,7 +52,7 @@ gl.filter.allna <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE datatype <- utils.check.datatype(x,verbose=verbose) # recurrence clash
@@ -78,14 +89,26 @@ gl.filter.allna <- function(x,
     # DO THE JOB
     
     if (verbose >= 2) {
+        if (by.pop==FALSE){
         cat(
             report(
                 "  Identifying and removing loci and individuals scored all missing (NA)\n"
             )
         )
+        } else {
+            cat(
+                report(
+                    "  Identifying and removing loci that are all missing (NA) in any one individual\n"
+                )
+            )
+        }
     }
     
+    if (by.pop==FALSE){
     # Consider loci
+    if(verbose >=2){
+        cat(report("  Deleting loci that are scored as all missing (NA)\n"))
+    }
     na.counter <- 0
     loc.list <- array(NA, nLoc(x))
     nL <- nLoc(x)
@@ -123,6 +146,9 @@ gl.filter.allna <- function(x,
     }
     
     # Consider individuals
+    if(verbose >=2){
+        cat(report("  Deleting individuals that are scored as all missing (NA)\n"))
+    }
     na.counter <- 0
     ind.list <- array(NA, nInd(x))
     nI <- nInd(x)
@@ -155,6 +181,32 @@ gl.filter.allna <- function(x,
             cat("  Deleted\n")
         }
     }
+    }
+    
+    if (by.pop==TRUE){
+        if(verbose >=2){
+            cat(report("  Deleting loci that are all missing (NA) in any one population\n"))
+        }
+        total <- 0
+        loc.list <- NULL
+        for (i in 1:nPop(x)){
+            tmpop <- as.matrix(gl.keep.pop(x,popNames(x)[i],verbose=0))
+            tmpsums <- colSums(tmpop)
+            tmp.list <- locNames(x)[is.na(tmpsums)]
+            count <- length(tmp.list)
+            if (verbose >= 3){
+               cat("    ",popNames(x)[i],": deleted",count,"loci\n")
+            }  
+            total <- total + count
+            loc.list <- c(loc.list,tmp.list)
+        }
+        loc.list <- unique(loc.list)
+        if (verbose >= 3){
+            cat("\n  Loci all NA in one or more populations:",length(loc.list),"deleted\n\n")
+        }  
+        x <- gl.drop.loc(x,loc.list=loc.list,verbose=0)
+    }
+    
     
     # ADD TO HISTORY
     nh <- length(x@other$history)

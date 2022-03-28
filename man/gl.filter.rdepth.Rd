@@ -3,7 +3,7 @@
 \name{gl.filter.rdepth}
 \alias{gl.filter.rdepth}
 \title{Filters loci based on counts of sequence tags scored at a locus (read
-depth)}
+ depth)}
 \usage{
 gl.filter.rdepth(
   x,

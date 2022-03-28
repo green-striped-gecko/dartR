@@ -8,6 +8,7 @@ gl.dist.ind(
   x,
   method = NULL,
   scale = FALSE,
+  swap = FALSE,
   output = "dist",
   plot.out = TRUE,
   plot_theme = theme_dartR(),
@@ -19,9 +20,13 @@ gl.dist.ind(
 \arguments{
 \item{x}{Name of the genlight containing the SNP genotypes or presence-absence data [required].}
 
-\item{method}{Specify distance measure [SNP: Euclidean; P/A: SMD].}
+\item{method}{Specify distance measure [SNP: Euclidean; P/A: Simple].}
 
 \item{scale}{If TRUE, the distances are scaled to fall in the range [0,1] [default TRUE]}
+
+\item{swap}{If TRUE and working with presence-absence data, then presence 
+(no disrupting mutation) is scored as 0 and absence (presence of a disrupting 
+mutation) is scored as 1 [default FALSE].}
 
 \item{output}{Specify the format and class of the object to be returned, 
 'dist' for a object of class dist, 'matrix' for an object of class matrix [default "dist"].}
@@ -48,27 +53,28 @@ This script calculates various distances between individuals based on allele
 \details{
 The distance measure for SNP genotypes can be one of:
 \itemize{
- \item Euclidean Distance
- \item Scaled Euclidean Distance
- \item Simple Mismatch Distance
- \item Absolute Mismatch Distance
- \item Czekanowski (Manhattan) Distance
+ \item Euclidean Distance [method = "Euclidean"]
+ \item Scaled Euclidean Distance [method='Euclidean", scale=TRUE]
+ \item Simple Mismatch Distance [method="Simple"]
+ \item Absolute Mismatch Distance [method="Absolute"]
+ \item Czekanowski (Manhattan) Distance [method="Manhattan"]
  }
 
 The distance measure for Sequence Tag Presence/Absence data (binary) can be one of:
 \itemize{
- \item Euclidean Distance
- \item Scaled Euclidean Distance
- \item Simple Matching Distance
- \item Jaccard Distance
- \item Bray-Curtis Distance
+ \item Euclidean Distance [method = "Euclidean"]
+ \item Scaled Euclidean Distance [method='Euclidean", scale=TRUE]
+ \item Simple Matching Distance [method="Simple"]
+ \item Jaccard Distance [method="Jaccard"]
+ \item Bray-Curtis Distance [method="Bray-Curtis"]
  }
 
 Refer to the dartR Technical Note on Distances in Genetics.
 }
 \examples{
-D <- gl.dist.ind(testset.gl, method='euclidean')
-D <- gl.dist.ind.new(testset.gs, method='euclidean')
+D <- gl.dist.ind(testset.gl, method='euclidean',scale=TRUE)
+D <- gl.dist.ind(testset.gl, method='manhattan')
+D <- gl.dist.ind(testset.gs, method='Jaccard',swap=TRUE)
 }
 \author{
 Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}

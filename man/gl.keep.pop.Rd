@@ -2,8 +2,7 @@
 % Please edit documentation in R/gl.keep.pop.r
 \name{gl.keep.pop}
 \alias{gl.keep.pop}
-\title{Removes all but specified populations from a genlight \{adegenet\}
-object}
+\title{Removes all but the specified populations from a genlight object}
 \usage{
 gl.keep.pop(
   x,
@@ -48,7 +47,8 @@ the recalculated locus metadata.
 \examples{
  # SNP data
    gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'))
-   gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'),mono.rm=TRUE,recalc=TRUE)
+   gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'),
+   mono.rm=TRUE,recalc=TRUE)
    gl2 <- gl.keep.pop(testset.gl, pop.list=c('Female'),as.pop='sex')
  # Tag P/A data
    gs2 <- gl.keep.pop(testset.gs, pop.list=c('EmsubRopeMata','EmvicVictJasp'))

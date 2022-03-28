@@ -3,7 +3,7 @@
 \name{gl.outflank}
 \alias{gl.outflank}
 \title{Identifies loci under selection per population using the outflank
-method of Whitlock and Lotterhos (2015)}
+ method of Whitlock and Lotterhos (2015)}
 \usage{
 gl.outflank(
   gi,
@@ -42,7 +42,7 @@ Returns an index of outliers and the full outflank list
 }
 \description{
 Identifies loci under selection per population using the outflank
-method of Whitlock and Lotterhos (2015)
+ method of Whitlock and Lotterhos (2015)
 }
 \details{
 This function is a wrapper around the outflank function provided by

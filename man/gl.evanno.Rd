@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.evanno.r
 \name{gl.evanno}
 \alias{gl.evanno}
-\title{Creates an Evanno plot from an sr structure run object}
+\title{Creates an Evanno plot from a STRUCTURE run object}
 \usage{
 gl.evanno(sr, plot.out = TRUE)
 }
@@ -21,7 +21,7 @@ functions from \code{strataG}
 }
 \details{
 The function is basically a convenient wrapper around the beautiful
-strataG function \link[strataG]{evanno} (Archer et al. 2016). For a detailed
+strataG function \code{evanno} (Archer et al. 2016). For a detailed
 description please refer to this package (see references below).
 }
 \examples{
@@ -49,7 +49,7 @@ Mol Ecol Resour. doi:10.1111/1755-0998.12559
 }
 }
 \seealso{
-\code{\link{gl.run.structure}},  \link[strataG]{clumpp},
+\code{\link{gl.run.structure}},  \code{clumpp},
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

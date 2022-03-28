@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2structure.r
 \name{gl2structure}
 \alias{gl2structure}
-\title{Converts genlight objects to STRUCTURE formated files}
+\title{Converts a genlight object to STRUCTURE formated files}
 \usage{
 gl2structure(
   x,

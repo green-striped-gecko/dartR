@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.hwe.pop.r
 \name{gl.hwe.pop}
 \alias{gl.hwe.pop}
-\title{Hardy-Weinberg tests over loci and populations}
+\title{Performs Hardy-Weinberg tests over loci and populations}
 \usage{
 gl.hwe.pop(
   x,

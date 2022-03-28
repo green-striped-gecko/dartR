@@ -1,6 +1,5 @@
 #' @name gl.keep.pop
-#' @title Removes all but specified populations from a genlight \{adegenet\}
-#' object
+#' @title Removes all but the specified populations from a genlight object
 #' @description
 #' Individuals are assigned to populations based on the specimen metadata data
 #' file (csv) used with gl.read.dart().
@@ -28,7 +27,8 @@
 #' @examples
 #'  # SNP data
 #'    gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'))
-#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'),mono.rm=TRUE,recalc=TRUE)
+#'    gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'),
+#'    mono.rm=TRUE,recalc=TRUE)
 #'    gl2 <- gl.keep.pop(testset.gl, pop.list=c('Female'),as.pop='sex')
 #'  # Tag P/A data
 #'    gs2 <- gl.keep.pop(testset.gs, pop.list=c('EmsubRopeMata','EmvicVictJasp'))

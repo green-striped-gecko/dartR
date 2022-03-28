@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.report.ld.map.r
 \name{gl.report.ld.map}
 \alias{gl.report.ld.map}
-\title{Calculates pairwise linkage disequilibrium}
+\title{Calculates pairwise linkage disequilibrium in SNPs mapped to a 
+reference genome}
 \usage{
 gl.report.ld.map(
   x,

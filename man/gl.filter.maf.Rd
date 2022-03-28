@@ -14,7 +14,8 @@ gl.filter.maf(
   recalc = FALSE,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
-  plot_colors = two_colors,
+  plot_colors_pop = discrete_palette,
+  plot_colors_all = two_colors,
   bins = 25,
   save2tmp = FALSE,
   verbose = NULL
@@ -29,7 +30,7 @@ will be removed [default 0.01].}
 \item{by.pop}{Whether MAF should be calculated by population [default FALSE].}
 
 \item{pop.limit}{Minimum number of populations in which MAF should be less 
-than the threshold for a loci to be filtered out. Only used if by.pop=TRUE. 
+than the threshold for a locus to be filtered out. Only used if by.pop=TRUE. 
 The default value is half of the populations [default ceiling(nPop(x)/2)].}
 
 \item{ind.limit}{Minimum number of individuals that a population should 
@@ -43,8 +44,11 @@ be produced [default TRUE].}
 
 \item{plot_theme}{User specified theme for the plot [default theme_dartR()].}
 
-\item{plot_colors}{List of two color names for the borders and fill of the
-plots [default two_colors].}
+\item{plot_colors_pop}{A color palette for population plots
+[default discrete_palette].}
+
+\item{plot_colors_all}{List of two color names for the borders and fill of
+the overall plot [default two_colors].}
 
 \item{bins}{Number of bins to display in histograms [default 25].}
 

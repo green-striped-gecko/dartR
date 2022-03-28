@@ -46,7 +46,7 @@ gl.drop.ind <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -77,9 +77,10 @@ gl.drop.ind <- function(x,
     # Remove individuals
     
     if (verbose >= 2) {
-        cat("  Deleting individuals",
-            paste(ind.list, collapse = ", "),
-            "\n")
+        cat(report("  Deleting specified individuals\n"))
+    } 
+    if(verbose >= 3){
+        cat("  ",paste(ind.list, collapse = ", "),"\n")
     }
     
     # Delete listed individuals, recalculate relevant locus metadata and remove monomorphic loci

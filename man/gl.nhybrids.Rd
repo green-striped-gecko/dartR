@@ -2,8 +2,8 @@
 % Please edit documentation in R/gl.nhybrids.r
 \name{gl.nhybrids}
 \alias{gl.nhybrids}
-\title{Creates an input file for the program NewHybrids and runs it if
- NewHybrids is installed}
+\title{Creates an input file for the program NewHybrids and runs it if 
+NewHybrids is installed}
 \usage{
 gl.nhybrids(
   gl,

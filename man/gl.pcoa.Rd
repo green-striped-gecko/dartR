@@ -12,6 +12,7 @@ gl.pcoa(
   mono.rm = TRUE,
   parallel = FALSE,
   n.cores = 16,
+  plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colors = two_colors,
   save2tmp = FALSE,
@@ -35,6 +36,10 @@ Windows) [default FALSE].}
 
 \item{n.cores}{Number of cores to use if parallel processing is requested
 [default 16].}
+
+\item{plot.out}{If TRUE, a diagnostic plot is displayed showing a scree plot
+for the "informative" axes and a histogram of eigenvalues of the remaining 
+"noise" axes [Default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}
@@ -152,13 +157,19 @@ modern reference is Jolliffe (2002). PCoA was developed by Gower (1966) while
 the best modern reference is Legendre & Legendre (1998).
 }
 \examples{
+\dontrun{
+gl <- possums.gl
 # PCA (using SNP genlight object)
-pca <- gl.pcoa(testset.gl)
-gl.pcoa.plot(pca,testset.gl)
+pca <- gl.pcoa(possums.gl[1:50,],verbose=2)
+gl.pcoa.plot(pca,gl)
+
+gs <- testset.gs
+levels(pop(gs))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
+rep('MDB',8),rep('Coast',6),'Em.subglobosa','Em.victoriae')
 
 # PCA (using SilicoDArT genlight object)
-pca <- gl.pcoa(testset.gs)
-gl.pcoa.plot(pca,testset.gs)
+pca <- gl.pcoa(gs)
+gl.pcoa.plot(pca,gs)
 
 # Collapsing pops to OTUs using Fixed Difference Analysis (using fd object)
 fd <- gl.fixed.diff(testset.gl)
@@ -169,8 +180,8 @@ gl.pcoa.plot(pca,fd$gl)
 # Using a distance matrix
 D <- gl.dist.ind(testset.gs, method='jaccard')
 pcoa <- gl.pcoa(D,correction="cailliez")
-gl.pcoa.plot(pcoa,testset.gs)
-
+gl.pcoa.plot(pcoa,gs)
+}
 }
 \references{
 \itemize{
@@ -201,8 +212,5 @@ points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp.
 \author{
 Author(s): Arthur Georges. Custodian: Arthur Georges (Post to
 \url{https://groups.google.com/d/forum/dartr})
-
-Custodian: Arthur Georges -- Post to
-\url{https://groups.google.com/d/forum/dartr}
 }
 \concept{data exploration functions}

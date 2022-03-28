@@ -1,4 +1,4 @@
-#' Least-cost path analysis based on a friction matrix
+#' Performs least-cost path analysis based on a friction matrix
 #'
 #' This function calculates the pairwise distances (Euclidean, cost path
 #'  distances and genetic distances) of populations using a friction matrix and

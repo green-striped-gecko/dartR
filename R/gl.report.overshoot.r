@@ -1,6 +1,6 @@
 #' @name gl.report.overshoot
 #' @title Reports loci for which the SNP has been trimmed from the sequence tag
-#' along with the adaptor
+#'  along with the adaptor
 #' @description
 #' This function checks the position of the SNP within the trimmed sequence tag
 #' and identifies those for which the SNP position is outside the trimmed

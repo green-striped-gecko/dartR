@@ -4,7 +4,7 @@
 \alias{gl.assign.pca}
 \title{Assign an individual of unknown provenance to population based on PCA}
 \usage{
-gl.assign.pca(x, unknown, plevel = 0.999, verbose = NULL)
+gl.assign.pca(x, unknown, plevel = 0.999, plot.out = TRUE, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the input genlight object [required].}
@@ -14,6 +14,9 @@ unknown [required].}
 
 \item{plevel}{Probability level for bounding ellipses in the PCoA plot
 [default 0.999].}
+
+\item{plot.out}{If TRUE, plot the 2D PCA showing the position 
+of the unknown [default TRUE]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -68,9 +71,12 @@ In deciding the assignment, the script considers an individual to be an
 outlier with respect to a particular population at alpha = 0.001 as default.
 }
 \examples{
+\dontrun{
 #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
-x <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,verbose=3) 
-x <- gl.assign.pca(x, unknown='UC_00146', plevel=0.95, verbose=3)
+test <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,
+verbose=3) 
+test_2 <- gl.assign.pca(test, unknown='UC_00146', plevel=0.95, verbose=3)
+}
 }
 \author{
 Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}

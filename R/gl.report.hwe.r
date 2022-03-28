@@ -19,6 +19,8 @@
 #' Either 'dost','selome','midp' (see details) [default 'midp'].
 #' @param cc_val The continuity correction applied to the ChiSquare test
 #'  [default 0.5].
+#' @param sig_only Whether the returned table should include loci with a 
+#'  significant departure from Hardy-Weinberg proportions [default TRUE].
 #' @param min_sample_size Minimum number of individuals per population in which
 #' perform H-W tests [default 5].
 #' @param plot.out If TRUE, will produce Ternary Plot(s) [default TRUE].
@@ -166,6 +168,7 @@ gl.report.hwe <- function(x,
                           alpha_val = 0.05,
                           pvalue_type = "midp",
                           cc_val = 0.5,
+                          sig_only = TRUE,
                           min_sample_size = 5,
                           plot.out = TRUE,
                           plot_colors = two_colors_contrast,
@@ -440,8 +443,6 @@ gl.report.hwe <- function(x,
             plot_colors[2]
     }
     
-    result_test <- result[which(result$Population == "WA"),]
-    
     if (plot.out) {
         count <- 0
         # count how many plots are going to be created
@@ -599,27 +600,16 @@ gl.report.hwe <- function(x,
     # removing column with color name
     df <- result[,-11]
     #### Report the results
-    if (multi_comp == F) {
-        df <- df[which(df$Prob <= alpha_val),]
-    }
-    if (multi_comp == T) {
-        df <- df[which(df$Prob.adj <= alpha_val),]
+    if(sig_only) {
+        if (multi_comp == F) {
+            df <- df[which(df$Prob <= alpha_val),]
+        }
+        if (multi_comp == T) {
+            df <- df[which(df$Prob.adj <= alpha_val),]
+        }
     }
     df <- df[order(df$Locus),]
-    cat("    Reporting significant departures from Hardy-Weinberg Equilibrium\n")
-    if (nrow(df) == 0) {
-        cat("    No significant departures\n")
-    } else {
-        cat("    NB: Departures significant at the alpha level of",
-            alpha_val,
-            "are listed\n")
-        cat(
-            important(
-                "    Adjustment of p-values for multiple comparisons vary with sample size\n"
-            )
-        )
-        print(df, row.names = FALSE)
-    }
+    
     
     # SAVE INTERMEDIATES TO TEMPDIR
     if (save2tmp) {
@@ -645,6 +635,20 @@ gl.report.hwe <- function(x,
     # FLAG SCRIPT END
     
     if (verbose >= 1) {
+        cat("    Reporting significant departures from Hardy-Weinberg Equilibrium\n")
+        if (nrow(df) == 0) {
+            cat("    No significant departures\n")
+        } else {
+            cat("    NB: Departures significant at the alpha level of",
+                alpha_val,
+                "are listed\n")
+            cat(
+                important(
+                    "    Adjustment of p-values for multiple comparisons vary with sample size\n"
+                )
+            )
+            print(df, row.names = FALSE)
+        }
         cat(report("\nCompleted:", funname, "\n"))
     }
     

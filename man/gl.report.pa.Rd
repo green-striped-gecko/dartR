@@ -121,6 +121,7 @@ alternative to FST for quantifying genetic population differentiation. Genes,
  \code{\link{gl.print.reports}}
 
 Other reporting functions: 
+\code{\link{gl.diagnostics.hwe}()},
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.heterozygosity}()},

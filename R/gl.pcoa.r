@@ -19,6 +19,9 @@
 #' Windows) [default FALSE].
 #' @param n.cores Number of cores to use if parallel processing is requested
 #' [default 16].
+#' @param plot.out If TRUE, a diagnostic plot is displayed showing a scree plot
+#' for the "informative" axes and a histogram of eigenvalues of the remaining 
+#' "noise" axes [Default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options
 #'  [default theme_dartR()].
 #' @param plot_colors List of two color names for the borders and fill of the
@@ -125,13 +128,19 @@
 #'@author Author(s): Arthur Georges. Custodian: Arthur Georges (Post to
 #'\url{https://groups.google.com/d/forum/dartr})
 #'@examples
+#' \dontrun{
+#' gl <- possums.gl
 #' # PCA (using SNP genlight object)
-#' pca <- gl.pcoa(testset.gl)
-#' gl.pcoa.plot(pca,testset.gl)
+#' pca <- gl.pcoa(possums.gl[1:50,],verbose=2)
+#' gl.pcoa.plot(pca,gl)
+#' 
+#' gs <- testset.gs
+#' levels(pop(gs))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
+#' rep('MDB',8),rep('Coast',6),'Em.subglobosa','Em.victoriae')
 #' 
 #' # PCA (using SilicoDArT genlight object)
-#' pca <- gl.pcoa(testset.gs)
-#' gl.pcoa.plot(pca,testset.gs)
+#' pca <- gl.pcoa(gs)
+#' gl.pcoa.plot(pca,gs)
 #' 
 #' # Collapsing pops to OTUs using Fixed Difference Analysis (using fd object)
 #' fd <- gl.fixed.diff(testset.gl)
@@ -142,8 +151,8 @@
 #' # Using a distance matrix
 #' D <- gl.dist.ind(testset.gs, method='jaccard')
 #' pcoa <- gl.pcoa(D,correction="cailliez")
-#' gl.pcoa.plot(pcoa,testset.gs)
-#' 
+#' gl.pcoa.plot(pcoa,gs)
+#' }
 #'@references
 #'\itemize{
 #'\item Cailliez, F. (1983) The analytical solution of the additive constant
@@ -166,8 +175,6 @@
 #'points in space. Philosophical Magazine. Series 6, vol. 2, no. 11, pp.
 #'559-572.
 #' }
-#' @author Custodian: Arthur Georges -- Post to
-#' \url{https://groups.google.com/d/forum/dartr}
 #' @seealso \code{\link{gl.pcoa.plot}}
 #' @family data exploration functions
 #' @importFrom ape pcoa
@@ -179,6 +186,7 @@ gl.pcoa <- function(x,
                     mono.rm = TRUE,
                     parallel = FALSE,
                     n.cores = 16,
+                    plot.out = TRUE,
                     plot_theme = theme_dartR(),
                     plot_colors = two_colors,
                     save2tmp = FALSE,
@@ -189,7 +197,7 @@ gl.pcoa <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -219,17 +227,17 @@ gl.pcoa <- function(x,
         if (nInd(x) < 2) {
         stop(
             error(
-                "Fatal Error: Only one individual or no individuals present in the dataset"
+                "Fatal Error: Only one individual or no individuals present in the dataset\n"
             )
         )
         }
    
         if (nLoc(x) < nInd(x)) {
-        cat(
+        if(verbose >=2){cat(
             warn(
-                "  Warning: Number of loci is less than the number of individuals to be represented"
+                "  Warning: Number of loci is less than the number of individuals to be represented\n"
             )
-        )
+        )}
         }
     }
     
@@ -242,7 +250,7 @@ gl.pcoa <- function(x,
             if (verbose >= 2) {
                 cat(
                     warn(
-                        "  Warning: Correction if specified needs to be lingoes or cailliez, set to the default 'None'"
+                        "  Warning: Correction if specified needs to be lingoes or cailliez, set to the default 'None'\n"
                     )
                 )
             }
@@ -407,26 +415,25 @@ gl.pcoa <- function(x,
     
     if (datatype == "SNP" || datatype == "SilicoDArT")
     {
-        if (verbose >= 2) {
-            if (datatype == "SNP") {
-                cat(
+        if (datatype == "SNP") {
+            if (verbose >= 2) {cat(
                     report(
                         "  Performing a PCA, individuals as entities, loci as attributes, SNP genotype as state\n"
                     )
-                )
+                )}
                 title <-
                     "PCA on SNP Genotypes\nScree Plot (informative axes only)"
             }
             if (datatype == "SilicoDArT") {
-                cat(
+                if (verbose >= 2) {cat(
                     report(
                         "  Performing a PCA, individuals as entities, loci as attributes, Tag P/A as state\n"
                     )
-                )
+                )}
                 title <-
                     "PCA on Tag P/A Data\nScree Plot (informative axes only)"
             }
-        }
+            
         pca <-
             glPca(x,
                   nf = nfactors,
@@ -550,7 +557,7 @@ gl.pcoa <- function(x,
     # printing outputs
     p3 <- (p1 / p2)
     if (verbose >= 1) {
-        print(p3)
+        if(plot.out){print(p3)}
     }
     
     # SAVE INTERMEDIATES TO TEMPDIR

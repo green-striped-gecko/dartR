@@ -1,6 +1,6 @@
 #' @name gl.test.heterozygosity
 #' @title Tests the difference in heterozygosity between populations taken
-#' pairwise
+#'  pairwise
 #' @description
 #' Calculates the expected heterozygosities for each population in a genlight
 #' object, and uses re-randomization to test the statistical significance of

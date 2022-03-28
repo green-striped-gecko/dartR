@@ -1,5 +1,5 @@
 #' @name gl.hwe.pop
-#' @title Hardy-Weinberg tests over loci and populations
+#' @title Performs Hardy-Weinberg tests over loci and populations
 #' @description
 #' Hardy-Weinberg tests are performed for each loci in each of the populations
 #' as defined by the pop slot in a genlight object.

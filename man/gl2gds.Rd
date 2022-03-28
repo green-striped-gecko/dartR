@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2gds.r
 \name{gl2gds}
 \alias{gl2gds}
-\title{Converts a genlight object to gds format}
+\title{Converts a genlight object into gds format}
 \usage{
 gl2gds(
   x,

@@ -1,6 +1,5 @@
-##################################### pairwise LD function across all loci
 #' Calculates pairwise population based Linkage Disequilibrium across all loci
-#' using the specified number of cores
+#'  using the specified number of cores
 #' @description
 #' This function is implemented in a parallel fashion to speed up the process.
 #' There is also the ability to restart the function if crashed by specifying
@@ -75,7 +74,7 @@ gl.report.ld <- function(x,
             utils.check.datatype(x, verbose = verbose)
         
         # convert genlight to genind
-        if (class(x) == "genlight") {
+        if (is(x,"genlight")) {
             gi <- gl2gi(x)
         }
         

@@ -2,29 +2,45 @@
 #' available in dartR
 #'
 #' The function compares the installed packages with the the currently available
-#' ones on cran. Be aware this function only works if a version of dartR is
+#' ones on CRAN. Be aware this function only works if a version of dartR is
 #' already installed on your system. You can choose if you also want to have a
-#' specific version of dartR installed ('CRAN', 'master' or 'dev' ). 'master'
-#' and 'dev' are installed from Github. Be aware the dev version from github is
+#' specific version of dartR installed ('CRAN', 'master', 'beta' or 'dev' ). 'master'
+#' , 'beta' and 'dev' are installed from Github. Be aware that the dev version from github is
 #'  not fully tested and most certainly will contain untested functions.
-#' @param flavour If and which version of R you want to install. If NULL
-#' then only needed packages for the current version will be installed. If
+#' @param flavour The version of R you want to install. If NULL
+#' then only packages needed for the current version will be installed. If
 #' 'CRAN' current CRAN version will be installed. 'master' installs the GitHub
-#' master branch and 'dev' installs the experimental development branch from
+#' master branch, 'beta' installs the latest stable version, and 'dev' installs 
+#' the experimental development branch from
 #' GitHub [default NULL].
-#' @param verbose Returns information on packages and dartR versions
-#' [default TRUE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' progress log ; 3, progress and results summary; 5, full report
+#' [default 2 or as specified using gl.set.verbosity].
 #' @return Returns a message if the installation was successful/required.
 #' @export
 #' @importFrom stringr str_trim
-#' @importFrom devtools install_github
 #' @rawNamespace import(crayon, except = c(chr, '%+%'))
 #' @importFrom utils installed.packages install.packages available.packages
-#' @author Bernd Gruber (bugs? Post to
+#' @author Custodian: Bernd Gruber (Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 
 gl.install.vanilla.dartR <- function(flavour = NULL,
-                                     verbose = TRUE) {
+                                     verbose = NULL) {
+    # SET VERBOSITY
+    verbose <- gl.check.verbosity(verbose)
+    
+    # FLAG SCRIPT START
+    funname <- match.call()[[1]]
+    utils.flag.start(func = funname,
+                     build = "Josh",
+                     verbosity = verbose)
+    
+    # ERROR CHECKING
+    
+    if(is.null(flavour)){
+        flavour <- "CRAN"
+    }
+    
     pkg <- "devtools"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
         stop(
@@ -45,177 +61,174 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
         ))
     }
     
-    pkg <- "crayon"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package ",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
-    }
+    # DO THE JOB
     
     err <- NULL
     if (!is.null(flavour)) {
         if (flavour == "CRAN") {
             detach("package:dartR", unload = TRUE)
-            if (verbose) {
-                message(report("Installing dartR from CRAN (latest version)"))
+            if (verbose >= 2) {
+                cat(report("  Installing dartR from CRAN (latest version)\n"))
             }
             install.packages("dartR")
         }
-        
         if (flavour == "master") {
-            if (verbose) {
-                message(report("Installing dartR from github (master)"))
+            if (verbose >= 2) {
+                cat(report("  Installing dartR from github (master)\n"))
             }
             detach("package:dartR", unload = TRUE)
             devtools::install_github("green-striped-gecko/dartR",
                                      ref = "master",
                                      dependencies = TRUE)
-            
         }
         if (substr(flavour, 1, 3) == "dev") {
             detach("package:dartR", unload = TRUE)
-            if (verbose) {
-                message(important("Installing dartR from github (dev)"))
+            if (verbose >= 2) {
+                cat(report("  Installing dartR from github (dev)\n"))
             }
             devtools::install_github("green-striped-gecko/dartR",
                                      ref = flavour,
                                      dependencies = TRUE)
-            
+        }
+        if (substr(flavour, 1, 3) == "beta") {
+            detach("package:dartR", unload = TRUE)
+            if (verbose >= 2) {
+                cat(report("  Installing dartR from github (beta)\n"))
+            }
+            devtools::install_github("green-striped-gecko/dartR",
+                                     ref = flavour,
+                                     dependencies = TRUE)
         }
     }
     
-    ip <- installed.packages()[, "Package"]
     # check all depends #check all imports check all suggests
-    suggests <-
+     ip <- installed.packages()[, "Package"]
+     suggests <-
         stringr::str_trim(unlist(strsplit(
             packageDescription("dartR", fields = "Suggests"), ","
         )))
-    toinstall <- suggests[!suggests %in% ip]
-    available <- available.packages()[, "Package"]
-    toinsav <- toinstall[toinstall %in% available]
+     toinstall <- suggests[!suggests %in% ip]
+     available <- available.packages()[, "Package"]
+     toinsav <- toinstall[toinstall %in% available]
     
     if (length(toinsav) > 0) {
-        if (verbose) {
-            message(
-                report(
-                    "The following packages will be installed (and are available on Cran):\n"
+        if (verbose >= 2) {
+            cat(report(
+                    "  The following packages will be installed (also available on CRAN):\n"
                 )
             )
         }
         
-        if (verbose) {
-            message(report(paste0(toinsav, "\n")))
+        if (verbose >= 2) {
+            cat("  ",paste0("  ",toinsav, "\n"))
         }
         for (ii in 1:length(toinsav)) {
             install.packages(toinsav[ii])
             
-            if (verbose) {
-                message(report(paste(
-                    "Package:", toinsav[ii], "installed.\n"
+            if (verbose >= 2) {
+                cat(report(paste(
+                    "  Package:", toinsav[ii], "installed.\n"
                 )))
             }
         }
         
-        if (verbose) {
-            message(
-                report(
-                    "All required packages are now installed. If there are still errors you might need to update them using"
+        if (verbose >= 2) {
+            cat(report(
+                    "  All required packages are now installed. If still errors, update them using "
                 )
             )
+            cat(code("update.packages()"))
         }
         
-        if (verbose) {
-            message(code("update.packages()"))
-        }
-        
-        if (verbose) {
-            message(report(
-                paste(
-                    "\nYou have installed dartR",
+        if (verbose >= 2) {
+            cat(report("  ",paste(
+                    "\n  You have installed dartR",
                     packageVersion("dartR")
                 )
             ))
         }
         
-        if (verbose) {
-            message(report("\nHave fun using Vanilla dartR!\n"))
+        if (verbose >= 2) {
+            cat(report("\nHave fun using Vanilla dartR!\n"))
         }
         # package installed but not available
     } else if (length(toinstall) > 0) {
-        if (verbose) {
-            message(
-                warn(
-                    "The following packages need to be installed, but are not available via Cran. You need to try and find them on github or other repositories such as bioconductor."
+        if (verbose >= 2) {
+            cat(warn(
+                    "  Warning: The following packages need to be installed, but are not available via CRAN.\n  Look to github or other repositories such as bioconductor.\n"
+                )
+            )            
+            cat("  ",paste0(toinstall,"\n"))
+        }
+        
+        if (verbose >= 2) {
+            cat(warn(
+                    "  Warning: If the packages qvalue and/or SNPrelate are missing run the code and then gl.install.vanilla.dartR() again\n"
                 )
             )
         }
         
-        if (verbose) {
-            message(warn(paste0(toinstall, "\n")))
-        }
-        
-        if (verbose) {
-            message(
-                important(
-                    "If the packages qvalue and/or SNPrelate are missing run the following lines of code and then gl.install.vanilla.dartR() agian\n"
-                )
-            )
-        }
-        
-        if (verbose) {
-            message(important(
+        if (verbose >= 2) {
+            cat(warn(
                 paste(
-                    "install.packages('devtools') \nlibrary(devtools)\ninstall.packages('BiocManager')\nBiocManager::install(c('SNPRelate', 'qvalue'))"
+                    "    install.packages('devtools') \n    library(devtools)\n    install.packages('BiocManager')\n    BiocManager::install(c('SNPRelate', 'qvalue'))\n"
                 )
             ))
         }
         
         err <- TRUE
     } else {
-        if (verbose) {
-            message(
+        if (verbose >= 2) {
+            cat(
                 report(
-                    "All required packages are already installed.\n If there are still errors you might need to update them using"
+                    "  All required packages are already installed.\n  If there are still errors you might need to update them using "
                 )
             )
         }
         
-        if (verbose) {
-            message(code("update.packages()"))
+        if (verbose >= 2) {
+            cat(code("update.packages()"))
+            cat("\n")
         }
         
-        if (verbose) {
-            message(report(
-                paste(
-                    "You have installed dartR:",
-                    packageVersion("dartR")
-                )
-            ))
-        }
-        
-        if (verbose) {
-            message(report("\nHave fun using Vanilla dartR!\n"))
-        }
+        # if (verbose) {
+        #     cat(report(
+        #         paste(
+        #             "  You have installed dartR:",
+        #             packageVersion("dartR"),"\n"
+        #         )
+        #     ))
+        # }
     }
     
-    if (verbose & is.null(err) & !is.null(flavour)) {
+    if (verbose>= 2 & is.null(err) & !is.null(flavour)) {
         if (flavour != "CRAN") {
             fl = paste0("Github [", flavour, "]")
         } else {
             fl = "CRAN"
-            message(report(
+            cat(report(
                 paste(
-                    "You have installed dartR",
+                    "  You have installed dartR",
                     packageVersion("dartR"),
                     "from",
                     fl,
-                    ".\n"
+                    "\n"
                 )
             ))
         }
         
+        
+        if (verbose>= 2) {
+            message(report("\n  Have fun using Vanilla dartR!\n"))
+        }
+        
+        # FLAG SCRIPT END
+        
+        if (verbose > 0) {
+            cat(report("Completed:", funname, "\n"))
+        }
+        
     }
+    library(dartR) 
     
 }

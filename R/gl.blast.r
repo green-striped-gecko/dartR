@@ -1,7 +1,7 @@
 #'@name gl.blast
 #'
-#'@title Alignment of nucleotides sequences against those present in a target
-#'  database using blastn
+#'@title Aligns nucleotides sequences against those present in a target database 
+#'using blastn
 #'
 #'@description Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
 #'  1997) is a sequence comparison algorithm optimized for speed used to search
@@ -46,13 +46,8 @@
 #'
 #'@details \strong{Installing BLAST}
 #'
-#'  You can download the BLAST installs from: \itemize{ \item For Mac:
-#'  \url{https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/ncbi-blast-2.11.0+.dmg}
-#'   \item For Windows:
-#'  \url{https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/ncbi-blast-2.11.0+-win64.exe}
-#'   \item For Linux:
-#'  \url{https://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/ncbi-blast-2.11.0+-1.src.rpm}
-#'   }
+#'  You can download the BLAST installs from:
+#'  \url{https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/}
 #'
 #'  It is important to install BLAST in a path that does not contain spaces for
 #'  this function to work.

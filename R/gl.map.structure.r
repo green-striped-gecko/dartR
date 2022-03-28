@@ -57,7 +57,7 @@
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5, movepops=mp)
 #' }
 #' @export
-#' @seealso \code{\link{gl.run.structure}},  \link[strataG]{clumpp},
+#' @seealso \code{\link{gl.run.structure}},  \code{clumpp},
 #' \code{\link{gl.plot.structure}}
 #' @references
 #' \itemize{

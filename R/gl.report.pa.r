@@ -218,7 +218,7 @@ gl.report.pa <- function(x,
                 tibble::rownames_to_column(data, "source")
             data_long <- tibble::as_tibble(data_long)
             data_long <-
-                pivot_longer(data_long, -source, "target")
+                tidyr::pivot_longer(data_long, -source, "target")
             data_long <- data_long[data_long$value > 0, ]
             
             data_long$target <-
@@ -247,11 +247,11 @@ gl.report.pa <- function(x,
             nodes$name <- gsub("trgt_", "", nodes$name)
             
             # assigning colors to populations
-            if (class(palette_discrete) == "function") {
+            if (is(palette_discrete, "function")) {
                 colors_pops <- palette_discrete(length(levels(pop(x))))
             }
             
-            if (class(palette_discrete) != "function") {
+            if (!is(palette_discrete, "function")) {
                 colors_pops <- palette_discrete
                 if (!any(grepl("#", colors_pops))) {
                     colors_pops <- gplots::col2hex(colors_pops)
@@ -357,11 +357,11 @@ gl.report.pa <- function(x,
         
         if (plot.out) {
             # assigning colors to populations
-            if (class(palette_discrete) == "function") {
+            if (is(palette_discrete, "function")) {
                 colors_pops <- palette_discrete(length(levels(pop(x))) + 1)
             }
             
-            if (class(palette_discrete) != "function") {
+            if (!is(palette_discrete, "function")) {
                 colors_pops <- palette_discrete
             }
             
@@ -440,14 +440,18 @@ gl.report.pa <- function(x,
     
     # PRINTING OUTPUTS
     if (plot.out) {
-        if (map.interactive & method == "pairwise") {
+        if (map.interactive & (method == "pairwise")) {
             labs <- popNames(x)
             gl.map.interactive(x, matrix = mm, symmetric = FALSE)
         }
         # using package patchwork
         print(p3)
     }
-    print(df)
+    
+    if(verbose>0){
+        print(df)
+    }
+    
     if (verbose >= 2) {
         cat(report(
             "  Table of private alleles and fixed differences returned\n"

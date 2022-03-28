@@ -84,6 +84,7 @@ Broadens the Spectrum of Molecular Ecology and Evolution. TREE 32(12)
 }
 \seealso{
 Other reporting functions: 
+\code{\link{gl.diagnostics.hwe}()},
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.heterozygosity}()},
 \code{\link{gl.report.parent.offspring}()},

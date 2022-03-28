@@ -1,6 +1,6 @@
 #' @name gl.edit.recode.ind
-#' @title Creates or edits an individual (=specimen) names, creates an recode_ind
-#'  file and applies the changes to a genlight object.
+#' @title Creates or edits individual (=specimen) names, creates a recode_ind
+#'  file and applies the changes to a genlight object
 #' @description
 #' A script to edit individual names in a genlight object, or to create a
 #' reassignment table taking the individual labels from a genlight object, or to

@@ -4,7 +4,7 @@
 \alias{gl.filter.locmetrics}
 \alias{gl.filter.locmetric}
 \title{Filters loci on the basis of numeric information stored in
-other$loc.metrics in a genlight \{adegenet\} object}
+ other$loc.metrics in a genlight \{adegenet\} object}
 \usage{
 gl.filter.locmetric(x, metric, upper, lower, keep = "within", verbose = NULL)
 }

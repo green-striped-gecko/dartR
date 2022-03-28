@@ -1,4 +1,4 @@
-#' Concatenates DArT trimmed sequences and outputs a FASTA file.
+#' Concatenates DArT trimmed sequences and outputs a FASTA file
 #'
 #' Concatenated sequence tags are useful for phylogenetic methods where
 #' information on base frequencies and transition and transversion ratios are

@@ -1,21 +1,43 @@
 process,variable,value,description,range_value
-initialisation,real_freq,NULL,Frequency of each one of the alleles of the loci from a real dataset,Defined by the user
-initialisation,real_loc,NULL,Locations of the loci from a real dataset,Not available
-initialisation,loci_number_to_simulate,1000,Number of loci under selection,Dependent on computing resources
-initialisation,mutation_rate,5*10^-5,Mutation rate per generation per site. Value only used in the equation to determine q,Defined by the user
-recombination,map_resolution,100000,Resolution of the recombination map (bp),Dependent on genomic resources
-selection,dominance_mean,0.2,Mean of the normal distribution from where h values are sampled,0-1
-selection,gamma_scale,0.03,Scale of the gamma distribution from where s values are sampled,Defined by the user
-selection,gamma_shape,0.35,Shape of the gamma distribution from where s values are sampled,Defined by the user
-selection,h_gral,0.5,h of deleterious alleles,0-1
-selection,intercept,0.5,Value for the intercept of the equation  to determine h (maximum value of h when s = 0) ,0-1
-selection,log_mean,0.002,Mean of the log normal distribution from where s values are sampled,Defined by the user
-selection,log_sd,4,Standard deviation of the log normal distribution from where s values are sampled,Defined by the user
-selection,q_gral,0.5,Initial frequencies of deleterious alleles,0-1
-selection,rate,500,Value for the variable rate of the dominance equation to calculate h,Defined by the user
-selection,s_gral,0.05,s of deleterious alleles,0-1
-selection,targets_factor,0.05,Factor to sample the number of loci under selection from the input file  “targets_of_selection.csv”,Defined by the user
-initialisation,chromosome_name,NA,Name of the chromosome to be simulated,Defined by the user (must be character)
-initialisation,chunk_number,100,Number of rows of the recombination map,Defined by the user
-recombination,chunk_recombination,1,Recombination rate per region of size chunk_number,Defined by the user
-initialisation,q_neutral,0.5,Initial frequencies of neutral alleles,0-1
+Basic,chunk_number,100,Number of chromosome chunks,Defined by the user
+Basic,chunk_bp,100000,Number of basepairs (bp) per chromosome chunk,Defined by the user
+Basic,chunk_cM,10,Number of centiMorgans (cM) per chromosome chunk,Defined by the user
+Basic,chunk_neutral_loci,1,Number of loci with neutral alleles per chromosome chunk,Defined by the user
+Basic,q_neutral,0.5,Initial frequency of all neutral alleles,0-1
+Basic,loci_deleterious,0,Number of loci with deleterious alleles,Dependent on computing resources
+Basic,loci_advantageous,0,Number of loci with advantageous alleles,Dependent on computing resources
+Selection coefficient,s_distribution_del,"""gamma""",Distribution to sample selection coefficients for deleterious alleles,"""equal"" or ""gamma"" or ""log_normal"""
+Selection coefficient,s_del,0.001,Selection coefficient for all deleterious alleles,0-1
+Selection coefficient,gamma_scale,0.03,Scale of the gamma distribution from where s values are sampled,Defined by the user
+Selection coefficient,gamma_shape,0.4,Shape of the gamma distribution from where s values are sampled,Defined by the user
+Selection coefficient,log_mean,0.002,Mean of the log normal distribution from where s values are sampled,0-1
+Selection coefficient,log_sd,4,Standard deviation of the log normal distribution from where s values are sampled,Defined by the user
+Selection coefficient,s_distribution_adv,"""exponential""",Distribution to sample selection coefficients of advantageous alleles,"""equal"" or ""exponential"""
+Selection coefficient,s_adv,0.001,Selection coefficient for all advantageous alleles,0-1
+Selection coefficient,exp_rate,16,Mean of the exponential distribution for advantageous alleles,Defined by the user
+Dominance,h_distribution_del,"""normal""",Distribution to sample dominance for deleterious alleles,"""equal"" or ""normal"" or ""equation"""
+Dominance,h_del,0.25,Dominance for all deleterious alleles,0-1
+Dominance,h_mean_del,0.25,Mean of the normal distribution from where h values are sampled,0-1
+Dominance,h_sd_del,sqrt(0.001),Standard deviation of the normal distribution from where h values are sampled,Defined by the user
+Dominance,h_intercept_del,0.5,Value for the intercept of the equation to determine h (maximum value of h when s = 0) ,Defined by the user
+Dominance,h_rate_del,500,Value for the variable rate of the dominance equation to calculate h,Defined by the user
+Dominance,h_distribution_adv,"""normal""",Distribution to sample dominance for advantageous alleles,"""equal"" or ""normal"" or ""equation"""
+Dominance,h_adv,0.25,Dominance for all advantageous alleles,0-1
+Dominance,h_mean_adv,0.25,Mean of the normal distribution from where h values are sampled,0-1
+Dominance,h_sd_adv,sqrt(0.001),Standard deviation of the normal distribution from where h values are sampled,Defined by the user
+Dominance,h_intercept_adv,0.5,Value for the intercept of the equation to determine h (maximum value of h when s = 0) ,Defined by the user
+Dominance,h_rate_adv,500,Value for the variable rate of the dominance equation to calculate h,Defined by the user
+Initial frequency,q_distribution_del,"""equation""",Method to determine initial allele frequency of deleterious alleles,"""equal"" or ""equation"""
+Initial frequency,q_del,0.05,Initial frequency of all deleterious alleles,0-1
+Initial frequency,q_equation_del,5*10^-5,Mutation rate per generation per site for deleterious alleles,Defined by the user
+Initial frequency,q_distribution_adv,"""equation""",Method to determine initial allele frequency of advantageous alleles,"""equal"" or ""equation"""
+Initial frequency,q_adv,0.05,Initial frequency of all advantageous alleles,0-1
+Initial frequency,q_equation_adv,5*10^-5,Mutation rate per generation per site for advantageous alleles,Defined by the user
+Mutation,loci_mut_neu,0,Number of loci with neutral alleles available to mutation ,Dependent on computing resources
+Mutation,loci_mut_del,0,Number of loci with deleterious alleles available to mutation ,Dependent on computing resources
+Mutation,loci_mut_adv,0,Number of loci with advantageous alleles available to mutation ,Dependent on computing resources
+Real information,real_loc,FALSE,Extract location of neutral loci from genlight object,TRUE or FALSE
+Real information,real_freq,FALSE,Extract allele frequencies of neutral loci from genlight object,TRUE or FALSE
+Real information,chromosome_name,"""1""","Chromosome name from where to extract location, alllele frequency, recombination map and targets of selection (if provided).",Defined by the user
+Real information,deleterious_factor,10,Percentage of the number targets from the input file 'targets_of_selection.csv' to use for deleterious alleles,Defined by the user
+Real information,mutations_factor,10,Percentage of the number targets from the input file 'targets_of_selection.csv' to use for mutations of deleterious alelles,Defined by the user

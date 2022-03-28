@@ -31,7 +31,8 @@
 #'  # SNP data
 #'    gl2 <- gl.drop.pop(testset.gl,
 #'    pop.list=c('EmsubRopeMata','EmvicVictJasp'),verbose=3)
-#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c('EmsubRopeMata','EmvicVictJasp'),mono.rm=TRUE,recalc=TRUE)
+#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c('EmsubRopeMata','EmvicVictJasp'),
+#'    mono.rm=TRUE,recalc=TRUE)
 #'    gl2 <- gl.drop.pop(testset.gl, pop.list=c('Male','Unknown'),as.pop='sex')
 #'  # Tag P/A data
 #'    gs2 <- gl.drop.pop(testset.gs, pop.list=c('EmsubRopeMata','EmvicVictJasp'))
@@ -54,7 +55,7 @@ gl.drop.pop <-  function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "Josh",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -98,7 +99,7 @@ gl.drop.pop <-  function(x,
     }
     
     if (verbose >= 2) {
-        cat(report("  Checking for presence of nominated populations\n"))
+        cat(report("  Checking for presence of nominated populations, deleting them\n"))
     }
     for (case in pop.list) {
         if (!(case %in% popNames(x))) {
@@ -122,7 +123,7 @@ gl.drop.pop <-  function(x,
     
     # Remove populations
     
-    if (verbose >= 2) {
+    if (verbose >= 3) {
         cat("  Deleting populations",
             paste(pop.list, collapse = ", "),
             "\n")

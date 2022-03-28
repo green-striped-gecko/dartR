@@ -27,7 +27,7 @@
 
 gl.print.history <- function(x = NULL,
                              history = NULL) {
-    if (class(x) == "genlight")
+    if (is(x,"genlight"))
         if (is.null(history))
             hist2 <-
                 x@other$history

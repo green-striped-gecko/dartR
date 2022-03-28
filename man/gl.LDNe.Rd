@@ -2,49 +2,58 @@
 % Please edit documentation in R/gl.LDNe.r
 \name{gl.LDNe}
 \alias{gl.LDNe}
-\title{Estimate effective population size using the Linkage Disequilibrium 
+\title{Estimates effective population size using the Linkage Disequilibrium
 method based on NeEstimator (V2)}
 \usage{
 gl.LDNe(
   x,
   outfile = "genepopLD.txt",
   outpath = tempdir(),
-  neest.path = "./",
+  neest.path = getwd(),
   critical = 0,
   singleton.rm = TRUE,
   mating = "random",
   plot.out = TRUE,
+  plot_theme = theme_dartR(),
+  plot_colors_pop = discrete_palette,
   save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
-  
-\item{outfile}{File name of the output file [default 'genepopLD.txt'] with 
-all results from Neestimator 2.}
-  
-\item{outpath}{Path where to save the output file
-[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
- when calling this function to direct output files to your working directory.
- @param neest.path path to the folder of the   NE2-1 file. 
- [Please note there are 3 different executables depending on your OS: Ne2-1.exe (=Windows), Ne2-1M (=Mac), Ne2-L (=Linux)]. 
- You only need to point to the folder (the function will recognise which OS 
- you are running).}
 
-\item{critical}{(vector of) Critical values that are used to remove alleles 
-based on their minor allele frequency. This can be done before using the 
-gl.filter.maf function, therefore the default is set to 0 (no loci are 
-removed). To run for MAF 0 and MAF 0.05 at the same time specify: critical = 
-c(0,0.05)}
+\item{outfile}{File name of the output file  with
+all results from Neestimator 2 [default 'genepopLD.txt'].}
 
-\item{singleton.rm}{use this if you want to remove singleton alleles (=TRUE)
-[default TRUE].}
+\item{outpath}{Path where to save the output file. Use outpath=getwd() or
+outpath='.' when calling this function to direct output files to your working
+ directory [default tempdir(), mandated by CRAN].}
 
-\item{mating}{use formula for Random mating='random' or monogamy= 'monogamy'. 
+\item{neest.path}{Path to the folder of the NE2-1 file.
+Please note there are 3 different executables depending on your OS:
+Ne2-1.exe (=Windows), Ne2-1M (=Mac), Ne2-1L (=Linux). You only need to point
+to the folder (the function will recognise which OS you are running)
+[default getwd()].}
+
+\item{critical}{(vector of) Critical values that are used to remove alleles
+based on their minor allele frequency. This can be done before using the
+gl.filter.maf function, therefore the default is set to 0 (no loci are
+removed). To run for MAF 0 and MAF 0.05 at the same time specify: critical =
+c(0,0.05) [default 0].}
+
+\item{singleton.rm}{Whether to remove singleton alleles [default TRUE].}
+
+\item{mating}{Formula for Random mating='random' or monogamy= 'monogamy'
 [default 'random'].}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
+
+\item{plot_theme}{User specified theme [default theme_dartR()].}
+
+\item{plot_colors_pop}{A discrete palette for population colors or a list
+with as many colors as there are populations in the dataset
+[default discrete_palette].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
@@ -54,16 +63,15 @@ progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-invisible results as table
+Dataframe with the results as table
 }
 \description{
-
-This function is basically a convinience function that runs the LD Ne
- estimator using Neestimator2 
- (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/}) 
- within R using the provided genlight object. To be able to do so, the 
- software has to be downloaded from their website and the appropriate 
- executable Ne2-1 has to be copied into the path as specified in the function 
+This function is basically a convenience function that runs the LD Ne
+ estimator using Neestimator2
+ (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/})
+ within R using the provided genlight object. To be able to do so, the
+ software has to be downloaded from their website and the appropriate
+ executable Ne2-1 has to be copied into the path as specified in the function
  (see example below).
 }
 \examples{
