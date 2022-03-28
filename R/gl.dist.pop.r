@@ -33,14 +33,16 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # SNP genotypes
-#' D <- gl.dist.pop(testset.gl, method='euclidean')
-#' D <- gl.dist.pop(testset.gl, method='euclidean',scale=TRUE)
-#' D <- gl.dist.pop(testset.gl, method='nei')
-#' D <- gl.dist.pop(testset.gl, method='reynolds')
-#' D <- gl.dist.pop(testset.gl, method='chord')
-#' D <- gl.dist.pop(testset.gl, method='fixed-diff')
-#' #Presence-Absence data
-#' D <- gl.dist.pop(testset.gs, method='euclidean')
+#' D <- gl.dist.pop(possums.gl[1:90,1:100], method='euclidean')
+#' D <- gl.dist.pop(possums.gl[1:90,1:100], method='euclidean',scale=TRUE)
+#' \dontrun{
+#' #D <- gl.dist.pop(possums.gl, method='nei')
+#' #D <- gl.dist.pop(possums.gl, method='reynolds')
+#' #D <- gl.dist.pop(possums.gl, method='chord')
+#' #D <- gl.dist.pop(possums.gl, method='fixed-diff')
+#' }
+#' #Presence-Absence data [only 10 individuals due to speed]
+#' D <- gl.dist.pop(testset.gs[1:10,], method='euclidean')
 
 gl.dist.pop <- function(x,
                         method = "euclidean",

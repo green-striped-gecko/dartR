@@ -51,7 +51,7 @@ gl.costdistances <- function(landscape,
         ))
     }
     
-    if (class(locs) == "genlight") {
+    if (is(locs, "genlight")) {
         if (is.null(locs@other$latlon)) {
             stop(
                 error(

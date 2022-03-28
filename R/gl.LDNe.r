@@ -237,11 +237,11 @@ gl.LDNe <- function(x,
   # PLOTS
   if (plot.out) {
     # printing plots and reports assigning colors to populations
-    if (class(plot_colors_pop) == "function") {
+    if (is(plot_colors_pop, "function")) {
       colors_pops <- plot_colors_pop(length(levels(pop(x))))
     }
     
-    if (class(plot_colors_pop) != "function") {
+    if (!is(plot_colors_pop,"function")) {
       colors_pops <- plot_colors_pop
     }
     

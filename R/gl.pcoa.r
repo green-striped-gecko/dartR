@@ -128,12 +128,10 @@
 #'@author Author(s): Arthur Georges. Custodian: Arthur Georges (Post to
 #'\url{https://groups.google.com/d/forum/dartr})
 #'@examples
-#' gl <- testset.gl
-#' levels(pop(gl))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
-#' rep('MDB',8),rep('Coast',7),'Em.subglobosa','Em.victoriae')
-#' 
+#' \dontrun{
+#' gl <- possums.gl
 #' # PCA (using SNP genlight object)
-#' pca <- gl.pcoa(gl,verbose=2)
+#' pca <- gl.pcoa(possums.gl[1:50,],verbose=2)
 #' gl.pcoa.plot(pca,gl)
 #' 
 #' gs <- testset.gs
@@ -154,7 +152,7 @@
 #' D <- gl.dist.ind(testset.gs, method='jaccard')
 #' pcoa <- gl.pcoa(D,correction="cailliez")
 #' gl.pcoa.plot(pcoa,gs)
-#' 
+#' }
 #'@references
 #'\itemize{
 #'\item Cailliez, F. (1983) The analytical solution of the additive constant
