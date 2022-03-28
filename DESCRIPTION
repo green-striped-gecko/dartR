@@ -35,7 +35,7 @@ biocViews:
 Imports: stats, methods, utils, plyr, tidyr,stringr, ape, vegan,
         sp, PopGenReport, MASS, StAMPP,SNPRelate,
         gridExtra, foreach, dplyr, crayon,reshape2, fields,
-        patchwork, raster, data.table, shiny
+        patchwork, raster, data.table, shiny, purrr
 Suggests: 
     HardyWeinberg,
     networkD3,
@@ -81,8 +81,7 @@ Suggests:
     devtools,
     tibble,
     stringi,
-    shinyWidgets,
-    purrr
+    shinyWidgets
 Additional_repositories: https://github.com/EricArcher/strataG 
 License: GPL (>= 3)
 LazyData: true
