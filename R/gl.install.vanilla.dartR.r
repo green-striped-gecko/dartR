@@ -217,6 +217,7 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
             ))
         }
         
+        
         if (verbose>= 2) {
             message(report("\n  Have fun using Vanilla dartR!\n"))
         }
@@ -228,5 +229,6 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
         }
         
     }
+    library(dartR) 
     
 }
