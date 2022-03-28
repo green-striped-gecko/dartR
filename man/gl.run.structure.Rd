@@ -17,7 +17,7 @@ gl.run.structure(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{...}{Parameters to specify the STRUCTURE run (check \code{structureRun}
+\item{...}{Parameters to specify the STRUCTURE run (check \code{structureRun} within strataG.
 for more details). Parameters are passed to the \code{structureRun} function.
 For example you need to set the k.range and the type of model you would like
 to run (noadmix, locprior) etc. If those parameter names do not tell you

@@ -82,11 +82,13 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' \dontrun{
 #' ref_table <- gl.sim.WF.table(file_var=system.file('extdata', 
 #' 'ref_variables.csv', package = 'dartR'),interactive_vars = FALSE)
 #' res_sim <- gl.sim.WF.run(file_var = system.file('extdata', 
 #' 'sim_variables.csv', package ='dartR'),ref_table=ref_table,
 #' interactive_vars = FALSE)
+#' }
 #' @seealso \code{\link{gl.sim.WF.table}}
 #' @family simulation functions
 #' @import stats

@@ -157,12 +157,10 @@ modern reference is Jolliffe (2002). PCoA was developed by Gower (1966) while
 the best modern reference is Legendre & Legendre (1998).
 }
 \examples{
-gl <- testset.gl
-levels(pop(gl))<-c(rep('Coast',5),rep('Cooper',3),rep('Coast',5),
-rep('MDB',8),rep('Coast',7),'Em.subglobosa','Em.victoriae')
-
+\dontrun{
+gl <- possums.gl
 # PCA (using SNP genlight object)
-pca <- gl.pcoa(gl,verbose=2)
+pca <- gl.pcoa(possums.gl[1:50,],verbose=2)
 gl.pcoa.plot(pca,gl)
 
 gs <- testset.gs
@@ -183,7 +181,7 @@ gl.pcoa.plot(pca,fd$gl)
 D <- gl.dist.ind(testset.gs, method='jaccard')
 pcoa <- gl.pcoa(D,correction="cailliez")
 gl.pcoa.plot(pcoa,gs)
-
+}
 }
 \references{
 \itemize{

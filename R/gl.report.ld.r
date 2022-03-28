@@ -74,7 +74,7 @@ gl.report.ld <- function(x,
             utils.check.datatype(x, verbose = verbose)
         
         # convert genlight to genind
-        if (class(x) == "genlight") {
+        if (is(x,"genlight")) {
             gi <- gl2gi(x)
         }
         

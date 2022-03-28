@@ -71,10 +71,12 @@ In deciding the assignment, the script considers an individual to be an
 outlier with respect to a particular population at alpha = 0.001 as default.
 }
 \examples{
+\dontrun{
 #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
 test <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,
 verbose=3) 
 test_2 <- gl.assign.pca(test, unknown='UC_00146', plevel=0.95, verbose=3)
+}
 }
 \author{
 Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
