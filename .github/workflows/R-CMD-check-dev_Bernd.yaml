@@ -69,8 +69,6 @@ jobs:
             `r-spatial` = "https://r-spatial.r-universe.dev/",
             CRAN = "https://cloud.r-project.org/"
           ))
-
-          remotes::install_github('EricArcher/strataG')
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
