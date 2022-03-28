@@ -6,7 +6,7 @@
 #'  \url{https://groups.google.com/d/forum/dartr}); original implementation of
 #'  Eric Archer \url{https://github.com/EricArcher/strataG}
 #' 
-#' @param g a \linkS4class{gtypes} object.
+#' @param g a gtypes object [see \code{strataG}].
 #' @param k.range vector of values to for \code{maxpop} in multiple runs. If set
 #'   to \code{NULL}, a single STRUCTURE run is conducted with \code{maxpops}
 #'   groups. If specified, do not also specify \code{maxpops}.

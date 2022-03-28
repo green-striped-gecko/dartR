@@ -81,7 +81,8 @@ Suggests:
     devtools,
     tibble,
     stringi,
-    shinyWidgets
+    shinyWidgets,
+    purrr
 Additional_repositories: https://github.com/EricArcher/strataG 
 License: GPL (>= 3)
 LazyData: true
@@ -96,3 +97,4 @@ Author: Bernd Gruber [aut, cre],
   Oliver Berry [ctb],
   Lindsay V. Clark [ctb],
   Floriaan Devloo-Delva [ctb]
+  Eric Archer [ctb]

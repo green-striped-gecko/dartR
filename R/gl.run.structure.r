@@ -57,7 +57,7 @@
 #' @import patchwork
 ### @importFrom strataG genind2gtypes structureRun
 #' @importFrom dplyr bind_rows mutate_at vars starts_with mutate group_by ungroup arrange n rename select everything n_distinct bind_rows starts_with
-#'
+#' @importFrom purrr map
 #' @export
 ### @seealso \code{structureRun}
 #' @references
@@ -77,7 +77,7 @@ gl.run.structure <- function(x,
                              save2tmp = FALSE,
                              verbose = NULL) {
     
-    pkg <- "devtools"
+    pkg <- "purrr"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
         stop(
             error(
