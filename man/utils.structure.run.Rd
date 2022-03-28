@@ -15,7 +15,7 @@ utils.structure.run(
 )
 }
 \arguments{
-\item{g}{a \linkS4class{gtypes} object.}
+\item{g}{a gtypes object [see \code{strataG}].}
 
 \item{k.range}{vector of values to for \code{maxpop} in multiple runs. If set
 to \code{NULL}, a single STRUCTURE run is conducted with \code{maxpops}
