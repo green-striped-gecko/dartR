@@ -3,12 +3,7 @@
 \name{utils.basic.stats}
 \alias{utils.basic.stats}
 \title{Calculates mean observed heterozygosity, mean expected heterozygosity and Fis
- per locus, per population and Fst across all populations 
- 
- This is a re-implementation of \code{hierfstat::basics.stats} specifically 
- for genlight objects. Formula (and hence results) match exactly the original 
-version of \code{hierfstat::basics.stats} (although Dstp and Fstp are not 
-currently computed) but it is much faster.}
+ per locus, per population and Fst across all populations}
 \usage{
 utils.basic.stats(x)
 }
@@ -19,10 +14,7 @@ utils.basic.stats(x)
 A list with with the statistics for each population
 }
 \description{
-Calculates mean observed heterozygosity, mean expected heterozygosity and Fis
- per locus, per population and Fst across all populations 
- 
- This is a re-implementation of \code{hierfstat::basics.stats} specifically 
+This is a re-implementation of \code{hierfstat::basics.stats} specifically 
  for genlight objects. Formula (and hence results) match exactly the original 
 version of \code{hierfstat::basics.stats} (although Dstp and Fstp are not 
 currently computed) but it is much faster.
