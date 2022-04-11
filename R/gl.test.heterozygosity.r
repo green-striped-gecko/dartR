@@ -13,7 +13,7 @@
 #' [default 0.01].
 #' @param plot.out If TRUE, plots a sampling distribution of the differences for
 #' each comparison [default TRUE].
-#' @param max_plots Maximum number of plots to print per page [default 9].
+#' @param max_plots Maximum number of plots to print per page [default 6].
 #' @param plot_theme Theme for the plot. See Details for options
 #'  [default theme_dartR()].
 #' @param plot_colors List of two color names for the borders and fill of the
@@ -188,8 +188,6 @@ gl.test.heterozygosity <- function(x,
         x_axis_limits_lots <- c(min(mat), max(mat))
         # count how many plots are going to be created
         total_number_plots <- choose(nPop(x), 2)
-        # maximum number of plots per page
-        max_plots <- max_plots
         # create list to contain plots
         p_list <- list()
         

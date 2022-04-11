@@ -104,7 +104,7 @@ gl2plink <- function(x,
     
     outfilespec <- file.path(outpath, outfile)
     
-    snp_temp <- as.data.frame(cbind(x$chromosome,x$position))
+    snp_temp <- as.data.frame(cbind(as.character(x$chromosome),x$position))
     colnames(snp_temp) <- c("chrom","snp_pos")
     
 
