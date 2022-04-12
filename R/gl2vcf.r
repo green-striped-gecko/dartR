@@ -98,7 +98,7 @@ gl2vcf <- function(x,
     
     allele_tmp <- gsub("/"," ", x$loc.all)
     allele_tmp <- strsplit(allele_tmp,split = " ")
-    allele_tmp <- Reduce(rbind,allele_tmp)[,1]
+    allele_tmp <- Reduce(rbind,allele_tmp)[,2]
     allele_tmp <- cbind(locNames(x), allele_tmp)
     write.table(allele_tmp,
                 file = file.path(tempdir(),"mylist.txt"),
@@ -126,7 +126,7 @@ gl2vcf <- function(x,
                     else
                         "",
                     "--allow-no-sex",
-                    paste("--reference-allele",file.path(outpath,'mylist.txt')),
+                    paste("--reference-allele",file.path(tempdir(),'mylist.txt')),
                     # "--keep-allele-order",
                     # "--real-ref-alleles",
                     # paste("--a1-allele", file.path(outpath,'alleles.csv'),"1"),
