@@ -292,6 +292,10 @@ gl.dist.pop <- function(x,
     }
 
     # # Revert to original order ord <- rank(popNames(x)) mat <- as.matrix(dd)[ord, ord] dd <- as.dist(mat)
+    
+    if(method != "fixed-diff") {
+    dimnames(dd) <- list(popNames(x), popNames(x))
+    }
 
     # PLOT Plot Box-Whisker plot
     
