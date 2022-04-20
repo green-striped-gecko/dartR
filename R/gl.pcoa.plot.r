@@ -491,7 +491,7 @@ gl.pcoa.plot <- function(glPca,
             # Scale the axes in proportion to % explained, if requested if(scale==TRUE) { plott <- plott +
             # coord_fixed(ratio=e[yaxis]/e[xaxis]) }
             if (scale == TRUE) {
-                plott <- plott + coord_fixed(ratio = 1)
+                plott <- plott + coord_fixed(ratio = e[yaxis]/ e[xaxis])
             }
             # Add ellipses if requested
             if (ellipse == TRUE) {

@@ -360,14 +360,19 @@ gl.dist.ind <- function(x,
         if(verbose >= 2){
             cat(report("  Returning a square matrix\n"))
         }
+        dimnames(mat) <- list(indNames(x), indNames(x))
         final <- mat
     }
     if(output!="matrix"){
         if(verbose >= 2){
             cat(report("  Returning a stat::dist object\n"))
         }
+        dm <- as.matrix(dd)
+        dimnames(dm) <- list(indNames(x), indNames(x))
+        dd <- as.dist(dm)
         final <- dd
     }
+    
     if (verbose > 0) {
             cat(report("Completed:", funname, "\n"))
     }

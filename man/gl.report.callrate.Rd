@@ -10,6 +10,7 @@ gl.report.callrate(
   plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colors = two_colors,
+  bins = 50,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -27,6 +28,8 @@ individual (method='ind') [default 'loc'].}
 
 \item{plot_colors}{Vector with two color names for the borders and fill
 [default two_colors].}
+
+\item{bins}{Number of bins to display in histograms [default 25].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
