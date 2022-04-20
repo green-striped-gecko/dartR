@@ -96,6 +96,17 @@ gl2vcf <- function(x,
     prefix.in_temp <- paste0(tempdir(), "/gl_plink_temp")
     prefix.out_temp <- file.path(outpath, outfile)
     
+    allele_tmp <- gsub("/"," ", x$loc.all)
+    allele_tmp <- strsplit(allele_tmp,split = " ")
+    allele_tmp <- Reduce(rbind,allele_tmp)[,2]
+    allele_tmp <- cbind(locNames(x), allele_tmp)
+    write.table(allele_tmp,
+                file = file.path(tempdir(),"mylist.txt"),
+                row.names = FALSE,
+                col.names = FALSE,
+                quote = FALSE
+    )
+    
     make_plink <-
         function(plink.path,
                  prefix.in = prefix.in_temp,
@@ -115,7 +126,11 @@ gl2vcf <- function(x,
                     else
                         "",
                     "--allow-no-sex",
-                    "--keep-allele-order",
+                    paste("--reference-allele",file.path(tempdir(),'mylist.txt')),
+                    # "--keep-allele-order",
+                    # "--real-ref-alleles",
+                    # paste("--a1-allele", file.path(outpath,'alleles.csv'),"1"),
+                    # paste("--a2-allele", file.path(outpath,'alleles.csv'),"2"),
                     "--out",
                     prefix.out,
                     extra.options

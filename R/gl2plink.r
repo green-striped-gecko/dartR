@@ -198,14 +198,25 @@ gl2plink <- function(x,
     write.table(
         xx,
         file = paste0(outfilespec, ".ped"),
-        quote = F,
-        row.names = F,
-        col.names = F
+        quote = FALSE,
+        row.names = FALSE,
+        col.names = FALSE
     )
     
     if (bed_file) {
         prefix.in_temp <- outfilespec
         prefix.out_temp <- outfilespec
+        
+        allele_tmp <- gsub("/"," ", x$loc.all)
+        allele_tmp <- strsplit(allele_tmp,split = " ")
+        allele_tmp <- Reduce(rbind,allele_tmp)[,1]
+        allele_tmp <- cbind(locNames(x), allele_tmp)
+        write.table(allele_tmp,
+                    file = file.path(outpath,"mylist.txt"),
+                    row.names = FALSE,
+                    col.names = FALSE,
+                    quote = FALSE
+                    )
         
         make_plink <-
             function(plink.path,
@@ -225,7 +236,11 @@ gl2plink <- function(x,
                             "",
                         "--allow-no-sex",
                         "--allow-extra-chr",
-                        "--keep-allele-order",
+                        paste("--reference-allele",file.path(outpath,'mylist.txt')) ,
+                        #  "--keep-allele-order",
+                        #  "--real-ref-alleles",
+                        # paste("--a1-allele", file.path(outpath,'alleles.csv'),"1"),
+                        # paste("--a2-allele", file.path(outpath,'alleles.csv'),"2"),
                         "--out",
                         prefix.out,
                         extra.options
