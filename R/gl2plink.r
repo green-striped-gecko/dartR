@@ -222,7 +222,6 @@ gl2plink <- function(x,
             function(plink.path,
                      prefix.in = prefix.in_temp,
                      prefix.out = prefix.out_temp,
-                     autosome.only = FALSE,
                      extra.options = "") {
                 bedfile.out <- paste0(prefix.out, ".bed")
                 system_verbose(
@@ -230,17 +229,9 @@ gl2plink <- function(x,
                         plink.path,
                         "--file",
                         prefix.in,
-                        if (autosome.only)
-                            "--autosome"
-                        else
-                            "",
                         "--allow-no-sex",
                         "--allow-extra-chr",
-                        paste("--reference-allele",file.path(outpath,'mylist.txt')) ,
-                        #  "--keep-allele-order",
-                        #  "--real-ref-alleles",
-                        # paste("--a1-allele", file.path(outpath,'alleles.csv'),"1"),
-                        # paste("--a2-allele", file.path(outpath,'alleles.csv'),"2"),
+                        # paste("--reference-allele",file.path(tempdir(),'mylist.txt')),
                         "--out",
                         prefix.out,
                         extra.options
@@ -248,6 +239,7 @@ gl2plink <- function(x,
                 )
                 bedfile.out
             }
+        
         
         system_verbose = function(...) {
             report = system(..., intern = T)
