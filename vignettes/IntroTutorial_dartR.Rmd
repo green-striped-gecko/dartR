@@ -978,9 +978,7 @@ The commands
 
 
 ```{r, eval=FALSE}
-gl.pcoa.plot(pc, glnew, labels="interactive", xaxis=1, yaxis=2)
-ggplotly()
-
+gl.pcoa.plot(pc, glnew, interactive = TRUE, xaxis=1, yaxis=2)
 ```
 
 will plot the individuals in the top two dimensions of the ordinated space, color the points in accordance to the population to which they belong, and allow points to be identified interactively using the mouse.
