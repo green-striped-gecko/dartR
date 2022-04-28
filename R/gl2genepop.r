@@ -16,7 +16,7 @@
 #' vector of population names in the order required by the user (see examples)
 #' [default "alphabetic"].
 #' @param output_format Whether to use a 2-digit format ("2_digits") or 3-digits
-#'  format (3_digits) [default "2_digits"].
+#'  format ("3_digits") [default "2_digits"].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -28,8 +28,10 @@
 #' # SNP data
 #' geno <- gl2genepop(testset.gl[1:3,1:9])
 #' head(geno)
-#' geno <- gl2genepop(x, pop_order = c("TENTERFIELD","SEVERN_ABOVE",
-#'  "SEVERN_BELOW"))
+#' test <- gl.filter.callrate(platypus.gl,threshold = 1)
+#' popNames(test)
+#' gl2genepop(test, pop_order = c("TENTERFIELD","SEVERN_ABOVE","SEVERN_BELOW"),
+#'            output_format="3_digits")
 #' }
 #' @export
 

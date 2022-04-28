@@ -4,7 +4,14 @@
 \alias{gl2genepop}
 \title{Converts a genlight object into genepop format (and file)}
 \usage{
-gl2genepop(x, outfile = "genepop.gen", outpath = tempdir(), verbose = NULL)
+gl2genepop(
+  x,
+  outfile = "genepop.gen",
+  outpath = tempdir(),
+  pop_order = "alphabetic",
+  output_format = "2_digits",
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
@@ -14,6 +21,13 @@ gl2genepop(x, outfile = "genepop.gen", outpath = tempdir(), verbose = NULL)
 \item{outpath}{Path where to save the output file. Use outpath=getwd() or
 outpath='.' when calling this function to direct output files to your working
  directory [default tempdir(), mandated by CRAN].}
+
+\item{pop_order}{Order of the output populations either "alphabetic" or a 
+vector of population names in the order required by the user (see examples)
+[default "alphabetic"].}
+
+\item{output_format}{Whether to use a 2-digit format ("2_digits") or 3-digits
+format ("3_digits") [default "2_digits"].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -35,6 +49,10 @@ invisible data.frame by the function.
 # SNP data
 geno <- gl2genepop(testset.gl[1:3,1:9])
 head(geno)
+test <- gl.filter.callrate(platypus.gl,threshold = 1)
+popNames(test)
+gl2genepop(test, pop_order = c("TENTERFIELD","SEVERN_ABOVE","SEVERN_BELOW"),
+           output_format="3_digits")
 }
 }
 \author{
