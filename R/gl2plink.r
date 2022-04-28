@@ -104,7 +104,7 @@ gl2plink <- function(x,
     
     outfilespec <- file.path(outpath, outfile)
     
-    snp_temp <- as.data.frame(cbind(x$chromosome,x$position))
+    snp_temp <- as.data.frame(cbind(as.character(x$chromosome),x$position))
     colnames(snp_temp) <- c("chrom","snp_pos")
     
 
@@ -198,20 +198,30 @@ gl2plink <- function(x,
     write.table(
         xx,
         file = paste0(outfilespec, ".ped"),
-        quote = F,
-        row.names = F,
-        col.names = F
+        quote = FALSE,
+        row.names = FALSE,
+        col.names = FALSE
     )
     
     if (bed_file) {
         prefix.in_temp <- outfilespec
         prefix.out_temp <- outfilespec
         
+        allele_tmp <- gsub("/"," ", x$loc.all)
+        allele_tmp <- strsplit(allele_tmp,split = " ")
+        allele_tmp <- Reduce(rbind,allele_tmp)[,1]
+        allele_tmp <- cbind(locNames(x), allele_tmp)
+        write.table(allele_tmp,
+                    file = file.path(outpath,"mylist.txt"),
+                    row.names = FALSE,
+                    col.names = FALSE,
+                    quote = FALSE
+                    )
+        
         make_plink <-
             function(plink.path,
                      prefix.in = prefix.in_temp,
                      prefix.out = prefix.out_temp,
-                     autosome.only = FALSE,
                      extra.options = "") {
                 bedfile.out <- paste0(prefix.out, ".bed")
                 system_verbose(
@@ -219,13 +229,9 @@ gl2plink <- function(x,
                         plink.path,
                         "--file",
                         prefix.in,
-                        if (autosome.only)
-                            "--autosome"
-                        else
-                            "",
                         "--allow-no-sex",
                         "--allow-extra-chr",
-                        "--keep-allele-order",
+                        # paste("--reference-allele",file.path(tempdir(),'mylist.txt')),
                         "--out",
                         prefix.out,
                         extra.options
@@ -233,6 +239,7 @@ gl2plink <- function(x,
                 )
                 bedfile.out
             }
+        
         
         system_verbose = function(...) {
             report = system(..., intern = T)
