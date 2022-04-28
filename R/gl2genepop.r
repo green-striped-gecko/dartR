@@ -82,12 +82,6 @@ gl2genepop <- function (x,
     tmp <- seppop(x)
     tmp_2 <-  tmp[match(pop_order, names(tmp))]
     x <- Reduce(rbind,tmp_2)
-    # order_tmp <- data.frame(order=1:nInd(x), name=as.character(pop(x)))
-    # order_tmp$name <- make.unique(order_tmp$name)
-    # pop_order_tmp <- table(pop(x))[match(pop_order,names(table(pop(x))))]
-    # pop_order_tmp_2 <- make.unique(rep(pop_order,pop_order_tmp))
-    # order_pop <- order_tmp[match(pop_order_tmp_2, order_tmp$name),"order"]
-    # x <- x[order_pop,]
   }
 
   #convert to genind
