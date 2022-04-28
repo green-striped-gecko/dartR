@@ -4,9 +4,10 @@
 #' This function is implemented in a parallel fashion to speed up the process.
 #' There is also the ability to restart the function if crashed by specifying
 #' the chunk file names or restarting the function exactly in the same way as in
-#' the first run. This is implemented as sometimes due to connectivity loss
-#' between cores the function my crash half way. Also remove loci with have only
-#'  missing value before running the function.
+#' the first run. This is implemented because sometimes, due to connectivity loss
+#' between cores, the function may crash half way. Before running the function, 
+#' it is advisable to use the function \code{\link{gl.filter.allna}} to remove
+#'  loci with all missing data.
 #'
 #' @param x A genlight or genind object created (genlight objects are internally
 #'  converted via \code{\link{gl2gi}} to genind) [required].
