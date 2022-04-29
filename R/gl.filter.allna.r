@@ -44,7 +44,7 @@
 #' @export
 
 gl.filter.allna <- function(x,
-                            by.pop=FALSE,
+                            by.pop = FALSE,
                             verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -191,8 +191,10 @@ gl.filter.allna <- function(x,
         loc.list <- NULL
         for (i in 1:nPop(x)){
             tmpop <- as.matrix(gl.keep.pop(x,popNames(x)[i],verbose=0))
-            tmpsums <- colSums(tmpop)
-            tmp.list <- locNames(x)[is.na(tmpsums)]
+            tmpsums <- apply(tmpop,2,function(x){all(is.na(x))})
+            # tmpsums <-  colSums(tmpop)
+            tmp.list <- locNames(x)[tmpsums==TRUE]
+            # tmp.list <- locNames(x)[is.na(tmpsums)]
             count <- length(tmp.list)
             if (verbose >= 3){
                cat("    ",popNames(x)[i],": deleted",count,"loci\n")
