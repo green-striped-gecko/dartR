@@ -264,7 +264,9 @@ gl.filter.maf <- function(x,
             
             p_all_pre <-
                 ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
-                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_histogram(bins = bins,
+                               color = plot_colors_all[1],
+                               fill = plot_colors_all[2]) +
                 geom_vline(xintercept = threshold,color = "red",size = 1) + 
                 xlab("Pre-filter SNP MAF\nOver all populations") + 
                 ylab("Count") + 
@@ -273,7 +275,9 @@ gl.filter.maf <- function(x,
             
             p_all_post <-
                 ggplot(as.data.frame(maf_post), aes(x = maf)) + 
-                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_histogram(bins = bins,
+                               color = plot_colors_all[1],
+                               fill = plot_colors_all[2]) +
                 geom_vline(xintercept = threshold,color = "red",size = 1) + 
                 xlab("Post-filter SNP MAF\nOver all populations") + 
                 ylab("Count") + 
@@ -294,7 +298,9 @@ gl.filter.maf <- function(x,
             }
             p_all_pre <-
                 ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
-                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_histogram(bins = bins,
+                               color = plot_colors_all[1],
+                               fill = plot_colors_all[2]) +
                 geom_vline(xintercept = threshold,color = "red",size = 1) + 
                 xlab("Pre-filter SNP MAF\nOver all populations") + 
                 ylab("Count") + 
@@ -303,7 +309,9 @@ gl.filter.maf <- function(x,
             
             p_all_post <-
                 ggplot(as.data.frame(maf_post), aes(x = maf)) + 
-                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_histogram(bins = bins,
+                               color = plot_colors_all[1],
+                               fill = plot_colors_all[2]) +
                 geom_vline(xintercept = threshold,color = "red",size = 1) + 
                 xlab("Post-filter SNP MAF\nOver all populations") + 
                 ylab("Count") + 
@@ -324,7 +332,9 @@ gl.filter.maf <- function(x,
             
             p_all_pre <-
                 ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
-                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_histogram(bins = bins,
+                               color = plot_colors_all[1],
+                               fill = plot_colors_all[2]) +
                 geom_vline(xintercept = threshold,color = "red",size = 1) + 
                 xlab("Pre-filter SNP MAF") + 
                 ylab("Count") + 
@@ -333,7 +343,9 @@ gl.filter.maf <- function(x,
             
             p_all_post <-
                 ggplot(as.data.frame(maf_post), aes(x = maf)) + 
-                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_histogram(bins = bins,
+                               color = plot_colors_all[1],
+                               fill = plot_colors_all[2]) +
                 geom_vline(xintercept = threshold,color = "red",size = 1) + 
                 xlab("Post-filter SNP MAF") + 
                 ylab("Count") + 
@@ -353,7 +365,9 @@ gl.filter.maf <- function(x,
             
             p_all_pre <-
                 ggplot(as.data.frame(maf_pre), aes(x = maf)) + 
-                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_histogram(bins = bins,
+                               color = plot_colors_all[1],
+                               fill = plot_colors_all[2]) +
                 geom_vline(xintercept = threshold,color = "red",size = 1) + 
                 xlab("Pre-filter SNP MAF") + 
                 ylab("Count") + 
@@ -362,7 +376,9 @@ gl.filter.maf <- function(x,
             
             p_all_post <-
                 ggplot(as.data.frame(maf_post), aes(x = maf)) + 
-                geom_histogram(bins = bins,color = plot_colors_all[1],fill = plot_colors_all[2]) +
+                geom_histogram(bins = bins,
+                               color = plot_colors_all[1],
+                               fill = plot_colors_all[2]) +
                 geom_vline(xintercept = threshold,color = "red",size = 1) + 
                 xlab("Post-filter SNP MAF") + 
                 ylab("Count") + 
@@ -387,6 +403,7 @@ gl.filter.maf <- function(x,
         x2@other$loc.metrics.flags$FreqHomRef <- FALSE
         x2@other$loc.metrics.flags$FreqHomSnp <- FALSE
         x2@other$loc.metrics.flags$CallRate <- FALSE
+        x2@other$loc.metrics.flags$allna <- FALSE
     }
     
     # REPORT A SUMMARY

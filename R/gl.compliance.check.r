@@ -148,6 +148,23 @@ gl.compliance.check <- function(x,
         x@other$loc.metrics.flags$monomorphs <- FALSE
     }
     
+    # Check for loci with all NAs
+    if (verbose >= 2) {
+        cat(report("  Checking for loci with all missing data\n"))
+    }
+    x2 <- gl.filter.allna(x, verbose = 0)
+    if (nLoc(x2) == nLoc(x)) {
+        if (verbose >= 1) {
+            cat(report("    No loci with all missing data detected\n"))
+        }
+        x@other$loc.metrics.flags$allna <- TRUE
+    } else {
+        if (verbose >= 1) {
+            cat(warn("    Dataset contains loci with all missing dat\n"))
+        }
+        x@other$loc.metrics.flags$allna <- FALSE
+    }
+    
     # Check that the number of values in the loc.metrics dataframe is the same
     # as the number of loci
     if (nLoc(x) != nrow(x@other$loc.metrics)) {

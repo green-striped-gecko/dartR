@@ -198,8 +198,15 @@ gl.filter.parent.offspring <- function(x,
     
     # Boxplot
     p1 <-
-        ggplot(counts_plot, aes(y = counts)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + coord_flip() + plot_theme + xlim(range = c(-1,
-                                                                                                                                                        1)) + ylim(min(counts), max(counts)) + ylab(" ") + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + ggtitle(title)
+        ggplot(counts_plot, aes(y = counts)) + 
+        geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) +
+        coord_flip() + 
+        plot_theme + 
+        xlim(range = c(-1,1)) + 
+        ylim(min(counts), max(counts)) + 
+        ylab(" ") + 
+        theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
+        ggtitle(title)
     
     outliers_temp <- ggplot_build(p1)$data[[1]]$outliers[[1]]
     
@@ -250,11 +257,16 @@ gl.filter.parent.offspring <- function(x,
     
     # Histogram
     p2 <-
-        ggplot(counts_plot, aes(x = counts)) + geom_histogram(bins = 50,
-                                                              color = plot_colors[1],
-                                                              fill = plot_colors[2]) + geom_vline(xintercept = cutoff,
-                                                                                                  color = "red",
-                                                                                                  size = 1) + coord_cartesian(xlim = c(min(counts), max(counts))) + xlab("No. Pedigree incompatible") + ylab("Count") +
+        ggplot(counts_plot, aes(x = counts)) + 
+        geom_histogram(bins = 50,
+                       color = plot_colors[1],
+                       fill = plot_colors[2]) + 
+        geom_vline(xintercept = cutoff,
+                   color = "red",
+                   size = 1) + 
+        coord_cartesian(xlim = c(min(counts), max(counts))) + 
+        xlab("No. Pedigree incompatible") + 
+        ylab("Count") +
         plot_theme
     
     
