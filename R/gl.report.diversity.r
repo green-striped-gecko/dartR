@@ -10,6 +10,7 @@
 #'
 #' @param x Name of the genlight object containing the SNP or presence/absence
 #' (SilicoDArT) data [required].
+#' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options
 #' [default theme_dartR()].
 #' @param plot_colors A color palette or a list with as many colors as there are 
@@ -73,6 +74,7 @@
 ### To be done: adjust calculation of betas for population sizes (switch)
 
 gl.report.diversity <- function(x,
+                                plot.out = TRUE,
                                 pbar = TRUE,
                                 table = "DH",
                                 plot_theme = theme_dartR(),
@@ -463,6 +465,8 @@ gl.report.diversity <- function(x,
         as.data.frame(cbind(fs_plot, fs_plot_up[, 3], fs_plot_low[, 3]))
     colnames(fs_final) <- c("pop", "q", "value", "up", "low")
     
+    if(plot.out==TRUE){
+    
     # printing plots and reports assigning colors to populations
     if (is(plot_colors, "function")) {
         colors_pops <- plot_colors(length(levels(pop(x))))
@@ -490,6 +494,7 @@ gl.report.diversity <- function(x,
         ggtitle("q-profile")
     
     print(p3)
+    }
     
     if (!is.na(match(table, c("H", "DH", "HD")))) {
         tt <-
@@ -583,7 +588,7 @@ gl.report.diversity <- function(x,
     }
     
     # SAVE INTERMEDIATES TO TEMPDIR
-    if (save2tmp) {
+    if (save2tmp & plot.out==TRUE) {
         # creating temp file names
         temp_plot <- tempfile(pattern = "Plot_")
         match_call <-
