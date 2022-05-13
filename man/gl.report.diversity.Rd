@@ -6,6 +6,7 @@
 \usage{
 gl.report.diversity(
   x,
+  plot.out = TRUE,
   pbar = TRUE,
   table = "DH",
   plot_theme = theme_dartR(),
@@ -17,6 +18,8 @@ gl.report.diversity(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP or presence/absence
 (SilicoDArT) data [required].}
+
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
 \item{pbar}{Report on progress. Silent if set to FALSE [default TRUE].}
 
