@@ -29,7 +29,7 @@ boxplot and histogram [default 3].}
 
 \item{taglength}{Typical length of the sequence tags [default 69].}
 
-\item{plot.out}{specify if plot is to be produced [default TRUE].}
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}

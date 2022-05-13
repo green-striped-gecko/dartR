@@ -74,12 +74,9 @@ gl.filter.heterozygosity <- function(x,
     c.hom2 <- array(NA, nInd(x))
     for (i in 1:nInd(x)) {
         c.na[i] <- sum(is.na(m[i,]))
-        c.hets[i] <-
-            sum(m[i,] == 1, na.rm = TRUE) / (nLoc(x) - c.na[i])
-        c.hom0[i] <-
-            sum(m[i,] == 0, na.rm = TRUE) / (nLoc(x) - c.na[i])
-        c.hom2[i] <-
-            sum(m[i,] == 2, na.rm = TRUE) / (nLoc(x) - c.na[i])
+        c.hets[i] <- sum(m[i,] == 1, na.rm = TRUE) / (nLoc(x) - c.na[i])
+        c.hom0[i] <- sum(m[i,] == 0, na.rm = TRUE) / (nLoc(x) - c.na[i])
+        c.hom2[i] <- sum(m[i,] == 2, na.rm = TRUE) / (nLoc(x) - c.na[i])
     }
     
     if (verbose >= 2) {

@@ -66,7 +66,7 @@ utils.reset.flags <- function(x,
         if (verbose >= 2) {
             cat(
                 report(
-                    "  Resetting flags for AvgPIC, OneRatioRef, OneRatioSnp, PICRef, PICSnp, CallRate, maf, FreqHets, FreqHomRef, FreqHomSnp, monomorphs, OneRatio, PIC to",
+                    "  Resetting flags for AvgPIC, OneRatioRef, OneRatioSnp, PICRef, PICSnp, CallRate, maf, FreqHets, FreqHomRef, FreqHomSnp, monomorphs, OneRatio, PIC, allna to",
                     set,
                     "\n"
                 )
@@ -260,6 +260,10 @@ utils.reset.flags <- function(x,
         # monomorphs if (is.null(x@other$loc.metrics$monomorphs)) { x@other$loc.metrics$monomorphs <- array(NA,nLoc(x)) if (verbose >= 3){
         # cat(' Locus metric monomorphs does not exist, creating slot @other$loc.metrics$monomorphs\n') } }
         x@other$loc.metrics.flags$monomorphs <- set
+        
+        # allna
+        x@other$loc.metrics.flags$allna <- set
+        
         
         # verbosity
         if (is.null(x@other$verbose)) {
@@ -458,6 +462,10 @@ utils.reset.flags <- function(x,
             }
         }
         x@other$loc.metrics.flags$PIC <- set
+        
+        # allna
+        x@other$loc.metrics.flags$allna <- set
+        
         
         # verbosity
         if (is.null(x@other$verbose)) {

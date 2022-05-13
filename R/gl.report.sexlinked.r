@@ -20,8 +20,8 @@
 #' silicodart marker can be present in either of the sexes and still be regarded
 #' as a sex-linked marker [default 0.1].
 #' @param plot.out Creates a plot that shows the heterozygosity of males and
-#' females at each loci.
-#' be regarded as consistent with a sex specific marker [default TRUE].
+#' females at each loci and shaded area in which loci can be regarded as 
+#' consistent with a sex specific marker [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options
 #' [default theme_dartR()].
 #' @param plot_colors List of three color names for the not sex-linked loci, for

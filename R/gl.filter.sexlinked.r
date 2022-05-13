@@ -276,18 +276,12 @@ gl.filter.sexlinked <- function(x,
                     )
                 )
                 cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat(
-                    "     - F0 is the number of homozygous loci for the reference allele in females\n"
-                )
+                cat("     - F0 is the number of homozygous loci for the reference allele in females\n")
                 cat("     - F1 is the number of heterozygous loci in females\n")
-                cat(
-                    "     - F2 is the number of homozygous loci for the alternative allele in females\n"
-                )
+                cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
                 cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
                 cat("     - M1 is the number of heterozygous loci in males\n")
-                cat(
-                    "     - M2 is the number of homozygous loci for the alternative allele in males\n"
-                )
+                cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
                 cat("     - fhet is heterozygosity in females\n")
                 cat("     - mhet is heterozygosity in males\n\n")
                 print(zw)
@@ -323,18 +317,12 @@ gl.filter.sexlinked <- function(x,
                     )
                 )
                 cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat(
-                    "     - F0 is the number of homozygous loci for the reference allele in females\n"
-                )
+                cat("     - F0 is the number of homozygous loci for the reference allele in females\n")
                 cat("     - F1 is the number of heterozygous loci in females\n")
-                cat(
-                    "     - F2 is the number of homozygous loci for the alternative allele in females\n"
-                )
+                cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
                 cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
                 cat("     - M1 is the number of heterozygous loci in males\n")
-                cat(
-                    "     - M2 is the number of homozygous loci for the alternative allele in males\n"
-                )
+                cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
                 cat("     - fhet is heterozygosity in females\n")
                 cat("     - mhet is heterozygosity in males\n")
                 print(xy)
