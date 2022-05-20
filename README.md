@@ -130,12 +130,15 @@ install_github("green-striped-gecko/dartR@dev")
 ```
 **!!Please note the here it is quite likely that some functions might not work, or even the install might break with an error.!!**
 
-Documentation and tutorials and sample files are available at: http://georges.biomatix.org/dartR
+Documentation, tutorials and sample files are available at: http://georges.biomatix.org/dartR
 
 Q&A forum in support of users can be accessed at: https://groups.google.com/g/dartr?pli=1
 
 If you use dartR in your research, please support us by citing dartR. You can find the citation information by typing in the R console:
-> citation("dartR”)
+
+```{r}I
+citation("dartR”)
+```
 
 Have fun working with dartR! Any issues you encounter please use the issues tab on github or contact us via email under glbugs@aerg.canberra.edu.au
 
