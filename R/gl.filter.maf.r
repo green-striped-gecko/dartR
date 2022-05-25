@@ -98,7 +98,7 @@ gl.filter.maf <- function(x,
     }
     
     # FUNCTION SPECIFIC ERROR CHECKING
-    
+    if(threshold >= 1) threshold <- threshold/(length(indNames(x))*mean(ploidy(x)))
     if (threshold > 0.5 | threshold <= 0) {
         cat(
             warn(
@@ -116,7 +116,7 @@ gl.filter.maf <- function(x,
                 "  Removing loci with MAF <",threshold, "in at least",pop.limit,"populations and recalculating FreqHoms and FreqHets\n"
             ))
         }
-        x <- utils.recalc.maf(x, verbose = 0)
+        #x <- utils.recalc.maf(x, verbose = 0)
         pop.list <- seppop(x)
         
         # getting populations with more than ind.limit
