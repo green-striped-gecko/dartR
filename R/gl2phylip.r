@@ -71,7 +71,7 @@ gl2phylip <- function(x,
     
     # DO THE JOB
     
-    # Convert gl object to a matrix of allele fequencies, locus by population
+    # Convert gl object to a matrix of allele frequencies, locus by population
     if (verbose >= 2) {
         cat(report(
             "Converting to a matrix of frequencies, locus by populations\n"
