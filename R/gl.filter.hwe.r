@@ -11,6 +11,8 @@
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param subset Way to group individuals to perform H-W tests. Either a vector
 #' with population names, 'each', 'all' (see details) [default 'each'].
+#' @param n.pop.threshold The minimum number of populations where the same locus 
+#' has to be out  of hwe to be removed [default 1]
 #' @param method_sig Method for determining statistical significance: 'ChiSquare'
 #' or 'Exact' [default 'Exact'].
 #' @param multi_comp Whether to adjust p-values for multiple comparisons
@@ -100,6 +102,11 @@
 #' when number of tests is large.
 #' The number of tests on which the adjustment for multiple comparisons is
 #' the number of populations times the number of loci.
+#' 
+#' \bold{From v2.1} \code{gl.filter.hwe} takes the argument \code{n.pop.threshold}.
+#' if \code{n.pop.threshold > 1} loci will be removed only if they are concurrently 
+#' if they are significantly (after adjustment if applied) out of hwe in >= 
+#' \code{n.pop.threshold > 1}.
 #'
 #' @return A genlight object with the loci departing significantly from H-W
 #' proportions removed.
@@ -132,11 +139,13 @@
 #' 76:887-893.
 #' }
 #' @seealso \code{\link{gl.report.hwe}}
+#' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @family filters/filter reports
 #' @export
 
 gl.filter.hwe <- function(x,
                           subset = "each",
+                          n.pop.threshold=1,
                           method_sig = "Exact",
                           multi_comp = FALSE,
                           multi_comp_method = "BY",
@@ -186,6 +195,9 @@ gl.filter.hwe <- function(x,
     }
     
     # DO THE JOB
+    # Set NULL to variables to pass CRAN checks
+    N<-Locus<-NULL
+    
     hold <- x
     
     #### Interpret options for subset all
@@ -402,8 +414,9 @@ gl.filter.hwe <- function(x,
     if (multi_comp == T) {
         df <- df[which(df$Prob.adj <= alpha_val), ]
     }
-    
-    failed.loci <- as.character(unique(df$Locus))
+    dt <- data.table(df)
+    dt[, npop := .N, by=Locus]
+    failed.loci <- as.character(dt[npop >= n.pop.threshold, unique(Locus)])
     
     if (verbose >= 2) {
         cat("  Loci examined:", nLoc(hold), "\n")
