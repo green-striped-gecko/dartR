@@ -98,7 +98,7 @@ gl.filter.maf <- function(x,
     }
     
     # FUNCTION SPECIFIC ERROR CHECKING
-    
+    if(is.integer(threshold)) threshold <- threshold/(length(indNames(x))*mean(ploidy(x)))
     if (threshold > 0.5 | threshold <= 0) {
         cat(
             warn(
