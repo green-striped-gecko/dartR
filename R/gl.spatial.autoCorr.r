@@ -116,7 +116,7 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   else
     stop(error("  The argument 'GGD' should be a matrix"))
   
-  if(!all.equal(dim(GD), dim(GGD))) 
+  if(is.character(all.equal(dim(GD), dim(GGD))))
     stop(error("  The arguments GD and GDD should have identical dimensions"))
   
   if(!is.numeric(bins)) 
@@ -125,10 +125,10 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   # DO THE JOB
   sample.size <- nrow(GGD)
   crt <- 1/(sample.size - 1) # correction
-  splist<- spautocor(GD, GGD, permutation=FALSE, bins=bins)
+  splist<- utils.spautocor(GD, GGD, permutation=FALSE, bins=bins)
   
   if(permutation) {
-    bssplist <- replicate(reps, spautocor(GD, GGD, permutation=TRUE, bins=bins))
+    bssplist <- replicate(reps, utils.spautocor(GD, GGD, permutation=TRUE, bins=bins))
     
     #convert the output into a matrix
     bs <-matrix(unlist(bssplist), nrow=reps, ncol=bins, byrow=TRUE)
@@ -145,7 +145,7 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
     
   }
   if(bootstrap) {
-    errors <- replicate(reps, spautocor(GD, GGD, bootstrap=TRUE, bins=bins))
+    errors <- replicate(reps, utils.spautocor(GD, GGD, bootstrap=TRUE, bins=bins))
     errors <- matrix(unlist(errors), nrow=reps, ncol=bins, byrow=TRUE)
     err.l <- apply(errors, 2, quantile, probs=0.025, na.rm=TRUE)
     err.u <- apply(errors, 2, quantile, probs=0.975, na.rm=TRUE)
@@ -159,7 +159,7 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   
   p <- ggplot(res, aes(Bin, r)) + geom_line() + geom_point() + 
     geom_hline(yintercept=0, col="black") +
-    geom_text(aes(y=max(U.r) + 0.05, label=N)) +
+    scale_x_continuous(sec.axis=sec_axis(trans = ~., breaks = res$Bin, labels = res$N)) +
     xlab("Distance class") +
     plot_theme
   
