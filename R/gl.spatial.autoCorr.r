@@ -165,7 +165,9 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   
   if(bootstrap) p <- p + geom_errorbar(aes(ymin=L.r, ymax=U.r)) 
   if(permutation) p <- p + geom_line(aes(y=L.r.null), col="Red", linetype="dashed") + 
-    geom_line(aes(y=U.r.null), col="Red", linetype="dashed")
+    geom_point(aes(y=L.r.null), col="Red") +
+    geom_line(aes(y=U.r.null), col="Red", linetype="dashed") +
+    geom_point(aes(y=U.r.null), col="Red")
   
   print(p)
   
