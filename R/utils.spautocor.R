@@ -44,6 +44,7 @@
 #' \item Beck, N, et al. 2008. Social constraint and an absence of sex-biased
 #' dispersal drive fine-scale genetic structure in white-winged choughs.
 #' Molecular Ecology 17, 4346-4358.
+#' }
 #' @examples
 #' @export
 
