@@ -46,6 +46,8 @@
 #' Molecular Ecology 17, 4346-4358.
 #' }
 #' @examples
+#' # See gl.spatial.autoCorr
+#' @seealso \code{\link{gl.spatial.autoCorr}}
 #' @export
 
 

@@ -87,6 +87,26 @@
 #' Molecular Ecology 17, 4346-4358.
 #' }
 #' @examples
+#'  # Select one pop only
+#' plat_Tent <- gl.keep.ind(platypus.gl, 
+#' ind.list = platypus.gl@ind.names[pop(platypus.gl) == "TENTERFIELD"], 
+#' mono.rm = TRUE)
+#' # Compute a simple distance matrix and reverse it so that correlated values 
+#' # indicated more similar individuals as we are used to see plots in GenAleEx
+#' gd <- 1 - as.matrix(gl.dist.ind(plat_Tent, method = "Simple", plot.out = FALSE))
+#' # Replace the diagonal with zeros
+#' diag(gd) <- 0
+#' # Compute the geographical distance matrix
+#' ggd <- as.matrix(dist(plat_Tent@other$latlon))
+#' 
+#' # Spatial autocorrelation
+#' spa <- gl.spatial.autoCorr(gd, ggd, bins = 3, reps = 100, 
+#' permutation = TRUE, bootstrap = TRUE)
+#' 
+#' # Alternatively, use Smouse distance from PopGneReport package
+#' smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=T))
+#' spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
+#' permutation = TRUE, bootstrap = TRUE)
 #' @import ggplot2
 #' @export
 
