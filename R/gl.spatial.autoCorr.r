@@ -31,9 +31,9 @@
 #' @param GGD A geographical distance matrix, based on the coordinates of
 #' individuals. This is typically an Euclidean distance but it can be 
 #' any meaningful (geographical) distance metrics.
-#' @param bins The number of bins for the distance classes (i.e. 
-#' \code{length(bins) == 1) or a vectors with the break points. See details.
-#' @reps The number to be used for permutation and bootstrap analyses
+#' @param bins The number of bins for the distance classes 
+#' (i.e. \code{length(bins) == 1)} or a vectors with the break points. See details.
+#' @param reps The number to be used for permutation and bootstrap analyses
 #' @param permutation Whether permutation calculations for the null hypothesis of 
 #' no spatial structure should be carried out
 #' @param bootstrap Whether bootstrap calculations to compute the 95% confidence intervals 
@@ -85,6 +85,7 @@
 #' \item Beck, N, et al. 2008. Social constraint and an absence of sex-biased
 #' dispersal drive fine-scale genetic structure in white-winged choughs.
 #' Molecular Ecology 17, 4346-4358.
+#' }
 #' @examples
 #' @import ggplot2
 #' @export
@@ -135,13 +136,13 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
     bs.l <- apply(bs,2, quantile, probs=0.025, na.rm=TRUE)
     bs.u <- apply(bs,2, quantile, probs=0.975, na.rm=TRUE)
     
-    p.one.tail <- sapply(seq_along(splist$r.uc), function(i, r.r, r.uc) {
-      if(is.na(r.uc[i])) NA 
+    p.one.tail <- sapply(seq_along(splist$r.uc), function(i, r.rc, r, crt=crt) {
+      if(is.na(r[i])) NA 
       else
-        if (r.uc[i] >= 0) sum(r.r[, i] >= r.uc[i])/length(r.r[, i]) 
+        if (r[i] >= 0) sum(r.rc[, i] >= r[i])/length(r.rc[, i]) 
         else 
-        sum(r.r[, i] <= r.uc[i])/length(r.r[, i])
-    }, r.uc=splist$r.uc,  r.r=bs)
+        sum(r.rc[, i] <= r[i])/length(r.rc[, i])
+    }, r=splist$r.uc + crt,  r.rc=bs + crt)
     
   }
   if(bootstrap) {
