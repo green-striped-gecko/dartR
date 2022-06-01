@@ -24,6 +24,11 @@ any other squared distance matrix can be used. see example}
 individuals. This is typically an Euclidean distance but it can be 
 any meaningful (geographical) distance metrics.}
 
+\item{bins}{The number of bins for the distance classes 
+(i.e. \code{length(bins) == 1)} or a vectors with the break points. See details.}
+
+\item{reps}{The number to be used for permutation and bootstrap analyses}
+
 \item{permutation}{Whether permutation calculations for the null hypothesis of 
 no spatial structure should be carried out}
 
@@ -80,8 +85,53 @@ hypothesis of no spatial structure (this is a two-tail test). The same data
 are also used to calculate the probability of the one-tail test (See reference 
 below for details).
 }
-\references{
+\examples{
+ # Select one pop only
+plat_Tent <- gl.keep.ind(platypus.gl, 
+ind.list = platypus.gl@ind.names[pop(platypus.gl) == "TENTERFIELD"], 
+mono.rm = TRUE)
+# Compute a simple distance matrix and reverse it so that correlated values 
+# indicated more similar individuals as we are used to see plots in GenAleEx
+gd <- 1 - as.matrix(gl.dist.ind(plat_Tent, method = "Simple", plot.out = FALSE))
+# Replace the diagonal with zeros
+diag(gd) <- 0
+# Compute the geographical distance matrix
+ggd <- as.matrix(dist(plat_Tent@other$latlon))
 
+# Spatial autocorrelation
+spa <- gl.spatial.autoCorr(gd, ggd, bins = 3, reps = 100, 
+permutation = TRUE, bootstrap = TRUE)
+
+# Alternatively, use Smouse distance from PopGneReport package
+smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=T))
+spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
+permutation = TRUE, bootstrap = TRUE)
+}
+\references{
+\itemize{
+\item Smouse PE, Peakall R. 1999. Spatial autocorrelation analysis of
+individual multiallele and multilocus genetic structure. Heredity 82:
+561-573.
+
+\item Double, MC, et al. 2005. Dispersal, philopatry and infidelity: dissecting
+local genetic structure in superb fairy-wrens (Malurus cyaneus). Evolution
+59, 625-635.
+
+\item Peakall, R, et al. 2003. Spatial autocorrelation analysis offers new
+insights into gene flow in the Australian bush rat, Rattus fuscipes.
+Evolution 57, 1182-1195.
+
+\item Smouse, PE, et al. 2008. A heterogeneity test for fine-scale genetic
+structure. Molecular Ecology 17, 3389-3400.
+
+\item Gonzales, E, et al. 2010. The impact of landscape disturbance on spatial
+genetic structure in the Guanacaste tree, Enterolobium
+cyclocarpum(Fabaceae). Journal of Heredity 101, 133-143.
+
+\item Beck, N, et al. 2008. Social constraint and an absence of sex-biased
+dispersal drive fine-scale genetic structure in white-winged choughs.
+Molecular Ecology 17, 4346-4358.
+}
 }
 \author{
 Carlo Pacioni & Bernd Gruber
