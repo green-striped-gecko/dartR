@@ -90,8 +90,10 @@ utils.spautocor <- function(GD, GGD, permutation=FALSE, bootstrap=FALSE, bins=10
     }
     
     if (bootstrap==TRUE) {
-      row.sample <- sample(nrow(index), replace = TRUE)
-      index <- index[row.sample, ]
+      if(nrow(index) > 1) {
+        row.sample <- sample(nrow(index), replace = TRUE)
+        index <- index[row.sample, ] 
+      }
     }
     
     cx <- sum(cd[index])
