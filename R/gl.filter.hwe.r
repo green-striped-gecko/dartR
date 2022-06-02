@@ -105,12 +105,12 @@
 #' 
 #' \bold{From v2.1} \code{gl.filter.hwe} takes the argument \code{n.pop.threshold}.
 #' if \code{n.pop.threshold > 1} loci will be removed only if they are concurrently 
-#' if they are significantly (after adjustment if applied) out of hwe in >= 
+#' significant (after adjustment if applied) out of hwe in >= 
 #' \code{n.pop.threshold > 1}.
 #'
 #' @return A genlight object with the loci departing significantly from H-W
 #' proportions removed.
-#' @author Custodian: Luis Minjangos -- Post to
+#' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' result <- gl.filter.hwe(x = bandicoot.gl)
@@ -145,7 +145,7 @@
 
 gl.filter.hwe <- function(x,
                           subset = "each",
-                          n.pop.threshold=1,
+                          n.pop.threshold = 1,
                           method_sig = "Exact",
                           multi_comp = FALSE,
                           multi_comp_method = "BY",
