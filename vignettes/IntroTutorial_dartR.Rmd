@@ -397,12 +397,12 @@ platy
 To convert the genind to a genlight object simply type:
 
 ```{r, eval=FALSE}
-platy.gl <- (gi2gl(platy))
+platy.gl <- gi2gl(platy)
 ```
 
 
 ```{r, echo=FALSE}
-platy.gl <- (gi2gl(platy, parallel = FALSE))
+platy.gl <- gi2gl(platy, parallel = FALSE)
 ```
 
 

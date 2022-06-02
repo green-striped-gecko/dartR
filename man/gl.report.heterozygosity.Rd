@@ -26,7 +26,7 @@ individual (method='ind') [default 'pop'].}
 \item{n.invariant}{An estimate of the number of invariant sequence tags used
 to adjust the heterozygosity rate [default 0].}
 
-\item{plot.out}{Whether produce a plot of the results [default TRUE].}
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}

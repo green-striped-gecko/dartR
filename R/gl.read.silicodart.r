@@ -190,7 +190,6 @@ gl.read.silicodart <- function(filename,
         )
     }
     
-    
     # create unique locnames based on cloneID
     index <-
         unique(covmetrics$CloneID[which(duplicated(covmetrics$CloneID))])
@@ -335,7 +334,8 @@ gl.read.silicodart <- function(filename,
             "FreqHomSnp",
             "monomorphs",
             "OneRatio",
-            "PIC"
+            "PIC",
+            "allna"
         )
     glout@other$loc.metrics.flags <-
         data.frame(matrix(TRUE, nrow = 1, ncol = length(recalc.flags)))

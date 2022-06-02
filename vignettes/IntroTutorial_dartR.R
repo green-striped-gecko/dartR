@@ -85,10 +85,10 @@ platy
 
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  platy.gl <- (gi2gl(platy))
+#  platy.gl <- gi2gl(platy)
 
 ## ---- echo=FALSE--------------------------------------------------------------
-platy.gl <- (gi2gl(platy, parallel = FALSE))
+platy.gl <- gi2gl(platy, parallel = FALSE)
 
 ## -----------------------------------------------------------------------------
 platy.gl@other$ind.metrics <- platy.gl@other$data
