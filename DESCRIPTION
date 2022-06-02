@@ -68,7 +68,6 @@ Suggests:
     qvalue,
     RColorBrewer,
     Rcpp,
-    rgdal,
     rgl,
     rmarkdown,
     rrBLUP,
@@ -81,6 +80,7 @@ Suggests:
     SIBER,
     snpStats,
     stringi,
+    terra,
     tibble,
     tidyverse,
     vcfR
