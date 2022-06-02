@@ -253,6 +253,8 @@ gl.plot.structure_2 <- function(sr,
       legend.position = "none"
     )
   
+  print (gg)
+  
   return(gg)
   
 }
