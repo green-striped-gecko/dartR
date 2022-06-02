@@ -74,7 +74,7 @@ utils.spautocor <- function(GD, GGD, permutation=FALSE, bootstrap=FALSE, bins=10
   ed[upper.tri(ed)] <-NA
   diag(ed) <- NA
   
-  if(length(bins)) {
+  if(length(bins)==1) {
     steps <- seq_len(bins) * signif(diff(range(ed, na.rm=TRUE))/bins,4)
     steps <- c(min(ed, na.rm = TRUE), steps)
     if (steps[length(steps)] < max(ed, na.rm = TRUE)) 

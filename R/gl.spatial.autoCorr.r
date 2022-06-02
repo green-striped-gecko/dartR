@@ -146,13 +146,14 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   # DO THE JOB
   sample.size <- nrow(GGD)
   crt <- 1/(sample.size - 1) # correction
+  nbins <- if(length(bins) == 1) bins else length(bins) - 1
   splist<- utils.spautocor(GD, GGD, permutation=FALSE, bins=bins)
   
   if(permutation) {
     bssplist <- replicate(reps, utils.spautocor(GD, GGD, permutation=TRUE, bins=bins))
     
     #convert the output into a matrix
-    bs <-matrix(unlist(bssplist), nrow=reps, ncol=bins, byrow=TRUE)
+    bs <-matrix(unlist(bssplist), nrow=reps, ncol=nbins, byrow=TRUE)
     bs.l <- apply(bs,2, quantile, probs=0.025, na.rm=TRUE)
     bs.u <- apply(bs,2, quantile, probs=0.975, na.rm=TRUE)
     
@@ -167,7 +168,7 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   }
   if(bootstrap) {
     errors <- replicate(reps, utils.spautocor(GD, GGD, bootstrap=TRUE, bins=bins))
-    errors <- matrix(unlist(errors), nrow=reps, ncol=bins, byrow=TRUE)
+    errors <- matrix(unlist(errors), nrow=reps, ncol=nbins, byrow=TRUE)
     err.l <- apply(errors, 2, quantile, probs=0.025, na.rm=TRUE)
     err.u <- apply(errors, 2, quantile, probs=0.975, na.rm=TRUE)
   }
