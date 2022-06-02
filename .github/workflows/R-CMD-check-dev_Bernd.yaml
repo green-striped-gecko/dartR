@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - dev_bernd
-    
-   
 
 name: R-CMD-check-dev_Bernd
 
@@ -65,9 +63,7 @@ jobs:
       - name: Install dependencies
         run: |
 
-          options(repos = c(
-            `r-spatial` = "https://r-spatial.r-universe.dev/",
-            CRAN = "https://cloud.r-project.org/"
+          options(repos = c(CRAN = "https://cloud.r-project.org/"
           ))
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
