@@ -34,6 +34,15 @@ no spatial structure should be carried out}
 
 \item{bootstrap}{Whether bootstrap calculations to compute the 95% confidence intervals 
 around r should be carried out}
+
+\item{plot_theme}{User specified theme [default theme_dartR()].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE].}
+
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+progress log ; 3, progress and results summary; 5, full report
+[default NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 Returns a data frame with the following columns:
@@ -103,7 +112,7 @@ spa <- gl.spatial.autoCorr(gd, ggd, bins = 3, reps = 100,
 permutation = TRUE, bootstrap = TRUE)
 
 # Alternatively, use Smouse distance from PopGneReport package
-smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=T))
+smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=TRUE))
 spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
 permutation = TRUE, bootstrap = TRUE)
 }

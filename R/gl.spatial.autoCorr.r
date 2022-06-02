@@ -38,7 +38,7 @@
 #' no spatial structure should be carried out
 #' @param bootstrap Whether bootstrap calculations to compute the 95% confidence intervals 
 #' around r should be carried out
-#' @inheritParams gl.diagnostic.hwe
+#' @inheritParams gl.diagnostics.hwe
 #' @return Returns a data frame with the following columns:
 #' \enumerate{
 #' \item Bin  The distance classes
@@ -104,7 +104,7 @@
 #' permutation = TRUE, bootstrap = TRUE)
 #' 
 #' # Alternatively, use Smouse distance from PopGneReport package
-#' smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=T))
+#' smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=TRUE))
 #' spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
 #' permutation = TRUE, bootstrap = TRUE)
 #' @import ggplot2
@@ -178,7 +178,7 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   if(permutation) res <- cbind(res, L.r.null.uc=bs.l, U.r.null.uc = bs.u,  
                                L.r.null=bs.l + crt,  U.r.null=bs.u + crt, 
                                p.one.tail=p.one.tail)
-  
+  Bin <- r <- L.r <- U.r <- L.r.null <- U.r.null <- NULL #avoid global binding error
   p <- ggplot(res, aes(Bin, r)) + geom_line() + geom_point() + 
     geom_hline(yintercept=0, col="black") +
     scale_x_continuous(sec.axis=sec_axis(trans = ~., breaks = res$Bin, labels = res$N)) +

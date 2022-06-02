@@ -414,6 +414,7 @@ gl.filter.hwe <- function(x,
     if (multi_comp == T) {
         df <- df[which(df$Prob.adj <= alpha_val), ]
     }
+    npop <-NULL #needs to be defined to avoid cran check error
     dt <- data.table(df)
     dt[, npop := .N, by=Locus]
     failed.loci <- as.character(dt[npop >= n.pop.threshold, unique(Locus)])

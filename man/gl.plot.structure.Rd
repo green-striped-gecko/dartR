@@ -7,20 +7,20 @@
 gl.plot.structure(sr, k, sort = NULL, CLUMPP = "./", ..., plot_theme, verbose)
 }
 \arguments{
-\item{sr}{Structure run object from \code{\link{gl.run.structure}} [required].}
+\item{sr}{structure run object from \code{\link{gl.run.structure}} [required].}
 
-\item{k}{The number for k the q matrix should be based on. Needs to
+\item{k}{the number for k the q matrix should be based on. Needs to
 be within you simulated range of k's in your sr structure run object.}
 
-\item{sort}{How q matrix is sorted (by population, group proportion etc.)
+\item{sort}{how q matrix is sorted (by population, group proportion etc.)
 [default is by the population definition and group proportion from group
  1 to k-1, meaning first sorted by group, then by proportion of group 1,
   then group 2,.... then group k-1].}
 
-\item{CLUMPP}{Path to the clumpp executable file. Windows: CLUMPP.exe,
+\item{CLUMPP}{path to the clumpp executable file. Windows: CLUMPP.exe,
 macos and linux: CLUMPP (no exe).}
 
-\item{...}{Additional parameter passed to the clumpp function within
+\item{...}{additional parameter passed to the clumpp function within
 package strataG (\code{clumpp}).}
 
 \item{plot_theme}{Theme for the plot. See details for options [default

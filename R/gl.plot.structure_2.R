@@ -183,7 +183,7 @@ gl.plot.structure_2 <- function(sr,
     
     no_cluster <- c(TRUE, unname(no_cluster), TRUE, TRUE, TRUE)
     no_cluster_2 <-  as.vector((1:ncol(Q_list_tmp))[no_cluster])
-    
+    ..no_cluster_2 <- NULL #avoid binding error
     Q_list_tmp <- Q_list_tmp[, ..no_cluster_2]
     Q_list[[i]] <- Q_list_tmp
   }
@@ -216,7 +216,7 @@ gl.plot.structure_2 <- function(sr,
   if (!is(colors_clusters, "function")) {
     cols_clusters <- colors_clusters
   }
-  
+  ord <- value <- Cluster <- NULL
   gg <- ggplot(Q_melt, aes(x = factor(ord), y = value, fill = Cluster)) +
     geom_col(color = "black", size = 0.2,width = 1) +
     facet_grid(K ~ pop , scales = "free", space = "free") +
