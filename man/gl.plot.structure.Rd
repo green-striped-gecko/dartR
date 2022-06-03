@@ -20,7 +20,7 @@ gl.plot.structure_2(
 )
 }
 \arguments{
-\item{sr}{Structure run object from \code{\link{gl.run.structure}} [required].}
+\item{sr}{structure run object from \code{\link{gl.run.structure}} [required].}
 
 \item{K}{The number for K the q matrix should be based on. Needs to
 be within you simulated range of K's in your sr structure run object.}

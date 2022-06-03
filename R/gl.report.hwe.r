@@ -600,6 +600,7 @@ gl.report.hwe <- function(x,
     }
     # removing column with color name
     df <- data.table(result[,-11])
+    npop <- Locus <- NULL
     df[, npop := .N, by=Locus]
     
     #### Report the results

@@ -125,7 +125,7 @@ J_perm <- function(perm, Q_x, Q_sub_list) {
 }
 
 J <- function(Q_x, Q_sub_list) {
-  sum(unlist(map_dbl(Q_sub_list, G, Q_x))) / length(Q_sub_list)
+  sum(unlist(purrr::map_dbl(Q_sub_list, G, Q_x))) / length(Q_sub_list)
 }
 
 G <- function(Q_1, Q_2) {
@@ -235,16 +235,16 @@ iterativeGreedy <- function(Q_list) {
   
   #slower but memory efficient
   for (i in 1:(length(Q_list) - 1)) {
-    permuations <- iterpc(ncol(Q_list[[i + 1]]), ordered = TRUE)
+    permuations <- iterpc::iterpc(ncol(Q_list[[i + 1]]), ordered = TRUE)
     
     max_perm <- 1:ncol(Q_list[[i + 1]])
     max <- -Inf
     j <- 0
-    while (j < getlength(permuations)) {
-      value <- J_perm(getnext(permuations), Q_list[[i + 1]], Q_list[1:i])
+    while (j < iterpc::getlength(permuations)) {
+      value <- J_perm(iterpc::getnext(permuations), Q_list[[i + 1]], Q_list[1:i])
       if (value > max) {
         max <- value
-        max_perm <- getcurrent(permuations)
+        max_perm <- iterpc::getcurrent(permuations)
       }
       j <- j + 1
     }
