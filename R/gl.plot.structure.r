@@ -17,7 +17,7 @@
 #' @param clumpak [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options
 #' [default NULL].
-#' @param colors_clusters A color palette for clusters (K) or a list with
+#' @param colors_clusters A color palette for clusters (K) or a vector with
 #' as many colors as there are clusters (K)
 #' [default NULL].
 #' @param ind_name Whether to plot individual names [default TRUE].
@@ -38,14 +38,14 @@
 #' @examples
 #' \dontrun{
 #' #CLUMPP needs to be installed to be able to run the example
-#' #bc <- bandicoot.gl[,1:100]
+#' bc <- bandicoot.gl[,1:100]
 #' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3,
-#' exec = './structure.exe')
+#' #exec = './structure.exe')
 #' #ev <- gl.evanno(sr)
 #' #ev
-#' #qmat <- gl.plot.structure(sr, K=3, CLUMPP='d:/structure/')
-#' #head(qmat)
-#' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
+#' #qmat <- gl.plot.structure(sr, K = 4)
+
+#' #gl.map.structure(qmat, bc,K = 4)
 #' }
 #' @export
 #' @seealso \code{gl.run.structure},  \code{clumpp}, \code{gl.plot.structure}
@@ -63,7 +63,7 @@
 #' \href{http://web.stanford.edu/group/rosenberglab/clumppDownload.html}{clumpp}
 #' }
 
-gl.plot.structure_2 <- function(sr,
+gl.plot.structure <- function(sr,
                                 K = NULL,
                                 met_clumpp = "greedyLargeK",
                                 iter_clumpp = 100,
@@ -127,7 +127,7 @@ gl.plot.structure_2 <- function(sr,
       # implemented in starmie package
       if (clumpak) {
         # if just one replicate
-        if(lenght(res_tmp)==1){
+        if(length(res_tmp)==1){
           res_tmp_2 <- res_tmp[[1]]
         # if more than one replicate
         }else{

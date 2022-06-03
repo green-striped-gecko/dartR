@@ -2,10 +2,9 @@
 % Please edit documentation in R/gl.plot.structure.r
 \name{gl.plot.structure}
 \alias{gl.plot.structure}
-\alias{gl.plot.structure_2}
 \title{Plots a STRUCTURE analysis using a genlight object}
 \usage{
-gl.plot.structure_2(
+gl.plot.structure(
   sr,
   K = NULL,
   met_clumpp = "greedyLargeK",
@@ -36,7 +35,7 @@ One of 'greedy' or 'greedyLargeK' or 'stephens' [default "greedy"].}
 \item{plot_theme}{Theme for the plot. See Details for options
 [default NULL].}
 
-\item{colors_clusters}{A color palette for clusters (K) or a list with
+\item{colors_clusters}{A color palette for clusters (K) or a vector with
 as many colors as there are clusters (K)
 [default NULL].}
 
@@ -66,14 +65,13 @@ The function outputs a barplot which is the typical output of
 \examples{
 \dontrun{
 #CLUMPP needs to be installed to be able to run the example
-#bc <- bandicoot.gl[,1:100]
+bc <- bandicoot.gl[,1:100]
 #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3,
-exec = './structure.exe')
+#exec = './structure.exe')
 #ev <- gl.evanno(sr)
 #ev
-#qmat <- gl.plot.structure(sr, K=3, CLUMPP='d:/structure/')
-#head(qmat)
-#gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
+#qmat <- gl.plot.structure(sr, K = 4)
+#gl.map.structure(qmat, bc,K = 4)
 }
 }
 \references{
