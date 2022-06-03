@@ -7,3 +7,5 @@ dartR.Rproj
 .Rbuildignore
 .DS_Store
 dartR.Rproj
+/doc/
+/Meta/
