@@ -152,7 +152,7 @@ function (x)
       # return generic names if no colnames assigned
       nums <- formatC(1:nloc, digits = floor(log10(nloc)), flag = "0")
       generic.locus.names <- paste0("Locus", "_", nums)
-      colnames(gen.data) <- .expandLocusNames(generic.locus.names, ploidy)
+      colnames(gen.data) <- generic.locus.names# .expandLocusNames(generic.locus.names, ploidy)
     } 
     locus.names.lookup <- stats::setNames(
       rep(.parseLocusNames(colnames(gen.data), ploidy), each = ploidy),
@@ -160,28 +160,28 @@ function (x)
     )
     
     # check sequences
-    if(!is.null(sequences)) {
-      sequences <- as.multidna(sequences)
-      if(getNumLoci(sequences) != ncol(gen.data)) {
-        stop(
-          "the number of genes in 'sequences' is not equal to the number of loci",
-          call. = FALSE
-        )
-      }
-      setLocusNames(sequences) <- colnames(gen.data)
-      for(loc in colnames(gen.data)) {
-        haps <- stats::na.omit(unique(as.character(gen.data[, loc])))
-        seq.names <- apex::getSequenceNames(sequences)[[loc]]
-        missing <- setdiff(haps, seq.names)
-        if(length(missing) > 0) {
-          stop(
-            "the following haplotypes can't be found in sequences for locus '", 
-            loc, "': ", paste(missing, collapse = ", "), 
-            call. = FALSE
-          )
-        }
-      }
-    }
+    # if(!is.null(sequences)) {
+    #   sequences <- as.multidna(sequences)
+    #   if(getNumLoci(sequences) != ncol(gen.data)) {
+    #     stop(
+    #       "the number of genes in 'sequences' is not equal to the number of loci",
+    #       call. = FALSE
+    #     )
+    #   }
+    #   setLocusNames(sequences) <- colnames(gen.data)
+    #   for(loc in colnames(gen.data)) {
+    #     haps <- stats::na.omit(unique(as.character(gen.data[, loc])))
+    #     seq.names <- apex::getSequenceNames(sequences)[[loc]]
+    #     missing <- setdiff(haps, seq.names)
+    #     if(length(missing) > 0) {
+    #       stop(
+    #         "the following haplotypes can't be found in sequences for locus '", 
+    #         loc, "': ", paste(missing, collapse = ", "), 
+    #         call. = FALSE
+    #       )
+    #     }
+    #   }
+    # }
     
     gen.data <- cbind(
       id = rownames(gen.data), 

@@ -113,7 +113,7 @@
 #' permutation = TRUE, bootstrap = TRUE)
 #' 
 #' # Alternatively, use Smouse distance from PopGneReport package
-#' smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=T))
+#' smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=TRUE))
 #' spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
 #' permutation = TRUE, bootstrap = TRUE)
 #' #' @seealso \code{\link{gl.spatial.ac.multi}}
@@ -121,7 +121,7 @@
 #' @export
 
 
-gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100, 
+gl.spatial.autoCorr <- function(GD, GGD, bins=2, reps=100, 
                                 permutation=FALSE, 
                                 bootstrap=FALSE, 
                                 plot_theme = theme_classic(),
@@ -139,12 +139,12 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   
   # CHECK DATATYPE
   if(!is.matrix(GD))
-    if(class(GD) == "dist") GD <- as.matrix(GD)
+    if(is(GD, "dist")) GD <- as.matrix(GD)
   else
     stop(error("  The argument 'GD' should be a matrix"))
   
   if(!is.matrix(GGD))
-    if(class(GGD) == "dist") GGD <- as.matrix(GGD)
+    if(is(GGD, "dist")) GGD <- as.matrix(GGD)
   else
     stop(error("  The argument 'GGD' should be a matrix"))
   
@@ -190,7 +190,7 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   if(permutation) res <- cbind(res, L.r.null.uc=bs.l, U.r.null.uc = bs.u,  
                                L.r.null=bs.l + crt,  U.r.null=bs.u + crt, 
                                p.one.tail=p.one.tail)
-  
+  Bin <- r <- L.r <- U.r <- L.r.null <- U.r.null <- NULL #avoid global binding error
   p <- ggplot(res, aes(Bin, r)) + geom_line() + geom_point() + 
     geom_hline(yintercept=0, col="black") +
     scale_x_continuous(sec.axis=sec_axis(trans = ~., breaks = res$Bin, labels = res$N)) +

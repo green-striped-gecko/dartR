@@ -25,7 +25,9 @@ gl.filter.maf(
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
 \item{threshold}{Threshold MAF -- loci with a MAF less than the threshold
-will be removed [default 0.01].}
+will be removed [default 0.01]. If a value > 1 is provided it will be 
+interpreted as MAC (i.e. the minimum number of times an allele needs to be 
+observed).}
 
 \item{by.pop}{Whether MAF should be calculated by population [default FALSE].}
 
@@ -66,6 +68,23 @@ The reduced genlight dataset
 This script calculates the minor allele frequency for each locus and updates
 the locus metadata for FreqHomRef, FreqHomSnp, FreqHets and MAF (if it
 exists). It then uses the updated metadata for MAF to filter loci.
+}
+\details{
+Careful consideration needs to be given to the settings to be used for this 
+fucntion. When the filter is applied globally (i.e. \code{by.pop=FALSE}) but 
+the data include multiple population, there is the risk to remove markers 
+because the allele frequencies is low (at global level) but the allele frequencies
+for the same markers may be high within some of the populations (especially if 
+the per-population sample size is small). Similarly, not always it is a 
+sensible choice to run this function using \code{by.pop=TRUE} because allele 
+that are rare in a population may be very common in other, but the (possible) 
+allele frequencies will depend on the sample size within each population. 
+Where the purpose of filtering for MAF is to remove possible spurious alleles 
+(i.e. sequencing errors), it is perhaps better to filter based on the number 
+of times an allele is observed (MAC, Minimum Allele Count), under the 
+assumption that if an allele is observed >MAC, it is fairly rare to be an error.
+\bold{From v2.1} The threshold can take values > 1. In this case, these are 
+interpreted as a threshold for MAC.
 }
 \examples{
 result <- gl.filter.monomorphs(testset.gl)

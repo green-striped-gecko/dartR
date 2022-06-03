@@ -170,7 +170,7 @@ gl.fixed.diff <- function(x,
     # define dist2list function
     
     dist2list <- function(dist) {
-        if (!class(dist) == "dist") {
+        if (!is(dist,"dist")) {
             stop(error("the input data must be a dist object."))
         }
         dat <- as.data.frame(as.matrix(dist))

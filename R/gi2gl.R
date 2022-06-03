@@ -28,7 +28,7 @@ gi2gl <- function(gi,
     
     # STANDARD ERROR CHECKING
     
-    if (class(gi) != "genind") {
+    if (!is(gi, "genind")) {
         stop(error("  Fatal Error: genind object required!\n"))
     }
     

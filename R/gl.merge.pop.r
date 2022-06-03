@@ -58,7 +58,7 @@ gl.merge.pop <- function(x,
         if (is.null(new)) {
         stop(error("Fatal Error: A new population label must be specified\n"))
     }
-    if (class(x) != "genlight") {
+    if (!is(x ,"genlight")) {
         stop(error(
             "Fatal Error: genlight object required!\n"
         ))
