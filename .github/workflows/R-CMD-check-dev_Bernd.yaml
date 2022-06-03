@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
 
@@ -60,9 +60,10 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
       - name:Install macos dependiencies
-        if: runner.os =="macOS"
+        if: runner.os =='macOS'
         run: |
           install.packages("rgdal", type="binary")
+          shell: Rscript {0}
           
       - name: Install dependencies
         run: |
