@@ -190,7 +190,9 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=2, reps=100,
   if(permutation) res <- cbind(res, L.r.null.uc=bs.l, U.r.null.uc = bs.u,  
                                L.r.null=bs.l + crt,  U.r.null=bs.u + crt, 
                                p.one.tail=p.one.tail)
+  
   Bin <- r <- L.r <- U.r <- L.r.null <- U.r.null <- NULL #avoid global binding error
+  
   p <- ggplot(res, aes(Bin, r)) + geom_line() + geom_point() + 
     geom_hline(yintercept=0, col="black") +
     scale_x_continuous(sec.axis=sec_axis(trans = ~., breaks = res$Bin, labels = res$N)) +
@@ -216,8 +218,5 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=2, reps=100,
       
     }
     
-  
-    
-  
   return(res)
 }

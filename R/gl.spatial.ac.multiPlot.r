@@ -53,6 +53,7 @@
 #' # Plot them together 
 #' gl.spatial.ac.multiPlot(list(TENTERFIELD=spa, SEVERN_ABOVE=spa_Sev))
 #' 
+#' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @import ggplot2
 #' @export
 gl.spatial.ac.multiPlot <- function(l.spa, grp.var.name="Pop", 
@@ -73,6 +74,8 @@ gl.spatial.ac.multiPlot <- function(l.spa, grp.var.name="Pop",
     stop(error("  The argument 'l.spa' should be a list of gl.spatial.autoCorr outputs\n"))
   
   if(length(names(l.spa)) == 0) names(l.spa) <- paste0("Pop", seq_len(length(l.spa)))
+  
+  L.r <- U.r <- NULL #avoid global binding error
   
   # DO THE JOB
   
