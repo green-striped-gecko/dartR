@@ -24,6 +24,9 @@ gl.spatial.ac.multiPlot(
 }
 \value{
 Returns the ggplot object
+
+Custodian: Carlo Pacioni -- Post to
+  \url{https://groups.google.com/d/forum/dartr}
 }
 \description{
 This function takes multiple  outputs of gl.spatial.autoCorr 
@@ -45,18 +48,30 @@ mono.rm = TRUE)
 gd <- 1 - as.matrix(gl.dist.ind(plat_Tent, method = "Simple", plot.out = FALSE))
 # Replace the diagonal with zeros
 diag(gd) <- 0
-# Compute the geographical distance matrix
+# Compute the (approx) geographical distance matrix
 ggd <- as.matrix(dist(plat_Tent@other$latlon))
 
 # Spatial autocorrelation
 spa <- gl.spatial.autoCorr(gd, ggd, bins = 3, reps = 100, 
 permutation = TRUE, bootstrap = TRUE)
 
-# Alternatively, use Smouse distance from PopGneReport package
-smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=T))
-spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
+ # Does the same for the second pop
+plat_Sev <- gl.keep.ind(platypus.gl, 
+ind.list = platypus.gl@ind.names[pop(platypus.gl) == "SEVERN_ABOVE"], 
+mono.rm = TRUE)
+# Compute a simple distance matrix and reverse it so that correlated values 
+# indicated more similar individuals as we are used to see plots in GenAleEx
+gd_Sev <- 1 - as.matrix(gl.dist.ind(plat_Sev, method = "Simple", plot.out = FALSE))
+# Replace the diagonal with zeros
+diag(gd_Sev) <- 0
+# Compute the (approx) geographical distance matrix
+ggd_Sev <- as.matrix(dist(plat_Sev@other$latlon))
+
+# Spatial autocorrelation
+spa_Sev <- gl.spatial.autoCorr(gd, ggd, bins = 3, reps = 100, 
 permutation = TRUE, bootstrap = TRUE)
-}
-\author{
-Carlo Pacioni
+
+# Plot them together 
+gl.spatial.ac.multiPlot(list(TENTERFIELD=spa, SEVERN_ABOVE=spa_Sev))
+
 }
