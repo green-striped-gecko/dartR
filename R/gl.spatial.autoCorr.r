@@ -116,6 +116,7 @@
 #' smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=T))
 #' spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
 #' permutation = TRUE, bootstrap = TRUE)
+#' #' @seealso \code{\link{gl.spatial.ac.multi}}
 #' @import ggplot2
 #' @export
 
