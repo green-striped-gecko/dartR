@@ -35,23 +35,10 @@ no spatial structure should be carried out}
 
 \item{bootstrap}{Whether bootstrap calculations to compute the 95% confidence intervals 
 around r should be carried out}
-<<<<<<< HEAD
 
 \item{outpath}{The path where to save the output}
 
 \item{out_file_rootname}{The name of the root of the output file}
-||||||| merged common ancestors
-=======
-
-\item{plot_theme}{User specified theme [default theme_dartR()].}
-
-\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
-temporary directory (tempdir) [default FALSE].}
-
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log ; 3, progress and results summary; 5, full report
-[default NULL, unless specified using gl.set.verbosity].}
->>>>>>> dev
 }
 \value{
 Returns a data frame with the following columns:

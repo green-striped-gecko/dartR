@@ -45,8 +45,8 @@
 #' no spatial structure should be carried out
 #' @param bootstrap Whether bootstrap calculations to compute the 95% confidence intervals 
 #' around r should be carried out
-#' @param outpath The path where to save the output
-#' @param  out_file_rootname The name of the root of the output file
+#' @param outpath The path where to save the output 
+#' @param  out_file_rootname The name of the root of the output file 
 #' @inheritParams gl.diagnostic.hwe
 #' @return Returns a data frame with the following columns:
 #' \enumerate{
