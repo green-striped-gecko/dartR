@@ -7,6 +7,7 @@
 gl.map.structure(
   qmat,
   x,
+  K,
   provider = "Esri.NatGeoWorldMap",
   scalex = 1,
   scaley = 1,
@@ -22,6 +23,8 @@ gl.map.structure(
 
 \item{x}{Name of the genlight object containing the coordinates in the
 \code{\@other$latlon} slot to calculate the population centers [required].}
+
+\item{K}{The number for K to be plotted [required].}
 
 \item{provider}{Provider    passed to leaflet. Check \link[leaflet]{providers}
 for a list of possible backgrounds [default "Esri.NatGeoWorldMap"].}

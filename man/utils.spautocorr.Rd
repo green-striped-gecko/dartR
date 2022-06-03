@@ -5,7 +5,14 @@
 \alias{utils.spautocor}
 \title{Spatial autocorrelation coefficient calculations}
 \usage{
-utils.spautocor(GD, GGD, permutation = FALSE, bootstrap = FALSE, bins = 10)
+utils.spautocor(
+  GD,
+  GGD,
+  permutation = FALSE,
+  bootstrap = FALSE,
+  bins = 10,
+  reps
+)
 }
 \arguments{
 \item{GD}{a matrix of individual pairwise genetic distances. In principle 
@@ -23,6 +30,8 @@ around r should be carried out}
 
 \item{bins}{The number of bins for the distance classes 
 (i.e. \code{length(bins) == 1)} or a vectors with the break points. See details.}
+
+\item{reps}{The number to be used for permutation and bootstrap analyses}
 }
 \value{
 Returns a data frame with the following columns:

@@ -171,11 +171,9 @@ gl2plink <- function(x,
         cbind(FID, IID, ID_dad, ID_mom, sex_code, phen_value)
     
     x_mat <- as.matrix(x[, ])
-    homs1 <-
-        paste(substr(x@loc.all, 1, 1), "/", substr(x@loc.all, 1, 1), sep = "")
+    homs1 <- paste(substr(x@loc.all, 1, 1), "/", substr(x@loc.all, 1, 1), sep = "")
     hets <- x@loc.all
-    homs2 <-
-        paste(substr(x@loc.all, 3, 3), "/", substr(x@loc.all, 3, 3), sep = "")
+    homs2 <- paste(substr(x@loc.all, 3, 3), "/", substr(x@loc.all, 3, 3), sep = "")
     xx <- matrix(NA, ncol = ncol(x_mat), nrow = nrow(x_mat))
     for (i in 1:nrow(x_mat)) {
         for (ii in 1:ncol(x_mat)) {
@@ -187,8 +185,9 @@ gl2plink <- function(x,
                     xx[i, ii] <- hets[ii]
                 else if (inp == 2)
                     xx[i, ii] <- homs2[ii]
-            } else
+            } else{
                 xx[i, ii] = "0/0"
+            }
         }
     }
     xx <- gsub("/", " ", xx)

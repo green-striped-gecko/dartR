@@ -98,8 +98,7 @@ memoryGreedy <- function(Q_list) {
   #Faster but with a high memory footprint for large K
   for (i in 1:(length(Q_list) - 1)) {
     permuations <- permn(1:ncol(Q_list[[i + 1]]))
-    perm_scores <-
-      purrr::map_dbl(permuations, J_perm, Q_list[[i + 1]], Q_list[1:i])
+    perm_scores <- purrr::map_dbl(permuations, J_perm, Q_list[[i + 1]], Q_list[1:i])
     perm <- permuations[[which.max(perm_scores)]]
     Q_list[[i + 1]] <- Q_list[[i + 1]][, perm]
     permutations[i + 1, ] <- perm
