@@ -45,6 +45,8 @@
 #' no spatial structure should be carried out
 #' @param bootstrap Whether bootstrap calculations to compute the 95% confidence intervals 
 #' around r should be carried out
+#' @param outpath The path where to save the output
+#' @param  out_file_rootname The name of the root of the output file
 #' @inheritParams gl.diagnostic.hwe
 #' @return Returns a data frame with the following columns:
 #' \enumerate{
@@ -122,7 +124,8 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
                                 permutation=FALSE, 
                                 bootstrap=FALSE, 
                                 plot_theme = theme_classic(),
-                                save2tmp = FALSE,
+                                outpath = tempdir(),
+                                out_file_rootname="autoCorr",
                                 verbose=NULL) {
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -190,7 +193,7 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   p <- ggplot(res, aes(Bin, r)) + geom_line() + geom_point() + 
     geom_hline(yintercept=0, col="black") +
     scale_x_continuous(sec.axis=sec_axis(trans = ~., breaks = res$Bin, labels = res$N)) +
-    xlab("Distance class") +
+    xlab("Distance class") + #theme(axis.text.x.top=element_text(angle = 90)) +
     plot_theme
   
   if(bootstrap) p <- p + geom_errorbar(aes(ymin=L.r, ymax=U.r)) 
@@ -201,28 +204,18 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   
   print(p)
   
-  # SAVE INTERMEDIATES TO TEMPDIR
-    # creating temp file names
-  if (save2tmp) {
-    temp_plot <- tempfile(pattern = "Plot_")
-    match_call <-
-      paste0(names(match.call()),
-             "_",
-             as.character(match.call()),
-             collapse = "_")
-    # saving to tempdir
-    saveRDS(list(match_call, p), file = temp_plot)
+  # SAVE outputs
+  fn_base <- file.path(outpath, out_file_rootname)
+  save(p, file = paste(fn_base, "plot.rda", sep = "_"))
+  ggsave(filename = paste(fn_base, "plot.png", sep = "_"), plot = p, width = 18, height = 12, units = "cm")
+  write.csv(res, file = paste(fn_base, "table.csv", sep = "_"), row.names = FALSE)
     
     if (verbose >= 2) {
-      cat(report("  Saving the ggplot to session tempfile\n"))
-      cat(
-        report(
-          "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
-        )
-      )
+      cat(report("  Saving outputs\n"))
+      
     }
     
-  }
+  
     
   
   return(res)
