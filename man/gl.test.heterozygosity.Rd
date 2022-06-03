@@ -32,7 +32,7 @@ gl.test.heterozygosity(
 \item{plot.out}{If TRUE, plots a sampling distribution of the differences for
 each comparison [default TRUE].}
 
-\item{max_plots}{Maximum number of plots to print per page [default 9].}
+\item{max_plots}{Maximum number of plots to print per page [default 6].}
 
 \item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}

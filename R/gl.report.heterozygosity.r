@@ -11,7 +11,7 @@
 #' individual (method='ind') [default 'pop'].
 #' @param n.invariant An estimate of the number of invariant sequence tags used
 #' to adjust the heterozygosity rate [default 0].
-#' @param plot.out Whether produce a plot of the results [default TRUE].
+#' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options
 #' [default theme_dartR()].
 #' @param plot_colors_pop A color palette for population plots or a list with

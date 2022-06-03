@@ -1,0 +1,15 @@
+---
+title: "dartR Tutorials"
+author: "Bernd Gruber, Peter Unmack, Oliver Berry, Luis Mijangos & Arthur Georges"
+date: '`r Sys.Date()`'
+output:
+  pdf_document
+vignette: >
+    %\VignetteIndexEntry{dartR_Tutorials}
+    %\VignetteEngine{knitr::rmarkdown}
+    \usepackage[utf8]{inputenc}   
+---
+
+Tutorials for beginner and developer in dartR can be found on our github pages
+
+* [Tutorials for dartR please click here http://georges.biomatix.org/dartR](http://georges.biomatix.org/dartR)

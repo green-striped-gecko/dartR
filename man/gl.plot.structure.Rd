@@ -2,66 +2,113 @@
 % Please edit documentation in R/gl.plot.structure.r
 \name{gl.plot.structure}
 \alias{gl.plot.structure}
-\title{Plots a STRUCTURE analysis using a genlight object}
+\title{Plots STRUCTURE analysis results (Q-matrix)}
 \usage{
-gl.plot.structure(sr, k, sort = NULL, CLUMPP = "./", ..., plot_theme, verbose)
+gl.plot.structure(
+  sr,
+  K = NULL,
+  met_clumpp = "greedyLargeK",
+  iter_clumpp = 100,
+  clumpak = TRUE,
+  plot_theme = NULL,
+  colors_clusters = NULL,
+  ind_name = TRUE,
+  border_ind = 0.15,
+  plot.out = TRUE,
+  save2tmp = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
-\item{sr}{structure run object from \code{\link{gl.run.structure}} [required].}
+\item{sr}{Structure run object from \code{\link{gl.run.structure}} [required].}
 
-\item{k}{the number for k the q matrix should be based on. Needs to
-be within you simulated range of k's in your sr structure run object.}
+\item{K}{The number for K of the q matrix that should be plotted. Needs to
+be within you simulated range of K's in your sr structure run object. If 
+NULL, all the K's are plotted [default NULL].}
 
-\item{sort}{how q matrix is sorted (by population, group proportion etc.)
-[default is by the population definition and group proportion from group
- 1 to k-1, meaning first sorted by group, then by proportion of group 1,
-  then group 2,.... then group k-1].}
+\item{met_clumpp}{The algorithm to use to infer the correct permutations.
+One of 'greedy' or 'greedyLargeK' or 'stephens' [default "greedyLargeK"].}
 
-\item{CLUMPP}{path to the clumpp executable file. Windows: CLUMPP.exe,
-macos and linux: CLUMPP (no exe).}
+\item{iter_clumpp}{The number of iterations to use if running either 'greedy'
+'greedyLargeK' [default 100].}
 
-\item{...}{additional parameter passed to the clumpp function within
-package strataG (\code{clumpp}).}
+\item{clumpak}{Whether use the Clumpak method (see details) [default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See details for options [default
-theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default NULL].}
+
+\item{colors_clusters}{A color palette for clusters (K) or a list with
+as many colors as there are clusters (K) [default NULL].}
+
+\item{ind_name}{Whether to plot individual names [default TRUE].}
+
+\item{border_ind}{The width of the border line between individuals 
+[default 0.25].}
+
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report [default
  NULL, unless specified using gl.set.verbosity]}
 }
 \value{
-a barplot in ggplot format
+List of Q-matrices
 }
 \description{
 This function takes a structure run object (output from
- \code{\link{gl.run.structure}}) and plots the typical strcture bar
-  plot that visiualise the q matrix of a structure run.
+ \code{\link{gl.run.structure}}) and plots the typical structure bar
+  plot that visualize the q matrix of a structure run.
 }
 \details{
 The function outputs a barplot which is the typical output of
- structure. This function needs the use of clumpp, which is an external
-  program that needs to be installed For a evanno plot use gl.evanno.
+ structure. For a Evanno plot use gl.evanno.
+ 
+ This function is based on the methods of CLUMPP and Clumpak as implemented 
+ in the R package starmie (https://github.com/sa-lee/starmie). 
+ 
+ The Clumpak method identifies sets of highly similar runs among 
+ all the replicates of the same K. The method then separates the distinct 
+ groups of runs representing distinct modes in the space of possible solutions.
+ 
+ The CLUMPP method permutes the clusters output by independent runs of 
+ clustering programs such as structure, so that they match up as closely as 
+ possible.
+ 
+ This function averages the replicates within each mode identified by the 
+ Clumpak method.
+  
+ Plots and table are saved to the temporal directory (tempdir) and can be
+ accessed with the function \code{\link{gl.print.reports}} and listed with
+ the function \code{\link{gl.list.reports}}. Note that they can be accessed
+ only in the current R session because tempdir is cleared each time that the
+  R session is closed.
+
+Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
 \dontrun{
-#CLUMPP needs to be installed to be able to run the example
 #bc <- bandicoot.gl[,1:100]
-#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = './structure.exe')
+#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = './structure')
 #ev <- gl.evanno(sr)
 #ev
-#qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
+#qmat <- gl.plot.structure(sr, K=3)
 #head(qmat)
-#gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
+#gl.map.structure(qmat, K=3, bc, scalex=1, scaley=0.5)
 }
 }
 \references{
 \itemize{
 \item Pritchard, J.K., Stephens, M., Donnelly, P. (2000) Inference of
 population structure using multilocus genotype data. Genetics 155, 945-959.
-\item Archer, F. I., Adams, P. E. and Schneiders, B. B. (2016) strataG: An R
-package for manipulating, summarizing and analysing population genetic data.
-Mol Ecol Resour. doi:10.1111/1755-0998.12559
+\item Kopelman, Naama M., et al. "Clumpak: a program for identifying 
+clustering modes and packaging population structure inferences across K." 
+Molecular ecology resources 15.5 (2015): 1179-1191.
 \item Mattias Jakobsson and Noah A. Rosenberg. 2007. CLUMPP: a cluster
 matching and permutation program for dealing with label switching and
 multimodality in analysis of population structure. Bioinformatics
@@ -70,8 +117,8 @@ multimodality in analysis of population structure. Bioinformatics
 }
 }
 \seealso{
-\code{gl.run.structure},  \code{clumpp}, \code{gl.plot.structure}
+\code{gl.run.structure}, \code{gl.plot.structure}
 }
 \author{
-Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber & Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 }

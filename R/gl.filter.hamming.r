@@ -186,12 +186,17 @@ gl.filter.hamming <- function(x,
             xlabel <- "Pre-filter P/A Hamming Distance"
         }
         p1 <-
-            ggplot(data.frame(plotvar), aes(x = plotvar)) + geom_histogram(bins = 100,
-                                                                           color = plot_colors[1],
-                                                                           fill = plot_colors[2]) + coord_cartesian(xlim = c(0,
-                                                                                                                             max)) + geom_vline(xintercept = threshold,
-                                                                                                                                                color = "red",
-                                                                                                                                                size = 1) + xlab(xlabel) + ylab("Count") + plot_theme
+            ggplot(data.frame(plotvar), aes(x = plotvar)) + 
+            geom_histogram(bins = 100,
+                           color = plot_colors[1],
+                           fill = plot_colors[2]) + 
+            coord_cartesian(xlim = c(0, max)) +
+            geom_vline(xintercept = threshold,
+                       color = "red",
+                       size = 1) + 
+            xlab(xlabel) + 
+            ylab("Count") + 
+            plot_theme
         
         # if (datatype=='SilicoDArT'){ rdepth <- x2@other$loc.metrics$AvgReadDepth } else if (datatype=='SNP'){ rdepth <-
         # x2@other$loc.metrics$rdepth }
@@ -203,12 +208,15 @@ gl.filter.hamming <- function(x,
             xlabel <- "Post-filter P/A Hamming Distance"
         }
         p2 <-
-            ggplot(data.frame(plotvar), aes(x = plotvar)) + geom_histogram(bins = 100,
-                                                                           color = plot_colors[1],
-                                                                           fill = plot_colors[2]) + coord_cartesian(xlim = c(0,
-                                                                                                                             max)) + geom_vline(xintercept = threshold,
-                                                                                                                                                color = "red",
-                                                                                                                                                size = 1) + xlab(xlabel) + ylab("Count") + plot_theme
+            ggplot(data.frame(plotvar), aes(x = plotvar)) +
+            geom_histogram(bins = 100,
+                           color = plot_colors[1],
+                           fill = plot_colors[2]) + 
+            coord_cartesian(xlim = c(0, max)) + 
+            geom_vline(xintercept = threshold,color = "red", size = 1) + 
+            xlab(xlabel) +
+            ylab("Count") + 
+            plot_theme
         
         p3 <- (p1 / p2) + plot_layout(heights = c(1, 1))
         print(p3)

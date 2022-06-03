@@ -5,13 +5,16 @@
 \title{Filters loci that are all NA across individuals and/or populations 
 with all NA across loci}
 \usage{
-gl.filter.allna(x, by.pop = FALSE, verbose = NULL)
+gl.filter.allna(x, by.pop = FALSE, recalc = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the input genlight object [required].}
 
 \item{by.pop}{If TRUE, loci that are all missing in any one population
 are deleted [default FALSE]}
+
+\item{recalc}{Recalculate the locus metadata statistics if any individuals
+are deleted in the filtering [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report

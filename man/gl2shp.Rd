@@ -33,6 +33,9 @@ when calling this function to direct output files to your working directory.}
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns a SpatVector file
+}
 \description{
 This function exports coordinates in a genlight object to a point shape file
  (including also individual meta data if available).
@@ -40,7 +43,7 @@ Coordinates are provided under x@other$latlon and assumed to be in WGS84
 coordinates, if not proj4 string is provided.
 }
 \examples{
-gl2shp(testset.gl)
+out <- gl2shp(testset.gl)
 }
 \author{
 Bernd Guber (Post to \url{https://groups.google.com/d/forum/dartr})

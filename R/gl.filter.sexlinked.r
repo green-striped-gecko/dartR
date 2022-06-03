@@ -213,8 +213,8 @@ gl.filter.sexlinked <- function(x,
         if (sum(indexxy, na.rm = T) > 0) {
             xy <- cbind(locnr = which(indexxy == TRUE), df[indexxy, ])
             # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity is NaN. these cases are removed
-            xy$fhet <- xy$F1 / (xy$F0 + xy$F1)
-            xy$mhet <- xy$M1 / (xy$M0 + xy$M1)
+            xy$fhet <- xy$F1 / (xy$F0 + xy$F1 + xy$F2)
+            xy$mhet <- xy$M1 / (xy$M0 + xy$M1 + xy$M2)
             xy <- xy[complete.cases(xy), ]
         }
         
@@ -234,8 +234,8 @@ gl.filter.sexlinked <- function(x,
         if (sum(indexzw, na.rm = T) > 0) {
             zw <- cbind(locnr = which(indexzw == TRUE), df[indexzw, ])
             # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity is NaN. these cases are removed
-            zw$fhet <- zw$F1 / (zw$F0 + zw$F1)
-            zw$mhet <- zw$M1 / (zw$M0 + zw$M1)
+            zw$fhet <- zw$F1 / (zw$F0 + zw$F1 + zw$F2)
+            zw$mhet <- zw$M1 / (zw$M0 + zw$M1 + zw$M2)
             zw <- zw[complete.cases(zw), ]
         }
         
@@ -276,18 +276,12 @@ gl.filter.sexlinked <- function(x,
                     )
                 )
                 cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat(
-                    "     - F0 is the number of homozygous loci for the reference allele in females\n"
-                )
+                cat("     - F0 is the number of homozygous loci for the reference allele in females\n")
                 cat("     - F1 is the number of heterozygous loci in females\n")
-                cat(
-                    "     - F2 is the number of homozygous loci for the alternative allele in females\n"
-                )
+                cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
                 cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
                 cat("     - M1 is the number of heterozygous loci in males\n")
-                cat(
-                    "     - M2 is the number of homozygous loci for the alternative allele in males\n"
-                )
+                cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
                 cat("     - fhet is heterozygosity in females\n")
                 cat("     - mhet is heterozygosity in males\n\n")
                 print(zw)
@@ -323,18 +317,12 @@ gl.filter.sexlinked <- function(x,
                     )
                 )
                 cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat(
-                    "     - F0 is the number of homozygous loci for the reference allele in females\n"
-                )
+                cat("     - F0 is the number of homozygous loci for the reference allele in females\n")
                 cat("     - F1 is the number of heterozygous loci in females\n")
-                cat(
-                    "     - F2 is the number of homozygous loci for the alternative allele in females\n"
-                )
+                cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
                 cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
                 cat("     - M1 is the number of heterozygous loci in males\n")
-                cat(
-                    "     - M2 is the number of homozygous loci for the alternative allele in males\n"
-                )
+                cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
                 cat("     - fhet is heterozygosity in females\n")
                 cat("     - mhet is heterozygosity in males\n")
                 print(xy)

@@ -96,7 +96,7 @@ gl.plot.network <- function(D,
     }
     
     if (!is.null(x)) {
-        if (class(x) != "genlight") {
+        if (!is(x, "genlight")) {
             stop(
                 error(
                     "Fatal Error: if specified, genlight object required for gl.dist.network!\n"

@@ -36,8 +36,8 @@ silicodart marker can be present in either of the sexes and still be regarded
 as a sex-linked marker [default 0.1].}
 
 \item{plot.out}{Creates a plot that shows the heterozygosity of males and
-females at each loci.
-be regarded as consistent with a sex specific marker [default TRUE].}
+females at each loci and shaded area in which loci can be regarded as 
+consistent with a sex specific marker [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}

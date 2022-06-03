@@ -182,12 +182,16 @@ gl.filter.callrate <- function(x,
             xlabel <- "Pre-filter P/A Call Rate [Loci]"
         }
         p1 <-
-            ggplot(data.frame(callrate), aes(x = callrate)) + geom_histogram(bins = bins,
-                                                                             color = plot_colors[1],
-                                                                             fill = plot_colors[2]) +
-            coord_cartesian(xlim = c(min, 1)) + geom_vline(xintercept = threshold,
-                                                           color = "red",
-                                                           size = 1) + xlab(xlabel) + ylab("Count") +
+            ggplot(data.frame(callrate), aes(x = callrate)) +
+            geom_histogram(bins = bins,
+                           color = plot_colors[1],
+                           fill = plot_colors[2]) +
+            coord_cartesian(xlim = c(min, 1)) + 
+            geom_vline(xintercept = threshold,
+                       color = "red",
+                       size = 1) + 
+            xlab(xlabel) + 
+            ylab("Count") +
             plot_theme
         
         callrate <- x2@other$loc.metrics$CallRate
@@ -199,12 +203,16 @@ gl.filter.callrate <- function(x,
             xlabel <- "Post-filter P/A Call Rate [Loci]"
         }
         p2 <-
-            ggplot(data.frame(callrate), aes(x = callrate)) + geom_histogram(bins = bins,
-                                                                             color = plot_colors[1],
-                                                                             fill = plot_colors[2]) +
-            coord_cartesian(xlim = c(min, 1)) + geom_vline(xintercept = threshold,
-                                                           color = "red",
-                                                           size = 1) + xlab(xlabel) + ylab("Count") +
+            ggplot(data.frame(callrate), aes(x = callrate)) + 
+            geom_histogram(bins = bins,
+                           color = plot_colors[1],
+                           fill = plot_colors[2]) +
+            coord_cartesian(xlim = c(min, 1)) +
+            geom_vline(xintercept = threshold,
+                       color = "red",
+                       size = 1) +
+            xlab(xlabel) +
+            ylab("Count") +
             plot_theme
         
         if (mono.rm) {
@@ -225,6 +233,7 @@ gl.filter.callrate <- function(x,
             x2@other$loc.metrics.flags$FreqHets <- FALSE
             x2@other$loc.metrics.flags$FreqHomRef <- FALSE
             x2@other$loc.metrics.flags$FreqHomSnp <- FALSE
+            x2@other$loc.metrics.flags$allna <- FALSE
         }
     }
     
@@ -263,11 +272,12 @@ gl.filter.callrate <- function(x,
             ))
         }
         if (!recursive) {
-            # Extract those individuals with a call rate greater or equal to the threshold
+            # Extract those individuals with a call rate greater or equal to the
+            # threshold
             x2 <- x[ind.call.rate >= threshold,]
             
-            # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for locus
-            # filtering
+            # for some reason that eludes me, this also (appropriately) filters 
+            # the latlons and the covariates, but see above for locus filtering
             
             # Report individuals that are excluded on call rate
             if (any(ind.call.rate <= threshold)) {
@@ -292,34 +302,27 @@ gl.filter.callrate <- function(x,
                     }
                     if (recalc) {
                         # Recalculate all metrics, including Call Rate (flags reset in utils scripts)
-                        x2 <-
-                            gl.recalc.metrics(x2, verbose = verbose)
+                        x2 <- gl.recalc.metrics(x2, verbose = verbose)
                     } else {
                         # Reset the flags as FALSE for all metrics except Call Rate (dealt with elsewhere)
                         x2@other$loc.metrics.flags$AvgPIC <- FALSE
-                        x2@other$loc.metrics.flags$OneRatioRef <-
-                            FALSE
-                        x2@other$loc.metrics.flags$OneRatioSnp <-
-                            FALSE
+                        x2@other$loc.metrics.flags$OneRatioRef <- FALSE
+                        x2@other$loc.metrics.flags$OneRatioSnp <- FALSE
                         x2@other$loc.metrics.flags$PICRef <- FALSE
                         x2@other$loc.metrics.flags$PICSnp <- FALSE
                         x2@other$loc.metrics.flags$maf <- FALSE
                         x2@other$loc.metrics.flags$FreqHets <- FALSE
-                        x2@other$loc.metrics.flags$FreqHomRef <-
-                            FALSE
-                        x2@other$loc.metrics.flags$FreqHomSnp <-
-                            FALSE
+                        x2@other$loc.metrics.flags$FreqHomRef <- FALSE
+                        x2@other$loc.metrics.flags$FreqHomSnp <- FALSE
+                        x2@other$loc.metrics.flags$allna <- FALSE
                     }
                 }
             }
             # Recalculate the callrate
-            ind.call.rate <-
-                1 - rowSums(is.na(as.matrix(x2))) / nLoc(x2)
+            ind.call.rate <- 1 - rowSums(is.na(as.matrix(x2))) / nLoc(x2)
             # cat(min(ind.call.rate),'\n')
-            
         } else {
             # If recursive
-            
             # Recursively remove individuals
             if (verbose >= 2) {
                 cat(
@@ -334,8 +337,7 @@ gl.filter.callrate <- function(x,
             }
             for (i in 1:10) {
                 # Recalculate the callrate
-                ind.call.rate <-
-                    1 - rowSums(is.na(as.matrix(x))) / nLoc(x)
+                ind.call.rate <- 1 - rowSums(is.na(as.matrix(x))) / nLoc(x)
                 # Extract those individuals with a call rate greater or equal to the threshold
                 x2 <- x[ind.call.rate >= threshold,]
                 
@@ -393,23 +395,16 @@ gl.filter.callrate <- function(x,
                                 gl.recalc.metrics(x2, verbose = verbose)
                         } else {
                             # Reset the flags as FALSE for all metrics except Call Rate (dealt with elsewhere)
-                            x2@other$loc.metrics.flags$AvgPIC <-
-                                FALSE
-                            x2@other$loc.metrics.flags$OneRatioRef <-
-                                FALSE
-                            x2@other$loc.metrics.flags$OneRatioSnp <-
-                                FALSE
-                            x2@other$loc.metrics.flags$PICRef <-
-                                FALSE
-                            x2@other$loc.metrics.flags$PICSnp <-
-                                FALSE
+                            x2@other$loc.metrics.flags$AvgPIC <- FALSE
+                            x2@other$loc.metrics.flags$OneRatioRef <- FALSE
+                            x2@other$loc.metrics.flags$OneRatioSnp <- FALSE
+                            x2@other$loc.metrics.flags$PICRef <- FALSE
+                            x2@other$loc.metrics.flags$PICSnp <- FALSE
                             x2@other$loc.metrics.flags$maf <- FALSE
-                            x2@other$loc.metrics.flags$FreqHets <-
-                                FALSE
-                            x2@other$loc.metrics.flags$FreqHomRef <-
-                                FALSE
-                            x2@other$loc.metrics.flags$FreqHomSnp <-
-                                FALSE
+                            x2@other$loc.metrics.flags$FreqHets <- FALSE
+                            x2@other$loc.metrics.flags$FreqHomRef <- FALSE
+                            x2@other$loc.metrics.flags$FreqHomSnp <- FALSE
+                            x2@other$loc.metrics.flags$allna <- FALSE
                         }
                     }
                 }
@@ -427,12 +422,15 @@ gl.filter.callrate <- function(x,
             xlabel <- "Pre-filter P/A Call Rate [Individuals]"
         }
         p1 <-
-            ggplot(data.frame(hold2), aes(x = hold2)) + geom_histogram(bins = bins,
-                                                                       color = plot_colors[1],
-                                                                       fill = plot_colors[2]) + coord_cartesian(xlim = c(min,
-                                                                                                                         1)) + geom_vline(xintercept = threshold,
-                                                                                                                                          color = "red",
-                                                                                                                                          size = 1) + xlab(xlabel) + ylab("Count") + plot_theme
+            ggplot(data.frame(hold2), aes(x = hold2)) + 
+            geom_histogram(bins = bins,
+                           color = plot_colors[1],
+                           fill = plot_colors[2]) +
+            coord_cartesian(xlim = c(min,1)) + 
+            geom_vline(xintercept = threshold, color = "red", size = 1) + 
+            xlab(xlabel) + 
+            ylab("Count") + 
+            plot_theme
         
         min <- min(ind.call.rate, threshold, na.rm = TRUE)
         min <- trunc(min * 100) / 100
@@ -442,12 +440,14 @@ gl.filter.callrate <- function(x,
             xlabel <- "Post-filter P/A Call Rate [Individuals]"
         }
         p2 <-
-            ggplot(data.frame(ind.call.rate), aes(x = ind.call.rate)) + geom_histogram(bins = bins,
-                                                                                       color = plot_colors[1],
-                                                                                       fill = plot_colors[2]) +
-            coord_cartesian(xlim = c(min, 1)) + geom_vline(xintercept = threshold,
-                                                           color = "red",
-                                                           size = 1) + xlab(xlabel) + ylab("Count") +
+            ggplot(data.frame(ind.call.rate), aes(x = ind.call.rate)) + 
+            geom_histogram(bins = bins, 
+                           color = plot_colors[1], 
+                           fill = plot_colors[2]) +
+            coord_cartesian(xlim = c(min, 1)) + 
+            geom_vline(xintercept = threshold,color = "red", size = 1) + 
+            xlab(xlabel) + 
+            ylab("Count") +
             plot_theme
     }
     
@@ -493,12 +493,15 @@ gl.filter.callrate <- function(x,
             xlabel <- "Pre-filter P/A Call Rate [by population]"
         }
         p1 <-
-            ggplot(data.frame(tmp), aes(x = tmp)) + geom_histogram(bins = bins,
-                                                                   color = plot_colors[1],
-                                                                   fill = plot_colors[2]) + coord_cartesian(xlim = c(min,
-                                                                                                                     1)) + geom_vline(xintercept = threshold,
-                                                                                                                                      color = "red",
-                                                                                                                                      size = 1) + xlab(xlabel) + ylab("Count") + plot_theme
+            ggplot(data.frame(tmp), aes(x = tmp)) + 
+            geom_histogram(bins = bins,
+                           color = plot_colors[1],
+                           fill = plot_colors[2]) + 
+            coord_cartesian(xlim = c(min, 1)) + 
+            geom_vline(xintercept = threshold, color = "red", size = 1) + 
+            xlab(xlabel) + 
+            ylab("Count") + 
+            plot_theme
         
         tmp <- x@other$loc.metrics$CallRate
         min <- min(tmp, threshold, na.rm = TRUE)
@@ -509,12 +512,15 @@ gl.filter.callrate <- function(x,
             xlabel <- "Post-filter P/A Call Rate [by population]"
         }
         p2 <-
-            ggplot(data.frame(tmp), aes(x = tmp)) + geom_histogram(bins = bins,
-                                                                   color = plot_colors[1],
-                                                                   fill = plot_colors[2]) + coord_cartesian(xlim = c(min,
-                                                                                                                     1)) + geom_vline(xintercept = threshold,
-                                                                                                                                      color = "red",
-                                                                                                                                      size = 1) + xlab(xlabel) + ylab("Count") + plot_theme
+            ggplot(data.frame(tmp), aes(x = tmp)) + 
+            geom_histogram(bins = bins,
+                           color = plot_colors[1],
+                           fill = plot_colors[2]) + 
+            coord_cartesian(xlim = c(min, 1)) +
+            geom_vline(xintercept = threshold,color = "red", size = 1) + 
+            xlab(xlabel) + 
+            ylab("Count") + 
+            plot_theme
         
         x2 <- x
         if (mono.rm) {
@@ -535,6 +541,7 @@ gl.filter.callrate <- function(x,
             x2@other$loc.metrics.flags$FreqHets <- FALSE
             x2@other$loc.metrics.flags$FreqHomRef <- FALSE
             x2@other$loc.metrics.flags$FreqHomSnp <- FALSE
+            x2@other$loc.metrics.flags$allna <- FALSE
         }
     }
     

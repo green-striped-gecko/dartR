@@ -15,6 +15,7 @@
 #'  [required].
 #' @param x Name of the genlight object containing the coordinates in the
 #'  \code{\@other$latlon} slot to calculate the population centers [required].
+#' @param K The number for K to be plotted [required].
 #' @param provider Provider	passed to leaflet. Check \link[leaflet]{providers}
 #' for a list of possible backgrounds [default "Esri.NatGeoWorldMap"].
 #' @param scalex Scaling factor to determine the size of the bars in x direction 
@@ -43,18 +44,17 @@
 #'  population. This can be used to create your own map.
 #' @examples
 #' \dontrun{
-#' #CLUMPP needs to be installed to be able to run the example
 #' #bc <- bandicoot.gl[,1:100]
 #' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = './structure.exe')
 #' #ev <- gl.evanno(sr)
 #' #ev
-#' #qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
-#' #head(qmat)
-#' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
+#' #qmat <- gl.plot.structure(sr, k=2:4)#' #head(qmat)
+#' #gl.map.structure(qmat, bc,K=3)
+#' #gl.map.structure(qmat, bc,K=4)
 #' #move population 4 (out of 5) 0.5 degrees to the right and populations 1
-#' #0.3 degree to the top of the map.
+#' #0.3 degree to the north of the map.
 #' #mp <- data.frame(lon=c(0,0,0,0.5,0), lat=c(-0.3,0,0,0,0))
-#' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5, movepops=mp)
+#' #gl.map.structure(qmat, bc,K=4, movepops=mp)
 #' }
 #' @export
 #' @seealso \code{\link{gl.run.structure}},  \code{clumpp},
@@ -78,13 +78,29 @@
 
 gl.map.structure <- function(qmat,
                              x,
+                             K, 
                              provider = "Esri.NatGeoWorldMap",
                              scalex = 1,
                              scaley = 1,
                              movepops = NULL,
                              pop.labels = TRUE,
                              pop.labels.cex = 12) {
-    ff <- qmat[, 4:(ncol(qmat))]
+    
+   
+    eq.k <- sapply(qmat, function(x) {
+       ncol(x) - 4 == K
+    })
+    
+    if (sum(eq.k) == 0) {
+        stop(error(paste(
+            "No entries for K =", K, "found in 'qmat'.\n"
+        )))
+    }
+    
+    qmat <- as.data.frame(qmat[eq.k][[1]])
+    
+    # ff <- qmat[, 4:(ncol(qmat))]
+    ff <- qmat[,which(grepl("cluster", colnames(qmat)))]
     
     df <- x@other$latlon
     centers <-
@@ -124,7 +140,9 @@ gl.map.structure <- function(qmat,
     zz <- do.call(order, unname(as.list(ll)))
     bb <- qmat[zz, ]
     bb$orig.pop <- factor(bb$orig.pop)
-    ff <- bb[, 4:(ncol(bb))]
+    # ff <- bb[, 4:(ncol(bb))]
+    
+    ff <- bb[,which(grepl("cluster", colnames(bb)))]
     
     out <- list()
     m1 <- leaflet::leaflet() %>%

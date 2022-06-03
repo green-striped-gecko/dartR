@@ -30,6 +30,8 @@
 utils.structure.run <- 
   function (g, k.range = NULL, num.k.rep = 1, label = NULL, delete.files = TRUE, exec = "structure", ...) 
   {
+
+    
 ################################################################
     .structureParseQmat <-    function (q.mat.txt, pops) 
     {
@@ -58,7 +60,7 @@ utils.structure.run <-
 ################################################################
     .alleles2integer <- function (g, min.val = 0) 
     {
-      g@data %>% dplyr::group_by(.data$locus) %>% dplyr::mutate(allele = min.val - 
+      g$data %>% dplyr::group_by(.data$locus) %>% dplyr::mutate(allele = min.val - 
                                                                   1 + as.integer(factor(.data$allele))) %>% dplyr::ungroup()
     }    
 ################################################################
@@ -68,11 +70,11 @@ utils.structure.run <-
     {
       x <- if (alleles2integer) 
         .alleles2integer(g, ...)
-      else g@data
+      else g$data
       if (!is.null(na.val)) 
         x$allele[is.na(x$allele)] <- na.val
-      x %>% dplyr::arrange(.data$id, .data$locus) %>% dplyr::mutate(a = rep(1:g@ploidy, 
-                                                                            dplyr::n()/g@ploidy)) %>% tidyr::spread(.data$locus, 
+      x %>% dplyr::arrange(.data$id, .data$locus) %>% dplyr::mutate(a = rep(1:g$ploidy, 
+                                                                            dplyr::n()/g$ploidy)) %>% tidyr::spread(.data$locus, 
                                                                                                                         .data$allele) %>% dplyr::rename(allele = "a") %>% 
         dplyr::select(.data$id, .data$stratum, .data$allele, 
                       dplyr::everything())
@@ -81,7 +83,7 @@ utils.structure.run <-
 ####################################################    
     .getFileLabel <- function (g, label = NULL) 
     {
-      desc <- g@description
+      desc <- g$description
       label <- if (!is.null(label)) {
         label
       }
@@ -92,7 +94,7 @@ utils.structure.run <-
       gsub("[[:punct:]]", ".", label)
     }
 ####################################################
-    structureWrite <-   function (g, label = NULL, maxpops = 1:(dplyr::n_distinct(g@data$stratum)), burnin = 1000, 
+    structureWrite <-   function (g, label = NULL, maxpops = 1:(dplyr::n_distinct(g$data$stratum)), burnin = 1000, 
               numreps = 1000, noadmix = TRUE, freqscorr = FALSE, randomize = TRUE, 
               seed = 0, pop.prior = NULL, locpriorinit = 1, maxlocprior = 20, 
               gensback = 2, migrprior = 0.05, pfrompopflagonly = TRUE, 
@@ -106,15 +108,15 @@ utils.structure.run <-
         }
       }
       if (is.null(popflag)) 
-        popflag <- rep(1, length(unique(g@data$id)))
-      if (length(popflag) != length(unique(g@data$id))) {
+        popflag <- rep(1, length(unique(g$data$id)))
+      if (length(popflag) != length(unique(g$data$id))) {
         stop("'popflag' should be the same length as the number of individuals in 'g'.")
       }
       if (!all(popflag %in% c(0, 1))) {
         stop("all values in 'popflag' must be 0 or 1.")
       }
       if (is.null(names(popflag))) 
-        names(popflag) <- unique(g@data$id)
+        names(popflag) <- unique(g$data$id)
       in.file <- ifelse(is.null(label), "data", paste(label, 
                                                       "data", sep = "_"))
       out.file <- ifelse(is.null(label), "out", paste(label, 
@@ -129,7 +131,7 @@ utils.structure.run <-
                                                        popflag = popflag[.data$id]) %>% dplyr::select(.data$id, 
                                                                                                       .data$stratum, .data$popflag, dplyr::everything()) %>% 
         as.matrix()
-      write(paste(  sort(unique(g@data[["locus"]])), collapse = " "), file = in.file)
+      write(paste(  sort(unique(g$data[["locus"]])), collapse = " "), file = in.file)
       for (i in 1:nrow(mat)) {
         write(paste(mat[i, ], collapse = " "), file = in.file, 
               append = TRUE)
@@ -138,7 +140,7 @@ utils.structure.run <-
                        paste("BURNIN", as.integer(burnin)), paste("NUMREPS", 
                                                                   as.integer(numreps)), paste("INFILE", in.file), 
                        paste("OUTFILE", out.file), paste("NUMINDS", 
-                                                         length(unique(g@data$id))), paste("NUMLOCI", length(unique(g@data$locus))), 
+                                                         length(unique(g$data$id))), paste("NUMLOCI", length(unique(g$data$locus))), 
                        "MISSING -9", "LABEL 1", "POPDATA 1", 
                        "POPFLAG 1", "LOCDATA 0", "PHENOTYPE 0", 
                        "EXTRACOLS 0", "MARKERNAMES 1")
@@ -173,7 +175,7 @@ utils.structure.run <-
       extra.params <- paste("#define", extra.params)
       write(extra.params, file = extra.file)
       invisible(list(files = c(data = in.file, mainparams = main.file, 
-                               extraparams = extra.file, out = out.file), pops = sort(unique(g@data$stratum))))
+                               extraparams = extra.file, out = out.file), pops = sort(unique(g$data$stratum))))
     }
 ###########################################################
     structureRead <-    function (file, pops = NULL) 
@@ -271,9 +273,10 @@ utils.structure.run <-
 
 ###########################################################
     
-    label <- .getFileLabel(g, label)
+    label <- g$description
     label <- paste(label, "structureRun", sep = ".")
     label <- gsub("[[:space:]]", ".", label)
+    label <- gsub(":", ".", label)
     unlink(label, recursive = TRUE, force = TRUE)
     dir.create(label)
     if (!utils::file_test("-d", label)) {
@@ -282,7 +285,7 @@ utils.structure.run <-
     }
     label <- file.path(label, label)
     if (is.null(k.range)) 
-      k.range <- 1:(dplyr::n_distinct(g@data$stratum))
+      k.range <- 1:(dplyr::n_distinct(g$data$stratum))
     rep.df <- expand.grid(rep = 1:num.k.rep, k = k.range)
     rownames(rep.df) <- paste(label, ".k", rep.df$k, ".r", 
                               rep.df$rep, sep = "")
