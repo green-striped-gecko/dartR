@@ -15,6 +15,7 @@
 #'  [required].
 #' @param x Name of the genlight object containing the coordinates in the
 #'  \code{\@other$latlon} slot to calculate the population centers [required].
+#' @param K The number for K to be plotted [required].
 #' @param provider Provider	passed to leaflet. Check \link[leaflet]{providers}
 #' for a list of possible backgrounds [default "Esri.NatGeoWorldMap"].
 #' @param scalex Scaling factor to determine the size of the bars in x direction 
@@ -78,13 +79,29 @@
 
 gl.map.structure <- function(qmat,
                              x,
+                             K, 
                              provider = "Esri.NatGeoWorldMap",
                              scalex = 1,
                              scaley = 1,
                              movepops = NULL,
                              pop.labels = TRUE,
                              pop.labels.cex = 12) {
-    ff <- qmat[, 4:(ncol(qmat))]
+    
+   
+    eq.k <- sapply(qmat, function(x) {
+       ncol(x) - 4 == K
+    })
+    
+    if (sum(eq.k) == 0) {
+        stop(error(paste(
+            "No entries for K =", K, "found in 'qmat'.\n"
+        )))
+    }
+    
+    qmat <- as.data.frame(qmat[eq.k][[1]])
+    
+    # ff <- qmat[, 4:(ncol(qmat))]
+    ff <- qmat[,which(grepl("cluster", colnames(qmat)))]
     
     df <- x@other$latlon
     centers <-
@@ -124,7 +141,9 @@ gl.map.structure <- function(qmat,
     zz <- do.call(order, unname(as.list(ll)))
     bb <- qmat[zz, ]
     bb$orig.pop <- factor(bb$orig.pop)
-    ff <- bb[, 4:(ncol(bb))]
+    # ff <- bb[, 4:(ncol(bb))]
+    
+    ff <- bb[,which(grepl("cluster", colnames(bb)))]
     
     out <- list()
     m1 <- leaflet::leaflet() %>%

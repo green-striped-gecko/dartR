@@ -2,29 +2,49 @@
 % Please edit documentation in R/gl.plot.structure.r
 \name{gl.plot.structure}
 \alias{gl.plot.structure}
+\alias{gl.plot.structure_2}
 \title{Plots a STRUCTURE analysis using a genlight object}
 \usage{
-gl.plot.structure(sr, k, sort = NULL, CLUMPP = "./", ..., plot_theme, verbose)
+gl.plot.structure_2(
+  sr,
+  K = NULL,
+  met_clumpp = "greedyLargeK",
+  iter_clumpp = 100,
+  clumpak = TRUE,
+  plot_theme = NULL,
+  colors_clusters = NULL,
+  ind_name = TRUE,
+  border_ind = 0.15,
+  plot.out = TRUE,
+  verbose = NULL
+)
 }
 \arguments{
-\item{sr}{structure run object from \code{\link{gl.run.structure}} [required].}
+\item{sr}{Structure run object from \code{\link{gl.run.structure}} [required].}
 
-\item{k}{the number for k the q matrix should be based on. Needs to
-be within you simulated range of k's in your sr structure run object.}
+\item{K}{The number for K the q matrix should be based on. Needs to
+be within you simulated range of K's in your sr structure run object.}
 
-\item{sort}{how q matrix is sorted (by population, group proportion etc.)
-[default is by the population definition and group proportion from group
- 1 to k-1, meaning first sorted by group, then by proportion of group 1,
-  then group 2,.... then group k-1].}
+\item{met_clumpp}{The algorithm to use to infer the correct permutations.
+One of 'greedy' or 'greedyLargeK' or 'stephens' [default "greedy"].}
 
-\item{CLUMPP}{path to the clumpp executable file. Windows: CLUMPP.exe,
-macos and linux: CLUMPP (no exe).}
+\item{iter_clumpp}{The number of iterations to use if running either 'greedy'
+'greedyLargeK' [default 100].}
 
-\item{...}{additional parameter passed to the clumpp function within
-package strataG (\code{clumpp}).}
+\item{clumpak}{[default TRUE].}
 
-\item{plot_theme}{Theme for the plot. See details for options [default
-theme_dartR()].}
+\item{plot_theme}{Theme for the plot. See Details for options
+[default NULL].}
+
+\item{colors_clusters}{A color palette for clusters (K) or a list with
+as many colors as there are clusters (K)
+[default NULL].}
+
+\item{ind_name}{Whether to plot individual names [default TRUE].}
+
+\item{border_ind}{The width of the border line between individuals [default 0.25].}
+
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report [default
@@ -47,10 +67,11 @@ The function outputs a barplot which is the typical output of
 \dontrun{
 #CLUMPP needs to be installed to be able to run the example
 #bc <- bandicoot.gl[,1:100]
-#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = './structure.exe')
+#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3,
+exec = './structure.exe')
 #ev <- gl.evanno(sr)
 #ev
-#qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
+#qmat <- gl.plot.structure(sr, K=3, CLUMPP='d:/structure/')
 #head(qmat)
 #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 }

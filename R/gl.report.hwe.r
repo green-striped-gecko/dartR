@@ -125,8 +125,9 @@
 #' For these plots to work it is necessary to install the package ggtern.
 #' @return A dataframe containing loci, counts of reference SNP homozygotes,
 #' heterozygotes and alternate SNP homozygotes; probability of departure from
-#' H-W proportions, and per locus significance with and without correction for
-#' multiple comparisons.
+#' H-W proportions, per locus significance with and without correction for
+#' multiple comparisons and the number of population where the same locus is 
+#' significantly out of hwe.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
@@ -598,7 +599,10 @@ gl.report.hwe <- function(x,
         
     }
     # removing column with color name
-    df <- result[,-11]
+    df <- data.table(result[,-11])
+    npop <- Locus <- NULL
+    df[, npop := .N, by=Locus]
+    
     #### Report the results
     if(sig_only) {
         if (multi_comp == F) {
@@ -609,6 +613,7 @@ gl.report.hwe <- function(x,
         }
     }
     df <- df[order(df$Locus),]
+    
     
     
     # SAVE INTERMEDIATES TO TEMPDIR

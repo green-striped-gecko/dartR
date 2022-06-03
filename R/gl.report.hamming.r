@@ -17,7 +17,7 @@
 #' @param threshold Minimum acceptable base pair difference for display on the
 #' boxplot and histogram [default 3].
 #' @param taglength Typical length of the sequence tags [default 69].
-#' @param plot.out specify if plot is to be produced [default TRUE].
+#' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme Theme for the plot. See Details for options
 #' [default theme_dartR()].
 #' @param plot_colors List of two color names for the borders and fill of the

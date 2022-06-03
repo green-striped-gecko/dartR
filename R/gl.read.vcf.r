@@ -32,7 +32,12 @@ gl.read.vcf <- function(vcffile,
         stop(error("To use this function you need to install package: vcfR."))
     } else {
         vcf <- vcfR::read.vcfR(file = vcffile, verbose = verbose)
+        myRef <- vcfR::getREF(vcf)
+        myAlt <- vcfR::getALT(vcf)
+        loc.all <- paste0(myRef,"/",myAlt)
         x <- vcfR::vcfR2genlight(vcf)
+        x@loc.all <- loc.all
+        
         ploidy(x) <- 2
         x <- gl.compliance.check(x)
         

@@ -41,11 +41,13 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # SNP data
-#'   gl.report.callrate(testset.gl)
-#'   gl.report.callrate(testset.gl,method='ind')
+#'   test.gl <- testset.gl[1:20,]
+#'   gl.report.callrate(test.gl)
+#'   gl.report.callrate(test.gl,method='ind')
 #' # Tag P/A data
-#'   gl.report.callrate(testset.gs)
-#'   gl.report.callrate(testset.gs,method='ind')
+#'   test.gs <- testset.gs[1:20,]
+#'   gl.report.callrate(test.gs)
+#'   gl.report.callrate(test.gs,method='ind')
 #' @seealso \code{\link{gl.filter.callrate}}
 #' @family filters and filter reports
 #' @import patchwork

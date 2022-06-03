@@ -84,6 +84,15 @@ two_colors <- c("#3B9AB2", "#78B7C5")
 two_colors_contrast <- c("deeppink", "chartreuse3")
 three_colors <- c("#3B9AB2", "deeppink", "lemonchiffon")
 four_colors <- c("lemonchiffon", "deeppink", "dodgerblue", "chartreuse3")
+# taken from package pals palette polychrome
+structure_colors <- cols <-  c( "#E4E1E3", "#F6222E", "#FE00FA", "#16FF32", 
+                               "#3283FE", "#FEAF16", "#B00068", "#1CFFCE", "#90AD1C", 
+                               "#2ED9FF", "#DEA0FD", "#AA0DFE", "#F8A19F", "#325A9B", 
+                               "#C4451C", "#1C8356", "#85660D", "#B10DA1", "#FBE426", 
+                               "#1CBE4F", "#FA0087", "#FC1CBF", "#F7E1A0", "#C075A6", 
+                               "#782AB6", "#AAF400", "#BDCDFF", "#822E1C", "#B5EFB5", 
+                               "#7ED7D1", "#1C7F93", "#D85FF7", "#683B79", "#66B0FF", 
+                               "#3B00FB")
 
 # SET THEME FOR PLOTS
 #' dartR theme

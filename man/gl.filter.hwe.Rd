@@ -8,6 +8,7 @@
 gl.filter.hwe(
   x,
   subset = "each",
+  n.pop.threshold = 1,
   method_sig = "Exact",
   multi_comp = FALSE,
   multi_comp_method = "BY",
@@ -23,6 +24,9 @@ gl.filter.hwe(
 
 \item{subset}{Way to group individuals to perform H-W tests. Either a vector
 with population names, 'each', 'all' (see details) [default 'each'].}
+
+\item{n.pop.threshold}{The minimum number of populations where the same locus 
+has to be out  of hwe to be removed [default 1]}
 
 \item{method_sig}{Method for determining statistical significance: 'ChiSquare'
 or 'Exact' [default 'Exact'].}
@@ -132,6 +136,11 @@ error rate, so these methods are more powerful than the others, especially
 when number of tests is large.
 The number of tests on which the adjustment for multiple comparisons is
 the number of populations times the number of loci.
+
+\bold{From v2.1} \code{gl.filter.hwe} takes the argument \code{n.pop.threshold}.
+if \code{n.pop.threshold > 1} loci will be removed only if they are concurrently 
+significant (after adjustment if applied) out of hwe in >= 
+\code{n.pop.threshold > 1}.
 }
 \examples{
 result <- gl.filter.hwe(x = bandicoot.gl)
@@ -168,7 +177,7 @@ Other filters/filter reports:
 \code{\link{gl.report.hwe}()}
 }
 \author{
-Custodian: Luis Minjangos -- Post to
+Custodian: Luis Mijangos -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
 \concept{filters/filter reports}
