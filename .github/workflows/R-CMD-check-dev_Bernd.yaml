@@ -59,11 +59,11 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-      - name:Install macos dependiencies
-        if: runner.os =='macOS'
+      - name: Install macos dependiencies
+        if: runner.os == 'macOS'
         run: |
           install.packages("rgdal", type="binary")
-          shell: Rscript {0}
+        shell: Rscript {0}
           
       - name: Install dependencies
         run: |
