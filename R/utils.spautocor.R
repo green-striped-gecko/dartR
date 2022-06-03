@@ -51,7 +51,7 @@
 #' @export
 
 
-utils.spautocor <- function(GD, GGD, permutation=FALSE, bootstrap=FALSE, bins=10) {
+utils.spautocor <- function(GD, GGD, permutation=FALSE, bootstrap=FALSE, bins=10, reps) {
   
   gd <- GD
   ed <- GGD
@@ -89,9 +89,19 @@ utils.spautocor <- function(GD, GGD, permutation=FALSE, bootstrap=FALSE, bins=10
       index <- which(ed<steps[d] & ed >=steps[d-1], arr.ind=TRUE)
     }
     
+    N <- length(index)/2
+    distance <- steps[d]
+    
     if (bootstrap==TRUE) {
-      row.sample <- sample(nrow(index), replace = TRUE)
-      index <- index[row.sample, ]
+      if(reps > choose(N + N -1, N)) { # The number of possible combination with replacement are C(n+k-1, k)
+        return(data.frame(Bin=distance, N=N, r.uc=NA))
+      } else {
+        if(nrow(index) > 1) {
+        row.sample <- sample(nrow(index), replace = TRUE)
+        index <- index[row.sample, ] 
+      }
+      }
+      
     }
     
     cx <- sum(cd[index])
@@ -99,8 +109,8 @@ utils.spautocor <- function(GD, GGD, permutation=FALSE, bootstrap=FALSE, bins=10
     cxjj<-sum(diag(cd)[index[,2]])
     r <-  2 * cx /(cxii+cxjj)
     
-    distance <- steps[d]
-    N <- length(index)/2
+    
+    
     return(data.frame(Bin=distance, N=N, r.uc=r))
   }
   l.res <- lapply(2:length(steps), compute.r, steps=steps, ed=ed, cd=cd, 
