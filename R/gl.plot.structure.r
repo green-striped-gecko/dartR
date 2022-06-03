@@ -1,4 +1,4 @@
-#' @name gl.plot.structure_2
+#' @name gl.plot.structure
 #'
 #' @title Plots a STRUCTURE analysis using a genlight object
 #'
