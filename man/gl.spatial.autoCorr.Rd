@@ -12,7 +12,8 @@ gl.spatial.autoCorr(
   permutation = FALSE,
   bootstrap = FALSE,
   plot_theme = theme_classic(),
-  save2tmp = FALSE,
+  outpath = tempdir(),
+  out_file_rootname = "autoCorr",
   verbose = NULL
 )
 }
@@ -34,6 +35,10 @@ no spatial structure should be carried out}
 
 \item{bootstrap}{Whether bootstrap calculations to compute the 95% confidence intervals 
 around r should be carried out}
+
+\item{outpath}{The path where to save the output}
+
+\item{out_file_rootname}{The name of the root of the output file}
 }
 \value{
 Returns a data frame with the following columns:
@@ -76,14 +81,21 @@ Peakall et al 2003.
 If \code{bins} is of length = 1 it is interpreted as the number of (even) 
 bins to use. In this case the starting point is always the minimum 
 value in the distance matrix, and the last is the maximum. If it is a numeric
-vector, it is interpreted as the braking points. In this case, the first has 
-to be the lowest value, and the last has to be the highest. The number of 
+vector of length>1, it is interpreted as the breaking points. In this case, 
+the first has to be the lowest value, and the last has to be the highest. 
+There are no internal checks for this and it is user responsibility to ensure that 
+distance classes are properly set up. If that is not the case, data that fall 
+outside the range provided will be dropped. The number of 
 bins will be  \code{length(bins) - 1}.
 
 The permutation constructs the 95% confidence intervals around the null 
 hypothesis of no spatial structure (this is a two-tail test). The same data
 are also used to calculate the probability of the one-tail test (See reference 
 below for details).
+
+Bootstrap calculations are skipped and \code{NA} is returned when the number of 
+possible combinations given the sample size of any given distance class is 
+< \code{reps}.
 }
 \examples{
  # Select one pop only
@@ -106,6 +118,7 @@ permutation = TRUE, bootstrap = TRUE)
 smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=T))
 spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
 permutation = TRUE, bootstrap = TRUE)
+#' @seealso \code{\link{gl.spatial.ac.multi}}
 }
 \references{
 \itemize{
