@@ -59,13 +59,17 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
-
+      - name:Install macos dependiencies
+        if: runner.os =="macOS"
+        run: |
+          install.packages("rgdal", type="binary")
+          
       - name: Install dependencies
         run: |
 
           options(repos = c(CRAN = "https://cloud.r-project.org/"
           ))
-          remotes::install_deps(dependencies = NA)
+          remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 

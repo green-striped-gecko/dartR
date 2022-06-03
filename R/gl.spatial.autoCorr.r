@@ -111,7 +111,7 @@
 #' @export
 
 
-gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100, 
+gl.spatial.autoCorr <- function(GD, GGD, bins=2, reps=100, 
                                 permutation=FALSE, 
                                 bootstrap=FALSE, 
                                 plot_theme = theme_classic(),
@@ -128,12 +128,12 @@ gl.spatial.autoCorr <- function(GD, GGD, bins=1, reps=100,
   
   # CHECK DATATYPE
   if(!is.matrix(GD))
-    if(class(GD) == "dist") GD <- as.matrix(GD)
+    if(is(GD, "dist")) GD <- as.matrix(GD)
   else
     stop(error("  The argument 'GD' should be a matrix"))
   
   if(!is.matrix(GGD))
-    if(class(GGD) == "dist") GGD <- as.matrix(GGD)
+    if(is(GGD, "dist")) GGD <- as.matrix(GGD)
   else
     stop(error("  The argument 'GGD' should be a matrix"))
   

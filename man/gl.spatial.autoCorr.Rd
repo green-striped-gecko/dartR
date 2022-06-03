@@ -7,7 +7,7 @@
 gl.spatial.autoCorr(
   GD,
   GGD,
-  bins = 1,
+  bins = 2,
   reps = 100,
   permutation = FALSE,
   bootstrap = FALSE,
