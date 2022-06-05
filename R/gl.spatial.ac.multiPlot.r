@@ -1,5 +1,5 @@
 
-#' @name gl.spatial.ac.multiPlot
+#' @name gl.plot.multiSpaAC
 #' @title plot of mulitple Spatial autocorrelation analyses 
 #' 
 #' @description  This function takes multiple  outputs of gl.spatial.autoCorr 
@@ -51,12 +51,12 @@
 #' permutation = TRUE, bootstrap = TRUE)
 #' 
 #' # Plot them together 
-#' gl.spatial.ac.multiPlot(list(TENTERFIELD=spa, SEVERN_ABOVE=spa_Sev))
+#' gl.plot.multiSpaAC(list(TENTERFIELD=spa, SEVERN_ABOVE=spa_Sev))
 #' 
 #' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @import ggplot2
 #' @export
-gl.spatial.ac.multiPlot <- function(l.spa, grp.var.name="Pop", 
+gl.plot.multiSpaAC <- function(l.spa, grp.var.name="Pop", 
                                     plot_theme = theme_classic(),
                                     outpath = tempdir(),
                                     out_file_rootname="ac.multiPlot",
