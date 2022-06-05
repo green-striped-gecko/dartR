@@ -114,10 +114,12 @@ ggd <- as.matrix(dist(plat_Tent@other$latlon))
 spa <- gl.spatial.autoCorr(gd, ggd, bins = 3, reps = 100, 
 permutation = TRUE, bootstrap = TRUE)
 
+\dontrun{
 # Alternatively, use Smouse distance from PopGneReport package
 smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=TRUE))
 spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
 permutation = TRUE, bootstrap = TRUE)
+}
 #' @seealso \code{\link{gl.spatial.ac.multi}}
 }
 \references{
