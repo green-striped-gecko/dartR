@@ -81,6 +81,7 @@ Suggests:
     snpStats,
     stringi,
     terra,
+    testthat (>= 3.0.0),
     tibble,
     tidyverse,
     vcfR
@@ -98,3 +99,4 @@ Author: Bernd Gruber [aut, cre],
   Lindsay V. Clark [ctb],
   Floriaan Devloo-Delva [ctb],
   Eric Archer [ctb]
+Config/testthat/edition: 3
