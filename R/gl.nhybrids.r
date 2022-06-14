@@ -764,7 +764,7 @@ gl.nhybrids <- function(gl,
     
     if (flag == "bothpar" & plot == TRUE) {
         # Read in the results of the New Hybrids analysis
-        F1.test <- read.csv(file = "aa-Pofz.csv")
+        F1.test <- read.csv(file = "aa-PofZ.csv")
         # Pull out results for F1 hybrids only, defined by posterior probability >= pprob
         F1.test <- F1.test[(F1.test$F1 >= pprob), ]
         # Use the id of the F1 hybrids to subset the genlight object containing the loci with fixed differences used in the analysis
