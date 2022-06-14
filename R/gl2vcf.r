@@ -83,7 +83,7 @@ gl2vcf <- function(x,
     gl2plink(
         x = x,
         outfile = "gl_plink_temp",
-        outpath = tempdir(),
+        outpath = outpath,
         chr_format = chr_format,
         pos_cM = pos_cM,
         ID_dad = ID_dad,
@@ -93,7 +93,7 @@ gl2vcf <- function(x,
         verbose = NULL
     )
     
-    prefix.in_temp <- paste0(tempdir(), "/gl_plink_temp")
+    prefix.in_temp <- paste0(outpath, "/gl_plink_temp")
     prefix.out_temp <- file.path(outpath, outfile)
     
     allele_tmp <- gsub("/"," ", x$loc.all)
