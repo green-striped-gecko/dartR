@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.plot.multiSpaAC.r
 \name{gl.plot.multiSpaAC}
 \alias{gl.plot.multiSpaAC}
-\title{plot of mulitple Spatial autocorrelation analyses}
+\title{Plot of multiple Spatial autocorrelation analyses}
 \usage{
 gl.plot.multiSpaAC(
   l.spa,
@@ -18,15 +18,11 @@ gl.plot.multiSpaAC(
 
 \item{grp.var.name}{The name to be used for the grouping variable}
 
-\item{plot_theme}{User specified theme [default theme_dartR()].}
-
-\item{outpath}{The path where to save the output}
-
-\item{out_file_rootname}{The name of the root of the output file}
+\item{plot_theme}{Theme for the plot. See details [default NULL].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log ; 3, progress and results summary; 5, full report
-[default NULL, unless specified using gl.set.verbosity].}
+progress log ; 3, progress and results summary; 5, full report [default
+ NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 Returns the ggplot object
@@ -36,8 +32,9 @@ Custodian: Carlo Pacioni -- Post to
 }
 \description{
 This function takes multiple  outputs of gl.spatial.autoCorr 
-and plots them to enable their graphical comparisons. If upper and lower estimates
-are present in the outputs, these are plotted as error bars around the r estimates.
+and plots them to enable their graphical comparisons. If upper and lower 
+estimates are present in the outputs, these are plotted as error bars around
+ the r estimates.
 }
 \details{
 The input is a list. If the list has names, these are used 

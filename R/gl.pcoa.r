@@ -51,7 +51,7 @@
 #' representation.
 #'
 #' The measure of distance between entities in a PCA is the Pearson Correlation
-#' Coefficent, essentially a standardized Euclidean distance. This is both a
+#' Coefficient, essentially a standardized Euclidean distance. This is both a
 #' metric distance and a Euclidean distance. In PCoA, the second source of
 #' stress is the choice of distance measure or dissimilarity measure. While any
 #' distance or dissimilarity matrix can be represented in an ordinated space,
