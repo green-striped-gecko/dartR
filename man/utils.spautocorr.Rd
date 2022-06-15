@@ -15,23 +15,22 @@ utils.spautocor(
 )
 }
 \arguments{
-\item{GD}{a matrix of individual pairwise genetic distances. In principle 
-any other squared distance matrix can be used. see example}
+\item{GD}{Genetic distance matrix.}
 
-\item{GGD}{A geographical distance matrix, based on the coordinates of
-individuals. This is typically an Euclidean distance but it can be 
-any meaningful (geographical) distance metrics.}
+\item{GGD}{Geographic distance matrix.}
 
-\item{permutation}{Whether permutation calculations for the null hypothesis of 
-no spatial structure should be carried out}
+\item{permutation}{Whether permutation calculations for the null hypothesis 
+of no spatial structure should be carried out [default TRUE].}
 
-\item{bootstrap}{Whether bootstrap calculations to compute the 95% confidence intervals 
-around r should be carried out}
+\item{bootstrap}{Whether bootstrap calculations to compute the 95% confidence
+intervals around r should be carried out [default TRUE].}
 
-\item{bins}{The number of bins for the distance classes 
-(i.e. \code{length(bins) == 1)} or a vectors with the break points. See details.}
+\item{bins}{The number of bins for the distance classes
+(i.e. \code{length(bins) == 1)} or a vectors with the break points. See 
+details [default 5].}
 
-\item{reps}{The number to be used for permutation and bootstrap analyses}
+\item{reps}{The number to be used for permutation and bootstrap analyses
+[default 100].}
 }
 \value{
 Returns a data frame with the following columns:
@@ -44,13 +43,13 @@ if both \code{bootstap} and \code{permutation} are \code{FALSE} otherwise only
 \code{r} estimates are returned
 }
 \description{
-Carries out calculation for spatial autocorrelation coefficient 
+Carries out calculation for spatial autocorrelation coefficient
 starting from a genetic and geogaphic distance matrix.
 }
 \details{
-The code of this function is based one \code{spautocorr} from the package 
-\code{PopGenReport}, which has been modified to fix a few bugs (as of 
-\code{PopGenReport v 3.0.4} and allow calculations of bootstraps estimates. 
+The code of this function is based one \code{spautocorr} from the package
+\code{PopGenReport}, which has been modified to fix a few bugs (as of
+\code{PopGenReport v 3.0.4} and allow calculations of bootstraps estimates.
 
 See details from \code{gl.spatial.autoCorr} for a detailed explanation.
 }

@@ -1,10 +1,10 @@
-
 #' @name gl.plot.multiSpaAC
-#' @title plot of mulitple Spatial autocorrelation analyses 
+#' @title Plot of multiple Spatial autocorrelation analyses 
 #' 
 #' @description  This function takes multiple  outputs of gl.spatial.autoCorr 
-#' and plots them to enable their graphical comparisons. If upper and lower estimates
-#' are present in the outputs, these are plotted as error bars around the r estimates.
+#' and plots them to enable their graphical comparisons. If upper and lower 
+#' estimates are present in the outputs, these are plotted as error bars around
+#'  the r estimates.
 #'  
 #' @details The input is a list. If the list has names, these are used 
 #' in the legend. If names are absent, these are internally created assuming that each 
@@ -56,6 +56,7 @@
 #' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @import ggplot2
 #' @export
+#' 
 gl.plot.multiSpaAC <- function(l.spa, grp.var.name="Pop", 
                                     plot_theme = theme_classic(),
                                     outpath = tempdir(),
