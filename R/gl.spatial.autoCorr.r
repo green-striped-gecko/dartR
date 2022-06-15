@@ -808,6 +808,57 @@ gl.spatial.autoCorr <- function(x = NULL,
     }
     }
     
+    #if all.pops is TRUE
+    if(all.pops){
+      
+      if(is.null(plot_colors)){
+        plot_colors <- c("deeppink","blue")
+      }
+      
+      if (permutation) {
+        p3 <- ggplot(res, aes(Bin, r)) +
+          geom_ribbon(aes(ymin=L.r.null,ymax=U.r.null), fill= CI_color, alpha=0.25)+ 
+          geom_line(aes(y = L.r.null), col = "black", linetype = "dashed") +
+          geom_point(aes(y = L.r.null), col = "black") +
+          geom_line(aes(y = U.r.null), col = "black", linetype = "dashed") +
+          geom_hline(yintercept = 0, col = "black",size=1) +
+          geom_point(aes(y = U.r.null), col = "black") +
+          geom_line(size=1,color=plot_colors[2]) +
+          geom_point(size=2,color=plot_colors[1]) +
+          scale_x_continuous(breaks = res$Bin,
+                             labels = paste(round(res$Bin/1000,1),"Km"),
+                             sec.axis = sec_axis(
+                               trans = ~ .,
+                               breaks = res$Bin,
+                               labels = paste("n =",res$N))) +
+          ylab("Autocorrelation (r)") + 
+          xlab("Distance class") + 
+          plot_theme
+        
+      }else{
+        
+        p3 <- ggplot(res, aes(Bin, r)) +
+          geom_point(aes(y = U.r.null), col = "black") +
+          geom_line(size=1,color=plot_colors[2]) +
+          geom_point(size=2,color=plot_colors[1]) +
+          scale_x_continuous(breaks = res$Bin,
+                             labels = paste(round(res$Bin/1000,0),"Km"),
+                             sec.axis = sec_axis(
+                               trans = ~ .,
+                               breaks = res$Bin,
+                               labels = paste("n =",res$N))) +
+          ylab("Autocorrelation (r)") + 
+          xlab("Distance class") + 
+          plot_theme
+        
+      }
+      
+      if (bootstrap) {
+        p3 <- p3 +
+          geom_errorbar(aes(ymin=L.r, ymax=U.r),width=res$Bin[1]/10) 
+      }
+    }
+    
     #if there are more than one population
     if(!is.data.frame(res) & plot.pops.together == TRUE){
       

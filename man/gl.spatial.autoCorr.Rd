@@ -2,49 +2,99 @@
 % Please edit documentation in R/gl.spatial.autoCorr.r
 \name{gl.spatial.autoCorr}
 \alias{gl.spatial.autoCorr}
-\title{Spatial autocorrelation following Smouse and Pekall 1999}
+\title{Spatial autocorrelation following Smouse and Peakall 1999}
 \usage{
 gl.spatial.autoCorr(
-  GD,
-  GGD,
-  bins = 2,
+  x = NULL,
+  Dgeo = NULL,
+  Dgen = NULL,
+  coordinates = "latlon",
+  Dgen_method = "Euclidean",
+  Dgeo_trans = "Dgeo",
+  Dgen_trans = "Dgen",
+  bins = 5,
   reps = 100,
-  permutation = FALSE,
-  bootstrap = FALSE,
-  plot_theme = theme_classic(),
-  outpath = tempdir(),
-  out_file_rootname = "autoCorr",
+  all.pops = FALSE,
+  plot.pops.together = FALSE,
+  permutation = TRUE,
+  bootstrap = TRUE,
+  plot_theme = NULL,
+  plot_colors = NULL,
+  plot_colors_pop = NULL,
+  CI_color = "red",
+  plot.out = TRUE,
+  save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
-\item{GD}{a matrix of individual pairwise genetic distances. In principle 
-any other squared distance matrix can be used. see example}
+\item{x}{Genlight object [default NULL].}
 
-\item{GGD}{A geographical distance matrix, based on the coordinates of
-individuals. This is typically an Euclidean distance but it can be 
-any meaningful (geographical) distance metrics.}
+\item{Dgeo}{Geographic distance matrix if no genlight object is provided. This
+is typically an Euclidean distance but it can be any meaningful 
+(geographical) distance metrics [default NULL].}
 
-\item{bins}{The number of bins for the distance classes 
-(i.e. \code{length(bins) == 1)} or a vectors with the break points. See details.}
+\item{Dgen}{Genetic distance matrix if no genlight object is provided
+[default NULL].}
 
-\item{reps}{The number to be used for permutation and bootstrap analyses}
+\item{coordinates}{Can be either 'latlon', 'xy' or a two column data.frame
+with column names 'lat','lon', 'x', 'y')  Coordinates are provided via
+\code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon
+data will be projected to meters using Mercator system [google maps] or if
+xy then distance is directly calculated on the coordinates [default .}
 
-\item{permutation}{Whether permutation calculations for the null hypothesis of 
-no spatial structure should be carried out}
+\item{Dgen_method}{Method to calculate genetic distances. See details
+[default "Euclidean"].}
 
-\item{bootstrap}{Whether bootstrap calculations to compute the 95% confidence intervals 
-around r should be carried out}
+\item{Dgeo_trans}{Transformation to be used on the Euclidean distances. See
+Dgen_trans [default "Dgeo"].}
 
-\item{plot_theme}{User specified theme [default theme_dartR()].}
+\item{Dgen_trans}{You can provide a formula to transform the genetic
+distance. The transformation can be applied as a formula using Dgen as the
+ variable to be transformed. For example: \code{Dgen_trans = 'Dgen/(1-Dgen)'.
+  Any valid R expression can be used here 
+  [default 'Dgen', which is the identity function.]}}
 
-\item{outpath}{The path where to save the output}
+\item{bins}{The number of bins for the distance classes
+(i.e. \code{length(bins) == 1)} or a vectors with the break points. See 
+details [default 5].}
 
-\item{out_file_rootname}{The name of the root of the output file}
+\item{reps}{The number to be used for permutation and bootstrap analyses
+[default 100].}
+
+\item{all.pops}{Genetic and geographic distances are calculated within each 
+population and then merged to perform an overall autocorrelation analysis
+  [default FALSE].}
+
+\item{plot.pops.together}{Plot all the populations in one plot. Confidence 
+intervals are not shown [default FALSE].}
+
+\item{permutation}{Whether permutation calculations for the null hypothesis 
+of no spatial structure should be carried out [default TRUE].}
+
+\item{bootstrap}{Whether bootstrap calculations to compute the 95% confidence
+intervals around r should be carried out [default TRUE].}
+
+\item{plot_theme}{Theme for the plot. See details [default NULL].}
+
+\item{plot_colors}{Vector with two color names for the points and lines of 
+the plot. Only used when analyzing one population [default NULL].}
+
+\item{plot_colors_pop}{A color palette for populations or a list with
+as many colors as there are populations in the dataset. Only used when 
+analyzing more than one population [default NULL].}
+
+\item{CI_color}{Color for the shade of the 95% confidence intervals around 
+the r estimates [default "red"].}
+
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
+
+\item{save2tmp}{If TRUE, saves any ggplots and listings to the session
+temporary directory (tempdir) [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log ; 3, progress and results summary; 5, full report
-[default NULL, unless specified using gl.set.verbosity].}
+progress log ; 3, progress and results summary; 5, full report [default
+ NULL, unless specified using gl.set.verbosity].}
 }
 \value{
 Returns a data frame with the following columns:
@@ -52,108 +102,113 @@ Returns a data frame with the following columns:
 \item Bin  The distance classes
 \item N The number of pairwise comparisons within each distance class
 \item r.uc The uncorrected autocorrelation coefficient
-\item Correction the correction 
+\item Correction the correction
 \item r The corrected autocorrelation coefficient
-\item L.r The corrected autocorrelation coefficient lower limit 
+\item L.r The corrected autocorrelation coefficient lower limit
 (if \code{bootstap = TRUE})
-\item U.r The corrected autocorrelation coefficient upper limit 
+\item U.r The corrected autocorrelation coefficient upper limit
 (if \code{bootstap = TRUE})
-\item L.r.null.uc The uncorrectedlower limit for the null hypothesis of no spatial 
-autocorrelation (if \code{permutation = TRUE}) 
-\item U.r.null.uc  The uncorrected upper limit for the null hypothesis of no spatial 
-autocorrelation (if \code{permutation = TRUE})
-\item L.r.null The corrected lower limit for the null hypothesis of no spatial 
-autocorrelation (if \code{permutation = TRUE})
-\item U.r.null The corrected upper limit for the null hypothesis of no spatial 
-autocorrelation (if \code{permutation = TRUE})
+\item L.r.null.uc The uncorrected lower limit for the null hypothesis of no 
+spatial autocorrelation (if \code{permutation = TRUE})
+\item U.r.null.uc  The uncorrected upper limit for the null hypothesis of no 
+spatial autocorrelation (if \code{permutation = TRUE})
+\item L.r.null The corrected lower limit for the null hypothesis of no 
+spatial autocorrelation (if \code{permutation = TRUE})
+\item U.r.null The corrected upper limit for the null hypothesis of no 
+spatial autocorrelation (if \code{permutation = TRUE})
 \item p.one.tail The p value of the one tail statistical test
 }
 }
 \description{
-Global spatial autocorrelation is a multivariate approach combining all loci
-into a single analysis. The autocorrelation coefficient r is calculated for
-each pairwise genetic distance pairs for all specified distance classes. For
-more information see Smouse and Peakall 1999, Peakall et a. 2003 and Smouse
-et al. 2008.
+Global spatial autocorrelation is a multivariate approach
+combining all loci into a single analysis. The autocorrelation coefficient
+ "r" is calculated for each pair of individuals in each specified distance
+ class. For more information see Smouse and Peakall 1999, Peakall et al. 2003
+  and Smouse et al. 2008.
 }
 \details{
-The code of this function execute behind the scene a modified 
-version of \code{spautocorr} from the package 
-\code{PopGenReport}, and it also includes 
-bootstraps to compute the 95% confidence intervals around the r 
-estimates, the one-tail test, and the correction factor described by 
+This function executes behind the scene a modified
+version of \code{spautocorr} from the package \code{PopGenReport} and
+bootstraps to compute the 95% confidence intervals around the r
+estimates, the one-tail test, and the correction factor described by
 Peakall et al 2003.
 
-If \code{bins} is of length = 1 it is interpreted as the number of (even) 
-bins to use. In this case the starting point is always the minimum 
-value in the distance matrix, and the last is the maximum. If it is a numeric
-vector of length>1, it is interpreted as the breaking points. In this case, 
-the first has to be the lowest value, and the last has to be the highest. 
-There are no internal checks for this and it is user responsibility to ensure that 
-distance classes are properly set up. If that is not the case, data that fall 
-outside the range provided will be dropped. The number of 
-bins will be  \code{length(bins) - 1}.
+If \code{bins} is of length = 1 it is interpreted as the number of (even)
+bins to use. In this case the starting point is always the minimum value in 
+the distance matrix, and the last is the maximum. If it is a numeric vector 
+of length>1, it is interpreted as the breaking points. In this case, the 
+first has to be the lowest value, and the last has to be the highest. There 
+are no internal checks for this and it is user responsibility to ensure that
+distance classes are properly set up. If that is not the case, data that fall
+outside the range provided will be dropped. The number of bins will be 
+\code{length(bins) - 1}.
 
-The permutation constructs the 95% confidence intervals around the null 
+The permutation constructs the 95% confidence intervals around the null
 hypothesis of no spatial structure (this is a two-tail test). The same data
-are also used to calculate the probability of the one-tail test (See reference 
-below for details).
+are also used to calculate the probability of the one-tail test (See 
+references below for details).
 
-Bootstrap calculations are skipped and \code{NA} is returned when the number of 
-possible combinations given the sample size of any given distance class is 
+Bootstrap calculations are skipped and \code{NA} is returned when the number 
+of possible combinations given the sample size of any given distance class is
 < \code{reps}.
+
+Methods available to calculate genetic distances for SNP data:
+\itemize{
+\item "propShared" using the function \code{\link{gl.propShared}}.
+\item "grm" using the function \code{\link{gl.grm}}.
+\item "Euclidean" using the function \code{\link{gl.dist.ind}}.
+\item "Simple" using the function \code{\link{gl.dist.ind}}.
+\item "Absolute" using the function \code{\link{gl.dist.ind}}.
+\item "Manhattan" using the function \code{\link{gl.dist.ind}}.
+}
+
+Methods available to calculate genetic distances for SilicoDArT data:
+\itemize{
+\item "Euclidean" using the function \code{\link{gl.dist.ind}}.
+\item "Simple" using the function \code{\link{gl.dist.ind}}.
+\item "Jaccard" using the function \code{\link{gl.dist.ind}}.
+\item "Bray-Curtis" using the function \code{\link{gl.dist.ind}}.
+}
+  
+ Plots and table are saved to the temporal directory (tempdir) and can be
+ accessed with the function \code{\link{gl.print.reports}} and listed with
+ the function \code{\link{gl.list.reports}}. Note that they can be accessed
+ only in the current R session because tempdir is cleared each time that the
+  R session is closed.
+
+Examples of other themes that can be used can be consulted in \itemize{
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
+ \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ }
 }
 \examples{
- # Select one pop only
-plat_Tent <- gl.keep.ind(platypus.gl, 
-ind.list = platypus.gl@ind.names[pop(platypus.gl) == "TENTERFIELD"], 
-mono.rm = TRUE)
-# Compute a simple distance matrix and reverse it so that correlated values 
-# indicated more similar individuals as we are used to see plots in GenAleEx
-gd <- 1 - as.matrix(gl.dist.ind(plat_Tent, method = "Simple", plot.out = FALSE))
-# Replace the diagonal with zeros
-diag(gd) <- 0
-# Compute the geographical distance matrix
-ggd <- as.matrix(dist(plat_Tent@other$latlon))
-
-# Spatial autocorrelation
-spa <- gl.spatial.autoCorr(gd, ggd, bins = 3, reps = 100, 
-permutation = TRUE, bootstrap = TRUE)
-
-\dontrun{
-# Alternatively, use Smouse distance from PopGneReport package
-smouse.plat<-as.matrix(PopGenReport::gd.smouse(gl2gi(plat_Tent), verbose=TRUE))
-spa.sm <- gl.spatial.autoCorr(smouse.plat, ggd, bins = 3, reps = 100, 
-permutation = TRUE, bootstrap = TRUE)
-}
-#' @seealso \code{\link{gl.spatial.ac.multi}}
+res <- gl.spatial.autoCorr(platypus.gl, bins=seq(0,10000,2000))
+# using one population, showing sample size
+test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
+res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
 }
 \references{
 \itemize{
 \item Smouse PE, Peakall R. 1999. Spatial autocorrelation analysis of
 individual multiallele and multilocus genetic structure. Heredity 82:
 561-573.
-
-\item Double, MC, et al. 2005. Dispersal, philopatry and infidelity: dissecting
-local genetic structure in superb fairy-wrens (Malurus cyaneus). Evolution
-59, 625-635.
-
+\item Double, MC, et al. 2005. Dispersal, philopatry and infidelity: 
+dissecting local genetic structure in superb fairy-wrens (Malurus cyaneus). 
+Evolution 59, 625-635.
 \item Peakall, R, et al. 2003. Spatial autocorrelation analysis offers new
 insights into gene flow in the Australian bush rat, Rattus fuscipes.
 Evolution 57, 1182-1195.
-
 \item Smouse, PE, et al. 2008. A heterogeneity test for fine-scale genetic
 structure. Molecular Ecology 17, 3389-3400.
-
-\item Gonzales, E, et al. 2010. The impact of landscape disturbance on spatial
-genetic structure in the Guanacaste tree, Enterolobium
-cyclocarpum(Fabaceae). Journal of Heredity 101, 133-143.
-
+\item Gonzales, E, et al. 2010. The impact of landscape disturbance on 
+spatial genetic structure in the Guanacaste tree, Enterolobium
+cyclocarpum (Fabaceae). Journal of Heredity 101, 133-143.
 \item Beck, N, et al. 2008. Social constraint and an absence of sex-biased
 dispersal drive fine-scale genetic structure in white-winged choughs.
 Molecular Ecology 17, 4346-4358.
 }
 }
 \author{
-Carlo Pacioni & Bernd Gruber
+Carlo Pacioni, Bernd Gruber & Luis Mijangos 
+(Post to \url{https://groups.google.com/d/forum/dartr})
 }
