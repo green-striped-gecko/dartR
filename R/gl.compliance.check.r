@@ -241,7 +241,7 @@ gl.compliance.check <- function(x,
         x@other$latlon <- x@other$latlong
     }
     
-    if (!is.null(x@other$latlon) | !is.null(x@other$latlon$long)) {
+    if (!is.null(x@other$latlon$long)) {
         x@other$latlon$lon <- x@other$latlon$long
     }
     
