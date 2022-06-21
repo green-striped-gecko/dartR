@@ -6,13 +6,15 @@
 #' proportions based on observed frequencies of reference homozygotes,
 #'  heterozygotes and alternate homozygotes.
 #'
-#' Loci are filtered out if they show HWE departure in any one population.
+#' Loci are filtered out if they show HWE departure either in any one population 
+#' (n.pop.threshold =1) or in at least X number of populations 
+#' (n.pop.threshold > 1).
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param subset Way to group individuals to perform H-W tests. Either a vector
 #' with population names, 'each', 'all' (see details) [default 'each'].
 #' @param n.pop.threshold The minimum number of populations where the same locus 
-#' has to be out  of hwe to be removed [default 1]
+#' has to be out of H-W proportions to be removed [default 1].
 #' @param method_sig Method for determining statistical significance: 'ChiSquare'
 #' or 'Exact' [default 'Exact'].
 #' @param multi_comp Whether to adjust p-values for multiple comparisons

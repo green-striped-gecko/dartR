@@ -1,20 +1,27 @@
 #' @name gl.report.ld.map
-#' @title Calculates pairwise linkage disequilibrium in SNPs mapped to a 
-#' reference genome
+#' @title Calculates pairwise linkage disequilibrium 
 #' @description
-#' This function calculates pairwise linkage disequilibrium (LD) within each 
-#' chromosome and by population using the function \link[snpStats]{ld} 
-#' (package snpStats).
+#' This function calculates pairwise linkage disequilibrium (LD) by population 
+#' using the function \link[snpStats]{ld} (package snpStats).
 #' 
-#' This function requires that SNPs to be mapped to a reference genome and the 
-#' information for SNP's position must be stored in the genlight accessor 
-#' position" and the SNP's chromosome name in the accessor chromosome. 
+#' If SNPs are not mapped to a reference genome, the parameters ld_max_pairwise 
+#' and ld_resolution should be set as NULL (the default). In this case, the 
+#' function will assign the same chromosome ("1") to all the SNPs in the dataset
+#'  and assign a sequence from 1 to n loci as the position of each SNP. The 
+#'  function will then calculate LD for all possible SNP pair combinations. 
+#'  
+#' If SNPs are mapped to a reference genome, the parameters ld_max_pairwise and 
+#' ld_resolution should not be NULL. In this case, the information for SNP's 
+#' position should be stored in the genlight accessor "@@position" and the SNP's 
+#' chromosome name in the accessor "@@chromosome". The function will then 
+#' calculate LD within each chromosome and for all possible SNP pair 
+#' combinations within a distance of ld_max_pairwise. 
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param ld_max_pairwise Maximum distance in number of base pairs at which LD 
-#' should be calculated [default 1000000].
+#' should be calculated [default NULL].
 #' @param ld_resolution Resolution at which LD should be reported in number of 
-#' base pairs [default 10000]
+#' base pairs [default NULL]
 #' @param maf Minor allele frequency threshold to filter out loci [default 0.05].
 #' @param ld_stat The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
 #'   "D.prime", "R.squared", and "R" [default "R.squared"].
@@ -39,27 +46,30 @@
 #' unlinked (Delourme et al., 2013; Li et al., 2014).
 #' @references
 #' \itemize{
-#' \item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., André, 
-#' I., . . . Marty, A. (2013). High-density SNP-based genetic map development 
-#' and linkage disequilibrium assessment in Brassica napusL. BMC genomics, 14(1), 120.
-#' \item Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . Brummer,
-#'  E. C. (2014). Development of an alfalfa SNP array and its use to evaluate 
-#'  patterns of population structure and linkage disequilibrium. PLoS One, 9(1), e84329.
+#' \item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., 
+#' André, I., . . . Marty, A. (2013). High-density SNP-based genetic map 
+#' development and linkage disequilibrium assessment in Brassica napusL. BMC 
+#' genomics, 14(1), 120.
+#' \item Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . 
+#' Brummer, E. C. (2014). Development of an alfalfa SNP array and its use to 
+#' evaluate patterns of population structure and linkage disequilibrium. PLoS 
+#' One, 9(1), e84329.
 #'  }
 #' @return A dataframe with information for each SNP pair in LD. 
-#' @author Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Luis Mijangos -- Post to
+#'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' \dontrun{
 #' x <- platypus.gl
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 #' x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
-#' gl.report.ld.map(x,ld_resolution = 100000)
+#' gl.report.ld.map(x,ld_max_pairwise = 1000000,ld_resolution = 100000)
 #' }
 #' @export
 
 gl.report.ld.map <- function(x,
-                           ld_max_pairwise = 1000000,
-                           ld_resolution = 10000,
+                           ld_max_pairwise = NULL,
+                           ld_resolution = NULL,
                            maf = 0.05,
                            ld_stat = "R.squared",
                            stat_keep = "AvgPIC",
@@ -101,6 +111,13 @@ gl.report.ld.map <- function(x,
   }
   
   # DO THE JOB
+  
+  if(is.null(ld_max_pairwise)){
+    x$position <- 1:nLoc(x)
+    x$chromosome <- as.factor(rep("1",nLoc(x)))
+    ld_max_pairwise <- nLoc(x)
+    ld_resolution <- 10
+  }
   
   x_list <- seppop(x)
   
@@ -153,7 +170,8 @@ gl.report.ld.map <- function(x,
         file = paste0(tempdir(), "/", "gl_plink", "_", pop_name, ".ped"),
         snps = paste0(tempdir(), "/", "gl_plink", "_", pop_name, ".map") ,
         sep = " ",
-        show_warnings = F
+        show_warnings = F,
+        na.strings = NA
       )
     
     ld_map <- snp_stats$map
@@ -183,24 +201,25 @@ gl.report.ld.map <- function(x,
       if (nrow(ld_map_loci) <= 1) {
         next
       }
-      # this is the mean distance between each snp which is used to determine the depth at which
-      # LD analyses are performed
+      # this is the mean distance between each snp which is used to determine 
+      # the depth at which LD analyses are performed
       mean_dis <- mean(diff(ld_map_loci$loc_bp))
-      ld_depth_b <- ceiling((ld_max_pairwise / mean_dis))
-      ld_snps <-
-        snpStats::ld(genotype_loci, depth = ld_depth_b, stats = ld_stat) #function to calculate LD
+      ld_depth_b <- ceiling((ld_max_pairwise / mean_dis)) - 1
+      #function to calculate LD
+      ld_snps <- snpStats::ld(genotype_loci, depth = ld_depth_b, stats = ld_stat) 
       ld_columns <- as.matrix(ld_snps)
       colnames(ld_columns) <- rownames(ld_columns)
       
       ld_columns <- as.data.frame(as.table(as.matrix(ld_columns)))
-      ld_columns <-
-        ld_columns[-ld_columns$Freq < 0,] #remove cases where LD was not calculated
+      # remove cases where LD was not calculated
+      ld_columns <- ld_columns[-ld_columns$Freq < 0,] 
       ld_columns$Var1 <- as.numeric(as.character(ld_columns$Var1))
       ld_columns$Var2 <- as.numeric(as.character(ld_columns$Var2))
-      #determine the distance at which LD was calculated
+      # determine the distance at which LD was calculated
       ld_columns$dis <- ld_columns$Var2 - ld_columns$Var1
-      #remove pairwise LD results that were calculated at larger distances than the required in the
-      # settings and then filtering and rearranging dataframes to match each other and then merge them
+      # remove pairwise LD results that were calculated at larger distances than 
+      # the required in the settings and then filtering and rearranging 
+      # dataframes to match each other and then merge them
       df_linkage_temp <-
         ld_columns[which(ld_columns$dis <= ld_max_pairwise),]
       if (nrow(df_linkage_temp) < 1) {
@@ -217,15 +236,11 @@ gl.report.ld.map <- function(x,
       t_locationc <-
         ldtc[dtb, c("snp.name", "stat_keep"), nomatch = 0]
       
-      df_linkage_temp <-
-        df_linkage_temp[order(df_linkage_temp$Var1),]
+      df_linkage_temp <- df_linkage_temp[order(df_linkage_temp$Var1),]
       df_linkage_temp <- cbind(df_linkage_temp, t_locationb)
-      df_linkage_temp <-
-        df_linkage_temp[order(df_linkage_temp$Var2),]
+      df_linkage_temp <- df_linkage_temp[order(df_linkage_temp$Var2),]
       df_linkage_temp <- cbind(df_linkage_temp, t_locationc)
-      df_linkage_temp <-
-        df_linkage_temp[order(df_linkage_temp$Var1),]
-      
+      df_linkage_temp <- df_linkage_temp[order(df_linkage_temp$Var1),]
       df_linkage_temp <- cbind(chr_list[chrom], df_linkage_temp)
       df_linkage_temp <- cbind(pop_name, df_linkage_temp)
       
@@ -252,8 +267,7 @@ gl.report.ld.map <- function(x,
     }
   }
   
-  break_bins <-
-    c(seq(1, ld_max_pairwise, ld_resolution), ld_max_pairwise)
+  break_bins <- c(seq(1, ld_max_pairwise, ld_resolution), ld_max_pairwise)
   
   split_df <- split(df_linkage, f = df_linkage$pop)
   split_df <- lapply(split_df, function(x) {

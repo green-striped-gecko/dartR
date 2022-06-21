@@ -113,6 +113,7 @@ Resultant ggplot(s) and the tabulation(s) are saved to the session's
 \code{\link{gl.report.callrate}}
 
 Other filter functions: 
+\code{\link{gl.filter.ld}()},
 \code{\link{gl.filter.parent.offspring}()},
 \code{\link{gl.filter.sexlinked}()}
 }

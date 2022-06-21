@@ -72,7 +72,7 @@ intervals are not shown [default FALSE].}
 \item{permutation}{Whether permutation calculations for the null hypothesis 
 of no spatial structure should be carried out [default TRUE].}
 
-\item{bootstrap}{Whether bootstrap calculations to compute the 95% confidence
+\item{bootstrap}{Whether bootstrap calculations to compute the 95\% confidence
 intervals around r should be carried out [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See details [default NULL].}
@@ -84,7 +84,7 @@ the plot. Only used when analyzing one population [default NULL].}
 as many colors as there are populations in the dataset. Only used when 
 analyzing more than one population [default NULL].}
 
-\item{CI_color}{Color for the shade of the 95% confidence intervals around 
+\item{CI_color}{Color for the shade of the 95\% confidence intervals around 
 the r estimates [default "red"].}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
@@ -129,7 +129,7 @@ combining all loci into a single analysis. The autocorrelation coefficient
 \details{
 This function executes behind the scene a modified
 version of \code{spautocorr} from the package \code{PopGenReport} and
-bootstraps to compute the 95% confidence intervals around the r
+bootstraps to compute the 95\% confidence intervals around the r
 estimates, the one-tail test, and the correction factor described by
 Peakall et al 2003.
 
@@ -143,7 +143,7 @@ distance classes are properly set up. If that is not the case, data that fall
 outside the range provided will be dropped. The number of bins will be 
 \code{length(bins) - 1}.
 
-The permutation constructs the 95% confidence intervals around the null
+The permutation constructs the 95\% confidence intervals around the null
 hypothesis of no spatial structure (this is a two-tail test). The same data
 are also used to calculate the probability of the one-tail test (See 
 references below for details).

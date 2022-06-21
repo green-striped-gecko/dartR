@@ -2,13 +2,12 @@
 % Please edit documentation in R/gl.report.ld.map.r
 \name{gl.report.ld.map}
 \alias{gl.report.ld.map}
-\title{Calculates pairwise linkage disequilibrium in SNPs mapped to a 
-reference genome}
+\title{Calculates pairwise linkage disequilibrium}
 \usage{
 gl.report.ld.map(
   x,
-  ld_max_pairwise = 1e+06,
-  ld_resolution = 10000,
+  ld_max_pairwise = NULL,
+  ld_resolution = NULL,
   maf = 0.05,
   ld_stat = "R.squared",
   stat_keep = "AvgPIC",
@@ -23,10 +22,10 @@ gl.report.ld.map(
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
 \item{ld_max_pairwise}{Maximum distance in number of base pairs at which LD 
-should be calculated [default 1000000].}
+should be calculated [default NULL].}
 
 \item{ld_resolution}{Resolution at which LD should be reported in number of 
-base pairs [default 10000]}
+base pairs [default NULL]}
 
 \item{maf}{Minor allele frequency threshold to filter out loci [default 0.05].}
 
@@ -54,13 +53,21 @@ progress log; 3, progress and results summary; 5, full report
 A dataframe with information for each SNP pair in LD.
 }
 \description{
-This function calculates pairwise linkage disequilibrium (LD) within each 
-chromosome and by population using the function \link[snpStats]{ld} 
-(package snpStats).
+This function calculates pairwise linkage disequilibrium (LD) by population 
+using the function \link[snpStats]{ld} (package snpStats).
 
-This function requires that SNPs to be mapped to a reference genome and the 
-information for SNP's position must be stored in the genlight accessor 
-position" and the SNP's chromosome name in the accessor chromosome.
+If SNPs are not mapped to a reference genome, the parameters ld_max_pairwise 
+and ld_resolution should be set as NULL (the default). In this case, the 
+function will assign the same chromosome ("1") to all the SNPs in the dataset
+ and assign a sequence from 1 to n loci as the position of each SNP. The 
+ function will then calculate LD for all possible SNP pair combinations. 
+ 
+If SNPs are mapped to a reference genome, the parameters ld_max_pairwise and 
+ld_resolution should not be NULL. In this case, the information for SNP's 
+position should be stored in the genlight accessor "@position" and the SNP's 
+chromosome name in the accessor "@chromosome". The function will then 
+calculate LD within each chromosome and for all possible SNP pair 
+combinations within a distance of ld_max_pairwise.
 }
 \details{
 This function reports pairwise LD of those SNPs in which the LD measure is 
@@ -75,19 +82,22 @@ unlinked (Delourme et al., 2013; Li et al., 2014).
 x <- platypus.gl
 x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
-gl.report.ld.map(x,ld_resolution = 100000)
+gl.report.ld.map(x,ld_max_pairwise = 1000000,ld_resolution = 100000)
 }
 }
 \references{
 \itemize{
-\item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., André, 
-I., . . . Marty, A. (2013). High-density SNP-based genetic map development 
-and linkage disequilibrium assessment in Brassica napusL. BMC genomics, 14(1), 120.
-\item Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . Brummer,
- E. C. (2014). Development of an alfalfa SNP array and its use to evaluate 
- patterns of population structure and linkage disequilibrium. PLoS One, 9(1), e84329.
+\item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., 
+André, I., . . . Marty, A. (2013). High-density SNP-based genetic map 
+development and linkage disequilibrium assessment in Brassica napusL. BMC 
+genomics, 14(1), 120.
+\item Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . 
+Brummer, E. C. (2014). Development of an alfalfa SNP array and its use to 
+evaluate patterns of population structure and linkage disequilibrium. PLoS 
+One, 9(1), e84329.
  }
 }
 \author{
-Custodian: Luis Mijangos -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Luis Mijangos -- Post to
+ \url{https://groups.google.com/d/forum/dartr}
 }
