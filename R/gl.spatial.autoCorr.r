@@ -9,7 +9,7 @@
 #'
 #' @details This function executes behind the scene a modified
 #' version of \code{spautocorr} from the package \code{PopGenReport} and
-#' bootstraps to compute the 95% confidence intervals around the r
+#' bootstraps to compute the 95\% confidence intervals around the r
 #' estimates, the one-tail test, and the correction factor described by
 #' Peakall et al 2003.
 #'
@@ -23,7 +23,7 @@
 #' outside the range provided will be dropped. The number of bins will be 
 #' \code{length(bins) - 1}.
 #'
-#' The permutation constructs the 95% confidence intervals around the null
+#' The permutation constructs the 95\% confidence intervals around the null
 #' hypothesis of no spatial structure (this is a two-tail test). The same data
 #' are also used to calculate the probability of the one-tail test (See 
 #' references below for details).
@@ -93,7 +93,7 @@
 #' intervals are not shown [default FALSE].
 #' @param permutation Whether permutation calculations for the null hypothesis 
 #' of no spatial structure should be carried out [default TRUE].
-#' @param bootstrap Whether bootstrap calculations to compute the 95% confidence
+#' @param bootstrap Whether bootstrap calculations to compute the 95\% confidence
 #' intervals around r should be carried out [default TRUE].
 #' @param plot_theme Theme for the plot. See details [default NULL].
 #' @param plot_colors Vector with two color names for the points and lines of 
@@ -101,7 +101,7 @@
 #' @param plot_colors_pop A color palette for populations or a list with
 #' as many colors as there are populations in the dataset. Only used when 
 #' analyzing more than one population [default NULL].
-#' @param CI_color Color for the shade of the 95% confidence intervals around 
+#' @param CI_color Color for the shade of the 95\% confidence intervals around 
 #' the r estimates [default "red"].
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session

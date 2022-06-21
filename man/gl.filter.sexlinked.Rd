@@ -98,6 +98,7 @@ out <- gl.filter.sexlinked(testset.gs, filter='drop')
 \seealso{
 Other filter functions: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.ld}()},
 \code{\link{gl.filter.parent.offspring}()}
 }
 \author{

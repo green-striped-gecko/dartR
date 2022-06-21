@@ -127,6 +127,7 @@ out <- gl.filter.parent.offspring(testset.gl[1:10])
 
 Other filter functions: 
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.ld}()},
 \code{\link{gl.filter.sexlinked}()}
 }
 \author{
