@@ -200,7 +200,7 @@ gl.spatial.autoCorr <- function(x = NULL,
   
   # CHECK DATATYPE
   
-  if (!is.null(x)){
+  if (!is.null(x)) {
     dt <- utils.check.datatype(x, verbose = 0)
   }
   
@@ -232,9 +232,9 @@ gl.spatial.autoCorr <- function(x = NULL,
     L.r <-
     U.r <- L.r.null <- U.r.null <- Freq <- Var1 <-  NULL 
   
-  # DO THE JOB
+  # DO THE JOB #
   
-  # if a genlight object is provided
+  #### if a genlight object is provided ####
   
   if (!is.null(x) & is(x, "genlight")) {
  
@@ -285,7 +285,7 @@ gl.spatial.autoCorr <- function(x = NULL,
         coordstring = "data.frame x/y"
       }
       
-      if (is.null(coords)){
+      if (is.null(coords)) {
         stop(
           error(
             "No valid coordinates provided. Check the provided data.frame and its format.\n"
@@ -294,12 +294,12 @@ gl.spatial.autoCorr <- function(x = NULL,
       }
     }
     
-    if (is.null(coords)){
+    if (is.null(coords)) {
       stop(error("No valid coordinates provided!\n"))
     }
     
     # make sure coordinates have the correct length
-    if (nrow(coords) != nInd(x_temp) & ta == "genlight"){
+    if (nrow(coords) != nInd(x_temp) & ta == "genlight") {
       stop(error(
         "Cannot find coordinates for each individual in slot @other$latlon.\n"
       ))
@@ -383,7 +383,7 @@ gl.spatial.autoCorr <- function(x = NULL,
   Dgen <- as.dist(Dgen)
   Dgeo <- as.dist(Dgeo)
   
-  # use tranformations
+  # use transformations
   Dgen <- eval(parse(text = Dgen_trans))
   Dgeo <- eval(parse(text = Dgeo_trans))
   
@@ -407,9 +407,9 @@ gl.spatial.autoCorr <- function(x = NULL,
       
   }
   
-  if(all.pops){
+  if(all.pops) {
     
-    Dgen_long <- lapply(Dgen_list,function(x){
+    Dgen_long <- lapply(Dgen_list,function(x) {
       return(as.data.frame(as.table(x)))
     })
     
@@ -422,7 +422,7 @@ gl.spatial.autoCorr <- function(x = NULL,
     rownames(Dgen) <- colnames(Dgen)
     Dgen <- as.matrix(Dgen)
     
-    Dgeo_long <- lapply(Dgeo_list,function(x){
+    Dgeo_long <- lapply(Dgeo_list,function(x) {
       return(as.data.frame(as.table(x)))
     })
     
@@ -442,7 +442,7 @@ gl.spatial.autoCorr <- function(x = NULL,
     crt <- 1 / (sample.size - 1) # correction
     nbins <- if (length(bins) == 1) {
       bins
-    } else{
+    } else {
       length(bins) - 1
     }
     
@@ -477,10 +477,10 @@ gl.spatial.autoCorr <- function(x = NULL,
         sapply(seq_along(splist$r.uc), function(i, r.rc, r, crt = crt) {
           if (is.na(r[i])) {
             NA
-          } else{
+          } else {
             if (r[i] >= 0) {
               sum(r.rc[, i] >= r[i]) / length(r.rc[, i])
-            } else{
+            } else {
               sum(r.rc[, i] <= r[i]) / length(r.rc[, i])
             }
           }
@@ -522,11 +522,11 @@ gl.spatial.autoCorr <- function(x = NULL,
         p.one.tail = p.one.tail
       )
     }
-  }else{
+  } else {
     
     res <- list()
     
-    for(z in 1:length(Dgeo_list)){
+    for(z in 1:length(Dgeo_list)) {
       
       Dgeo <- Dgeo_list[[z]]
       Dgen <- Dgen_list[[z]]
@@ -535,7 +535,7 @@ gl.spatial.autoCorr <- function(x = NULL,
       crt <- 1 / (sample.size - 1) # correction
       nbins <- if (length(bins) == 1) {
         bins
-      } else{
+      } else {
         length(bins) - 1
       }
       
@@ -570,10 +570,10 @@ gl.spatial.autoCorr <- function(x = NULL,
           sapply(seq_along(splist$r.uc), function(i, r.rc, r, crt = crt) {
             if (is.na(r[i])) {
               NA
-            } else{
+            } else {
               if (r[i] >= 0) {
                 sum(r.rc[, i] >= r[i]) / length(r.rc[, i])
-              } else{
+              } else {
                 sum(r.rc[, i] <= r[i]) / length(r.rc[, i])
               }
             }
@@ -626,7 +626,7 @@ gl.spatial.autoCorr <- function(x = NULL,
 
   }
 
-  # if matrices are provided
+  #### if matrices are provided ####
   
   if (is.null(x)) {
     
@@ -665,7 +665,7 @@ gl.spatial.autoCorr <- function(x = NULL,
       crt <- 1 / (sample.size - 1) # correction
       nbins <- if (length(bins) == 1) {
         bins
-      } else{
+      } else {
         length(bins) - 1
       }
       
@@ -700,10 +700,10 @@ gl.spatial.autoCorr <- function(x = NULL,
           sapply(seq_along(splist$r.uc), function(i, r.rc, r, crt = crt) {
             if (is.na(r[i])) {
               NA
-            } else{
+            } else {
               if (r[i] >= 0) {
                 sum(r.rc[, i] >= r[i]) / length(r.rc[, i])
-              } else{
+              } else {
                 sum(r.rc[, i] <= r[i]) / length(r.rc[, i])
               }
             }
@@ -747,7 +747,7 @@ gl.spatial.autoCorr <- function(x = NULL,
       }
   }
   
-  # PRINTING OUTPUTS
+  #### PRINTING OUTPUTS ####
   
   if (plot.out) {
     
@@ -755,12 +755,12 @@ gl.spatial.autoCorr <- function(x = NULL,
       plot_theme <- theme_dartR()
     }
     
-    #if there is just one population
-    if(is.list(res) & length(res)==1){
+    #### if there is just one population ####
+    if(is.list(res) & length(res)==1) {
       
       res <- res[[1]]
     
-    if(is.null(plot_colors)){
+    if(is.null(plot_colors)) {
       plot_colors <- c("deeppink","blue")
     }
     
@@ -784,7 +784,7 @@ gl.spatial.autoCorr <- function(x = NULL,
         xlab("Distance class") + 
         plot_theme
       
-    }else{
+    } else {
       
       p3 <- ggplot(res, aes(Bin, r)) +
         geom_point(aes(y = U.r.null), col = "black") +
@@ -808,10 +808,10 @@ gl.spatial.autoCorr <- function(x = NULL,
     }
     }
     
-    #if all.pops is TRUE
-    if(all.pops){
+    #### if all.pops is TRUE ####
+    if(all.pops) {
       
-      if(is.null(plot_colors)){
+      if(is.null(plot_colors)) {
         plot_colors <- c("deeppink","blue")
       }
       
@@ -835,7 +835,7 @@ gl.spatial.autoCorr <- function(x = NULL,
           xlab("Distance class") + 
           plot_theme
         
-      }else{
+      } else {
         
         p3 <- ggplot(res, aes(Bin, r)) +
           geom_point(aes(y = U.r.null), col = "black") +
@@ -860,7 +860,7 @@ gl.spatial.autoCorr <- function(x = NULL,
     }
     
     #if there are more than one population
-    if(!is.data.frame(res) & plot.pops.together == TRUE){
+    if(!is.data.frame(res) & plot.pops.together == TRUE) {
       
       if (is.null(plot_colors_pop)) {
         plot_colors_pop <- discrete_palette
@@ -893,7 +893,7 @@ gl.spatial.autoCorr <- function(x = NULL,
       }
     }
     
-    if(!is.data.frame(res) & plot.pops.together == FALSE){
+    if(!is.data.frame(res) & plot.pops.together == FALSE) {
       
       if (is.null(plot_colors_pop)) {
         plot_colors_pop <- discrete_palette
@@ -930,7 +930,7 @@ gl.spatial.autoCorr <- function(x = NULL,
               size = 12
             ), legend.position = "none") 
         
-      }else{
+      } else {
         
         p3 <- ggplot(spa_multi,aes_string("Bin", "r", col="Population")) +
           geom_line(size=1,show.legend = FALSE) +
