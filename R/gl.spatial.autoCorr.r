@@ -407,9 +407,10 @@ gl.spatial.autoCorr <- function(x = NULL,
       
   }
   
+  #### all.pop ####
   if(all.pops) {
     
-    Dgen_long <- lapply(Dgen_list,function(x) {
+    Dgen_long <- lapply(Dgen_list, function(x) {
       return(as.data.frame(as.table(x)))
     })
     
@@ -422,7 +423,7 @@ gl.spatial.autoCorr <- function(x = NULL,
     rownames(Dgen) <- colnames(Dgen)
     Dgen <- as.matrix(Dgen)
     
-    Dgeo_long <- lapply(Dgeo_list,function(x) {
+    Dgeo_long <- lapply(Dgeo_list, function(x) {
       return(as.data.frame(as.table(x)))
     })
     
