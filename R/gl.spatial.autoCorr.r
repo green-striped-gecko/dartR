@@ -86,9 +86,6 @@
 #' details [default 5].
 #' @param reps The number to be used for permutation and bootstrap analyses
 #' [default 100].
-#' @param all.pops Genetic and geographic distances are calculated within each 
-#' population and then merged to perform an overall autocorrelation analysis
-#'   [default FALSE].
 #' @param plot.pops.together Plot all the populations in one plot. Confidence 
 #' intervals are not shown [default FALSE].
 #' @param permutation Whether permutation calculations for the null hypothesis 
@@ -170,7 +167,6 @@ gl.spatial.autoCorr <- function(x = NULL,
                                 Dgen_trans = "Dgen",
                                 bins = 5,
                                 reps = 100,
-                                all.pops = FALSE,
                                 plot.pops.together = FALSE,
                                 permutation = TRUE,
                                 bootstrap = TRUE,
@@ -364,126 +360,11 @@ gl.spatial.autoCorr <- function(x = NULL,
       
   }
   
-  if(all.pops){
-    
-    Dgen_long <- lapply(Dgen_list,function(x){
-      return(as.data.frame(as.table(x)))
-    })
-    
-    Dgen_rbind <- data.table::rbindlist(Dgen_long)
-    Dgen_rbind$Var1 <- as.character(Dgen_rbind$Var1)
-    Dgen_rbind$Var2 <- as.character(Dgen_rbind$Var2)
-    Dgen <- as.data.frame(pivot_wider(Dgen_rbind, names_from = Var1, values_from = Freq))
-    
-    Dgen <- Dgen[,-1]
-    rownames(Dgen) <- colnames(Dgen)
-    Dgen <- as.matrix(Dgen)
-    
-    Dgeo_long <- lapply(Dgeo_list,function(x){
-      return(as.data.frame(as.table(x)))
-    })
-    
-    Dgeo_rbind <- data.table::rbindlist(Dgeo_long)
-    Dgeo_rbind$Var1 <- as.character(Dgeo_rbind$Var1)
-    Dgeo_rbind$Var2 <- as.character(Dgeo_rbind$Var2)
-    Dgeo <- as.data.frame(pivot_wider(Dgeo_rbind, names_from = Var1, values_from = Freq))
-    
-    Dgeo <- Dgeo[,-1]
-    rownames(Dgeo) <- colnames(Dgeo)
-    Dgeo <- as.matrix(Dgeo)
-    
-    # Replace the diagonal with zeros
-    diag(Dgen) <- 0
-    
-    sample.size <- nrow(Dgeo)
-    crt <- 1 / (sample.size - 1) # correction
-    nbins <- if (length(bins) == 1) {
-      bins
-    } else{
-      length(bins) - 1
-    }
-    
-    splist <-
-      utils.spautocor(Dgen,
-                      Dgeo,
-                      permutation = FALSE,
-                      bins = bins,
-                      reps = reps)
-    
-    if (permutation) {
-      bssplist <- replicate(reps,
-                            utils.spautocor(
-                              Dgen,
-                              Dgeo,
-                              permutation = TRUE,
-                              bins = bins,
-                              reps = reps
-                            ))
-      
-      #convert the output into a matrix
-      bs <- matrix(
-        unlist(bssplist),
-        nrow = reps,
-        ncol = nbins,
-        byrow = TRUE
-      )
-      bs.l <- apply(bs, 2, quantile, probs = 0.025, na.rm = TRUE)
-      bs.u <- apply(bs, 2, quantile, probs = 0.975, na.rm = TRUE)
-      
-      p.one.tail <-
-        sapply(seq_along(splist$r.uc), function(i, r.rc, r, crt = crt) {
-          if (is.na(r[i])) {
-            NA
-          } else{
-            if (r[i] >= 0) {
-              sum(r.rc[, i] >= r[i]) / length(r.rc[, i])
-            } else{
-              sum(r.rc[, i] <= r[i]) / length(r.rc[, i])
-            }
-          }
-        }, r = splist$r.uc + crt,  r.rc = bs + crt)
-      
-    }
-    
-    if (bootstrap) {
-      errors <-
-        replicate(reps,
-                  utils.spautocor(
-                    Dgen,
-                    Dgeo,
-                    bootstrap = TRUE,
-                    bins = bins,
-                    reps = reps
-                  ))
-      errors <-
-        matrix(unlist(errors),
-               nrow = reps,
-               ncol = nbins,
-               byrow = TRUE)
-      err.l <- apply(errors, 2, quantile, probs = 0.025, na.rm = TRUE)
-      err.u <- apply(errors, 2, quantile, probs = 0.975, na.rm = TRUE)
-    }
-    
-    res <- cbind(splist, Correction = crt, r = splist$r.uc + crt)
-    if (bootstrap) {
-      res <- cbind(res, L.r = err.l + crt, U.r = err.u + crt)
-    }
-    
-    if (permutation) {
-      res <- cbind(
-        res,
-        L.r.null.uc = bs.l,
-        U.r.null.uc = bs.u,
-        L.r.null = bs.l + crt,
-        U.r.null = bs.u + crt,
-        p.one.tail = p.one.tail
-      )
-    }
-  }else{
-    
+
+    #### Execute utils.spautocorr on a list ####
     res <- list()
     
-    for(z in 1:length(Dgeo_list)){
+    for(z in 1:length(Dgeo_list)) {
       
       Dgeo <- Dgeo_list[[z]]
       Dgen <- Dgen_list[[z]]
@@ -492,7 +373,7 @@ gl.spatial.autoCorr <- function(x = NULL,
       crt <- 1 / (sample.size - 1) # correction
       nbins <- if (length(bins) == 1) {
         bins
-      } else{
+      } else {
         length(bins) - 1
       }
       
