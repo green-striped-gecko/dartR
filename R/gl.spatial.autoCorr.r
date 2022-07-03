@@ -314,10 +314,10 @@ gl.spatial.autoCorr <- function(x = NULL,
     } else {
       if (Dgen_method == "grm") {
         Dgen <- as.dist(gl.grm(x_temp, plotheatmap=FALSE, verbose = 0))
-      } else {
-        Dgen <- gl.dist.ind(x_temp, method = Dgen_method, plot.out = FALSE,
-                      verbose = 0)
-      }
+          } else {
+            Dgen <- gl.dist.ind(x_temp, method = Dgen_method, plot.out = FALSE,
+                          verbose = 0)
+          }
     }
     if ((dt == "SNP" &
         Dgen_method == "Euclidean" |
@@ -333,259 +333,198 @@ gl.spatial.autoCorr <- function(x = NULL,
     distance <- Dgen_method
 
   # convert matrices to distance objects
-  Dgen <- as.dist(Dgen)
-  Dgeo <- as.dist(Dgeo)
-  
-  # use tranformations
-  Dgen <- eval(parse(text = Dgen_trans))
-  Dgeo <- eval(parse(text = Dgeo_trans))
-  
-  if (sum(is.infinite(Dgeo)) > 0) {
-    stop(
-      error(
-        "Most likely some pairwise individual distances were zero and the transformation created missing values [e.g. log(Dgeo)]. This affects the Mantel test and points are omitted from the plot. Consider adding a suitable tranformation e.g. an offset to your Dgeo transformation if using a log transformation [e.g. Dgeo_trans='log(Dgeo+1)'] or adding some 'noise' to the coordinates.\n"
-      )
-    )
+    Dgen_list[[i]] <- as.dist(Dgen)
+    Dgeo_list[[i]] <- as.dist(Dgeo)
     
-  }
-  
-      Dgen <- as.matrix(Dgen)
-      Dgeo <- as.matrix(Dgeo)
-      
-      # Replace the diagonal with zeros
-      diag(Dgen) <- 0
-      
-      Dgeo_list[[i]] <- Dgeo
-      Dgen_list[[i]] <- Dgen
-      
-  }
-  
+    } # Close for(i in 1:length(pop_list))
+  } # close if a genlight object is provided
 
-    #### Execute utils.spautocorr on a list ####
-    res <- list()
-    
-    for(z in 1:length(Dgeo_list)) {
-      
-      Dgeo <- Dgeo_list[[z]]
-      Dgen <- Dgen_list[[z]]
-      
-      sample.size <- nrow(Dgeo)
-      crt <- 1 / (sample.size - 1) # correction
-      nbins <- if (length(bins) == 1) {
-        bins
-      } else {
-        length(bins) - 1
-      }
-      
-      splist <-
-        utils.spautocor(Dgen,
-                        Dgeo,
-                        permutation = FALSE,
-                        bins = bins,
-                        reps = reps)
-      
-      if (permutation) {
-        bssplist <- replicate(reps,
-                              utils.spautocor(
-                                Dgen,
-                                Dgeo,
-                                permutation = TRUE,
-                                bins = bins,
-                                reps = reps
-                              ))
-        
-        #convert the output into a matrix
-        bs <- matrix(
-          unlist(bssplist),
-          nrow = reps,
-          ncol = nbins,
-          byrow = TRUE
-        )
-        bs.l <- apply(bs, 2, quantile, probs = 0.025, na.rm = TRUE)
-        bs.u <- apply(bs, 2, quantile, probs = 0.975, na.rm = TRUE)
-        
-        p.one.tail <-
-          sapply(seq_along(splist$r.uc), function(i, r.rc, r, crt = crt) {
-            if (is.na(r[i])) {
-              NA
-            } else{
-              if (r[i] >= 0) {
-                sum(r.rc[, i] >= r[i]) / length(r.rc[, i])
-              } else{
-                sum(r.rc[, i] <= r[i]) / length(r.rc[, i])
-              }
-            }
-          }, r = splist$r.uc + crt,  r.rc = bs + crt)
-        
-      }
-      
-      if (bootstrap) {
-        errors <-
-          replicate(reps,
-                    utils.spautocor(
-                      Dgen,
-                      Dgeo,
-                      bootstrap = TRUE,
-                      bins = bins,
-                      reps = reps
-                    ))
-        errors <-
-          matrix(unlist(errors),
-                 nrow = reps,
-                 ncol = nbins,
-                 byrow = TRUE)
-        err.l <- apply(errors, 2, quantile, probs = 0.025, na.rm = TRUE)
-        err.u <- apply(errors, 2, quantile, probs = 0.975, na.rm = TRUE)
-      }
-      
-      res_temp <- cbind(splist, Correction = crt, r = splist$r.uc + crt)
-      if (bootstrap) {
-        res_temp <- cbind(res_temp, L.r = err.l + crt, U.r = err.u + crt)
-      }
-      
-      if (permutation) {
-        res_temp <- cbind(
-          res_temp,
-          L.r.null.uc = bs.l,
-          U.r.null.uc = bs.u,
-          L.r.null = bs.l + crt,
-          U.r.null = bs.u + crt,
-          p.one.tail = p.one.tail
-        )
-      }
-      
-      res[[z]] <- res_temp
-      
+
+  #### if distances are provided ####
+  if (is.null(x)) {
+    chk.D <- function(D, name.D) {
+      if(!(is(D, "dist") | is.matrix(D))) 
+        stop(error(paste0("  ", name.D, 
+                          " is neither a list, a matrix nor a distance\n")))
+      if(is.matrix(D)) D <- as.dist(D)
+      return(list(D))
     }
     
-    names(res) <- popNames(x)
+    if(!is(Dgeo, "list")) {
+      Dgeo_list <- chk.D(D=Dgeo, name.D = "Dgeo")
+    } else {
+      Dgeo_list <- Dgeo
+    }
+    if(!is(Dgen, "list")) {
+      Dgen_list <- chk.D(D=Dgen, name.D = "Dgen")
+    }  else {
+      Dgen_list <- Dgen
+    }
+        
+    # now distances are a list
+    if(length(Dgeo_list) != length(Dgen_list))
+      stop(error( "  The arguments Dgen and Dgeo should be of same length\n"))
     
-  }
-
-  }
-
-  # if matrices are provided
-  
-  if (is.null(x)) {
+    chk.D.list <- function(D.list, name.D) {
+      if(length(unique(sapply(D.list, class))) == 1) {
+        stop(error(paste0("  ", name.D, 
+              " is a list, but its elements are of different classes. These should be either all matrices or distances\n")))
+      }
+      
+      if(!(is(D.list[[1]], "dist") | is.matrix(D.list[[1]]))) {
+        stop(error(paste0("  ", name.D, 
+              " is a list, but its element are neither all matrices nor distances\n")))
+      }
+      
+      if(is.matrix(D.list[[1]])) D.list <- lapply(D.list, as.dist)
+    }
     
-    if (is.character(all.equal(dim(Dgen), dim(Dgeo)))) {
+    Dgeo_list <- chk.D.list(Dgeo_list, name.D = "Dgeo")
+    Dgen_list <- chk.D.list(Dgen, name.D = "Dgen")
+      
+    len.elements.Dgeo <- sapply(Dgeo_list, length)
+    len.elements.Dgen <- sapply(Dgen_list, length)
+    
+    if (is.character(all.equal(len.elements.Dgeo, len.elements.Dgen))) {
       stop(error("  The arguments Dgen and Dgeo should have identical dimensions\n"))
     }
+    coordstring = "Dgeo provided."
+    distance = "Dgen provided"
+    typedis = "ind"
+  } # Close if matrices are provided
+  #----------------------------------------------------------------------------#
 
-        coordstring = "Dgeo provided."
-        distance = "Dgen provided"
-        typedis = "ind"
-    
-      # make sure both matrices are distance objects if provided via Dgen and Dgeo directly
-      Dgen <- as.dist(Dgen)
-      Dgeo <- as.dist(Dgeo)
-      
-      # use tranformations
-      Dgen <- eval(parse(text = Dgen_trans))
-      Dgeo <- eval(parse(text = Dgeo_trans))
-      
-      if (sum(is.infinite(Dgeo)) > 0) {
-        stop(
-          error(
-            "Most likely some pairwise individual distances were zero and the transformation created missing values [e.g. log(Dgeo)]. This affects the Mantel test and points are omitted from the plot. Consider adding a suitable tranformation e.g. an offset to your Dgeo transformation if using a log transformation [e.g. Dgeo_trans='log(Dgeo+1)'] or adding some 'noise' to the coordinates.\n"
-          )
-        )
-        
-      }
-      
-      Dgen <- as.matrix(Dgen)
-      Dgeo <- as.matrix(Dgeo)
-      
-      # Replace the diagonal with zeros
-      diag(Dgen) <- 0
-      
-      sample.size <- nrow(Dgeo)
-      crt <- 1 / (sample.size - 1) # correction
-      nbins <- if (length(bins) == 1) {
-        bins
-      } else{
-        length(bins) - 1
-      }
-      
-      splist <-
-        utils.spautocor(Dgen,
-                        Dgeo,
-                        permutation = FALSE,
-                        bins = bins,
-                        reps = reps)
-      
-      if (permutation) {
-        bssplist <- replicate(reps,
-                              utils.spautocor(
-                                Dgen,
-                                Dgeo,
-                                permutation = TRUE,
-                                bins = bins,
-                                reps = reps
-                              ))
-        
-        #convert the output into a matrix
-        bs <- matrix(
-          unlist(bssplist),
-          nrow = reps,
-          ncol = nbins,
-          byrow = TRUE
-        )
-        bs.l <- apply(bs, 2, quantile, probs = 0.025, na.rm = TRUE)
-        bs.u <- apply(bs, 2, quantile, probs = 0.975, na.rm = TRUE)
-        
-        p.one.tail <-
-          sapply(seq_along(splist$r.uc), function(i, r.rc, r, crt = crt) {
-            if (is.na(r[i])) {
-              NA
-            } else{
-              if (r[i] >= 0) {
-                sum(r.rc[, i] >= r[i]) / length(r.rc[, i])
-              } else{
-                sum(r.rc[, i] <= r[i]) / length(r.rc[, i])
-              }
-            }
-          }, r = splist$r.uc + crt,  r.rc = bs + crt)
-        
-      }
-      
-      if (bootstrap) {
-        errors <-
-          replicate(reps,
-                    utils.spautocor(
-                      Dgen,
-                      Dgeo,
-                      bootstrap = TRUE,
-                      bins = bins,
-                      reps = reps
-                    ))
-        errors <-
-          matrix(unlist(errors),
-                 nrow = reps,
-                 ncol = nbins,
-                 byrow = TRUE)
-        err.l <- apply(errors, 2, quantile, probs = 0.025, na.rm = TRUE)
-        err.u <- apply(errors, 2, quantile, probs = 0.975, na.rm = TRUE)
-      }
-      
-      res <- cbind(splist, Correction = crt, r = splist$r.uc + crt)
-      if (bootstrap) {
-        res <- cbind(res, L.r = err.l + crt, U.r = err.u + crt)
-      }
-      
-      if (permutation) {
-        res <- cbind(
-          res,
-          L.r.null.uc = bs.l,
-          U.r.null.uc = bs.u,
-          L.r.null = bs.l + crt,
-          U.r.null = bs.u + crt,
-          p.one.tail = p.one.tail
-        )
-      }
+  #### Apply transformations ####
+  apply.transformation <- function(D, transFUN, name.D) {
+    assign(name.D, value = D)
+    new.obj <- eval(parse(text = transFUN))
+    return(new.obj)
   }
   
-  # PRINTING OUTPUTS
+  Dgen_list <- lapply(Dgen_list, apply.transformation, transFUN=Dgen_trans, name.D="Dgen")
+  Dgeo_list <- lapply(Dgeo_list, apply.transformation, transFUN=Dgeo_trans, name.D="Dgeo")
+      
+  lapply(Dgeo_list, function(D) {
+    if(sum(is.infinite(D)) > 0) {
+      stop(
+        error(
+          "Most likely some pairwise individual distances were zero and the transformation created missing values [e.g. log(Dgeo)]. Consider adding a suitable tranformation e.g. an offset to your Dgeo transformation if using a log transformation [e.g. Dgeo_trans='log(Dgeo+1)'] or adding some 'noise' to the coordinates.\n"
+        )
+      )
+    }
+  } 
+  )
+  convert2matrix <- function(D) {
+    D <- as.matrix(D)
+    diag(D) <- 0
+    return(D)
+  }
+  
+  Dgen_list <- lapply(Dgen_list, convert2matrix) 
+  Dgeo_list <- lapply(Dgeo_list, convert2matrix)
+  
+  #### Execute utils.spautocorr on a list ####
+      res <- list()
+      
+      for(z in 1:length(Dgeo_list)) {
+        
+        Dgeo <- Dgeo_list[[z]]
+        Dgen <- Dgen_list[[z]]
+        
+        sample.size <- nrow(Dgeo)
+        crt <- 1 / (sample.size - 1) # correction
+        nbins <- if (length(bins) == 1) {
+          bins
+        } else {
+          length(bins) - 1
+        }
+        
+        splist <-
+          utils.spautocor(Dgen,
+                          Dgeo,
+                          permutation = FALSE,
+                          bins = bins,
+                          reps = reps)
+        
+        if (permutation) {
+          bssplist <- replicate(reps,
+                                utils.spautocor(
+                                  Dgen,
+                                  Dgeo,
+                                  permutation = TRUE,
+                                  bins = bins,
+                                  reps = reps
+                                ))
+          
+          #convert the output into a matrix
+          bs <- matrix(
+            unlist(bssplist),
+            nrow = reps,
+            ncol = nbins,
+            byrow = TRUE
+          )
+          bs.l <- apply(bs, 2, quantile, probs = 0.025, na.rm = TRUE)
+          bs.u <- apply(bs, 2, quantile, probs = 0.975, na.rm = TRUE)
+          
+          p.one.tail <-
+            sapply(seq_along(splist$r.uc), function(i, r.rc, r, crt = crt) {
+              if (is.na(r[i])) {
+                NA
+              } else{
+                if (r[i] >= 0) {
+                  sum(r.rc[, i] >= r[i]) / length(r.rc[, i])
+                } else{
+                  sum(r.rc[, i] <= r[i]) / length(r.rc[, i])
+                }
+              }
+            }, r = splist$r.uc + crt,  r.rc = bs + crt)
+          
+        }
+        
+        if (bootstrap) {
+          errors <-
+            replicate(reps,
+                      utils.spautocor(
+                        Dgen,
+                        Dgeo,
+                        bootstrap = TRUE,
+                        bins = bins,
+                        reps = reps
+                      ))
+          errors <-
+            matrix(unlist(errors),
+                   nrow = reps,
+                   ncol = nbins,
+                   byrow = TRUE)
+          err.l <- apply(errors, 2, quantile, probs = 0.025, na.rm = TRUE)
+          err.u <- apply(errors, 2, quantile, probs = 0.975, na.rm = TRUE)
+        }
+        
+        res_temp <- cbind(splist, Correction = crt, r = splist$r.uc + crt)
+        if (bootstrap) {
+          res_temp <- cbind(res_temp, L.r = err.l + crt, U.r = err.u + crt)
+        }
+        
+        if (permutation) {
+          res_temp <- cbind(
+            res_temp,
+            L.r.null.uc = bs.l,
+            U.r.null.uc = bs.u,
+            L.r.null = bs.l + crt,
+            U.r.null = bs.u + crt,
+            p.one.tail = p.one.tail
+          )
+        }
+        
+        res[[z]] <- res_temp
+        
+      }
+      
+      
+      names(res) <- popNames(x)
+  #-------- Close Execute utils.spautoCorr ------------------------------------#
+
+#### PRINTING OUTPUTS ####
   
   if (plot.out) {
     
