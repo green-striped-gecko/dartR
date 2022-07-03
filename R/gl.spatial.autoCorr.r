@@ -199,13 +199,11 @@ gl.spatial.autoCorr <- function(x = NULL,
                    verbosity = verbose)
   
   # CHECK DATATYPE
-  
   if (!is.null(x)){
     dt <- utils.check.datatype(x, verbose = 0)
   }
   
   # specific error checks
-  
   if (!is.numeric(bins)) {
     stop(error("  The argument 'bins' should be a numeric vector\n"))
   }
@@ -234,8 +232,7 @@ gl.spatial.autoCorr <- function(x = NULL,
   
   # DO THE JOB
   
-  # if a genlight object is provided
-  
+  #### if a genlight object is provided ####
   if (!is.null(x) & is(x, "genlight")) {
  
   pop_list <- seppop(x)
@@ -316,65 +313,25 @@ gl.spatial.autoCorr <- function(x = NULL,
       }
     
     # calculate genetic distances
-    
-    if (dt == "SNP" &
-        Dgen_method == "Euclidean" |
-        Dgen_method == "Simple" |
-        Dgen_method == "Absolute") {
-      Dgen <-
-        gl.dist.ind(x_temp,
-                    method = Dgen_method,
-                    plot.out = FALSE,
-                    verbose = 0)
-      
-      # Reverse genetic distance matrix so that correlated values
-      # indicated more similar individuals as we are used to see plots in GenAleEx
-      
-      Dgen <- 1 - Dgen
-    }
-    
-    if (dt == "SNP" & Dgen_method == "Manhattan") {
-      Dgen <-
-        gl.dist.ind(x_temp,
-                    method = Dgen_method,
-                    plot.out = FALSE,
-                    verbose = 0)
-    }
-    
-    if (dt == "SilicoDArT" & Dgen_method == "Euclidean") {
-      Dgen <-
-        gl.dist.ind(x_temp,
-                    method = Dgen_method,
-                    plot.out = FALSE,
-                    verbose = 0)
-      # Reverse genetic distance matrix so that correlated values
-      # indicated more similar individuals as we are used to see plots in GenAleEx
-      
-      Dgen <- 1 - Dgen
-    }
-    
-    if (dt == "SilicoDArT" &
-        Dgen_method == "Simple" |
-        Dgen_method == "Jaccard" |
-        Dgen_method == "Bray-Curtis") {
-      Dgen <-
-        gl.dist.ind(x_temp,
-                    method = Dgen_method,
-                    plot.out = FALSE,
-                    verbose = 0)
-    
-    }
-    
     if (Dgen_method == "propShared") {
       Dgen <- as.dist(gl.propShared(x_temp))
+    } else {
+      if (Dgen_method == "grm") {
+        Dgen <- as.dist(gl.grm(x_temp, plotheatmap=FALSE, verbose = 0))
+      } else {
+        Dgen <- gl.dist.ind(x_temp, method = Dgen_method, plot.out = FALSE,
+                      verbose = 0)
+      }
+    }
+    if ((dt == "SNP" &
+        Dgen_method == "Euclidean" |
+        Dgen_method == "Simple" |
+        Dgen_method == "Absolute") |
+      (dt == "SilicoDArT" & Dgen_method == "Euclidean")) {
+      
       # Reverse genetic distance matrix so that correlated values
       # indicated more similar individuals as we are used to see plots in GenAleEx
-      
       Dgen <- 1 - Dgen
-    }
-    
-    if (Dgen_method == "grm") {
-      Dgen <- as.dist(gl.grm(x_temp,plotheatmap=FALSE,verbose = 0))
     }
     
     distance <- Dgen_method
