@@ -337,6 +337,7 @@ gl.spatial.autoCorr <- function(x = NULL,
     Dgeo_list[[i]] <- as.dist(Dgeo)
     
     } # Close for(i in 1:length(pop_list))
+  pop.names <- popNames(x)
   } # close if a genlight object is provided
 
 
@@ -364,6 +365,8 @@ gl.spatial.autoCorr <- function(x = NULL,
     # now distances are a list
     if(length(Dgeo_list) != length(Dgen_list))
       stop(error( "  The arguments Dgen and Dgeo should be of same length\n"))
+    
+    if(is.null(namesDgen)) pop.names <- paste0("Pop", seq_along(Dgen_list))
     
     chk.D.list <- function(D.list, name.D) {
       if(length(unique(sapply(D.list, class))) == 1) {
@@ -414,6 +417,7 @@ gl.spatial.autoCorr <- function(x = NULL,
     }
   } 
   )
+  
   convert2matrix <- function(D) {
     D <- as.matrix(D)
     diag(D) <- 0
@@ -521,7 +525,7 @@ gl.spatial.autoCorr <- function(x = NULL,
       }
       
       
-      names(res) <- popNames(x)
+      names(res) <- pop.names
   #-------- Close Execute utils.spautoCorr ------------------------------------#
 
 #### PRINTING OUTPUTS ####
@@ -532,113 +536,6 @@ gl.spatial.autoCorr <- function(x = NULL,
       plot_theme <- theme_dartR()
     }
     
-    #if there is just one population
-    if(is.list(res) & length(res)==1){
-      
-      res <- res[[1]]
-    
-    if(is.null(plot_colors)){
-      plot_colors <- c("deeppink","blue")
-    }
-    
-    if (permutation) {
-      p3 <- ggplot(res, aes(Bin, r)) +
-        geom_ribbon(aes(ymin=L.r.null,ymax=U.r.null), fill= CI_color, alpha=0.25)+ 
-        geom_line(aes(y = L.r.null), col = "black", linetype = "dashed") +
-        geom_point(aes(y = L.r.null), col = "black") +
-        geom_line(aes(y = U.r.null), col = "black", linetype = "dashed") +
-        geom_hline(yintercept = 0, col = "black",size=1) +
-        geom_point(aes(y = U.r.null), col = "black") +
-        geom_line(size=1,color=plot_colors[2]) +
-        geom_point(size=2,color=plot_colors[1]) +
-        scale_x_continuous(breaks = res$Bin,
-                           labels = paste(round(res$Bin/1000,1),"Km"),
-                           sec.axis = sec_axis(
-                             trans = ~ .,
-                             breaks = res$Bin,
-                             labels = paste("n =",res$N))) +
-        ylab("Autocorrelation (r)") + 
-        xlab("Distance class") + 
-        plot_theme
-      
-    }else{
-      
-      p3 <- ggplot(res, aes(Bin, r)) +
-        geom_point(aes(y = U.r.null), col = "black") +
-        geom_line(size=1,color=plot_colors[2]) +
-        geom_point(size=2,color=plot_colors[1]) +
-        scale_x_continuous(breaks = res$Bin,
-                           labels = paste(round(res$Bin/1000,0),"Km"),
-                           sec.axis = sec_axis(
-                             trans = ~ .,
-                             breaks = res$Bin,
-                             labels = paste("n =",res$N))) +
-        ylab("Autocorrelation (r)") + 
-        xlab("Distance class") + 
-        plot_theme
-      
-    }
-    
-    if (bootstrap) {
-      p3 <- p3 +
-        geom_errorbar(aes(ymin=L.r, ymax=U.r),width=res$Bin[1]/10) 
-    }
-    }
-    
-    #if all.pops is TRUE
-    if(all.pops){
-      
-      if(is.null(plot_colors)){
-        plot_colors <- c("deeppink","blue")
-      }
-      
-      if (permutation) {
-        p3 <- ggplot(res, aes(Bin, r)) +
-          geom_ribbon(aes(ymin=L.r.null,ymax=U.r.null), fill= CI_color, alpha=0.25)+ 
-          geom_line(aes(y = L.r.null), col = "black", linetype = "dashed") +
-          geom_point(aes(y = L.r.null), col = "black") +
-          geom_line(aes(y = U.r.null), col = "black", linetype = "dashed") +
-          geom_hline(yintercept = 0, col = "black",size=1) +
-          geom_point(aes(y = U.r.null), col = "black") +
-          geom_line(size=1,color=plot_colors[2]) +
-          geom_point(size=2,color=plot_colors[1]) +
-          scale_x_continuous(breaks = res$Bin,
-                             labels = paste(round(res$Bin/1000,1),"Km"),
-                             sec.axis = sec_axis(
-                               trans = ~ .,
-                               breaks = res$Bin,
-                               labels = paste("n =",res$N))) +
-          ylab("Autocorrelation (r)") + 
-          xlab("Distance class") + 
-          plot_theme
-        
-      }else{
-        
-        p3 <- ggplot(res, aes(Bin, r)) +
-          geom_point(aes(y = U.r.null), col = "black") +
-          geom_line(size=1,color=plot_colors[2]) +
-          geom_point(size=2,color=plot_colors[1]) +
-          scale_x_continuous(breaks = res$Bin,
-                             labels = paste(round(res$Bin/1000,0),"Km"),
-                             sec.axis = sec_axis(
-                               trans = ~ .,
-                               breaks = res$Bin,
-                               labels = paste("n =",res$N))) +
-          ylab("Autocorrelation (r)") + 
-          xlab("Distance class") + 
-          plot_theme
-        
-      }
-      
-      if (bootstrap) {
-        p3 <- p3 +
-          geom_errorbar(aes(ymin=L.r, ymax=U.r),width=res$Bin[1]/10) 
-      }
-    }
-    
-    #if there are more than one population
-    if(!is.data.frame(res) & plot.pops.together == TRUE){
-      
       if (is.null(plot_colors_pop)) {
         plot_colors_pop <- discrete_palette
       }
@@ -651,12 +548,13 @@ gl.spatial.autoCorr <- function(x = NULL,
         plot_colors_pop <- plot_colors_pop
       }
       
-      spa_multi <-data.table::rbindlist(res, use.names = TRUE, fill = TRUE, idcol = "Population")
+      spa_multi <-data.table::rbindlist(res, use.names = TRUE, 
+                                        fill = TRUE, idcol = "Population")
       
-      p3 <- ggplot(spa_multi,aes_string("Bin", "r", col="Population")) +
+      p3 <- ggplot(spa_multi, aes_string("Bin", "r", col="Population")) +
         geom_line(size=1) +
         geom_point(size=2) +
-        geom_hline(yintercept = 0, col = "black",size=1) +
+        geom_hline(yintercept = 0, col = "black", size=1) +
         scale_color_manual(values = plot_colors_pop) +
         # scale_x_binned(breaks = spa_multi$Bin,
          #                    labels = paste(round(spa_multi$Bin/1000,0),"Km")) +
@@ -666,70 +564,30 @@ gl.spatial.autoCorr <- function(x = NULL,
       
       if (bootstrap) {
         p3 <- p3 +   
-          geom_errorbar(aes(ymin=L.r, ymax=U.r),width=spa_multi$Bin[1]/10) 
-      }
-    }
-    
-    if(!is.data.frame(res) & plot.pops.together == FALSE){
-      
-      if (is.null(plot_colors_pop)) {
-        plot_colors_pop <- discrete_palette
+          geom_errorbar(aes(ymin=L.r, ymax=U.r), width=spa_multi$Bin[1]/10) 
       }
       
-      if (is(plot_colors_pop, "function")) {
-        plot_colors_pop <- plot_colors_pop(nPop(x))
-      }
-      
-      if (!is(plot_colors_pop, "function")) {
-        plot_colors_pop <- plot_colors_pop
-      }
-      
-      spa_multi <-data.table::rbindlist(res, use.names = TRUE, fill = TRUE, idcol = "Population")
-      
-      if (permutation) {
-        p3 <- ggplot(spa_multi, aes_string(x="Bin", y="r",color="Population")) +
-          geom_hline(yintercept = 0, col = "black",size=1) +
-          geom_ribbon(aes(ymin=L.r.null,ymax=U.r.null), fill = CI_color, alpha=0.25,show.legend = FALSE)+ 
+      if (permutation & plot.pops.together == FALSE) {
+        p3 <- p3 +  
+          geom_ribbon(aes(ymin=L.r.null,ymax=U.r.null), fill = CI_color, 
+                      alpha=0.25,show.legend = FALSE) + 
           geom_line(aes(y = L.r.null), col = "black", linetype = "dashed") +
           geom_point(aes(y = L.r.null), col = "black") +
           geom_line(aes(y = U.r.null), col = "black", linetype = "dashed") +
           geom_point(aes(y = U.r.null), col = "black") +
-          geom_line(size=1, show.legend = FALSE) +
-          geom_point(size=2, show.legend = FALSE) +
-          facet_wrap(~Population, scales = "free_x", ncol = 3)+
-          scale_color_manual(values = plot_colors_pop) +
-          ylab("Autocorrelation (r)") + 
-          xlab("Distance class") + 
-          plot_theme +
-          theme(
-            strip.text.x = element_text(size = 12),
-            axis.text.x = element_text(
-              size = 12
-            ), legend.position = "none") 
-        
-      }else{
-        
-        p3 <- ggplot(spa_multi,aes_string("Bin", "r", col="Population")) +
-          geom_line(size=1,show.legend = FALSE) +
-          geom_point(size=2,show.legend = FALSE) +
-          geom_hline(yintercept = 0, col = "black",size=1) +
-          facet_grid(~Population,scales = "free_x")+
-          ylab("Autocorrelation (r)") + 
-          xlab("Distance class") + 
-          plot_theme +
-          theme(
-            strip.text.x = element_text(size = 12),
-            axis.text.x = element_text(
-              size = 12
-            ), legend.position = "none") 
-        
+          facet_wrap(~Population, scales = "free_x", ncol = 3) #+
+          # theme(
+          #   strip.text.x = element_text(size = 12),
+          #   axis.text.x = element_text(
+          #     size = 12
+          #   ), legend.position = "none") 
       }
-      
-      if (bootstrap) {
-        p3 <- p3 +   
-          geom_errorbar(aes(ymin=L.r, ymax=U.r),width=spa_multi$Bin[1]/10) 
-      }
-    }
+      if(length(Dgen_list) == 1) 
+        p3 + 
+        scale_x_continuous(sec.axis = sec_axis(
+                                  trans = ~ .,
+                                  breaks = res$Bin,
+                                  labels = res$N))
     
     suppressMessages(print(p3))
     }
