@@ -14,12 +14,10 @@ gl.spatial.autoCorr(
   Dgen_trans = "Dgen",
   bins = 5,
   reps = 100,
-  all.pops = FALSE,
   plot.pops.together = FALSE,
   permutation = TRUE,
   bootstrap = TRUE,
   plot_theme = NULL,
-  plot_colors = NULL,
   plot_colors_pop = NULL,
   CI_color = "red",
   plot.out = TRUE,
@@ -46,7 +44,7 @@ xy then distance is directly calculated on the coordinates [default .}
 \item{Dgen_method}{Method to calculate genetic distances. See details
 [default "Euclidean"].}
 
-\item{Dgeo_trans}{Transformation to be used on the Euclidean distances. See
+\item{Dgeo_trans}{Transformation to be used on the geographic distances. See
 Dgen_trans [default "Dgeo"].}
 
 \item{Dgen_trans}{You can provide a formula to transform the genetic
@@ -62,12 +60,8 @@ details [default 5].}
 \item{reps}{The number to be used for permutation and bootstrap analyses
 [default 100].}
 
-\item{all.pops}{Genetic and geographic distances are calculated within each 
-population and then merged to perform an overall autocorrelation analysis
-  [default FALSE].}
-
 \item{plot.pops.together}{Plot all the populations in one plot. Confidence 
-intervals are not shown [default FALSE].}
+intervals from permutations are not shown [default FALSE].}
 
 \item{permutation}{Whether permutation calculations for the null hypothesis 
 of no spatial structure should be carried out [default TRUE].}
@@ -77,12 +71,8 @@ intervals around r should be carried out [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See details [default NULL].}
 
-\item{plot_colors}{Vector with two color names for the points and lines of 
-the plot. Only used when analyzing one population [default NULL].}
-
 \item{plot_colors_pop}{A color palette for populations or a list with
-as many colors as there are populations in the dataset. Only used when 
-analyzing more than one population [default NULL].}
+as many colors as there are populations in the dataset [default NULL].}
 
 \item{CI_color}{Color for the shade of the 95\% confidence intervals around 
 the r estimates [default "red"].}
@@ -127,11 +117,30 @@ combining all loci into a single analysis. The autocorrelation coefficient
   and Smouse et al. 2008.
 }
 \details{
-This function executes behind the scene a modified
-version of \code{spautocorr} from the package \code{PopGenReport} and
-bootstraps to compute the 95\% confidence intervals around the r
-estimates, the one-tail test, and the correction factor described by
-Peakall et al 2003.
+This function executes a modified version
+ of \code{spautocorr} from the package \code{PopGenReport}. Differently 
+from \code{PopGenReport}, this function also computes the 95\% confidence 
+intervals around the r via bootstraps, the 95% confidence interval around the 
+null hypothesis of no spatial structure and the one-tail test via permutation, 
+and the correction factor described by Peakall et al 2003.
+
+The input can provide a genlight object (which has to have the latlon slot 
+populated), a pair of \code{Dgeo} and \code{Dgen}, which have to be either
+ \code{matrix} or \code{dist} objects, or a \code{list} of the latter if the 
+ analysis needs to be carried out for multiple populations (in this case, 
+ all the elements of the \code{list} have to be of the same class (i.e. 
+ \code{matrix} or \code{dist}). 
+
+If the input is a genlight object, the function calculates the linear distance
+for \code{Dgeo} and the relevant \code{Dgen} matrix (see \code{Dgen_method}) 
+for each population. 
+When the method selected generate a genetic similarity matrix (e.g. "simple" 
+distance), the matrix is internally transformed with \code{1 - Dgen} so that 
+positive values of autocorrelation coefficients indicates more related 
+individuals similarly as implemented in GenAlEx. If the user provide the 
+distance matrices, care must be taken in interpreting the results because
+similarity matrix will generate negative values for closely related 
+individuals.
 
 If \code{bins} is of length = 1 it is interpreted as the number of (even)
 bins to use. In this case the starting point is always the minimum value in 
