@@ -550,21 +550,27 @@ gl.spatial.autoCorr <- function(x = NULL,
       
       spa_multi <-data.table::rbindlist(res, use.names = TRUE, 
                                         fill = TRUE, idcol = "Population")
+      lbls <-  if(spa_multi [, max(Bin)] > 1000) {
+        round(spa_multi$Bin/1000, 0) 
+      } else {
+        spa_multi$Bin
+      }
       
       p3 <- ggplot(spa_multi, aes_string("Bin", "r", col="Population")) +
         geom_line(size=1) +
         geom_point(size=2) +
         geom_hline(yintercept = 0, col = "black", size=1) +
         scale_color_manual(values = plot_colors_pop) +
-        # scale_x_binned(breaks = spa_multi$Bin,
-         #                    labels = paste(round(spa_multi$Bin/1000,0),"Km")) +
+        scale_x_continuous(breaks = spa_multi$Bin,
+                      labels = lbls) +
         ylab("Autocorrelation (r)") + 
         xlab("Distance class") + 
         plot_theme
       
       if (bootstrap) {
         p3 <- p3 +   
-          geom_errorbar(aes(ymin=L.r, ymax=U.r), width=spa_multi$Bin[1]/10) 
+          geom_errorbar(aes(ymin=L.r, ymax=U.r), 
+                        width=spa_multi[, mean(tail(Bin, -1) - head(Bin, -1))]/10) 
       }
       
       if (permutation & plot.pops.together == FALSE) {
@@ -575,19 +581,24 @@ gl.spatial.autoCorr <- function(x = NULL,
           geom_point(aes(y = L.r.null), col = "black") +
           geom_line(aes(y = U.r.null), col = "black", linetype = "dashed") +
           geom_point(aes(y = U.r.null), col = "black") +
-          facet_wrap(~Population, scales = "free_x", ncol = 3) #+
-          # theme(
+          facet_wrap(~Population, nrow = length(Dgen_list), scales = "free_y") +
+           theme(
           #   strip.text.x = element_text(size = 12),
           #   axis.text.x = element_text(
           #     size = 12
-          #   ), legend.position = "none") 
+          #   ), 
+             legend.position = "none") 
       }
-      if(length(Dgen_list) == 1) 
-        p3 + 
-        scale_x_continuous(sec.axis = sec_axis(
+      if(length(Dgen_list) == 1) {
+        p3 <- p3 + 
+        scale_x_continuous(breaks = spa_multi$Bin,
+                            labels = lbls,
+                            sec.axis = sec_axis(
                                   trans = ~ .,
-                                  breaks = res$Bin,
-                                  labels = res$N))
+                                  breaks = spa_multi$Bin,
+                                  labels = spa_multi$N)) +
+        theme(strip.text = element_blank(), legend.position = "none")
+      }
     
     suppressMessages(print(p3))
     }
