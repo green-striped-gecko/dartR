@@ -320,6 +320,7 @@ gl.spatial.autoCorr <- function(x = NULL,
           }
     }
     if ((dt == "SNP" &
+        Dgen_method == "propShared" |
         Dgen_method == "Euclidean" |
         Dgen_method == "Simple" |
         Dgen_method == "Absolute") |
