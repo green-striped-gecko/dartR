@@ -210,7 +210,7 @@ gl.spatial.autoCorr <- function(x = NULL,
                    verbosity = verbose)
   
   # CHECK DATATYPE
-  if (!is.null(x)){
+  if (!is.null(x)) {
     dt <- utils.check.datatype(x, verbose = 0)
   }
   
@@ -241,7 +241,7 @@ gl.spatial.autoCorr <- function(x = NULL,
     L.r <-
     U.r <- L.r.null <- U.r.null <- Freq <- Var1 <-  NULL 
   
-  # DO THE JOB
+  # DO THE JOB #
   
   #### if a genlight object is provided ####
   if (!is.null(x) & is(x, "genlight")) {
@@ -293,7 +293,7 @@ gl.spatial.autoCorr <- function(x = NULL,
         coordstring = "data.frame x/y"
       }
       
-      if (is.null(coords)){
+      if (is.null(coords)) {
         stop(
           error(
             "No valid coordinates provided. Check the provided data.frame and its format.\n"
@@ -302,12 +302,12 @@ gl.spatial.autoCorr <- function(x = NULL,
       }
     }
     
-    if (is.null(coords)){
+    if (is.null(coords)) {
       stop(error("No valid coordinates provided!\n"))
     }
     
     # make sure coordinates have the correct length
-    if (nrow(coords) != nInd(x_temp) & ta == "genlight"){
+    if (nrow(coords) != nInd(x_temp) & ta == "genlight") {
       stop(error(
         "Cannot find coordinates for each individual in slot @other$latlon.\n"
       ))
@@ -351,8 +351,7 @@ gl.spatial.autoCorr <- function(x = NULL,
   # convert matrices to distance objects
     Dgen_list[[i]] <- as.dist(Dgen)
     Dgeo_list[[i]] <- as.dist(Dgeo)
-    
-    } # Close for(i in 1:length(pop_list))
+      } # Close for(i in 1:length(pop_list))
   pop.names <- popNames(x)
   } # close if a genlight object is provided
 
@@ -377,11 +376,11 @@ gl.spatial.autoCorr <- function(x = NULL,
     }  else {
       Dgen_list <- Dgen
     }
-        
+
     # now distances are a list
     if(length(Dgeo_list) != length(Dgen_list))
       stop(error( "  The arguments Dgen and Dgeo should be of same length\n"))
-    
+
     if(is.null(names(Dgeo_list))) pop.names <- paste0("Pop", seq_along(Dgen_list))
     
     chk.D.list <- function(D.list, name.D) {
@@ -420,7 +419,7 @@ gl.spatial.autoCorr <- function(x = NULL,
     new.obj <- eval(parse(text = transFUN))
     return(new.obj)
   }
-  
+
   Dgen_list <- lapply(Dgen_list, apply.transformation, transFUN=Dgen_trans, name.D="Dgen")
   Dgeo_list <- lapply(Dgeo_list, apply.transformation, transFUN=Dgeo_trans, name.D="Dgeo")
       
@@ -536,17 +535,14 @@ gl.spatial.autoCorr <- function(x = NULL,
             p.one.tail = p.one.tail
           )
         }
-        
         res[[z]] <- res_temp
-        
       }
-      
       
       names(res) <- pop.names
   #-------- Close Execute utils.spautoCorr ------------------------------------#
 
 #### PRINTING OUTPUTS ####
-  
+
   if (plot.out) {
     
     if (is.null(plot_theme)) {
@@ -591,7 +587,7 @@ gl.spatial.autoCorr <- function(x = NULL,
           geom_errorbar(aes(ymin=L.r, ymax=U.r), 
                         width=spa_multi[, mean(tail(Bin, -1) - head(Bin, -1))]/10) 
       }
-      
+
       if (permutation & plot.pops.together == FALSE) {
         p3 <- p3 +  
           geom_ribbon(aes(ymin=L.r.null,ymax=U.r.null), fill = CI_color, 
@@ -608,6 +604,7 @@ gl.spatial.autoCorr <- function(x = NULL,
           #   ), 
              legend.position = "none") 
       }
+      
       if(length(Dgen_list) == 1) {
         p3 <- p3 + 
         scale_x_continuous(breaks = spa_multi$Bin,
