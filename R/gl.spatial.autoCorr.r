@@ -251,7 +251,7 @@ gl.spatial.autoCorr <- function(x = NULL,
   Dgen_list <- list()
   Dgeo_list <- list()
   
-  for (i in 1:length(pop_list)) {
+  for (i in seq_along(pop_list)) {
     
     if (verbose > 2) {
       cat(
@@ -447,7 +447,7 @@ gl.spatial.autoCorr <- function(x = NULL,
   #### Execute utils.spautocorr on a list ####
       res <- list()
       
-      for(z in 1:length(Dgeo_list)) {
+      for(z in seq_along(Dgeo_list)) {
         
         Dgeo <- Dgeo_list[[z]]
         Dgen <- Dgen_list[[z]]
