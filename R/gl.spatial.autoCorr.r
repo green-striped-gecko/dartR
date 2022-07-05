@@ -618,8 +618,9 @@ gl.spatial.autoCorr <- function(x = NULL,
                                   labels = spa_multi$N)) +
         theme(strip.text = element_blank(), legend.position = "none")
       }
-    
+    suppressWarnings(
     suppressMessages(print(p3))
+    )
     }
   
   if (verbose > 0) {
