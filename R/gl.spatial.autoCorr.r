@@ -382,10 +382,10 @@ gl.spatial.autoCorr <- function(x = NULL,
     if(length(Dgeo_list) != length(Dgen_list))
       stop(error( "  The arguments Dgen and Dgeo should be of same length\n"))
     
-    if(is.null(namesDgen)) pop.names <- paste0("Pop", seq_along(Dgen_list))
+    if(is.null(names(Dgeo_list))) pop.names <- paste0("Pop", seq_along(Dgen_list))
     
     chk.D.list <- function(D.list, name.D) {
-      if(length(unique(sapply(D.list, class))) == 1) {
+      if(length(unique(sapply(D.list, class))) != 1) {
         stop(error(paste0("  ", name.D, 
               " is a list, but its elements are of different classes. These should be either all matrices or distances\n")))
       }
@@ -396,10 +396,11 @@ gl.spatial.autoCorr <- function(x = NULL,
       }
       
       if(is.matrix(D.list[[1]])) D.list <- lapply(D.list, as.dist)
+      return(D.list)
     }
     
     Dgeo_list <- chk.D.list(Dgeo_list, name.D = "Dgeo")
-    Dgen_list <- chk.D.list(Dgen, name.D = "Dgen")
+    Dgen_list <- chk.D.list(Dgen_list, name.D = "Dgen")
       
     len.elements.Dgeo <- sapply(Dgeo_list, length)
     len.elements.Dgen <- sapply(Dgen_list, length)
@@ -557,7 +558,9 @@ gl.spatial.autoCorr <- function(x = NULL,
       }
       
       if (is(plot_colors_pop, "function")) {
-        plot_colors_pop <- plot_colors_pop(nPop(x))
+        if(is.null(x)) n.pop <- length(Dgeo_list) else
+          n.pop <- nPop(x)
+        plot_colors_pop <- plot_colors_pop(n.pop)
       }
       
       if (!is(plot_colors_pop, "function")) {
@@ -566,10 +569,10 @@ gl.spatial.autoCorr <- function(x = NULL,
       
       spa_multi <-data.table::rbindlist(res, use.names = TRUE, 
                                         fill = TRUE, idcol = "Population")
-      lbls <-  if(spa_multi [, max(Bin)] > 1000) {
-        round(spa_multi$Bin/1000, 0) 
+      if(spa_multi [, max(Bin)] > 1000) {
+        lbls <- round(spa_multi$Bin/1000, 0) 
       } else {
-        spa_multi$Bin
+        lbls <- spa_multi$Bin
       }
       
       p3 <- ggplot(spa_multi, aes_string("Bin", "r", col="Population")) +
