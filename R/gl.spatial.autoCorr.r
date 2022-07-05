@@ -349,8 +349,8 @@ gl.spatial.autoCorr <- function(x = NULL,
     distance <- Dgen_method
 
   # convert matrices to distance objects
-  Dgen <- as.dist(Dgen)
-  Dgeo <- as.dist(Dgeo)
+    Dgen_list[[i]] <- as.dist(Dgen)
+    Dgeo_list[[i]] <- as.dist(Dgeo)
       } # Close for(i in 1:length(pop_list))
   pop.names <- popNames(x)
   } # close if a genlight object is provided
@@ -535,9 +535,7 @@ gl.spatial.autoCorr <- function(x = NULL,
             p.one.tail = p.one.tail
           )
         }
-        
         res[[z]] <- res_temp
-
       }
       
       names(res) <- pop.names
