@@ -124,23 +124,29 @@ intervals around the r via bootstraps, the 95% confidence interval around the
 null hypothesis of no spatial structure and the one-tail test via permutation, 
 and the correction factor described by Peakall et al 2003.
 
-The input can provide a genlight object (which has to have the latlon slot 
-populated), a pair of \code{Dgeo} and \code{Dgen}, which have to be either
- \code{matrix} or \code{dist} objects, or a \code{list} of the latter if the 
+The input can be i) a genlight object (which has to have the latlon slot 
+populated), ii) a pair of \code{Dgeo} and \code{Dgen}, which have to be either
+ \code{matrix} or \code{dist} objects, or iii) a \code{list} of the 
+ \code{matrix} or \code{dist} objects if the 
  analysis needs to be carried out for multiple populations (in this case, 
  all the elements of the \code{list} have to be of the same class (i.e. 
- \code{matrix} or \code{dist}). 
+ \code{matrix} or \code{dist}) and the population order in the two lists has 
+ to be the same. 
 
 If the input is a genlight object, the function calculates the linear distance
 for \code{Dgeo} and the relevant \code{Dgen} matrix (see \code{Dgen_method}) 
 for each population. 
-When the method selected generate a genetic similarity matrix (e.g. "simple" 
+When the method selected is a genetic similarity matrix (e.g. "simple" 
 distance), the matrix is internally transformed with \code{1 - Dgen} so that 
 positive values of autocorrelation coefficients indicates more related 
 individuals similarly as implemented in GenAlEx. If the user provide the 
 distance matrices, care must be taken in interpreting the results because
 similarity matrix will generate negative values for closely related 
 individuals.
+
+If \code{max(Dgeo)>1000} (e.g. the geographic distances are in thousands of 
+metres), values are divided by 1000 (in the example before these would then 
+become km) to facilitate readability of the plots.
 
 If \code{bins} is of length = 1 it is interpreted as the number of (even)
 bins to use. In this case the starting point is always the minimum value in 
