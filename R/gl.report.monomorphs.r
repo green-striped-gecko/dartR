@@ -62,7 +62,7 @@ gl.report.monomorphs <- function(x,
                 all(row == 1, na.rm = TRUE) | all(is.na(row))) {
                 loc.list[i] <- lN[i]
                 if (all(is.na(row))) {
-                    na.counter = na.counter + 1
+                    na.counter <-na.counter + 1
                 }
             }
         }
@@ -78,7 +78,7 @@ gl.report.monomorphs <- function(x,
                 all(row == 2, na.rm = TRUE) | all(is.na(row))) {
                 loc.list[i] <- lN[i]
                 if (all(is.na(row))) {
-                    na.counter = na.counter + 1
+                    na.counter <-na.counter + 1
                 }
             }
         }

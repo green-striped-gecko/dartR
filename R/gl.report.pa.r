@@ -180,8 +180,8 @@ gl.report.pa <- function(x,
             )
         
         for (i in 1:nrow(pc)) {
-            i1 = pall[i, 1]
-            i2 = pall[i, 2]
+            i1 <-pall[i, 1]
+            i2 <-pall[i, 2]
             
             p1 <- as.matrix(pops[[i1]])
             p2 <- as.matrix(pops[[i2]])
@@ -189,16 +189,16 @@ gl.report.pa <- function(x,
             p2alf <- colMeans(p2, na.rm = T) / 2
             
             pall[i, 5:6] <- c(nrow(p1), nrow(p2))
-            pall[i, 7] = sum(abs(p1alf - p2alf) == 1, na.rm = T)
+            pall[i, 7] <-sum(abs(p1alf - p2alf) == 1, na.rm = T)
             
-            pall[i, 8] = sum(p2alf == 0 &
+            pall[i, 8] <-sum(p2alf == 0 &
                                  p1alf != 0, na.rm = T) + sum(p2alf == 1 &
                                                                   p1alf != 1, na.rm = T)
-            pall[i, 9] = sum(p1alf == 0 &
+            pall[i, 9] <-sum(p1alf == 0 &
                                  p2alf != 0, na.rm = T) + sum(p1alf == 1 &
                                                                   p2alf != 1, na.rm = T)
-            pall[i, 10] = pall[i, 8] + pall[i, 9]
-            pall[i, 11] = round(mean(abs(p1alf - p2alf), na.rm = T), 3)
+            pall[i, 10] <-pall[i, 8] + pall[i, 9]
+            pall[i, 11] <-round(mean(abs(p1alf - p2alf), na.rm = T), 3)
         }
         
         if (plot.out) {
@@ -328,8 +328,8 @@ gl.report.pa <- function(x,
                 )
             
             for (i in 1:nrow(pc)) {
-                i1 = pall[i, 1]
-                i2 = pall[i, 2]
+                i1 <-pall[i, 1]
+                i2 <-pall[i, 2]
                 
                 p1 <- as.matrix(pops[[i1]])
                 p2 <- as.matrix(pops[[i2]])
@@ -337,16 +337,16 @@ gl.report.pa <- function(x,
                 p2alf <- colMeans(p2, na.rm = T) / 2
                 
                 pall[i, 5:6] <- c(nrow(p1), nrow(p2))
-                pall[i, 7] = sum(abs(p1alf - p2alf) == 1, na.rm = T)
+                pall[i, 7] <-sum(abs(p1alf - p2alf) == 1, na.rm = T)
                 
-                pall[i, 8] = sum(p2alf == 0 &
+                pall[i, 8] <-sum(p2alf == 0 &
                                      p1alf != 0, na.rm = T) + sum(p2alf == 1 &
                                                                       p1alf != 1, na.rm = T)
-                pall[i, 9] = sum(p1alf == 0 &
+                pall[i, 9] <-sum(p1alf == 0 &
                                      p2alf != 0, na.rm = T) + sum(p1alf == 1 &
                                                                       p2alf != 1, na.rm = T)
-                pall[i, 10] = pall[i, 8] + pall[i, 9]
-                pall[i, 11] = round(mean(abs(p1alf - p2alf), na.rm = T), 3)
+                pall[i, 10] <-pall[i, 8] + pall[i, 9]
+                pall[i, 11] <-round(mean(abs(p1alf - p2alf), na.rm = T), 3)
             }
             
             pas[y, ] <- pall

@@ -43,8 +43,8 @@ heterozygous loci are resolved before concatenation by either assigning
 \details{
 Four methods are employed:
 
-Method 1 -- heterozygous positions are replaced by the standard ambiguity c
-odes. The resultant sequence fragments are concatenated across loci to
+Method 1 -- heterozygous positions are replaced by the standard ambiguity 
+codes. The resultant sequence fragments are concatenated across loci to
 generate a single combined sequence to be used in subsequent ML phylogenetic
 analyses.
 

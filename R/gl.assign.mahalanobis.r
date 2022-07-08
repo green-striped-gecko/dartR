@@ -1,10 +1,10 @@
 #' @name gl.assign.mahalanobis
-#' @title Assign an individual of unknown provenance to population based on Mahalanobis
-#' Distance
+#' @title Assign an individual of unknown provenance to population based on 
+#' Mahalanobis Distance
 #' @description
 #' This script assigns an individual of unknown provenance to one or more target
-#' populations based on the unknown individual's proximity to population centroids;
-#' proximity is estimated using Mahalanobis Distance. 
+#' populations based on the unknown individual's proximity to population 
+#' centroids; proximity is estimated using Mahalanobis Distance. 
 #'
 #' The following process is followed:
 #' \enumerate{
@@ -85,7 +85,8 @@
 #' @examples 
 #' \dontrun{
 #' #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
-#' test <- gl.assign.pa(testset.gl, unknown='UC_01044', nmin=10, threshold=1,verbose=3) 
+#' test <- gl.assign.pa(testset.gl, unknown='UC_01044', nmin=10, threshold=1,
+#' verbose=3) 
 #' test_2  <- gl.assign.pca(test, unknown='UC_01044', plevel=0.95, verbose=3)
 #' df <- gl.assign.mahalanobis(test_2, unknown='UC_01044', verbose=3)
 #' }
@@ -116,7 +117,8 @@ gl.assign.mahalanobis <- function(x,
     if (!(unknown %in% indNames(x))) {
         stop(
             error(
-                "Fatal Error: Unknown must be listed among the individuals in the genlight object!\n"
+                "Fatal Error: Unknown must be listed among the individuals in 
+                the genlight object!\n"
             )
         )
     }
@@ -137,7 +139,8 @@ gl.assign.mahalanobis <- function(x,
     # DO THE JOB
     if (nPop(x) < 2) {
         if(verbose >= 2){
-            cat(warn("  Only one population, including the unknown, no putative source identified.\n"))
+            cat(warn("  Only one population, including the unknown, no putative 
+                     source identified.\n"))
         }
         # Add a row
         df[i,1] <- unknown
@@ -165,16 +168,22 @@ gl.assign.mahalanobis <- function(x,
           if(verbose >= 2){
             cat(report("  Plotting the unknown against putative populations\n"))
           }
-            suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,x,ellipse=TRUE,plevel=plevel,verbose=0)))
+            suppressWarnings(suppressMessages(gl.pcoa.plot(pcoa,
+                                                           x,
+                                                           ellipse=TRUE,
+                                                           plevel=plevel,
+                                                           verbose=0)))
         }    
 
-        # Determine the number of dimensions for confidence envelope (the ordination and dimension reduction) From the eigenvalue
+        # Determine the number of dimensions for confidence envelope (the 
+        # ordination and dimension reduction) From the eigenvalue
         # distribution
         s <- sum(pcoa$eig)
         e <- round(pcoa$eig * 100 / s, 1)
         e.sign <- e[e > mean(e,na.rm=TRUE)]
         first.est <- length(e.sign)
-        # From the number of populations, including the unknown sec.est <- nPop(x)
+        # From the number of populations, including the unknown 
+        # sec.est <- nPop(x)
         
         # cat(' Number of populations, including the unknown:',sec.est,'\n')
         if (verbose >= 2) {
@@ -191,13 +200,15 @@ gl.assign.mahalanobis <- function(x,
         }
         dim <- min(first.est, dim.limit)
         if (verbose >= 2) {
-            cat(report("    Dimension of confidence envelope set at", dim, "\n"))
+            cat(report("    Dimension of confidence envelope set at", dim,
+                       "\n"))
         }
         pcoa$scores <- pcoa$scores[, 1:dim]
         
         # Add population names to the scores
         c <-
-            data.frame(cbind(pcoa$scores, as.character(pop(x))), stringsAsFactors = FALSE)
+            data.frame(cbind(pcoa$scores, as.character(pop(x))), 
+                       stringsAsFactors = FALSE)
         colnames(c)[dim + 1] <- "pop"
         
         # Create a set of data without the unknown
@@ -233,12 +244,14 @@ gl.assign.mahalanobis <- function(x,
             if (pval["unknown"] >= 1-plevel) {
                 assign <- "yes"
             } else {
-                assign="no"
+                assign <- "no"
             }
             # Create a dataframe to hold the results
             if(i==1){
-              df <- data.frame(unknown=NA,pop=NA,MahalD=NA,pval=NA,critval=NA,assign="NA")
- #             df <- data.frame(unknown=NA,pop=NA,MahalD=NA,wtMahalD=NA,pval=NA,critval=NA,assign="NA")
+              df <- data.frame(unknown=NA,pop=NA,MahalD=NA,pval=NA,critval=NA,
+                               assign="NA")
+ #             df <- data.frame(unknown=NA,pop=NA,MahalD=NA,wtMahalD=NA,pval=NA,
+              # critval=NA,assign="NA")
             }
             # # Add a row
             # df[i,1] <- unknown
@@ -266,7 +279,8 @@ gl.assign.mahalanobis <- function(x,
         best <- as.character(df[df$assign == "yes"][1,2])
        
         if (verbose >= 3) {
-            cat("  Best assignment is the population with the larges probability of assignment, in this case",
+            cat("  Best assignment is the population with the larges probability
+                of assignment, in this case",
                     best,
                     "\n"
                 )

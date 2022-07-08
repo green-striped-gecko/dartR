@@ -217,13 +217,13 @@ gl.spatial.autoCorr <- function(x = NULL,
           "  Analysis performed using provided genetic and Euclidean distance matrices. If a genlight object is provided, it is ignored.\n"
         )
       )
-    ta = "dgendgeo"
+    ta <-"dgendgeo"
   }
   
   if (is(x, "genlight")) {
     if (verbose > 0)
       cat(report("  Analysis performed on the genlight object.\n"))
-    ta = "genlight"
+    ta <-"genlight"
   }
   
   # avoid global binding error
@@ -263,26 +263,26 @@ gl.spatial.autoCorr <- function(x = NULL,
             "Cannot find coordinates in x@other$latlon"
           ))
         coords <- dismo::Mercator(x_temp@other$latlon[, c("lon", "lat")])
-        coordstring = "x@other$latlon (Mercator transformed)"
+        coordstring <-"x@other$latlon (Mercator transformed)"
       }
       
       if (coordinates == "xy") {
         if (is.null(x_temp@other$xy))
           stop(error("Cannot find coordinates in x@other$xy"))
         coords <- x_temp@other$xy
-        coordstring = "x@other$xy"
+        coordstring <-"x@other$xy"
       }
     }
     
     if (is(coordinates, "data.frame")) {
       if (length(setdiff(colnames(coordinates), c("lat", "lon"))) == 0) {
         coords <- dismo::Mercator(coordinates[, c("lon", "lat")])
-        coordstring = "data.frame lat/lon (Mercator transformed)"
+        coordstring <-"data.frame lat/lon (Mercator transformed)"
       }
       
       if (length(setdiff(colnames(coordinates), c("x", "y"))) == 0) {
         coords <- coordinates[, c("x", "y")]
-        coordstring = "data.frame x/y"
+        coordstring <-"data.frame x/y"
       }
       
       if (is.null(coords)){
@@ -634,9 +634,9 @@ gl.spatial.autoCorr <- function(x = NULL,
       stop(error("  The arguments Dgen and Dgeo should have identical dimensions\n"))
     }
 
-        coordstring = "Dgeo provided."
-        distance = "Dgen provided"
-        typedis = "ind"
+        coordstring <-"Dgeo provided."
+        distance <-"Dgen provided"
+        typedis <-"ind"
     
       # make sure both matrices are distance objects if provided via Dgen and Dgeo directly
       Dgen <- as.dist(Dgen)

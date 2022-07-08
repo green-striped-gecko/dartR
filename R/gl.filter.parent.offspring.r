@@ -225,7 +225,7 @@ gl.filter.parent.offspring <- function(x,
     # if individuals in parent offspring relationship are found
     if (length(lower.extremes) > 0) {
         tmp <- count
-        tmp[lower.tri(tmp)] = t(tmp)[lower.tri(tmp)]
+        tmp[lower.tri(tmp)] <-t(tmp)[lower.tri(tmp)]
         for (i in 1:length(outliers$Outlier)) {
             # Identify
             tmp2 <- tmp[tmp == outliers$Outlier[i]]

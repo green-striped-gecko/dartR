@@ -206,9 +206,10 @@ gl.blast <- function(x,
                     ""
             )
         if (grepl("\\s", path_makeblastdb)) {
-            stop(
-                error(
-                    "The path to the executable for makeblastdb has spaces. Please move it\n to a path without spaces so BLAST can work.\n\n"
+        stop(
+            error(
+              "  The path to the executable for makeblastdb has spaces. 
+              Please move it\n to a path without spaces so BLAST can work.\n\n"
                 )
             )
         }
@@ -217,7 +218,8 @@ gl.blast <- function(x,
     if (all(path_makeblastdb == "")) {
         stop(
             error(
-                "Executable for makeblastdb not found! Please make sure that the software\n is correctly installed.\n\n"
+                "  Executable for makeblastdb not found! Please make sure that 
+                the software\n is correctly installed.\n\n"
             )
         )
     }
@@ -250,7 +252,8 @@ gl.blast <- function(x,
         if (grepl("\\s", path_blastn)) {
             stop(
                 error(
-                    "The path to the executable for blastn has spaces. Please move it to a\n path without spaces so BLAST can work.\n\n"
+                    "The path to the executable for blastn has spaces. Please 
+                    move it to a\n path without spaces so BLAST can work.\n\n"
                 )
             )
         }
@@ -259,7 +262,8 @@ gl.blast <- function(x,
     if (all(path_blastn == "")) {
         stop(
             error(
-                "Executable for blastn not found! Please make sure that the software is\n correctly installed.\n\n"
+                "Executable for blastn not found! Please make sure that the 
+                software is\n correctly installed.\n\n"
             )
         )
     }
@@ -287,7 +291,8 @@ gl.blast <- function(x,
             " -outfmt ",
             "\"",
             6,
-            " qseqid sacc stitle qseq sseq nident mismatch pident length evalue bitscore qstart qend sstart send gapopen gaps qlen slen\""
+            " qseqid sacc stitle qseq sseq nident mismatch pident length evalue 
+            bitscore qstart qend sstart send gapopen gaps qlen slen\""
         )
     )
     
@@ -338,7 +343,8 @@ gl.blast <- function(x,
             "slen"
         )
     
-    # calculate percentage overlap ratio of the alignment length divided by the query length or subject length (whichever is shortest of
+    # calculate percentage overlap ratio of the alignment length divided by the
+    # query length or subject length (whichever is shortest of
     # the two lengths)
     min_length_BF <-
         apply(blast_res_unfiltered[, c("qlen", "slen")], 1, min)
@@ -354,7 +360,8 @@ gl.blast <- function(x,
     # splitting hits by sequence
     all_hits <-
         split(x = blast_res_filtered, f = blast_res_filtered$qseqid)
-    # ordering by first considering the highest percentage identity, then the highest percentage overlap, then the highest bitscore. Only
+    # ordering by first considering the highest percentage identity, then the 
+    # highest percentage overlap, then the highest bitscore. Only
     # one hit per sequence is kept based on these selection criteria.
     one_hit_temp <- lapply(all_hits, function(x) {
         x[order(x$pident,
@@ -395,14 +402,16 @@ gl.blast <- function(x,
     temp_one_hit <- tempfile(pattern = "Blast_one_hit_")
     
     # saving to tempdir
-    saveRDS(list(match_call, blast_res_unfiltered), file = temp_blast_unfiltered)
+    saveRDS(list(match_call, blast_res_unfiltered), 
+            file = temp_blast_unfiltered)
     saveRDS(list(match_call, blast_res_filtered), file = temp_blast_filtered)
     saveRDS(list(match_call, one_hit), file = temp_one_hit)
     
     if (verbose >= 2) {
         cat(
             report(
-                "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                "  NOTE: Retrieve output files from tempdir using 
+                gl.list.reports() and gl.print.reports()\n"
             )
         )
     }

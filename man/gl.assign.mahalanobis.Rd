@@ -2,8 +2,8 @@
 % Please edit documentation in R/gl.assign.mahalanobis.r
 \name{gl.assign.mahalanobis}
 \alias{gl.assign.mahalanobis}
-\title{Assign an individual of unknown provenance to population based on Mahalanobis
-Distance}
+\title{Assign an individual of unknown provenance to population based on 
+Mahalanobis Distance}
 \usage{
 gl.assign.mahalanobis(
   x,
@@ -38,8 +38,8 @@ A data frame with the results of the assignment analysis.
 }
 \description{
 This script assigns an individual of unknown provenance to one or more target
-populations based on the unknown individual's proximity to population centroids;
-proximity is estimated using Mahalanobis Distance. 
+populations based on the unknown individual's proximity to population 
+centroids; proximity is estimated using Mahalanobis Distance. 
 
 The following process is followed:
 \enumerate{
@@ -100,7 +100,8 @@ outlier with respect to a particular population at alpha = 0.001 as default
 \examples{
 \dontrun{
 #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
-test <- gl.assign.pa(testset.gl, unknown='UC_01044', nmin=10, threshold=1,verbose=3) 
+test <- gl.assign.pa(testset.gl, unknown='UC_01044', nmin=10, threshold=1,
+verbose=3) 
 test_2  <- gl.assign.pca(test, unknown='UC_01044', plevel=0.95, verbose=3)
 df <- gl.assign.mahalanobis(test_2, unknown='UC_01044', verbose=3)
 }

@@ -122,9 +122,9 @@ utils.read.dart <- function(filename,
     
     datas <- snpraw[, (lmet + 1):ncol(snpraw)]
     
-    nrows = NULL
+    nrows <-NULL
     if (is.null(nrows)) {
-        gnrows = 3 - max(datas, na.rm = TRUE)  #if max(datas==1) then two row format, if two then one row format
+        gnrows <-3 - max(datas, na.rm = TRUE)  #if max(datas==1) then two row format, if two then one row format
         
         if (gnrows == 1 | gnrows == 2) {
             nrows <- gnrows
