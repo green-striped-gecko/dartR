@@ -48,7 +48,7 @@ utils::globalVariables(c("chromosome_name","phase1","same_line","number_pops_pha
 
 # function to replicate defaults colors of ggplot
 discrete_palette <- function(n) {
-    hues = seq(15, 375, length = n + 1)
+    hues <-seq(15, 375, length = n + 1)
     return(hcl(h = hues, l = 65, c = 100)[1:n])
 }
 

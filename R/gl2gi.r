@@ -61,7 +61,7 @@ gl2gi <- function(x,
                 else if (inp == 2)
                     xx[i, ii] <- homs2[ii]
             } else
-                xx[i, ii] = "-/-"
+                xx[i, ii] <-"-/-"
         }
         if (probar) {
             setTxtProgressBar(pb, i / nrow(x2))

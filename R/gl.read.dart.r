@@ -81,7 +81,7 @@ gl.read.dart <- function(filename,
                      verbosity = verbose)
     
     if (verbose == 0) {
-        probar = FALSE
+        probar <-FALSE
     }
     
     # DO THE JOB

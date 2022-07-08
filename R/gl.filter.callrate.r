@@ -129,7 +129,7 @@ gl.filter.callrate <- function(x,
     
     # Suppress plotting on verbose == 0
     if (verbose == 0) {
-        plot.out = FALSE
+        plot.out <-FALSE
     }
     
     # Method

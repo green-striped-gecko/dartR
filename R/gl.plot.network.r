@@ -152,7 +152,7 @@ gl.plot.network <- function(D,
                                       directed = FALSE)
     
     if (!is.null(x)) {
-        colors = rainbow(nlevels(pop(x)))
+        colors <-rainbow(nlevels(pop(x)))
         my_colors <- colors[pop(x)]
     } else {
         my_colors <- "red"

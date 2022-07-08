@@ -10,10 +10,13 @@ gl.report.ld.map(
   ld_resolution = NULL,
   maf = 0.05,
   ld_stat = "R.squared",
+  ind.limit = 10,
+  summary_stat = "max",
   stat_keep = "AvgPIC",
   plot.out = TRUE,
-  plot_theme = theme_dartR(),
-  plot_colors = two_colors,
+  plot_theme = NULL,
+  histogram_colors = NULL,
+  boxplot_colors = NULL,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -30,17 +33,29 @@ base pairs [default NULL]}
 \item{maf}{Minor allele frequency threshold to filter out loci [default 0.05].}
 
 \item{ld_stat}{The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
-"D.prime", "R.squared", and "R" [default "R.squared"].}
+"D.prime", "R.squared", and "R" [default "R.squared"]..}
+
+\item{ind.limit}{Minimum number of individuals that a population should
+contain to take it in account to report loci in LD [default 10].}
+
+\item{summary_stat}{LD is calculated between SNP pairs in each population.
+This option sets the summary statistic to report the LD between SNP pairs
+ across populations. Options are "mean" or "max" to report the maximum 
+ value [default "max"].}
 
 \item{stat_keep}{Name of the column from the slot loc.metrics to be used to 
 choose SNP to be kept [default "AvgPIC"].}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
-\item{plot_theme}{User specified theme [default theme_dartR()].}
+\item{plot_theme}{User specified theme [default NULL].}
 
-\item{plot_colors}{Vector with two color names for the borders and fill
-[default two_colors].}
+\item{histogram_colors}{Vector with two color names for the borders and fill
+[default NULL].}
+
+\item{boxplot_colors}{A color palette for boxplots by population or a list
+ with as many colors as there are populations in the dataset
+[default NULL].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
@@ -63,19 +78,31 @@ function will assign the same chromosome ("1") to all the SNPs in the dataset
  function will then calculate LD for all possible SNP pair combinations. 
  
 If SNPs are mapped to a reference genome, the parameters ld_max_pairwise and 
-ld_resolution should not be NULL. In this case, the information for SNP's 
-position should be stored in the genlight accessor "@position" and the SNP's 
-chromosome name in the accessor "@chromosome". The function will then 
-calculate LD within each chromosome and for all possible SNP pair 
-combinations within a distance of ld_max_pairwise.
+ld_resolution should be filled out (ie not NULL). In this case, the
+ information for SNP's position should be stored in the genlight accessor
+  "@position" and the SNP's chromosome name in the accessor "@chromosome".
+   The function will then calculate LD within each chromosome and for all
+    possible SNP pair combinations within a distance of ld_max_pairwise.
 }
 \details{
-This function reports pairwise LD of those SNPs in which the LD measure is 
-> 0 in all the populations. 
-The LD plot shows the pairwise LD measure against distance in number
-of base pairs pooled over all the chromosomes and a red line representing the
-threshold (R.squared = 0.2) that is commonly used to imply that two loci are
-unlinked (Delourme et al., 2013; Li et al., 2014).
+This function reports LD between SNP pairs by population. Reports include 
+the number of SNPs that would be filtered out given specific LD thresholds. 
+The function code{\link{gl.filter.ld}} filters out the SNPs in LD using as
+input the results of gl.report.ld.map. However, the actual number of SNPs to 
+be filtered out depends on the parameters set in the function 
+code{\link{gl.filter.ld}}. Therefore, the number of SNPs to be filtered out
+ reported by gl.report.ld.map should be used as a guide and not as a definite
+  number.
+
+If SNPs are mapped to a reference genome, the function creates a plot showing
+the pairwise LD measure against distance in number of base pairs pooled over
+all the chromosomes and a red line representing the threshold (R.squared = 
+0.2) that is commonly used to imply that two loci are unlinked (Delourme et
+al., 2013; Li et al., 2014). Additionally, boxplots of LD by population and
+a histogram showing LD frequency are presented.
+
+If SNPs are not mapped to a reference genome, only boxplots by population and
+ a histogram showing LD frequency are presented.
 }
 \examples{
 \dontrun{
@@ -97,7 +124,17 @@ evaluate patterns of population structure and linkage disequilibrium. PLoS
 One, 9(1), e84329.
  }
 }
+\seealso{
+\code{\link{gl.filter.ld}}
+
+Other filter functions: 
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.ld}()},
+\code{\link{gl.filter.parent.offspring}()},
+\code{\link{gl.filter.sexlinked}()}
+}
 \author{
 Custodian: Luis Mijangos -- Post to
  \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{filter functions}

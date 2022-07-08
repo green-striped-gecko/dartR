@@ -188,13 +188,13 @@ gl.map.interactive <- function(x,
                             if (!is.null(matrix[i, ii]) &
                                 !is.null(matrix[ii, i])) {
                                 if (matrix[i, ii] > matrix[ii, i])
-                                    lcols = "#FFAA00"
+                                    lcols <-"#FFAA00"
                                 else
-                                    lcols = "#00AAFF"
+                                    lcols <-"#00AAFF"
                                 if (matrix[i, ii] == matrix[ii, i])
-                                    lcols = "#00AA00"
+                                    lcols <-"#00AA00"
                             } else
-                                lcols = "#333333"
+                                lcols <-"#333333"
                             m <- m %>%
                                 leaflet.minicharts::addFlows(
                                     lng0 = as.numeric(from["lon"]),

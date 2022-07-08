@@ -126,13 +126,13 @@ gl.ibd <- function(x = NULL,
                         "Analysis performed using provided genetic and Euclidean distance matrices. If a genlight object is provided, it is ignored.\n"
                     )
                 )
-            ta = "dgendgeo"
+            ta <-"dgendgeo"
         }
         
         if (is(x, "genlight")) {
             if (verbose > 0)
                 cat(report("Analysis performed on the genlight object.\n"))
-            ta = "genlight"
+            ta <-"genlight"
         }
         
         # check coordinates (if no Dgen and Dgeo is provided)
@@ -153,14 +153,14 @@ gl.ibd <- function(x = NULL,
                             )
                         )
                     }
-                    coordstring = "x@other$latlon (Mercator transformed)"
+                    coordstring <-"x@other$latlon (Mercator transformed)"
                 }
                 
                 if (coordinates == "xy") {
                     if (is.null(x@other$xy))
                         stop(error("Cannot find coordinates in x@other$xy.\n"))
                     coords <- x@other$xy
-                    coordstring = "x@other$xy"
+                    coordstring <-"x@other$xy"
                 }
                 
             }
@@ -168,12 +168,12 @@ gl.ibd <- function(x = NULL,
             if (is(coordinates, "data.frame")) {
                 if (length(setdiff(colnames(coordinates), c("lat", "lon"))) == 0) {
                     coords <- dismo::Mercator(coordinates[, c("lon", "lat")])
-                    coordstring = "data.frame lat/lon (Mercator transformed)"
+                    coordstring <-"data.frame lat/lon (Mercator transformed)"
                 }
                 
                 if (length(setdiff(colnames(coordinates), c("x", "y"))) == 0) {
                     coords <- coordinates[, c("x", "y")]
-                    coordstring = "data.frame x/y"
+                    coordstring <-"data.frame x/y"
                 }
                 
                 if (is.null(coords)){
@@ -196,14 +196,14 @@ gl.ibd <- function(x = NULL,
                 ))
             }
             
-            typedis = NULL
+            typedis <-NULL
             if (distance == "Fst" | distance == "D") {
-                typedis = "pop"
+                typedis <-"pop"
             }
             
             if (distance == "propShared" |
                 distance == "euclidean") {
-                typedis = "ind"
+                typedis <-"ind"
             }
             
             if (typedis == "pop" & nPop(x) < 2){
@@ -272,9 +272,9 @@ gl.ibd <- function(x = NULL,
             }
         } else {
             # end of ta=='genlight' ta='dgendgeo
-            coordstring = "Dgeo provided."
-            distance = "Dgen provided"
-            typedis = "ind"
+            coordstring <-"Dgeo provided."
+            distance <-"Dgen provided"
+            typedis <-"ind"
         }
         # make sure both matrices are distance objects if provided via Dgen and Dgeo directly
         Dgen <- as.dist(Dgen)
@@ -360,7 +360,7 @@ gl.ibd <- function(x = NULL,
                 if (is(x, "genlight"))
                     cn <- pop(x)
                 else
-                    cn = rownames(as.matrix(Dgen))
+                    cn <-rownames(as.matrix(Dgen))
             }
             res <-
                 data.frame(

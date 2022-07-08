@@ -56,7 +56,8 @@ proportions. This function helps diagnose potential problems.
 }
 \details{
 This function initially runs \code{\link{gl.report.hwe}} and reports
-the ternary plots. The remaining outputs follow the recommendations from Waples
+the ternary plots. The remaining outputs follow the recommendations from
+ Waples
 (2015) paper and De Meeûs 2018. These include: 
 \enumerate{ 
 \item A histogram
@@ -82,7 +83,8 @@ subpopulations) standard errors are also printed on screen and reported in
 the returned list (if \code{stdErr=TRUE}). These are computed with the 
 Jackknife method over loci (See De Meeûs 2007 for details on how this is 
 computed) and it may take some time for these computations to complete. 
-De Meeûs 2018 suggests that under a global significant heterozygosity deficit: 
+De Meeûs 2018 suggests that under a global significant heterozygosity 
+deficit: 
 - if the
 correlation between Fis and Fst is strongly positive, and StdErrFis >>
 StdErrFst, Null alleles are likely to be the cause. 
@@ -92,7 +94,8 @@ Wahlund may be the cause.
 - if the correlation between Fis and Fst is ~0, and
 StdErrFis ~ StdErrFst, selfing or sib mating could to be the cause. It is
 important to realise that these statistics only suggest a pattern (pointers).
-Their absence is not conclusive evidence of the absence of the problem, as their
+Their absence is not conclusive evidence of the absence of the problem, as 
+their
 presence does not confirm the cause of the problem. 
 \item A table where the
 number of observed and expected significant HWE tests are reported by each
@@ -109,7 +112,8 @@ series of tests conducted (De Meeûs et al 2009).
 }
 }
 \examples{
-res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]), stdErr=FALSE, n.cores=1)
+res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]), 
+stdErr=FALSE, n.cores=1)
 }
 \references{
 \itemize{ 

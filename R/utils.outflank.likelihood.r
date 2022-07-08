@@ -11,21 +11,21 @@ EffectiveNumberSamplesMLE <- function(FstVect,
     # The FstVect should already have been purged of NaN values and of loci with
     #too low heterozygosity or MAF.
     
-    sortedFst = FstVect[order(FstVect)]
+    sortedFst <-FstVect[order(FstVect)]
     
     # The Minimum Fst considered in the trimmed data is the larger of the amount
     #specified by the user or the mean FSt over 100. This is
     # to prevent extremely small Fsts from causing estiamtion errors (Especially
     #when R interprets a small Fst as FSt=0.)
-    LowTrimPoint = max(Fstbar / 100, SmallestFstInTrimmedList)
+    LowTrimPoint <-max(Fstbar / 100, SmallestFstInTrimmedList)
     
-    trimmedFstVect = FstVect[which((FstVect >= LowTrimPoint) &
+    trimmedFstVect <-FstVect[which((FstVect >= LowTrimPoint) &
                                        (FstVect <= LargestFstInTrimmedList))]
     
-    trimmedFstArray = as.array(trimmedFstVect)
+    trimmedFstArray <-as.array(trimmedFstVect)
     
-    localNLLAllData = function(dfInferred) {
-        localNLLOneLocus = function(Fst) {
+    localNLLAllData <-function(dfInferred) {
+        localNLLOneLocus <-function(Fst) {
             negLLdfFstTrim(Fst,
                            dfInferred,
                            Fstbar,
@@ -62,7 +62,7 @@ negLLdfFstTrim <- function(Fst,
     # negative log likelihood of a given locus' Fst for a given dfInferred
     #CHECKED AGAINST MATHEMATICA DERIVATION##
     
-    df = dfInferred
+    df <-dfInferred
     
     1 / (2 * Fstbar) * (
         df * Fst + df * Fstbar * log(2) - df * Fstbar * log(df) - (df - 2) * Fstbar * log(Fst) + df * Fstbar * log(Fstbar) + 2 *

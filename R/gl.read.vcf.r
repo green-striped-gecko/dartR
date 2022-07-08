@@ -26,7 +26,7 @@ gl.read.vcf <- function(vcffile,
                      build = "Jackson",
                      verbosity = verbose)
     
-    x = NULL
+    x <-NULL
     
     if (!(requireNamespace("vcfR", quietly = TRUE))) {
         stop(error("To use this function you need to install package: vcfR."))

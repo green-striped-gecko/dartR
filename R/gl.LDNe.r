@@ -151,7 +151,7 @@ gl.LDNe <- function(x,
   }
   
   #change into tempdir (run it there)
-  old.path = getwd()
+  old.path <-getwd()
   setwd(tempdir())
   system(cmd)
   res <- read.delim(outfile)
