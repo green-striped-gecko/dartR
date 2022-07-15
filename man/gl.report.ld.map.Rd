@@ -30,7 +30,10 @@ should be calculated [default NULL].}
 \item{ld_resolution}{Resolution at which LD should be reported in number of 
 base pairs [default NULL]}
 
-\item{maf}{Minor allele frequency threshold to filter out loci [default 0.05].}
+\item{maf}{Minor allele frequency threshold to filter out loci 
+If a value > 1 is provided it will be 
+interpreted as MAC (i.e. the minimum number of times an allele needs to be 
+observed) [default 0.05].}
 
 \item{ld_stat}{The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
 "D.prime", "R.squared", and "R" [default "R.squared"]..}
@@ -63,6 +66,13 @@ temporary directory (tempdir) [default FALSE].}
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
+
+\item{pop.limit}{Minimum number of populations in which the same SNP pair 
+should be in LD to be reported in plots. However should be more
+than the threshold for a locus to be filtered out.
+The default value is half of the populations [default ceiling(nPop(x)/2)].}
+
+\item{ld_threshold_pops}{LD threshold to show number of SNP pairs in LD}
 }
 \value{
 A dataframe with information for each SNP pair in LD.
@@ -93,6 +103,16 @@ be filtered out depends on the parameters set in the function
 code{\link{gl.filter.ld}}. Therefore, the number of SNPs to be filtered out
  reported by gl.report.ld.map should be used as a guide and not as a definite
   number.
+
+\enumerate{
+\item 
+
+}
+A bar plot with observed
+and expected (null expectation) number of significant HWE tests for the same
+locus in multiple populations (that is, the x-axis shows whether a locus
+results significant in 1, 2, ..., n populations. The y axis is the count of
+these occurrences.
 
 If SNPs are mapped to a reference genome, the function creates a plot showing
 the pairwise LD measure against distance in number of base pairs pooled over

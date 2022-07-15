@@ -22,15 +22,23 @@
 #' should be calculated [default NULL].
 #' @param ld_resolution Resolution at which LD should be reported in number of 
 #' base pairs [default NULL]
-#' @param maf Minor allele frequency threshold to filter out loci [default 0.05].
+#' @param maf Minor allele frequency threshold to filter out loci 
+#' If a value > 1 is provided it will be 
+#' interpreted as MAC (i.e. the minimum number of times an allele needs to be 
+#' observed) [default 0.05].
 #' @param ld_stat The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
 #'   "D.prime", "R.squared", and "R" [default "R.squared"]..
 #' @param ind.limit Minimum number of individuals that a population should
 #' contain to take it in account to report loci in LD [default 10].
+#' @param pop.limit Minimum number of populations in which the same SNP pair 
+#' should be in LD to be reported in plots. However should be more
+#' than the threshold for a locus to be filtered out.
+#' The default value is half of the populations [default ceiling(nPop(x)/2)].
 #' @param summary_stat LD is calculated between SNP pairs in each population.
 #'  This option sets the summary statistic to report the LD between SNP pairs
 #'   across populations. Options are "mean" or "max" to report the maximum 
 #'   value [default "max"]. 
+#' @param ld_threshold_pops LD threshold to show number of SNP pairs in LD 
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param stat_keep Name of the column from the slot loc.metrics to be used to 
 #' choose SNP to be kept [default "AvgPIC"].
@@ -55,6 +63,16 @@
 #' code{\link{gl.filter.ld}}. Therefore, the number of SNPs to be filtered out
 #'  reported by gl.report.ld.map should be used as a guide and not as a definite
 #'   number.
+#' 
+#' \enumerate{
+#' \item 
+#' 
+#' }
+#' A bar plot with observed
+#' and expected (null expectation) number of significant HWE tests for the same
+#' locus in multiple populations (that is, the x-axis shows whether a locus
+#' results significant in 1, 2, ..., n populations. The y axis is the count of
+#' these occurrences.
 #' 
 #' If SNPs are mapped to a reference genome, the function creates a plot showing
 #' the pairwise LD measure against distance in number of base pairs pooled over
@@ -350,8 +368,6 @@ gl.report.ld.map <- function(x,
   
   df_ld <- df_ld[order(df_ld$locus_a_b), ]
   
-  res <- as.data.frame.matrix(with(df_ld, table(locus_a_b,pop)))
-  
   df_ld_split <- split(df_ld, f = df_ld$locus_a_b)
   
   if(summary_stat=="max"){
@@ -442,13 +458,22 @@ gl.report.ld.map <- function(x,
       geom_line(size = 1) +
       geom_point(size = 2) +
       geom_hline(aes(yintercept = 0.2, 
-                     colour = "LD threshold for unlinked loci"),
+                     colour = "LD threshold for unlinked loci"),color="red",
                  size = 1) +
       xlab("Base pairs") +
       ylab(ld_stat) +
       labs(color = "") +
       plot_theme +
       theme(legend.position = "bottom")
+    
+    # Number of populations in which the same SNP pairs are in LD
+    
+    ld_pops_tmp <- table(rowSums(as.data.frame.matrix(with(df_ld, table(locus_a_b,pop)))))
+    ld_pops <- as.data.frame(cbind(as.numeric(names(ld_pops_tmp)),unlist(unname(ld_pops_tmp))))
+    colnames(ld_pops) <- c("pops","n_loc")
+    
+    ggplot(ld_pops,aes(x=pops,y=n_loc))+
+      geom_col()
    
   }
   

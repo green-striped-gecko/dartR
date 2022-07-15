@@ -26,9 +26,9 @@
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param threshold Threshold MAF -- loci with a MAF less than the threshold
-#' will be removed [default 0.01]. If a value > 1 is provided it will be 
+#' will be removed. If a value > 1 is provided it will be 
 #' interpreted as MAC (i.e. the minimum number of times an allele needs to be 
-#' observed).
+#' observed) [default 0.01].
 #' @param by.pop Whether MAF should be calculated by population [default FALSE].
 #' @param pop.limit Minimum number of populations in which MAF should be less 
 #' than the threshold for a locus to be filtered out. Only used if by.pop=TRUE. 

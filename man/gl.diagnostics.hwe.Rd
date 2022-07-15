@@ -39,8 +39,8 @@ expected number of significant HWE tests [default two_colors_contrast].}
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
-\item{n.cores}{The number of cores to use. If "auto" [default], it will 
-use all but one available cores.}
+\item{n.cores}{The number of cores to use. If "auto", it will 
+use all but one available cores [default "auto"].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report
@@ -85,18 +85,22 @@ Jackknife method over loci (See De Meeûs 2007 for details on how this is
 computed) and it may take some time for these computations to complete. 
 De Meeûs 2018 suggests that under a global significant heterozygosity 
 deficit: 
+
 - if the
 correlation between Fis and Fst is strongly positive, and StdErrFis >>
 StdErrFst, Null alleles are likely to be the cause. 
+
 - if the correlation
 between Fis and Fst is ~0 or mildly positive, and StdErrFis > StdErrFst,
 Wahlund may be the cause. 
+
 - if the correlation between Fis and Fst is ~0, and
-StdErrFis ~ StdErrFst, selfing or sib mating could to be the cause. It is
+StdErrFis ~ StdErrFst, selfing or sib mating could to be the cause.
+
+ It is
 important to realise that these statistics only suggest a pattern (pointers).
 Their absence is not conclusive evidence of the absence of the problem, as 
-their
-presence does not confirm the cause of the problem. 
+their presence does not confirm the cause of the problem. 
 \item A table where the
 number of observed and expected significant HWE tests are reported by each
 population, indicating whether these are due to heterozygosity excess or
