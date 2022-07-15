@@ -39,6 +39,8 @@ gl.filter.ld <- function(x,
                          ind.limit = 10,
                          verbose = NULL) {
   
+  x_hold <- x
+  
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
@@ -64,13 +66,14 @@ gl.filter.ld <- function(x,
     }
   }
   
+  x <- gl.keep.pop(x,pop.list = as.character(unique(ld_tmp$pop)),verbose = 0)
+  
   ld_tmp <- ld_res[ld_res$ld_stat >= threshold, ]
-  ld_tmp$test_stat <-
-    ld_tmp$locus_a.stat_keep >= ld_tmp$locus_b.stat_keep
+  ld_tmp$test_stat <- ld_tmp$locus_a.stat_keep >= ld_tmp$locus_b.stat_keep
   ld_tmp$pop <- as.factor(ld_tmp$pop)
   ld_tmp_pop <- split(ld_tmp, f = ld_tmp$pop)
   
-  ld_tmp_pop <- ld_tmp_pop[which(table(pop(x)) >= ind.limit)]
+  ld_tmp_pop <- ld_tmp_pop[unname(unlist(which(table(pop(x)) >= ind.limit)))]
   
   loci_list <- vector(mode = "list", length = length(ld_tmp_pop))
   
@@ -96,7 +99,7 @@ gl.filter.ld <- function(x,
   loci_names_tmp <- names(table(loci_list_res))
   loci_names <- loci_names_tmp[table(loci_list_res) >= pop.limit]
   
-  x2 <- gl.drop.loc(x, loc.list =  loci_names, verbose = 0)
+  x2 <- gl.drop.loc(x_hold, loc.list =  loci_names, verbose = 0)
   
   # REPORT A SUMMARY
   if (verbose >= 3) {

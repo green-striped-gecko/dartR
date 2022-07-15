@@ -38,6 +38,18 @@ gl.read.vcf <- function(vcffile,
         x <- vcfR::vcfR2genlight(vcf)
         x@loc.all <- loc.all
         
+        # adding SNP information from VCF
+        info_tmp <- vcfR::getINFO(vcf)
+        info_tmp <- as.data.frame(Reduce(rbind,stringr::str_split(info_tmp,pattern = "=|;")))
+        info <- info_tmp[,seq(2,ncol(info_tmp),2)]
+        colnames(info) <- unname(unlist(info_tmp[1,seq(1,ncol(info_tmp),2)]))
+        # identify which SNPs have more than 2 alleles
+        more_alleles <- grep(",",info$AC)
+        info <- info[-more_alleles,]
+        info[] <- lapply(info, as.numeric)
+        
+        x$other$loc.metrics <- cbind(x$other$loc.metrics,info)
+         
         ploidy(x) <- 2
         x <- gl.compliance.check(x)
         
