@@ -40,7 +40,7 @@ gl.read.vcf <- function(vcffile,
         
         # adding SNP information from VCF
         info_tmp <- vcfR::getINFO(vcf)
-        info_tmp <- as.data.frame(do.call(stringr::str_split(info_tmp,pattern = "=|;"),tmp_1))
+        info_tmp <- as.data.frame(do.call(rbind,stringr::str_split(info_tmp,pattern = "=|;")))
         info <- info_tmp[,seq(2,ncol(info_tmp),2)]
         colnames(info) <- unname(unlist(info_tmp[1,seq(1,ncol(info_tmp),2)]))
         # identify which SNPs have more than 2 alleles
