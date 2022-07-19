@@ -41,7 +41,7 @@ gl.read.vcf <- function(vcffile,
         # adding SNP information from VCF
         info_tmp_1 <- vcf@fix[,6:7]
         info_tmp_2 <- vcfR::getINFO(vcf)
-        if(is.na(info_tmp_2[1])){
+        if(any(is.na(info_tmp_2[1]) | is.na(info_tmp_1[1]))==TRUE){
           info <- info_tmp_1
           colnames(info) <- c("QUAL","FILTER")
         }else{
