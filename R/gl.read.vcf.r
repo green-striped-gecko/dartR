@@ -39,14 +39,24 @@ gl.read.vcf <- function(vcffile,
         x@loc.all <- loc.all
         
         # adding SNP information from VCF
-        info_tmp <- vcfR::getINFO(vcf)
-        info_tmp <- as.data.frame(do.call(rbind,stringr::str_split(info_tmp,pattern = "=|;")))
-        info <- info_tmp[,seq(2,ncol(info_tmp),2)]
-        colnames(info) <- unname(unlist(info_tmp[1,seq(1,ncol(info_tmp),2)]))
+        info_tmp_1 <- vcf@fix[,6:7]
+        info_tmp_2 <- vcfR::getINFO(vcf)
+        if(is.na(info_tmp_2[1])){
+          info <- info_tmp_1
+          colnames(info) <- c("QUAL","FILTER")
+        }else{
+          info_tmp_2 <- as.data.frame(do.call(rbind,stringr::str_split(info_tmp_2,pattern = "=|;")))
+          info <- info_tmp_2[,seq(2,ncol(info_tmp_2),2)]
+          info <- cbind(info_tmp_1,info)
+          colnames(info) <- c("QUAL","FILTER",unname(unlist(info_tmp_2[1,seq(1,ncol(info_tmp_2),2)])))
+        }
+      
         # identify which SNPs have more than 2 alleles
-        more_alleles <- grep(",",info$AC)
-        info <- info[-more_alleles,]
-        info[] <- lapply(info, as.numeric)
+        if("AC" %in% colnames(info)){
+          more_alleles <- grep(",",info$AC)
+          info <- info[-more_alleles,]
+          info[] <- lapply(info, as.numeric)
+        }
         
         ploidy(x) <- 2
         x <- gl.compliance.check(x)
