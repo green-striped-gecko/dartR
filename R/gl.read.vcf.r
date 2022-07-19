@@ -48,10 +48,10 @@ gl.read.vcf <- function(vcffile,
         info <- info[-more_alleles,]
         info[] <- lapply(info, as.numeric)
         
-        x$other$loc.metrics <- cbind(x$other$loc.metrics,info)
-         
         ploidy(x) <- 2
         x <- gl.compliance.check(x)
+        
+        x$other$loc.metrics <- cbind(x$other$loc.metrics,info)
         
         # add history
         x@other$history <- list(match.call())
