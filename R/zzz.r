@@ -45,6 +45,13 @@ utils::globalVariables(c("chromosome_name","phase1","same_line","number_pops_pha
 `.` <- list
 
 # SET PLOTS COLORS
+# Convert color names to hex RGB strings taken from function col2hex from
+# package gplots 
+RGB_colors <- function (cname){
+  colMat <- col2rgb(cname)
+  rgb(red = colMat[1, ]/255, green = colMat[2, ]/255, blue = colMat[3, 
+  ]/255)
+}
 
 # function to replicate defaults colors of ggplot
 discrete_palette <- function(n) {
