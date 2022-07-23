@@ -363,6 +363,10 @@ gl.report.pa <- function(x,
             
             if (!is(palette_discrete, "function")) {
                 colors_pops <- palette_discrete
+                # if colors are not in RGB format
+                if(grepl("#",colors_pops[1])==FALSE){
+                  colors_pops <- RGB_colors(colors_pops)
+                }
             }
             
             data_long_1 <-
