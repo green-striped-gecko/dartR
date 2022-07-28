@@ -4,54 +4,46 @@
 #' This function takes one individual and estimates
 #' their probability of coming from individual populations
 #' from multilocus genotype frequencies.
-#'
+#
 #' @param x Name of the genlight object containing the SNP data [required].
-#' @param ind
-#' @param inbreeding_par The inbreeding parameter (default=0)
+#' @param ind Name of the individual to be assigned to a population [required].
+#' @param inbreeding_par The inbreeding parameter [default 0]. 
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
 #' @details
-#' 
+#' This function is a re-implementation of the function multilocus_assignment
+#'  from package gstudio. 
+#'  Description of the method used in this function can be found at:
 #' https://dyerlab.github.io/applied_population_genetics/population-assignment.html
-#' @return A \code{data.frame} consisting of assignment probabilities.
+#' @return A \code{data.frame} consisting of assignment probabilities for each
+#'  population.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' res <- utils.assignment(platypus.gl,ind="T27")
 #' @export
 
-gl2alleles <- function (gl) {
-  x <- as.matrix(gl[, ])
-  homs1 <-
-    paste(substr(gl@loc.all, 1, 1), "/", substr(gl@loc.all, 1, 1), sep = "")
-  hets <- gl@loc.all
-  homs2 <-
-    paste(substr(gl@loc.all, 3, 3), "/", substr(gl@loc.all, 3, 3), sep = "")
-  xx <- matrix(NA, ncol = ncol(x), nrow = nrow(x))
-  for (i in 1:nrow(x)) {
-    for (ii in 1:ncol(x)) {
-      inp <- x[i, ii]
-      if (!is.na(inp)) {
-        if (inp == 0)
-          xx[i, ii] <- homs1[ii]
-        else if (inp == 1)
-          xx[i, ii] <- hets[ii]
-        else if (inp == 2)
-          xx[i, ii] <- homs2[ii]
-      }
-      else
-        xx[i, ii] = NA
-    }
-  }
-  xx <- gsub("/", ":", xx)
-  return(xx)
-}
-
 utils.assignment <- function(x,
                             ind,
                             inbreeding_par = 0,
                             verbose = 2) {
+  
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
+  
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func = funname,
+                   build = "Jody",
+                   verbosity = verbose)
+  
+  # CHECK DATATYPE
+  datatype <- utils.check.datatype(x, verbose = verbose)
+  
+  # DO THE JOB
+  
+  # filtering loci with all missing data by population 
   x <- gl.filter.allna(x, by.pop = TRUE, verbose = 0)
   
   pop_list <- seppop(x)
@@ -149,6 +141,41 @@ utils.assignment <- function(x,
   ret$Posterior <- round(ret$Posterior, 5)
   ret$Probability <- round(ret$Probability, 5)
   
-  return(ret)
+  # FLAG SCRIPT END
   
+  if (verbose >= 1) {
+    cat(report("Completed:", funname, "\n"))
+  }
+  
+  # RETURN
+  
+  return(invisible(ret))
+  
+}
+
+gl2alleles <- function (gl) {
+  x <- as.matrix(gl[, ])
+  homs1 <-
+    paste(substr(gl@loc.all, 1, 1), "/", substr(gl@loc.all, 1, 1), sep = "")
+  hets <- gl@loc.all
+  homs2 <-
+    paste(substr(gl@loc.all, 3, 3), "/", substr(gl@loc.all, 3, 3), sep = "")
+  xx <- matrix(NA, ncol = ncol(x), nrow = nrow(x))
+  for (i in 1:nrow(x)) {
+    for (ii in 1:ncol(x)) {
+      inp <- x[i, ii]
+      if (!is.na(inp)) {
+        if (inp == 0)
+          xx[i, ii] <- homs1[ii]
+        else if (inp == 1)
+          xx[i, ii] <- hets[ii]
+        else if (inp == 2)
+          xx[i, ii] <- homs2[ii]
+      }
+      else
+        xx[i, ii] = NA
+    }
+  }
+  xx <- gsub("/", ":", xx)
+  return(xx)
 }
