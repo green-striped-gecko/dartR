@@ -6,8 +6,9 @@
 #' from multilocus genotype frequencies.
 #
 #' @param x Name of the genlight object containing the SNP data [required].
-#' @param ind Name of the individual to be assigned to a population [required].
+#' @param unknown Name of the individual to be assigned to a population [required].
 #' @param inbreeding_par The inbreeding parameter [default 0]. 
+#' @param zero_prob [default 0.01].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -21,12 +22,13 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' res <- utils.assignment(platypus.gl,ind="T27")
+#' res <- utils.assignment(platypus.gl,unknown="T27")
 #' @export
 
 utils.assignment <- function(x,
-                            ind,
+                            unknown,
                             inbreeding_par = 0,
+                            zero_prob = 0.001,
                             verbose = 2) {
   
   # SET VERBOSITY
@@ -41,97 +43,124 @@ utils.assignment <- function(x,
   # CHECK DATATYPE
   datatype <- utils.check.datatype(x, verbose = verbose)
   
+  if(unknown %in% indNames(x) ==FALSE){
+    stop(error(paste("  Individual",unknown,"is not in the genlight object\n")))
+  }
+  
   # DO THE JOB
   
   # filtering loci with all missing data by population 
   x <- gl.filter.allna(x, by.pop = TRUE, verbose = 0)
+  unknown_pop <- gl.keep.ind(x,ind.list =unknown,verbose = 0 )
+  unknown_pop <- data.frame(gl2alleles(unknown_pop))
   
+  x <- gl.drop.ind(x,ind.list = unknown,verbose = 0)
+  
+  pop_names <- popNames(x)
+
   pop_list <- seppop(x)
   gl_alleles <- do.call(rbind, strsplit(x$loc.all, "/"))
-  loc_names <- locNames(x)
+  # loc_names <- locNames(x)
   
   frequencies <- lapply(pop_list, function(y) {
     freq_allele <- gl.alf(y)
-    pop_name <- popNames(y)
-    freqs_gl_1 <-
+    # pop_name <- popNames(y)
+    freqs_gl <-
       data.frame(
-        Population = pop_name,
-        Locus = loc_names,
-        Allele = gl_alleles[, 1],
-        Frequency = freq_allele[, 1]
+        # Population = pop_name,
+        # Locus = loc_names,
+        Allele1 = gl_alleles[, 1],
+        Allele2 = gl_alleles[, 2],
+        Frequency1 = freq_allele[, 1],
+        Frequency2 = freq_allele[, 2]
       )
-    freqs_gl_2 <-
-      data.frame(
-        Population = pop_name,
-        Locus = loc_names,
-        Allele = gl_alleles[, 2],
-        Frequency = freq_allele[, 2]
-      )
-    freqs_gl <- rbind(freqs_gl_1, freqs_gl_2)
     return(freqs_gl)
   })
   
-  frequencies <- rbindlist(frequencies)
+  # frequencies <- data.table::rbindlist(frequencies)
   
-  individual <- gl.keep.ind(x, ind.list = ind, verbose = 0)
-  individual <- data.frame(gl2alleles(individual))
-  colnames(individual) <- loc_names
+  # unknown_pop <- data.frame(gl2alleles(unknown_pop))
+  # colnames(unknown_pop) <- loc_names
   
-  loci <- loc_names
+  # loci <- loc_names
   
-  pops <- sort(unique(frequencies$Population))
-  ret <- data.frame(Population = pops, Probability = 0)
+  # pops <- sort(unique(frequencies$Population))
+  ret <- data.frame(Population = pop_names, Probability = 0)
+
   
-  for (pop in pops) {
+  for (popx in 1:nPop(x)) {
     prob <- 1
     
     if (verbose >= 2) {
       cat(report(
         "  Assigning individual",
-        ind,
+        unknown,
         "against population",
-        pop,
+        pop_names[popx],
         "\n"
       ))
     }
     
-    for (locus in loci) {
-      popfreq <- frequencies[frequencies$Population == pop &
-                               frequencies$Locus == locus ,]
+    # for (locus in loci) {
+      # popfreq <- frequencies[frequencies$Population == pops[popx] &
+                               # frequencies$Locus == locus ,]
       
-      loc <- individual[[locus]]
+      popfreq <- frequencies[[popx]]
       
-      if (!is.na(loc)) {
-        all_alleles <- strsplit(loc, ":")[[1]]
-        
-        f <-
-          prod(unlist(lapply(all_alleles, function(z)
-            return(
-              popfreq$Frequency[popfreq$Allele == z]
-            ))))
-        
-        if (all_alleles[1] != all_alleles[2]) {
-          f <- f * 2
-        }
-        
-        if (inbreeding_par > 0) {
-          f <- f * (1 - inbreeding_par)
-          if (all_alleles[1] == all_alleles[2]) {
-            f <-
-              f + (popfreq$Frequency[popfreq$Allele == all_alleles[1]] * inbreeding_par)
-          }
-        }
-        
-        prob <- prob * f
-      } else{
-        prob <- prob
-        
-      }
+      # loc <- individual[[locus]]
       
-    }
+      loc <-  as.data.frame(do.call(rbind,strsplit(unname(unlist(unknown_pop)), ":")))
+      colnames(loc) <- c("a1","a2")
+      
+      df_assign <- cbind(loc,popfreq)
+      df_assign$hom1 <- df_assign$Frequency1^2
+      df_assign$hom2 <- df_assign$Frequency2^2
+      df_assign$het <- 2*df_assign$Frequency1*df_assign$Frequency2
+      
+      df_assign[which(df_assign$a1 == df_assign$a2 & df_assign$a1 == df_assign$Allele1 ),c("hom2","het")] <- 0
+      
+      df_assign[which(df_assign$a1 == df_assign$a2 & df_assign$a1 == df_assign$Allele2 ),c("hom1","het")] <- 0
+      
+      df_assign[which(df_assign$a1 != df_assign$a2),c("hom1","hom2")] <- 0
+      
+      df_assign$prob <- df_assign$hom1+df_assign$hom2+df_assign$het
+      
+      df_assign[which(is.na(df_assign$a1)),"prob"] <- NA
+      
+      df_assign[which(df_assign$prob==0),"prob"] <- zero_prob
+      
+      # if (!is.na(loc)) {
+      #   all_alleles <- strsplit(loc, ":")[[1]]
+      #   
+      #   f <-
+      #     prod(unlist(lapply(all_alleles, function(z)
+      #       return(
+      #         popfreq$Frequency[popfreq$Allele == z]
+      #       ))))
+      #   
+      #   if (all_alleles[1] != all_alleles[2]) {
+      #     f <- f * 2
+      #   }
+      #   
+      #   if (inbreeding_par > 0) {
+      #     f <- f * (1 - inbreeding_par)
+      #     if (all_alleles[1] == all_alleles[2]) {
+      #       f <-
+      #         f + (popfreq$Frequency[popfreq$Allele == all_alleles[1]] * inbreeding_par)
+      #     }
+      #   }
+      #   
+      #   prob <- prob * f
+      # } else{
+      #   prob <- prob
+      #   
+      # }
+      
+    # }
     
     # assign probability
-    ret$Probability[ret$Population == pop] <- prob
+   # ret$Probability[ret$Population == pop_names[popx]] <- prob
+      ret[popx,"Probability"] <- prod(df_assign$prob,na.rm = TRUE)
   }
   
   ret <- ret[order(-ret$Probability),]
