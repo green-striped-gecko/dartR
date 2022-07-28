@@ -4,12 +4,12 @@
 \alias{utils.assignment}
 \title{Population assignment probabilities}
 \usage{
-utils.assignment(x, ind, inbreeding_par = 0, verbose = 2)
+utils.assignment(x, unknown, inbreeding_par = 0, verbose = 2)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{ind}{Name of the individual to be assigned to a population [required].}
+\item{unknown}{Name of the individual to be assigned to a population [required].}
 
 \item{inbreeding_par}{The inbreeding parameter [default 0].}
 
@@ -33,7 +33,7 @@ This function is a re-implementation of the function multilocus_assignment
 https://dyerlab.github.io/applied_population_genetics/population-assignment.html
 }
 \examples{
-res <- utils.assignment(platypus.gl,ind="T27")
+res <- utils.assignment(platypus.gl,unknown="T27")
 }
 \author{
 Custodian: Luis Mijangos -- Post to
