@@ -60,15 +60,11 @@ utils.assignment <- function(x,
 
   pop_list <- seppop(x)
   gl_alleles <- do.call(rbind, strsplit(x$loc.all, "/"))
-  # loc_names <- locNames(x)
-  
+
   frequencies <- lapply(pop_list, function(y) {
     freq_allele <- gl.alf(y)
-    # pop_name <- popNames(y)
     freqs_gl <-
       data.frame(
-        # Population = pop_name,
-        # Locus = loc_names,
         Allele1 = gl_alleles[, 1],
         Allele2 = gl_alleles[, 2],
         Frequency1 = freq_allele[, 1],
@@ -77,17 +73,8 @@ utils.assignment <- function(x,
     return(freqs_gl)
   })
   
-  # frequencies <- data.table::rbindlist(frequencies)
-  
-  # unknown_pop <- data.frame(gl2alleles(unknown_pop))
-  # colnames(unknown_pop) <- loc_names
-  
-  # loci <- loc_names
-  
-  # pops <- sort(unique(frequencies$Population))
   ret <- data.frame(Population = pop_names, Probability = 0)
 
-  
   for (popx in 1:nPop(x)) {
     prob <- 1
     
@@ -100,15 +87,9 @@ utils.assignment <- function(x,
         "\n"
       ))
     }
-    
-    # for (locus in loci) {
-      # popfreq <- frequencies[frequencies$Population == pops[popx] &
-                               # frequencies$Locus == locus ,]
       
       popfreq <- frequencies[[popx]]
-      
-      # loc <- individual[[locus]]
-      
+    
       loc <-  as.data.frame(do.call(rbind,strsplit(unname(unlist(unknown_pop)), ":")))
       colnames(loc) <- c("a1","a2")
       
@@ -128,19 +109,6 @@ utils.assignment <- function(x,
       df_assign[which(is.na(df_assign$a1)),"prob"] <- NA
       
       df_assign[which(df_assign$prob==0),"prob"] <- zero_prob
-      
-      # if (!is.na(loc)) {
-      #   all_alleles <- strsplit(loc, ":")[[1]]
-      #   
-      #   f <-
-      #     prod(unlist(lapply(all_alleles, function(z)
-      #       return(
-      #         popfreq$Frequency[popfreq$Allele == z]
-      #       ))))
-      #   
-      #   if (all_alleles[1] != all_alleles[2]) {
-      #     f <- f * 2
-      #   }
       #   
       #   if (inbreeding_par > 0) {
       #     f <- f * (1 - inbreeding_par)
@@ -150,17 +118,9 @@ utils.assignment <- function(x,
       #     }
       #   }
       #   
-      #   prob <- prob * f
-      # } else{
-      #   prob <- prob
-      #   
-      # }
-      
-    # }
-    
+   
     # assign probability
-   # ret$Probability[ret$Population == pop_names[popx]] <- prob
-      ret[popx,"Probability"] <- prod(df_assign$prob,na.rm = TRUE)
+ret[popx,"Probability"] <- prod(df_assign$prob,na.rm = TRUE)
   }
   
   ret <- ret[order(-ret$Probability),]
