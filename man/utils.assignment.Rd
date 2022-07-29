@@ -4,22 +4,12 @@
 \alias{utils.assignment}
 \title{Population assignment probabilities}
 \usage{
-utils.assignment(
-  x,
-  unknown,
-  inbreeding_par = 0,
-  zero_prob = 0.001,
-  verbose = 2
-)
+utils.assignment(x, unknown, verbose = 2)
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
 \item{unknown}{Name of the individual to be assigned to a population [required].}
-
-\item{inbreeding_par}{The inbreeding parameter [default 0].}
-
-\item{zero_prob}{[default 0.01].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -36,7 +26,7 @@ from multilocus genotype frequencies.
 }
 \details{
 This function is a re-implementation of the function multilocus_assignment
- from package gstudio. 
+ from package gstudio.
  Description of the method used in this function can be found at:
 https://dyerlab.github.io/applied_population_genetics/population-assignment.html
 }
