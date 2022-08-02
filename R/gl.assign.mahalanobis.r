@@ -276,7 +276,7 @@ gl.assign.mahalanobis <- function(x,
             print(df)
         }
         # Extract the best match, and report
-        best <- as.character(df[df$assign == "yes"][1,2])
+        best <- as.character(df[df$assign == "yes",][1,2])
        
         if (verbose >= 3) {
             cat("  Best assignment is the population with the larges probability

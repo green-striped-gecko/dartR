@@ -136,7 +136,7 @@ gl.drop.pop <-  function(x,
     pop.hold <- pop.hold[pops_to_drop]
 
     # Monomorphic loci may have been created
-    x@other$loc.metrics.flags$monomorphs == FALSE
+    x@other$loc.metrics.flags$monomorphs <- FALSE
     
     # Remove monomorphic loci
     if (mono.rm) {
