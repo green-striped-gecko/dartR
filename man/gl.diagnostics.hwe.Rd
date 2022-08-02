@@ -109,7 +109,9 @@ series of tests conducted (De Meeûs et al 2009).
 }
 }
 \examples{
+\donttest{
 res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]),n.cores=1)
+}
 }
 \references{
 \itemize{ 
