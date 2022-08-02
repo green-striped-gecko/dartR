@@ -64,7 +64,6 @@ adequate, say >=10).
 }
 \seealso{
 \code{\link{gl.assign.pca}}
-unknown')
 }
 \author{
 Custodian: Arthur Georges -- Post to

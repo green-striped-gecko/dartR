@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.report.ld.map.r
 \name{gl.report.ld.map}
 \alias{gl.report.ld.map}
-\title{Calculates pairwise linkage disequilibrium}
+\title{Calculates pairwise linkage disequilibrium by population}
 \usage{
 gl.report.ld.map(
   x,
@@ -27,13 +27,9 @@ gl.report.ld.map(
 \item{ld_max_pairwise}{Maximum distance in number of base pairs at which LD 
 should be calculated [default NULL].}
 
-\item{ld_resolution}{Resolution at which LD should be reported in number of 
-base pairs [default NULL]}
-
-\item{maf}{Minor allele frequency threshold to filter out loci 
-If a value > 1 is provided it will be 
-interpreted as MAC (i.e. the minimum number of times an allele needs to be 
-observed) [default 0.05].}
+\item{maf}{Minor allele frequency threshold to filter out loci. If a value > 
+1 is provided it will be interpreted as MAC (i.e. the minimum number of times
+an allele needs to be observed) [default 0.05].}
 
 \item{ld_stat}{The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
 "D.prime", "R.squared", and "R" [default "R.squared"]..}
@@ -56,7 +52,7 @@ choose SNP to be kept [default "AvgPIC"].}
 \item{histogram_colors}{Vector with two color names for the borders and fill
 [default NULL].}
 
-\item{boxplot_colors}{A color palette for boxplots by population or a list
+\item{boxplot_colors}{A color palette for box plots by population or a list
  with as many colors as there are populations in the dataset
 [default NULL].}
 
@@ -81,18 +77,19 @@ A dataframe with information for each SNP pair in LD.
 This function calculates pairwise linkage disequilibrium (LD) by population 
 using the function \link[snpStats]{ld} (package snpStats).
 
-If SNPs are not mapped to a reference genome, the parameters ld_max_pairwise 
-and ld_resolution should be set as NULL (the default). In this case, the 
+If SNPs are not mapped to a reference genome, the parameter ld_max_pairwise
+ should be set as NULL (the default). In this case, the 
 function will assign the same chromosome ("1") to all the SNPs in the dataset
  and assign a sequence from 1 to n loci as the position of each SNP. The 
  function will then calculate LD for all possible SNP pair combinations. 
  
-If SNPs are mapped to a reference genome, the parameters ld_max_pairwise and 
-ld_resolution should be filled out (ie not NULL). In this case, the
+If SNPs are mapped to a reference genome, the parameter ld_max_pairwise
+ should be filled out (i.e. not NULL). In this case, the
  information for SNP's position should be stored in the genlight accessor
-  "@position" and the SNP's chromosome name in the accessor "@chromosome".
-   The function will then calculate LD within each chromosome and for all
-    possible SNP pair combinations within a distance of ld_max_pairwise.
+  "@position" and the SNP's chromosome name in the accessor "@chromosome"
+   (see examples). The function will then calculate LD within each chromosome
+    and for all possible SNP pair combinations within a distance of
+     ld_max_pairwise.
 }
 \details{
 This function reports LD between SNP pairs by population. Reports include 

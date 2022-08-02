@@ -312,7 +312,7 @@ gl.assign.pa <- function(x,
     }
     
     # Check that there is more than one population to assign (excluding
-    #'unknown')
+    # 'unknown')
     if (is.null(n.best)) {
         if (verbose >= 2) {
             if (nPop(gl) == 1) {

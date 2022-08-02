@@ -288,25 +288,25 @@ theme_dartR <- function(base_size = 11,
 }
 
 ## plot method
-setMethod("plot", signature(x = "genlight"), function(x,
-                                                      group_pop = FALSE,
-                                                      ind_labels = indNames(x),
-                                                      ind_labels_size = 10,
-                                                      plot_colors = four_colors,
-                                                      posi = "bottom",
-                                                      save2tmp = FALSE,
-                                                      verbose = NULL) {
-    gl.smearplot(
-        x,
-        group_pop = group_pop,
-        ind_labels = ind_labels,
-        ind_labels_size = ind_labels_size,
-        plot_colors = plot_colors,
-        posi = posi,
-        save2tmp = save2tmp,
-        verbose = verbose
-    )
-})
+# setMethod("plot", signature(x = "genlight"), function(x,
+#                                                       group_pop = TRUE,
+#                                                       ind_labels = TRUE,
+#                                                       ind_labels_size = 8,
+#                                                       plot_colors = four_colors,
+#                                                       posi = "bottom",
+#                                                       save2tmp = FALSE,
+#                                                       verbose = NULL) {
+#     gl.smearplot(
+#         x,
+#         group_pop = group_pop,
+#         ind_labels = ind_labels,
+#         ind_labels_size = ind_labels_size,
+#         plot_colors = plot_colors,
+#         posi = posi,
+#         save2tmp = save2tmp,
+#         verbose = verbose
+#     )
+# })
 
 # WELCOME MESSAGE
 .onAttach <- function(...) {
