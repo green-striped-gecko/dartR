@@ -159,7 +159,7 @@ gl.select.colors <- function(x = NULL,
     # DO THE JOB
     
     if (is.null(library)) {
-        palette = NULL
+        palette <-NULL
         if (verbose >= 2) {
             cat(warn(
                 "  Warning: No color library or palette specified, set to default\n"

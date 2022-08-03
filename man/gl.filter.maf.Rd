@@ -25,9 +25,9 @@ gl.filter.maf(
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
 \item{threshold}{Threshold MAF -- loci with a MAF less than the threshold
-will be removed [default 0.01]. If a value > 1 is provided it will be 
+will be removed. If a value > 1 is provided it will be 
 interpreted as MAC (i.e. the minimum number of times an allele needs to be 
-observed).}
+observed) [default 0.01].}
 
 \item{by.pop}{Whether MAF should be calculated by population [default FALSE].}
 

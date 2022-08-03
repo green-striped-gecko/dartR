@@ -56,7 +56,8 @@ res_3 <- gl.report.ld.map(res_2)
 Other filter functions: 
 \code{\link{gl.filter.callrate}()},
 \code{\link{gl.filter.parent.offspring}()},
-\code{\link{gl.filter.sexlinked}()}
+\code{\link{gl.filter.sexlinked}()},
+\code{\link{gl.report.ld.map}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to

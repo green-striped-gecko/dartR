@@ -34,9 +34,11 @@ Calculates a cost distance matrix, to be used with run.popgensim.
 \dontrun{
 data(possums.gl)
 library(raster)  #needed for that example
-landscape.sim <- readRDS(system.file('extdata','landscape.sim.rdata', package='dartR'))
+landscape.sim <- readRDS(system.file('extdata','landscape.sim.rdata', 
+package='dartR'))
 #calculate mean centers of individuals per population
-xy <- apply(possums.gl@other$xy, 2, function(x) tapply(x, pop(possums.gl), mean))
+xy <- apply(possums.gl@other$xy, 2, function(x) tapply(x, pop(possums.gl),
+ mean))
 cd <- gl.costdistances(landscape.sim, xy, method='leastcost', NN=8)
 round(cd,3)
 }

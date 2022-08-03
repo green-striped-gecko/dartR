@@ -11,26 +11,43 @@
 #'  function will then calculate LD for all possible SNP pair combinations. 
 #'  
 #' If SNPs are mapped to a reference genome, the parameters ld_max_pairwise and 
-#' ld_resolution should not be NULL. In this case, the information for SNP's 
-#' position should be stored in the genlight accessor "@@position" and the SNP's 
-#' chromosome name in the accessor "@@chromosome". The function will then 
-#' calculate LD within each chromosome and for all possible SNP pair 
-#' combinations within a distance of ld_max_pairwise. 
+#' ld_resolution should be filled out (ie not NULL). In this case, the
+#'  information for SNP's position should be stored in the genlight accessor
+#'   "@@position" and the SNP's chromosome name in the accessor "@@chromosome".
+#'    The function will then calculate LD within each chromosome and for all
+#'     possible SNP pair combinations within a distance of ld_max_pairwise. 
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param ld_max_pairwise Maximum distance in number of base pairs at which LD 
 #' should be calculated [default NULL].
 #' @param ld_resolution Resolution at which LD should be reported in number of 
 #' base pairs [default NULL]
-#' @param maf Minor allele frequency threshold to filter out loci [default 0.05].
+#' @param maf Minor allele frequency threshold to filter out loci 
+#' If a value > 1 is provided it will be 
+#' interpreted as MAC (i.e. the minimum number of times an allele needs to be 
+#' observed) [default 0.05].
 #' @param ld_stat The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
-#'   "D.prime", "R.squared", and "R" [default "R.squared"].
+#'   "D.prime", "R.squared", and "R" [default "R.squared"]..
+#' @param ind.limit Minimum number of individuals that a population should
+#' contain to take it in account to report loci in LD [default 10].
+#' @param pop.limit Minimum number of populations in which the same SNP pair 
+#' should be in LD to be reported in plots. However should be more
+#' than the threshold for a locus to be filtered out.
+#' The default value is half of the populations [default ceiling(nPop(x)/2)].
+#' @param summary_stat LD is calculated between SNP pairs in each population.
+#'  This option sets the summary statistic to report the LD between SNP pairs
+#'   across populations. Options are "mean" or "max" to report the maximum 
+#'   value [default "max"]. 
+#' @param ld_threshold_pops LD threshold to show number of SNP pairs in LD 
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param stat_keep Name of the column from the slot loc.metrics to be used to 
 #' choose SNP to be kept [default "AvgPIC"].
-#' @param plot_theme User specified theme [default theme_dartR()].
-#' @param plot_colors Vector with two color names for the borders and fill
-#' [default two_colors].
+#' @param plot_theme User specified theme [default NULL].
+#' @param histogram_colors Vector with two color names for the borders and fill
+#' [default NULL].
+#' @param boxplot_colors A color palette for boxplots by population or a list
+#'  with as many colors as there are populations in the dataset
+#' [default NULL].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
@@ -38,12 +55,35 @@
 #' [default 2, unless specified using gl.set.verbosity].
 #'
 #' @details
-#' This function reports pairwise LD of those SNPs in which the LD measure is 
-#' > 0 in all the populations. 
-#' The LD plot shows the pairwise LD measure against distance in number
-#' of base pairs pooled over all the chromosomes and a red line representing the
-#' threshold (R.squared = 0.2) that is commonly used to imply that two loci are
-#' unlinked (Delourme et al., 2013; Li et al., 2014).
+#' This function reports LD between SNP pairs by population. Reports include 
+#' the number of SNPs that would be filtered out given specific LD thresholds. 
+#' The function code{\link{gl.filter.ld}} filters out the SNPs in LD using as
+#' input the results of gl.report.ld.map. However, the actual number of SNPs to 
+#' be filtered out depends on the parameters set in the function 
+#' code{\link{gl.filter.ld}}. Therefore, the number of SNPs to be filtered out
+#'  reported by gl.report.ld.map should be used as a guide and not as a definite
+#'   number.
+#' 
+#' \enumerate{
+#' \item 
+#' 
+#' }
+#' A bar plot with observed
+#' and expected (null expectation) number of significant HWE tests for the same
+#' locus in multiple populations (that is, the x-axis shows whether a locus
+#' results significant in 1, 2, ..., n populations. The y axis is the count of
+#' these occurrences.
+#' 
+#' If SNPs are mapped to a reference genome, the function creates a plot showing
+#' the pairwise LD measure against distance in number of base pairs pooled over
+#' all the chromosomes and a red line representing the threshold (R.squared = 
+#' 0.2) that is commonly used to imply that two loci are unlinked (Delourme et
+#' al., 2013; Li et al., 2014). Additionally, boxplots of LD by population and
+#' a histogram showing LD frequency are presented.
+#' 
+#' If SNPs are not mapped to a reference genome, only boxplots by population and
+#'  a histogram showing LD frequency are presented. 
+#'    
 #' @references
 #' \itemize{
 #' \item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., 
@@ -65,6 +105,8 @@
 #' x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
 #' gl.report.ld.map(x,ld_max_pairwise = 1000000,ld_resolution = 100000)
 #' }
+#' @seealso \code{\link{gl.filter.ld}}
+#' @family filter functions
 #' @export
 
 gl.report.ld.map <- function(x,
@@ -72,10 +114,13 @@ gl.report.ld.map <- function(x,
                            ld_resolution = NULL,
                            maf = 0.05,
                            ld_stat = "R.squared",
+                           ind.limit = 10,
+                           summary_stat = "max",
                            stat_keep = "AvgPIC",
                            plot.out = TRUE,
-                           plot_theme = theme_dartR(),
-                           plot_colors = two_colors,
+                           plot_theme = NULL,
+                           histogram_colors = NULL,
+                           boxplot_colors = NULL,
                            save2tmp = FALSE,
                            verbose = NULL) {
   # SET VERBOSITY
@@ -111,12 +156,16 @@ gl.report.ld.map <- function(x,
   }
   
   # DO THE JOB
+  # by default SNPs are mapped to a reference genome
+  SNP_map <- TRUE
   
   if(is.null(ld_max_pairwise)){
     x$position <- 1:nLoc(x)
     x$chromosome <- as.factor(rep("1",nLoc(x)))
     ld_max_pairwise <- nLoc(x)
     ld_resolution <- 10
+    # SNPs are not mapped to a reference genome
+    SNP_map <- FALSE
   }
   
   x_list <- seppop(x)
@@ -137,22 +186,29 @@ gl.report.ld.map <- function(x,
   )
   
   for (i in 1:length(x_list)) {
+
     pop_ld <- x_list[[i]]
     pop_name <- popNames(pop_ld)
+    
+    if(nInd(pop_ld)<=ind.limit){
+        cat(warn(paste("  Skipping population",pop_name,"from analysis because it has less than",ind.limit,"individuals.\n")))
+      next()
+    }
+    
     if (verbose >= 2) {
-      cat(report("Calculating pairwise LD in population", pop_name, "\n"))
+      cat(report("  Calculating pairwise LD in population", pop_name, "\n"))
     }
     # keeping only mapped loci
-    mapped <- which(pop_ld$position != 0)
-    pop_ld <-
-      gl.keep.loc(pop_ld, loc.list = locNames(pop_ld)[mapped], verbose = 0)
+    # mapped <- which(pop_ld$position != 0)
+    # pop_ld <-
+      # gl.keep.loc(pop_ld, loc.list = locNames(pop_ld)[mapped], verbose = 0)
     # ordering SNPs by chromosome and position
     hold <- pop_ld
     pop_ld <- hold[, order(hold$chromosome, hold$position)]
     pop_ld$other$loc.metrics <-
       hold$other$loc.metrics[order(hold$chromosome, hold$position),]
-    pop_ld <- gl.filter.allna(pop_ld, verbose = 0)
-    pop_ld <- gl.recalc.metrics(pop_ld, verbose = 0)
+    # pop_ld <- gl.filter.allna(pop_ld, verbose = 0)
+     pop_ld <- gl.recalc.metrics(pop_ld, verbose = 0)
     if (maf > 0) {
       pop_ld <- gl.filter.maf(pop_ld, threshold = maf, verbose = 0)
     }
@@ -201,12 +257,25 @@ gl.report.ld.map <- function(x,
       if (nrow(ld_map_loci) <= 1) {
         next
       }
-      # this is the mean distance between each snp which is used to determine 
-      # the depth at which LD analyses are performed
-      mean_dis <- mean(diff(ld_map_loci$loc_bp))
-      ld_depth_b <- ceiling((ld_max_pairwise / mean_dis)) - 1
-      #function to calculate LD
-      ld_snps <- snpStats::ld(genotype_loci, depth = ld_depth_b, stats = ld_stat) 
+      
+      #if SNPs are mapped to a reference genome
+      if(SNP_map==TRUE){
+        
+        # this is the mean distance between each snp which is used to determine 
+        # the depth at which LD analyses are performed
+        mean_dis <- mean(diff(ld_map_loci$loc_bp))
+        ld_depth_b <- ceiling((ld_max_pairwise / mean_dis)) - 1
+        #function to calculate LD
+        ld_snps <- snpStats::ld(genotype_loci, depth = ld_depth_b, stats = ld_stat)
+        
+        #if SNPs are not mapped to a reference genome 
+      }else{
+        #function to calculate LD
+        ld_snps <- snpStats::ld(genotype_loci,genotype_loci, stats = ld_stat)
+        ld_snps[lower.tri(ld_snps,diag = TRUE)] <- 0
+        
+      }
+     
       ld_columns <- as.matrix(ld_snps)
       colnames(ld_columns) <- rownames(ld_columns)
       
@@ -231,10 +300,8 @@ gl.report.ld.map <- function(x,
       snp_loc <-
         ld_map_loci[, c("chr", "snp.name", "stat_keep", "loc_bp")]
       dtb <- data.table(snp_loc, key = "loc_bp")
-      t_locationb <-
-        ldtb[dtb, c("snp.name", "stat_keep"), nomatch = 0]
-      t_locationc <-
-        ldtc[dtb, c("snp.name", "stat_keep"), nomatch = 0]
+      t_locationb <- ldtb[dtb, c("snp.name", "stat_keep"), nomatch = 0]
+      t_locationc <- ldtc[dtb, c("snp.name", "stat_keep"), nomatch = 0]
       
       df_linkage_temp <- df_linkage_temp[order(df_linkage_temp$Var1),]
       df_linkage_temp <- cbind(df_linkage_temp, t_locationb)
@@ -291,51 +358,94 @@ gl.report.ld.map <- function(x,
   bins_ld$distance <- as.numeric(bins_ld$distance)
   bins_ld$ld_stat <- as.numeric(bins_ld$ld_stat)
   
-  loci_pairs <-
-    lapply(split_df, function(x) {
-      unlist(x[, "locus_a_b"])
-    })
-  loci_pairs_all_pops <- Reduce(intersect, loci_pairs)
-  df_ld <-
-    df_linkage[df_linkage$locus_a_b %in% loci_pairs_all_pops, ]
+  # loci_pairs <-
+  #   lapply(split_df, function(x) {
+  #     unlist(x[, "locus_a_b"])
+  #   })
+  # loci_pairs_all_pops <- Reduce(intersect, loci_pairs)
+  # df_ld <- df_linkage[df_linkage$locus_a_b %in% loci_pairs_all_pops, ]
+  df_ld <- df_linkage
+  
   df_ld <- df_ld[order(df_ld$locus_a_b), ]
   
   df_ld_split <- split(df_ld, f = df_ld$locus_a_b)
-  df_ld_mean_ld <- lapply(df_ld_split, function(x) {
-    mean(x$ld_stat)
-  })
-  df_ld_mean_ld <-
-    as.data.frame(cbind(names(df_ld_mean_ld), unlist(df_ld_mean_ld)))
-  colnames(df_ld_mean_ld) <- c("snp_pair", "ld_stat")
   
-  ld_stat_res <- as.numeric(df_ld_mean_ld$ld_stat)
+  if(summary_stat=="max"){
+    df_ld_report <- lapply(df_ld_split, function(x) {
+      max(x$ld_stat)
+    })
+  }
+  
+  if(summary_stat=="mean"){
+    df_ld_report <- lapply(df_ld_split, function(x) {
+      mean(x$ld_stat)
+    })
+  }
+  
+  df_ld_report_2 <- strsplit(names(df_ld_report),split = "_")
+  
+  df_ld_report_3 <- rbindlist(lapply(df_ld_report_2,function(x){
+    as.data.frame(rbind(x))
+  }))
+  
+  df_ld_report_3$ld <- unname(unlist(df_ld_report))
+  
+  df_ld_report_4 <- as.data.frame(df_ld_report_3[order(df_ld_report_3$ld,decreasing = TRUE),])
+  
+  df_ld_report_5 <- split(df_ld_report_4,f=df_ld_report_4$V1)
+  
+  df_ld_report_6 <- rbindlist(lapply(df_ld_report_5,"[",1,))
+
+  ld_stat_res <- as.numeric(unname(unlist(df_ld_report)))
   
   if (plot.out) {
+    
+    if(is.null(histogram_colors)){
+      histogram_colors <- two_colors
+    }
+    
+    if(is.null(plot_theme)){
+    plot_theme = theme_dartR()
+    }
+    
+    if(is.null(boxplot_colors)){
+      boxplot_colors <- discrete_palette(length(levels(pop(x))))
+    }
+    
+    if (is(boxplot_colors, "function")) {
+      boxplot_colors <- boxplot_colors(length(levels(pop(x))))
+    }
+    
+    if (!is(boxplot_colors,"function")) {
+      boxplot_colors <- boxplot_colors
+    }
+    
     # get title for plots
     title1 <- "SNP data - Pairwise LD"
     
     # Calculate minimum and maximum graph cutoffs
     min_ld <- min(ld_stat_res, na.rm = TRUE)
-    min_ld <- trunc(min_ld * 100) / 100
     
     # Boxplot
     p1 <-
-      ggplot(data.frame(ld_stat_res), aes(y = ld_stat_res)) +
-      geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) +
-      coord_flip() +
+      ggplot(df_ld, aes(x=pop,y = ld_stat,color=pop)) +
+      geom_boxplot() +
       plot_theme +
-      xlim(range = c(-1, 1)) +
-      ylim(min_ld, 1) + ylab(" ") +
-      theme(axis.text.y = element_blank(),
-            axis.ticks.y = element_blank()) +
-      ggtitle(title1)
+      scale_color_manual(values = boxplot_colors) +
+      ylab(ld_stat) +
+      ggtitle(title1) +
+      theme(legend.position = "none")+     
+      labs(title = "Pairwise LD by population", color = "") +
+      theme(axis.title.x=element_blank(),
+            axis.text.x = element_blank(),
+            axis.ticks.x = element_blank()) 
     
     # Histogram
     p2 <-
       ggplot(data.frame(ld_stat_res), aes(x = ld_stat_res)) +
       geom_histogram(bins = 100,
-                     color = plot_colors[1],
-                     fill = plot_colors[2]) +
+                     color = histogram_colors[1],
+                     fill = histogram_colors[2]) +
       coord_cartesian(xlim = c(min_ld, 1)) +
       xlab(ld_stat) +
       ylab("Count") +
@@ -343,17 +453,28 @@ gl.report.ld.map <- function(x,
     
     # pairwise LD by population
     distance <- NULL
-    p4 <-
+    p3 <-
       ggplot(bins_ld, aes(x = distance, y = ld_stat, colour = pop)) +
       geom_line(size = 1) +
       geom_point(size = 2) +
-      geom_hline(aes(yintercept = 0.2, colour = "LD threshold for unlinked loci"),
+      geom_hline(aes(yintercept = 0.2, 
+                     colour = "LD threshold for unlinked loci"),color="red",
                  size = 1) +
-      labs(title = "Pairwise LD by population", color = "") +
       xlab("Base pairs") +
       ylab(ld_stat) +
+      labs(color = "") +
       plot_theme +
       theme(legend.position = "bottom")
+    
+    # Number of populations in which the same SNP pairs are in LD
+    
+    ld_pops_tmp <- table(rowSums(as.data.frame.matrix(with(df_ld, table(locus_a_b,pop)))))
+    ld_pops <- as.data.frame(cbind(as.numeric(names(ld_pops_tmp)),unlist(unname(ld_pops_tmp))))
+    colnames(ld_pops) <- c("pops","n_loc")
+    
+    ggplot(ld_pops,aes(x=pops,y=n_loc))+
+      geom_col()
+   
   }
   
   # Print out some statistics
@@ -372,16 +493,17 @@ gl.report.ld.map <- function(x,
   ))) / (nLoc(x) * nInd(x)), 2), "\n\n")
   
   # Determine the loss of loci for a given threshold
+  ld_loc <- df_ld_report_6$ld
   quantile_res <-
     quantile(
-      ld_stat_res,
+      ld_loc,
       probs = seq(0, 1, 1 / 20),
       type = 1,
       na.rm = T
     )
   retained <-
     unlist(lapply(quantile_res, function(y) {
-      res <- length(ld_stat_res[ld_stat_res <= y])
+      res <- length(ld_loc[ld_loc <= y])
     }))
   pc.retained <- round(retained * 100 / length(ld_stat_res), 1)
   filtered <- length(ld_stat_res) - retained
@@ -407,10 +529,9 @@ gl.report.ld.map <- function(x,
   
   # PRINTING OUTPUTS
   if (plot.out) {
-    # using package patchwork
-    p3 <- (p1 / p2 / p4) + plot_layout(heights = c(1, 2, 2))
-    print(p3)
-    
+      # using package patchwork
+      p4 <- p1 / p2 / p3
+      print(p4)
   }
   print(df)
   
@@ -426,7 +547,7 @@ gl.report.ld.map <- function(x,
                as.character(match.call()),
                collapse = "_")
       # saving to tempdir
-      saveRDS(list(match_call, p3), file = temp_plot)
+      saveRDS(list(match_call, p4), file = temp_plot)
       if (verbose >= 2) {
         cat(report("  Saving the ggplot to session tempfile\n"))
       }
@@ -450,6 +571,6 @@ gl.report.ld.map <- function(x,
   }
   
   # RETURN
-  return(df_ld)
+  return(invisible(df_ld))
   
 }

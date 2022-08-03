@@ -49,6 +49,7 @@ gl.tree.nj <- function(x,
     
     # DO THE JOB
     
+<<<<<<< HEAD
     # # Convert gl object to a matrix of allele frequencies, locus by population
     # if (verbose >= 2) {
     #     cat(report(
@@ -67,6 +68,22 @@ gl.tree.nj <- function(x,
     
     d <- gl.dist.pop(x, method=dist.method, output="matrix")
     row.names(d) <- popNames(x)
+=======
+    # Convert gl object to a matrix of allele frequencies, locus by population
+    if (verbose >= 2) {
+        cat(report(
+            "  Converting to a matrix of frequencies, locus by populations\n"
+        ))
+    }
+    t <-apply(as.matrix(x), 2, tapply, pop(x), function(e)
+        mean(e) / 2)
+    # Compute Euclidean distance
+    if (verbose >= 2) {
+        cat(report("  Computing Euclidean distances\n"))
+    }
+    d <- round(as.matrix(dist(t)), 4)
+    # row.names(d) <- c(paste(row.names(d),' ')) row.names(d) <- substr(row.names(d),1,10)
+>>>>>>> 06233be3b235c0270e437be3dcab853c38692903
     
     # Plot the distances as an nj tree
     tree <- ape::nj(d)

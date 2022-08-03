@@ -122,7 +122,7 @@ gl.filter.allna <- function(x,
         if (all(is.na(row))) {
             loc.list[i] <- l.names[i]
             if (all(is.na(row))) {
-                na.counter = na.counter + 1
+                na.counter <-na.counter + 1
             }
         }
     }
@@ -161,7 +161,7 @@ gl.filter.allna <- function(x,
         if (all(is.na(col))) {
             ind.list[i] <- i.names[i]
             if (all(is.na(col))) {
-                na.counter = na.counter + 1
+                na.counter <-na.counter + 1
             }
         }
     }

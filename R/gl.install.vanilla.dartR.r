@@ -203,9 +203,9 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
     
     if (verbose>= 2 & is.null(err) & !is.null(flavour)) {
         if (flavour != "CRAN") {
-            fl = paste0("Github [", flavour, "]")
+            fl <-paste0("Github [", flavour, "]")
         } else {
-            fl = "CRAN"
+            fl <-"CRAN"
             cat(report(
                 paste(
                     "  You have installed dartR",

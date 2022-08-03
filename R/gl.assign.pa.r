@@ -1,6 +1,6 @@
 #' @name gl.assign.pa
-#' @title Eliminates populations as possible source populations for an individual
-#'  of unknown provenance, using private alleles
+#' @title Eliminates populations as possible source populations for an 
+#' individual of unknown provenance, using private alleles
 #' @description
 #' This script eliminates from consideration as putative source populations,
 #' those populations for which the individual has too many private alleles. The
@@ -38,7 +38,8 @@
 #' @importFrom stats dnorm qnorm
 #' @export
 #'
-#' @author Custodian: Arthur Georges -- Post to #'  \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to
+#'   \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # Test run with a focal individual from the Macleay River (EmmacMaclGeor)
 #'   test <- gl.assign.pa(testset.gl, unknown='UC_00146', nmin=10, threshold=1,
@@ -71,14 +72,16 @@ gl.assign.pa <- function(x,
     if (!all(test, na.rm = FALSE)) {
         stop(
             error(
-                "Fatal Error: nominated focal individual (of unknown provenance) is not present in the dataset!\n"
+                "Fatal Error: nominated focal individual (of unknown provenance) 
+                is not present in the dataset!\n"
             )
         )
     }
     if (nmin <= 0 & verbose >= 1) {
         cat(
             warn(
-                "  Warning: the minimum size of the target population must be greater than zero, set to 10\n"
+                "  Warning: the minimum size of the target population must be 
+                greater than zero, set to 10\n"
             )
         )
         nmin <- 10
@@ -86,7 +89,8 @@ gl.assign.pa <- function(x,
     if (threshold < 0 & verbose >= 1) {
         cat(
             warn(
-                "  Warning: the threshold for private alleles must be non-negative, set to 0\n"
+                "  Warning: the threshold for private alleles must be 
+                non-negative, set to 0\n"
             )
         )
         threshold <- 0
@@ -96,7 +100,8 @@ gl.assign.pa <- function(x,
         if (n.best < 1 & verbose >= 1) {
             cat(
                 warn(
-                    "  Warning: the n.best parameter for retention of best match populations must be a positive integer, set to NULL\n"
+                    "  Warning: the n.best parameter for retention of best 
+                    match populations must be a positive integer, set to NULL\n"
                 )
             )
             n.best <- NULL
@@ -109,11 +114,13 @@ gl.assign.pa <- function(x,
     hard.min <- 10
     if (verbose >= 1 & (nmin < hard.min)) {
         cat(warn(
-            "  Warning: The specified minimum sample size is less than 10 individuals\n"
+            "  Warning: The specified minimum sample size is less than 10 
+            individuals\n"
         ))
         cat(
             warn(
-                "    Risk of alleles present in the unknown being missed during sampling of populations with sample sizes less than 10\n"
+                "    Risk of alleles present in the unknown being missed during
+                sampling of populations with sample sizes less than 10\n"
             )
         )
     }
@@ -121,20 +128,22 @@ gl.assign.pa <- function(x,
     # Assign the unknown individual to population 'unknown'
     vec <- as.vector(pop(x))
     vec[indNames(x) == unknown] <- "unknown"
-    pop(x) <-
-        as.factor(vec)  # Note, population containing the unknown has been reduced in size by 1
+    # Note, population containing the unknown has been reduced in size by 1
+    pop(x) <- as.factor(vec)  
     
     # Remove loci scored as NA for the unknown
     a <- x[pop(x) == "unknown",]
-    b <-
-        data.frame(as.matrix(a))  # Fuck, it changed the locus names, replaced hyphens with periods
-    names(b) <- locNames(a)  # Change them back
+    # Fuck, it changed the locus names, replaced hyphens with periods
+    b <- data.frame(as.matrix(a))  
+    # Change them back
+    names(b) <- locNames(a)  
     c <- names(b)[is.na(b)]
     if (length(c) > 0) {
         x <- gl.drop.loc(x, loc.list = c, verbose = 0)
     }
     
-    # Split the genlight object into one containing the unknown and one containing the remaining populations
+    # Split the genlight object into one containing the unknown and one 
+    # containing the remaining populations
     unknowns <- gl.keep.pop(x, pop.list = "unknown", verbose = 0)
     knowns <- gl.drop.pop(x, pop.list = "unknown", verbose = 0)
     
@@ -163,7 +172,8 @@ gl.assign.pa <- function(x,
         if (verbose >= 1) {
             cat(
                 warn(
-                    "  Warning: Some retained populations have sample sizes less than",
+                    "  Warning: Some retained populations have sample sizes less
+                    than",
                     hard.min,
                     ":",
                     pop.warn,
@@ -173,7 +183,8 @@ gl.assign.pa <- function(x,
         }
         if (verbose >= 1) {
             cat(warn(
-                "    Substantial risk of private alleles arising as sampling error\n\n"
+                "    Substantial risk of private alleles arising as sampling 
+                error\n\n"
             ))
         }
     }
@@ -185,7 +196,8 @@ gl.assign.pa <- function(x,
         if (verbose >= 0) {
             stop(
                 error(
-                    "Fatal Error: Number of unknown focal individuals > 1; population label 'unknown' already in use\n"
+                    "Fatal Error: Number of unknown focal individuals > 1; 
+                    population label 'unknown' already in use\n"
                 )
             )
         }
@@ -221,23 +233,28 @@ gl.assign.pa <- function(x,
             unknown.gen <- unknown.ind[j]
             pop.gen <- gen[, j]
             if (length(pop.gen) >= nmin) {
-                # Where the unknown focal individual is homozygous reference allele [aa]
+                # Where the unknown focal individual is homozygous reference 
+              #allele [aa]
                 if (unknown.gen == 0) {
-                    # If all individuals in the target population are bb [not aa or ab] then focal individual has private allele [a]
+                    # If all individuals in the target population are bb [not 
+                  # aa or ab] then focal individual has private allele [a]
                     if (all(pop.gen == 2, na.rm = TRUE)) {
                         count[i] <- count[i] + 1
                     }
                 }
-                # Where the unknown focal individual is homozygous for the alternate allele [bb]
+                # Where the unknown focal individual is homozygous for the 
+              #alternate allele [bb]
                 if (unknown.gen == 2) {
-                    # If all individuals in the target population are aa [not bb or ab] then focal individual has private allele [b]
+                    # If all individuals in the target population are aa [not 
+                  #bb or ab] then focal individual has private allele [b]
                     if (all(pop.gen == 0, na.rm = TRUE)) {
                         count[i] <- count[i] + 1
                     }
                 }
                 # Where the unknown focal individual is heterozgous [ab]
                 if (unknown.gen == 1) {
-                    # If all individuals in the target population are aa, then [b] is private or if bb, then [a] is private
+                    # If all individuals in the target population are aa, then 
+                  #[b] is private or if bb, then [a] is private
                     if ((all(pop.gen == 0, na.rm = TRUE)) ||
                         (all(pop.gen == 2, na.rm = TRUE))) {
                         count[i] <- count[i] + 1
@@ -250,7 +267,8 @@ gl.assign.pa <- function(x,
     # Print out results
     
     if (verbose >= 3) {
-        cat("  Table showing populations against number of loci with private alleles\n")
+        cat("  Table showing populations against number of loci with private 
+            alleles\n")
     }
     counter <- 1
     retain <- NULL
@@ -278,7 +296,8 @@ gl.assign.pa <- function(x,
         gl <-
             gl.keep.pop(
                 x,
-                pop.list = c(levels(pop(knowns))[count <= threshold], "unknown"),
+                pop.list = c(levels(pop(knowns))[count <= threshold],
+                             "unknown"),
                 mono.rm = TRUE,
                 verbose = 0
             )
@@ -292,17 +311,18 @@ gl.assign.pa <- function(x,
             )
     }
     
-    # Check that there is more than one population to assign (excluding 'unknown')
+    # Check that there is more than one population to assign (excluding
+    # 'unknown')
     if (is.null(n.best)) {
         if (verbose >= 2) {
             if (nPop(gl) == 1) {
                 # Taking into account the unknown as a population
-                if (verbose >= 2) {
-                    cat(
-                        report(
-                            "  There are no populations retained for assignment.",
-                            "  The unknown may not belong to one of the target populations.",
-                            "  Returning genlight object for the unknown individual only\n"
+      if (verbose >= 2) {
+          cat(
+          report(
+            "  There are no populations retained for assignment.",
+            "  The unknown may not belong to one of the target populations.",
+            "  Returning genlight object for the unknown individual only\n"
                         )
                     )
                 }
@@ -324,12 +344,12 @@ gl.assign.pa <- function(x,
     } else {
         if (verbose >= 2) {
             if (length(retain) == 0) {
-                if (verbose >= 2) {
-                    cat(
-                        report(
-                            "  There are no populations retained for assignment.",
-                            "  The unknown may not belong to one of the target populations.",
-                            "  Returning genlight object for the unknown individual only\n"
+        if (verbose >= 2) {
+          cat(
+          report(
+            "  There are no populations retained for assignment.",
+            "  The unknown may not belong to one of the target populations.",
+            "  Returning genlight object for the unknown individual only\n"
                         )
                     )
                 }

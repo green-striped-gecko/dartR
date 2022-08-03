@@ -45,10 +45,17 @@ utils::globalVariables(c("chromosome_name","phase1","same_line","number_pops_pha
 `.` <- list
 
 # SET PLOTS COLORS
+# Convert color names to hex RGB strings taken from function col2hex from
+# package gplots 
+RGB_colors <- function (cname){
+  colMat <- col2rgb(cname)
+  rgb(red = colMat[1, ]/255, green = colMat[2, ]/255, blue = colMat[3, 
+  ]/255)
+}
 
 # function to replicate defaults colors of ggplot
 discrete_palette <- function(n) {
-    hues = seq(15, 375, length = n + 1)
+    hues <-seq(15, 375, length = n + 1)
     return(hcl(h = hues, l = 65, c = 100)[1:n])
 }
 
@@ -281,25 +288,25 @@ theme_dartR <- function(base_size = 11,
 }
 
 ## plot method
-setMethod("plot", signature(x = "genlight"), function(x,
-                                                      group_pop = FALSE,
-                                                      ind_labels = indNames(x),
-                                                      ind_labels_size = 10,
-                                                      plot_colors = four_colors,
-                                                      posi = "bottom",
-                                                      save2tmp = FALSE,
-                                                      verbose = NULL) {
-    gl.smearplot(
-        x,
-        group_pop = group_pop,
-        ind_labels = ind_labels,
-        ind_labels_size = ind_labels_size,
-        plot_colors = plot_colors,
-        posi = posi,
-        save2tmp = save2tmp,
-        verbose = verbose
-    )
-})
+# setMethod("plot", signature(x = "genlight"), function(x,
+#                                                       group_pop = TRUE,
+#                                                       ind_labels = TRUE,
+#                                                       ind_labels_size = 8,
+#                                                       plot_colors = four_colors,
+#                                                       posi = "bottom",
+#                                                       save2tmp = FALSE,
+#                                                       verbose = NULL) {
+#     gl.smearplot(
+#         x,
+#         group_pop = group_pop,
+#         ind_labels = ind_labels,
+#         ind_labels_size = ind_labels_size,
+#         plot_colors = plot_colors,
+#         posi = posi,
+#         save2tmp = save2tmp,
+#         verbose = verbose
+#     )
+# })
 
 # WELCOME MESSAGE
 .onAttach <- function(...) {

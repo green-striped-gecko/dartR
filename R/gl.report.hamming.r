@@ -138,7 +138,7 @@ gl.report.hamming <- function(x,
         )
     }
     
-    count = 0
+    count <-0
     nL <- nLoc(x)
     d <- rep(NA, (((nL - 1) * nL) / 2))
     
