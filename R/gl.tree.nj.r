@@ -29,6 +29,7 @@
 #'   gl.tree.nj(testset.gs,type='fan')
 
 gl.tree.nj <- function(x,
+                       dist.method="euclidean",
                        type = "phylogram",
                        outgroup = NULL,
                        labelsize = 0.7,
@@ -48,20 +49,24 @@ gl.tree.nj <- function(x,
     
     # DO THE JOB
     
-    # Convert gl object to a matrix of allele frequencies, locus by population
-    if (verbose >= 2) {
-        cat(report(
-            "  Converting to a matrix of frequencies, locus by populations\n"
-        ))
-    }
-    t = apply(as.matrix(x), 2, tapply, pop(x), function(e)
-        mean(e) / 2)
-    # Compute Euclidean distance
-    if (verbose >= 2) {
-        cat(report("  Computing Euclidean distances\n"))
-    }
-    d <- round(as.matrix(dist(t)), 4)
-    # row.names(d) <- c(paste(row.names(d),' ')) row.names(d) <- substr(row.names(d),1,10)
+    # # Convert gl object to a matrix of allele frequencies, locus by population
+    # if (verbose >= 2) {
+    #     cat(report(
+    #         "  Converting to a matrix of frequencies, locus by populations\n"
+    #     ))
+    # }
+    # t = apply(as.matrix(x), 2, tapply, pop(x), function(e)
+    #     mean(e) / 2)
+    # # Compute Euclidean distance
+    # if (verbose >= 2) {
+    #     cat(report("  Computing Euclidean distances\n"))
+    # }
+    # d <- round(as.matrix(dist(t)), 4)
+    # # row.names(d) <- c(paste(row.names(d),' ')) row.names(d) <- substr(row.names(d),1,10)
+    # 
+    
+    d <- gl.dist.pop(x, method=dist.method, output="matrix")
+    row.names(d) <- popNames(x)
     
     # Plot the distances as an nj tree
     tree <- ape::nj(d)
