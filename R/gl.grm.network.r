@@ -16,6 +16,9 @@
 #' @param node.label.size Size of the node labels [default 3].
 #' @param node.label.color Color of the text of the node labels
 #' [default 'black'].
+#' @param node.alpha Alpha value for nodes [default 1].
+#' @param link.color Color for the links [default "black"].
+#' @param link.size Size of the links [default 1].
 #' @param relatedness_factor Factor of relatedness[default 0.5].
 #' @param title Title for the plot
 #' [default 'Network based on genomic relationship matrix'].
@@ -69,15 +72,23 @@
 #'  be used to guide the choosing of the relatedness threshold in the function.
 #'
 #'|Relationship|Kinship|95% CI|
-#'|Identical twins/clones/same individual     | 0.5     |        -|
+#'|Identical twins/clones/same individual     | 0.5     |        -         |
+#'
 #'|Sibling/Parent-Offspring                   | 0.25    |    (0.204, 0.296)|
+#'
 #'|Half-sibling                               | 0.125   |    (0.092, 0.158)|
+#'
 #'|First cousin                               | 0.062   |    (0.038, 0.089)|
+#'
 #'|Half-cousin                                | 0.031   |    (0.012, 0.055)|
+#'
 #'|Second cousin                              | 0.016   |    (0.004, 0.031)|
+#'
 #'|Half-second cousin                         | 0.008   |    (0.001, 0.020)|
+#' 
 #'|Third cousin                               | 0.004   |    (0.000, 0.012)|
-#'|Unrelated                                  | 0       |        -|
+#'
+#'|Unrelated                                  | 0       |        -         | 
 #'
 #' Four layout options are implemented in this function:
 #'\itemize{
@@ -112,7 +123,6 @@
 #'  }
 #' @seealso \code{\link{gl.grm}}
 #' @family inbreeding functions
-#' @md
 #' @export
 
 gl.grm.network <- function(G,
@@ -122,6 +132,9 @@ gl.grm.network <- function(G,
                            node.label = TRUE,
                            node.label.size = 2,
                            node.label.color = "black",
+                           node.alpha = 1,
+                           link.color = "black",
+                           link.size = 1,
                            relatedness_factor = 0.25,
                            title = "Network based on a genomic relationship matrix",
                            palette_discrete = discrete_palette,
@@ -254,24 +267,20 @@ gl.grm.network <- function(G,
     names(colors_pops) <- as.character(levels(x$pop))
     
     p1 <-
-        ggplot() + geom_segment(data = edges,
-                                aes(
-                                    x = X1,
-                                    y = Y1,
-                                    xend = X2,
-                                    yend = Y2
-                                ),
-                                size = 1.5) + geom_point(data = plotcord,
-                                                         aes(x = X1,
-                                                             y = X2, color = pop),
-                                                         size = node.size) + coord_fixed(ratio = 1) + theme_void() + ggtitle(paste(title, "\n[", layout.name, "]")) + theme(
-                                                             legend.position = "bottom",
-                                                             plot.title = element_text(
-                                                                 hjust = 0.5,
-                                                                 face = "bold",
-                                                                 size = 14
-                                                             )
-                                                         ) + scale_color_manual(name = "Populations", values = colors_pops)
+        ggplot() + 
+      geom_segment(data = edges,
+                   aes( x = X1, y = Y1, xend = X2,yend = Y2), 
+                   size = link.size,
+                   color = link.color) + 
+      geom_point(data = plotcord,aes(x = X1,y = X2, color = pop), 
+                 size = node.size,
+                 alpha = node.alpha) +
+      coord_fixed(ratio = 1) + 
+      theme_void() +
+      ggtitle(paste(title, "\n[", layout.name, "]")) + 
+      theme(legend.position = "bottom",
+            plot.title = element_text( hjust = 0.5, face = "bold",size = 14)) + 
+      scale_color_manual(name = "Populations", values = colors_pops)
     
     if (node.label == T) {
         p1 <-
