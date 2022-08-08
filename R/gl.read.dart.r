@@ -103,7 +103,7 @@ gl.read.dart <- function(filename,
         )
     glout <-
         utils.dart2genlight(
-            dout,
+          dart= dout,
             ind.metafile = ind.metafile,
             probar = probar,
             verbose = verbose
