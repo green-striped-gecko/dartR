@@ -11,7 +11,6 @@ gl.report.ld.map(
   maf = 0.05,
   ld_stat = "R.squared",
   ind.limit = 10,
-  summary_stat = "max",
   stat_keep = "AvgPIC",
   plot.out = TRUE,
   plot_theme = NULL,
@@ -101,7 +100,6 @@ ld_res <- gl.report.ld.map(x,ld_max_pairwise = 1000000)
 \code{\link{gl.filter.ld}}
 
 Other filter functions: 
-\code{\link{gl.diagnostics.ld}()},
 \code{\link{gl.filter.callrate}()},
 \code{\link{gl.filter.ld}()},
 \code{\link{gl.filter.parent.offspring}()},
