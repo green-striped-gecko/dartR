@@ -120,6 +120,13 @@ utils.read.dart <- function(filename,
             make.unique(as.character(ind.names), sep = "_")
     }
     
+    stdmetricscols <- 1:lmet
+    # if (length(stdmetricscols) != length(stdmetrics)) { cat(paste('\nCould not find all standard metrics.\n',stdmetrics[!(stdmetrics
+    # %in% names(snpraw) )] ,' is missing.\n Carefully check the spelling of your headers!\n')) stop() } if (!is.null(addmetrics)) {
+    # addmetricscols <- which( names(snpraw) %in% addmetrics ) if (length(addmetricscols) != length(addmetrics)) { cat(paste('\nCould not
+    # find all additional metrics.\n',addmetrics[!(addmetrics %in% names(snpraw) )] ,' is missing.\n Carefully check the spelling of your
+    # headers! or set addmetrics to NULL\n')) stop() } stdmetricscols <- c(stdmetricscols, addmetricscols) }
+    
     covmetrics <- snpraw[, stdmetricscols]
     
     ##### Various checks (first are there two rows per allele?  we do not need cloneid any more....  covmetrics$CloneID =
@@ -140,18 +147,7 @@ utils.read.dart <- function(filename,
     covmetrics$uid <- paste(covmetrics$clone, spp, sep = "-")
     ### there should be only twos (and maybe fours)
     tt <- table(table(covmetrics$uid))
-    if (verbose >= 2) {
-      cat(report(
-        paste(
-          "Number of rows per clone (should be only ",
-          nrows,
-          "s):",
-          names(tt),
-          "\n "
-        )
-      ))
-    }
-    
+
     # Testing for SNPs with the same ID
     # Jason Carling e-mail
     # the marker discovery and calling pipeline which we use (called ds14) has a 
@@ -219,18 +215,8 @@ utils.read.dart <- function(filename,
       }
       
       
-    }else{
-      
-      if (nrows != as.numeric(names(tt))) {
-        cat(
-          warn(
-            "  Warning: The no. rows per Clone does not fit with nrow format. Most likely your data are not read in correctly!\n"
-          )
-        )
-      }
-      
     }
-    
+      
     datas <- snpraw[, (lmet + 1):ncol(snpraw)]
     
     nrows <-NULL
@@ -254,12 +240,25 @@ utils.read.dart <- function(filename,
         
     }
     
-    stdmetricscols <- 1:lmet
-    # if (length(stdmetricscols) != length(stdmetrics)) { cat(paste('\nCould not find all standard metrics.\n',stdmetrics[!(stdmetrics
-    # %in% names(snpraw) )] ,' is missing.\n Carefully check the spelling of your headers!\n')) stop() } if (!is.null(addmetrics)) {
-    # addmetricscols <- which( names(snpraw) %in% addmetrics ) if (length(addmetricscols) != length(addmetrics)) { cat(paste('\nCould not
-    # find all additional metrics.\n',addmetrics[!(addmetrics %in% names(snpraw) )] ,' is missing.\n Carefully check the spelling of your
-    # headers! or set addmetrics to NULL\n')) stop() } stdmetricscols <- c(stdmetricscols, addmetricscols) }
+    if (nrows != as.numeric(names(tt))) {
+      cat(
+        warn(
+          "  Warning: The no. rows per Clone does not fit with nrow format. Most likely your data are not read in correctly!\n"
+        )
+      )
+    }
+    
+    if (verbose >= 2) {
+      cat(report(
+        paste(
+          "Number of rows per clone (should be only ",
+          nrows,
+          "s):",
+          names(tt),
+          "\n "
+        )
+      ))
+    }
     
     if (verbose >= 2) {
         cat(report("Added the following locus metrics:\n"))
