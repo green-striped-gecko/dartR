@@ -279,6 +279,11 @@ gl.report.callrate <- function(x,
         df <- df[order(-df$Quantile), ]
         df$Quantile <- paste0(df$Quantile, "%")
         rownames(df) <- NULL
+        
+        ind.call.rate_pop <- as.data.frame(cbind(names(ind.call.rate),as.character(pop(x)),ind.call.rate))
+        colnames(ind.call.rate_pop) <- c("ind_name","pop","missing_data")
+        ind.call.rate_pop <- ind.call.rate_pop[order(ind.call.rate_pop$pop,ind.call.rate_pop$missing_data,decreasing = TRUE),]
+        
     }
     
     # PRINTING OUTPUTS
@@ -295,6 +300,8 @@ gl.report.callrate <- function(x,
         }
     }
     print(df)
+    cat("\n\n")
+    print(ind.call.rate_pop, row.names = FALSE)
     
     # SAVE INTERMEDIATES TO TEMPDIR
     
@@ -323,6 +330,8 @@ gl.report.callrate <- function(x,
         }
         temp_table <- tempfile(pattern = "Table_")
         saveRDS(list(match_call, df), file = temp_table)
+        temp_table_2 <- tempfile(pattern = "Table2_")
+        saveRDS(list(ind.call.rate_pop, df), file = temp_table_2)
         if (verbose >= 2) {
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
