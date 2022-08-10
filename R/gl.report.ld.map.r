@@ -2,7 +2,7 @@
 #' @title Calculates pairwise linkage disequilibrium by population
 #' @description
 #' This function calculates pairwise linkage disequilibrium (LD) by population 
-#' using the function \link[snpStats]{ld} (package snpStats).
+#' using the function \code{\link[snpStats]{ld}} (package snpStats).
 #' 
 #' If SNPs are not mapped to a reference genome, the parameter
 #'  \code{ld_max_pairwise}
@@ -23,17 +23,18 @@
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param ld_max_pairwise Maximum distance in number of base pairs at which LD 
 #' should be calculated [default NULL].
-#' @param maf Minor allele frequency threshold to filter out loci. If a value > 
-#' 1 is provided it will be interpreted as MAC (i.e. the minimum number of times
-#' an allele needs to be observed) [default 0.05].
+#' @param maf Minor allele frequency (by population) threshold to filter out 
+#' loci. If a value > 1 is provided it will be interpreted as MAC (i.e. the
+#'  minimum number of times an allele needs to be observed) [default 0.05].
 #' @param ld_stat The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
-#'   "D.prime", "R.squared", and "R" [default "R.squared"]..
+#'   "D.prime", "R.squared", and "R". See \code{\link[snpStats]{ld}}
+#'    (package snpStats) for details [default "R.squared"]..
 #' @param ind.limit Minimum number of individuals that a population should
 #' contain to take it in account to report loci in LD [default 10].
-#' @param stat_keep Name of the column from the slot loc.metrics to be used to 
-#' choose SNP to be kept [default "AvgPIC"].
-#' @param ld_threshold_pops LD threshold to show number of SNP pairs in LD 
-#' [default 0.2].
+#' @param stat_keep Name of the column from the slot \code{loc.metrics} to be
+#'  used to choose SNP to be kept [default "AvgPIC"].
+#' @param ld_threshold_pops LD threshold to report in the plot of "Number of 
+#' populations in which the same SNP pair are in LD" [default 0.2].
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme User specified theme [default NULL].
 #' @param histogram_colors Vector with two color names for the borders and fill
@@ -62,7 +63,7 @@
 #' \dontrun{
 #' x <- platypus.gl
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
-#' x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
+#' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 #' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 1000000)
 #' }
 #' @seealso \code{\link{gl.filter.ld}}
