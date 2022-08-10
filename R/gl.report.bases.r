@@ -48,7 +48,7 @@
 #'   #' # Tag P/A data
 #'   out <- gl.report.bases(testset.gs)
 #'
-#' @family reporting functions
+#' @family report functions
 #' @import stringr
 #' @import patchwork
 #' @export
@@ -76,7 +76,8 @@ gl.report.bases <- function(x,
     
     if (!any(names(x@other$loc.metrics) == "TrimmedSequence")) {
         stop(error(
-            "  Fatal Error: Dataset does not include variable TrimmedSequence!\n"
+            "  Fatal Error: Dataset does not include variable 
+            TrimmedSequence!\n"
         ))
     }
     
@@ -130,19 +131,27 @@ gl.report.bases <- function(x,
         
         # Sum the transitions and transversions
         tv <-
-            sum(str_count(state.change, "A>C")) + sum(stringr::str_count(state.change, "C>A")) + sum(stringr::str_count(state.change, "G>T")) +
-            sum(stringr::str_count(state.change, "T>G")) + sum(stringr::str_count(state.change, "A>T")) + sum(stringr::str_count(state.change,
-                                                                                                                                 "T>A")) + sum(stringr::str_count(state.change, "G>C")) + sum(stringr::str_count(state.change, "C>G"))
+            sum(str_count(state.change, "A>C")) + 
+          sum(stringr::str_count(state.change, "C>A")) +
+          sum(stringr::str_count(state.change, "G>T")) +
+            sum(stringr::str_count(state.change, "T>G")) + 
+          sum(stringr::str_count(state.change, "A>T")) + 
+          sum(stringr::str_count(state.change, "T>A")) + 
+          sum(stringr::str_count(state.change, "G>C")) + 
+          sum(stringr::str_count(state.change, "C>G"))
         
         ts <-
-            sum(stringr::str_count(state.change, "A>G")) + sum(stringr::str_count(state.change, "G>A")) + sum(stringr::str_count(state.change,
-                                                                                                                                 "C>T")) + sum(stringr::str_count(state.change, "T>C"))
+            sum(stringr::str_count(state.change, "A>G")) + 
+          sum(stringr::str_count(state.change, "G>A")) + 
+          sum(stringr::str_count(state.change, "C>T")) + 
+          sum(stringr::str_count(state.change, "T>C"))
         
         if (verbose >= 2) {
             if (ts + tv != length(x@other$loc.metrics$TrimmedSequence)) {
                 cat(
                     warn(
-                        "  Warning: Sum of transitions plus transversions does not equal number of loci.\n"
+                        "  Warning: Sum of transitions plus transversions does 
+                        not equal number of loci.\n"
                     )
                 )
             }
@@ -179,7 +188,8 @@ gl.report.bases <- function(x,
         if (verbose >= 2) {
             cat(
                 important(
-                    "  Tag P/A data (SilicoDArT), transition/transversions cannot be calculated\n"
+                    "  Tag P/A data (SilicoDArT), transition/transversions 
+                    cannot be calculated\n"
                 )
             )
         }
@@ -203,10 +213,12 @@ gl.report.bases <- function(x,
         df <- data.frame(bases = bases, freq = freq)
         
         p1 <-
-            ggplot(data = df, aes(x = bases, y = freq)) + geom_bar(stat = "identity",
-                                                                   color = plot_colors[1],
-                                                                   fill = plot_colors[2]) + xlab("Bases") +
-            ylab("Percent Frequency") + ggtitle(title) + plot_theme
+            ggplot(data = df, aes(x = bases, y = freq)) +
+          geom_bar(stat="identity",color=plot_colors[1],fill=plot_colors[2]) + 
+          xlab("Bases") +
+            ylab("Percent Frequency") + 
+          ggtitle(title) +
+          plot_theme
         
         if (datatype == "SNP") {
             bases <- c("Ts", "Tv")
@@ -214,10 +226,12 @@ gl.report.bases <- function(x,
             df2 <- data.frame(bases = bases, freq = freq)
             
             p2 <-
-                ggplot(data = df2, aes(x = bases, y = freq)) + geom_bar(stat = "identity",
-                                                                        color = plot_colors[1],
-                                                                        fill = plot_colors[2]) +
-                xlab("Mutation Type") + ylab("Percent Frequency") + ggtitle(paste("SNP: Ts/Tv Rates [ratio =", round(ratio, 2), "]")) + plot_theme
+                ggplot(data = df2, aes(x = bases, y = freq)) +
+          geom_bar(stat="identity",color=plot_colors[1],fill=plot_colors[2]) +
+                xlab("Mutation Type") + 
+              ylab("Percent Frequency") + 
+              ggtitle(paste("SNP: Ts/Tv Rates [ratio =",round(ratio,2),"]")) +
+              plot_theme
             
             p3 <- (p1 / p2)  # Using package patchwork
         } else {
@@ -231,9 +245,9 @@ gl.report.bases <- function(x,
         cat(
             report(
                 "  Returning a list containing
-         [[1]] $freq -- the table of base frequencies and transition/transversion ratios;
-         [[2]] $plotbases -- ggplot bargraph of base frequencies;
-         [[3]] $plottstv -- ggplot bargraph of transitions and transversions."
+[[1]] $freq -- the table of base frequencies and transition/transversion ratios;
+[[2]] $plotbases -- ggplot bargraph of base frequencies;
+[[3]] $plottstv -- ggplot bargraph of transitions and transversions."
             )
         )
     }
@@ -262,7 +276,8 @@ gl.report.bases <- function(x,
             cat(report("  Saving ggplot(s) to the session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

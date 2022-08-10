@@ -240,7 +240,7 @@ utils.read.dart <- function(filename,
         
     }
     
-    if (nrows != as.numeric(names(tt))) {
+    if (nrows != as.numeric(names(tt[1]))) {
       cat(
         warn(
           "  Warning: The no. rows per Clone does not fit with nrow format. Most likely your data are not read in correctly!\n"

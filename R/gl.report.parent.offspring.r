@@ -81,7 +81,7 @@
 #' @seealso \code{\link{gl.list.reports}}, \code{\link{gl.report.rdepth}} ,
 #'  \code{\link{gl.print.reports}},\code{\link{gl.report.reproducibility}},
 #'  \code{\link{gl.filter.parent.offspring}}
-#' @family reporting functions
+#' @family report functions
 #' @importFrom stats median IQR
 #' @import patchwork
 #' @export
@@ -113,7 +113,8 @@ gl.report.parent.offspring <- function(x,
     if (verbose >= 2) {
         cat(
             report(
-                "  Generating null expectation for distribution of counts of pedigree incompatibility\n"
+                "  Generating null expectation for distribution of counts of 
+                pedigree incompatibility\n"
             )
         )
     }
@@ -123,18 +124,22 @@ gl.report.parent.offspring <- function(x,
     if (is.null(x@other$loc.metrics$RepAvg)) {
         cat(
             warn(
-                "  Dataset does not include RepAvg among the locus metrics, therefore the reproducibility filter was not used\n"
+                "  Dataset does not include RepAvg among the locus metrics, 
+                therefore the reproducibility filter was not used\n"
             )
         )
     } else {
         x <-
-            gl.filter.reproducibility(x, threshold = min.reproducibility, verbose = 0)
+            gl.filter.reproducibility(x, 
+                                      threshold = min.reproducibility,
+                                      verbose = 0)
     }
     # Filter stringently on read depth, to further minimize miscalls
     if (is.null(x@other$loc.metrics$rdepth)) {
         cat(
             warn(
-                "  Dataset does not include rdepth among the locus metrics, therefore the read depth filter was not used\n"
+                "  Dataset does not include rdepth among the locus metrics, 
+                therefore the read depth filter was not used\n"
             )
         )
     } else {
@@ -166,19 +171,28 @@ gl.report.parent.offspring <- function(x,
     if (verbose >= 2) {
         cat(
             report(
-                "  Identifying outliers with lower than expected counts of pedigree inconsistencies\n"
+                "  Identifying outliers with lower than expected counts of 
+                pedigree inconsistencies\n"
             )
         )
     }
     title <-
-        paste0("SNP data (DArTSeq)\nCounts of pedigree incompatible loci per pair")
+        paste0("SNP data (DArTSeq)\nCounts of pedigree incompatible loci per 
+               pair")
     
     counts_plot <- as.data.frame(counts)
     
     # Boxplot
     p1 <-
-        ggplot(counts_plot, aes(y = counts)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + coord_flip() + plot_theme + xlim(range = c(-1,
-                                                                                                                                                        1)) + ylim(min(counts), max(counts)) + ylab(" ") + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + ggtitle(title)
+        ggplot(counts_plot, aes(y = counts)) + 
+      geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+      coord_flip() + 
+      plot_theme + 
+      xlim(range = c(-1, 1)) +
+      ylim(min(counts), max(counts)) + 
+      ylab(" ") + 
+      theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
+      ggtitle(title)
     
     outliers_temp <- ggplot_build(p1)$data[[1]]$outliers[[1]]
     
@@ -204,7 +218,8 @@ gl.report.parent.offspring <- function(x,
             outliers$ind2[i] <- popNames(x)[!is.na(tmp2)][2]
             # Z-scores
             zscore <-
-                (mean(count, na.rm = TRUE) - outliers$Outlier[i]) / sd(count, na.rm = TRUE)
+                (mean(count, na.rm = TRUE) - outliers$Outlier[i]) / 
+              sd(count, na.rm = TRUE)
             outliers$zscore[i] <- round(zscore, 2)
             outliers$p[i] <-
                 round(pnorm(
@@ -228,11 +243,12 @@ gl.report.parent.offspring <- function(x,
     
     # Histogram
     p2 <-
-        ggplot(counts_plot, aes(x = counts)) + geom_histogram(bins = 50,
-                                                              color = plot_colors[1],
-                                                              fill = plot_colors[2]) + geom_vline(xintercept = cutoff,
-                                                                                                  color = "red",
-                                                                                                  size = 1) + coord_cartesian(xlim = c(min(counts), max(counts))) + xlab("No. Pedigree incompatible") + ylab("Count") +
+        ggplot(counts_plot, aes(x = counts)) + 
+      geom_histogram(bins = 50,color = plot_colors[1],fill = plot_colors[2]) + 
+      geom_vline(xintercept = cutoff, color = "red", size = 1) + 
+      coord_cartesian(xlim = c(min(counts), max(counts))) + 
+      xlab("No. Pedigree incompatible") + 
+      ylab("Count") +
         plot_theme
     
     # Output the outlier loci
@@ -277,7 +293,8 @@ gl.report.parent.offspring <- function(x,
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

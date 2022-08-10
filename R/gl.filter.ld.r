@@ -1,21 +1,19 @@
 #' @name gl.filter.ld
-#' @title Filters loci in a genlight \{adegenet\} object based on linkage
-#'  disequilibrium (LD)
+#' @title Filters loci based on linkage disequilibrium (LD)
 #' @description
-#' This function uses the statistic set in the parameter stat_keep from function
-#'  \code{\link{gl.report.ld.map}} to choose the SNP to keep when two SNPs are 
-#'  in LD. When a SNP is selected to be filtered out in each pairwise comparison,
-#'   the function stores its  name in a list. In subsequent pairwise comparisons,
-#'    if the SNP is already in the list, the other SNP will be kept.
+#' This function uses the statistic set in the parameter \code{stat_keep} from 
+#' function \code{\link{gl.report.ld.map}} to choose the SNP to keep when two 
+#' SNPs are in LD. When a SNP is selected to be filtered out in each pairwise 
+#' comparison, the function stores its  name in a list. In subsequent pairwise
+#'  comparisons, if the SNP is already in the list, the other SNP will be kept.
 #' @param x Name of the genlight object containing the SNP data [required].
-#' @param ld_res Output from function \code{\link{gl.report.ld.map}} [required].
-#' @param threshold Threshold value below which loci will be removed
+#' @param ld_report Output from function \code{\link{gl.report.ld.map}} 
+#' [required].
+#' @param threshold Threshold value above which loci will be removed
 #' [default 0.2].
 #' @param pop.limit Minimum number of populations in which LD should be more
 #' than the threshold for a locus to be filtered out.
 #' The default value is half of the populations [default ceiling(nPop(x)/2)].
-#' @param ind.limit Minimum number of individuals that a population should
-#' contain to take it in account to filter out loci in LD [default 10].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -26,14 +24,14 @@
 #' test <- bandicoot.gl
 #' test <- gl.filter.callrate(test,threshold = 1)
 #' res <- gl.report.ld.map(test)
-#' res_2 <- gl.filter.ld(x=test,ld_res = res)
+#' res_2 <- gl.filter.ld(x=test,ld_report = res)
 #' res_3 <- gl.report.ld.map(res_2)
 #' @seealso \code{\link{gl.report.ld.map}}
 #' @family filter functions
 #' @export
 
 gl.filter.ld <- function(x,
-                         ld_res,
+                         ld_report,
                          threshold = 0.2,
                          pop.limit = ceiling(nPop(x) / 2),
                          ind.limit = 10,
@@ -60,20 +58,19 @@ gl.filter.ld <- function(x,
     if (verbose >= 2) {
       cat(
         warn(
-          "  Warning: Data may include monomorphic loci in call rate calculations for filtering\n"
+          "  Warning: Data may include monomorphic loci in call rate 
+          calculations for filtering\n"
         )
       )
     }
   }
   
-  x <- gl.keep.pop(x,pop.list = as.character(unique(ld_tmp$pop)),verbose = 0)
+  x <- gl.keep.pop(x,pop.list = as.character(unique(ld_report$pop)),verbose = 0)
   
-  ld_tmp <- ld_res[ld_res$ld_stat >= threshold, ]
+  ld_tmp <- ld_report[ld_report$ld_stat >= threshold, ]
   ld_tmp$test_stat <- ld_tmp$locus_a.stat_keep >= ld_tmp$locus_b.stat_keep
   ld_tmp$pop <- as.factor(ld_tmp$pop)
   ld_tmp_pop <- split(ld_tmp, f = ld_tmp$pop)
-  
-  ld_tmp_pop <- ld_tmp_pop[unname(unlist(which(table(pop(x)) >= ind.limit)))]
   
   loci_list <- vector(mode = "list", length = length(ld_tmp_pop))
   
@@ -102,7 +99,7 @@ gl.filter.ld <- function(x,
   x2 <- gl.drop.loc(x_hold, loc.list =  loci_names, verbose = 0)
   
   # REPORT A SUMMARY
-  if (verbose >= 3) {
+  if (verbose >= 2) {
     cat("  Summary of filtered dataset\n")
     cat(paste("    LD for loci >", threshold, "\n"))
     cat(paste("    Original No. of loci :", nLoc(x), "\n"))

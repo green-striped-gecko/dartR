@@ -2,35 +2,40 @@
 #' @title Calculates pairwise linkage disequilibrium by population
 #' @description
 #' This function calculates pairwise linkage disequilibrium (LD) by population 
-#' using the function \link[snpStats]{ld} (package snpStats).
+#' using the function \code{\link[snpStats]{ld}} (package snpStats).
 #' 
-#' If SNPs are not mapped to a reference genome, the parameter ld_max_pairwise
+#' If SNPs are not mapped to a reference genome, the parameter
+#'  \code{ld_max_pairwise}
 #'  should be set as NULL (the default). In this case, the 
 #' function will assign the same chromosome ("1") to all the SNPs in the dataset
 #'  and assign a sequence from 1 to n loci as the position of each SNP. The 
 #'  function will then calculate LD for all possible SNP pair combinations. 
 #'  
-#' If SNPs are mapped to a reference genome, the parameter ld_max_pairwise
+#' If SNPs are mapped to a reference genome, the parameter 
+#' \code{ld_max_pairwise}
 #'  should be filled out (i.e. not NULL). In this case, the
 #'  information for SNP's position should be stored in the genlight accessor
 #'   "@@position" and the SNP's chromosome name in the accessor "@@chromosome"
 #'    (see examples). The function will then calculate LD within each chromosome
 #'     and for all possible SNP pair combinations within a distance of
-#'      ld_max_pairwise. 
+#'      \code{ld_max_pairwise}. 
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param ld_max_pairwise Maximum distance in number of base pairs at which LD 
 #' should be calculated [default NULL].
-#' @param maf Minor allele frequency threshold to filter out loci. If a value > 
-#' 1 is provided it will be interpreted as MAC (i.e. the minimum number of times
-#' an allele needs to be observed) [default 0.05].
+#' @param maf Minor allele frequency (by population) threshold to filter out 
+#' loci. If a value > 1 is provided it will be interpreted as MAC (i.e. the
+#'  minimum number of times an allele needs to be observed) [default 0.05].
 #' @param ld_stat The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
-#'   "D.prime", "R.squared", and "R" [default "R.squared"]..
+#'   "D.prime", "R.squared", and "R". See \code{\link[snpStats]{ld}}
+#'    (package snpStats) for details [default "R.squared"]..
 #' @param ind.limit Minimum number of individuals that a population should
 #' contain to take it in account to report loci in LD [default 10].
+#' @param stat_keep Name of the column from the slot \code{loc.metrics} to be
+#'  used to choose SNP to be kept [default "AvgPIC"].
+#' @param ld_threshold_pops LD threshold to report in the plot of "Number of 
+#' populations in which the same SNP pair are in LD" [default 0.2].
 #' @param plot.out Specify if plot is to be produced [default TRUE].
-#' @param stat_keep Name of the column from the slot loc.metrics to be used to 
-#' choose SNP to be kept [default "AvgPIC"].
 #' @param plot_theme User specified theme [default NULL].
 #' @param histogram_colors Vector with two color names for the borders and fill
 #' [default NULL].
@@ -46,10 +51,10 @@
 #'
 #' @details
 #' This function reports LD between SNP pairs by population. 
-#' The function code{\link{gl.filter.ld}} filters out the SNPs in LD using as
-#' input the results of gl.report.ld.map. However, the actual number of SNPs to 
-#' be filtered out depends on the parameters set in the function 
-#' code{\link{gl.filter.ld}}.
+#' The function \code{\link{gl.filter.ld}} filters out the SNPs in LD using as
+#' input the results of \code{\link{gl.report.ld.map}}. The actual number of 
+#' SNPs to be filtered out depends on the parameters set in the function 
+#' \code{\link{gl.filter.ld}}.
 #'    
 #' @return A dataframe with information for each SNP pair in LD. 
 #' @author Custodian: Luis Mijangos -- Post to
@@ -58,20 +63,20 @@
 #' \dontrun{
 #' x <- platypus.gl
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
-#' x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
+#' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 #' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 1000000)
 #' }
 #' @seealso \code{\link{gl.filter.ld}}
-#' @family filter functions
+#' @family report functions
 #' @export
 
 gl.report.ld.map <- function(x,
                            ld_max_pairwise = NULL,
-                           ld_resolution = NULL,
                            maf = 0.05,
                            ld_stat = "R.squared",
                            ind.limit = 10,
                            stat_keep = "AvgPIC",
+                           ld_threshold_pops = 0.2,
                            plot.out = TRUE,
                            plot_theme = NULL,
                            histogram_colors = NULL,
@@ -145,7 +150,8 @@ gl.report.ld.map <- function(x,
     pop_name <- popNames(pop_ld)
     
     if(nInd(pop_ld)<=ind.limit){
-        cat(warn(paste("  Skipping population",pop_name,"from analysis because it has less than",ind.limit,"individuals.\n")))
+        cat(warn(paste("  Skipping population",pop_name,"from analysis because 
+                       it has less than",ind.limit,"individuals.\n")))
       next()
     }
     
@@ -168,8 +174,8 @@ gl.report.ld.map <- function(x,
       verbose = 0
     )
     
-    # Read a pedfile as "SnpMatrix" object using a modified version of the function
-    # read.pedfile from package snpStats
+    # Read a pedfile as "SnpMatrix" object using a modified version of the 
+    # function read.pedfile from package snpStats
     snp_stats <-
       utils.read.ped(
         file = paste0(tempdir(), "/", "gl_plink", "_", pop_name, ".ped"),
@@ -215,7 +221,8 @@ gl.report.ld.map <- function(x,
         mean_dis <- mean(diff(ld_map_loci$loc_bp))
         ld_depth_b <- ceiling((ld_max_pairwise / mean_dis)) - 1
         #function to calculate LD
-        ld_snps <- snpStats::ld(genotype_loci, depth = ld_depth_b, stats = ld_stat)
+        ld_snps <- snpStats::ld(genotype_loci, depth = ld_depth_b, 
+                                stats = ld_stat)
         
         #if SNPs are not mapped to a reference genome 
       }else{
@@ -333,7 +340,22 @@ gl.report.ld.map <- function(x,
       xlab(ld_stat) +
       ylab("Count") +
       plot_theme
-   
+    
+    # Number of populations in which the same SNP pairs are in LD
+    df_ld_temp <- df_ld[which(df_ld$ld_stat>ld_threshold_pops),]
+    ld_pops_tmp <- table(rowSums(as.data.frame.matrix(with(df_ld_temp, 
+                                                     table(locus_a_b,pop)))))
+    ld_pops <- as.data.frame(cbind(as.numeric(names(ld_pops_tmp)),
+                                   unlist(unname(ld_pops_tmp))))
+    colnames(ld_pops) <- c("pops","n_loc")
+    
+    n_loc <- pops <- NULL
+    
+     p3 <- ggplot(ld_pops,aes(x=pops,y=n_loc))+
+      geom_col(color = histogram_colors[1],fill = histogram_colors[2]) +
+      ylab("Count")+
+      xlab("Number of populations in which the same SNP pair are in LD") +
+      plot_theme
   }
   
   # Print out some statistics
@@ -354,8 +376,8 @@ gl.report.ld.map <- function(x,
   # PRINTING OUTPUTS
   if (plot.out) {
       # using package patchwork
-      p3 <- p1 / p2
-      print(p3)
+      p4 <- p1 / p2 / p3
+      print(p4)
   }
 
   # SAVE INTERMEDIATES TO TEMPDIR
@@ -370,7 +392,7 @@ gl.report.ld.map <- function(x,
                as.character(match.call()),
                collapse = "_")
       # saving to tempdir
-      saveRDS(list(match_call, p3), file = temp_plot)
+      saveRDS(list(match_call, p4), file = temp_plot)
       if (verbose >= 2) {
         cat(report("  Saving the ggplot to session tempfile\n"))
       }
