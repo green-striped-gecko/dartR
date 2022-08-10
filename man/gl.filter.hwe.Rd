@@ -174,9 +174,6 @@ Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics
 }
 \seealso{
 \code{\link{gl.report.hwe}}
-
-Other filters/filter reports: 
-\code{\link{gl.report.hwe}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to

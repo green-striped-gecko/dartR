@@ -4,19 +4,21 @@
 #' This function calculates pairwise linkage disequilibrium (LD) by population 
 #' using the function \link[snpStats]{ld} (package snpStats).
 #' 
-#' If SNPs are not mapped to a reference genome, the parameter ld_max_pairwise
+#' If SNPs are not mapped to a reference genome, the parameter
+#'  \code{ld_max_pairwise}
 #'  should be set as NULL (the default). In this case, the 
 #' function will assign the same chromosome ("1") to all the SNPs in the dataset
 #'  and assign a sequence from 1 to n loci as the position of each SNP. The 
 #'  function will then calculate LD for all possible SNP pair combinations. 
 #'  
-#' If SNPs are mapped to a reference genome, the parameter ld_max_pairwise
+#' If SNPs are mapped to a reference genome, the parameter 
+#' \code{ld_max_pairwise}
 #'  should be filled out (i.e. not NULL). In this case, the
 #'  information for SNP's position should be stored in the genlight accessor
 #'   "@@position" and the SNP's chromosome name in the accessor "@@chromosome"
 #'    (see examples). The function will then calculate LD within each chromosome
 #'     and for all possible SNP pair combinations within a distance of
-#'      ld_max_pairwise. 
+#'      \code{ld_max_pairwise}. 
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param ld_max_pairwise Maximum distance in number of base pairs at which LD 
@@ -48,10 +50,10 @@
 #'
 #' @details
 #' This function reports LD between SNP pairs by population. 
-#' The function code{\link{gl.filter.ld}} filters out the SNPs in LD using as
-#' input the results of gl.report.ld.map. However, the actual number of SNPs to 
-#' be filtered out depends on the parameters set in the function 
-#' code{\link{gl.filter.ld}}.
+#' The function \code{\link{gl.filter.ld}} filters out the SNPs in LD using as
+#' input the results of \code{\link{gl.report.ld.map}}. The actual number of 
+#' SNPs to be filtered out depends on the parameters set in the function 
+#' \code{\link{gl.filter.ld}}.
 #'    
 #' @return A dataframe with information for each SNP pair in LD. 
 #' @author Custodian: Luis Mijangos -- Post to
@@ -64,7 +66,7 @@
 #' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 1000000)
 #' }
 #' @seealso \code{\link{gl.filter.ld}}
-#' @family filter functions
+#' @family report functions
 #' @export
 
 gl.report.ld.map <- function(x,
@@ -147,7 +149,8 @@ gl.report.ld.map <- function(x,
     pop_name <- popNames(pop_ld)
     
     if(nInd(pop_ld)<=ind.limit){
-        cat(warn(paste("  Skipping population",pop_name,"from analysis because it has less than",ind.limit,"individuals.\n")))
+        cat(warn(paste("  Skipping population",pop_name,"from analysis because 
+                       it has less than",ind.limit,"individuals.\n")))
       next()
     }
     
@@ -170,8 +173,8 @@ gl.report.ld.map <- function(x,
       verbose = 0
     )
     
-    # Read a pedfile as "SnpMatrix" object using a modified version of the function
-    # read.pedfile from package snpStats
+    # Read a pedfile as "SnpMatrix" object using a modified version of the 
+    # function read.pedfile from package snpStats
     snp_stats <-
       utils.read.ped(
         file = paste0(tempdir(), "/", "gl_plink", "_", pop_name, ".ped"),
@@ -217,7 +220,8 @@ gl.report.ld.map <- function(x,
         mean_dis <- mean(diff(ld_map_loci$loc_bp))
         ld_depth_b <- ceiling((ld_max_pairwise / mean_dis)) - 1
         #function to calculate LD
-        ld_snps <- snpStats::ld(genotype_loci, depth = ld_depth_b, stats = ld_stat)
+        ld_snps <- snpStats::ld(genotype_loci, depth = ld_depth_b, 
+                                stats = ld_stat)
         
         #if SNPs are not mapped to a reference genome 
       }else{
@@ -338,8 +342,10 @@ gl.report.ld.map <- function(x,
     
     # Number of populations in which the same SNP pairs are in LD
     df_ld_temp <- df_ld[which(df_ld$ld_stat>ld_threshold_pops),]
-    ld_pops_tmp <- table(rowSums(as.data.frame.matrix(with(df_ld_temp, table(locus_a_b,pop)))))
-    ld_pops <- as.data.frame(cbind(as.numeric(names(ld_pops_tmp)),unlist(unname(ld_pops_tmp))))
+    ld_pops_tmp <- table(rowSums(as.data.frame.matrix(with(df_ld_temp, 
+                                                     table(locus_a_b,pop)))))
+    ld_pops <- as.data.frame(cbind(as.numeric(names(ld_pops_tmp)),
+                                   unlist(unname(ld_pops_tmp))))
     colnames(ld_pops) <- c("pops","n_loc")
     
      p3 <- ggplot(ld_pops,aes(x=pops,y=n_loc))+

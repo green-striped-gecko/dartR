@@ -7,7 +7,7 @@
 \usage{
 gl.filter.ld(
   x,
-  ld_res,
+  ld_report,
   threshold = 0.2,
   pop.limit = ceiling(nPop(x)/2),
   ind.limit = 10,
@@ -17,7 +17,7 @@ gl.filter.ld(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{ld_res}{Output from function \code{\link{gl.report.ld.map}} [required].}
+\item{ld_report}{Output from function \code{\link{gl.report.ld.map}} [required].}
 
 \item{threshold}{Threshold value below which loci will be removed
 [default 0.2].}
@@ -47,7 +47,7 @@ This function uses the statistic set in the parameter stat_keep from function
 test <- bandicoot.gl
 test <- gl.filter.callrate(test,threshold = 1)
 res <- gl.report.ld.map(test)
-res_2 <- gl.filter.ld(x=test,ld_res = res)
+res_2 <- gl.filter.ld(x=test,ld_report = res)
 res_3 <- gl.report.ld.map(res_2)
 }
 \seealso{
@@ -56,8 +56,7 @@ res_3 <- gl.report.ld.map(res_2)
 Other filter functions: 
 \code{\link{gl.filter.callrate}()},
 \code{\link{gl.filter.parent.offspring}()},
-\code{\link{gl.filter.sexlinked}()},
-\code{\link{gl.report.ld.map}()}
+\code{\link{gl.filter.sexlinked}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to

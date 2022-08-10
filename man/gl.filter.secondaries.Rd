@@ -40,14 +40,7 @@ Other filters and filter reports:
 \code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.rdepth}()},
-\code{\link{gl.filter.reproducibility}()},
-\code{\link{gl.report.callrate}()},
-\code{\link{gl.report.hamming}()},
-\code{\link{gl.report.locmetric}()},
-\code{\link{gl.report.monomorphs}()},
-\code{\link{gl.report.rdepth}()},
-\code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.taglength}()}
+\code{\link{gl.filter.reproducibility}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to

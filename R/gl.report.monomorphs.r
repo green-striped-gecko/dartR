@@ -26,7 +26,7 @@
 #' # SilicoDArT data
 #'   gl.report.monomorphs(testset.gs)
 #' @seealso \code{\link{gl.filter.monomorphs}}
-#' @family filters and filter reports
+#' @family report functions
 #' @export
 
 gl.report.monomorphs <- function(x,

@@ -140,14 +140,6 @@ the plot?. Journal of heredity, 106(1), 1-19.
 }
 \seealso{
 \code{\link{gl.report.hwe}}
-
-Other reporting functions: 
-\code{\link{gl.report.bases}()},
-\code{\link{gl.report.diversity}()},
-\code{\link{gl.report.heterozygosity}()},
-\code{\link{gl.report.parent.offspring}()},
-\code{\link{gl.report.pa}()},
-\code{\link{gl.report.sexlinked}()}
 }
 \author{
 Custodian: Carlo Pacioni -- Post to

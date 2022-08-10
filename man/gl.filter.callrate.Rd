@@ -115,8 +115,7 @@ Resultant ggplot(s) and the tabulation(s) are saved to the session's
 Other filter functions: 
 \code{\link{gl.filter.ld}()},
 \code{\link{gl.filter.parent.offspring}()},
-\code{\link{gl.filter.sexlinked}()},
-\code{\link{gl.report.ld.map}()}
+\code{\link{gl.filter.sexlinked}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to

@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.report.reproducibility.r
 \name{gl.report.reproducibility}
 \alias{gl.report.reproducibility}
-\title{Reports summary of RepAvg (repeatability averaged over both alleles for
+\title{Reports summary of RepAvg (repeatability averaged over both alleles 
+for
 each locus) or reproducibility (repeatability of the scores for fragment
 presence/absence)}
 \usage{
@@ -61,8 +62,9 @@ The function displays a table of minimum, maximum, mean and quantiles for
 
  For examples of themes, see:
    \itemize{
- \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
- \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+ \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and 
+ \item
+  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
  }
 }
 \examples{
@@ -75,21 +77,27 @@ The function displays a table of minimum, maximum, mean and quantiles for
 \seealso{
 \code{\link{gl.filter.reproducibility}}
 
-Other filters and filter reports: 
-\code{\link{gl.filter.allna}()},
-\code{\link{gl.filter.monomorphs}()},
-\code{\link{gl.filter.rdepth}()},
-\code{\link{gl.filter.reproducibility}()},
-\code{\link{gl.filter.secondaries}()},
+Other report functions: 
+\code{\link{gl.report.bases}()},
 \code{\link{gl.report.callrate}()},
+\code{\link{gl.report.diversity}()},
 \code{\link{gl.report.hamming}()},
+\code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.hwe}()},
+\code{\link{gl.report.ld.map}()},
 \code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
 \code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.parent.offspring}()},
+\code{\link{gl.report.pa}()},
 \code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.sexlinked}()},
 \code{\link{gl.report.taglength}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{filters and filter reports}
+\concept{report functions}
