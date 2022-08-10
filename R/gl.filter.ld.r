@@ -8,7 +8,7 @@
 #'   the function stores its  name in a list. In subsequent pairwise comparisons,
 #'    if the SNP is already in the list, the other SNP will be kept.
 #' @param x Name of the genlight object containing the SNP data [required].
-#' @param ld_res Output from function \code{\link{gl.report.ld.map}} [required].
+#' @param ld_report Output from function \code{\link{gl.report.ld.map}} [required].
 #' @param threshold Threshold value below which loci will be removed
 #' [default 0.2].
 #' @param pop.limit Minimum number of populations in which LD should be more
@@ -26,14 +26,14 @@
 #' test <- bandicoot.gl
 #' test <- gl.filter.callrate(test,threshold = 1)
 #' res <- gl.report.ld.map(test)
-#' res_2 <- gl.filter.ld(x=test,ld_res = res)
+#' res_2 <- gl.filter.ld(x=test,ld_report = res)
 #' res_3 <- gl.report.ld.map(res_2)
 #' @seealso \code{\link{gl.report.ld.map}}
 #' @family filter functions
 #' @export
 
 gl.filter.ld <- function(x,
-                         ld_res,
+                         ld_report,
                          threshold = 0.2,
                          pop.limit = ceiling(nPop(x) / 2),
                          ind.limit = 10,
@@ -66,9 +66,9 @@ gl.filter.ld <- function(x,
     }
   }
   
-  x <- gl.keep.pop(x,pop.list = as.character(unique(ld_tmp$pop)),verbose = 0)
+  x <- gl.keep.pop(x,pop.list = as.character(unique(ld_report$pop)),verbose = 0)
   
-  ld_tmp <- ld_res[ld_res$ld_stat >= threshold, ]
+  ld_tmp <- ld_report[ld_report$ld_stat >= threshold, ]
   ld_tmp$test_stat <- ld_tmp$locus_a.stat_keep >= ld_tmp$locus_b.stat_keep
   ld_tmp$pop <- as.factor(ld_tmp$pop)
   ld_tmp_pop <- split(ld_tmp, f = ld_tmp$pop)

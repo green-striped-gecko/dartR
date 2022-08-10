@@ -28,9 +28,11 @@
 #'   "D.prime", "R.squared", and "R" [default "R.squared"]..
 #' @param ind.limit Minimum number of individuals that a population should
 #' contain to take it in account to report loci in LD [default 10].
-#' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param stat_keep Name of the column from the slot loc.metrics to be used to 
 #' choose SNP to be kept [default "AvgPIC"].
+#' @param ld_threshold_pops LD threshold to show number of SNP pairs in LD 
+#' [default 0.2].
+#' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme User specified theme [default NULL].
 #' @param histogram_colors Vector with two color names for the borders and fill
 #' [default NULL].
@@ -67,11 +69,11 @@
 
 gl.report.ld.map <- function(x,
                            ld_max_pairwise = NULL,
-                           ld_resolution = NULL,
                            maf = 0.05,
                            ld_stat = "R.squared",
                            ind.limit = 10,
                            stat_keep = "AvgPIC",
+                           ld_threshold_pops = 0.2,
                            plot.out = TRUE,
                            plot_theme = NULL,
                            histogram_colors = NULL,
@@ -333,7 +335,18 @@ gl.report.ld.map <- function(x,
       xlab(ld_stat) +
       ylab("Count") +
       plot_theme
-   
+    
+    # Number of populations in which the same SNP pairs are in LD
+    df_ld_temp <- df_ld[which(df_ld$ld_stat>ld_threshold_pops),]
+    ld_pops_tmp <- table(rowSums(as.data.frame.matrix(with(df_ld_temp, table(locus_a_b,pop)))))
+    ld_pops <- as.data.frame(cbind(as.numeric(names(ld_pops_tmp)),unlist(unname(ld_pops_tmp))))
+    colnames(ld_pops) <- c("pops","n_loc")
+    
+     p3 <- ggplot(ld_pops,aes(x=pops,y=n_loc))+
+      geom_col(color = histogram_colors[1],fill = histogram_colors[2]) +
+      ylab("Count")+
+      xlab("Number of populations in which the same SNP pair are in LD") +
+      plot_theme
   }
   
   # Print out some statistics
@@ -354,8 +367,8 @@ gl.report.ld.map <- function(x,
   # PRINTING OUTPUTS
   if (plot.out) {
       # using package patchwork
-      p3 <- p1 / p2
-      print(p3)
+      p4 <- p1 / p2 / p3
+      print(p4)
   }
 
   # SAVE INTERMEDIATES TO TEMPDIR
@@ -370,7 +383,7 @@ gl.report.ld.map <- function(x,
                as.character(match.call()),
                collapse = "_")
       # saving to tempdir
-      saveRDS(list(match_call, p3), file = temp_plot)
+      saveRDS(list(match_call, p4), file = temp_plot)
       if (verbose >= 2) {
         cat(report("  Saving the ggplot to session tempfile\n"))
       }
