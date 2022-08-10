@@ -348,6 +348,8 @@ gl.report.ld.map <- function(x,
                                    unlist(unname(ld_pops_tmp))))
     colnames(ld_pops) <- c("pops","n_loc")
     
+    n_loc <- pops <- NULL
+    
      p3 <- ggplot(ld_pops,aes(x=pops,y=n_loc))+
       geom_col(color = histogram_colors[1],fill = histogram_colors[2]) +
       ylab("Count")+

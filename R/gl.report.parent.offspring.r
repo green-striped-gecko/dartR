@@ -185,7 +185,7 @@ gl.report.parent.offspring <- function(x,
     # Boxplot
     p1 <-
         ggplot(counts_plot, aes(y = counts)) + 
-      eom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+      geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
       coord_flip() + 
       plot_theme + 
       xlim(range = c(-1, 1)) +

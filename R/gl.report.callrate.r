@@ -306,7 +306,9 @@ ind.call.rate_pop <- ind.call.rate_pop[order(ind.call.rate_pop$pop,
     }
     print(df)
     cat("\n\n")
+    if (method == "ind") {
     print(ind.call.rate_pop, row.names = FALSE)
+    }
     
     # SAVE INTERMEDIATES TO TEMPDIR
     
@@ -335,8 +337,10 @@ ind.call.rate_pop <- ind.call.rate_pop[order(ind.call.rate_pop$pop,
         }
         temp_table <- tempfile(pattern = "Table_")
         saveRDS(list(match_call, df), file = temp_table)
+        if (method == "ind") {
         temp_table_2 <- tempfile(pattern = "Table2_")
         saveRDS(list(ind.call.rate_pop, df), file = temp_table_2)
+        }
         if (verbose >= 2) {
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
