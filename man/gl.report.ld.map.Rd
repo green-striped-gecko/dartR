@@ -33,7 +33,7 @@ loci. If a value > 1 is provided it will be interpreted as MAC (i.e. the
 
 \item{ld_stat}{The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
 "D.prime", "R.squared", and "R". See \code{\link[snpStats]{ld}}
- (package snpStats) for details [default "R.squared"]..}
+ (package snpStats) for details [default "R.squared"].}
 
 \item{ind.limit}{Minimum number of individuals that a population should
 contain to take it in account to report loci in LD [default 10].}
