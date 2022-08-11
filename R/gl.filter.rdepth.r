@@ -49,7 +49,7 @@
 #'
 #' @seealso \code{\link{gl.filter.rdepth}}
 #'
-#' @family filters and filter reports
+#' @family filter functions
 #' @import patchwork
 #' @export
 
@@ -192,7 +192,8 @@ gl.filter.rdepth <-  function(x,
             ))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

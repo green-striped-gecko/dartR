@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.filter.maf.r
 \name{gl.filter.maf}
 \alias{gl.filter.maf}
-\title{Filters loci on the basis of minor allele frequency (MAF) in a genlight
+\title{Filters loci on the basis of minor allele frequency (MAF) in a 
+genlight
  {adegenet} object}
 \usage{
 gl.filter.maf(
@@ -73,8 +74,10 @@ exists). It then uses the updated metadata for MAF to filter loci.
 Careful consideration needs to be given to the settings to be used for this 
 fucntion. When the filter is applied globally (i.e. \code{by.pop=FALSE}) but 
 the data include multiple population, there is the risk to remove markers 
-because the allele frequencies is low (at global level) but the allele frequencies
-for the same markers may be high within some of the populations (especially if 
+because the allele frequencies is low (at global level) but the allele 
+frequencies
+for the same markers may be high within some of the populations (especially 
+if 
 the per-population sample size is small). Similarly, not always it is a 
 sensible choice to run this function using \code{by.pop=TRUE} because allele 
 that are rare in a population may be very common in other, but the (possible) 
@@ -82,7 +85,8 @@ allele frequencies will depend on the sample size within each population.
 Where the purpose of filtering for MAF is to remove possible spurious alleles 
 (i.e. sequencing errors), it is perhaps better to filter based on the number 
 of times an allele is observed (MAC, Minimum Allele Count), under the 
-assumption that if an allele is observed >MAC, it is fairly rare to be an error.
+assumption that if an allele is observed >MAC, it is fairly rare to be an 
+error.
 \bold{From v2.1} The threshold can take values > 1. In this case, these are 
 interpreted as a threshold for MAC.
 }
@@ -90,7 +94,27 @@ interpreted as a threshold for MAC.
 result <- gl.filter.monomorphs(testset.gl)
 result <- gl.filter.maf(result, threshold=0.05, verbose=3)
 }
+\seealso{
+Other filter functions: 
+\code{\link{gl.filter.allna}()},
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.heterozygosity}()},
+\code{\link{gl.filter.hwe}()},
+\code{\link{gl.filter.ld}()},
+\code{\link{gl.filter.locmetrics}},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.overshoot}()},
+\code{\link{gl.filter.parent.offspring}()},
+\code{\link{gl.filter.pa}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.filter.secondaries}()},
+\code{\link{gl.filter.sexlinked}()},
+\code{\link{gl.filter.taglength}()},
+\code{\link{gl.ld.haplotype}()}
+}
 \author{
 Custodian: Luis Mijangos -- Post to
  \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{filter functions}

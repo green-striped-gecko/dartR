@@ -24,7 +24,8 @@ gl.filter.callrate(
 \item{x}{Name of the genlight object containing the SNP data, or the genind
 object containing the SilocoDArT data [required].}
 
-\item{method}{Use method='loc' to specify that loci are to be filtered, 'ind' to specify
+\item{method}{Use method='loc' to specify that loci are to be filtered, 'ind'
+ to specify
 that specimens are to be filtered, 'pop' to remove loci that fail to meet the
  specified threshold in any one population [default 'loc'].}
 
@@ -74,7 +75,8 @@ a particular locus.
 \details{
 Because this filter operates on call rate, this function recalculates Call
 Rate, if necessary, before filtering. If individuals are removed using
-method='ind', then the call rate stored in the genlight object is, optionally,
+method='ind', then the call rate stored in the genlight object is, 
+optionally,
 recalculated after filtering.
 
 Note that when filtering individuals on call rate, the initial call rate is
@@ -100,22 +102,41 @@ Resultant ggplot(s) and the tabulation(s) are saved to the session's
 }
 \examples{
 # SNP data
-  result <- gl.filter.callrate(testset.gl[1:10], method='loc', threshold=0.8, verbose=3)
-  result <- gl.filter.callrate(testset.gl[1:10], method='ind', threshold=0.8, verbose=3)
-  result <- gl.filter.callrate(testset.gl[1:10], method='pop', threshold=0.8, verbose=3)
+  result <- gl.filter.callrate(testset.gl[1:10], method='loc', threshold=0.8,
+   verbose=3)
+  result <- gl.filter.callrate(testset.gl[1:10], method='ind', threshold=0.8,
+   verbose=3)
+  result <- gl.filter.callrate(testset.gl[1:10], method='pop', threshold=0.8,
+   verbose=3)
 # Tag P/A data
-  result <- gl.filter.callrate(testset.gs[1:10], method='loc', threshold=0.95, verbose=3)
-  result <- gl.filter.callrate(testset.gs[1:10], method='ind', threshold=0.8, verbose=3)
-  result <- gl.filter.callrate(testset.gs[1:10], method='pop', threshold=0.8, verbose=3)
+  result <- gl.filter.callrate(testset.gs[1:10], method='loc', 
+  threshold=0.95, verbose=3)
+  result <- gl.filter.callrate(testset.gs[1:10], method='ind', 
+  threshold=0.8, verbose=3)
+  result <- gl.filter.callrate(testset.gs[1:10], method='pop', 
+  threshold=0.8, verbose=3)
 
 }
 \seealso{
 \code{\link{gl.report.callrate}}
 
 Other filter functions: 
+\code{\link{gl.filter.allna}()},
+\code{\link{gl.filter.heterozygosity}()},
+\code{\link{gl.filter.hwe}()},
 \code{\link{gl.filter.ld}()},
+\code{\link{gl.filter.locmetrics}},
+\code{\link{gl.filter.maf}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.overshoot}()},
 \code{\link{gl.filter.parent.offspring}()},
-\code{\link{gl.filter.sexlinked}()}
+\code{\link{gl.filter.pa}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.filter.secondaries}()},
+\code{\link{gl.filter.sexlinked}()},
+\code{\link{gl.filter.taglength}()},
+\code{\link{gl.ld.haplotype}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to

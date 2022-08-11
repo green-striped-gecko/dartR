@@ -22,6 +22,7 @@
 #' [default 2, unless specified using gl.set.verbosity].
 #' @return A new genlight object with the recalcitrant loci deleted
 #' @export
+#' @family filter functions
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
@@ -47,7 +48,8 @@ gl.filter.overshoot <- function(x,
     if (datatype == "SilicoDArT") {
         stop(
             error(
-                "  Detected Presence/Absence (SilicoDArT) data. Please supply a SNP dataset\n"
+                "  Detected Presence/Absence (SilicoDArT) data. Please supply a 
+                SNP dataset\n"
             )
         )
     }
@@ -57,13 +59,16 @@ gl.filter.overshoot <- function(x,
     if (length(x@other$loc.metrics$TrimmedSequence) != nLoc(x)) {
         stop(
             error(
-                "Fatal Error: Data must include Trimmed Sequences for each loci in a column called 'TrimmedSequence' in the @other$loc.metrics slot.\n"
+                "Fatal Error: Data must include Trimmed Sequences for each loci 
+                in a column called 'TrimmedSequence' in the @other$loc.metrics 
+                slot.\n"
             )
         )
     }
     if (length(x@other$loc.metrics$SnpPosition) != nLoc(x)) {
         stop(error(
-            "Fatal Error: Data must include position information for each loci.\n"
+            "Fatal Error: Data must include position information for each 
+            loci.\n"
         ))
     }
     
@@ -71,7 +76,8 @@ gl.filter.overshoot <- function(x,
     
     if (verbose >= 2) {
         cat(report(
-            "  Identifying loci for which the SNP has been trimmed with the adaptor\n"
+            "  Identifying loci for which the SNP has been trimmed with the 
+            adaptor\n"
         ))
     }
     
@@ -128,7 +134,8 @@ gl.filter.overshoot <- function(x,
             ))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

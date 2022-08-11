@@ -26,6 +26,9 @@ gl.filter.ld(
 than the threshold for a locus to be filtered out.
 The default value is half of the populations [default ceiling(nPop(x)/2)].}
 
+\item{ind.limit}{Minimum number of individuals that a population should
+contain to take it in account to report loci in LD [default 10].}
+
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
@@ -51,9 +54,21 @@ res_3 <- gl.report.ld.map(res_2)
 \code{\link{gl.report.ld.map}}
 
 Other filter functions: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.heterozygosity}()},
+\code{\link{gl.filter.hwe}()},
+\code{\link{gl.filter.locmetrics}},
+\code{\link{gl.filter.maf}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.overshoot}()},
 \code{\link{gl.filter.parent.offspring}()},
+\code{\link{gl.filter.pa}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.filter.secondaries}()},
 \code{\link{gl.filter.sexlinked}()},
+\code{\link{gl.filter.taglength}()},
 \code{\link{gl.ld.haplotype}()}
 }
 \author{
