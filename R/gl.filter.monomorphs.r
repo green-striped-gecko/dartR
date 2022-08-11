@@ -58,24 +58,24 @@ gl.filter.monomorphs <- function(x,
     }
     
     # Tag presence/absence data
-    if (datatype == "SilicoDArT") {
-        nL <- nLoc(x)
-        matrix <- as.matrix(x)
-        l.names <- locNames(x)
-        for (i in 1:nL) {
-            row <- matrix[, i]  # Row for each locus
-            if (all(row == 0, na.rm = TRUE) |
-                all(row == 1, na.rm = TRUE) | all(is.na(row))) {
-                loc.list[i] <- l.names[i]
-                if (all(is.na(row))) {
-                    na.counter <-na.counter + 1
-                }
-            }
-        }
-    }
-    
+    # if (datatype == "SilicoDArT") {
+    #     nL <- nLoc(x)
+    #     matrix <- as.matrix(x)
+    #     l.names <- locNames(x)
+    #     for (i in 1:nL) {
+    #         row <- matrix[, i]  # Row for each locus
+    #         if (all(row == 0, na.rm = TRUE) |
+    #             all(row == 1, na.rm = TRUE) | all(is.na(row))) {
+    #             loc.list[i] <- l.names[i]
+    #             if (all(is.na(row))) {
+    #                 na.counter <-na.counter + 1
+    #             }
+    #         }
+    #     }
+    # }
+    # 
     # SNP data
-    if (datatype == "SNP") {
+    # if (datatype == "SNP") {
         # nL <- nLoc(x)
         # matrix <- as.matrix(x)
         # lN <- locNames(x)
@@ -94,7 +94,7 @@ gl.filter.monomorphs <- function(x,
         loc.list <- rownames(mono_tmp[which(mono_tmp$alf1==1 | 
                                          mono_tmp$alf1 == 0),])
         loc.list_NA <- rownames(mono_tmp[which(is.na(mono_tmp$alf1)),])
-    }
+    # }
     
     # Remove NAs from list of monomorphic loci and loci with all NAs
     # loc.list <- loc.list[!is.na(loc.list)]

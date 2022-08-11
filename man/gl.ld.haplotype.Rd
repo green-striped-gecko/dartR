@@ -14,14 +14,39 @@ gl.ld.haplotype(
   ld_stat = "R.squared",
   ind.limit = 10,
   min_snps = 10,
-  ld_threshold_haplo = 0.2,
+  ld_threshold_haplo = 0.5,
   save2tmp = FALSE,
   verbose = NULL
 )
 }
 \arguments{
+\item{x}{Name of the genlight object containing the SNP data [required].}
+
+\item{pop_name}{Name of the population to analyse. If NULL all the 
+populations are analised [default NULL].}
+
+\item{chrom_name}{Nme of the chromosome to analyse. If NULL all the 
+chromosomes are analised [default NULL].}
+
 \item{ld_max_pairwise}{Maximum distance in number of base pairs at which LD
-should be calculated [default NULL].}
+should be calculated [default 10000000].}
+
+\item{maf}{Minor allele frequency (by population) threshold to filter out 
+loci. If a value > 1 is provided it will be interpreted as MAC (i.e. the
+ minimum number of times an allele needs to be observed) [default 0.05].}
+
+\item{ld_stat}{The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
+"D.prime", "R.squared", and "R". See \code{\link[snpStats]{ld}}
+ (package snpStats) for details [default "R.squared"].}
+
+\item{ind.limit}{Minimum number of individuals that a population should
+contain to take it in account to report loci in LD [default 10].}
+
+\item{min_snps}{Minimum number of SNPs that should have a haplotype to call 
+it [default 10].}
+
+\item{ld_threshold_haplo}{Minimum LD between adjacent SNPs to call a 
+haplotype [default 0.5].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
@@ -29,29 +54,6 @@ temporary directory (tempdir) [default FALSE].}
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
-
-\item{ld_report}{[required].}
-
-\item{ld_resolution}{Resolution at which LD should be reported in number of
-base pairs [default NULL]}
-
-\item{summary_stat}{LD is calculated between SNP pairs in each population.
-This option sets the summary statistic to report the LD between SNP pairs
- across populations. Options are "mean" or "max" to report the maximum
- value [default "max"].}
-
-\item{ld_threshold_pops}{LD threshold to show number of SNP pairs in LD}
-
-\item{plot.out}{Specify if plot is to be produced [default TRUE].}
-
-\item{plot_theme}{User specified theme [default NULL].}
-
-\item{histogram_colors}{Vector with two color names for the borders and fill
-[default NULL].}
-
-\item{boxplot_colors}{A color palette for boxplots by population or a list
- with as many colors as there are populations in the dataset
-[default NULL].}
 }
 \value{
 A dataframe with information for each SNP pair in LD.
@@ -112,27 +114,8 @@ One, 9(1), e84329.
 }
 \seealso{
 \code{\link{gl.filter.ld}}
-
-Other filter functions: 
-\code{\link{gl.filter.allna}()},
-\code{\link{gl.filter.callrate}()},
-\code{\link{gl.filter.heterozygosity}()},
-\code{\link{gl.filter.hwe}()},
-\code{\link{gl.filter.ld}()},
-\code{\link{gl.filter.locmetrics}},
-\code{\link{gl.filter.maf}()},
-\code{\link{gl.filter.monomorphs}()},
-\code{\link{gl.filter.overshoot}()},
-\code{\link{gl.filter.parent.offspring}()},
-\code{\link{gl.filter.pa}()},
-\code{\link{gl.filter.rdepth}()},
-\code{\link{gl.filter.reproducibility}()},
-\code{\link{gl.filter.secondaries}()},
-\code{\link{gl.filter.sexlinked}()},
-\code{\link{gl.filter.taglength}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to
  \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{filter functions}

@@ -2,24 +2,26 @@
 #' @title Provides descriptive stats and plots to diagnose linkage
 #' disequilibrium patterns
 #' @description
-#'
-#' @param ld_report [required].
+#' 
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param pop_name Name of the population to analyse. If NULL all the 
+#' populations are analised [default NULL].
+#' @param chrom_name Nme of the chromosome to analyse. If NULL all the 
+#' chromosomes are analised [default NULL].
 #' @param ld_max_pairwise Maximum distance in number of base pairs at which LD
-#' should be calculated [default NULL].
-#' @param ld_resolution Resolution at which LD should be reported in number of
-#' base pairs [default NULL]
-#' @param summary_stat LD is calculated between SNP pairs in each population.
-#'  This option sets the summary statistic to report the LD between SNP pairs
-#'   across populations. Options are "mean" or "max" to report the maximum
-#'   value [default "max"].
-#' @param ld_threshold_pops LD threshold to show number of SNP pairs in LD
-#' @param plot.out Specify if plot is to be produced [default TRUE].
-#' @param plot_theme User specified theme [default NULL].
-#' @param histogram_colors Vector with two color names for the borders and fill
-#' [default NULL].
-#' @param boxplot_colors A color palette for boxplots by population or a list
-#'  with as many colors as there are populations in the dataset
-#' [default NULL].
+#' should be calculated [default 10000000].
+#' @param maf Minor allele frequency (by population) threshold to filter out 
+#' loci. If a value > 1 is provided it will be interpreted as MAC (i.e. the
+#'  minimum number of times an allele needs to be observed) [default 0.05].
+#' @param ld_stat The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
+#'   "D.prime", "R.squared", and "R". See \code{\link[snpStats]{ld}}
+#'    (package snpStats) for details [default "R.squared"].
+#' @param ind.limit Minimum number of individuals that a population should
+#' contain to take it in account to report loci in LD [default 10].
+#' @param min_snps Minimum number of SNPs that should have a haplotype to call 
+#' it [default 10].
+#' @param ld_threshold_haplo Minimum LD between adjacent SNPs to call a 
+#' haplotype [default 0.5].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
@@ -78,14 +80,8 @@
 #' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 1000000)
 #' }
 #' @seealso \code{\link{gl.filter.ld}}
-#' @family filter functions
 #' @export
 
-# library(raster)
-# library(maptools)
-# library(zoo)
-# library(plyr)
-# library(viridis)
 
 gl.ld.haplotype <- function(x,
                             pop_name = NULL,
@@ -95,7 +91,7 @@ gl.ld.haplotype <- function(x,
                             ld_stat = "R.squared",
                             ind.limit = 10,
                             min_snps = 10,
-                            ld_threshold_haplo = 0.2,
+                            ld_threshold_haplo = 0.5,
                             save2tmp = FALSE,
                             verbose = NULL) {
   # SET VERBOSITY
@@ -131,6 +127,8 @@ gl.ld.haplotype <- function(x,
   }
   
   # DO THE JOB
+  
+  group <- het <- lat <- long <- NULL
   
   if (is.null(chrom_name) == FALSE) {
     chrom_tmp <-  unlist(lapply(chrom_name, function(y) {
@@ -304,10 +302,10 @@ gl.ld.haplotype <- function(x,
       mean_column <-
         scales::rescale(mean_column, to = c(0, height_poly))
       
-      # as the matrix was rotated the position of the snps is not correct anymore.
-      # the following code reassigns the snp position based on the second row from
-      # bottom to top of the rotated matrix. the first two and the last snps are
-      # removed to take in account the snps that are not present in the second row
+# as the matrix was rotated the position of the snps is not correct anymore.
+# the following code reassigns the snp position based on the second row from
+# bottom to top of the rotated matrix. the first two and the last snps are
+# removed to take in account the snps that are not present in the second row
       second_row_temp <- which(!is.na(matrix_rotate_3[, 1])) - 1
       second_row <-  second_row_temp[length(second_row_temp)]
       second_row_2 <- matrix_rotate_2[second_row, ]
@@ -417,24 +415,25 @@ gl.ld.haplotype <- function(x,
       locations_temp_2 <- locations_temp
       colnames(locations_temp_2) <- c("start", "end")
       locations_temp_2$start_ld_plot <-
-        unlist(lapply(locations_temp_2$start, findInterval, vec = as.numeric(paste(
+   unlist(lapply(locations_temp_2$start, findInterval, vec = as.numeric(paste(
           unlist(real_distance_4$real_distance_3)
         ))))
       locations_temp_2$end_ld_plot <-
-        unlist(lapply(locations_temp_2$end, findInterval, vec = as.numeric(paste(
+     unlist(lapply(locations_temp_2$end, findInterval, vec = as.numeric(paste(
           unlist(real_distance_4$real_distance_3)
         ))))
       locations_temp_2$midpoint <-
         (locations_temp_2$start + locations_temp_2$end) / 2
       locations_temp_2$midpoint_ld_plot <-
         (locations_temp_2$start_ld_plot + locations_temp_2$end_ld_plot) / 2
-      locations_temp_2$labels <- paste0(as.character(round(locations_temp_2$start /
-                                                             1000000, 0)), "-", as.character(round(locations_temp_2$end / 1000000, 0)))
+      locations_temp_2$labels <-
+        paste0(as.character(round(locations_temp_2$start /1000000, 0)), "-", 
+               as.character(round(locations_temp_2$end / 1000000, 0)))
       
       haplo_temp_a <-
-        locations_temp_2[which(as.numeric(row.names(locations_temp_2)) %% 2 == 1), ]
+  locations_temp_2[which(as.numeric(row.names(locations_temp_2)) %% 2 == 1), ]
       haplo_temp_b <-
-        locations_temp_2[which(as.numeric(row.names(locations_temp_2)) %% 2 == 0), ]
+   locations_temp_2[which(as.numeric(row.names(locations_temp_2)) %% 2 == 0), ]
       
       ticks_breaks <-
         c(locations_temp_2$start_ld_plot,
@@ -492,7 +491,7 @@ gl.ld.haplotype <- function(x,
           fill = "cornsilk4"
         ) +
         geom_polygon(data = polygon_haplo.df,
-                     aes(long, lat, group = group, fill = polygon_haplo.df[, 8])) +
+                aes(long, lat, group = group, fill = polygon_haplo.df[, 8])) +
         viridis::scale_fill_viridis(name = "r2 (LD)", option = "viridis") +
         geom_vline(aes(
           xintercept = c(
@@ -550,15 +549,6 @@ gl.ld.haplotype <- function(x,
       
       
       print(haploview)
-      
-      ggsave(
-        paste0("chr_", chrom, "_haploview.pdf"),
-        width = 10,
-        height = 7,
-        units = "in",
-        dpi = "retina",
-        bg = "transparent"
-      )
       
     }
   }

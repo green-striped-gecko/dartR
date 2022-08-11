@@ -140,8 +140,7 @@ Other filter functions:
 \code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.filter.secondaries}()},
 \code{\link{gl.filter.sexlinked}()},
-\code{\link{gl.filter.taglength}()},
-\code{\link{gl.ld.haplotype}()}
+\code{\link{gl.filter.taglength}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to

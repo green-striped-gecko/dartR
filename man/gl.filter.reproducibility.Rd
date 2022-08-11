@@ -76,8 +76,7 @@ Other filter functions:
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.secondaries}()},
 \code{\link{gl.filter.sexlinked}()},
-\code{\link{gl.filter.taglength}()},
-\code{\link{gl.ld.haplotype}()}
+\code{\link{gl.filter.taglength}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to

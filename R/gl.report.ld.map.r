@@ -28,7 +28,7 @@
 #'  minimum number of times an allele needs to be observed) [default 0.05].
 #' @param ld_stat The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
 #'   "D.prime", "R.squared", and "R". See \code{\link[snpStats]{ld}}
-#'    (package snpStats) for details [default "R.squared"]..
+#'    (package snpStats) for details [default "R.squared"].
 #' @param ind.limit Minimum number of individuals that a population should
 #' contain to take it in account to report loci in LD [default 10].
 #' @param stat_keep Name of the column from the slot \code{loc.metrics} to be

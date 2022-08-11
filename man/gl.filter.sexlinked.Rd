@@ -111,8 +111,7 @@ Other filter functions:
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.filter.secondaries}()},
-\code{\link{gl.filter.taglength}()},
-\code{\link{gl.ld.haplotype}()}
+\code{\link{gl.filter.taglength}()}
 }
 \author{
 Arthur Georges, Bernd Gruber & Floriaan Devloo-Delva (Post to
