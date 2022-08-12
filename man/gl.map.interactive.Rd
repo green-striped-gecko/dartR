@@ -15,6 +15,9 @@ gl.map.interactive(
   ind.circle.cols = NULL,
   ind.circle.cex = 10,
   ind.circle.transparency = 0.8,
+  palette_links = NULL,
+  factor_links = 10,
+  leg_title = NULL,
   provider = "Esri.NatGeoWorldMap",
   verbose = NULL
 )
@@ -41,11 +44,26 @@ populations [default TRUE].}
 
 \item{ind.circles}{Should individuals plotted as circles [default TRUE].}
 
-\item{ind.circle.cols}{colors off circles. Colors can be provided as usual by names (e.g. "black") and are re-cycled. So a color c("blue","red") colors individuals alternatively between blue and red using the genlight object order of individuals. For transparency see parameter ind.circle.transparency. Defaults to rainbow colors by population  if not provided. If you want to have your own colors for each population, check the platypus.gl example below.}
+\item{ind.circle.cols}{Colors of circles. Colors can be provided as usual by 
+names (e.g. "black") and are re-cycled. So a color c("blue","red") colors 
+individuals alternatively between blue and red using the genlight object
+ order of individuals. For transparency see parameter 
+ ind.circle.transparency. Defaults to rainbow colors by population  if not
+  provided. If you want to have your own colors for each population, check
+   the platypus.gl example below.}
 
-\item{ind.circle.cex}{(size or circles in pixels ). Defaults to 10.}
+\item{ind.circle.cex}{(size or circles in pixels ) [default 10].}
 
-\item{ind.circle.transparency}{Transparency of circles between 0=invisible and 1=no transparency. Defaults to 0.8.}
+\item{ind.circle.transparency}{Transparency of circles between 0=invisible 
+and 1=no transparency. Defaults to 0.8.}
+
+\item{palette_links}{Color palette for the links in case a matrix is provided
+[default NULL].}
+
+\item{leg_title}{Legend's title for the links in case a matrix is provided
+[default NULL].
+@param factor_links Factor by which matrix values are multiplied for a 
+better visualisation [default 10].}
 
 \item{provider}{Passed to leaflet [default "Esri.NatGeoWorldMap"].}
 
@@ -63,6 +81,18 @@ Creates an interactive map (based on latlon) from a genlight object
 A wrapper around the \pkg{leaflet} package. For possible background 
 maps check as specified via the provider:
 \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
+
+The palette_links argument can be any of the following:
+A character vector of RGB or named colors. Examples: palette(), 
+c("#000000", "#0000FF", "#FFFFFF"), topo.colors(10)
+
+The name of an RColorBrewer palette, e.g. "BuPu" or "Greens".
+
+The full name of a viridis palette: "viridis", "magma", "inferno", 
+or "plasma".
+
+A function that receives a single value between 0 and 1 and returns a color.
+ Examples: colorRamp(c("#000000", "#FFFFFF"), interpolate = "spline").
 }
 \examples{
 gl.map.interactive(bandicoot.gl)
