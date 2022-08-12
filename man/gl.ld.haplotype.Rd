@@ -2,8 +2,8 @@
 % Please edit documentation in R/gl.ld.haplotype.r
 \name{gl.ld.haplotype}
 \alias{gl.ld.haplotype}
-\title{Provides descriptive stats and plots to diagnose linkage
-disequilibrium patterns}
+\title{Visualize patterns of linkage disequilibrium and identification of 
+haplotypes}
 \usage{
 gl.ld.haplotype(
   x,
@@ -15,6 +15,9 @@ gl.ld.haplotype(
   ind.limit = 10,
   min_snps = 10,
   ld_threshold_haplo = 0.5,
+  color_haplo = "viridis",
+  color_het = "deeppink",
+  plot.out = TRUE,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -48,6 +51,12 @@ it [default 10].}
 \item{ld_threshold_haplo}{Minimum LD between adjacent SNPs to call a 
 haplotype [default 0.5].}
 
+\item{color_haplo}{Color palette for haplotype plot. See details
+[default "viridis"].
+@param color_het Color for heterozygosity [default "deeppink"].}
+
+\item{plot.out}{Specify if Sankey plot is to be produced [default TRUE].}
+
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
 
@@ -56,66 +65,37 @@ progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-A dataframe with information for each SNP pair in LD.
+An LD heatmap and a table with haplotypes that were identified.
 }
 \description{
-Provides descriptive stats and plots to diagnose linkage
-disequilibrium patterns
+This function plots a Linkage disequilibrium (LD) heatmap, where the colour 
+shading indicates the strength of LD. Chromosome positions (Mbp) are shown on
+ the horizontal axis, and haplotypes appear as triangles and delimited by 
+ dark yellow vertical lines. Numbers identifying each haplotype are shown in 
+ the upper part of the plot. 
+ 
+ The heatmap also shows heterozygosity for each SNP. 
+ 
+ The function identifies haplotypes based on contiguous SNPs that are in 
+ linkage disequilibrium using as threshold \code{ld_threshold_haplo} and
+containing more than \code{min_snps} SNPs.
 }
 \details{
-This function reports LD between SNP pairs by population. Reports include
-the number of SNPs that would be filtered out given specific LD thresholds.
-The function code{\link{gl.filter.ld}} filters out the SNPs in LD using as
-input the results of gl.report.ld.map. However, the actual number of SNPs to
-be filtered out depends on the parameters set in the function
-code{\link{gl.filter.ld}}. Therefore, the number of SNPs to be filtered out
- reported by gl.report.ld.map should be used as a guide and not as a definite
-  number.
-
-\enumerate{
-\item
-
-}
-A bar plot with observed
-and expected (null expectation) number of significant HWE tests for the same
-locus in multiple populations (that is, the x-axis shows whether a locus
-results significant in 1, 2, ..., n populations. The y axis is the count of
-these occurrences.
-
-If SNPs are mapped to a reference genome, the function creates a plot showing
-the pairwise LD measure against distance in number of base pairs pooled over
-all the chromosomes and a red line representing the threshold (R.squared =
-0.2) that is commonly used to imply that two loci are unlinked (Delourme et
-al., 2013; Li et al., 2014). Additionally, boxplots of LD by population and
-a histogram showing LD frequency are presented.
-
-If SNPs are not mapped to a reference genome, only boxplots by population and
- a histogram showing LD frequency are presented.
-}
-\examples{
-\dontrun{
-x <- platypus.gl
-x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
-x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
-ld_res <- gl.report.ld.map(x,ld_max_pairwise = 1000000)
-}
-}
-\references{
-\itemize{
-\item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G.,
-André, I., . . . Marty, A. (2013). High-density SNP-based genetic map
-development and linkage disequilibrium assessment in Brassica napusL. BMC
-genomics, 14(1), 120.
-\item Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . .
-Brummer, E. C. (2014). Development of an alfalfa SNP array and its use to
-evaluate patterns of population structure and linkage disequilibrium. PLoS
-One, 9(1), e84329.
- }
-}
-\seealso{
-\code{\link{gl.filter.ld}}
+the
+ information for SNP's position should be stored in the genlight accessor
+  "@position" and the SNP's chromosome name in the accessor "@chromosome"
+   (see examples). The function will then calculate LD within each chromosome
+   
+The output of the function includes a table with with the haplotypes
+ that were identified and their location.
+ 
+ Colors of the heatmap (\code{color_haplo}) are based on the function
+   \code{\link[viridis]{scale_fill_viridis}} from  package \code{viridis}. 
+   Other color palettes options are "magma", "inferno", "plasma", "viridis",
+    "cividis", "rocket", "mako" and "turbo".
 }
 \author{
 Custodian: Luis Mijangos -- Post to
  \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{ld functions}

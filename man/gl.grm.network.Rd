@@ -8,13 +8,12 @@ gl.grm.network(
   G,
   x,
   method = "fr",
-  node.size = 6,
+  node.size = 7,
   node.label = TRUE,
   node.label.size = 2,
   node.label.color = "black",
-  node.alpha = 1,
-  link.color = "black",
-  link.size = 1,
+  link.color = "turbo",
+  link.size = 2,
   relatedness_factor = 0.25,
   title = "Network based on a genomic relationship matrix",
   palette_discrete = discrete_palette,
@@ -39,9 +38,8 @@ gl.grm.network(
 \item{node.label.color}{Color of the text of the node labels
 [default 'black'].}
 
-\item{node.alpha}{Alpha value for nodes [default 1].}
-
-\item{link.color}{Color for the links [default "black"].}
+\item{link.color}{Color palette for links. See details 
+[default "turbo"].}
 
 \item{link.size}{Size of the links [default 1].}
 
@@ -141,6 +139,11 @@ Four layout options are implemented in this function:
 \item 'mds' Multidimensional scaling layout \link[igraph]{layout_with_mds}
 (package igraph)
 }
+
+Colors of the links (\code{link.color}) are based on the function
+   \code{\link[viridis]{scale_fill_viridis}} from  package \code{viridis}. 
+   Other color palettes options are "magma", "inferno", "plasma", "viridis",
+    "cividis", "rocket", "mako" and "turbo".
 }
 \examples{
 gl_test <- bandicoot.gl

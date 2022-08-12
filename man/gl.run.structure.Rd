@@ -17,7 +17,8 @@ gl.run.structure(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{...}{Parameters to specify the STRUCTURE run (check \code{structureRun} within strataG.
+\item{...}{Parameters to specify the STRUCTURE run (check \code{structureRun}
+ within strataG.
 for more details). Parameters are passed to the \code{structureRun} function.
 For example you need to set the k.range and the type of model you would like
 to run (noadmix, locprior) etc. If those parameter names do not tell you
@@ -61,13 +62,15 @@ strataG function \code{structureRun} (Archer et al. 2016). For a detailed
 description please refer to this package (see references below).
 To make use of this function you need to download STRUCTURE for you system
 (\bold{non GUI version}) from here
-\href{https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
+\href{https://web.stanford.edu/group/pritchardlab/structure_software/
+release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
 }
 \examples{
 \dontrun{
 #CLUMPP needs to be installed to be able to run the example
 #bc <- bandicoot.gl[,1:100]
-#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = './structure.exe')
+#sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, 
+exec = './structure.exe')
 #ev <- gl.evanno(sr)
 #ev
 #qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')

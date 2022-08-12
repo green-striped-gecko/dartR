@@ -16,8 +16,8 @@
 #' @param node.label.size Size of the node labels [default 3].
 #' @param node.label.color Color of the text of the node labels
 #' [default 'black'].
-#' @param node.alpha Alpha value for nodes [default 1].
-#' @param link.color Color for the links [default "black"].
+#' @param link.color  Color palette for links. See details 
+#' [default "turbo"].
 #' @param link.size Size of the links [default 1].
 #' @param relatedness_factor Factor of relatedness[default 0.5].
 #' @param title Title for the plot
@@ -100,6 +100,11 @@
 #'\item 'mds' Multidimensional scaling layout \link[igraph]{layout_with_mds}
 #' (package igraph)
 #' }
+#' 
+#' Colors of the links (\code{link.color}) are based on the function
+#'    \code{\link[viridis]{scale_fill_viridis}} from  package \code{viridis}. 
+#'    Other color palettes options are "magma", "inferno", "plasma", "viridis",
+#'     "cividis", "rocket", "mako" and "turbo".
 #'
 #' @return A network plot showing relatedness between individuals
 #' @author Custodian: Arthur Georges -- Post to
@@ -128,13 +133,12 @@
 gl.grm.network <- function(G,
                            x,
                            method = "fr",
-                           node.size = 6,
+                           node.size = 7,
                            node.label = TRUE,
                            node.label.size = 2,
                            node.label.color = "black",
-                           node.alpha = 1,
-                           link.color = "black",
-                           link.size = 1,
+                           link.color = "turbo",
+                           link.size = 2,
                            relatedness_factor = 0.25,
                            title = "Network based on a genomic relationship matrix",
                            palette_discrete = discrete_palette,
@@ -199,6 +203,21 @@ gl.grm.network <- function(G,
     # the result of the GRM is the summation of the IBD of each allele . Therefore the 
     links$kinship <- (links$weight / 2) - MS
     
+    links_tmp <- links[,c(1,2,4)]
+    links_tmp <- rbind(links_tmp,cbind(from=indNames(x),to=indNames(x),kinship=0))
+    links_matrix <- as.matrix(reshape2::acast(links_tmp, from~to, value.var="kinship"))
+    links_matrix <- apply(links_matrix, 2, as.numeric)
+    rownames(links_matrix) <- colnames(links_matrix)
+    
+    links_plot_tmp <- links_tmp[links_tmp$kinship>relatedness_factor,]
+    links_plot_2 <- links_plot_tmp[,c("from","kinship")]
+    colnames(links_plot_2) <- c("label.node","kinship")
+    links_plot_3 <- links_plot_tmp[,c("to","kinship")]
+    colnames(links_plot_3) <- c("label.node","kinship")
+    links_plot <- rbind(links_plot_2,links_plot_3)
+    
+    # links_matrix[links_matrix<0] <- 0
+    
     nodes <- data.frame(cbind(x$ind.names, as.character(pop(x))))
     colnames(nodes) <- c("name", "pop")
     
@@ -255,6 +274,11 @@ gl.grm.network <- function(G,
     plotcord <- merge(plotcord, pop_df, by = "label.node")
     plotcord$pop <- as.factor(plotcord$pop)
     
+    plotcord <- merge(plotcord,links_plot,by="label.node",all.x = TRUE)
+    plotcord[is.na(plotcord$kinship),"kinship"] <- 0
+    plotcord$kinship <- as.numeric(plotcord$kinship)
+    plotcord$kinship <- scales::rescale(plotcord$kinship, to = c(0.2, 1))
+    
     # assigning colors to populations
     if (is(palette_discrete, "function")) {
         colors_pops <- palette_discrete(length(levels(pop(x))))
@@ -269,18 +293,19 @@ gl.grm.network <- function(G,
     p1 <-
         ggplot() + 
       geom_segment(data = edges,
-                   aes( x = X1, y = Y1, xend = X2,yend = Y2), 
-                   size = link.size,
-                   color = link.color) + 
-      geom_point(data = plotcord,aes(x = X1,y = X2, color = pop), 
+                   aes( x = X1, y = Y1, xend = X2,yend = Y2,color = size),
+                   size = link.size) +
+      viridis::scale_color_viridis(name = "Relatedness", option = link.color) +
+      geom_point(data = plotcord,aes(x = X1,y = X2, fill = pop), 
+                  pch = 21,
                  size = node.size,
-                 alpha = node.alpha) +
+                 alpha=plotcord$kinship) +
+      scale_fill_manual(name = "Populations", values = colors_pops)+
       coord_fixed(ratio = 1) + 
       theme_void() +
       ggtitle(paste(title, "\n[", layout.name, "]")) + 
       theme(legend.position = "bottom",
-            plot.title = element_text( hjust = 0.5, face = "bold",size = 14)) + 
-      scale_color_manual(name = "Populations", values = colors_pops)
+            plot.title = element_text( hjust = 0.5, face = "bold",size = 14)) 
     
     if (node.label == T) {
         p1 <-
@@ -329,6 +354,6 @@ gl.grm.network <- function(G,
     
     # RETURN
     
-    invisible(p1)
+    return(invisible(list(p1,links_matrix)))
     
 }
