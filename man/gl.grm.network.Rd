@@ -12,9 +12,9 @@ gl.grm.network(
   node.label = TRUE,
   node.label.size = 2,
   node.label.color = "black",
-  link.color = "turbo",
+  link.color = "viridis",
   link.size = 2,
-  relatedness_factor = 0.25,
+  relatedness_factor = 0.125,
   title = "Network based on a genomic relationship matrix",
   palette_discrete = discrete_palette,
   save2tmp = FALSE,
@@ -29,7 +29,7 @@ gl.grm.network(
 
 \item{method}{One of 'fr', 'kk', 'gh' or 'mds' [default 'fr'].}
 
-\item{node.size}{Size of the symbols for the network nodes [default 6].}
+\item{node.size}{Size of the symbols for the network nodes [default 7].}
 
 \item{node.label}{TRUE to display node labels [default TRUE].}
 
@@ -39,11 +39,11 @@ gl.grm.network(
 [default 'black'].}
 
 \item{link.color}{Color palette for links. See details 
-[default "turbo"].}
+[default "viridis"].}
 
-\item{link.size}{Size of the links [default 1].}
+\item{link.size}{Size of the links [default 2].}
 
-\item{relatedness_factor}{Factor of relatedness[default 0.5].}
+\item{relatedness_factor}{Factor of relatedness[default 0.125].}
 
 \item{title}{Title for the plot
 [default 'Network based on genomic relationship matrix'].}

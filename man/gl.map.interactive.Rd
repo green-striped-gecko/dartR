@@ -16,7 +16,6 @@ gl.map.interactive(
   ind.circle.cex = 10,
   ind.circle.transparency = 0.8,
   palette_links = NULL,
-  factor_links = 10,
   leg_title = NULL,
   provider = "Esri.NatGeoWorldMap",
   verbose = NULL
@@ -61,9 +60,7 @@ and 1=no transparency. Defaults to 0.8.}
 [default NULL].}
 
 \item{leg_title}{Legend's title for the links in case a matrix is provided
-[default NULL].
-@param factor_links Factor by which matrix values are multiplied for a 
-better visualisation [default 10].}
+[default NULL].}
 
 \item{provider}{Passed to leaflet [default "Esri.NatGeoWorldMap"].}
 

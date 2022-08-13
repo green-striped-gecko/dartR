@@ -35,7 +35,7 @@
 #' haplotype [default 0.5].
 #' @param color_haplo Color palette for haplotype plot. See details
 #'  [default "viridis"].
-#'  @param color_het Color for heterozygosity [default "deeppink"].
+#' @param color_het Color for heterozygosity [default "deeppink"].
 #' @param plot.out Specify if Sankey plot is to be produced [default TRUE].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
