@@ -32,8 +32,7 @@
 #' description please refer to this package (see references below).
 #' To make use of this function you need to download STRUCTURE for you system
 #' (\bold{non GUI version}) from here
-#' \href{https://web.stanford.edu/group/pritchardlab/structure_software/
-#' release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
+#' \href{https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
 #'
 #' @return An sr object (structure.result list output). Each list entry is a
 #' single structurerun output (there are k.range * num.k.rep number of runs).

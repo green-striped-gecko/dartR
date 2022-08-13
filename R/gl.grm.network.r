@@ -11,15 +11,15 @@
 #' \code{\link{gl.grm}} [required].
 #' @param x A genlight object from which the G matrix was generated [required].
 #' @param method One of 'fr', 'kk', 'gh' or 'mds' [default 'fr'].
-#' @param node.size Size of the symbols for the network nodes [default 6].
+#' @param node.size Size of the symbols for the network nodes [default 7].
 #' @param node.label TRUE to display node labels [default TRUE].
 #' @param node.label.size Size of the node labels [default 3].
 #' @param node.label.color Color of the text of the node labels
 #' [default 'black'].
 #' @param link.color  Color palette for links. See details 
-#' [default "turbo"].
-#' @param link.size Size of the links [default 1].
-#' @param relatedness_factor Factor of relatedness[default 0.5].
+#' [default "viridis"].
+#' @param link.size Size of the links [default 2].
+#' @param relatedness_factor Factor of relatedness[default 0.125].
 #' @param title Title for the plot
 #' [default 'Network based on genomic relationship matrix'].
 #' @param palette_discrete A discrete palette for the color of populations or a
@@ -137,9 +137,9 @@ gl.grm.network <- function(G,
                            node.label = TRUE,
                            node.label.size = 2,
                            node.label.color = "black",
-                           link.color = "turbo",
+                           link.color = "viridis",
                            link.size = 2,
-                           relatedness_factor = 0.25,
+                           relatedness_factor = 0.125,
                            title = "Network based on a genomic relationship matrix",
                            palette_discrete = discrete_palette,
                            save2tmp = FALSE,
@@ -277,7 +277,7 @@ gl.grm.network <- function(G,
     plotcord <- merge(plotcord,links_plot,by="label.node",all.x = TRUE)
     plotcord[is.na(plotcord$kinship),"kinship"] <- 0
     plotcord$kinship <- as.numeric(plotcord$kinship)
-    plotcord$kinship <- scales::rescale(plotcord$kinship, to = c(0.2, 1))
+    plotcord$kinship <- scales::rescale(plotcord$kinship, to = c(0.25, 1))
     
     # assigning colors to populations
     if (is(palette_discrete, "function")) {
@@ -289,7 +289,7 @@ gl.grm.network <- function(G,
     }
     
     names(colors_pops) <- as.character(levels(x$pop))
-    
+    size <- NULL
     p1 <-
         ggplot() + 
       geom_segment(data = edges,

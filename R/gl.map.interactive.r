@@ -28,8 +28,6 @@
 #'  [default NULL].
 #' @param leg_title Legend's title for the links in case a matrix is provided
 #'  [default NULL].
-#'  @param factor_links Factor by which matrix values are multiplied for a 
-#'  better visualisation [default 10].
 #' @param provider Passed to leaflet [default "Esri.NatGeoWorldMap"].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
@@ -61,7 +59,6 @@
 #' gl.map.interactive(platypus.gl, ind.circle.cols=cols, ind.circle.cex=10, 
 #' ind.circle.transparency=0.5)
 
-
 gl.map.interactive <- function(x,
                                matrix = NULL,
                                standard = TRUE,
@@ -73,7 +70,6 @@ gl.map.interactive <- function(x,
                                ind.circle.cex = 10,
                                ind.circle.transparency = 0.8,        
                                palette_links = NULL,
-                               factor_links = 10,
                                leg_title = NULL,
                                provider = "Esri.NatGeoWorldMap",
                                verbose = NULL) {
@@ -211,7 +207,6 @@ individuals nor the number of populations."
                                 leaflet::addPolylines(
                                     lng = c(xys[i, "lon"], xys[ii, "lon"]),
                                     lat = c(xys[i, "lat"], xys[ii, "lat"]),
-                                    # weight = matrix[i,ii]*factor_links,
                                     color = qpal(matrix[i,ii]),
                                     opacity = 1
                                 )
@@ -229,7 +224,7 @@ individuals nor the number of populations."
        
             }
             
-            if (!symmetric) {f
+            if (!symmetric) {
                 for (i in 1:nrow(matrix)) {
                     for (ii in 1:nrow(matrix)) {
                         if (abs((i - ii)) != 0) {

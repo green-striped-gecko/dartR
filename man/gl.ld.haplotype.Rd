@@ -52,8 +52,9 @@ it [default 10].}
 haplotype [default 0.5].}
 
 \item{color_haplo}{Color palette for haplotype plot. See details
-[default "viridis"].
-@param color_het Color for heterozygosity [default "deeppink"].}
+[default "viridis"].}
+
+\item{color_het}{Color for heterozygosity [default "deeppink"].}
 
 \item{plot.out}{Specify if Sankey plot is to be produced [default TRUE].}
 

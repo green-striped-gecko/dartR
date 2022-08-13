@@ -62,8 +62,7 @@ strataG function \code{structureRun} (Archer et al. 2016). For a detailed
 description please refer to this package (see references below).
 To make use of this function you need to download STRUCTURE for you system
 (\bold{non GUI version}) from here
-\href{https://web.stanford.edu/group/pritchardlab/structure_software/
-release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
+\href{https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
 }
 \examples{
 \dontrun{
