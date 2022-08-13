@@ -8,15 +8,15 @@ gl.grm.network(
   G,
   x,
   method = "fr",
-  node.size = 7,
+  node.size = 8,
   node.label = TRUE,
   node.label.size = 2,
   node.label.color = "black",
-  link.color = "viridis",
+  link.color = NULL,
   link.size = 2,
   relatedness_factor = 0.125,
   title = "Network based on a genomic relationship matrix",
-  palette_discrete = discrete_palette,
+  palette_discrete = NULL,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -29,7 +29,7 @@ gl.grm.network(
 
 \item{method}{One of 'fr', 'kk', 'gh' or 'mds' [default 'fr'].}
 
-\item{node.size}{Size of the symbols for the network nodes [default 7].}
+\item{node.size}{Size of the symbols for the network nodes [default 8].}
 
 \item{node.label}{TRUE to display node labels [default TRUE].}
 
@@ -38,19 +38,18 @@ gl.grm.network(
 \item{node.label.color}{Color of the text of the node labels
 [default 'black'].}
 
-\item{link.color}{Color palette for links. See details 
-[default "viridis"].}
+\item{link.color}{Color palette for links [default NULL].}
 
 \item{link.size}{Size of the links [default 2].}
 
-\item{relatedness_factor}{Factor of relatedness[default 0.125].}
+\item{relatedness_factor}{Factor of relatedness [default 0.125].}
 
 \item{title}{Title for the plot
 [default 'Network based on genomic relationship matrix'].}
 
 \item{palette_discrete}{A discrete palette for the color of populations or a
 list with as many colors as there are populations in the dataset
- [default discrete_palette].}
+ [default NULL].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
@@ -139,20 +138,15 @@ Four layout options are implemented in this function:
 \item 'mds' Multidimensional scaling layout \link[igraph]{layout_with_mds}
 (package igraph)
 }
-
-Colors of the links (\code{link.color}) are based on the function
-   \code{\link[viridis]{scale_fill_viridis}} from  package \code{viridis}. 
-   Other color palettes options are "magma", "inferno", "plasma", "viridis",
-    "cividis", "rocket", "mako" and "turbo".
 }
 \examples{
-gl_test <- bandicoot.gl
-# five populations in gl_test
-nPop(gl_test)
-# color list for population colors
-pop_colors <- c('deepskyblue','green','gray','orange','deeppink')
-G_out <- gl.grm(gl_test,plotheatmap=FALSE)
-gl.grm.network(G_out, gl_test, palette_discrete = pop_colors, relatedness_factor = 0.25)
+t1 <- possums.gl
+# filtering on call rate 
+t1 <- gl.filter.callrate(t1)
+# relatedness matrix
+res <- gl.grm(t1,plotheatmap = FALSE)
+# relatedness network
+res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
 }
 \references{
 \itemize{
