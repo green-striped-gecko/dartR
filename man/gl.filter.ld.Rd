@@ -2,12 +2,11 @@
 % Please edit documentation in R/gl.filter.ld.r
 \name{gl.filter.ld}
 \alias{gl.filter.ld}
-\title{Filters loci in a genlight \{adegenet\} object based on linkage
- disequilibrium (LD)}
+\title{Filters loci based on linkage disequilibrium (LD)}
 \usage{
 gl.filter.ld(
   x,
-  ld_res,
+  ld_report,
   threshold = 0.2,
   pop.limit = ceiling(nPop(x)/2),
   ind.limit = 10,
@@ -17,9 +16,10 @@ gl.filter.ld(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{ld_res}{Output from function \code{\link{gl.report.ld.map}} [required].}
+\item{ld_report}{Output from function \code{\link{gl.report.ld.map}} 
+[required].}
 
-\item{threshold}{Threshold value below which loci will be removed
+\item{threshold}{Threshold value above which loci will be removed
 [default 0.2].}
 
 \item{pop.limit}{Minimum number of populations in which LD should be more
@@ -27,7 +27,7 @@ than the threshold for a locus to be filtered out.
 The default value is half of the populations [default ceiling(nPop(x)/2)].}
 
 \item{ind.limit}{Minimum number of individuals that a population should
-contain to take it in account to filter out loci in LD [default 10].}
+contain to take it in account to report loci in LD [default 10].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -37,27 +37,38 @@ progress log; 3, progress and results summary; 5, full report
 The reduced genlight object.
 }
 \description{
-This function uses the statistic set in the parameter stat_keep from function
- \code{\link{gl.report.ld.map}} to choose the SNP to keep when two SNPs are 
- in LD. When a SNP is selected to be filtered out in each pairwise comparison,
-  the function stores its  name in a list. In subsequent pairwise comparisons,
-   if the SNP is already in the list, the other SNP will be kept.
+This function uses the statistic set in the parameter \code{stat_keep} from 
+function \code{\link{gl.report.ld.map}} to choose the SNP to keep when two 
+SNPs are in LD. When a SNP is selected to be filtered out in each pairwise 
+comparison, the function stores its  name in a list. In subsequent pairwise
+ comparisons, if the SNP is already in the list, the other SNP will be kept.
 }
 \examples{
 test <- bandicoot.gl
 test <- gl.filter.callrate(test,threshold = 1)
 res <- gl.report.ld.map(test)
-res_2 <- gl.filter.ld(x=test,ld_res = res)
+res_2 <- gl.filter.ld(x=test,ld_report = res)
 res_3 <- gl.report.ld.map(res_2)
 }
 \seealso{
 \code{\link{gl.report.ld.map}}
 
 Other filter functions: 
+\code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.heterozygosity}()},
+\code{\link{gl.filter.hwe}()},
+\code{\link{gl.filter.locmetrics}},
+\code{\link{gl.filter.maf}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.overshoot}()},
 \code{\link{gl.filter.parent.offspring}()},
+\code{\link{gl.filter.pa}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.filter.secondaries}()},
 \code{\link{gl.filter.sexlinked}()},
-\code{\link{gl.report.ld.map}()}
+\code{\link{gl.filter.taglength}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to

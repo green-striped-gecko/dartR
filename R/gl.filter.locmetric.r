@@ -46,6 +46,7 @@
 #' [default 2, unless specified using gl.set.verbosity].
 #' @return The reduced genlight dataset.
 #' @export
+#' @family filter functions
 #' @author Luis Mijangos -- Post to 
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
@@ -77,18 +78,21 @@ gl.filter.locmetric <- function(x,
     if (nLoc(x) != nrow(x@other$loc.metrics)) {
         stop(
             error(
-                "The number of rows in the loc.metrics table does not match the number of loci in your genlight object!"
+                "The number of rows in the loc.metrics table does not match the
+                number of loci in your genlight object!"
             )
         )
     }
     
-    # Set a population if none is specified (such as if the genlight object has been generated manually)
+    # Set a population if none is specified (such as if the genlight object has 
+    #been generated manually)
     if (is.null(pop(x)) |
         is.na(length(pop(x))) | length(pop(x)) <= 0) {
         if (verbose >= 2) {
             cat(
                 report(
-                    "  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n"
+                    "  Population assignments not detected, individuals assigned
+                    to a single population labelled 'pop1'\n"
                 )
             )
         }
@@ -102,7 +106,8 @@ gl.filter.locmetric <- function(x,
         cat(warn("  Warning: genlight object contains monomorphic loci\n"))
     }
     
-    # FUNCTION SPECIFIC ERROR CHECKING check whether the field exists in the genlight object
+    # FUNCTION SPECIFIC ERROR CHECKING check whether the field exists in the 
+    #genlight object
     if (!(metric %in% colnames(x$other$loc.metrics))) {
         stop(error("Fatal Error: name of the metric not found\n"))
     }

@@ -41,7 +41,7 @@
 #' # Tag P/A data
 #'   result <- gl.filter.allna(testset.gs, verbose=3)
 #'
-#' @family filters and filter reports
+#' @family filter functions
 #' @import utils patchwork
 #' @export
 
@@ -58,12 +58,14 @@ gl.filter.allna <- function(x,
                      build = "Josh",
                      verbosity = verbose)
     
-    # CHECK DATATYPE datatype <- utils.check.datatype(x,verbose=verbose) # recurrence clash
+    # recurrence clash
+    # CHECK DATATYPE datatype <- utils.check.datatype(x,verbose=verbose) 
     if (is(x, "genlight")) {
         if (is.null(ploidy(x))) {
             stop(
                 error(
-                    "Fatal Error: ploidy not set in the genlight object, run gl <- gl.compliance.check(gl)\n"
+                    "Fatal Error: ploidy not set in the genlight object, run 
+                    gl <- gl.compliance.check(gl)\n"
                 )
             )
         }
@@ -83,7 +85,8 @@ gl.filter.allna <- function(x,
         } else {
             stop(
                 error(
-                    "Fatal Error -- SNP or SilicoDArT coding misspecified, run gl <- gl.compliance.check(gl)."
+                    "Fatal Error -- SNP or SilicoDArT coding misspecified, run 
+                    gl <- gl.compliance.check(gl)."
                 )
             )
         }
@@ -95,13 +98,15 @@ gl.filter.allna <- function(x,
         if (by.pop==FALSE){
         cat(
             report(
-                "  Identifying and removing loci and individuals scored all missing (NA)\n"
+                "  Identifying and removing loci and individuals scored all 
+                missing (NA)\n"
             )
         )
         } else {
             cat(
                 report(
-                    "  Identifying and removing loci that are all missing (NA) in any one individual\n"
+                    "  Identifying and removing loci that are all missing (NA) 
+                    in any one individual\n"
                 )
             )
         }
@@ -140,7 +145,7 @@ gl.filter.allna <- function(x,
             )
         }
         x2 <- x[, !x$loc.names %in% loc.list]
-        x2@other$loc.metrics <- x@other$loc.metrics[!x$loc.names %in% loc.list, ]
+    x2@other$loc.metrics <- x@other$loc.metrics[!x$loc.names %in% loc.list, ]
         x <- x2
         if (verbose >= 2) {
             cat("  Deleted\n")
@@ -149,7 +154,7 @@ gl.filter.allna <- function(x,
     
     # Consider individuals
     if(verbose >=2){
-        cat(report("  Deleting individuals that are scored as all missing (NA)\n"))
+    cat(report("  Deleting individuals that are scored as all missing (NA)\n"))
     }
     na.counter <- 0
     ind.list <- array(NA, nInd(x))
@@ -187,7 +192,7 @@ gl.filter.allna <- function(x,
     
     if (by.pop==TRUE){
         if(verbose >=2){
-            cat(report("  Deleting loci that are all missing (NA) in any one population\n"))
+cat(report("  Deleting loci that are all missing (NA) in any one population\n"))
         }
         total <- 0
         loc.list <- NULL
@@ -206,16 +211,19 @@ gl.filter.allna <- function(x,
         }
         loc.list <- unique(loc.list)
         if (verbose >= 3){
-            cat("\n  Loci all NA in one or more populations:",length(loc.list),"deleted\n\n")
+cat("\n  Loci all NA in one or more populations:",length(loc.list),
+    "deleted\n\n")
         }  
         x <- gl.drop.loc(x,loc.list=loc.list,verbose=0)
     }
     
     if (recalc) {
-        # Recalculate all metrics, including Call Rate (flags reset in utils scripts)
+        # Recalculate all metrics, including Call Rate (flags reset in utils 
+      #scripts)
         x <- gl.recalc.metrics(x, verbose = verbose)
     } else {
-        # Reset the flags as FALSE for all metrics except allna (dealt with elsewhere)
+        # Reset the flags as FALSE for all metrics except all na (dealt with 
+      #elsewhere)
         x@other$loc.metrics.flags$AvgPIC <- FALSE
         x@other$loc.metrics.flags$OneRatioRef <- FALSE
         x@other$loc.metrics.flags$OneRatioSnp <- FALSE

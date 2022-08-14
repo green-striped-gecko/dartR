@@ -54,7 +54,7 @@
 #' gl <- gl.report.maf(testset.gl)
 #' @seealso \code{\link{gl.filter.maf}}, \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
-#' @family filter reports functions
+#' @family report functions
 #' @export
 
 gl.report.maf <- function(x,

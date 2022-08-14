@@ -19,10 +19,12 @@
 #' If a pair of DNA sequences are of differing length, the longer is truncated.
 #'
 #' The algorithm is that of Johann de Jong
-#' \url{https://johanndejong.wordpress.com/2015/10/02/faster-hamming-distance-in-r-2/}
+#'\url{https://johanndejong.wordpress.com/2015/10/02/
+#'faster-hamming-distance-in-r-2/}
 #' as implemented in \code{\link{utils.hamming}}.
 #'
-#' Only one of two loci are retained if their Hamming distance is less that a specified
+#' Only one of two loci are retained if their Hamming distance is less that a 
+#' specified
 #' percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
@@ -87,7 +89,8 @@ gl.filter.hamming <- function(x,
     if (threshold < 0 || threshold > 1) {
         cat(
             warn(
-                "  Warning: Parameter 'threshold' must be an integer between 0 and 1, set to 0.2\n"
+                "  Warning: Parameter 'threshold' must be an integer between 0 
+                and 1, set to 0.2\n"
             )
         )
         threshold <- 0.2
@@ -109,12 +112,14 @@ gl.filter.hamming <- function(x,
     if (verbose >= 3) {
         cat(
             report(
-                "  Note: Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n"
+                "  Note: Hamming distance ranges from zero (sequence identity)
+                to 1 (no bases shared at any position)\n"
             )
         )
         cat(
             report(
-                "  Note: Calculating pairwise Hamming distances between trimmed reference sequence tags\n"
+                "  Note: Calculating pairwise Hamming distances between trimmed 
+                reference sequence tags\n"
             )
         )
     }
@@ -198,10 +203,13 @@ gl.filter.hamming <- function(x,
             ylab("Count") + 
             plot_theme
         
-        # if (datatype=='SilicoDArT'){ rdepth <- x2@other$loc.metrics$AvgReadDepth } else if (datatype=='SNP'){ rdepth <-
+        # if (datatype=='SilicoDArT'){ rdepth <-
+        #x2@other$loc.metrics$AvgReadDepth } else if 
+        #(datatype=='SNP'){ rdepth <-
         # x2@other$loc.metrics$rdepth }
         plotvar <- d[d >= threshold]
-        # min <- min(plotvar,threshold) min <- trunc(min*100)/100 max <- max(plotvar,threshold,na.rm=TRUE) max <- ceiling(max*10)/10
+        # min <- min(plotvar,threshold) min <- trunc(min*100)/100 max <- 
+        #max(plotvar,threshold,na.rm=TRUE) max <- ceiling(max*10)/10
         if (datatype == "SNP") {
             xlabel <- "Post-filter SNP Hamming Distance"
         } else {
@@ -256,7 +264,8 @@ gl.filter.hamming <- function(x,
             cat(report("  Saving ggplot(s) to the session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

@@ -7,7 +7,8 @@
 #' functions from \code{strataG}
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
-#' @param ... Parameters to specify the STRUCTURE run (check \code{structureRun} within strataG.
+#' @param ... Parameters to specify the STRUCTURE run (check \code{structureRun}
+#'  within strataG.
 #' for more details). Parameters are passed to the \code{structureRun} function.
 #' For example you need to set the k.range and the type of model you would like
 #' to run (noadmix, locprior) etc. If those parameter names do not tell you
@@ -47,7 +48,8 @@
 #' \dontrun{
 #' #CLUMPP needs to be installed to be able to run the example
 #' #bc <- bandicoot.gl[,1:100]
-#' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = './structure.exe')
+#' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, 
+#' exec = './structure.exe')
 #' #ev <- gl.evanno(sr)
 #' #ev
 #' #qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
@@ -56,7 +58,8 @@
 #' }
 #' @import patchwork
 ### @importFrom strataG genind2gtypes structureRun
-#' @importFrom dplyr bind_rows mutate_at vars starts_with mutate group_by ungroup arrange n rename select everything n_distinct bind_rows starts_with
+#' @importFrom dplyr bind_rows mutate_at vars starts_with mutate group_by 
+#' ungroup arrange n rename select everything n_distinct bind_rows starts_with
 #' @export
 ### @seealso \code{structureRun}
 #' @references
@@ -82,7 +85,8 @@ gl.run.structure <- function(x,
             error(
                 "Package ",
                 pkg,
-                " needed for this function to work. Please install it using install.packages('devtools')."
+                " needed for this function to work. Please install it using 
+                install.packages('devtools')."
             )
         )
     }
@@ -92,9 +96,10 @@ gl.run.structure <- function(x,
         if (!structure) {
             stop(error(
                 paste(
-                    "Cannot find Structure executable in the exex path provided:\n",
+"Cannot find Structure executable in the exex path provided:\n",
                     exec,
-                    "\nCheck the help page of ?gl.run.structure on how to download and the exec parameter to locate it."
+"\nCheck the help page of ?gl.run.structure on how to download and the exec
+parameter to locate it."
                 )
             ))
         }
@@ -123,7 +128,8 @@ gl.run.structure <- function(x,
         
         ev <- utils.structure.evanno(sr)
         pa <-
-            ((ev$plots$mean.ln.k + ev$plots$mean.ln.k) / (ev$plots$ln.ppk + ev$plots$delta.k)
+            ((ev$plots$mean.ln.k + ev$plots$mean.ln.k) / (ev$plots$ln.ppk + 
+                                                            ev$plots$delta.k)
             ) + plot_theme
         
         # PRINTING OUTPUTS
@@ -141,7 +147,8 @@ gl.run.structure <- function(x,
             
             # creating temp file names
             temp_plot <-
-                tempfile(pattern = paste0("Plot", paste0(nmc, "_", mc, collapse = "_")))
+                tempfile(pattern = paste0("Plot", paste0(nmc, "_", mc,
+                                                         collapse = "_")))
             
             # saving to tempdir
             saveRDS(pa, file = temp_plot)
@@ -155,7 +162,8 @@ gl.run.structure <- function(x,
                 )
                 cat(
                     report(
-                        "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                        "  NOTE: Retrieve output files from tempdir using 
+                        gl.list.reports() and gl.print.reports()\n"
                     )
                 )
             }

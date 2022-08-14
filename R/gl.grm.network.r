@@ -11,20 +11,19 @@
 #' \code{\link{gl.grm}} [required].
 #' @param x A genlight object from which the G matrix was generated [required].
 #' @param method One of 'fr', 'kk', 'gh' or 'mds' [default 'fr'].
-#' @param node.size Size of the symbols for the network nodes [default 6].
+#' @param node.size Size of the symbols for the network nodes [default 8].
 #' @param node.label TRUE to display node labels [default TRUE].
 #' @param node.label.size Size of the node labels [default 3].
 #' @param node.label.color Color of the text of the node labels
 #' [default 'black'].
-#' @param node.alpha Alpha value for nodes [default 1].
-#' @param link.color Color for the links [default "black"].
-#' @param link.size Size of the links [default 1].
-#' @param relatedness_factor Factor of relatedness[default 0.5].
+#' @param link.color  Color palette for links [default NULL].
+#' @param link.size Size of the links [default 2].
+#' @param relatedness_factor Factor of relatedness [default 0.125].
 #' @param title Title for the plot
 #' [default 'Network based on genomic relationship matrix'].
 #' @param palette_discrete A discrete palette for the color of populations or a
 #' list with as many colors as there are populations in the dataset
-#'  [default discrete_palette].
+#'  [default NULL].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
@@ -105,13 +104,13 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' gl_test <- bandicoot.gl
-#' # five populations in gl_test
-#' nPop(gl_test)
-#' # color list for population colors
-#' pop_colors <- c('deepskyblue','green','gray','orange','deeppink')
-#' G_out <- gl.grm(gl_test,plotheatmap=FALSE)
-#' gl.grm.network(G_out, gl_test, palette_discrete = pop_colors, relatedness_factor = 0.25)
+#' t1 <- possums.gl
+#' # filtering on call rate 
+#' t1 <- gl.filter.callrate(t1)
+#' # relatedness matrix
+#' res <- gl.grm(t1,plotheatmap = FALSE)
+#' # relatedness network
+#' res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
 #'@references
 #'\itemize{
 #'\item Endelman, J. B. , Jannink, J.-L. (2012). Shrinkage estimation of the 
@@ -128,16 +127,15 @@
 gl.grm.network <- function(G,
                            x,
                            method = "fr",
-                           node.size = 6,
+                           node.size = 8,
                            node.label = TRUE,
                            node.label.size = 2,
                            node.label.color = "black",
-                           node.alpha = 1,
-                           link.color = "black",
-                           link.size = 1,
-                           relatedness_factor = 0.25,
-                           title = "Network based on a genomic relationship matrix",
-                           palette_discrete = discrete_palette,
+                           link.color = NULL,
+                           link.size = 2,
+                           relatedness_factor = 0.125,
+                  title = "Network based on a genomic relationship matrix",
+                           palette_discrete = NULL,
                            save2tmp = FALSE,
                            verbose = NULL) {
     # SET VERBOSITY
@@ -152,13 +150,15 @@ gl.grm.network <- function(G,
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
     
-    # FUNCTION SPECIFIC ERROR CHECKING Set a population if none is specified (such as if the genlight object has been generated manually)
+    # FUNCTION SPECIFIC ERROR CHECKING Set a population if none is specified 
+    # (such as if the genlight object has been generated manually)
     if (is.null(pop(x)) |
         is.na(length(pop(x))) | length(pop(x)) <= 0) {
         if (verbose >= 2) {
             cat(
                 important(
-                    "  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n"
+                    "  Population assignments not detected, individuals assigned
+                    to a single population labelled 'pop1'\n"
                 )
             )
         }
@@ -180,7 +180,7 @@ gl.grm.network <- function(G,
           method == "kk" ||
           method == "gh" || method == "mds")) {
         cat(warn(
-            "Warning: Layout method must be one of fr, or kk, gh or mds, set to fr\n"
+     "Warning: Layout method must be one of fr, or kk, gh or mds, set to fr\n"
         ))
         method <- "fr"
     }
@@ -193,11 +193,27 @@ gl.grm.network <- function(G,
     
     colnames(links) <- c("from", "to", "weight")
     
-    # using the average inbreeding coefficient (1-f) of the diagonal elements as the reference value
+    # using the average inbreeding coefficient (1-f) of the diagonal elements as
+    #the reference value
     MS <- mean(diag(G) - 1)
     
-    # the result of the GRM is the summation of the IBD of each allele . Therefore the 
+    # the result of the GRM is the summation of the IBD of each allele .
     links$kinship <- (links$weight / 2) - MS
+    
+    links_tmp <- links[,c(1,2,4)]
+    links_tmp <- rbind(links_tmp,cbind(from=indNames(x),
+                                       to=indNames(x),kinship=0))
+    links_matrix <- as.matrix(reshape2::acast(links_tmp, 
+                                              from~to, value.var="kinship"))
+    links_matrix <- apply(links_matrix, 2, as.numeric)
+    rownames(links_matrix) <- colnames(links_matrix)
+    
+    links_plot_tmp <- links_tmp[links_tmp$kinship>relatedness_factor,]
+    links_plot_2 <- links_plot_tmp[,c("from","kinship")]
+    colnames(links_plot_2) <- c("label.node","kinship")
+    links_plot_3 <- links_plot_tmp[,c("to","kinship")]
+    colnames(links_plot_3) <- c("label.node","kinship")
+    links_plot <- rbind(links_plot_2,links_plot_3)
     
     nodes <- data.frame(cbind(x$ind.names, as.character(pop(x))))
     colnames(nodes) <- c("name", "pop")
@@ -206,7 +222,6 @@ gl.grm.network <- function(G,
                                       vertices = nodes,
                                       directed = FALSE)
     
-    # q <- stats::quantile(links$weight, p = 1-alpha) network.FS <- igraph::delete_edges(network, igraph::E(network)[links$weight < q ])
     q <- relatedness_factor
     network.FS <-
         igraph::delete_edges(network, igraph::E(network)[links$kinship < q])
@@ -237,7 +252,8 @@ gl.grm.network <- function(G,
     
     # get edges, which are pairs of node IDs
     edgelist <- igraph::get.edgelist(network.FS, names = F)
-    # convert to a four column edge data frame with source and destination coordinates
+    # convert to a four column edge data frame with source and destination
+    # coordinates
     edges <-
         data.frame(plotcord[edgelist[, 1], ], plotcord[edgelist[, 2], ])
     # using kinship for the size of the edges
@@ -255,7 +271,16 @@ gl.grm.network <- function(G,
     plotcord <- merge(plotcord, pop_df, by = "label.node")
     plotcord$pop <- as.factor(plotcord$pop)
     
+    plotcord <- merge(plotcord,links_plot,by="label.node",all.x = TRUE)
+    plotcord[is.na(plotcord$kinship),"kinship"] <- 0
+    plotcord$kinship <- as.numeric(plotcord$kinship)
+    plotcord$kinship <- scales::rescale(plotcord$kinship, to = c(0.1, 1))
+    
     # assigning colors to populations
+    if(is.null(palette_discrete)){
+      palette_discrete <- discrete_palette
+    }
+    
     if (is(palette_discrete, "function")) {
         colors_pops <- palette_discrete(length(levels(pop(x))))
     }
@@ -264,23 +289,29 @@ gl.grm.network <- function(G,
         colors_pops <- palette_discrete
     }
     
-    names(colors_pops) <- as.character(levels(x$pop))
+    if(is.null(link.color)){
+      link.color <- diverging_palette
+    }
     
+    names(colors_pops) <- as.character(levels(x$pop))
+    pal <- link.color(10)
+    size <- NULL
     p1 <-
         ggplot() + 
       geom_segment(data = edges,
-                   aes( x = X1, y = Y1, xend = X2,yend = Y2), 
-                   size = link.size,
-                   color = link.color) + 
-      geom_point(data = plotcord,aes(x = X1,y = X2, color = pop), 
+                   aes( x = X1, y = Y1, xend = X2,yend = Y2,color = size),
+                   size = link.size) +
+      scale_colour_gradientn(name = "Relatedness",colours = pal) + 
+      geom_point(data = plotcord,aes(x = X1,y = X2, fill = pop), 
+                  pch = 21,
                  size = node.size,
-                 alpha = node.alpha) +
+                 alpha=plotcord$kinship) +
+      scale_fill_manual(name = "Populations", values = colors_pops)+
       coord_fixed(ratio = 1) + 
       theme_void() +
       ggtitle(paste(title, "\n[", layout.name, "]")) + 
       theme(legend.position = "bottom",
-            plot.title = element_text( hjust = 0.5, face = "bold",size = 14)) + 
-      scale_color_manual(name = "Populations", values = colors_pops)
+            plot.title = element_text( hjust = 0.5, face = "bold",size = 14)) 
     
     if (node.label == T) {
         p1 <-
@@ -315,7 +346,8 @@ gl.grm.network <- function(G,
             cat(report("  Saving the ggplot to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }
@@ -329,6 +361,6 @@ gl.grm.network <- function(G,
     
     # RETURN
     
-    invisible(p1)
+    return(invisible(list(p1,links_matrix)))
     
 }

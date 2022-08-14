@@ -56,7 +56,7 @@
 #' @examples
 #' out <- gl.report.sexlinked(testset.gl)
 #' out <- gl.report.sexlinked(testset.gs)
-#' @family reporting functions
+#' @family report functions
 #' @export
 
 gl.report.sexlinked <- function(x,
@@ -113,8 +113,10 @@ gl.report.sexlinked <- function(x,
         stop(
             error(
                 "No definition for the sex of individuals is provided. If not
-               provided via the function call it needs to be at gl@other$ind.metrics$sex.
-               Please refer to the help pages how you can define sex of individuals."
+               provided via the function call it needs to be at 
+               gl@other$ind.metrics$sex.
+               Please refer to the help pages how you can define sex of
+                individuals."
             )
         )
     }
@@ -122,8 +124,9 @@ gl.report.sexlinked <- function(x,
     if (length(sex) != nInd(x)) {
         stop(
             error(
-                "The number of individuals and the number of entries defining the
-         sex do not match. Check your genlight object and your sex defining column."
+                "The number of individuals and the number of entries defining 
+                the sex do not match. Check your genlight object and your sex 
+                defining column."
             )
         )
     }
@@ -245,45 +248,47 @@ gl.report.sexlinked <- function(x,
         if (nrow(zw) == 0 & verbose > 0) {
             cat(
                 important(
-                    "  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n"
+                    "  No sex linked markers consistent with female 
+                    heterogamety (ZZ/ZW)\n"
                 )
             )
         } else {
             if (verbose > 0) {
-                cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n\n")
+                cat("\n  Sex linked loci consistent with female heterogamety 
+                    (ZZ/ZW)\n\n")
                 cat(
                     paste(
-                        "    Threshold proportion for homozygotes in the heterozygotic sex (ZW) is",
+                        "    Threshold proportion for homozygotes in the
+                        heterozygotic sex (ZW) is",
                         t.hom,
                         "\n"
                     )
                 )
                 cat(
                     paste(
-                        "    Threshold proportion for heterozygotes in the homozygotic sex (ZZ) is",
+                        "    Threshold proportion for heterozygotes in the 
+                        homozygotic sex (ZZ) is",
                         t.het,
                         "\n\n"
                     )
                 )
-                cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat(
-                    "     - F0 is the number of homozygous loci for the reference allele in females\n"
-                )
-                cat("     - F1 is the number of heterozygous loci in females\n")
-                cat(
-                    "     - F2 is the number of homozygous loci for the alternative allele in females\n"
-                )
-                cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
-                cat("     - M1 is the number of heterozygous loci in males\n")
-                cat(
-                    "     - M2 is the number of homozygous loci for the alternative allele in males\n"
-                )
-                cat("     - fhet is heterozygosity in females\n")
-                cat("     - mhet is heterozygosity in males\n\n")
+cat("- locnr is the location of the locus in the input genlight object\n")
+cat("- F0 is the number of homozygous loci for the reference allele in 
+    females\n")
+cat("- F1 is the number of heterozygous loci in females\n")
+cat("- F2 is the number of homozygous loci for the alternative allele in 
+    females\n")
+cat("- M0 is the number of homozygous loci for the reference allele in males\n")
+cat("- M1 is the number of heterozygous loci in males\n")
+cat("- M2 is the number of homozygous loci for the alternative allele in 
+    males\n")
+cat("- fhet is heterozygosity in females\n")
+cat("- mhet is heterozygosity in males\n\n")
                 print(zw)
                 cat(
                     important(
-                        "  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"
+                        "  \nNote: The most reliable putative markers will have
+                        a read depth > 10.\n\n"
                     )
                 )
             }
@@ -292,45 +297,46 @@ gl.report.sexlinked <- function(x,
         if (nrow(xy) == 0 & verbose > 0) {
             cat(
                 important(
-                    "  No sex linked markers consistent with male heterogamety (XX/XY)\n"
+                    "  No sex linked markers consistent with male heterogamety 
+                    (XX/XY)\n"
                 )
             )
         } else {
             if (verbose > 0) {
-                cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n\n")
+                cat("\n  Sex linked loci consistent with male heterogamety 
+                    (XX/XY)\n\n")
                 cat(
                     paste(
-                        "    Threshold proportion for homozygotes in the heterozygotic sex (XY) is",
+                        "    Threshold proportion for homozygotes in the 
+                        heterozygotic sex (XY) is",
                         t.hom,
                         "\n"
                     )
                 )
                 cat(
                     paste(
-                        "    Threshold proportion for heterozygotes in the homozygotic sex (XX) is",
+ "    Threshold proportion for heterozygotes in the homozygotic sex (XX) is",
                         t.het,
                         "\n\n"
                     )
                 )
-                cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat(
-                    "     - F0 is the number of homozygous loci for the reference allele in females\n"
+cat("- locnr is the location of the locus in the input genlight object\n")
+cat("- F0 is the number of homozygous loci for the reference allele in 
+    females\n")
+cat("- F1 is the number of heterozygous loci in females\n")
+cat("- F2 is the number of homozygous loci for the alternative allele in 
+    females\n")
+cat("- M0 is the number of homozygous loci for the reference allele in males\n")
+cat("- M1 is the number of heterozygous loci in males\n")
+cat("- M2 is the number of homozygous loci for the alternative allele in 
+    males\n"
                 )
-                cat("     - F1 is the number of heterozygous loci in females\n")
-                cat(
-                    "     - F2 is the number of homozygous loci for the alternative allele in females\n"
-                )
-                cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
-                cat("     - M1 is the number of heterozygous loci in males\n")
-                cat(
-                    "     - M2 is the number of homozygous loci for the alternative allele in males\n"
-                )
-                cat("     - fhet is heterozygosity in females\n")
-                cat("     - mhet is heterozygosity in males\n\n")
+cat("- fhet is heterozygosity in females\n")
+cat("- mhet is heterozygosity in males\n\n")
                 print(xy)
                 cat(
                     important(
-                        "  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"
+"  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"
                     )
                 )
             }
@@ -383,7 +389,10 @@ gl.report.sexlinked <- function(x,
                                   alpha = 1 / 3,
                                   size = 3,
                                   color = three_colors[2]
-                              ) + xlab("Female Heterozygosity") + ylab("Male Heterozygosity") + xlim(0, 1) + ylim(0, 1) +
+                              ) + xlab("Female Heterozygosity") + 
+              ylab("Male Heterozygosity") + 
+              xlim(0, 1) + 
+              ylim(0, 1) +
                 plot_theme
             
             suppressWarnings(print(gg))
@@ -474,12 +483,14 @@ gl.report.sexlinked <- function(x,
         if (nrow(zw) == 0 & verbose > 0) {
             cat(
                 important(
-                    "  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n"
+                    "  No sex linked markers consistent with female 
+                    heterogamety (ZZ/ZW)\n"
                 )
             )
         } else {
             if (verbose > 0) {
-                cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n\n")
+                cat("\n  Sex linked loci consistent with female heterogamety 
+                    (ZZ/ZW)\n\n")
                 cat(
                     paste(
                         "    Threshold proportion for presence/absence is",
@@ -487,15 +498,16 @@ gl.report.sexlinked <- function(x,
                         "\n\n"
                     )
                 )
-                cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat("     - F0 is the number of loci absent in females\n")
-                cat("     - F1 is the number of loci present in females\n")
-                cat("     - M0 is the number of loci absent in males\n")
-                cat("     - M1 is the number of loci present in males\n\n")
+cat("- locnr is the location of the locus in the input genlight object\n")
+cat("- F0 is the number of loci absent in females\n")
+cat("- F1 is the number of loci present in females\n")
+cat("- M0 is the number of loci absent in males\n")
+cat("- M1 is the number of loci present in males\n\n")
                 print(zw)
                 cat(
                     important(
-                        "  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"
+                        "  \nNote: The most reliable putative markers will have
+                        a read depth > 10.\n\n"
                     )
                 )
             }
@@ -504,12 +516,14 @@ gl.report.sexlinked <- function(x,
             if (verbose > 0)
                 cat(
                     important(
-                        "  No sex linked markers consistent with male heterogamety (XX/XY)\n"
+                        "  No sex linked markers consistent with male 
+                        heterogamety (XX/XY)\n"
                     )
                 )
         } else {
             if (verbose > 0) {
-                cat("\n  Sex linked loci consistent with male heterogamety (XX/XY)\n\n")
+                cat("\n  Sex linked loci consistent with male heterogamety 
+                    (XX/XY)\n\n")
                 cat(
                     paste(
                         "    Threshold proportion for presence/absence is",
@@ -517,15 +531,16 @@ gl.report.sexlinked <- function(x,
                         "\n\n"
                     )
                 )
-                cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat("     - F0 is the number of loci absent in females\n")
-                cat("     - F1 is the number of loci present in females\n")
-                cat("     - M0 is the number of loci absent in males\n")
-                cat("     - M1 is the number of loci present in males\n\n")
+cat("- locnr is the location of the locus in the input genlight object\n")
+cat("- F0 is the number of loci absent in females\n")
+cat("- F1 is the number of loci present in females\n")
+cat("- M0 is the number of loci absent in males\n")
+cat("- M1 is the number of loci present in males\n\n")
                 print(xy)
                 cat(
                     important(
-                        "  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"
+                        "  \nNote: The most reliable putative markers will have 
+                        a read depth > 10.\n\n"
                     )
                 )
             }
@@ -578,7 +593,11 @@ gl.report.sexlinked <- function(x,
                                   alpha = 1 / 3,
                                   size = 3,
                                   color = three_colors[2]
-                              ) + xlab("% present in females") + ylab("% present in males") + xlim(0, 1) + ylim(0, 1) + plot_theme
+                              ) + xlab("% present in females") + 
+              ylab("% present in males") + 
+              xlim(0, 1) + 
+              ylim(0, 1) + 
+              plot_theme
             
             suppressWarnings(print(gg))
         }

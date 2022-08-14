@@ -2,9 +2,10 @@
 #'
 #' Setting theme, colors and verbosity
 #' @importFrom graphics axis barplot box image lines text
-#' @importFrom grDevices hcl
+#' @importFrom grDevices hcl col2rgb
 #' @importFrom methods new
-#' @importFrom stats dist nobs optimize pchisq variable.names optim quantile pgamma
+#' @importFrom stats dist nobs optimize pchisq variable.names optim quantile 
+#' pgamma
 #' @import ggplot2
 
 zzz <- NULL  #to create a useful named help page
