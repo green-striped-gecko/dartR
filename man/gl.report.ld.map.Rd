@@ -93,6 +93,9 @@ The function \code{\link{gl.filter.ld}} filters out the SNPs in LD using as
 input the results of \code{\link{gl.report.ld.map}}. The actual number of 
 SNPs to be filtered out depends on the parameters set in the function 
 \code{\link{gl.filter.ld}}.
+
+Boxplots of LD by population and
+a histogram showing LD frequency are presented.
 }
 \examples{
 \dontrun{

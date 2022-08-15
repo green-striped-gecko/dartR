@@ -55,6 +55,9 @@
 #' input the results of \code{\link{gl.report.ld.map}}. The actual number of 
 #' SNPs to be filtered out depends on the parameters set in the function 
 #' \code{\link{gl.filter.ld}}.
+#' 
+#' Boxplots of LD by population and
+#' a histogram showing LD frequency are presented.
 #'    
 #' @return A dataframe with information for each SNP pair in LD. 
 #' @author Custodian: Luis Mijangos -- Post to

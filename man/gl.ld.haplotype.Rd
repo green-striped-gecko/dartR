@@ -15,6 +15,7 @@ gl.ld.haplotype(
   ind.limit = 10,
   min_snps = 10,
   ld_threshold_haplo = 0.5,
+  coordinates = NULL,
   color_haplo = "viridis",
   color_het = "deeppink",
   plot.out = TRUE,
@@ -51,12 +52,16 @@ it [default 10].}
 \item{ld_threshold_haplo}{Minimum LD between adjacent SNPs to call a 
 haplotype [default 0.5].}
 
+\item{coordinates}{A vector of two elements with the start and end 
+coordinates in base pairs to which restrict the 
+analysis e.g. c(1,1000000) [default NULL].}
+
 \item{color_haplo}{Color palette for haplotype plot. See details
 [default "viridis"].}
 
 \item{color_het}{Color for heterozygosity [default "deeppink"].}
 
-\item{plot.out}{Specify if Sankey plot is to be produced [default TRUE].}
+\item{plot.out}{Specify if heatmap plot is to be produced [default TRUE].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
@@ -66,7 +71,8 @@ progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-An LD heatmap and a table with haplotypes that were identified.
+A list with LD heatmaps and a table with the haplotypes that were 
+identified.
 }
 \description{
 This function plots a Linkage disequilibrium (LD) heatmap, where the colour 
@@ -82,18 +88,21 @@ shading indicates the strength of LD. Chromosome positions (Mbp) are shown on
 containing more than \code{min_snps} SNPs.
 }
 \details{
-the
- information for SNP's position should be stored in the genlight accessor
+The information for SNP's position should be stored in the genlight accessor
   "@position" and the SNP's chromosome name in the accessor "@chromosome"
-   (see examples). The function will then calculate LD within each chromosome
+  (see examples). The function will then calculate LD within each chromosome.
    
-The output of the function includes a table with with the haplotypes
+The output of the function includes a table with the haplotypes
  that were identified and their location.
  
  Colors of the heatmap (\code{color_haplo}) are based on the function
    \code{\link[viridis]{scale_fill_viridis}} from  package \code{viridis}. 
    Other color palettes options are "magma", "inferno", "plasma", "viridis",
     "cividis", "rocket", "mako" and "turbo".
+}
+\seealso{
+Other ld functions: 
+\code{\link{gl.ld.distance}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to
