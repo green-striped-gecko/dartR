@@ -98,12 +98,11 @@ Boxplots of LD by population and
 a histogram showing LD frequency are presented.
 }
 \examples{
-\dontrun{
 x <- platypus.gl
+x <- gl.filter.callrate(x,threshold = 1)
 x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
-ld_res <- gl.report.ld.map(x,ld_max_pairwise = 1000000)
-}
+ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
 }
 \seealso{
 \code{\link{gl.filter.ld}}

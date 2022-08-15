@@ -71,8 +71,7 @@ progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-A list with LD heatmaps and a table with the haplotypes that were 
-identified.
+A table with the haplotypes that were identified.
 }
 \description{
 This function plots a Linkage disequilibrium (LD) heatmap, where the colour 
@@ -99,6 +98,14 @@ The output of the function includes a table with the haplotypes
    \code{\link[viridis]{scale_fill_viridis}} from  package \code{viridis}. 
    Other color palettes options are "magma", "inferno", "plasma", "viridis",
     "cividis", "rocket", "mako" and "turbo".
+}
+\examples{
+x <- platypus.gl
+x <- gl.filter.callrate(x,threshold = 1)
+x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
+x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
+ld_res <- gl.ld.haplotype(x,chrom_name = "NC_041728.1_chromosome_1",
+                       ld_max_pairwise = 10000000 )
 }
 \seealso{
 Other ld functions: 

@@ -58,9 +58,15 @@
 #'    \code{\link[viridis]{scale_fill_viridis}} from  package \code{viridis}. 
 #'    Other color palettes options are "magma", "inferno", "plasma", "viridis",
 #'     "cividis", "rocket", "mako" and "turbo".
-#' @return A list with LD heatmaps and a table with the haplotypes that were 
-#' identified.
+#' @return A table with the haplotypes that were identified.
 #' @family ld functions
+#' @examples 
+#' x <- platypus.gl
+#' x <- gl.filter.callrate(x,threshold = 1)
+#' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
+#' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
+#' ld_res <- gl.ld.haplotype(x,chrom_name = "NC_041728.1_chromosome_1",
+#'                        ld_max_pairwise = 10000000 )
 #' @author Custodian: Luis Mijangos -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @export
@@ -151,12 +157,14 @@ colnames(haplo_table) <-  c("population","chromosome","haplotype","start","end",
 
 chr_list <- as.character(unique(x$chromosome))
 
-p <- rep(list(as.list(rep(NA, length(chr_list)))), length(names(x_list)))
-names(p) <- names(x_list)
-p <- lapply(p, function(x) {
-  names(x) <- paste0("chr_", chr_list)
-  return(x)
-})
+p <- NULL
+
+# p <- rep(list(as.list(rep(NA, length(chr_list)))), length(names(x_list)))
+# names(p) <- names(x_list)
+# p <- lapply(p, function(x) {
+#   names(x) <- paste0("chr_", chr_list)
+#   return(x)
+# })
 
   for (pop_n in 1:length(x_list)) {
     pop_ld <- x_list[[pop_n]]
@@ -236,6 +244,13 @@ p <- lapply(p, function(x) {
       # the depth at which LD analyses are performed
       mean_dis <- mean(diff(ld_map_loci$loc_bp))
       ld_depth_b <- ceiling((ld_max_pairwise / mean_dis)) - 1
+      
+      if(ld_depth_b<5){
+        cat(warn("  The maximum distance at which LD should be calculated 
+                 (ld_max_pairwise) is too short for chromosome",chr_name,
+                 ". Setting this distance to",round(mean_dis*5,0),"bp\n" ))
+        ld_depth_b <- 5
+      }
       #function to calculate LD
       ld_snps <- snpStats::ld(genotype_loci, depth = ld_depth_b,
                               stats = ld_stat)
@@ -394,13 +409,29 @@ p <- lapply(p, function(x) {
       n_snps <- as.matrix(haplo_1_ver_2[, 1:2])
       n_snps[, 1] <- n_snps[, 1] + 1
       n_snps <- n_snps[which(n_snps[, 1] != n_snps[, 2]), ]
+      
+      if(!is.matrix(n_snps)){
+      n_snps <- as.matrix(t(n_snps))
+      }
+      
       n_snps <- n_snps[!duplicated(n_snps[, 1]), ]
+      
+      if(!is.matrix(n_snps)){
+        n_snps <- as.matrix(t(n_snps))
+      }
+      
       n_snps <- n_snps[!duplicated(n_snps[, 2]), ]
+    
       
       df.4.cut <-
         as.data.frame(table(cut(row_snp, breaks = n_snps)), stringsAsFactors =
                         FALSE)
       df.4.cut <- df.4.cut[which(df.4.cut$Freq >= min_snps), ]
+      if(nrow(df.4.cut)<1){
+        cat(warn(" No haplotypes with more than ",min_snps,"were found. 
+                 Try using a lower threshold.\n"))
+        next()
+      }
       df.4.cut_3 <- gsub("[][()]", "", df.4.cut$Var1, ",")
       df.4.cut_3 <- strsplit(df.4.cut_3, ",")
       df.4.cut_4 <- lapply(df.4.cut_3, as.numeric)
@@ -492,6 +523,8 @@ p <- lapply(p, function(x) {
       
       haplo_table <- rbind(haplo_table,haplo_table_tmp)
       
+      p_temp <- NULL
+      
       p_temp <- ggplot() +
         geom_rect(
           aes(
@@ -553,8 +586,8 @@ p <- lapply(p, function(x) {
         labs(
           x = "Chromosome location (Mbp)",
           y = "Het",
-          title = paste("Chromosome", chr_name, "-", nLoc(pop_ld), "SNPs")
-        ) +
+          title = paste("Population",pop_name,"Chromosome", chr_name, "-", nLoc(pop_ld), "SNPs")
+          ) +
         scale_x_continuous(breaks = ticks_joint$ticks_breaks,
                            labels = ticks_joint$ticks_lab) +
         scale_colour_manual(name = "", values = colors_plot) +
@@ -571,9 +604,11 @@ p <- lapply(p, function(x) {
         ) +
         coord_fixed(ratio = 1 / 1)
       
-      p[[pop_n]][[chrom]] <- p_temp
+      # p <- c(p,p_temp) 
       
-      # PRINTING OUTPUTS
+      # p[[pop_n]][[chrom]] <- p_temp
+      
+      # # PRINTING OUTPUTS
       if (plot.out) {
         print(p_temp)
       }
@@ -582,17 +617,14 @@ p <- lapply(p, function(x) {
     cat(warn("  No haplotypes were identified for chromosome",chr_name,"\n"))
         
         colors_plot <- c("Heterozygosity" = color_het)
-
-    # for an unknown reason, the name of the fill variable in the geom_polygon
-    # changes between Freq and layer. So when there is a error in displaying
-    # the graphic, the name of this variable has to be changed for it to work
+        
+        p_temp <- NULL
         
         p_temp <- ggplot() +
           geom_polygon(data = polygon_haplo.df,
                        aes(long, lat, group = group, 
                            fill = polygon_haplo.df[, 8])) +
           viridis::scale_fill_viridis(name = ld_stat, option = color_haplo) +
-          
           geom_line(
             data = snp_het_alone,
             aes(x = position, y = het, color = "Heterozygosity"),
@@ -603,7 +635,7 @@ p <- lapply(p, function(x) {
           labs(
             x = "Chromosome location (Mbp)",
             y = "Het",
-            title = paste("Chromosome", chr_name, "-", nLoc(pop_ld), "SNPs")
+            title = paste("Population",pop_name,"Chromosome", chr_name, "-", nLoc(pop_ld), "SNPs")
           ) +
           # scale_x_continuous(breaks = ticks_joint$ticks_breaks,
           #                    labels = ticks_joint$ticks_lab) +
@@ -621,7 +653,9 @@ p <- lapply(p, function(x) {
           ) +
           coord_fixed(ratio = 1 / 1)
         
-        p[[pop_n]][[chrom]] <- p_temp
+        # p <- c(p,p_temp) 
+        
+        # p[[pop_n]][[chrom]] <- p_temp
         
         # PRINTING OUTPUTS
         if (plot.out) {
@@ -631,6 +665,11 @@ p <- lapply(p, function(x) {
       }
     }
   }
+
+# # PRINTING OUTPUTS
+if (plot.out) {
+  print(p)
+}
 
 haplo_table <- haplo_table[-1,]
 print(haplo_table,row.names = FALSE)
@@ -671,6 +710,6 @@ if (verbose >= 1) {
 
 # RETURN
 
-return(invisible(list(haplo_table=haplo_table,plots=p)))
+return(invisible(haplo_table))
   
 }

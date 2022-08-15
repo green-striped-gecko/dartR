@@ -36,12 +36,12 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' t1 <- platypus.gl
-#' t1 <- gl.filter.callrate(t1,threshold = 1)
-#' t1$chromosome <- as.factor(t1$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
-#' t1$position <- t1$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
-#' res <- gl.report.ld.map(t1,ld_max_pairwise=5000000)
-#' res2 <- gl.ld.distance(res,ld_resolution=1000000)
+#' x <- platypus.gl
+#' x <- gl.filter.callrate(x,threshold = 1)
+#' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
+#' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
+#' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
+#' ld_res_2 <- gl.ld.distance(ld_res,ld_resolution=1000000)
 #' @family ld functions
 #' @export
 
