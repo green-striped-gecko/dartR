@@ -1,4 +1,6 @@
 
+<a href='http://georges.biomatix.org/dartR'><img src='man/figures/dartRlogo.png' align="right" height="180" /></a>
+
 <!-- badges: start -->
 Main repository: 
   [![](https://www.r-pkg.org/badges/version/dartR?color=blue)](https://cran.r-project.org/package=dartR)
