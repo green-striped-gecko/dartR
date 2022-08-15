@@ -1,5 +1,5 @@
 
-dartR <a href='http://georges.biomatix.org/dartR'><img src='man/figures/dartRlogo.png' align="right" height="138.5" /></a>
+<a href='http://georges.biomatix.org/dartR'><img src='man/figures/dartRlogo.png' align="right" height="138.5" /></a>
 
 <!-- badges: start -->
 Main repository: 
