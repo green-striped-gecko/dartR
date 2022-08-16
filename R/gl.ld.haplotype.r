@@ -33,10 +33,13 @@
 #' it [default 10].
 #' @param ld_threshold_haplo Minimum LD between adjacent SNPs to call a 
 #' haplotype [default 0.5].
+#' @param coordinates A vector of two elements with the start and end 
+#' coordinates in base pairs to which restrict the 
+#' analysis e.g. c(1,1000000) [default NULL]. 
 #' @param color_haplo Color palette for haplotype plot. See details
 #'  [default "viridis"].
 #' @param color_het Color for heterozygosity [default "deeppink"].
-#' @param plot.out Specify if Sankey plot is to be produced [default TRUE].
+#' @param plot.out Specify if heatmap plot is to be produced [default TRUE].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
@@ -44,21 +47,26 @@
 #' [default 2, unless specified using gl.set.verbosity].
 #'
 #' @details
-#' 
-#' the
-#'  information for SNP's position should be stored in the genlight accessor
+#' The information for SNP's position should be stored in the genlight accessor
 #'   "@@position" and the SNP's chromosome name in the accessor "@@chromosome"
-#'    (see examples). The function will then calculate LD within each chromosome
+#'   (see examples). The function will then calculate LD within each chromosome.
 #'    
-#' The output of the function includes a table with with the haplotypes
+#' The output of the function includes a table with the haplotypes
 #'  that were identified and their location.
 #'  
 #'  Colors of the heatmap (\code{color_haplo}) are based on the function
 #'    \code{\link[viridis]{scale_fill_viridis}} from  package \code{viridis}. 
 #'    Other color palettes options are "magma", "inferno", "plasma", "viridis",
 #'     "cividis", "rocket", "mako" and "turbo".
-#' @return An LD heatmap and a table with haplotypes that were identified.
+#' @return A table with the haplotypes that were identified.
 #' @family ld functions
+#' @examples 
+#' x <- platypus.gl
+#' x <- gl.filter.callrate(x,threshold = 1)
+#' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
+#' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
+#' ld_res <- gl.ld.haplotype(x,chrom_name = "NC_041728.1_chromosome_1",
+#'                        ld_max_pairwise = 10000000 )
 #' @author Custodian: Luis Mijangos -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @export
@@ -72,6 +80,7 @@ gl.ld.haplotype <- function(x,
                             ind.limit = 10,
                             min_snps = 10,
                             ld_threshold_haplo = 0.5,
+                            coordinates = NULL,
                             color_haplo = "viridis",
                             color_het = "deeppink",
                             plot.out = TRUE,
@@ -126,18 +135,39 @@ gl.ld.haplotype <- function(x,
   
   if (is.null(pop_name) == FALSE) {
     x <- gl.keep.pop(x, pop.list = pop_name, verbose = 0)
-    
   }
   
   x_list <- seppop(x)
+  
+  if(is.null(coordinates) == FALSE){
+    cat(report("  Restricting the analysis from",coordinates[1],"to",
+               coordinates[2],"base pairs\n"))
+    x_list <- lapply(x_list,function(y){
+      loc_names <- which(y$position >= coordinates[1] & 
+                           y$position <= coordinates[2])
+      y <- gl.keep.loc(y,loc.list = locNames(y)[loc_names],verbose = 0)
+      return(y)
+  })
+  }
  
 haplo_table <- as.data.frame(matrix(nrow = 1,ncol = 10))
-colnames(haplo_table) <-  c("population","chromosome","haplotype","start","end", "start_ld_plot","end_ld_plot","midpoint", "midpoint_ld_plot","labels")
+colnames(haplo_table) <-  c("population","chromosome","haplotype","start","end",
+                            "start_ld_plot","end_ld_plot","midpoint", 
+                            "midpoint_ld_plot","labels")
 
-p <- list()
-  
-  for (i in 1:length(x_list)) {
-    pop_ld <- x_list[[i]]
+chr_list <- as.character(unique(x$chromosome))
+
+p <- NULL
+
+# p <- rep(list(as.list(rep(NA, length(chr_list)))), length(names(x_list)))
+# names(p) <- names(x_list)
+# p <- lapply(p, function(x) {
+#   names(x) <- paste0("chr_", chr_list)
+#   return(x)
+# })
+
+  for (pop_n in 1:length(x_list)) {
+    pop_ld <- x_list[[pop_n]]
     pop_name <- popNames(pop_ld)
     
     if (nInd(pop_ld) <= ind.limit) {
@@ -192,8 +222,6 @@ p <- list()
     genotype <- snp_stats$genotypes
     colnames(genotype@.Data) <- ld_map$loc_bp
     
-    chr_list <- as.character(unique(ld_map$chr))
-    
     for (chrom in 1:length(chr_list)) {
       chr_name <- chr_list[chrom]
       if (verbose >= 2) {
@@ -216,6 +244,13 @@ p <- list()
       # the depth at which LD analyses are performed
       mean_dis <- mean(diff(ld_map_loci$loc_bp))
       ld_depth_b <- ceiling((ld_max_pairwise / mean_dis)) - 1
+      
+      if(ld_depth_b<5){
+        cat(warn("  The maximum distance at which LD should be calculated 
+                 (ld_max_pairwise) is too short for chromosome",chr_name,
+                 ". Setting this distance to",round(mean_dis*5,0),"bp\n" ))
+        ld_depth_b <- 5
+      }
       #function to calculate LD
       ld_snps <- snpStats::ld(genotype_loci, depth = ld_depth_b,
                               stats = ld_stat)
@@ -340,7 +375,6 @@ p <- list()
       snp_het_alone[, 2] <-
         scales::rescale(snp_het_alone[, 2], to = c(0, height_poly))
       
-      
       # identifying haplotypes
       if(any(first_row_2>ld_threshold_haplo)){
       haplo_loc_test <- first_row_2 >= ld_threshold_haplo
@@ -365,21 +399,39 @@ p <- list()
       start_haplo <- c(1, start_haplo)
       
       start_haplo_2 <- second_row_4[start_haplo]
-      start_haplo_2 <- start_haplo_2[-length(start_haplo_2)]
       end_haplo_2 <-  second_row_4[end_haplo]
+      if(length(start_haplo_2)!=length(end_haplo_2)){
+        start_haplo_2 <- start_haplo_2[-length(start_haplo_2)]
+      }
       haplo_1_ver_2 <- as.data.frame(cbind(start_haplo_2, end_haplo_2))
       haplo_1_ver_2$size <- (haplo_1_ver_2[, 2] - haplo_1_ver_2[, 1])
       
       n_snps <- as.matrix(haplo_1_ver_2[, 1:2])
       n_snps[, 1] <- n_snps[, 1] + 1
       n_snps <- n_snps[which(n_snps[, 1] != n_snps[, 2]), ]
+      
+      if(!is.matrix(n_snps)){
+      n_snps <- as.matrix(t(n_snps))
+      }
+      
       n_snps <- n_snps[!duplicated(n_snps[, 1]), ]
+      
+      if(!is.matrix(n_snps)){
+        n_snps <- as.matrix(t(n_snps))
+      }
+      
       n_snps <- n_snps[!duplicated(n_snps[, 2]), ]
+    
       
       df.4.cut <-
         as.data.frame(table(cut(row_snp, breaks = n_snps)), stringsAsFactors =
                         FALSE)
       df.4.cut <- df.4.cut[which(df.4.cut$Freq >= min_snps), ]
+      if(nrow(df.4.cut)<1){
+        cat(warn(" No haplotypes with more than ",min_snps,"were found. 
+                 Try using a lower threshold.\n"))
+        next()
+      }
       df.4.cut_3 <- gsub("[][()]", "", df.4.cut$Var1, ",")
       df.4.cut_3 <- strsplit(df.4.cut_3, ",")
       df.4.cut_4 <- lapply(df.4.cut_3, as.numeric)
@@ -453,7 +505,6 @@ p <- list()
       ticks_joint$ticks_breaks <-
         as.numeric(as.character(ticks_joint$ticks_breaks))
       
-      
       colors_plot <-
         c("Heterozygosity" = color_het,
           "Haplotypes limits" = "lightgoldenrod3")
@@ -464,12 +515,15 @@ p <- list()
       # the graphic, the name of this variable has to be changed for it to work
       
       haplo_table_tmp <- rbind(haplo_temp_a,haplo_temp_b)
-      haplo_table_tmp <- cbind(haplotype=as.numeric(rownames(haplo_table_tmp)),haplo_table_tmp)
+      haplo_table_tmp <- cbind(haplotype=as.numeric(rownames(haplo_table_tmp)),
+                               haplo_table_tmp)
       haplo_table_tmp <- haplo_table_tmp[order(haplo_table_tmp$haplotype),]
       haplo_table_tmp <- cbind(chromosome=chr_name,haplo_table_tmp)
       haplo_table_tmp <- cbind(population=pop_name,haplo_table_tmp)
       
       haplo_table <- rbind(haplo_table,haplo_table_tmp)
+      
+      p_temp <- NULL
       
       p_temp <- ggplot() +
         geom_rect(
@@ -493,7 +547,8 @@ p <- list()
           fill = "cornsilk4"
         ) +
         geom_polygon(data = polygon_haplo.df,
-                     aes(long, lat, group = group, fill = polygon_haplo.df[, 8])) +
+                     aes(long, lat, group = group, 
+                         fill = polygon_haplo.df[, 8])) +
         viridis::scale_fill_viridis(name = ld_stat, option = color_haplo) +
         geom_vline(aes(
           xintercept = c(
@@ -531,8 +586,8 @@ p <- list()
         labs(
           x = "Chromosome location (Mbp)",
           y = "Het",
-          title = paste("Chromosome", chr_name, "-", nLoc(pop_ld), "SNPs")
-        ) +
+          title = paste("Population",pop_name,"Chromosome", chr_name, "-", nLoc(pop_ld), "SNPs")
+          ) +
         scale_x_continuous(breaks = ticks_joint$ticks_breaks,
                            labels = ticks_joint$ticks_lab) +
         scale_colour_manual(name = "", values = colors_plot) +
@@ -549,25 +604,27 @@ p <- list()
         ) +
         coord_fixed(ratio = 1 / 1)
       
+      # p <- c(p,p_temp) 
       
-      p[[chrom]] <- p_temp
+      # p[[pop_n]][[chrom]] <- p_temp
       
+      # # PRINTING OUTPUTS
+      if (plot.out) {
+        print(p_temp)
+      }
       
       }else{
     cat(warn("  No haplotypes were identified for chromosome",chr_name,"\n"))
         
         colors_plot <- c("Heterozygosity" = color_het)
-
-        # for an unknown reason, the name of the fill variable in the geom_polygon
-        # changes between Freq and layer. So when there is a error in displaying
-        # the graphic, the name of this variable has to be changed for it to work
+        
+        p_temp <- NULL
         
         p_temp <- ggplot() +
           geom_polygon(data = polygon_haplo.df,
                        aes(long, lat, group = group, 
                            fill = polygon_haplo.df[, 8])) +
           viridis::scale_fill_viridis(name = ld_stat, option = color_haplo) +
-          
           geom_line(
             data = snp_het_alone,
             aes(x = position, y = het, color = "Heterozygosity"),
@@ -578,7 +635,7 @@ p <- list()
           labs(
             x = "Chromosome location (Mbp)",
             y = "Het",
-            title = paste("Chromosome", chr_name, "-", nLoc(pop_ld), "SNPs")
+            title = paste("Population",pop_name,"Chromosome", chr_name, "-", nLoc(pop_ld), "SNPs")
           ) +
           # scale_x_continuous(breaks = ticks_joint$ticks_breaks,
           #                    labels = ticks_joint$ticks_lab) +
@@ -596,13 +653,26 @@ p <- list()
           ) +
           coord_fixed(ratio = 1 / 1)
         
-        p[[chrom]] <- p_temp
+        # p <- c(p,p_temp) 
+        
+        # p[[pop_n]][[chrom]] <- p_temp
+        
+        # PRINTING OUTPUTS
+        if (plot.out) {
+          print(p_temp)
+        }
         
       }
     }
   }
-print(p)
-print(haplo_table)
+
+# # PRINTING OUTPUTS
+if (plot.out) {
+  print(p)
+}
+
+haplo_table <- haplo_table[-1,]
+print(haplo_table,row.names = FALSE)
 
 # SAVE INTERMEDIATES TO TEMPDIR creating temp file names
 if (save2tmp) {
@@ -620,7 +690,7 @@ if (save2tmp) {
     }
   }
   temp_table <- tempfile(pattern = "Table_")
-  saveRDS(list(match_call, haplo_table[-1,]), file = temp_table)
+  saveRDS(list(match_call, haplo_table), file = temp_table)
   if (verbose >= 2) {
     cat(report("  Saving tabulation to session tempfile\n"))
     cat(
@@ -640,6 +710,6 @@ if (verbose >= 1) {
 
 # RETURN
 
-return(invisible(list(p,haplo_table[-1,])))
+return(invisible(haplo_table))
   
 }

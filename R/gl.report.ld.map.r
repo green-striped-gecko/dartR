@@ -55,17 +55,19 @@
 #' input the results of \code{\link{gl.report.ld.map}}. The actual number of 
 #' SNPs to be filtered out depends on the parameters set in the function 
 #' \code{\link{gl.filter.ld}}.
+#' 
+#' Boxplots of LD by population and
+#' a histogram showing LD frequency are presented.
 #'    
 #' @return A dataframe with information for each SNP pair in LD. 
 #' @author Custodian: Luis Mijangos -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' \dontrun{
 #' x <- platypus.gl
+#' x <- gl.filter.callrate(x,threshold = 1)
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 #' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
-#' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 1000000)
-#' }
+#' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
 #' @seealso \code{\link{gl.filter.ld}}
 #' @family report functions
 #' @export

@@ -9,7 +9,6 @@ gl.filter.ld(
   ld_report,
   threshold = 0.2,
   pop.limit = ceiling(nPop(x)/2),
-  ind.limit = 10,
   verbose = NULL
 )
 }
@@ -25,9 +24,6 @@ gl.filter.ld(
 \item{pop.limit}{Minimum number of populations in which LD should be more
 than the threshold for a locus to be filtered out.
 The default value is half of the populations [default ceiling(nPop(x)/2)].}
-
-\item{ind.limit}{Minimum number of individuals that a population should
-contain to take it in account to report loci in LD [default 10].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
