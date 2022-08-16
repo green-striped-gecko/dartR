@@ -31,25 +31,25 @@ utils.outflank.plotter <- function(OFoutput,
                                    Zoom = FALSE,
                                    RightZoomFraction = 0.05,
                                    titletext = NULL) {
-    data = OFoutput$results[which(OFoutput$results$He > Hmin), ]
+    data <-OFoutput$results[which(OFoutput$results$He > Hmin), ]
     if (NoCorr) {
-        flist = data$FSTNoCorr
-        fbar = sum(data$T1NoCorr) / sum(data$T2NoCorr)
-        titletext = paste(c(titletext, "Fst without sample size correction"))
+        flist <-data$FSTNoCorr
+        fbar <-sum(data$T1NoCorr) / sum(data$T2NoCorr)
+        titletext <-paste(c(titletext, "Fst without sample size correction"))
     }
     
     if (!NoCorr) {
-        flist = data$FST
-        fbar = OFoutput$FSTbar
+        flist <-data$FST
+        fbar <-OFoutput$FSTbar
         
-        titletext = paste(c(titletext, "Fst with sample size correction"))
+        titletext <-paste(c(titletext, "Fst with sample size correction"))
     }
     
-    flist = flist[which(!is.na(flist))]
-    keeperlist = which(!data$OutlierFlag)
+    flist <-flist[which(!is.na(flist))]
+    keeperlist <-which(!data$OutlierFlag)
     
     if (!withOutliers) {
-        flist = flist[keeperlist]
+        flist <-flist[keeperlist]
     }
     
     if (Zoom) {
@@ -79,16 +79,16 @@ FstDistPlotter <- function(df,
                            FSTbar,
                            binwidth = 0.005,
                            titletext = NULL) {
-    xPlotUpperBound = ceiling(max(FSTlist) * 100) / 100
-    breakslist = seq(0, xPlotUpperBound + binwidth, by = binwidth)
-    breaks = length(breakslist)
+    xPlotUpperBound <-ceiling(max(FSTlist) * 100) / 100
+    breakslist <-seq(0, xPlotUpperBound + binwidth, by = binwidth)
+    breaks <-length(breakslist)
     
-    x = breakslist
-    y = rep(0, length(x))
+    x <-breakslist
+    y <-rep(0, length(x))
     for (i in 1:breaks)
-        y[i] = pchisq(((i - 0.5) * binwidth) / FSTbar * df, df = df) - pchisq((((i - 1.5) * binwidth)) /
+        y[i] <-pchisq(((i - 0.5) * binwidth) / FSTbar * df, df = df) - pchisq((((i - 1.5) * binwidth)) /
                                                                                   FSTbar * df, df = df)
-    y = length(FSTlist) * y
+    y <-length(FSTlist) * y
     
     hist(
         FSTlist,
@@ -111,29 +111,29 @@ FstDistPlotterZoom <- function(df,
                                binwidth = 0.005,
                                titletext = NULL,
                                RightZoomFraction = 0.1) {
-    FSTlistNoNA = FSTlist[which(!is.na(FSTlist))]
+    FSTlistNoNA <-FSTlist[which(!is.na(FSTlist))]
     
-    xPlotUpperBound = ceiling(max(FSTlistNoNA) * 100) / 100
-    xPlotLowerBound = floor(as.numeric(
+    xPlotUpperBound <-ceiling(max(FSTlistNoNA) * 100) / 100
+    xPlotLowerBound <-floor(as.numeric(
         stats::quantile(
             FSTlistNoNA,
             prob = 1 - RightZoomFraction,
             na.rm = TRUE
         )
     ) * 100) / 100
-    flist = FSTlistNoNA[which(FSTlistNoNA > xPlotLowerBound)]
+    flist <-FSTlistNoNA[which(FSTlistNoNA > xPlotLowerBound)]
     
-    breakslist = seq(xPlotLowerBound, xPlotUpperBound, by = binwidth)
-    breaks = length(breakslist)
+    breakslist <-seq(xPlotLowerBound, xPlotUpperBound, by = binwidth)
+    breaks <-length(breakslist)
     
-    x = breakslist
+    x <-breakslist
     
-    y = rep(0, length(x))
+    y <-rep(0, length(x))
     for (i in 1:breaks)
-        y[i] = pchisq((xPlotLowerBound + (i - 0.5) * binwidth) / FSTbar * df, df = df) - pchisq((xPlotLowerBound + (i - 1.5) *
+        y[i] <-pchisq((xPlotLowerBound + (i - 0.5) * binwidth) / FSTbar * df, df = df) - pchisq((xPlotLowerBound + (i - 1.5) *
                                                                                                      binwidth) / FSTbar * df, df = df)
     
-    y = length(FSTlistNoNA) * y
+    y <-length(FSTlistNoNA) * y
     
     hist(
         flist,
@@ -153,10 +153,10 @@ FstDistPlotterAddBadCurve <- function(df,
                                       FSTbar,
                                       binwidth = 0.005,
                                       RightZoomFraction = 0.99) {
-    FSTlistNoNA = FSTlist[which(!is.na(FSTlist))]
+    FSTlistNoNA <-FSTlist[which(!is.na(FSTlist))]
     
-    xPlotUpperBound = ceiling(max(FSTlistNoNA) * 100) / 100
-    xPlotLowerBound = floor(as.numeric(
+    xPlotUpperBound <-ceiling(max(FSTlistNoNA) * 100) / 100
+    xPlotLowerBound <-floor(as.numeric(
         stats::quantile(
             FSTlistNoNA,
             prob = 1 - RightZoomFraction,
@@ -164,17 +164,17 @@ FstDistPlotterAddBadCurve <- function(df,
         )
     ) * 100) / 100
     
-    breakslist = seq(xPlotLowerBound, xPlotUpperBound, by = binwidth)
-    breaks = length(breakslist)
+    breakslist <-seq(xPlotLowerBound, xPlotUpperBound, by = binwidth)
+    breaks <-length(breakslist)
     
-    x = breakslist
+    x <-breakslist
     
-    y = rep(0, length(x))
+    y <-rep(0, length(x))
     for (i in 1:breaks)
-        y[i] = pchisq((xPlotLowerBound + (i - 0.5) * binwidth) / FSTbar * df, df = df) - pchisq((xPlotLowerBound + (i - 1.5) *
+        y[i] <-pchisq((xPlotLowerBound + (i - 0.5) * binwidth) / FSTbar * df, df = df) - pchisq((xPlotLowerBound + (i - 1.5) *
                                                                                                      binwidth) / FSTbar * df, df = df)
     
-    y = length(FSTlistNoNA) * y
+    y <-length(FSTlistNoNA) * y
     
     lines(x, y, col = "red", lwd = 3)
     
@@ -191,23 +191,23 @@ OutFLANKBadCurvePlotter <- function(badDF,
                                     Zoom = FALSE,
                                     RightZoomFraction = 0.99,
                                     titletext = NULL) {
-    data = OFoutput$results[which(OFoutput$results$He > Hmin), ]
+    data <-OFoutput$results[which(OFoutput$results$He > Hmin), ]
     if (NoCorr) {
-        flist = data$FSTNoCorr
-        fbar = sum(data$T1NoCorr) / sum(data$T2NoCorr)
+        flist <-data$FSTNoCorr
+        fbar <-sum(data$T1NoCorr) / sum(data$T2NoCorr)
     }
     
     if (!NoCorr) {
-        flist = data$FST
-        fbar = OFoutput$FSTbar
+        flist <-data$FST
+        fbar <-OFoutput$FSTbar
     }
     
-    flist = flist[which(!is.na(flist))]
-    keeperlist = which(!data$OutlierFlag)
+    flist <-flist[which(!is.na(flist))]
+    keeperlist <-which(!data$OutlierFlag)
     
     
     if (!withOutliers)
-        flist = flist[keeperlist]
+        flist <-flist[keeperlist]
     
     FstDistPlotterAddBadCurve(badDF,
                               FSTlist = flist,

@@ -349,8 +349,10 @@ for (int j = 0; j < loc; j++) {
     res$other$loc.metrics <- ref
     chromosome(res) <- res$other$loc.metrics$chr_name
     position(res) <- res$other$loc.metrics$loc_bp
+    res$loc.all <- rep("0/1",nLoc(res))
     res$other$sim.vars <- s_vars
     res <- utils.reset.flags(res,verbose=0)
+    
     
     return(res)
     

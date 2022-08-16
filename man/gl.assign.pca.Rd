@@ -50,11 +50,12 @@ A next step is to consider the PCoA plot for populations where no private
 alleles have been detected and the position of the unknown in relation to the
 confidence ellipses as is plotted by this script. Note, this plot is
 considering only the top two dimensions of the ordination, and so an unknown
-lying outside the confidence ellipse can be unambiguously interpreted as it lying outside
-the confidence envelope. However, if the unknown lies inside the confidence
-ellipse in two dimensions, then it may still lie outside the confidence
-envelope in deeper dimensions. This second step is good for eliminating populations from
-consideration, but does not provide confidence in assignment.
+lying outside the confidence ellipse can be unambiguously interpreted as it 
+lying outside the confidence envelope. However, if the unknown lies inside 
+the confidence ellipse in two dimensions, then it may still lie outside the 
+confidence envelope in deeper dimensions. This second step is good for 
+eliminating populations from consideration, but does not provide confidence 
+in assignment.
 
 The third step is to consider the assignment probabilities, using the script
 gl.assign.mahalanobis(). This approach calculates the squared Generalised 
@@ -79,5 +80,6 @@ test_2 <- gl.assign.pca(test, unknown='UC_00146', plevel=0.95, verbose=3)
 }
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to 
+\url{https://groups.google.com/d/forum/dartr}
 }

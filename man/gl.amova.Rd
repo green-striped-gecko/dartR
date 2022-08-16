@@ -39,5 +39,6 @@ out <- gl.amova(bandicoot.gl, permutations=10)
 
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber (bugs? Post to 
+\url{https://groups.google.com/d/forum/dartr})
 }

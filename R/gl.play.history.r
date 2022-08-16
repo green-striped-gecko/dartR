@@ -51,7 +51,7 @@ gl.play.history <- function(x,
     
     for (i in 1:length(hist2)) {
         glhist <- hist2[[i]]
-        narg = length(glhist)
+        narg <-length(glhist)
         ll <- list()
         ll[1:(narg - 1)] <- glhist[2:narg]
         names(ll) <- names(glhist[2:narg])

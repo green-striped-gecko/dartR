@@ -49,7 +49,7 @@
 #'   gl.report.callrate(test.gs)
 #'   gl.report.callrate(test.gs,method='ind')
 #' @seealso \code{\link{gl.filter.callrate}}
-#' @family filters and filter reports
+#' @family report functions
 #' @import patchwork
 #' @export
 
@@ -101,19 +101,19 @@ gl.report.callrate <- function(x,
                 # Boxplot
                 p1 <-
                     ggplot(data.frame(callrate), aes(y = callrate)) + 
-                    geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+                    geom_boxplot(color=plot_colors[1], fill = plot_colors[2]) + 
                     coord_flip() +
                     plot_theme + 
                     xlim(range = c(-1, 1)) + 
                     ylim(min, 1) + 
                     ylab(" ") + 
-                    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+              theme(axis.text.y=element_blank(),axis.ticks.y=element_blank()) +
                     ggtitle(title1)
                 
                 # Histogram
                 p2 <-
                     ggplot(data.frame(callrate), aes(x = callrate)) +
-                    geom_histogram(bins = bins,color = plot_colors[1],fill = plot_colors[2]) +
+    geom_histogram(bins = bins,color = plot_colors[1],fill = plot_colors[2]) +
                     coord_cartesian(xlim = c(min, 1)) +
                     xlab("Call rate") +
                     ylab("Count") + 
@@ -129,18 +129,19 @@ gl.report.callrate <- function(x,
                     pop_tmp <- utils.recalc.callrate(z, verbose = 0)
                     c_rate_tmp <- pop_tmp$other$loc.metrics$CallRate
                     p_temp <-
-                        ggplot(as.data.frame(c_rate_tmp), aes(x = c_rate_tmp)) + 
-                        geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) +
+                       ggplot(as.data.frame(c_rate_tmp), aes(x = c_rate_tmp)) + 
+    geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) +
                         xlab("Call rate") + 
                         ylab("Count") +
                         coord_cartesian(xlim = c(min, 1)) +
                         plot_theme + 
                         ggtitle(paste(popNames(z), "n =", nInd(z)))
                     
-                    cat("   Population:",popNames(pop_tmp),"\n")
-                    cat("   No. of loci =", nLoc(pop_tmp), "\n")
-                    cat("   No. of individuals =", nInd(pop_tmp), "\n")
-                    cat("   Mean Call Rate",mean(pop_tmp$other$loc.metrics$CallRate,na.rm = TRUE) ,"\n\n")
+cat("   Population:",popNames(pop_tmp),"\n")
+cat("   No. of loci =", nLoc(pop_tmp), "\n")
+cat("   No. of individuals =", nInd(pop_tmp), "\n")
+cat("   Mean Call Rate",mean(pop_tmp$other$loc.metrics$CallRate,na.rm = TRUE) ,
+    "\n\n")
                     
                     return(p_temp)
                 })
@@ -198,7 +199,7 @@ gl.report.callrate <- function(x,
         
     }
     
-    ########### FOR METHOD BASED ON INDIVIDUAL Calculate the call rate by individual
+########### FOR METHOD BASED ON INDIVIDUAL Calculate the call rate by individual
     if (method == "ind") {
         ind.call.rate <- 1 - rowSums(is.na(as.matrix(x))) / nLoc(x)
         if (plot.out) {
@@ -222,13 +223,13 @@ gl.report.callrate <- function(x,
                 xlim(range = c(-1, 1)) +
                 ylim(min, 1) + 
                 ylab(" ") +
-                theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+        theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
                 ggtitle(title1)
             
             # Histogram
             p2 <-
                 ggplot(data.frame(ind.call.rate), aes(x = ind.call.rate)) + 
-                geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) +
+  geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) +
                 coord_cartesian(xlim = c(min, 1)) + 
                 xlab("Call rate") +
                 ylab("Count") +
@@ -249,7 +250,7 @@ gl.report.callrate <- function(x,
             as.matrix(x)
         )) / (nLoc(x) * nInd(x)), 2), "\n\n")
         
-        # Determine the loss of individuals for a given threshold using quantiles
+  # Determine the loss of individuals for a given threshold using quantiles
         quantile_res <-
             quantile(ind.call.rate, probs = seq(0, 1, 1 / 20))
         retained <- unlist(lapply(quantile_res, function(y) {
@@ -279,6 +280,15 @@ gl.report.callrate <- function(x,
         df <- df[order(-df$Quantile), ]
         df$Quantile <- paste0(df$Quantile, "%")
         rownames(df) <- NULL
+        
+        ind.call.rate_pop <- as.data.frame(cbind(names(ind.call.rate),
+                                                 as.character(pop(x)),
+                                                 ind.call.rate))
+        colnames(ind.call.rate_pop) <- c("ind_name","pop","missing_data")
+ind.call.rate_pop <- ind.call.rate_pop[order(ind.call.rate_pop$pop,
+                                             ind.call.rate_pop$missing_data,
+                                             decreasing = TRUE),]
+        
     }
     
     # PRINTING OUTPUTS
@@ -295,6 +305,10 @@ gl.report.callrate <- function(x,
         }
     }
     print(df)
+    cat("\n\n")
+    if (method == "ind") {
+    print(ind.call.rate_pop, row.names = FALSE)
+    }
     
     # SAVE INTERMEDIATES TO TEMPDIR
     
@@ -323,11 +337,16 @@ gl.report.callrate <- function(x,
         }
         temp_table <- tempfile(pattern = "Table_")
         saveRDS(list(match_call, df), file = temp_table)
+        if (method == "ind") {
+        temp_table_2 <- tempfile(pattern = "Table2_")
+        saveRDS(list(ind.call.rate_pop, df), file = temp_table_2)
+        }
         if (verbose >= 2) {
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

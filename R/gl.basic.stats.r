@@ -44,7 +44,9 @@ gl.basic.stats <- function(x,
     # DO THE JOB
     
     out <-
-        hierfstat::basic.stats(hierfstat::genind2hierfstat(gl2gi(x, verbose = 0)), digits = digits)
+        hierfstat::basic.stats(hierfstat::genind2hierfstat(gl2gi(x,
+                                                                 verbose = 0)), 
+                               digits = digits)
     
     # FLAG SCRIPT END
     

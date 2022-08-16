@@ -81,7 +81,7 @@ gl.read.dart <- function(filename,
                      verbosity = verbose)
     
     if (verbose == 0) {
-        probar = FALSE
+        probar <-FALSE
     }
     
     # DO THE JOB
@@ -103,7 +103,7 @@ gl.read.dart <- function(filename,
         )
     glout <-
         utils.dart2genlight(
-            dout,
+          dart= dout,
             ind.metafile = ind.metafile,
             probar = probar,
             verbose = verbose
