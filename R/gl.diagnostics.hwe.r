@@ -79,14 +79,8 @@
 #' @author Custodian: Carlo Pacioni -- Post to
 #'   \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-<<<<<<< HEAD
-#' \donttest{
-#' res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]),n.cores=1)
-#' }
-=======
 #' res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]), 
 #' stdErr=FALSE, n.cores=1)
->>>>>>> 9e85f3a5bfa6c175ce1fe7074f80707af20c9737
 #' @references \itemize{ 
 #' \item de Meeûs, T., McCoy, K.D., Prugnolle, F.,
 #' Chevillon, C., Durand, P., Hurtrez-Boussès, S., Renaud, F., 2007. Population
