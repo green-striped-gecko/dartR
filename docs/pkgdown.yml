@@ -1,0 +1,10 @@
+pandoc: '2.18'
+pkgdown: 2.0.3
+pkgdown_sha: ~
+articles:
+  dartRTutorials: dartRTutorials.html
+last_built: 2022-06-08T06:25Z
+urls:
+  reference: https://green-striped-gecko.github.io/dartR/reference
+  article: https://green-striped-gecko.github.io/dartR/articles
+
