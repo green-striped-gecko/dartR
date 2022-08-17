@@ -44,9 +44,6 @@ jobs:
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
-        
-      - name: Install spatial dependencies
-        run: sudo apt-get install libgdal-dev libproj-dev libgeos-dev libudunits2-dev netcdf-bin
 
       - name: Restore R package cache
         if: runner.os != 'Windows'
@@ -63,10 +60,13 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+          sudo apt-get install libgdal-dev libproj-dev libgeos-dev libudunits2-dev netcdf-bin
+
       - name: Install macos dependiencies
         if: runner.os == 'macOS'
         run: |
           install.packages("rgdal", type="binary")
+          install.packages("sf")
           install.packages("Rcpp")
           install.packages('raster', repos='https://rspatial.r-universe.dev')
           install.packages('terra', repos='https://rspatial.r-universe.dev')
