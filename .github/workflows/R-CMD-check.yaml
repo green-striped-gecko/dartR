@@ -65,6 +65,7 @@ jobs:
       - name: Install macos dependiencies
         if: runner.os == 'macOS'
         run: |
+          brew install gdal proj geos
           install.packages("rgdal")
           install.packages("sf")
           install.packages("Rcpp")
