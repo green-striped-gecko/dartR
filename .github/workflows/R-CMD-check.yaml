@@ -65,16 +65,10 @@ jobs:
       - name: Install macos dependiencies
         if: runner.os == 'macOS'
         run: |
-          install.packages("rgdal")
-          install.packages("sf")
-          install.packages("Rcpp")
-          install.packages('raster', repos='https://rspatial.r-universe.dev')
-          install.packages('terra', repos='https://rspatial.r-universe.dev')
-        shell: Rscript {0}
+          brew install gdal proj geos
           
       - name: Install dependencies
         run: |
-
           options(repos = c(CRAN = "https://cloud.r-project.org/"
           ))
           remotes::install_deps(dependencies = TRUE)
