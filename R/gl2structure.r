@@ -57,7 +57,7 @@ gl2structure <- function(x,
     
     nInd <- nInd(x)
     if (is.null(indNames)) {
-        indNames = indNames(x)
+        indNames <-indNames(x)
     }
     
     if (length(indNames) != nInd) {

@@ -18,6 +18,7 @@
 #' @export
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
+#' @family filter functions
 #' @examples
 #' # SNP data
 #'   gl.report.taglength(testset.gl)
@@ -49,14 +50,17 @@ gl.filter.taglength <- function(x,
     if (length(x@other$loc.metrics$TrimmedSequence) != nLoc(x)) {
         stop(
             error(
-                "Fatal Error: Data must include Trimmed Sequences for each loci in a column called 'TrimmedSequence' in the @other$loc.metrics slot.\n"
+                "Fatal Error: Data must include Trimmed Sequences for each loci
+                in a column called 'TrimmedSequence' in the @other$loc.metrics
+                slot.\n"
             )
         )
     }
     if (upper < lower) {
         cat(
             warn(
-                "  Warning: Parameter 'upper' must be greater than parameter 'lower', swapping\n"
+                "  Warning: Parameter 'upper' must be greater than parameter 
+                'lower', swapping\n"
             )
         )
         tmp <- upper
@@ -66,7 +70,8 @@ gl.filter.taglength <- function(x,
     if (lower < 0 | lower > 250) {
         cat(
             warn(
-                "  Warning: Parameter 'verbose' must be an integer between 0 and 250 , set to 20\n"
+                "  Warning: Parameter 'verbose' must be an integer between 0 and
+                250 , set to 20\n"
             )
         )
         lower <- 20
@@ -74,7 +79,8 @@ gl.filter.taglength <- function(x,
     if (upper < 0 | upper > 250) {
         cat(
             warn(
-                "  Warning: Parameter 'upper' must be an integer between 0 and 250 , set to 69\n"
+                "  Warning: Parameter 'upper' must be an integer between 0 and
+                250 , set to 69\n"
             )
         )
         upper <- 69

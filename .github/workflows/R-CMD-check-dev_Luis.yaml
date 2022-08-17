@@ -63,6 +63,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           install.packages("rgdal", type="binary")
+          install.packages('dismo', repos='https://rspatial.r-universe.dev')
         shell: Rscript {0}
           
       - name: Install dependencies

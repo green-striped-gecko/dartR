@@ -1,7 +1,7 @@
 #' @name gl.grm
 #' @title Calculates an identity by descent matrix
 #' @description
-#' This function calculates the mean probability of identity by descent (IBD)
+#' This function calculates the mean probability of identity by state (IBS)
 #' across loci that would result from all the possible crosses of the
 #' individuals analyzed. IBD is calculated by an additive relationship matrix
 #' approach developed by Endelman and Jannink (2012) as implemented in the
@@ -59,7 +59,7 @@ gl.grm <- function(x,
                    palette_discrete = discrete_palette,
                    palette_convergent = convergent_palette,
                    legendx = 0,
-                   legendy = 1,
+                   legendy = 0.5,
                    verbose = NULL,
                    ...) {
     # SET VERBOSITY

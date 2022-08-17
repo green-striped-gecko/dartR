@@ -14,7 +14,8 @@
 #' @details
 #' Because this filter operates on call rate, this function recalculates Call
 #' Rate, if necessary, before filtering. If individuals are removed using
-#' method='ind', then the call rate stored in the genlight object is, optionally,
+#' method='ind', then the call rate stored in the genlight object is, 
+#' optionally,
 #' recalculated after filtering.
 #'
 #' Note that when filtering individuals on call rate, the initial call rate is
@@ -40,7 +41,8 @@
 #'
 #' @param x Name of the genlight object containing the SNP data, or the genind
 #'  object containing the SilocoDArT data [required].
-#' @param method Use method='loc' to specify that loci are to be filtered, 'ind' to specify
+#' @param method Use method='loc' to specify that loci are to be filtered, 'ind'
+#'  to specify
 #' that specimens are to be filtered, 'pop' to remove loci that fail to meet the
 #'  specified threshold in any one population [default 'loc'].
 #' @param threshold Threshold value below which loci will be removed
@@ -70,13 +72,19 @@
 #'
 #' @examples
 #' # SNP data
-#'   result <- gl.filter.callrate(testset.gl[1:10], method='loc', threshold=0.8, verbose=3)
-#'   result <- gl.filter.callrate(testset.gl[1:10], method='ind', threshold=0.8, verbose=3)
-#'   result <- gl.filter.callrate(testset.gl[1:10], method='pop', threshold=0.8, verbose=3)
+#'   result <- gl.filter.callrate(testset.gl[1:10], method='loc', threshold=0.8,
+#'    verbose=3)
+#'   result <- gl.filter.callrate(testset.gl[1:10], method='ind', threshold=0.8,
+#'    verbose=3)
+#'   result <- gl.filter.callrate(testset.gl[1:10], method='pop', threshold=0.8,
+#'    verbose=3)
 #' # Tag P/A data
-#'   result <- gl.filter.callrate(testset.gs[1:10], method='loc', threshold=0.95, verbose=3)
-#'   result <- gl.filter.callrate(testset.gs[1:10], method='ind', threshold=0.8, verbose=3)
-#'   result <- gl.filter.callrate(testset.gs[1:10], method='pop', threshold=0.8, verbose=3)
+#'   result <- gl.filter.callrate(testset.gs[1:10], method='loc', 
+#'   threshold=0.95, verbose=3)
+#'   result <- gl.filter.callrate(testset.gs[1:10], method='ind', 
+#'   threshold=0.8, verbose=3)
+#'   result <- gl.filter.callrate(testset.gs[1:10], method='pop', 
+#'   threshold=0.8, verbose=3)
 #'
 #' @seealso \code{\link{gl.report.callrate}}
 #' @family filter functions
@@ -114,13 +122,14 @@ gl.filter.callrate <- function(x,
         if (verbose >= 2) {
             cat(
                 warn(
-                    "  Warning: Data may include monomorphic loci in call rate calculations for filtering\n"
+                    "  Warning: Data may include monomorphic loci in call rate 
+                    calculations for filtering\n"
                 )
             )
         }
     }
     
-    # Check call rate up to date if (x@other$loc.metrics.flags$CallRate == FALSE){
+  # Check call rate up to date if (x@other$loc.metrics.flags$CallRate == FALSE){
     if (verbose >= 2) {
         cat(report("  Recalculating Call Rate\n"))
     }
@@ -129,14 +138,15 @@ gl.filter.callrate <- function(x,
     
     # Suppress plotting on verbose == 0
     if (verbose == 0) {
-        plot.out = FALSE
+        plot.out <-FALSE
     }
     
     # Method
     if (method != "ind" & method != "loc" & method != "pop") {
         cat(
             warn(
-                "    Warning: method must be either \"loc\" or \"ind\" or \"pop\", set to \"loc\" \n"
+"    Warning: method must be either \"loc\" or \"ind\" or \"pop\", set to 
+\"loc\" \n"
             )
         )
         method <- "loc"
@@ -145,7 +155,7 @@ gl.filter.callrate <- function(x,
     # Threshold
     if (threshold < 0 | threshold > 1) {
         cat(warn(
-            "    Warning: threshold must be an integer between 0 and 1, set to 0.95\n"
+"    Warning: threshold must be an integer between 0 and 1, set to 0.95\n"
         ))
         threshold <- 0.95
     }
@@ -167,7 +177,8 @@ gl.filter.callrate <- function(x,
         }
         n0 <- nLoc(x)
         
-        # Remove loci with NA count <= 1-threshold index <- colMeans(is.na(as.matrix(x))) < threshold
+        # Remove loci with NA count <= 1-threshold index <- 
+        #colMeans(is.na(as.matrix(x))) < threshold
         index <- x@other$loc.metrics$CallRate >= threshold
         x2 <- x[, index]
         x2@other$loc.metrics <- x@other$loc.metrics[index,]
@@ -220,10 +231,11 @@ gl.filter.callrate <- function(x,
             x2 <- gl.filter.monomorphs(x2, verbose = 0)
         }
         if (recalc) {
-            # Recalculate all metrics, including Call Rate (flags reset in utils scripts)
+ # Recalculate all metrics, including Call Rate (flags reset in utils scripts)
             x2 <- gl.recalc.metrics(x2, verbose = verbose)
         } else {
-            # Reset the flags as FALSE for all metrics except Call Rate (dealt with elsewhere)
+# Reset the flags as FALSE for all metrics except Call Rate (dealt with 
+          #elsewhere)
             x2@other$loc.metrics.flags$AvgPIC <- FALSE
             x2@other$loc.metrics.flags$OneRatioRef <- FALSE
             x2@other$loc.metrics.flags$OneRatioSnp <- FALSE
@@ -301,10 +313,11 @@ gl.filter.callrate <- function(x,
                         x2 <- gl.filter.monomorphs(x2, verbose = 0)
                     }
                     if (recalc) {
-                        # Recalculate all metrics, including Call Rate (flags reset in utils scripts)
+# Recalculate all metrics, including Call Rate (flags reset in utils scripts)
                         x2 <- gl.recalc.metrics(x2, verbose = verbose)
                     } else {
-                        # Reset the flags as FALSE for all metrics except Call Rate (dealt with elsewhere)
+# Reset the flags as FALSE for all metrics except Call Rate (dealt with 
+                      #elsewhere)
                         x2@other$loc.metrics.flags$AvgPIC <- FALSE
                         x2@other$loc.metrics.flags$OneRatioRef <- FALSE
                         x2@other$loc.metrics.flags$OneRatioSnp <- FALSE
@@ -329,7 +342,8 @@ gl.filter.callrate <- function(x,
                     report(
                         "Recursively removing individuals with call rate <",
                         threshold,
-                        ", recalculating Call Rate after deleting monomorphs, and repeating until final Call Rate is >=",
+                        ", recalculating Call Rate after deleting monomorphs,
+                        and repeating until final Call Rate is >=",
                         threshold,
                         "\n"
                     )
@@ -338,14 +352,16 @@ gl.filter.callrate <- function(x,
             for (i in 1:10) {
                 # Recalculate the callrate
                 ind.call.rate <- 1 - rowSums(is.na(as.matrix(x))) / nLoc(x)
-                # Extract those individuals with a call rate greater or equal to the threshold
+                # Extract those individuals with a call rate greater or equal to
+                #the threshold
                 x2 <- x[ind.call.rate >= threshold,]
                 
                 if (nInd(x2) == nInd(x)) {
                     break
                 }
                 
-                # for some reason that eludes me, this also (appropriately) filters the latlons and the covariates, but see above for
+                # for some reason that eludes me, this also (appropriately)
+                #filters the latlons and the covariates, but see above for
                 # locus filtering
                 if (verbose > 2) {
                     cat(
@@ -368,7 +384,7 @@ gl.filter.callrate <- function(x,
                         if (verbose >= 3) {
                             cat(
                                 report(
-                                    "  List of individuals deleted (CallRate <= ",
+                   "  List of individuals deleted (CallRate <= ",
                                     threshold,
                                     ":\n"
                                 )
@@ -390,11 +406,12 @@ gl.filter.callrate <- function(x,
                                 gl.filter.monomorphs(x2, verbose = 0)
                         }
                         if (recalc) {
-                            # Recalculate all metrics, including Call Rate (flags reset in utils scripts)
+# Recalculate all metrics, including Call Rate (flags reset in utils scripts)
                             x2 <-
                                 gl.recalc.metrics(x2, verbose = verbose)
                         } else {
-                            # Reset the flags as FALSE for all metrics except Call Rate (dealt with elsewhere)
+# Reset the flags as FALSE for all metrics except Call Rate (dealt with
+                          #elsewhere)
                             x2@other$loc.metrics.flags$AvgPIC <- FALSE
                             x2@other$loc.metrics.flags$OneRatioRef <- FALSE
                             x2@other$loc.metrics.flags$OneRatioSnp <- FALSE
@@ -457,7 +474,8 @@ gl.filter.callrate <- function(x,
         if (verbose >= 2) {
             cat(
                 report(
-                    "  Removing loci based on Call Rate by population\n    Call Rate must be equal to or exceed threshold =",
+                    "  Removing loci based on Call Rate by population\n  
+                    Call Rate must be equal to or exceed threshold =",
                     threshold,
                     "in all populations\n"
                 )
@@ -528,10 +546,11 @@ gl.filter.callrate <- function(x,
             x2 <- gl.filter.monomorphs(x2, verbose = 0)
         }
         if (recalc) {
-            # Recalculate all metrics, including Call Rate (flags reset in utils scripts)
+# Recalculate all metrics, including Call Rate (flags reset in utils scripts)
             x2 <- gl.recalc.metrics(x2, verbose = verbose)
         } else {
-            # Reset the flags as FALSE for all metrics except Call Rate (dealt with elsewhere)
+# Reset the flags as FALSE for all metrics except Call Rate (dealt with 
+          #elsewhere)
             x2@other$loc.metrics.flags$AvgPIC <- FALSE
             x2@other$loc.metrics.flags$OneRatioRef <- FALSE
             x2@other$loc.metrics.flags$OneRatioSnp <- FALSE
@@ -586,11 +605,11 @@ gl.filter.callrate <- function(x,
                 if (!recursive) {
                     cat(
                         warn(
-                            "  Warning: Some individuals with a Call Rate initially >=",
+"  Warning: Some individuals with a Call Rate initially >=",
                             threshold,
                             "may have a final CallRate lower than",
                             threshold,
-                            "when call rate is recalculated after removing resultant monomorphic loci\n"
+"when call rate is recalculated after removing resultant monomorphic loci\n"
                         )
                     )
                 }
@@ -615,7 +634,8 @@ gl.filter.callrate <- function(x,
             cat(report("  Saving ggplot(s) to the session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

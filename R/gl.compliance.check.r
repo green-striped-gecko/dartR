@@ -86,7 +86,8 @@ gl.compliance.check <- function(x,
             if (verbose >= 1) {
                 cat(
                     error(
-                        "    Error: SNP data must be scored NA, 0 or 1 or 2, revisit data input\n"
+                        "    Error: SNP data must be scored NA, 0 or 1 or 2, 
+                        revisit data input\n"
                     )
                 )
             }
@@ -101,7 +102,8 @@ gl.compliance.check <- function(x,
             if (verbose >= 1) {
                 cat(
                     report(
-                        "    Tag P/A data (SilicoDArT) scored 1, 0 (present or absent) confirmed\n"
+                        "    Tag P/A data (SilicoDArT) scored 1, 0 (present or 
+                        absent) confirmed\n"
                     )
                 )
             }
@@ -109,7 +111,8 @@ gl.compliance.check <- function(x,
             if (verbose >= 1) {
                 cat(
                     error(
-                        "    Error: Tag P/A data (SilicoDArT) must be scored NA for missing, 0 for absent or 1 for present, revisit data input\n"
+               "    Error: Tag P/A data (SilicoDArT) must be scored NA
+              for missing, 0 for absent or 1 for present, revisit data input\n"
                     )
                 )
             }
@@ -170,7 +173,10 @@ gl.compliance.check <- function(x,
     if (nLoc(x) != nrow(x@other$loc.metrics)) {
         cat(
             warn(
-                "  The number of rows in the loc.metrics table does not match the number of loci! This is potentially a major problem if there is a mismatch of the loci with the metadata. Trace back to identify the cause.\n"
+                "  The number of rows in the loc.metrics table does not match 
+                the number of loci! This is potentially a major problem if there
+                is a mismatch of the loci with the metadata. Trace back to 
+                identify the cause.\n"
             )
         )
     }
@@ -185,7 +191,8 @@ gl.compliance.check <- function(x,
         if (verbose >= 2) {
             cat(
                 warn(
-                    "  Individual names are not unique. Appending an extra number to make them unique.\n"
+                    "  Individual names are not unique. Appending an extra 
+                    number to make them unique.\n"
                 )
             )
         }
@@ -224,7 +231,8 @@ gl.compliance.check <- function(x,
         if (verbose >= 1) {
             cat(
                 warn(
-                    "  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n"
+                    "  Population assignments not detected, individuals assigned
+                    to a single population labelled 'pop1'\n"
                 )
             )
         }
@@ -241,7 +249,7 @@ gl.compliance.check <- function(x,
         x@other$latlon <- x@other$latlong
     }
     
-    if (!is.null(x@other$latlon) | !is.null(x@other$latlon$long)) {
+    if (!is.null(x@other$latlon$long)) {
         x@other$latlon$lon <- x@other$latlon$long
     }
     
@@ -250,7 +258,8 @@ gl.compliance.check <- function(x,
     x@other$latlon$long <- NULL
     if (verbose >= 2) {
         cat(report(
-            "  Spelling of coordinates checked and changed if necessary to lat/lon\n"
+            "  Spelling of coordinates checked and changed if necessary to 
+            lat/lon\n"
         ))
     }
     

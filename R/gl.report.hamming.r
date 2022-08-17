@@ -52,7 +52,8 @@
 #'  }
 #'
 #' @return Returns unaltered genlight object
-#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to 
+#' \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
 #' gl.report.hamming(testset.gl[,1:100])
@@ -60,7 +61,7 @@
 #'
 #' @seealso \code{\link{gl.filter.hamming}}
 #'
-#' @family filters and filter reports
+#' @family report functions
 #' @importFrom stats sd
 #' @import patchwork
 #' @export
@@ -96,8 +97,9 @@ gl.report.hamming <- function(x,
     if (rs < 0 | rs > taglength) {
         stop(
             error(
-                "Fatal Error: Length of restriction enzyme recognition sequence must be greater than zero,
-                   and less that the maximum length of a sequence tag; usually it is less than 9\n"
+                "Fatal Error: Length of restriction enzyme recognition sequence
+                must be greater than zero, and less that the maximum length of a
+                sequence tag; usually it is less than 9\n"
             )
         )
     }
@@ -126,19 +128,21 @@ gl.report.hamming <- function(x,
     if (verbose >= 3) {
         cat(
             report(
-                "  Hamming distance ranges from zero (sequence identity) to 1 (no bases shared at any position)\n"
+                "  Hamming distance ranges from zero (sequence identity) to 1 
+                (no bases shared at any position)\n"
             )
         )
     }
     if (verbose >= 2) {
         cat(
             report(
-                "  Calculating pairwise Hamming distances between trimmed Reference sequence tags\n"
+                "  Calculating pairwise Hamming distances between trimmed 
+                Reference sequence tags\n"
             )
         )
     }
     
-    count = 0
+    count <-0
     nL <- nLoc(x)
     d <- rep(NA, (((nL - 1) * nL) / 2))
     
@@ -155,11 +159,13 @@ gl.report.hamming <- function(x,
     # get title for plots
     if (datatype == "SNP") {
         title <-
-            paste0("SNP data (DArTSeq)\nPairwise Hamming Distance between sequence tags")
+            paste0("SNP data (DArTSeq)\nPairwise Hamming Distance between 
+                   sequence tags")
     } else {
         title <-
             paste0(
-                "Fragment P/A data (SilicoDArT)\nPairwise Hamming Distance between sequence tags"
+                "Fragment P/A data (SilicoDArT)\nPairwise Hamming Distance 
+                between sequence tags"
             )
     }
     
@@ -167,7 +173,8 @@ gl.report.hamming <- function(x,
         if (plot.out) {
             cat(
                 report(
-                    "  Plotting boxplot and histogram of Hamming distance, showing a threshold of",
+                    "  Plotting boxplot and histogram of Hamming distance, 
+                    showing a threshold of",
                     threshold,
                     "bp [HD",
                     round(tld, 2),
@@ -179,27 +186,32 @@ gl.report.hamming <- function(x,
     
     # Boxplot
     p1 <-
-        ggplot(as.data.frame(d), aes(y = d)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + geom_hline(yintercept = tld,
-                                                                                                                        color = "red",
-                                                                                                                        size = 1) + coord_flip() + plot_theme + xlim(range = c(-1, 1)) + ylim(0, 1) + ylab(" ") + theme(axis.text.y = element_blank(),
-                                                                                                                                                                                                                        axis.ticks.y = element_blank()) + ggtitle(title)
+        ggplot(as.data.frame(d), aes(y = d)) +
+      geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+      geom_hline(yintercept = tld,color = "red", size = 1) + 
+      coord_flip() + 
+      plot_theme + 
+      xlim(range = c(-1, 1)) + 
+      ylim(0, 1) +
+      ylab(" ") + 
+      theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
+      ggtitle(title)
     
     # Histogram
     p2 <-
-        ggplot(as.data.frame(d), aes(x = d)) + geom_histogram(bins = 50,
-                                                              color = plot_colors[1],
-                                                              fill = plot_colors[2]) + geom_vline(xintercept = tld,
-                                                                                                  color = "red",
-                                                                                                  size = 1) + coord_cartesian(xlim = c(0, 1)) + xlab("Hamming distance") + ylab("Count") + annotate(
-                                                                                                      geom = "text",
-                                                                                                      x = tld +
-                                                                                                          0.2,
-                                                                                                      y = max(graphics::hist(
-                                                                                                          d, breaks = seq(0, 1, by = 1 / 50), plot = FALSE
-                                                                                                      )$counts) * 0.75,
-                                                                                                      label = paste("Threshold of\n", threshold,
-                                                                                                                    "bp [HD", round(tld, 2), "]")
-                                                                                                  ) + plot_theme
+        ggplot(as.data.frame(d), aes(x = d)) + 
+      geom_histogram(bins = 50, color = plot_colors[1],fill = plot_colors[2]) +
+      geom_vline(xintercept = tld,color = "red",size = 1) + 
+      coord_cartesian(xlim = c(0, 1)) +
+      xlab("Hamming distance") +
+      ylab("Count") + 
+      annotate(geom = "text", 
+               x = tld + 0.2, 
+               y = max(graphics::hist(d, breaks = seq(0, 1, by = 1 / 50),
+                                      plot = FALSE)$counts) * 0.75,
+               label = paste("Threshold of\n", threshold,
+                             "bp [HD", round(tld, 2), "]")) + 
+      plot_theme
     
     cat("    No. of loci =", nLoc(x), "\n")
     cat("    No. of individuals =", nInd(x), "\n")
@@ -281,7 +293,8 @@ gl.report.hamming <- function(x,
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

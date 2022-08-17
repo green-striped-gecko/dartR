@@ -62,6 +62,27 @@ For all indexes, the entropies (H) and corresponding effective
 
 \strong{ Function's output }
 
+If the function's parameter "table" = "DH" (the default value) is used, the 
+ output of the function is 20 tables.
+
+The first two show the number of loci used. The name of each of the rest of 
+the tables starts with three terms separated by underscores.
+
+The first term refers to the q value (0 to 2).
+
+The second term refers to whether it is the diversity measure (H) or its 
+transformation to Hill numbers (D). 
+
+The third term refers to whether the diversity is calculated within 
+populations (alpha) or between populations (beta). 
+
+In the case of alpha diversity tables, standard deviations have their own 
+table, which finishes with a fourth term: "sd".
+
+In the case of beta diversity tables, standard deviations are in the upper 
+triangle of the matrix and diversity values are in the lower triangle of the 
+matrix.
+
  Plots are saved to the temporal directory (tempdir) and can be accessed with
   the function \code{\link{gl.print.reports}} and listed with the function
    \code{\link{gl.list.reports}}. Note that they can be accessed only in the
@@ -86,16 +107,27 @@ Broadens the Spectrum of Molecular Ecology and Evolution. TREE 32(12)
  948-963. doi:10.1016/j.tree.2017.09.12
 }
 \seealso{
-Other reporting functions: 
-\code{\link{gl.diagnostics.hwe}()},
+Other report functions: 
 \code{\link{gl.report.bases}()},
+\code{\link{gl.report.callrate}()},
+\code{\link{gl.report.hamming}()},
 \code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.hwe}()},
+\code{\link{gl.report.ld.map}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.parent.offspring}()},
 \code{\link{gl.report.pa}()},
-\code{\link{gl.report.sexlinked}()}
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.sexlinked}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr}),
  Contributors: William B. Sherwin, Alexander Sentinella
 }
-\concept{reporting functions}
+\concept{report functions}

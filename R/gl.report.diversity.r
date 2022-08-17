@@ -36,6 +36,27 @@
 #'
 #'\strong{ Function's output }
 #'
+#' If the function's parameter "table" = "DH" (the default value) is used, the 
+#'  output of the function is 20 tables.
+#'
+#'The first two show the number of loci used. The name of each of the rest of 
+#'the tables starts with three terms separated by underscores.
+#'
+#'The first term refers to the q value (0 to 2).
+#'
+#'The second term refers to whether it is the diversity measure (H) or its 
+#'transformation to Hill numbers (D). 
+#'
+#'The third term refers to whether the diversity is calculated within 
+#'populations (alpha) or between populations (beta). 
+#'
+#'In the case of alpha diversity tables, standard deviations have their own 
+#'table, which finishes with a fourth term: "sd".
+#'
+#'In the case of beta diversity tables, standard deviations are in the upper 
+#'triangle of the matrix and diversity values are in the lower triangle of the 
+#'matrix.
+#'
 #'  Plots are saved to the temporal directory (tempdir) and can be accessed with
 #'   the function \code{\link{gl.print.reports}} and listed with the function
 #'    \code{\link{gl.list.reports}}. Note that they can be accessed only in the
@@ -59,7 +80,7 @@
 #' div$two_H_beta
 #' names(div)
 #'
-#' @family reporting functions
+#' @family report functions
 #'
 #' @references
 #'Sherwin, W.B., Chao, A., Johst, L., Smouse, P.E. (2017). Information Theory
@@ -177,10 +198,6 @@ gl.report.diversity <- function(x,
         mat_shannon <- mat[c("A", "B"), ]
         
         dummys <- apply(mat_shannon, 2, shannon)
-        
-        # p <- (2 * p + hets) / 2 q <- (2 * q + hets) / 2 total <- colSums(mat,na.rm = T) p <- colMeans(as.matrix(x), na.rm = T)/2 p <-
-        # p[!is.na(p)] #ignore loci with just missing data logp <- ifelse(!is.finite(log(p)), 0, log(p)) log1_p <- ifelse(!is.finite(log(1
-        # - p)), 0, log(1 - p)) dummys <- -(p * logp + (1 - p) * log1_p)
         
         return(list(
             estH = mean(dummys),
@@ -346,8 +363,9 @@ gl.report.diversity <- function(x,
             tt <- table(c(i0, i1, i2))
             index <- as.numeric(names(tt)[tt == 3])
             dummys <-
-                one_H_alpha_all[i0 %in% index] - (one_H_alpha_es[[x[1]]]$dummys[i1 %in% index] + one_H_alpha_es[[x[2]]]$dummys[i2 %in%
-                                                                                                                                   index]) / 2
+                one_H_alpha_all[i0 %in% index] - 
+              (one_H_alpha_es[[x[1]]]$dummys[i1 %in% index] + 
+                 one_H_alpha_es[[x[2]]]$dummys[i2 %in% index]) / 2
             return(list(
                 estH = mean(dummys),
                 sdH = sd(dummys),
@@ -400,10 +418,12 @@ gl.report.diversity <- function(x,
             index <- as.numeric(names(tt)[tt == 3])
             
             m2Ha <-
-                (two_H_alpha_es[[x[1]]]$dummys[i1 %in% index] + two_H_alpha_es[[x[2]]]$dummys[i2 %in% index]) /
+                (two_H_alpha_es[[x[1]]]$dummys[i1 %in% index] + 
+                   two_H_alpha_es[[x[2]]]$dummys[i2 %in% index]) /
                 2
             dummys <-
-                ((two_H_alpha_all[i0 %in% index] - m2Ha) / (1 - m2Ha)) * (npops / (npops - 1))
+                ((two_H_alpha_all[i0 %in% index] - m2Ha) / 
+                   (1 - m2Ha)) * (npops / (npops - 1))
             return(list(
                 estH = mean(dummys),
                 sdH = sd(dummys),
@@ -602,7 +622,8 @@ gl.report.diversity <- function(x,
             cat(report("  Saving ggplot(s) to the session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

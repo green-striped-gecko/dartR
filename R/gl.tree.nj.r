@@ -54,7 +54,7 @@ gl.tree.nj <- function(x,
             "  Converting to a matrix of frequencies, locus by populations\n"
         ))
     }
-    t = apply(as.matrix(x), 2, tapply, pop(x), function(e)
+    t <-apply(as.matrix(x), 2, tapply, pop(x), function(e)
         mean(e) / 2)
     # Compute Euclidean distance
     if (verbose >= 2) {
