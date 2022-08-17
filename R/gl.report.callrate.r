@@ -10,6 +10,7 @@
 #'  (SilicoDArT) data [required].
 #' @param method Specify the type of report by locus (method='loc') or
 #' individual (method='ind') [default 'loc'].
+#' @param by_pop Whether report by population [default FALSE].
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param plot_theme User specified theme [default theme_dartR()].
 #' @param plot_colors Vector with two color names for the borders and fill
@@ -55,6 +56,7 @@
 
 gl.report.callrate <- function(x,
                                method = "loc",
+                               by_pop = FALSE, 
                                plot.out = TRUE,
                                plot_theme = theme_dartR(),
                                plot_colors = two_colors,
@@ -120,7 +122,7 @@ gl.report.callrate <- function(x,
                     plot_theme
                 
                 # plots by population
-                if(nPop(x)>1){
+                if(nPop(x)>1 & by_pop==TRUE){
                 pops <- seppop(x)
                 
                 cat("  Reporting Call Rate by population\n")
@@ -297,7 +299,7 @@ ind.call.rate_pop <- ind.call.rate_pop[order(ind.call.rate_pop$pop,
         p3 <- (p1 / p2) + plot_layout(heights = c(1, 4))
         print(p3)
         
-        if(nPop(x)>1 & method == "loc"){
+        if(nPop(x)>1 & method == "loc" & by_pop == TRUE){
             row_plots <- ceiling(nPop(x) / 3)
             p4 <- wrap_plots(c_rate_plots)
             p4 <- p4 + plot_layout(ncol = 3, nrow = row_plots)
