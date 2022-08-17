@@ -109,7 +109,7 @@ gl.ld.distance <- function(ld_report,
       pop_colors <- pop_colors
     }
     
-  distance <- NULL
+  distance <- ld_stat <- NULL
   p3 <-
     ggplot(bins_ld, aes(x = distance, y = ld_stat, colour = pop)) +
     geom_line(size = 1) +
