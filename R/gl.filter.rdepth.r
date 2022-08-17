@@ -49,7 +49,7 @@
 #'
 #' @seealso \code{\link{gl.filter.rdepth}}
 #'
-#' @family filters and filter reports
+#' @family filter functions
 #' @import patchwork
 #' @export
 
@@ -115,14 +115,16 @@ gl.filter.rdepth <-  function(x,
             xlabel <- "Pre-filter P/A read depth"
         }
         p1 <-
-            ggplot(data.frame(plotvar), aes(x = plotvar)) + geom_histogram(bins = 100,
-                                                                           color = plot_colors[1],
-                                                                           fill = plot_colors[2]) + coord_cartesian(xlim = c(0, max)) + geom_vline(xintercept = lower,
-                                                                                                                                                   color = "red",
-                                                                                                                                                   size = 1) + geom_vline(xintercept = upper,
-                                                                                                                                                                          color = "red",
-                                                                                                                                                                          size = 1) + xlab(xlabel) +
-            ylab("Count") + plot_theme
+            ggplot(data.frame(plotvar), aes(x = plotvar)) + 
+            geom_histogram(bins = 100,
+                           color = plot_colors[1],
+                           fill = plot_colors[2]) + 
+            coord_cartesian(xlim = c(0, max)) + 
+            geom_vline(xintercept = lower, color = "red", size = 1) +
+            geom_vline(xintercept = upper, color = "red", size = 1) + 
+            xlab(xlabel) +
+            ylab("Count") + 
+            plot_theme
         
         if (datatype == "SilicoDArT") {
             rdepth <- x2@other$loc.metrics$AvgReadDepth
@@ -142,12 +144,13 @@ gl.filter.rdepth <-  function(x,
             ggplot(data.frame(plotvar), aes(x = plotvar)) +
             geom_histogram(bins = 100,
                            color = plot_colors[1],
-                           fill = plot_colors[2]) + coord_cartesian(xlim = c(0, max)) + geom_vline(xintercept = lower,
-                                                                                                   color = "red",
-                                                                                                   size = 1) + geom_vline(xintercept = upper,
-                                                                                                                          color = "red",
-                                                                                                                          size = 1) + xlab(xlabel) +
-            ylab("Count") + plot_theme
+                           fill = plot_colors[2]) +
+            coord_cartesian(xlim = c(0, max)) +
+            geom_vline(xintercept = lower, color = "red",size = 1) + 
+            geom_vline(xintercept = upper,color = "red",size = 1) + 
+            xlab(xlabel) +
+            ylab("Count") +
+            plot_theme
         
         p3 <- (p1 / p2) + plot_layout(heights = c(1, 1))
         
@@ -189,7 +192,8 @@ gl.filter.rdepth <-  function(x,
             ))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

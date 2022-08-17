@@ -26,15 +26,42 @@ gl.read.vcf <- function(vcffile,
                      build = "Jackson",
                      verbosity = verbose)
     
-    x = NULL
+    x <- NULL
     
     if (!(requireNamespace("vcfR", quietly = TRUE))) {
-        stop(error("To use this function you need to install package: vcfR."))
+        stop(error("To use this function you need to install package: vcfR.\n"))
     } else {
         vcf <- vcfR::read.vcfR(file = vcffile, verbose = verbose)
+        myRef <- vcfR::getREF(vcf)
+        myAlt <- vcfR::getALT(vcf)
+        loc.all <- paste0(myRef,"/",myAlt)
         x <- vcfR::vcfR2genlight(vcf)
+        x@loc.all <- loc.all
+        
+        # adding SNP information from VCF
+        info_tmp_1 <- vcf@fix[,6:7]
+        info_tmp_2 <- vcfR::getINFO(vcf)
+        if(any(is.na(info_tmp_2[1]) | is.na(info_tmp_1[1]))==TRUE){
+          info <- info_tmp_1
+          colnames(info) <- c("QUAL","FILTER")
+        }else{
+          info_tmp_2 <- as.data.frame(do.call(rbind,stringr::str_split(info_tmp_2,pattern = "=|;")))
+          info <- info_tmp_2[,seq(2,ncol(info_tmp_2),2)]
+          info <- cbind(info_tmp_1,info)
+          colnames(info) <- c("QUAL","FILTER",unname(unlist(info_tmp_2[1,seq(1,ncol(info_tmp_2),2)])))
+        }
+      
+        # identify which SNPs have more than 2 alleles
+        if("AC" %in% colnames(info)){
+          more_alleles <- grep(",",info$AC)
+          info <- info[-more_alleles,]
+          info[] <- lapply(info, as.numeric)
+        }
+        
         ploidy(x) <- 2
         x <- gl.compliance.check(x)
+        
+        x$other$loc.metrics <- cbind(x$other$loc.metrics,info)
         
         # add history
         x@other$history <- list(match.call())

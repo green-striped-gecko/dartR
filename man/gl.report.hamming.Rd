@@ -29,7 +29,7 @@ boxplot and histogram [default 3].}
 
 \item{taglength}{Typical length of the sequence tags [default 69].}
 
-\item{plot.out}{specify if plot is to be produced [default TRUE].}
+\item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}
@@ -90,20 +90,27 @@ gl.report.hamming(testset.gs[,1:100])
 \seealso{
 \code{\link{gl.filter.hamming}}
 
-Other filters and filter reports: 
-\code{\link{gl.filter.allna}()},
-\code{\link{gl.filter.monomorphs}()},
-\code{\link{gl.filter.rdepth}()},
-\code{\link{gl.filter.reproducibility}()},
-\code{\link{gl.filter.secondaries}()},
+Other report functions: 
+\code{\link{gl.report.bases}()},
 \code{\link{gl.report.callrate}()},
+\code{\link{gl.report.diversity}()},
+\code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.hwe}()},
+\code{\link{gl.report.ld.map}()},
 \code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
 \code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.parent.offspring}()},
+\code{\link{gl.report.pa}()},
 \code{\link{gl.report.rdepth}()},
 \code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.sexlinked}()},
 \code{\link{gl.report.taglength}()}
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to 
+\url{https://groups.google.com/d/forum/dartr}
 }
-\concept{filters and filter reports}
+\concept{report functions}

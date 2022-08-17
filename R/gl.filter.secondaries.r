@@ -24,7 +24,7 @@
 #' @examples
 #' gl.report.secondaries(testset.gl)
 #' result <- gl.filter.secondaries(testset.gl)
-#' @family filters and filter reports
+#' @family filter functions
 #' @importFrom stats dpois
 #' @import patchwork
 #' @export
@@ -61,13 +61,15 @@ gl.filter.secondaries <- function(x,
         if (verbose > 1) {
             cat(
                 report(
-                    "  Selecting one SNP per sequence tag based on best RepAvg and AvgPIC\n"
+                    "  Selecting one SNP per sequence tag based on best RepAvg 
+                    and AvgPIC\n"
                 )
             )
         }
         loc.order <-
             order(
-                x@other$loc.metrics$AlleleID,-x@other$loc.metrics$RepAvg,-x@other$loc.metrics$AvgPIC
+                x@other$loc.metrics$AlleleID,-x@other$loc.metrics$RepAvg,
+                -x@other$loc.metrics$AvgPIC
             )
         x <- x[, loc.order]
         x@other$loc.metrics <- x@other$loc.metrics[loc.order, ]
@@ -76,20 +78,17 @@ gl.filter.secondaries <- function(x,
             cat(report("  Selecting one SNP per sequence tag at random\n"))
         }
         n <- length(x@other$loc.metrics$AlleleID)
-        index <-
-            sample(1:(n + 10000), size = n, replace = FALSE)
+        index <- sample(1:(n + 10000), size = n, replace = FALSE)
         x <- x[, order(index)]
-        x@other$loc.metrics <-
-            x@other$loc.metrics[order(index), ]
+        x@other$loc.metrics <- x@other$loc.metrics[order(index), ]
     }
     # Extract the clone ID number
-    a <-
-        strsplit(as.character(x@other$loc.metrics$AlleleID), "\\|")
+    a <- strsplit(as.character(x@other$loc.metrics$AlleleID), "\\|")
     b <- unlist(a)[c(TRUE, FALSE, FALSE)]
-    # Identify and remove secondaries from the genlight object, including the metadata
+    # Identify and remove secondaries from the genlight object, including the
+    #metadata
     x <- x[, duplicated(b) == FALSE]
-    x@other$loc.metrics <-
-        x@other$loc.metrics[duplicated(b) == FALSE, ]
+    x@other$loc.metrics <- x@other$loc.metrics[duplicated(b) == FALSE, ]
     
     # Report secondaries from the genlight object
     if (verbose > 2) {

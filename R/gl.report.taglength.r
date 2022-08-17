@@ -48,7 +48,7 @@
 #' out <- gl.report.taglength(testset.gl)
 #' @seealso \code{\link{gl.filter.taglength}}, \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
-#' @family filters and filter reports
+#' @family report functions
 #' @import patchwork
 #' @export
 
@@ -75,7 +75,9 @@ gl.report.taglength <- function(x,
     if (length(x@other$loc.metrics$TrimmedSequence) != nLoc(x)) {
         stop(
             error(
-                "Fatal Error: Data must include Trimmed Sequences for each loci in a column called 'TrimmedSequence' in the @other$loc.metrics slot.\n"
+                "Fatal Error: Data must include Trimmed Sequences for each loci 
+                in a column called 'TrimmedSequence' in the @other$loc.metrics
+                slot.\n"
             )
         )
     }
@@ -90,15 +92,21 @@ gl.report.taglength <- function(x,
     
     # Boxplot
     p1 <-
-        ggplot(plot_tags, aes(y = tags)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + coord_flip() + plot_theme + xlim(range = c(-1,
-                                                                                                                                                    1)) + ylim(0, 100) + ylab(" ") + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + ggtitle("SNP data - Tag Length")
+        ggplot(plot_tags, aes(y = tags)) + 
+      geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+      coord_flip() + plot_theme + xlim(range = c(-1,1)) + 
+      ylim(0, 100) + ylab(" ") + 
+      theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
+      ggtitle("SNP data - Tag Length")
     
     # Histogram
     p2 <-
-        ggplot(plot_tags, aes(x = tags)) + geom_histogram(bins = 50,
-                                                          color = plot_colors[1],
-                                                          fill = plot_colors[2]) + coord_cartesian(xlim = c(0,
-                                                                                                            100)) + xlab("Tag Length") + ylab("Count") + plot_theme
+        ggplot(plot_tags, aes(x = tags)) + 
+      geom_histogram(bins = 50,color = plot_colors[1], fill = plot_colors[2]) + 
+      coord_cartesian(xlim = c(0,100)) + 
+      xlab("Tag Length") + 
+      ylab("Count") + 
+      plot_theme
     
     # Print out some statistics
     stats <- summary(nchar.tags)
@@ -173,7 +181,8 @@ gl.report.taglength <- function(x,
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

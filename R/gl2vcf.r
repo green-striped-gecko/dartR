@@ -80,10 +80,62 @@ gl2vcf <- function(x,
     
     # DO THE JOB
     
+    # assigning SNP position information 
+    if(snp_pos == "0"){
+      x$position <- rep(as.integer(0),nLoc(x))
+      
+    }else{
+      
+      if(snp_pos %in% names(x$other$loc.metrics)){
+        
+        if(verbose>=2){
+          cat(report("  Using the SNP position information in the field",snp_chr, "from loc.metrics.\n"))
+        }
+        
+        x$position <- unname(unlist(x$other$loc.metrics[snp_pos]))
+        
+      }else{
+        
+        stop(error("  The field",snp_pos, "with the SNP position information is not present in loc.metrics.\n"))
+        
+      }
+    }
+    
+    # assigning chromosome information 
+    if(is.null(x$chromosome)){
+   
+      if(snp_chr == "0" ){
+        x$chromosome <- rep(as.factor("0"),nLoc(x))
+        
+        if(verbose>=2){
+          
+          cat(report("  Chromosome information is not present in the slot 'chromosome'. Setting '0' as the name chromosome for all the SNPs.\n"))
+          
+        }
+        
+      }else{
+        
+        if(snp_chr %in% names(x$other$loc.metrics)){
+          
+          if(verbose>=2){
+            cat(report("  Using the chromosome information in the field",snp_chr, "from loc.metrics.\n"))
+          }
+          
+          x$chromosome <- as.factor(unname(unlist(x$other$loc.metrics[snp_chr])))
+          
+        }else{
+          
+          stop(error("  The field",snp_chr, "with the chromosome information is not present in loc.metrics.\n"))
+          
+        }
+      }
+    }
+   
+    
     gl2plink(
         x = x,
         outfile = "gl_plink_temp",
-        outpath = tempdir(),
+        outpath = outpath,
         chr_format = chr_format,
         pos_cM = pos_cM,
         ID_dad = ID_dad,
@@ -93,8 +145,19 @@ gl2vcf <- function(x,
         verbose = NULL
     )
     
-    prefix.in_temp <- paste0(tempdir(), "/gl_plink_temp")
+    prefix.in_temp <- paste0(outpath, "/gl_plink_temp")
     prefix.out_temp <- file.path(outpath, outfile)
+    
+    allele_tmp <- gsub("/"," ", x$loc.all)
+    allele_tmp <- strsplit(allele_tmp,split = " ")
+    allele_tmp <- Reduce(rbind,allele_tmp)[,2]
+    allele_tmp <- cbind(locNames(x), allele_tmp)
+    write.table(allele_tmp,
+                file = file.path(tempdir(),"mylist.txt"),
+                row.names = FALSE,
+                col.names = FALSE,
+                quote = FALSE
+    )
     
     make_plink <-
         function(plink.path,
@@ -115,7 +178,11 @@ gl2vcf <- function(x,
                     else
                         "",
                     "--allow-no-sex",
-                    "--keep-allele-order",
+                    paste("--reference-allele",file.path(tempdir(),'mylist.txt')),
+                    # "--keep-allele-order",
+                    # "--real-ref-alleles",
+                    # paste("--a1-allele", file.path(outpath,'alleles.csv'),"1"),
+                    # paste("--a2-allele", file.path(outpath,'alleles.csv'),"2"),
                     "--out",
                     prefix.out,
                     extra.options
@@ -123,8 +190,8 @@ gl2vcf <- function(x,
             )
         }
     
-    system_verbose = function(...) {
-        report = system(..., intern = T)
+    system_verbose <-function(...) {
+        report <-system(..., intern = T)
         message(
             paste0(
                 "\n\n----------Output of function start:\n\n",

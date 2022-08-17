@@ -7,6 +7,7 @@
 gl.map.structure(
   qmat,
   x,
+  K,
   provider = "Esri.NatGeoWorldMap",
   scalex = 1,
   scaley = 1,
@@ -22,6 +23,8 @@ gl.map.structure(
 
 \item{x}{Name of the genlight object containing the coordinates in the
 \code{\@other$latlon} slot to calculate the population centers [required].}
+
+\item{K}{The number for K to be plotted [required].}
 
 \item{provider}{Provider    passed to leaflet. Check \link[leaflet]{providers}
 for a list of possible backgrounds [default "Esri.NatGeoWorldMap"].}
@@ -70,18 +73,17 @@ depends on the scale of the map and the position of the populations.
 }
 \examples{
 \dontrun{
-#CLUMPP needs to be installed to be able to run the example
 #bc <- bandicoot.gl[,1:100]
 #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, exec = './structure.exe')
 #ev <- gl.evanno(sr)
 #ev
-#qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
-#head(qmat)
-#gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
+#qmat <- gl.plot.structure(sr, k=2:4)#' #head(qmat)
+#gl.map.structure(qmat, bc,K=3)
+#gl.map.structure(qmat, bc,K=4)
 #move population 4 (out of 5) 0.5 degrees to the right and populations 1
-#0.3 degree to the top of the map.
+#0.3 degree to the north of the map.
 #mp <- data.frame(lon=c(0,0,0,0.5,0), lat=c(-0.3,0,0,0,0))
-#gl.map.structure(qmat, bc, scalex=1, scaley=0.5, movepops=mp)
+#gl.map.structure(qmat, bc,K=4, movepops=mp)
 }
 }
 \references{

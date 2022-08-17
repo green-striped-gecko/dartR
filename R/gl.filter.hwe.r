@@ -6,12 +6,17 @@
 #' proportions based on observed frequencies of reference homozygotes,
 #'  heterozygotes and alternate homozygotes.
 #'
-#' Loci are filtered out if they show HWE departure in any one population.
+#' Loci are filtered out if they show HWE departure either in any one population 
+#' (n.pop.threshold =1) or in at least X number of populations 
+#' (n.pop.threshold > 1).
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param subset Way to group individuals to perform H-W tests. Either a vector
 #' with population names, 'each', 'all' (see details) [default 'each'].
-#' @param method_sig Method for determining statistical significance: 'ChiSquare'
+#' @param n.pop.threshold The minimum number of populations where the same locus 
+#' has to be out of H-W proportions to be removed [default 1].
+#' @param method_sig Method for determining statistical significance: 
+#' 'ChiSquare'
 #' or 'Exact' [default 'Exact'].
 #' @param multi_comp Whether to adjust p-values for multiple comparisons
 #' [default FALSE].
@@ -44,7 +49,8 @@
 #' \itemize{
 #' \item Merging all populations in the dataset using subset = 'all'.
 #' \item Within each population separately using: subset = 'each'.
-#' \item Within selected populations using for example: subset = c('pop1','pop2').
+#' \item Within selected populations using for example: subset = 
+#' c('pop1','pop2').
 #' }
 #'
 #' Two different statistical methods to test for deviations from Hardy Weinberg
@@ -78,10 +84,13 @@
 #' Correction for multiple tests can be applied using the following methods
 #' based on the function \code{\link[stats]{p.adjust}}:
 #' \itemize{
-#' \item 'holm' is also known as the sequential Bonferroni technique (Rice, 1989).
-#' This method has a greater statistical power than the standard Bonferroni test,
+#' \item 'holm' is also known as the sequential Bonferroni technique 
+#' (Rice, 1989).
+#' This method has a greater statistical power than the standard Bonferroni 
+#' test,
 #' however this method becomes very stringent when many tests are performed and
-#' many real deviations from the null hypothesis can go undetected (Waples, 2015).
+#' many real deviations from the null hypothesis can go undetected 
+#' (Waples, 2015).
 #' \item 'hochberg' based on Hochberg, 1988.
 #' \item 'hommel' based on Hommel, 1988. This method is more powerful than
 #' Hochberg's, but the difference is usually small.
@@ -100,10 +109,17 @@
 #' when number of tests is large.
 #' The number of tests on which the adjustment for multiple comparisons is
 #' the number of populations times the number of loci.
+#' 
+#' \bold{From v2.1} \code{gl.filter.hwe} takes the argument
+#'  \code{n.pop.threshold}.
+#' if \code{n.pop.threshold > 1} loci will be removed only if they are 
+#' concurrently 
+#' significant (after adjustment if applied) out of hwe in >= 
+#' \code{n.pop.threshold > 1}.
 #'
 #' @return A genlight object with the loci departing significantly from H-W
 #' proportions removed.
-#' @author Custodian: Luis Minjangos -- Post to
+#' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' result <- gl.filter.hwe(x = bandicoot.gl)
@@ -115,9 +131,11 @@
 #' \item Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The Hardy
 #' Weinberg Package. Journal of Statistical Software 64:1-23.
 #' \item Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for
-#' Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
+#' Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 
+#' 65:77-84.
 #' \item Graffelman, J., & Moreno, V. (2013). The mid p-value in exact tests for
-#' Hardy-Weinberg equilibrium. Statistical applications in genetics and molecular
+#' Hardy-Weinberg equilibrium. Statistical applications in genetics and
+#'  molecular
 #' biology, 12(4), 433-448.
 #' \item Hochberg, Y. (1988). A sharper Bonferroni procedure for multiple tests
 #'  of significance. Biometrika, 75, 800–803.
@@ -132,11 +150,13 @@
 #' 76:887-893.
 #' }
 #' @seealso \code{\link{gl.report.hwe}}
-#' @family filters/filter reports
+#' @rawNamespace import(data.table, except = c(melt,dcast))
+#' @family filter functions
 #' @export
 
 gl.filter.hwe <- function(x,
                           subset = "each",
+                          n.pop.threshold = 1,
                           method_sig = "Exact",
                           multi_comp = FALSE,
                           multi_comp_method = "BY",
@@ -171,7 +191,8 @@ gl.filter.hwe <- function(x,
         cat(error("  Detected Presence/Absence (SilicoDArT) data\n"))
         stop(
             error(
-                "Cannot calculate HWE from fragment presence/absence data. Please provide a SNP dataset.\n"
+                "Cannot calculate HWE from fragment presence/absence data. 
+                Please provide a SNP dataset.\n"
             )
         )
     }
@@ -179,13 +200,17 @@ gl.filter.hwe <- function(x,
     if (alpha_val < 0 | alpha_val > 1) {
         cat(
             warn(
-                "    Warning: level of significance per locus alpha must be an integer between 0 and 1, set to 0.05\n"
+                "    Warning: level of significance per locus alpha must be an 
+                integer between 0 and 1, set to 0.05\n"
             )
         )
         alpha_val <- 0.05
     }
     
     # DO THE JOB
+    # Set NULL to variables to pass CRAN checks
+    N<-Locus<-NULL
+    
     hold <- x
     
     #### Interpret options for subset all
@@ -196,7 +221,8 @@ gl.filter.hwe <- function(x,
         if (verbose >= 3) {
             cat(
                 warn(
-                    "  Warning: Significance of tests may indicate heterogeneity among populations\n\n"
+                    "  Warning: Significance of tests may indicate heterogeneity
+                    among populations\n\n"
                 )
             )
         }
@@ -221,7 +247,8 @@ gl.filter.hwe <- function(x,
         if (pops_hwe == 0) {
             stop(
                 error(
-                    "Fatal Error: subset parameter must be \"each\", \"all\", or a list of populations existing in the dataset\n"
+                    "Fatal Error: subset parameter must be \"each\", \"all\", or
+                    a list of populations existing in the dataset\n"
                 )
             )
         }
@@ -242,7 +269,8 @@ gl.filter.hwe <- function(x,
         if (verbose >= 3) {
             cat(
                 warn(
-                    "  Warning: Significance of tests may indicate heterogeneity among populations\n\n"
+                    "  Warning: Significance of tests may indicate heterogeneity
+                    among populations\n\n"
                 )
             )
         }
@@ -300,7 +328,8 @@ gl.filter.hwe <- function(x,
     if (length(poplist) < 1) {
         stop(
             error(
-                "No populations left after removing populations with low sample size and populations with monomorphic loci"
+                "No populations left after removing populations with low sample
+                size and populations with monomorphic loci"
             )
         )
     }
@@ -402,8 +431,10 @@ gl.filter.hwe <- function(x,
     if (multi_comp == T) {
         df <- df[which(df$Prob.adj <= alpha_val), ]
     }
-    
-    failed.loci <- as.character(unique(df$Locus))
+    npop <-NULL #needs to be defined to avoid cran check error
+    dt <- data.table(df)
+    dt[, npop := .N, by=Locus]
+    failed.loci <- as.character(dt[npop >= n.pop.threshold, unique(Locus)])
     
     if (verbose >= 2) {
         cat("  Loci examined:", nLoc(hold), "\n")
@@ -419,7 +450,8 @@ gl.filter.hwe <- function(x,
             cat(
                 "  Deleted",
                 length(failed.loci),
-                "loci with significant departure from HWE, after correction for multiple tests using the",
+                "loci with significant departure from HWE, after correction for
+                multiple tests using the",
                 multi_comp_method,
                 "method at experiment-wide alpha =",
                 alpha_val,
@@ -438,7 +470,8 @@ gl.filter.hwe <- function(x,
         cat("  Loci retained:", nLoc(hold), "\n\n")
         cat(
             important(
-                "    Adjustment of p-values for multiple comparisons vary with sample size\n"
+                "    Adjustment of p-values for multiple comparisons vary with 
+                sample size\n"
             )
         )
     }

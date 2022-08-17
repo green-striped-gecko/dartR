@@ -90,7 +90,7 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
                                      ref = flavour,
                                      dependencies = TRUE)
         }
-        if (substr(flavour, 1, 3) == "beta") {
+        if (substr(flavour, 1, 4) == "beta") {
             detach("package:dartR", unload = TRUE)
             if (verbose >= 2) {
                 cat(report("  Installing dartR from github (beta)\n"))
@@ -203,9 +203,9 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
     
     if (verbose>= 2 & is.null(err) & !is.null(flavour)) {
         if (flavour != "CRAN") {
-            fl = paste0("Github [", flavour, "]")
+            fl <-paste0("Github [", flavour, "]")
         } else {
-            fl = "CRAN"
+            fl <-"CRAN"
             cat(report(
                 paste(
                     "  You have installed dartR",

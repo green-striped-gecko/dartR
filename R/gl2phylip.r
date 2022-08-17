@@ -71,13 +71,13 @@ gl2phylip <- function(x,
     
     # DO THE JOB
     
-    # Convert gl object to a matrix of allele fequencies, locus by population
+    # Convert gl object to a matrix of allele frequencies, locus by population
     if (verbose >= 2) {
         cat(report(
             "Converting to a matrix of frequencies, locus by populations\n"
         ))
     }
-    t = apply(as.matrix(x), 2, tapply, pop(x), function(e)
+    t <-apply(as.matrix(x), 2, tapply, pop(x), function(e)
         mean(e) / 2)
     # Compute Euclidean distance
     if (verbose >= 2) {
@@ -115,7 +115,7 @@ gl2phylip <- function(x,
                 x[, sample(h, size = nLoc(x), replace = TRUE)]
             
             # Convert gl object to a matrix of allele fequencies, locus by population
-            t = apply(as.matrix(newx), 2, tapply, pop(x), function(e)
+            t <-apply(as.matrix(newx), 2, tapply, pop(x), function(e)
                 mean(e) / 2)
             
             # Compute Euclidean distance

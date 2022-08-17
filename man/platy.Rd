@@ -15,8 +15,8 @@ Check ?read.genetable in pacakge PopGenReport for details on the format.
 library(PopGenReport)
 read.csv( paste(.libPaths()[1],'/dartR/extdata/platy.csv',sep='' ))
 platy <- read.genetable( paste(.libPaths()[1],'/dartR/extdata/platy.csv',
-sep='' ), ind=1, pop=2, lat=3, long=4, other.min=5, other.max=6, oneColPerAll=FALSE,
-sep='/')
+sep='' ), ind=1, pop=2, lat=3, long=4, other.min=5, other.max=6, 
+oneColPerAll=FALSE, sep='/')
 platy.gl <- gi2gl(platy, parallel=FALSE)
 df.loc <- data.frame(RepAvg = runif(nLoc(platy.gl)), CallRate = 1)
 platy.gl@other$loc.metrics <- df.loc

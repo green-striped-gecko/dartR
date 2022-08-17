@@ -33,8 +33,8 @@
 #' A simulated genlight object created to run a landscape genetic example
 #'
 #'This a test data set to run a landscape genetics example. It contains 10 
-#'populations of 30 individuals each and each individual has 300 loci. There are 
-#'no covariates for individuals or loci.
+#'populations of 30 individuals each and each individual has 300 loci. There 
+#'are no covariates for individuals or loci.
 #' @name possums.gl
 #' @format genlight object
 #' @docType data
@@ -127,8 +127,8 @@ NULL
 #' library(PopGenReport)
 #' read.csv( paste(.libPaths()[1],'/dartR/extdata/platy.csv',sep='' ))
 #' platy <- read.genetable( paste(.libPaths()[1],'/dartR/extdata/platy.csv',
-#' sep='' ), ind=1, pop=2, lat=3, long=4, other.min=5, other.max=6, oneColPerAll=FALSE,
-#' sep='/')
+#' sep='' ), ind=1, pop=2, lat=3, long=4, other.min=5, other.max=6, 
+#' oneColPerAll=FALSE, sep='/')
 #' platy.gl <- gi2gl(platy, parallel=FALSE)
 #' df.loc <- data.frame(RepAvg = runif(nLoc(platy.gl)), CallRate = 1)
 #' platy.gl@other$loc.metrics <- df.loc

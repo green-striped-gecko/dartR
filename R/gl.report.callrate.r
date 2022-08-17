@@ -14,6 +14,7 @@
 #' @param plot_theme User specified theme [default theme_dartR()].
 #' @param plot_colors Vector with two color names for the borders and fill
 #' [default two_colors].
+#' @param bins Number of bins to display in histograms [default 25].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
@@ -40,13 +41,15 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' # SNP data
-#'   gl.report.callrate(testset.gl)
-#'   gl.report.callrate(testset.gl,method='ind')
+#'   test.gl <- testset.gl[1:20,]
+#'   gl.report.callrate(test.gl)
+#'   gl.report.callrate(test.gl,method='ind')
 #' # Tag P/A data
-#'   gl.report.callrate(testset.gs)
-#'   gl.report.callrate(testset.gs,method='ind')
+#'   test.gs <- testset.gs[1:20,]
+#'   gl.report.callrate(test.gs)
+#'   gl.report.callrate(test.gs,method='ind')
 #' @seealso \code{\link{gl.filter.callrate}}
-#' @family filters and filter reports
+#' @family report functions
 #' @import patchwork
 #' @export
 
@@ -55,6 +58,7 @@ gl.report.callrate <- function(x,
                                plot.out = TRUE,
                                plot_theme = theme_dartR(),
                                plot_colors = two_colors,
+                               bins = 50,
                                save2tmp = FALSE,
                                verbose = NULL) {
     # SET VERBOSITY
@@ -97,26 +101,55 @@ gl.report.callrate <- function(x,
                 # Boxplot
                 p1 <-
                     ggplot(data.frame(callrate), aes(y = callrate)) + 
-                    geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+                    geom_boxplot(color=plot_colors[1], fill = plot_colors[2]) + 
                     coord_flip() +
                     plot_theme + 
                     xlim(range = c(-1, 1)) + 
                     ylim(min, 1) + 
                     ylab(" ") + 
-                    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+              theme(axis.text.y=element_blank(),axis.ticks.y=element_blank()) +
                     ggtitle(title1)
                 
                 # Histogram
                 p2 <-
                     ggplot(data.frame(callrate), aes(x = callrate)) +
-                    geom_histogram(bins = 100,color = plot_colors[1],fill = plot_colors[2]) +
+    geom_histogram(bins = bins,color = plot_colors[1],fill = plot_colors[2]) +
                     coord_cartesian(xlim = c(min, 1)) +
                     xlab("Call rate") +
                     ylab("Count") + 
                     plot_theme
+                
+                # plots by population
+                if(nPop(x)>1){
+                pops <- seppop(x)
+                
+                cat("  Reporting Call Rate by population\n")
+                
+                c_rate_plots <- lapply(pops, function(z) {
+                    pop_tmp <- utils.recalc.callrate(z, verbose = 0)
+                    c_rate_tmp <- pop_tmp$other$loc.metrics$CallRate
+                    p_temp <-
+                       ggplot(as.data.frame(c_rate_tmp), aes(x = c_rate_tmp)) + 
+    geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) +
+                        xlab("Call rate") + 
+                        ylab("Count") +
+                        coord_cartesian(xlim = c(min, 1)) +
+                        plot_theme + 
+                        ggtitle(paste(popNames(z), "n =", nInd(z)))
+                    
+cat("   Population:",popNames(pop_tmp),"\n")
+cat("   No. of loci =", nLoc(pop_tmp), "\n")
+cat("   No. of individuals =", nInd(pop_tmp), "\n")
+cat("   Mean Call Rate",mean(pop_tmp$other$loc.metrics$CallRate,na.rm = TRUE) ,
+    "\n\n")
+                    
+                    return(p_temp)
+                })
+                
+     
+                }
         }
 
-            
             # Print out some statistics
             stats <- summary(callrate)
             cat("  Reporting Call Rate by Locus\n")
@@ -166,7 +199,7 @@ gl.report.callrate <- function(x,
         
     }
     
-    ########### FOR METHOD BASED ON INDIVIDUAL Calculate the call rate by individual
+########### FOR METHOD BASED ON INDIVIDUAL Calculate the call rate by individual
     if (method == "ind") {
         ind.call.rate <- 1 - rowSums(is.na(as.matrix(x))) / nLoc(x)
         if (plot.out) {
@@ -183,17 +216,24 @@ gl.report.callrate <- function(x,
             
             # Boxplot
             p1 <-
-                ggplot(data.frame(ind.call.rate), aes(y = ind.call.rate)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) +
-                coord_flip() + plot_theme + xlim(range = c(-1, 1)) + ylim(min, 1) + ylab(" ") + theme(axis.text.y = element_blank(),
-                                                                                                      axis.ticks.y = element_blank()) +
+                ggplot(data.frame(ind.call.rate), aes(y = ind.call.rate)) + 
+                geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) +
+                coord_flip() +
+                plot_theme + 
+                xlim(range = c(-1, 1)) +
+                ylim(min, 1) + 
+                ylab(" ") +
+        theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
                 ggtitle(title1)
             
             # Histogram
             p2 <-
-                ggplot(data.frame(ind.call.rate), aes(x = ind.call.rate)) + geom_histogram(bins = 100,
-                                                                                           color = plot_colors[1],
-                                                                                           fill = plot_colors[2]) +
-                coord_cartesian(xlim = c(min, 1)) + xlab("Call rate") + ylab("Count") + plot_theme
+                ggplot(data.frame(ind.call.rate), aes(x = ind.call.rate)) + 
+  geom_histogram(bins = bins, color = plot_colors[1],fill = plot_colors[2]) +
+                coord_cartesian(xlim = c(min, 1)) + 
+                xlab("Call rate") +
+                ylab("Count") +
+                plot_theme
         }
         # Print out some statistics
         stats <- summary(ind.call.rate)
@@ -210,7 +250,7 @@ gl.report.callrate <- function(x,
             as.matrix(x)
         )) / (nLoc(x) * nInd(x)), 2), "\n\n")
         
-        # Determine the loss of individuals for a given threshold using quantiles
+  # Determine the loss of individuals for a given threshold using quantiles
         quantile_res <-
             quantile(ind.call.rate, probs = seq(0, 1, 1 / 20))
         retained <- unlist(lapply(quantile_res, function(y) {
@@ -240,6 +280,15 @@ gl.report.callrate <- function(x,
         df <- df[order(-df$Quantile), ]
         df$Quantile <- paste0(df$Quantile, "%")
         rownames(df) <- NULL
+        
+        ind.call.rate_pop <- as.data.frame(cbind(names(ind.call.rate),
+                                                 as.character(pop(x)),
+                                                 ind.call.rate))
+        colnames(ind.call.rate_pop) <- c("ind_name","pop","missing_data")
+ind.call.rate_pop <- ind.call.rate_pop[order(ind.call.rate_pop$pop,
+                                             ind.call.rate_pop$missing_data,
+                                             decreasing = TRUE),]
+        
     }
     
     # PRINTING OUTPUTS
@@ -247,8 +296,19 @@ gl.report.callrate <- function(x,
         # using package patchwork
         p3 <- (p1 / p2) + plot_layout(heights = c(1, 4))
         print(p3)
+        
+        if(nPop(x)>1 & method == "loc"){
+            row_plots <- ceiling(nPop(x) / 3)
+            p4 <- wrap_plots(c_rate_plots)
+            p4 <- p4 + plot_layout(ncol = 3, nrow = row_plots)
+            print(p4)
+        }
     }
     print(df)
+    cat("\n\n")
+    if (method == "ind") {
+    print(ind.call.rate_pop, row.names = FALSE)
+    }
     
     # SAVE INTERMEDIATES TO TEMPDIR
     
@@ -263,17 +323,30 @@ gl.report.callrate <- function(x,
                        collapse = "_")
             # saving to tempdir
             saveRDS(list(match_call, p3), file = temp_plot)
+            
+            # saving plots per pop
+            if(nPop(x)>1){
+            temp_plot_2 <- tempfile(pattern = "Plot_per_pop")
+            # saving to tempdir
+            saveRDS(list(match_call, p4), file = temp_plot_2)
+            }
+            
             if (verbose >= 2) {
                 cat(report("  Saving the ggplot to session tempfile\n"))
             }
         }
         temp_table <- tempfile(pattern = "Table_")
         saveRDS(list(match_call, df), file = temp_table)
+        if (method == "ind") {
+        temp_table_2 <- tempfile(pattern = "Table2_")
+        saveRDS(list(ind.call.rate_pop, df), file = temp_table_2)
+        }
         if (verbose >= 2) {
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

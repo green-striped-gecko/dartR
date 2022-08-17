@@ -21,8 +21,10 @@
 #' @importFrom sp SpatialPointsDataFrame coordinates<- CRS proj4string<-
 #' @importFrom stats complete.cases
 #' @author Bernd Guber (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @return 
+#' returns a SpatVector file 
 #' @examples
-#' gl2shp(testset.gl)
+#' out <- gl2shp(testset.gl)
 
 gl2shp <- function(x,
                    type = "shp",
@@ -47,7 +49,7 @@ gl2shp <- function(x,
     # FUNCTION SPECIFIC ERROR CHECKING
     
     # CHECK IF PACKAGES ARE INSTALLED
-    pkg <- "rgdal"
+    pkg <- "terra"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
         stop(error(
             "Package",
@@ -106,25 +108,27 @@ gl2shp <- function(x,
         sp::coordinates(glpoints) <- c("lon", "lat")
         
         # create all sites point shp files
-        spdf = SpatialPointsDataFrame(glpoints, data.frame(glpoints))
+        spdf <-SpatialPointsDataFrame(glpoints, data.frame(glpoints))
         proj4string(spdf) <- CRS(proj4)
         # if (!is.null(reproj4)) spdf <- project(spdf, proj = reproj4, inv = TRUE)
+        #now use terra
+        v <- terra::vect(cbind(spdf, x@other$ind.metrics ))
         if (type == "shp")
-            rgdal::writeOGR(
-                spdf,
-                dsn = outpath,
+            terra::writeVector(
+                v,
+                filename = paste0(file.path(outpath, outfile), ".shp"),
+                filetype="ESRI Shapefile",
                 layer = outfile,
-                driver = "ESRI Shapefile",
-                overwrite_layer = TRUE
+                overwrite = TRUE
             )
         
         if (type == "kml")
-            rgdal::writeOGR(
-                spdf,
-                driver = "KML",
-                dsn = paste0(file.path(outpath, outfile), ".kml"),
+            terra::writeVector(
+                v,
+                filename= paste0(file.path(outpath, outfile), ".kml"),
+                filetype="KML",
                 layer = outfile,
-                overwrite_layer = TRUE
+                overwrite = TRUE
             )
         
         if (verbose >= 2)
@@ -144,6 +148,6 @@ gl2shp <- function(x,
             cat(report("Completed:", funname, "\n"))
         }
         
-        return(NULL)
+        return(v)
     }
 }

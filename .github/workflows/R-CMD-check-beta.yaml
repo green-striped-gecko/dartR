@@ -30,11 +30,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
 
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-pandoc@v2
       - uses: r-lib/actions/setup-tinytex@v1
 
       - name: Query dependencies
@@ -59,16 +59,19 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "20.04"))')
+      - name: Install macos dependiencies
+        if: runner.os == 'macOS'
+        run: |
+          install.packages("rgdal", type="binary")
+        shell: Rscript {0}
+          
       - name: Install dependencies
         run: |
-          options(repos = c(
-            `r-spatial` = "https://r-spatial.r-universe.dev/",
-            CRAN = "https://cloud.r-project.org/"
+
+          options(repos = c(CRAN = "https://cloud.r-project.org/"
           ))
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
-          remotes::install_github('EricArcher/strataG')
-
         shell: Rscript {0}
 
       - name: Check

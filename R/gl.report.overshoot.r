@@ -26,7 +26,7 @@
 #' @examples
 #' gl.report.overshoot(testset.gl)
 #' @seealso \code{\link{gl.filter.overshoot}}
-#' @family filter report functions
+#' @family report functions
 #' @export
 
 gl.report.overshoot <- function(x,
@@ -50,7 +50,8 @@ gl.report.overshoot <- function(x,
         cat(error("  Detected Presence/Absence (SilicoDArT) data\n"))
         stop(
             error(
-                "Cannot identify overshoot arising from SNPS deleted with adaptors for fragment presence/absence data.
+                "Cannot identify overshoot arising from SNPS deleted with 
+                adaptors for fragment presence/absence data.
                Please provide a SNP dataset.\n"
             )
         )
@@ -59,7 +60,8 @@ gl.report.overshoot <- function(x,
     if (length(x@other$loc.metrics$TrimmedSequence) != nLoc(x)) {
         stop(
             error(
-                "Fatal Error: Data must include Trimmed Sequences for each loci in a column called 'TrimmedSequence'
+                "Fatal Error: Data must include Trimmed Sequences for each loci 
+                in a column called 'TrimmedSequence'
                in the @other$loc.metrics slot.\n"
             )
         )
@@ -67,7 +69,8 @@ gl.report.overshoot <- function(x,
     
     if (length(x@other$loc.metrics$SnpPosition) != nLoc(x)) {
         stop(error(
-            "Fatal Error: Data must include position information for each loci.\n"
+            "Fatal Error: Data must include position information for each 
+            loci.\n"
         ))
     }
     
@@ -75,7 +78,8 @@ gl.report.overshoot <- function(x,
     
     if (verbose >= 2) {
         cat(report(
-            "  Identifying loci for which the SNP has been trimmed with the adaptor\n"
+            "  Identifying loci for which the SNP has been trimmed with the 
+            adaptor\n"
         ))
     }
     
@@ -118,7 +122,8 @@ gl.report.overshoot <- function(x,
             )
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

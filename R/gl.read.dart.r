@@ -81,7 +81,7 @@ gl.read.dart <- function(filename,
                      verbosity = verbose)
     
     if (verbose == 0) {
-        probar = FALSE
+        probar <-FALSE
     }
     
     # DO THE JOB
@@ -103,7 +103,7 @@ gl.read.dart <- function(filename,
         )
     glout <-
         utils.dart2genlight(
-            dout,
+          dart= dout,
             ind.metafile = ind.metafile,
             probar = probar,
             verbose = verbose
@@ -128,7 +128,8 @@ gl.read.dart <- function(filename,
             "FreqHomSnp",
             "monomorphs",
             "OneRatio",
-            "PIC"
+            "PIC",
+            "allna"
         )
     glout@other$loc.metrics.flags <-
         data.frame(matrix(TRUE, nrow = 1, ncol = length(recalc.flags)))
@@ -195,10 +196,11 @@ gl.read.dart <- function(filename,
     if (mono.rm) {
         if (verbose >= 2) {
             cat(report(
-                "  Deleting monomorphic loci (optionally requested)\n"
+                "  Deleting monomorphic loci and loci with all mising data (optionally requested)\n"
             ))
         }
         glout <- gl.filter.monomorphs(glout, verbose = 0)
+        glout <- gl.filter.allna(glout, verbose = 0)
     }
     
     # Set the SilicoDArT flags to FALSE

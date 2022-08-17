@@ -12,6 +12,11 @@
 #' @param outpath Path where to save the output file. Use outpath=getwd() or
 #' outpath='.' when calling this function to direct output files to your working
 #'  directory [default tempdir(), mandated by CRAN].
+#' @param pop_order Order of the output populations either "alphabetic" or a 
+#' vector of population names in the order required by the user (see examples)
+#' [default "alphabetic"].
+#' @param output_format Whether to use a 2-digit format ("2_digits") or 3-digits
+#'  format ("3_digits") [default "2_digits"].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -23,12 +28,18 @@
 #' # SNP data
 #' geno <- gl2genepop(testset.gl[1:3,1:9])
 #' head(geno)
+#' test <- gl.filter.callrate(platypus.gl,threshold = 1)
+#' popNames(test)
+#' gl2genepop(test, pop_order = c("TENTERFIELD","SEVERN_ABOVE","SEVERN_BELOW"),
+#'            output_format="3_digits")
 #' }
 #' @export
 
 gl2genepop <- function (x,
                         outfile = "genepop.gen",
                         outpath = tempdir(),
+                        pop_order = "alphabetic",
+                        output_format = "2_digits", 
                         verbose = NULL) {
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -62,9 +73,20 @@ gl2genepop <- function (x,
   }
   
   # DO THE JOB
+  #ordering populations
   
+  if(length(pop_order)==1){
+    x <- x[order(pop(x)), ]
+  }
+  
+  if(length(pop_order)>1){
+    
+    tmp <- seppop(x)
+    tmp_2 <-  tmp[match(pop_order, names(tmp))]
+    x <- Reduce(rbind,tmp_2)
+  }
+
   #convert to genind
-  x <- x[order(pop(x)), ]
   x <- gl2gi(x, verbose = 0, probar = FALSE)
   data <- as.matrix(x)
   pop_names <- x@pop
@@ -102,8 +124,12 @@ gl2genepop <- function (x,
     sep = "\\.",
     into = c("locus", "allele")
   )
-  loci_names <-
-    as.character(loci_names_l[-which(duplicated(loci_names_l))])
+  
+  if(output_format == "3_digits"){
+    loc_all$allele <- paste0("0",loc_all$allele)
+  }
+  
+  loci_names <- as.character(loci_names_l[-which(duplicated(loci_names_l))])
   n.loci <- length(loci_names_l[-which(duplicated(loci_names_l))])
   data_gpop <- data.frame(id = paste(pop_names, "_",
                                      row.names(data), ",", sep = ""))
@@ -118,16 +144,17 @@ gl2genepop <- function (x,
         a[j] <- paste(loc_all[col_loc[hom], "allele"],
                       loc_all[col_loc[hom], "allele"], sep = "")
       } else if (length(het) != 0) {
-        if (as.character(loc_all[col_loc[het[1]], "allele"]) <
-            as.character(loc_all[col_loc[het[2]], "allele"])) {
+        # disabling the order of alleles
+        # if (as.character(loc_all[col_loc[het[1]], "allele"]) <
+        #     as.character(loc_all[col_loc[het[2]], "allele"])) {
           a[j] <- paste(loc_all[col_loc[het[1]], "allele"],
                         loc_all[col_loc[het[2]], "allele"],
                         sep = "")
-        } else {
-          a[j] <- paste(loc_all[col_loc[het[2]], "allele"],
-                        loc_all[col_loc[het[1]], "allele"],
-                        sep = "")
-        }
+        # } else {
+        #   a[j] <- paste(loc_all[col_loc[het[2]], "allele"],
+        #                 loc_all[col_loc[het[1]], "allele"],
+        #                 sep = "")
+        # }
       } else {
         if (nchar(loc_all[1, "allele"]) == 3) {
           a[j] <- "000000"
@@ -141,12 +168,11 @@ gl2genepop <- function (x,
   colnames(data_gpop) <- c("ID", as.character(loci_names))
   data_gpop[,] <- apply(data_gpop, c(1, 2), as.character)
   
-  dummy <-
-    paste("Genepop output. Loci:", nLoc(x), "Populations:", nPop(x))
+  dummy <- paste("Genepop output. Loci:", nLoc(x), "Populations:", nPop(x))
   dummy[2] <- paste(locNames(x), collapse = ",")
   cs <- c(cumsum(table(pop(x))))
-  from = c(1, (cs[-length(cs)] + 1))
-  to = cs
+  from <-c(1, (cs[-length(cs)] + 1))
+  to <-cs
   
   for (i in 1:nPop(x)) {
     da <-

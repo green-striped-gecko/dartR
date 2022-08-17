@@ -94,7 +94,7 @@
 #' @references Schmidt, T.L., Jasper, M.-E., Weeks, A.R., Hoffmann, A.A., 2021.
 #'   Unbiased population heterozygosity estimates from genome-wide sequence
 #'   data. Methods in Ecology and Evolution n/a.
-#' @family Filter reports functions
+#' @family report functions
 #' @importFrom stats dpois
 #' @import patchwork
 #' @export
@@ -125,7 +125,8 @@ gl.report.secondaries <- function(x,
         isFALSE("CloneID" %in% names(x$other$loc.metrics))) {
         stop(
             error(
-                "Neither CloneID or AlleleID metrics were found in the slot loc.metrics, which are required for this function to work\n"
+                "Neither CloneID or AlleleID metrics were found in the slot 
+                loc.metrics, which are required for this function to work\n"
             )
         )
     }
@@ -141,7 +142,8 @@ gl.report.secondaries <- function(x,
         strsplit(as.character(x@other$loc.metrics$AlleleID), "\\|")
     b <- unlist(a)[c(TRUE, FALSE, FALSE)]
     
-    # set up to estimate variable and inv sites in sequenced tags, and mean tag length
+    # set up to estimate variable and inv sites in sequenced tags, and mean tag
+    # length
     proc.data <-
         data.table(x$other$loc.metrics)  # using data.table
     if (isFALSE("CloneID" %in% names(x$other$loc.metrics))) {
@@ -155,19 +157,23 @@ gl.report.secondaries <- function(x,
         
         # the number of invariant sites of the genotyped tags
         n.inv.gen <-
-            proc.data[data.table(unique(CloneID)), sum(n.invariant), mult = "first"]
+            proc.data[data.table(unique(CloneID)), 
+                      sum(n.invariant), mult = "first"]
         # the mean length of the sequenced tags
         mean.len.tag <-
-            proc.data[data.table(unique(CloneID)), mean(lenTrimSeq), mult = "first"]
+            proc.data[data.table(unique(CloneID)),
+                      mean(lenTrimSeq), mult = "first"]
     } else {
         mean.len.tag <- taglength
         proc.data[, `:=`(n.variant, .N), by = CloneID]
         # The mean number of SNPs for each tag
         mean.nSNP.tag <-
-            proc.data[data.table(unique(CloneID)), mean(n.variant), mult = "first"]
+            proc.data[data.table(unique(CloneID)), 
+                      mean(n.variant), mult = "first"]
         # The number of tags
         n.inv.gen <-
-            round((mean.len.tag - mean.nSNP.tag) * proc.data[, length(unique(CloneID))], 0)
+            round((mean.len.tag - mean.nSNP.tag) * 
+                    proc.data[, length(unique(CloneID))], 0)
         cat(warn(
             paste(
                 "The column 'TrimmedSequence' was not found in loc.metrics\n",
@@ -191,11 +197,15 @@ gl.report.secondaries <- function(x,
         # Boxplot
         if (plot.out) {
             p1 <-
-                ggplot(secondaries_plot, aes(y = freqs)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + coord_flip() + plot_theme +
-                xlim(range = c(-1, 1)) + scale_y_discrete(limits = c(as.character(unique(
-                    freqs_1
-                )))) + theme(axis.text.y = element_blank(),
-                             axis.ticks.y = element_blank()) + ggtitle("Boxplot")
+                ggplot(secondaries_plot, aes(y = freqs)) + 
+              geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+              coord_flip() + 
+              plot_theme +
+                xlim(range = c(-1, 1)) + 
+              scale_y_discrete(limits = c(as.character(unique(freqs_1)))) + 
+              theme(axis.text.y = element_blank(),
+                    axis.ticks.y = element_blank()) + 
+              ggtitle("Boxplot")
             
             # Barplot
             freqs_2 <- c(0, table(as.numeric(table(b))))
@@ -209,8 +219,12 @@ gl.report.secondaries <- function(x,
             freq <- NULL
             
             p2 <-
-                ggplot(secondaries_plot_2, aes(x = freq, y = count)) + geom_col(color = plot_colors[1], fill = plot_colors[2]) + xlab("Frequency") +
-                ylab("Count") + ggtitle("Observed Frequency of SNPs per Sequence Tag") + plot_theme
+                ggplot(secondaries_plot_2, aes(x = freq, y = count)) + 
+              geom_col(color = plot_colors[1], fill = plot_colors[2]) +
+              xlab("Frequency") +
+                ylab("Count") + 
+              ggtitle("Observed Frequency of SNPs per Sequence Tag") + 
+              plot_theme
         }
         
         # Plot Histogram with estimate of the zero class
@@ -234,7 +248,8 @@ gl.report.secondaries <- function(x,
         # Set convergence criterion
         delta <- 1e-05
         
-        # Use the mean of the truncated distribution to compute lambda for the untruncated distribution
+        # Use the mean of the truncated distribution to compute lambda for the 
+        # untruncated distribution
         k <- seed
         for (i in 1:nsim) {
             if (verbose >= 2) {
@@ -253,7 +268,8 @@ gl.report.secondaries <- function(x,
                 if (verbose >= 2) {
                     cat(
                         important(
-                            "  Failed to converge: No reliable estimate of invariant loci\n"
+                            "  Failed to converge: No reliable estimate of 
+                            invariant loci\n"
                         )
                     )
                 }
@@ -265,11 +281,15 @@ gl.report.secondaries <- function(x,
         
         # Size of the truncated distribution
         if (!fail) {
-            n <- sum(freqs)  # Size of the truncated set
-            tp <-
-                1 - dpois(x = 0, lambda = k)  # Fraction that is the truncated set
-            rn <- round(n / tp, 0)  # Estimate of the whole set
-            # cat('\n Estimated size of the zero class',round(dpois(x=0,lambda=k)*rn,0),'\n') Table for the reconstructed set
+          # Size of the truncated set
+            n <- sum(freqs)  
+            # Fraction that is the truncated set
+            tp <- 1 - dpois(x = 0, lambda = k) 
+            # Estimate of the whole set
+            rn <- round(n / tp, 0)  
+            # cat('\n Estimated size of the zero class',
+            # round(dpois(x=0,lambda=k)*rn,0),'\n')
+            # Table for the reconstructed set
             reconstructed <-
                 dpois(x = 0:(length(freqs) - 1), lambda = k) * rn
             reconstructed <- as.table(reconstructed)
@@ -289,8 +309,12 @@ gl.report.secondaries <- function(x,
             # Barplot
             if (plot.out) {
                 p3 <-
-                    ggplot(reconstructed_plot, aes(x = freq, y = count)) + geom_col(color = plot_colors[1], fill = plot_colors[2]) + xlab("Frequency") +
-                    ylab("Count") + ggtitle(title) + plot_theme
+                    ggplot(reconstructed_plot, aes(x = freq, y = count)) + 
+                  geom_col(color = plot_colors[1], fill = plot_colors[2]) + 
+                  xlab("Frequency") +
+                    ylab("Count") + 
+                  ggtitle(title) + 
+                  plot_theme
                 
                 # PRINTING OUTPUTS using package patchwork
                 p4 <-
@@ -318,7 +342,8 @@ gl.report.secondaries <- function(x,
             saveRDS(list(match_call, p4), file = temp_plot)
             if (verbose >= 2) {
                 cat(report(
-                    "  Saving the plot in ggplot format to the session tempfile\n"
+                    "  Saving the plot in ggplot format to the session 
+                    tempfile\n"
                 ))
             }
             # saving genlight object to tempdir
@@ -326,12 +351,14 @@ gl.report.secondaries <- function(x,
             if (verbose >= 2) {
                 cat(
                     report(
-                        "  Saving the genlight object containing the filtered loci to the session tempfile\n"
+                        "  Saving the genlight object containing the filtered 
+                        loci to the session tempfile\n"
                     )
                 )
                 cat(
                     report(
-                        "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                        "  NOTE: Retrieve output files from tempdir using 
+                        gl.list.reports() and gl.print.reports()\n"
                     )
                 )
             }
@@ -371,7 +398,8 @@ gl.report.secondaries <- function(x,
             "\n")
         n.SNPs.secondaries <- table(duplicated(b))[2]
         cat(
-            "   Number of secondary SNP loci that would be removed on filtering:",
+            "   Number of secondary SNP loci that would be removed on 
+            filtering:",
             n.SNPs.secondaries,
             "\n"
         )
@@ -385,7 +413,8 @@ gl.report.secondaries <- function(x,
         n.invariant <-
             round(n.invariant.tags * mean.len.tag + n.inv.gen, 0)
         cat(
-            "   Total Number of invariant sites (including invariant sequence tags):",
+            "   Total Number of invariant sites (including invariant sequence 
+            tags):",
             n.invariant,
             "\n"
         )

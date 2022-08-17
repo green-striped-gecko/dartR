@@ -121,7 +121,7 @@ gl.dist.pop <- function(x,
     # Convert to a pop x locus matrix
     f <- reshape2::dcast(f, popn ~ locus, value.var = "frequency")
     # Reassign names to the populations, and convert from percentages to proportions
-    row.names(f) = f[, 1]
+    row.names(f) <- f[, 1]
     f <- f[,-c(1)]
     p <- f / 100
 
@@ -292,6 +292,10 @@ gl.dist.pop <- function(x,
     }
 
     # # Revert to original order ord <- rank(popNames(x)) mat <- as.matrix(dd)[ord, ord] dd <- as.dist(mat)
+    
+    if(method != "fixed-diff") {
+    dimnames(dd) <- list(popNames(x), popNames(x))
+    }
 
     # PLOT Plot Box-Whisker plot
     

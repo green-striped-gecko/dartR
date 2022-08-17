@@ -152,3 +152,26 @@ utils.read.ped <- function (file,
   }
   list(genotypes = result, fam = fam, map = map)
 }
+
+rotate.matrix <- function (x, 
+                           angle = 10, 
+                           method = "bilinear"){
+  
+  img <- x
+  angle.rad <- angle * pi/180
+  co.x <- matrix(rep(-(ncol(img)/2 - 0.5):(ncol(img)/2 - 
+                                             0.5), nrow(img)), nrow = nrow(img), byrow = T)
+  co.y <- matrix(rep(-(nrow(img)/2 - 0.5):(nrow(img)/2 - 
+                                             0.5), ncol(img)), ncol = ncol(img))
+  co.xn <- round(co.x * cos(angle.rad) - co.y * sin(angle.rad))
+  co.yn <- round(co.x * sin(angle.rad) + co.y * cos(angle.rad))
+  co.xn2 <- co.xn + max(co.xn) + 1
+  co.yn2 <- co.yn + max(co.yn) + 1
+  img.rot <- numeric(max(co.yn2) * max(co.xn2))
+  img.rot[(co.xn2 - 1) * max(co.yn2) + co.yn2] <- img
+  dim(img.rot) <- c(max(co.yn2), max(co.xn2))
+  attr(img.rot, "bits.per.sample") <- attr(img, "bits.per.sample")
+  attr(img.rot, "samples.per.pixel") <- attr(img, "samples.per.pixel")
+  return(img.rot)
+  
+}

@@ -1,15 +1,22 @@
 
+<a href='http://georges.biomatix.org/dartR'><img src='man/figures/dartRlogo.png' align="right" height="180" /></a>
+
 <!-- badges: start -->
 Main repository: 
   [![](https://www.r-pkg.org/badges/version/dartR?color=blue)](https://cran.r-project.org/package=dartR)
   [![CRAN checks](https://cranchecks.info/badges/summary/dartR)](https://cran.r-project.org/web/checks/check_results_dartR.html)
   [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
   [![R-CMD-check-beta](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-beta.yaml/badge.svg?branch=beta)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-beta.yaml)
-  [![](https://img.shields.io/badge/doi-10.1111/1755--0998.12745-00cccc.svg)](https://doi.org/10.1111/1755-0998.12745)
+ 
   [![](http://cranlogs.r-pkg.org/badges/last-week/dartR?color=orange)](https://cran.r-project.org/package=dartR)
-  
+
   <!-- badges: end -->
 
+Publication:
+ [![](https://img.shields.io/badge/doi-10.1111/1755--0998.12745-00cccc.svg)](https://doi.org/10.1111/1755-0998.12745)
+ 
+ Zenodo: 
+   [![DOI](https://zenodo.org/badge/86640709.svg)](https://zenodo.org/badge/latestdoi/86640709)  
 
 <!-- badges: start -->
 Dev repositories: 
@@ -130,6 +137,15 @@ install_github("green-striped-gecko/dartR@dev")
 ```
 **!!Please note the here it is quite likely that some functions might not work, or even the install might break with an error.!!**
 
+Documentation, tutorials and sample files are available at: http://georges.biomatix.org/dartR
+
+Q&A forum in support of users can be accessed at: https://groups.google.com/g/dartr?pli=1
+
+If you use dartR in your research, please support us by citing dartR. You can find the citation information by typing in the R console:
+
+```{r}I
+citation("dartR”)
+```
 
 Have fun working with dartR! Any issues you encounter please use the issues tab on github or contact us via email under glbugs@aerg.canberra.edu.au
 

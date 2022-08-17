@@ -5,13 +5,16 @@
 \title{Filters loci that are all NA across individuals and/or populations 
 with all NA across loci}
 \usage{
-gl.filter.allna(x, by.pop = FALSE, verbose = NULL)
+gl.filter.allna(x, by.pop = FALSE, recalc = FALSE, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the input genlight object [required].}
 
 \item{by.pop}{If TRUE, loci that are all missing in any one population
 are deleted [default FALSE]}
+
+\item{recalc}{Recalculate the locus metadata statistics if any individuals
+are deleted in the filtering [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -49,21 +52,25 @@ using the function \code{\link{gl.filter.allna}} with by.pop=TRUE.
 
 }
 \seealso{
-Other filters and filter reports: 
+Other filter functions: 
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.heterozygosity}()},
+\code{\link{gl.filter.hwe}()},
+\code{\link{gl.filter.ld}()},
+\code{\link{gl.filter.locmetrics}},
+\code{\link{gl.filter.maf}()},
 \code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.overshoot}()},
+\code{\link{gl.filter.parent.offspring}()},
+\code{\link{gl.filter.pa}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.filter.secondaries}()},
-\code{\link{gl.report.callrate}()},
-\code{\link{gl.report.hamming}()},
-\code{\link{gl.report.locmetric}()},
-\code{\link{gl.report.monomorphs}()},
-\code{\link{gl.report.rdepth}()},
-\code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.taglength}()}
+\code{\link{gl.filter.sexlinked}()},
+\code{\link{gl.filter.taglength}()}
 }
 \author{
 Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{filters and filter reports}
+\concept{filter functions}

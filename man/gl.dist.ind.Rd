@@ -72,9 +72,9 @@ The distance measure for Sequence Tag Presence/Absence data (binary) can be one 
 Refer to the dartR Technical Note on Distances in Genetics.
 }
 \examples{
-D <- gl.dist.ind(testset.gl, method='euclidean',scale=TRUE)
-D <- gl.dist.ind(testset.gl, method='manhattan')
-D <- gl.dist.ind(testset.gs, method='Jaccard',swap=TRUE)
+D <- gl.dist.ind(testset.gl[1:20,], method='euclidean',scale=TRUE)
+D <- gl.dist.ind(testset.gl[1:20,], method='manhattan')
+D <- gl.dist.ind(testset.gs[1:20,], method='Jaccard',swap=TRUE)
 }
 \author{
 Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}

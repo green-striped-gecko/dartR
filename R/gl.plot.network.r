@@ -96,7 +96,7 @@ gl.plot.network <- function(D,
     }
     
     if (!is.null(x)) {
-        if (class(x) != "genlight") {
+        if (!is(x, "genlight")) {
             stop(
                 error(
                     "Fatal Error: if specified, genlight object required for gl.dist.network!\n"
@@ -152,7 +152,7 @@ gl.plot.network <- function(D,
                                       directed = FALSE)
     
     if (!is.null(x)) {
-        colors = rainbow(nlevels(pop(x)))
+        colors <-rainbow(nlevels(pop(x)))
         my_colors <- colors[pop(x)]
     } else {
         my_colors <- "red"

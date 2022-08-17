@@ -45,9 +45,9 @@
 #' @export
 #' @author Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' D <- gl.dist.ind(testset.gl, method='euclidean',scale=TRUE)
-#' D <- gl.dist.ind(testset.gl, method='manhattan')
-#' D <- gl.dist.ind(testset.gs, method='Jaccard',swap=TRUE)
+#' D <- gl.dist.ind(testset.gl[1:20,], method='euclidean',scale=TRUE)
+#' D <- gl.dist.ind(testset.gl[1:20,], method='manhattan')
+#' D <- gl.dist.ind(testset.gs[1:20,], method='Jaccard',swap=TRUE)
 
 gl.dist.ind <- function(x,
                         method = NULL,
@@ -360,14 +360,19 @@ gl.dist.ind <- function(x,
         if(verbose >= 2){
             cat(report("  Returning a square matrix\n"))
         }
+        dimnames(mat) <- list(indNames(x), indNames(x))
         final <- mat
     }
     if(output!="matrix"){
         if(verbose >= 2){
             cat(report("  Returning a stat::dist object\n"))
         }
+        dm <- as.matrix(dd)
+        dimnames(dm) <- list(indNames(x), indNames(x))
+        dd <- as.dist(dm)
         final <- dd
     }
+    
     if (verbose > 0) {
             cat(report("Completed:", funname, "\n"))
     }

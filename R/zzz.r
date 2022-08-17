@@ -2,9 +2,10 @@
 #'
 #' Setting theme, colors and verbosity
 #' @importFrom graphics axis barplot box image lines text
-#' @importFrom grDevices hcl
+#' @importFrom grDevices hcl col2rgb
 #' @importFrom methods new
-#' @importFrom stats dist nobs optimize pchisq variable.names optim quantile pgamma
+#' @importFrom stats dist nobs optimize pchisq variable.names optim quantile 
+#' pgamma
 #' @import ggplot2
 
 zzz <- NULL  #to create a useful named help page
@@ -45,10 +46,17 @@ utils::globalVariables(c("chromosome_name","phase1","same_line","number_pops_pha
 `.` <- list
 
 # SET PLOTS COLORS
+# Convert color names to hex RGB strings taken from function col2hex from
+# package gplots 
+RGB_colors <- function (cname){
+  colMat <- col2rgb(cname)
+  rgb(red = colMat[1, ]/255, green = colMat[2, ]/255, blue = colMat[3, 
+  ]/255)
+}
 
 # function to replicate defaults colors of ggplot
 discrete_palette <- function(n) {
-    hues = seq(15, 375, length = n + 1)
+    hues <-seq(15, 375, length = n + 1)
     return(hcl(h = hues, l = 65, c = 100)[1:n])
 }
 
@@ -84,6 +92,15 @@ two_colors <- c("#3B9AB2", "#78B7C5")
 two_colors_contrast <- c("deeppink", "chartreuse3")
 three_colors <- c("#3B9AB2", "deeppink", "lemonchiffon")
 four_colors <- c("lemonchiffon", "deeppink", "dodgerblue", "chartreuse3")
+# taken from package pals palette polychrome
+structure_colors <- cols <-  c( "#E4E1E3", "#F6222E", "#FE00FA", "#16FF32", 
+                               "#3283FE", "#FEAF16", "#B00068", "#1CFFCE", "#90AD1C", 
+                               "#2ED9FF", "#DEA0FD", "#AA0DFE", "#F8A19F", "#325A9B", 
+                               "#C4451C", "#1C8356", "#85660D", "#B10DA1", "#FBE426", 
+                               "#1CBE4F", "#FA0087", "#FC1CBF", "#F7E1A0", "#C075A6", 
+                               "#782AB6", "#AAF400", "#BDCDFF", "#822E1C", "#B5EFB5", 
+                               "#7ED7D1", "#1C7F93", "#D85FF7", "#683B79", "#66B0FF", 
+                               "#3B00FB")
 
 # SET THEME FOR PLOTS
 #' dartR theme
@@ -272,25 +289,25 @@ theme_dartR <- function(base_size = 11,
 }
 
 ## plot method
-setMethod("plot", signature(x = "genlight"), function(x,
-                                                      group_pop = FALSE,
-                                                      ind_labels = indNames(x),
-                                                      ind_labels_size = 10,
-                                                      plot_colors = four_colors,
-                                                      posi = "bottom",
-                                                      save2tmp = FALSE,
-                                                      verbose = NULL) {
-    gl.smearplot(
-        x,
-        group_pop = group_pop,
-        ind_labels = ind_labels,
-        ind_labels_size = ind_labels_size,
-        plot_colors = plot_colors,
-        posi = posi,
-        save2tmp = save2tmp,
-        verbose = verbose
-    )
-})
+# setMethod("plot", signature(x = "genlight"), function(x,
+#                                                       group_pop = TRUE,
+#                                                       ind_labels = TRUE,
+#                                                       ind_labels_size = 8,
+#                                                       plot_colors = four_colors,
+#                                                       posi = "bottom",
+#                                                       save2tmp = FALSE,
+#                                                       verbose = NULL) {
+#     gl.smearplot(
+#         x,
+#         group_pop = group_pop,
+#         ind_labels = ind_labels,
+#         ind_labels_size = ind_labels_size,
+#         plot_colors = plot_colors,
+#         posi = posi,
+#         save2tmp = save2tmp,
+#         verbose = verbose
+#     )
+# })
 
 # WELCOME MESSAGE
 .onAttach <- function(...) {

@@ -146,7 +146,7 @@ gl.read.silicodart <- function(filename,
     }
     
     datas <- snpraw[, (lmet + 1):ncol(snpraw)]
-    nrows = 1  #there is no two row SilicoFormat??
+    nrows <-1  #there is no two row SilicoFormat??
     stdmetricscols <- 1:lmet
     
     if (verbose >= 2) {
@@ -190,7 +190,6 @@ gl.read.silicodart <- function(filename,
         )
     }
     
-    
     # create unique locnames based on cloneID
     index <-
         unique(covmetrics$CloneID[which(duplicated(covmetrics$CloneID))])
@@ -231,7 +230,7 @@ gl.read.silicodart <- function(filename,
                      header = T,
                      stringsAsFactors = T)
         # is there an entry for every individual
-        id.col = match("id", names(ind.cov))
+        id.col <-match("id", names(ind.cov))
         
         if (is.na(id.col)) {
             stop(error("Fatal Error: There is no id column\n"))
@@ -274,7 +273,7 @@ gl.read.silicodart <- function(filename,
             }
         }
         
-        pop.col = match("pop", names(ind.cov))
+        pop.col <-match("pop", names(ind.cov))
         
         if (is.na(pop.col)) {
             cat(warn("  Please note: there is no pop column\n"))
@@ -285,8 +284,8 @@ gl.read.silicodart <- function(filename,
             cat(report("    Added pop factor.\n"))
         }
         
-        lat.col = match("lat", names(ind.cov))
-        lon.col = match("lon", names(ind.cov))
+        lat.col <-match("lat", names(ind.cov))
+        lon.col <-match("lon", names(ind.cov))
         
         if (is.na(lat.col)) {
             cat(warn("  Please note: there is no lat column\n"))
@@ -335,7 +334,8 @@ gl.read.silicodart <- function(filename,
             "FreqHomSnp",
             "monomorphs",
             "OneRatio",
-            "PIC"
+            "PIC",
+            "allna"
         )
     glout@other$loc.metrics.flags <-
         data.frame(matrix(TRUE, nrow = 1, ncol = length(recalc.flags)))

@@ -8,6 +8,7 @@
 gl.filter.hwe(
   x,
   subset = "each",
+  n.pop.threshold = 1,
   method_sig = "Exact",
   multi_comp = FALSE,
   multi_comp_method = "BY",
@@ -24,7 +25,11 @@ gl.filter.hwe(
 \item{subset}{Way to group individuals to perform H-W tests. Either a vector
 with population names, 'each', 'all' (see details) [default 'each'].}
 
-\item{method_sig}{Method for determining statistical significance: 'ChiSquare'
+\item{n.pop.threshold}{The minimum number of populations where the same locus 
+has to be out of H-W proportions to be removed [default 1].}
+
+\item{method_sig}{Method for determining statistical significance: 
+'ChiSquare'
 or 'Exact' [default 'Exact'].}
 
 \item{multi_comp}{Whether to adjust p-values for multiple comparisons
@@ -58,7 +63,9 @@ This function filters out loci showing significant departure from H-W
 proportions based on observed frequencies of reference homozygotes,
  heterozygotes and alternate homozygotes.
 
-Loci are filtered out if they show HWE departure in any one population.
+Loci are filtered out if they show HWE departure either in any one population 
+(n.pop.threshold =1) or in at least X number of populations 
+(n.pop.threshold > 1).
 }
 \details{
 There are several factors that can cause deviations from Hardy-Weinberg
@@ -76,7 +83,8 @@ Populations can be defined in three ways:
 \itemize{
 \item Merging all populations in the dataset using subset = 'all'.
 \item Within each population separately using: subset = 'each'.
-\item Within selected populations using for example: subset = c('pop1','pop2').
+\item Within selected populations using for example: subset = 
+c('pop1','pop2').
 }
 
 Two different statistical methods to test for deviations from Hardy Weinberg
@@ -110,10 +118,13 @@ occasionally exceeding the nominal level (Graffelman & Moreno, 2013).
 Correction for multiple tests can be applied using the following methods
 based on the function \code{\link[stats]{p.adjust}}:
 \itemize{
-\item 'holm' is also known as the sequential Bonferroni technique (Rice, 1989).
-This method has a greater statistical power than the standard Bonferroni test,
+\item 'holm' is also known as the sequential Bonferroni technique 
+(Rice, 1989).
+This method has a greater statistical power than the standard Bonferroni 
+test,
 however this method becomes very stringent when many tests are performed and
-many real deviations from the null hypothesis can go undetected (Waples, 2015).
+many real deviations from the null hypothesis can go undetected 
+(Waples, 2015).
 \item 'hochberg' based on Hochberg, 1988.
 \item 'hommel' based on Hommel, 1988. This method is more powerful than
 Hochberg's, but the difference is usually small.
@@ -132,6 +143,13 @@ error rate, so these methods are more powerful than the others, especially
 when number of tests is large.
 The number of tests on which the adjustment for multiple comparisons is
 the number of populations times the number of loci.
+
+\bold{From v2.1} \code{gl.filter.hwe} takes the argument
+ \code{n.pop.threshold}.
+if \code{n.pop.threshold > 1} loci will be removed only if they are 
+concurrently 
+significant (after adjustment if applied) out of hwe in >= 
+\code{n.pop.threshold > 1}.
 }
 \examples{
 result <- gl.filter.hwe(x = bandicoot.gl)
@@ -144,9 +162,11 @@ result <- gl.filter.hwe(x = bandicoot.gl)
 \item Graffelman, J. (2015). Exploring Diallelic Genetic Markers: The Hardy
 Weinberg Package. Journal of Statistical Software 64:1-23.
 \item Graffelman, J. & Morales-Camarena, J. (2008). Graphical tests for
-Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 65:77-84.
+Hardy-Weinberg equilibrium based on the ternary plot. Human Heredity 
+65:77-84.
 \item Graffelman, J., & Moreno, V. (2013). The mid p-value in exact tests for
-Hardy-Weinberg equilibrium. Statistical applications in genetics and molecular
+Hardy-Weinberg equilibrium. Statistical applications in genetics and
+ molecular
 biology, 12(4), 433-448.
 \item Hochberg, Y. (1988). A sharper Bonferroni procedure for multiple tests
  of significance. Biometrika, 75, 800–803.
@@ -164,11 +184,25 @@ Tests of Hardy-Weinberg Equilibrium. American Journal of Human Genetics
 \seealso{
 \code{\link{gl.report.hwe}}
 
-Other filters/filter reports: 
-\code{\link{gl.report.hwe}()}
+Other filter functions: 
+\code{\link{gl.filter.allna}()},
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.heterozygosity}()},
+\code{\link{gl.filter.ld}()},
+\code{\link{gl.filter.locmetrics}},
+\code{\link{gl.filter.maf}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.overshoot}()},
+\code{\link{gl.filter.parent.offspring}()},
+\code{\link{gl.filter.pa}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.filter.secondaries}()},
+\code{\link{gl.filter.sexlinked}()},
+\code{\link{gl.filter.taglength}()}
 }
 \author{
-Custodian: Luis Minjangos -- Post to
+Custodian: Luis Mijangos -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{filters/filter reports}
+\concept{filter functions}

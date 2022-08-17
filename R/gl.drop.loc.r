@@ -73,19 +73,37 @@ gl.drop.loc <- function(x,
     }
     
     if (flag == "both" || flag == "list") {
-        for (case in loc.list) {
-            if (!(case %in% locNames(x))) {
-                if(verbose >= 2){
-                    cat(
-                    warn(
-                        "  Warning: Listed loci",
-                        case,
-                        "not present in the dataset -- ignored\n"
-                    ))
-                }
-                loc.list <- loc.list[!(loc.list == case)]
-            }
+      
+      tmp1 <- loc.list %in% locNames(x)
+      tmp2 <- which(tmp1 == FALSE)
+      if(length(tmp2)>0){
+        
+        if(verbose >= 2){
+          cat(
+            warn(
+              "  Warning: Listed loci",
+              paste(locNames(x)[tmp2],collapse = " "),
+              "not present in the dataset -- ignored\n"
+            ))
         }
+        
+        loc.list <- loc.list[-tmp2]
+        
+      }
+      
+        # for (case in loc.list) {
+        #     if (!(case %in% locNames(x))) {
+        #         if(verbose >= 2){
+        #             cat(
+        #             warn(
+        #                 "  Warning: Listed loci",
+        #                 case,
+        #                 "not present in the dataset -- ignored\n"
+        #             ))
+        #         }
+        #         loc.list <- loc.list[!(loc.list == case)]
+        #     }
+        # }
     }
     
     if (flag == "range") {
