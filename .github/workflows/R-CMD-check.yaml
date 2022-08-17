@@ -64,6 +64,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           install.packages("rgdal", type="binary")
+          install.packages("Rcpp")
           install.packages('raster', repos='https://rspatial.r-universe.dev')
           install.packages('terra', repos='https://rspatial.r-universe.dev')
         shell: Rscript {0}
