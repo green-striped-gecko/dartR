@@ -116,14 +116,8 @@ series of tests conducted (De Meeûs et al 2009).
 }
 }
 \examples{
-<<<<<<< HEAD
-\donttest{
-res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]),n.cores=1)
-=======
 res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]), 
 stdErr=FALSE, n.cores=1)
->>>>>>> 9e85f3a5bfa6c175ce1fe7074f80707af20c9737
-}
 }
 \references{
 \itemize{ 
