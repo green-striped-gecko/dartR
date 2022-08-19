@@ -1,4 +1,4 @@
-#' @name gl.filter.locmetrics
+#' @name gl.filter.locmetric
 #' @title Filters loci on the basis of numeric information stored in
 #'  other$loc.metrics in a genlight \{adegenet\} object
 #' @description
