@@ -327,7 +327,7 @@ gl.report.ld.map <- function(x,
       scale_color_manual(values = boxplot_colors) +
       ylab(ld_stat) +
       ggtitle(title1) +
-      theme(legend.position = "none")+     
+      theme(legend.position = "bottom")+     
       labs(title = "Pairwise LD by population", color = "") +
       theme(axis.title.x=element_blank(),
             axis.text.x = element_blank(),
@@ -356,7 +356,7 @@ gl.report.ld.map <- function(x,
      p3 <- ggplot(ld_pops,aes(x=pops,y=n_loc))+
       geom_col(color = histogram_colors[1],fill = histogram_colors[2]) +
       ylab("Count")+
-      xlab("Number of populations in which the same SNP pair are in LD") +
+      xlab(paste("Number of populations in which the same SNP pair are in LD with an",ld_stat,">",ld_threshold_pops)) +
       plot_theme
   }
   
