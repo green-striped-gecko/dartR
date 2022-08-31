@@ -30,7 +30,8 @@ The reduced genlight dataset.
 This script uses any field with numeric values stored in $other$loc.metrics
 to filter loci. The loci to keep can be within the upper and lower thresholds
  ('within') or outside of the upper and lower thresholds ('outside').
-
+}
+\details{
 The fields that are included in dartR, and a short description, are found
 below. Optionally, the user can also set his/her own filter by adding a
 vector into $other$loc.metrics as shown in the example.

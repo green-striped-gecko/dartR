@@ -176,6 +176,7 @@ individuals nor the number of populations."
         }
         
         if (!is.null(matrix)) {
+          matrix <- matrix[order(indNames(x)),]
             # standardize
             if (standard) {
                 matrix[, ] <-
