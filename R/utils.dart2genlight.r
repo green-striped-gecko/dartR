@@ -139,7 +139,7 @@ utils.dart2genlight <- function(dart,
     }
     gout <-
         new(
-            "genlight",
+            "dartR",
             gen = t(geninddata),
             ploidy = 2,
             ind.names = colnames(sdata),

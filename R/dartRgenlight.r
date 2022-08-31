@@ -1,80 +1,81 @@
 
-#seppop needs to be importet to work for dartRgenlight
+#seppop needs to be importet to work for dartR
 #also internal functions for "[" methods
 seppop <- getFromNamespace("seppop", "adegenet")
 .seppop_internal <- getFromNamespace(".seppop_internal", "adegenet")
 .get_pop_inds <- getFromNamespace(".get_pop_inds","adegenet")
 
-setClass("dartRgenlight", contains="genlight")
+setClass("dartR", contains="genlight",)
 
 
 ### adding new slots...
-#setClass("dartRgenlight",slots=list(what="integer"), contains="genlight")
+#setClass("dartR",slots=list(what="integer"), contains="genlight")
 ###
 
 ########################
-## show dartRgenlight ##
+## show dartR ##
 ########################
-setMethod ("show", "dartRgenlight", function(object){
+setMethod ("show", "dartR", function(object){
   ## HEADER
-
+  cat(" *****************************\n")
   cat(" *** DARTR-GENLIGHT OBJECT ***\n")
   cat(" *****************************")
+  marker <- "mixed markers"
   if (all(!is.na(ploidy(object)))) {
-  if (all(ploidy(object)==2)) cat("\n SNP-data") 
-  if (all(ploidy(object)==1)) cat("\n silicoDart data")
-  } else cat("Check ploidy of your dataset.")
+  if (all(ploidy(object)==2)) marker <-"SNPs" 
+  if (all(ploidy(object)==1)) marker <- "silicoDarts (P/A) "
+  } 
+  
   cat("\n\n **", format(nInd(object), big.mark=","), "genotypes, ",
-      format(nLoc(object), big.mark=","), "binary SNPs, size:", format(object.size(object), units="auto"))
+      format(nLoc(object), big.mark=","), marker,", size:", format(object.size(object), units="auto"))
   
   temp <- sapply(object@gen, function(e) length(e@NA.posi))
   if(length(temp>1)){
-    cat("\n ", sum(temp), " (", round((sum(temp)/(nInd(object)*nLoc(object))) *100,2)," %) missing data", sep="")
+    cat("\n\n    missing data: ", sum(temp), " (=", round((sum(temp)/(nInd(object)*nLoc(object))) *100,2)," %) scored as NA", sep="")
   }
   
   ## BASIC CONTENT
-  cat("\n\n ** Basic content")
+  cat("\n\n ** Genetic data")
   cat("\n   @gen: list of", length(object@gen), "SNPbin")
-  
+
   if(!is.null(object@ploidy)){
     ploidytxt <- paste("(range: ", paste(range(object@ploidy), collapse="-"), ")", sep="")
     cat("\n   @ploidy: ploidy of each individual ", ploidytxt)
   }
   
-  ## OPTIONAL CONTENT
-  cat("\n\n ** Optional content")
+  ## Additional data
+  cat("\n\n ** Additional data")
   optional <- FALSE
   
   if(!is.null(object@ind.names)){
     optional <- TRUE
     cat("\n   @ind.names: ", length(object@ind.names), "individual labels")
-  }
+  } else cat("\n   @ind.names: ", "no individual labels")
   
   if(!is.null(object@loc.names)){
     optional <- TRUE
     cat("\n   @loc.names: ", length(object@loc.names), "locus labels")
-  }
+  } else cat("\n   @loc.names: ", "no locus labels")
   
   if(!is.null(object@loc.all)){
     optional <- TRUE
-    cat("\n   @loc.all: ", length(object@loc.all), "alleles")
-  }
+    cat("\n   @loc.all: ", length(object@loc.all), "allele labels")
+  } else cat("\n   @loc.all: "," no allele labels") 
   
   if(!is.null(object@chromosome)){
     optional <- TRUE
-    cat("\n   @chromosome: factor storing chromosomes of the SNPs")
-  }
+    cat("\n   @chromosome: factor storing chromosomes of the", marker)
+  } 
   
   if(!is.null(object@position)){
     optional <- TRUE
-    cat("\n   @position: integer storing positions of the SNPs")
-  }
-  
+    cat("\n   @position: integer storing positions of the",marker,"[within 69 base sequence]")
+  } 
   if(!is.null(object@pop)){
     optional <- TRUE
     poptxt <- paste("(group size range: ", paste(range(table(object@pop)), collapse="-"), ")", sep="")
     cat("\n   @pop:", paste("population of each individual", poptxt))
-  }
+  } else cat("\n   @pop:", "no population lables for individuals")
   
   if (!is.null(object@strata)){
     optional <- TRUE
@@ -97,16 +98,28 @@ setMethod ("show", "dartRgenlight", function(object){
     optional <- TRUE
     cat("\n   @other: ")
     cat("a list containing: ")
-    cat(ifelse(is.null(names(object@other)), "elements without names", paste(names(object@other), collapse= "  ")), "\n")
+    cat(ifelse(is.null(names(object@other)), "elements without names", paste(names(object@other), collapse= ", ")), "\n")
   }
   
+  if(!is.null(object@other$ind.metrics)){
+    optional <- TRUE
+    cat("    @other$ind.metrics: ")
+    cat(ifelse(is.null(names(object@other$ind.metrics)), "elements without names", paste(names(object@other$ind.metrics), collapse= ", ")), "\n")
+  }
+
+  if(!is.null(object@other$ind.metrics)){
+    optional <- TRUE
+    cat("    @other$loc.metrics: ")
+    cat(ifelse(is.null(names(object@other$loc.metrics)), "elements without names", paste(names(object@other$loc.metrics), collapse= ", ")), "\n")
+  }
+    
   if(!optional) cat("\n   - empty -")
   
   
-    cat("\n   @other$latlon[g]:")
+    cat("   @other$latlon[g]:")
     if(!is.null(object@other$latlon)){
       if (nrow(object@other$latlon)==nInd(object))
-    cat(" coordinates for all individuals are attached") else cat(" coordinates for some individuals are missing")
+    cat(" coordinates for all individuals are attached") else cat(" number of coordinates does not match number of individuals")
   } else cat(" no coordinates attached")
   cat("\n")
  
@@ -114,12 +127,12 @@ setMethod ("show", "dartRgenlight", function(object){
 
 
 #################
-## subset dartRgenlight
+## subset dartR
 #################
 
-#' indexing dartRgenlight objects correctly...
+#' indexing dartR objects correctly...
 #' 
-#' @param x dartRgenlight object
+#' @param x dartR object
 #' @param i index for individuals
 #' @param j index for loci
 #' @param ... other parameters
@@ -129,8 +142,8 @@ setMethod ("show", "dartRgenlight", function(object){
 #' @param drop reduced to a vector if a single individual/loci is selected. default: FALSE [should never set to TRUE]
 
 
-## dartRgenlight
-setMethod("[", signature(x = "dartRgenlight", i = "ANY", j = "ANY", drop = "ANY"),
+## dartR
+setMethod("[", signature(x = "dartR", i = "ANY", j = "ANY", drop = "ANY"),
           function(x, i, j, ..., pop=NULL, treatOther=TRUE, quiet=TRUE, drop=FALSE) {
             if (missing(i)) i <- TRUE
             if (missing(j)) j <- TRUE
@@ -209,20 +222,20 @@ setMethod("[", signature(x = "dartRgenlight", i = "ANY", j = "ANY", drop = "ANY"
             x@loc.all     <- alleles(x)[j]
             x@gen         <- lapply(x@gen, function(e) e[j])
             x@n.loc       <- x@gen[[1]]@n.loc
-            #subset also loc.metrics
-            x@other$loc.metrics <- x@other$loc.metrics[j,]
+            #subset also loc.metrics (if this data.frame exists)
+            if (!is.null(x@other$loc.metrics)) x@other$loc.metrics <- x@other$loc.metrics[j,]
             
             return(x)
           }) # end [] for genlight
 
 
 ###############################################################
-#' adjust cbind for dartRgenlight
+#' adjust cbind for dartR
 #' 
 #' cbind is a bit lazy and does not take care for the metadata (so data in the other slot is lost). You can get most of the loci metadata back using gl.compliance.check.
-#' @param ... list of dartRgenlight objects
+#' @param ... list of dartR objects
 #' @export 
-cbind.dartRgenlight <- function(...){
+cbind.dartR <- function(...){
   ## store arguments
   dots <- list(...)
   
@@ -260,7 +273,7 @@ cbind.dartRgenlight <- function(...){
   }
   
   dots$gen <- res
-  dots$Class <- "dartRgenlight"
+  dots$Class <- "dartR"
   res <- do.call(new, dots)
   
   ## handle loc.names, alleles, etc. ##
@@ -273,14 +286,14 @@ cbind.dartRgenlight <- function(...){
   
   ## return object ##
   return(res)
-} # end cbind.dartRgenlight
+} # end cbind.dartR
 
-#' adjust rbind for dartRgenlight
+#' adjust rbind for dartR
 #' 
 #' rbind is a bit lazy and does not take care for the metadata (so data in the other slot is lost). You can get most of the loci metadata back using gl.compliance.check.
-#' @param ... list of dartRgenlight objects
+#' @param ... list of dartR objects
 #' @export 
-rbind.dartRgenlight <- function(...){
+rbind.dartR <- function(...){
   ## store arguments
   dots <- list(...)
   
@@ -302,7 +315,7 @@ rbind.dartRgenlight <- function(...){
   if(length(unique(sapply(myList, nLoc))) !=1 ) stop("objects have different numbers of SNPs")
   
   ## build output
-  dots$Class <- "dartRgenlight"
+  dots$Class <- "dartR"
   dots$gen <- Reduce(c, lapply(myList, function(e) e@gen))
   res <- do.call(new, dots)
   locNames(res) <- locNames(myList[[1]])
@@ -311,7 +324,7 @@ rbind.dartRgenlight <- function(...){
   pop(res)      <- factor(unlist(lapply(myList, pop)))
   
   
-  #hierachies are ignored in dartRgenlight objects here
+  #hierachies are ignored in dart objects here
   # Hierarchies are tricky. Using dplyr's bind_rows.
   #res <- .rbind_strata(myList, res)
   
