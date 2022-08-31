@@ -17,9 +17,9 @@ setClass("dartR", contains="genlight",)
 ########################
 setMethod ("show", "dartR", function(object){
   ## HEADER
-  cat(" *****************************\n")
-  cat(" *** DARTR-GENLIGHT OBJECT ***\n")
-  cat(" *****************************")
+  cat(" ********************\n")
+  cat(" *** DARTR OBJECT ***\n")
+  cat(" ********************")
   marker <- "mixed markers"
   if (all(!is.na(ploidy(object)))) {
   if (all(ploidy(object)==2)) marker <-"SNPs" 
