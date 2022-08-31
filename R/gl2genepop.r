@@ -129,8 +129,7 @@ gl2genepop <- function (x,
     loc_all$allele <- paste0("0",loc_all$allele)
   }
   
-  loci_names <-
-    as.character(loci_names_l[-which(duplicated(loci_names_l))])
+  loci_names <- as.character(loci_names_l[-which(duplicated(loci_names_l))])
   n.loci <- length(loci_names_l[-which(duplicated(loci_names_l))])
   data_gpop <- data.frame(id = paste(pop_names, "_",
                                      row.names(data), ",", sep = ""))
@@ -145,16 +144,17 @@ gl2genepop <- function (x,
         a[j] <- paste(loc_all[col_loc[hom], "allele"],
                       loc_all[col_loc[hom], "allele"], sep = "")
       } else if (length(het) != 0) {
-        if (as.character(loc_all[col_loc[het[1]], "allele"]) <
-            as.character(loc_all[col_loc[het[2]], "allele"])) {
+        # disabling the order of alleles
+        # if (as.character(loc_all[col_loc[het[1]], "allele"]) <
+        #     as.character(loc_all[col_loc[het[2]], "allele"])) {
           a[j] <- paste(loc_all[col_loc[het[1]], "allele"],
                         loc_all[col_loc[het[2]], "allele"],
                         sep = "")
-        } else {
-          a[j] <- paste(loc_all[col_loc[het[2]], "allele"],
-                        loc_all[col_loc[het[1]], "allele"],
-                        sep = "")
-        }
+        # } else {
+        #   a[j] <- paste(loc_all[col_loc[het[2]], "allele"],
+        #                 loc_all[col_loc[het[1]], "allele"],
+        #                 sep = "")
+        # }
       } else {
         if (nchar(loc_all[1, "allele"]) == 3) {
           a[j] <- "000000"
@@ -168,12 +168,11 @@ gl2genepop <- function (x,
   colnames(data_gpop) <- c("ID", as.character(loci_names))
   data_gpop[,] <- apply(data_gpop, c(1, 2), as.character)
   
-  dummy <-
-    paste("Genepop output. Loci:", nLoc(x), "Populations:", nPop(x))
+  dummy <- paste("Genepop output. Loci:", nLoc(x), "Populations:", nPop(x))
   dummy[2] <- paste(locNames(x), collapse = ",")
   cs <- c(cumsum(table(pop(x))))
-  from = c(1, (cs[-length(cs)] + 1))
-  to = cs
+  from <-c(1, (cs[-length(cs)] + 1))
+  to <-cs
   
   for (i in 1:nPop(x)) {
     da <-

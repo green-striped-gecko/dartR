@@ -54,6 +54,7 @@ Suggests:
     label.switching,
     leaflet,
     leaflet.minicharts,
+    maptools,
     markdown,
     mmod,
     networkD3,
@@ -83,10 +84,12 @@ Suggests:
     terra,
     tibble,
     tidyverse,
-    vcfR
+    vcfR,
+    zoo,
+    viridis
 License: GPL (>= 3)
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 NeedsCompilation: no
 Packaged: 2021-04-28 23:28:46 UTC; s425824
 Author: Bernd Gruber [aut, cre],
@@ -98,3 +101,6 @@ Author: Bernd Gruber [aut, cre],
   Lindsay V. Clark [ctb],
   Floriaan Devloo-Delva [ctb],
   Eric Archer [ctb]
+Config/testthat/edition: 3
+URL: https://green-striped-gecko.github.io/dartR/
+BugReports: https://groups.google.com/g/dartr?pli=1

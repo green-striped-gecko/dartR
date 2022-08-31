@@ -127,16 +127,27 @@ gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
 \seealso{
 \code{\link{gl.filter.heterozygosity}}
 
-Other reporting functions: 
-\code{\link{gl.diagnostics.hwe}()},
+Other report functions: 
 \code{\link{gl.report.bases}()},
+\code{\link{gl.report.callrate}()},
 \code{\link{gl.report.diversity}()},
+\code{\link{gl.report.hamming}()},
+\code{\link{gl.report.hwe}()},
+\code{\link{gl.report.ld.map}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.parent.offspring}()},
 \code{\link{gl.report.pa}()},
-\code{\link{gl.report.sexlinked}()}
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.sexlinked}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
 Custodian: Luis Mijangos (Post to
 \url{https://groups.google.com/d/forum/dartr})
 }
-\concept{reporting functions}
+\concept{report functions}

@@ -186,7 +186,7 @@ gl2plink <- function(x,
                 else if (inp == 2)
                     xx[i, ii] <- homs2[ii]
             } else{
-                xx[i, ii] = "0/0"
+                xx[i, ii] <-"0/0"
             }
         }
     }
@@ -240,8 +240,8 @@ gl2plink <- function(x,
             }
         
         
-        system_verbose = function(...) {
-            report = system(..., intern = T)
+        system_verbose <-function(...) {
+            report <-system(..., intern = T)
             message(
                 paste0(
                     "\n\n----------Output of function start:\n\n",

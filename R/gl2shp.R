@@ -108,7 +108,7 @@ gl2shp <- function(x,
         sp::coordinates(glpoints) <- c("lon", "lat")
         
         # create all sites point shp files
-        spdf = SpatialPointsDataFrame(glpoints, data.frame(glpoints))
+        spdf <-SpatialPointsDataFrame(glpoints, data.frame(glpoints))
         proj4string(spdf) <- CRS(proj4)
         # if (!is.null(reproj4)) spdf <- project(spdf, proj = reproj4, inv = TRUE)
         #now use terra

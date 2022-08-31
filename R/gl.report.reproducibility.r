@@ -1,5 +1,6 @@
 #' @name gl.report.reproducibility
-#' @title Reports summary of RepAvg (repeatability averaged over both alleles for
+#' @title Reports summary of RepAvg (repeatability averaged over both alleles 
+#' for
 #' each locus) or reproducibility (repeatability of the scores for fragment
 #' presence/absence)
 #' @description
@@ -39,8 +40,9 @@
 #'
 #'  For examples of themes, see:
 #'    \itemize{
-#'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
-#'  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
+#'  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and 
+#'  \item
+#'   \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
 #'  }
 #'
 #' @return An unaltered genlight object
@@ -54,7 +56,7 @@
 #'   out <- gl.report.reproducibility(testset.gs)
 #'
 #' @seealso \code{\link{gl.filter.reproducibility}}
-#' @family filters and filter reports
+#' @family report functions
 #' @import patchwork
 #' @export
 
@@ -106,13 +108,13 @@ gl.report.reproducibility <- function(x,
             plot_theme + 
             ylim(c(min(repeatability), 1)) + 
             ylab(" ") + 
-            theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+            theme(axis.text.y = element_blank(),axis.ticks.y=element_blank()) +
             ggtitle(title)
         
         # Histogram
         p2 <-
             ggplot(repeatability_plot, aes(x = repeatability)) +
-            geom_histogram(bins = 50, color = plot_colors[1],fill = plot_colors[2]) +
+            geom_histogram(bins = 50,color=plot_colors[1],fill=plot_colors[2]) +
             coord_cartesian(xlim = c(min(repeatability), 1)) + 
             xlab("Repeatability") + 
             ylab("Count") + 
@@ -191,7 +193,8 @@ gl.report.reproducibility <- function(x,
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

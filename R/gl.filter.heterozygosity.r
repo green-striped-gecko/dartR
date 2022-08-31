@@ -17,6 +17,7 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @importFrom plyr join
+#' @family filter functions
 #' @examples
 #'  result <- gl.filter.heterozygosity(testset.gl,t.upper=0.06,verbose=3)
 #'  tmp <- gl.report.heterozygosity(result,method='ind')
@@ -57,7 +58,8 @@ gl.filter.heterozygosity <- function(x,
     if (!x@other$loc.metrics.flags$monomorphs) {
         cat(
             warn(
-                "  Warning: genlight object contains monomorphic loci which will be factored into heterozygosity estimates\n"
+                "  Warning: genlight object contains monomorphic loci which will
+                be factored into heterozygosity estimates\n"
             )
         )
     }

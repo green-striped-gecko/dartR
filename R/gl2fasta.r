@@ -8,8 +8,8 @@
 #'
 #' Four methods are employed:
 #'
-#' Method 1 -- heterozygous positions are replaced by the standard ambiguity c
-#' odes. The resultant sequence fragments are concatenated across loci to
+#' Method 1 -- heterozygous positions are replaced by the standard ambiguity 
+#' codes. The resultant sequence fragments are concatenated across loci to
 #' generate a single combined sequence to be used in subsequent ML phylogenetic
 #' analyses.
 #'
@@ -190,9 +190,8 @@ gl2fasta <- function(x,
     
     if (method == 1 || method == 3) {
         allnames <- locNames(x)
-        snp = as.character(x@loc.all)
-        trimmed <-
-            as.character(x@other$loc.metrics$TrimmedSequence)
+        snp <- as.character(x@loc.all)
+        trimmed <- as.character(x@other$loc.metrics$TrimmedSequence)
         snpmatrix <- as.matrix(x)
         
         # Create a lookup table for the ambiguity codes A T G C A A W R M) T W T K Y G R K G S C M Y S C
@@ -224,9 +223,9 @@ gl2fasta <- function(x,
         rownames(conversion) <- colnames(conversion)
         
         # Extract alleles 1 and 2
-        allelepos = x@position
-        allele1 = gsub("(.)/(.)", "\\1", snp, perl = T)
-        allele2 = gsub("(.)/(.)", "\\2", snp, perl = T)
+        allelepos <- x@position
+        allele1 <-gsub("(.)/(.)", "\\1", snp, perl = T)
+        allele2 <-gsub("(.)/(.)", "\\2", snp, perl = T)
         
         
         if (verbose >= 2) {
@@ -254,16 +253,16 @@ gl2fasta <- function(x,
                     code <- "N"
                 } else {
                     if (snpmatrix[i, j] == 0) {
-                        a1 = allele1[j]
-                        a2 = allele1[j]
+                        a1 <-allele1[j]
+                        a2 <-allele1[j]
                     }
                     if (snpmatrix[i, j] == 1) {
-                        a1 = allele1[j]
-                        a2 = allele2[j]
+                        a1 <-allele1[j]
+                        a2 <-allele2[j]
                     }
                     if (snpmatrix[i, j] == 2) {
-                        a1 = allele2[j]
-                        a2 = allele2[j]
+                        a1 <-allele2[j]
+                        a2 <-allele2[j]
                     }
                     code <- conversion[a1, a2]
                 }
@@ -372,8 +371,8 @@ gl2fasta <- function(x,
                     end <-
                         stringr::str_sub(trimmed, start = snpos + 1)
                     # Extract the SNP transition bases (e.g. A and T)
-                    state1 = gsub("(.)/(.)", "\\1", snp, perl = T)
-                    state2 = gsub("(.)/(.)", "\\2", snp, perl = T)
+                    state1 <-gsub("(.)/(.)", "\\1", snp, perl = T)
+                    state2 <-gsub("(.)/(.)", "\\2", snp, perl = T)
                     # Change the SNP state to the alternate
                     if (snpbase == state1) {
                         snpbase <- state2

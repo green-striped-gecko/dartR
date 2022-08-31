@@ -1,5 +1,6 @@
 #' @name gl.define.pop
-#' @title Defines a new population in a genlight object for specified individuals
+#' @title Defines a new population in a genlight object for specified 
+#' individuals
 #' @description
 #' The script reassigns existing individuals to a new population and removes
 #' their existing population assignment.
@@ -18,7 +19,8 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' popNames(testset.gl)
-#' gl <- gl.define.pop(testset.gl, ind.list=c('AA019073','AA004859'), new='newguys')
+#' gl <- gl.define.pop(testset.gl, ind.list=c('AA019073','AA004859'), 
+#' new='newguys')
 #' popNames(gl)
 #' indNames(gl)[pop(gl)=='newguys']
 #' @export
@@ -41,13 +43,15 @@ gl.define.pop <- function(x,
     
     # STANDARD ERROR CHECKING
     
-    # Set a population if none is specified (such as if the genlight object has been generated manually)
+    # Set a population if none is specified (such as if the genlight object has 
+    #been generated manually)
     if (is.null(pop(x)) |
         is.na(length(pop(x))) | length(pop(x)) <= 0) {
         if (verbose >= 2) {
             cat(
                 warn(
-                    "  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n"
+                    "  Population assignments not detected, individuals assigned
+                    to a single population labelled 'pop1'\n"
                 )
             )
         }

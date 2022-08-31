@@ -114,7 +114,7 @@ gl.plot.structure <- function(sr,
   
   if (!is(sr, "structure.result")) {
     stop(error(
-      "sr is not a structure result object returned from gl.run.structure."
+      "sr is not a structure result object returned from gl.run.structure.\n"
     ))
   }
   
@@ -213,7 +213,7 @@ gl.plot.structure <- function(sr,
         }
       
       }else{
-        res[[length(res)+1]]  <- res_tmp_3
+        res[[length(res)+1]] <- res_tmp_3
       }
   
     }

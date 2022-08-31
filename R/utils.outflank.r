@@ -100,22 +100,22 @@ utils.outflank <- function(FstDataFrame,
                            NumberOfSamples,
                            qthreshold = 0.05) {
     # Setting up necessary columns in dataframe
-    Fstdata = outputDFStarterNoCorr(FstDataFrame, Hmin)
+    Fstdata <-outputDFStarterNoCorr(FstDataFrame, Hmin)
     
     # making working dataframe with real Fst (no NAs), storing NAs to add back
     #later
-    workingDataFrame = Fstdata[which(!is.na(Fstdata$FSTNoCorr)),]
-    storedDataFrameNA = Fstdata[which(is.na(Fstdata$FSTNoCorr)),]
+    workingDataFrame <-Fstdata[which(!is.na(Fstdata$FSTNoCorr)),]
+    storedDataFrameNA <-Fstdata[which(is.na(Fstdata$FSTNoCorr)),]
     
     # Finding upper and lower bounds for trimming (eliminating NAs, but not
     #negative FSTs)
-    sortedDataFrame = workingDataFrame[order(workingDataFrame$FSTNoCorr),]
+    sortedDataFrame <-workingDataFrame[order(workingDataFrame$FSTNoCorr),]
     
-    NLociTotal = length(sortedDataFrame$FSTNoCorr)
-    SmallestKeeper = ceiling(NLociTotal * LeftTrimFraction)
-    LargestKeeper = floor(NLociTotal * (1 - RightTrimFraction))
-    LowTrimPoint = sortedDataFrame$FSTNoCorr[[SmallestKeeper]]
-    HighTrimPoint = sortedDataFrame$FSTNoCorr[[LargestKeeper]]
+    NLociTotal <-length(sortedDataFrame$FSTNoCorr)
+    SmallestKeeper <-ceiling(NLociTotal * LeftTrimFraction)
+    LargestKeeper <-floor(NLociTotal * (1 - RightTrimFraction))
+    LowTrimPoint <-sortedDataFrame$FSTNoCorr[[SmallestKeeper]]
+    HighTrimPoint <-sortedDataFrame$FSTNoCorr[[LargestKeeper]]
     
     if (LowTrimPoint < 0) {
         writeLines(
@@ -136,36 +136,36 @@ utils.outflank <- function(FstDataFrame,
     }
     
     # finding dfInferred and Fstbar iteratively
-    putativeNeutralListTemp = ifelse(workingDataFrame$FSTNoCorr > 0, TRUE, FALSE)
+    putativeNeutralListTemp <-ifelse(workingDataFrame$FSTNoCorr > 0, TRUE, FALSE)
     
-    oldOutlierFlag = rep(FALSE, NLociTotal)
+    oldOutlierFlag <-rep(FALSE, NLociTotal)
     
     # Note: All negative FST loci are maked as putative outliers, which will
     #need to be tested with the coalescent model later. In the
     # meantime, they are removed so as to not confuse the likelihood function.
     
-    keepGoing = TRUE
-    count = 0
+    keepGoing <-TRUE
+    count <-0
     # writeLines(paste(mean(workingDataFrame$FSTNoCorr[putativeNeutralListTemp])))
     
     while (keepGoing) {
-        count = count + 1
+        count <-count + 1
         if (count > 19) {
-            keepGoing = FALSE
+            keepGoing <-FALSE
             writeLines(important("Exceeded iteration maximum."))  ###Try with
             #increased maximum value for count two lines above.
         }
         
-        FstbarNoCorrTemp = fstBarCalculatorNoCorr(workingDataFrame[putativeNeutralListTemp,])
+        FstbarNoCorrTemp <-fstBarCalculatorNoCorr(workingDataFrame[putativeNeutralListTemp,])
         
-        dfInferredTemp = EffectiveNumberSamplesMLE(
+        dfInferredTemp <-EffectiveNumberSamplesMLE(
             workingDataFrame$FSTNoCorr[putativeNeutralListTemp],
             FstbarNoCorrTemp,
             NumberOfSamples,
             LowTrimPoint,
             HighTrimPoint
         )
-        workingDataFrame = pOutlierFinderChiSqNoCorr(workingDataFrame,
+        workingDataFrame <-pOutlierFinderChiSqNoCorr(workingDataFrame,
                                                      FstbarNoCorrTemp,
                                                      dfInferredTemp,
                                                      qthreshold)
@@ -174,7 +174,7 @@ utils.outflank <- function(FstDataFrame,
         #(because negative Fst estimates can't be evaluated through
         #### the chi-square approach on their own)
         if (any(workingDataFrame$OutlierFlag[workingDataFrame$FSTNoCorr < LowTrimPoint]))
-            workingDataFrame$OutlierFlag[workingDataFrame$FSTNoCorr < 0] = TRUE
+            workingDataFrame$OutlierFlag[workingDataFrame$FSTNoCorr < 0] <-TRUE
         
         #### Any loci previously marked as $OutlierFlag=TRUE remain so, even if
         #the new iteration doesn''t flag them as outliers
@@ -182,14 +182,14 @@ utils.outflank <- function(FstDataFrame,
         
         # Resetting neutral list, and checking whether the outlier list has
         #stabilized
-        putativeNeutralListTemp = ifelse((!workingDataFrame$OutlierFlag), TRUE, FALSE)
+        putativeNeutralListTemp <-ifelse((!workingDataFrame$OutlierFlag), TRUE, FALSE)
         if (sum(putativeNeutralListTemp) == 0) {
             writeLines(error("No loci in neutral list...\n"))
             return(error("FAIL"))
         }
         
         if (identical(oldOutlierFlag, workingDataFrame$OutlierFlag))
-            keepGoing = FALSE
+            keepGoing <-FALSE
         
         ###### if all in trimmed get IDed as outlier - return to user with
         #warning
@@ -211,7 +211,7 @@ utils.outflank <- function(FstDataFrame,
             return(0)
         }
         
-        oldOutlierFlag = workingDataFrame$OutlierFlag
+        oldOutlierFlag <-workingDataFrame$OutlierFlag
         
         # writeLines(paste(as.character(count),' ',as.character(sum(putativeNeutralListTemp))))
     }
@@ -219,14 +219,14 @@ utils.outflank <- function(FstDataFrame,
     if (count > 19)
         writeLines(important("Loop iteration limit exceeded."))
     
-    numberLowFstOutliers = sum(workingDataFrame$OutlierFlag[(workingDataFrame$FSTNoCorr < LowTrimPoint)])
-    numberHighFstOutliers = sum(workingDataFrame$OutlierFlag[(workingDataFrame$FSTNoCorr > HighTrimPoint)])
+    numberLowFstOutliers <-sum(workingDataFrame$OutlierFlag[(workingDataFrame$FSTNoCorr < LowTrimPoint)])
+    numberHighFstOutliers <-sum(workingDataFrame$OutlierFlag[(workingDataFrame$FSTNoCorr > HighTrimPoint)])
     
-    FSTbar = fstBarCalculator(workingDataFrame[putativeNeutralListTemp,])
+    FSTbar <-fstBarCalculator(workingDataFrame[putativeNeutralListTemp,])
     
     # merge NA list back to working list, and sort by original order\t
-    resultsDataFrame = rbind(workingDataFrame, storedDataFrameNA)
-    resultsDataFrame = resultsDataFrame[order(resultsDataFrame$indexOrder),]
+    resultsDataFrame <-rbind(workingDataFrame, storedDataFrameNA)
+    resultsDataFrame <-resultsDataFrame[order(resultsDataFrame$indexOrder),]
     # return new dataframe
     list(
         FSTbar = FSTbar,
@@ -248,13 +248,13 @@ outputDFStarterNoCorr <- function(FstDataFrame,
     #the initial calculations. By default this requires that a
     # locus have heterozygosity equal to 10% or more.
     
-    len = length(FstDataFrame$FSTNoCorr)
-    indexOrder = seq(1, len)
-    GoodH = ifelse(FstDataFrame$He < Hmin, "lowH", "goodH")
-    OutlierFlag = ifelse(is.na(FstDataFrame$FSTNoCorr), NA, FALSE)
-    qvalues = rep(NA, len)
-    pvalues = rep(NA, len)
-    pvaluesRightTail = rep(NA, len)
+    len <-length(FstDataFrame$FSTNoCorr)
+    indexOrder <-seq(1, len)
+    GoodH <-ifelse(FstDataFrame$He < Hmin, "lowH", "goodH")
+    OutlierFlag <-ifelse(is.na(FstDataFrame$FSTNoCorr), NA, FALSE)
+    qvalues <-rep(NA, len)
+    pvalues <-rep(NA, len)
+    pvaluesRightTail <-rep(NA, len)
     cbind(FstDataFrame,
           indexOrder,
           GoodH,
@@ -281,27 +281,27 @@ pOutlierFinderChiSqNoCorr <- function(DataList,
     #do not have meaningful results with the chi-square aprach;
     # however, they do carry information.
     
-    DataListGood = DataList[which(DataList$FSTNoCorr > 0),]
-    DataListNonPosFst = DataList[which(DataList$FSTNoCorr <= 0),]
-    DataListNA = DataList[which(is.na(DataList$FSTNoCorr)),]
+    DataListGood <-DataList[which(DataList$FSTNoCorr > 0),]
+    DataListNonPosFst <-DataList[which(DataList$FSTNoCorr <= 0),]
+    DataListNA <-DataList[which(is.na(DataList$FSTNoCorr)),]
     
-    pList = pTwoSidedFromChiSq(DataListGood$FSTNoCorr * (dfInferred) / Fstbar, dfInferred)
-    pListRightTail = 1 - pchisq(DataListGood$FSTNoCorr * (dfInferred) /
+    pList <-pTwoSidedFromChiSq(DataListGood$FSTNoCorr * (dfInferred) / Fstbar, dfInferred)
+    pListRightTail <-1 - pchisq(DataListGood$FSTNoCorr * (dfInferred) /
                                     Fstbar, dfInferred)
     
     # Note: Change made 13 June 2014; q-values now only calcualted on
     #right-tail one-sided p-values
-    qtemp = qvalue::qvalue(pListRightTail,
+    qtemp <-qvalue::qvalue(pListRightTail,
                            fdr.level = qthreshold,
                            pi0.method = "bootstrap")
     # Note: Using the bootstrap method here seems OK, but if this causes
     #problems remove the pi0.method='bootstrap' in the previous line
     # to revert to the default.
     
-    DataListGood$pvalues = pList
-    DataListGood$pvaluesRightTail = pListRightTail
-    DataListGood$qvalues = qtemp$qvalues
-    DataListGood$OutlierFlag = qtemp$significant
+    DataListGood$pvalues <-pList
+    DataListGood$pvaluesRightTail <-pListRightTail
+    DataListGood$qvalues <-qtemp$qvalues
+    DataListGood$OutlierFlag <-qtemp$significant
     rbind(DataListGood, DataListNonPosFst, DataListNA)
     
 }
@@ -310,6 +310,6 @@ pTwoSidedFromChiSq <- function(x,
                                df) {
     # Takes a value x, finds the two-sided p-value for comparison to a
     #chi-square distribution with df degrees of freedom.
-    pOneSided = pchisq(x, df)
+    pOneSided <-pchisq(x, df)
     ifelse(pOneSided > 0.5, (1 - pOneSided) * 2, pOneSided * 2)
 }
