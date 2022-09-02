@@ -1,4 +1,4 @@
-#' @name gl.filter.locmetrics
+#' @name gl.filter.locmetric
 #' @title Filters loci on the basis of numeric information stored in
 #'  other$loc.metrics in a genlight \{adegenet\} object
 #' @description
@@ -6,6 +6,16 @@
 #' to filter loci. The loci to keep can be within the upper and lower thresholds
 #'  ('within') or outside of the upper and lower thresholds ('outside').
 #'
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param metric Name of the metric to be used for filtering [required].
+#' @param upper Filter upper threshold [required].
+#' @param lower Filter lower threshold  [required].
+#' @param keep Whether keep loci within of upper and lower thresholds or keep
+#' loci outside of upper and lower thresholds [within].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' progress log; 3, progress and results summary; 5, full report
+#' [default 2, unless specified using gl.set.verbosity].
+#' @details
 #' The fields that are included in dartR, and a short description, are found
 #' below. Optionally, the user can also set his/her own filter by adding a
 #' vector into $other$loc.metrics as shown in the example.
@@ -35,15 +45,6 @@
 #' \item RepAvg - proportion of technical replicate assay pairs for which the
 #' marker score is consistent.
 #' }
-#' @param x Name of the genlight object containing the SNP data [required].
-#' @param metric Name of the metric to be used for filtering [required].
-#' @param upper Filter upper threshold [required].
-#' @param lower Filter lower threshold  [required].
-#' @param keep Whether keep loci within of upper and lower thresholds or keep
-#' loci outside of upper and lower thresholds [within].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-#' progress log; 3, progress and results summary; 5, full report
-#' [default 2, unless specified using gl.set.verbosity].
 #' @return The reduced genlight dataset.
 #' @export
 #' @family filter functions
