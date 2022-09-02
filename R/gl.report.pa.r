@@ -203,9 +203,9 @@ gl.report.pa <- function(x,
       pall[i, "totalpriv"] <- pall[i, 8] + pall[i, 9]
       pall[i, "AFD"] <- round(mean(abs(p1alf - p2alf), na.rm = T), 3)
       
-      # pa_Chao <- utils.pa.Chao(x=x,pop1_m=pops[[i1]],pop2_m=pops[[i2]])      
-      # pall[i,"Chao1"] <- round(pa_Chao[[1]],0)
-      # pall[i,"Chao2"] <- round(pa_Chao[[2]],0)
+      pa_Chao <- utils.pa.Chao(x=x,pop1_m=pops[[i1]],pop2_m=pops[[i2]])
+      pall[i,"Chao1"] <- round(pa_Chao[[1]],0)
+      pall[i,"Chao2"] <- round(pa_Chao[[2]],0)
       
     }
     
