@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# dartR <img src='man/figures/dartRlogo.png' align="right" height="180" />
+# `dartR` <img src='man/figures/dartRlogo.png' align="right" height="180" />
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
 
 <!-- badges: start -->
@@ -42,9 +42,9 @@ Dev repositories:
 
 ## Overview
 
-dartR is a user-friendly R package that delivers a variety of analyses and pipelines on the same platform, as well as excellent user support via high-quality tutorials and documentation.
+`dartR` is a user-friendly R package that delivers a variety of analyses and pipelines on the same platform, as well as excellent user support via high-quality tutorials and documentation.
 
-dartR is a collaboration between the University of Canberra, CSIRO and Diversity Arrays Technology, and is supported with funding from the ACT Priority Investment Program, CSIRO and the University of Canberra.
+`dartR` is a collaboration between the University of Canberra, CSIRO and Diversity Arrays Technology, and is supported with funding from the ACT Priority Investment Program, CSIRO and the University of Canberra.
 
 <p align="center">
 <img src='man/figures/UC.png' height="100"/>
@@ -58,19 +58,19 @@ dartR is a collaboration between the University of Canberra, CSIRO and Diversity
 
 ## Installation
 
-dartR is on CRAN, so to install it simply type:
+`dartR` is on CRAN, so to install it simply type:
 
 ```{r, eval = FALSE}
 install.packages("dartR")
 ```
 
-You can use the function gl.install.vanilla.dartR to install all the packages that are used by dartR.
+You can use the function gl.install.vanilla.dartR to install all the packages that are used by `dartR`.
 
 ```{r, eval = FALSE}
 gl.install.vanilla.dartR()
 ```
 
-You can install the development version of dartR from [GitHub](https://github.com/) with:
+You can install the development version of `dartR` from [GitHub](https://github.com/) with:
 
 ``` {r, eval = FALSE}
 gl.install.vanilla.dartR(flavour = "dev")
@@ -80,7 +80,7 @@ Please consult [this installation tutorial][installation_tutorial] if you run in
 
 ## Usage
 
-dartR provides several functions for handling all the steps involved in genetic data analysis, from reading multiple data input formats to manipulating, filtering, exploring and analysing the data.
+`dartR` provides several functions for handling all the steps involved in genetic data analysis, from reading multiple data input formats to manipulating, filtering, exploring and analysing the data.
 
 <p align="center">
 <img src='man/figures/Figure_1.png' width="800"/>
@@ -105,9 +105,9 @@ test_1 <- gl.filter.callrate(test)
 
 1. Are you a R rookie? If you want to learn R and RStudio without any fuss, have a look at our [R-refresher tutorial][intro_tutorial].
 
-2. Let's get started by reading your genetic data into dartR; if you have DArT data, follow [this tutorial][input_tutorial_1]; if not, follow [this one][input_tutorial_2].
+2. Let's get started by reading your genetic data into `dartR`; if you have DArT data, follow [this tutorial][input_tutorial_1]; if not, follow [this one][input_tutorial_2].
 
-3. Checking out our [data manipulation tutorial][data_tutorial] is the easiest way to get your feet wet with dartR.
+3. Checking out our [data manipulation tutorial][data_tutorial] is the easiest way to get your feet wet with `dartR`.
 
 4. [This tutorial][filtering_tutorial] will provide some pointers on how to filter your data effectively, an important step that depends on making sound threshold assessments.
 
@@ -123,11 +123,11 @@ test_1 <- gl.filter.callrate(test)
 
 ## Contribute 
 
-If you want to help shape the future of dartR, [this tutorial][developer_tutorial] is for you.
+If you want to help shape the future of `dartR`, [this tutorial][developer_tutorial] is for you.
 
 ## Citation 
 
-Please acknowledge dartR if you use it in your study. Copy the following to the R console to retrieve the citation information:
+Please acknowledge `dartR` if you use it in your study. Copy the following to the R console to retrieve the citation information:
 
 ```{r, eval = FALSE}
 citation("dartR")
@@ -139,7 +139,7 @@ Check out our articles:
 
 - [dartR: An R package to facilitate analysis of SNP data generated from reduced representation genome sequencing][article_1]
 
-Have fun working with dartR! 
+Have fun working with `dartR`! 
 
 Cheers,
 
