@@ -4,6 +4,9 @@
     <loc>https://green-striped-gecko.github.io/dartR/404.html</loc>
   </url>
   <url>
+    <loc>https://green-striped-gecko.github.io/dartR/CONTRIBUTING.html</loc>
+  </url>
+  <url>
     <loc>https://green-striped-gecko.github.io/dartR/LICENSE.html</loc>
   </url>
   <url>
@@ -14,6 +17,9 @@
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/authors.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/code_of_conduct.html</loc>
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/index.html</loc>
@@ -38,6 +44,9 @@
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/gl.amova.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.assign.grm.html</loc>
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/gl.assign.mahalanobis.html</loc>
@@ -118,6 +127,12 @@
     <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.hwe.html</loc>
   </url>
   <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.ld.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.locmetric.html</loc>
+  </url>
+  <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.locmetrics.html</loc>
   </url>
   <url>
@@ -188,6 +203,12 @@
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/gl.keep.pop.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.ld.distance.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.ld.haplotype.html</loc>
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/gl.list.reports.html</loc>
@@ -494,6 +515,18 @@
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/theme_dartR.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.assignment.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.assignment_2.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.assignment_3.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.assignment_4.html</loc>
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/utils.basic.stats.html</loc>

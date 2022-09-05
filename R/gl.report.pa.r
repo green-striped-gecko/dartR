@@ -176,6 +176,8 @@ gl.report.pa <- function(x,
         fixed = NA,
         priv1 = NA,
         priv2 = NA,
+        Chao1 = NA,
+        Chao2= NA,
         totalpriv = NA,
         AFD = NA
       )
@@ -189,18 +191,22 @@ gl.report.pa <- function(x,
       p1alf <- colMeans(p1, na.rm = T) / 2
       p2alf <- colMeans(p2, na.rm = T) / 2
       
-      pall[i, 5:6] <- c(nrow(p1), nrow(p2))
-      pall[i, 7] <- sum(abs(p1alf - p2alf) == 1, na.rm = T)
+      pall[i, c("N1","N2")] <- c(nrow(p1), nrow(p2))
+      pall[i, "fixed"] <- sum(abs(p1alf - p2alf) == 1, na.rm = T)
       
-      pall[i, 8] <- sum(p2alf == 0 &
+      pall[i, "priv1"] <- sum(p2alf == 0 &
                           p1alf != 0, na.rm = T) + sum(p2alf == 1 &
                                                          p1alf != 1, na.rm = T)
-      pall[i, 9] <- sum(p1alf == 0 &
+      pall[i, "priv2"] <- sum(p1alf == 0 &
                           p2alf != 0, na.rm = T) + sum(p1alf == 1 &
                                                          p2alf != 1, na.rm = T)
-      pall[i, 10] <- pall[i, 8] + pall[i, 9]
-      pall[i, 11] <-
-        round(mean(abs(p1alf - p2alf), na.rm = T), 3)
+      pall[i, "totalpriv"] <- pall[i, 8] + pall[i, 9]
+      pall[i, "AFD"] <- round(mean(abs(p1alf - p2alf), na.rm = T), 3)
+      
+      pa_Chao <- utils.pa.Chao(x=x,pop1_m=pops[[i1]],pop2_m=pops[[i2]])
+      pall[i,"Chao1"] <- round(pa_Chao[[1]],0)
+      pall[i,"Chao2"] <- round(pa_Chao[[2]],0)
+      
     }
     
     if (plot.out) {

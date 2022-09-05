@@ -7,6 +7,7 @@
 gl.report.callrate(
   x,
   method = "loc",
+  by_pop = FALSE,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colors = two_colors,
@@ -21,6 +22,8 @@ gl.report.callrate(
 
 \item{method}{Specify the type of report by locus (method='loc') or
 individual (method='ind') [default 'loc'].}
+
+\item{by_pop}{Whether report by population [default FALSE].}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
