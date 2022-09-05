@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `dartR` <img src='man/figures/dartRlogo.png' align="right" height="180" />
+# `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/dartRlogo.png' align="right" height="140" /></a>
 
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
 
@@ -57,8 +57,11 @@ Priority Investment Program, CSIRO and the University of Canberra.
 install.packages("dartR")
 ```
 
-You can use the function gl.install.vanilla.dartR to install all the
-packages that are used by `dartR`.
+Because of CRAN limitations, the default installation does not include
+all packages needed to run all the functions; hence, specialised
+analyses need the installation of additional packages. The following
+code guarantees that all necessary functions for all `dartR` analyses
+are set up and ready to go.
 
 ``` r
 gl.install.vanilla.dartR()
@@ -161,12 +164,12 @@ citation("dartR")
 
 Check out our articles:
 
--   [dartR v2: An accessible genetic analysis platform for conservation,
-    ecology and agriculture](https://doi.org/10.1111/2041-210X.13918)
+- [dartR v2: An accessible genetic analysis platform for conservation,
+  ecology and agriculture](https://doi.org/10.1111/2041-210X.13918)
 
--   [dartR: An R package to facilitate analysis of SNP data generated
-    from reduced representation genome
-    sequencing](https://doi.org/10.1111/1755-0998.12745)
+- [dartR: An R package to facilitate analysis of SNP data generated from
+  reduced representation genome
+  sequencing](https://doi.org/10.1111/1755-0998.12745)
 
 Have fun working with `dartR`!
 
