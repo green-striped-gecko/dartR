@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dartR <img src='man/figures/dartRlogo.png' align="right" height="180" />
+# `dartR` <img src='man/figures/dartRlogo.png' align="right" height="180" />
 
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
 
@@ -34,11 +34,11 @@ Dev repositories:
 
 ## Overview
 
-dartR is a user-friendly R package that delivers a variety of analyses
+`dartR` is a user-friendly R package that delivers a variety of analyses
 and pipelines on the same platform, as well as excellent user support
 via high-quality tutorials and documentation.
 
-dartR is a collaboration between the University of Canberra, CSIRO and
+`dartR` is a collaboration between the University of Canberra, CSIRO and
 Diversity Arrays Technology, and is supported with funding from the ACT
 Priority Investment Program, CSIRO and the University of Canberra.
 
@@ -51,20 +51,20 @@ Priority Investment Program, CSIRO and the University of Canberra.
 
 ## Installation
 
-dartR is on CRAN, so to install it simply type:
+`dartR` is on CRAN, so to install it simply type:
 
 ``` r
 install.packages("dartR")
 ```
 
 You can use the function gl.install.vanilla.dartR to install all the
-packages that are used by dartR.
+packages that are used by `dartR`.
 
 ``` r
 gl.install.vanilla.dartR()
 ```
 
-You can install the development version of dartR from
+You can install the development version of `dartR` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -77,8 +77,8 @@ if you run into any problems during setup.
 
 ## Usage
 
-dartR provides several functions for handling all the steps involved in
-genetic data analysis, from reading multiple data input formats to
+`dartR` provides several functions for handling all the steps involved
+in genetic data analysis, from reading multiple data input formats to
 manipulating, filtering, exploring and analysing the data.
 
 <p align="center">
@@ -112,7 +112,7 @@ test_1 <- gl.filter.callrate(test)
     fuss, have a look at our [R-refresher
     tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/Tutorial_1_dartR_RStudio_Refresher_22-Dec-21.pdf).
 
-2.  Let’s get started by reading your genetic data into dartR; if you
+2.  Let’s get started by reading your genetic data into `dartR`; if you
     have DArT data, follow [this
     tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial3adartrdatastructuresandinput22-dec-21-2.pdf);
     if not, follow [this
@@ -120,7 +120,7 @@ test_1 <- gl.filter.callrate(test)
 
 3.  Checking out our [data manipulation
     tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf)
-    is the easiest way to get your feet wet with dartR.
+    is the easiest way to get your feet wet with `dartR`.
 
 4.  [This
     tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial5dartrbasicfiltering22-dec-21-2.pdf)
@@ -146,14 +146,14 @@ test_1 <- gl.filter.callrate(test)
 
 ## Contribute
 
-If you want to help shape the future of dartR, [this
+If you want to help shape the future of `dartR`, [this
 tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/Tutorial_0_dartR_for_the_Developer_2.0_19-Feb-22.pdf)
 is for you.
 
 ## Citation
 
-Please acknowledge dartR if you use it in your study. Copy the following
-to the R console to retrieve the citation information:
+Please acknowledge `dartR` if you use it in your study. Copy the
+following to the R console to retrieve the citation information:
 
 ``` r
 citation("dartR")
@@ -168,7 +168,7 @@ Check out our articles:
     from reduced representation genome
     sequencing](https://doi.org/10.1111/1755-0998.12745)
 
-Have fun working with dartR!
+Have fun working with `dartR`!
 
 Cheers,
 
