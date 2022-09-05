@@ -1,0 +1,138 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# dartR <img src='man/figures/dartRlogo.png' align="right" height="180" />
+
+### An accessible genetic analysis platform for conservation, ecology and agriculture
+
+<!-- badges: start -->
+Main repository: 
+[![](https://www.r-pkg.org/badges/version/dartR?color=blue)](https://cran.r-project.org/package=dartR)
+[![CRAN checks](https://cranchecks.info/badges/summary/dartR)](https://cran.r-project.org/web/checks/check_results_dartR.html)
+[![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+[![R-CMD-check-beta](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-beta.yaml/badge.svg?branch=beta)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-beta.yaml)
+ [![](http://cranlogs.r-pkg.org/badges/last-week/dartR?color=orange)](https://cran.r-project.org/package=dartR)
+<!-- badges: end -->
+
+Publication:
+[![](https://img.shields.io/badge/doi-10.1111/1755--0998.12745-00cccc.svg)](https://doi.org/10.1111/1755-0998.12745)
+ 
+Zenodo: 
+[![DOI](https://zenodo.org/badge/86640709.svg)](https://zenodo.org/badge/latestdoi/86640709)  
+
+<!-- badges: start -->
+Dev repositories: 
+[![R-CMD-check-dev](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev.yaml/badge.svg?branch=dev)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev.yaml)
+[![R-CMD-check-dev_Arthur](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Arthur.yaml/badge.svg?branch=dev_arthur)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Arthur.yaml)
+[![R-CMD-check-dev_Bernd](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Bernd.yaml/badge.svg?branch=dev_bernd)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Bernd.yaml)
+[![R-CMD-check-dev_Luis](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Luis.yaml/badge.svg?branch=dev_luis)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Luis.yaml)
+[![R-CMD-check-dev_Carlo](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Carlo.yaml/badge.svg?branch=dev_carlo)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-dev_Carlo.yaml)
+<!-- badges: end -->
+
+## Overview
+
+dartR is a user-friendly R package that provides in the same platform a wide range of analyses and pipelines along with strong user support through quality tutorials and documentation. 
+
+## Installation
+
+dartR is on CRAN, so to install it simply type:
+
+```{r, eval = FALSE}
+install.packages("dartR")
+library(dartR)
+```
+
+You can use the function gl.install.vanilla.dartR to install all the packages that are used by dartR.
+
+```{r, eval = FALSE}
+gl.install.vanilla.dartR()
+```
+
+You can install the development version of dartR from [GitHub](https://github.com/) with:
+
+``` {r, eval = FALSE}
+gl.install.vanilla.dartR(flavour = "dev")
+```
+
+Please consult [this installation tutorial][installation_tutorial] if you run into any problems during setup.
+
+## Usage
+
+<img src='man/figures/Figure_1.png' align="right" width="630"/>
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r, eval = FALSE}
+library(dartR)
+## basic example code
+```
+
+## Getting started
+
+Are you a R rookie? If you want to learn R and RStudio without any fuss, have a look at our [R-refresher tutorial][intro_tutorial].
+
+Let's get started by reading your genetic data into dartR; if you have DArT data, follow [this tutorial][input_tutorial_1]; if not, follow [this one][input_tutorial_2].
+
+Checking out our [data manipulation tutorial][data_tutorial] is the easiest way to get your feet wet with dartR.
+
+[This tutorial][filtering_tutorial] will provide some pointers on how to filter your data properly, an important step that depends on making sound threshold assessments.
+
+## Getting help 
+
+Q&A forum in support of users can be accessed [here][google_groups].
+
+There are two main places to get help with R and R-Studio:
+
+1.  The [RStudio community][community] is a friendly place to ask any question.
+
+1.  [Stack Overflow][so] is a great source of answers to common questions.
+
+## Contribute 
+
+If you want to help shape the future of dartR, [this tutorial][developer_tutorial] is for you.
+
+## Citation 
+
+Please acknowledge dartR if you use it in your study. Enter the following in the R console to retrieve the citation information:
+
+```{r, eval = FALSE}
+citation("dartR")
+```
+
+Check out our articles:
+
+- [dartR v2: An accessible genetic analysis platform for conservation, ecology and agriculture][article_2]
+
+- [dartR: An R package to facilitate analysis of SNP data generated from reduced representation genome sequencing][article_1]
+
+
+Have fun working with dartR! 
+
+Cheers,
+
+Bernd, Arthur, Luis, Carlo & Olly 
+
+[intro_tutorial]: http://georges.biomatix.org/storage/app/media/uploaded-files/Tutorial_1_dartR_RStudio_Refresher_22-Dec-21.pdf
+[input_tutorial_1]: http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial3adartrdatastructuresandinput22-dec-21-2.pdf
+[input_tutorial_2]: http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial3bdartrdatastructuresandinputfromsourcesotherthandartlmagv2-2.pdf
+[data_tutorial]: http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf
+[filtering_tutorial]: http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial5dartrbasicfiltering22-dec-21-2.pdf
+[developer_tutorial]: http://georges.biomatix.org/storage/app/media/uploaded-files/Tutorial_0_dartR_for_the_Developer_2.0_19-Feb-22.pdf
+[installation_tutorial]: https://github.com/green-striped-gecko/dartR/wiki/Installation-tutorial
+[google_groups]: https://groups.google.com/g/dartr?pli=1
+[article_1]: https://doi.org/10.1111/1755-0998.12745
+[article_2]: https://doi.org/10.1111/2041-210X.13918
+[community]: https://community.rstudio.com/
+[so]: https://stackoverflow.com/questions/tagged/r
