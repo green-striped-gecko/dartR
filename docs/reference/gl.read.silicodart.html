@@ -4,7 +4,7 @@
  that is unique to DArT. This program reads the data in to adegenet format
  for consistency with other programming activity. The script may require
  modification as DArT modify their data formats from time to time."><title>Imports presence/absence data from SilicoDArT to genlight {agegenet}
-format (ploidy=1) — gl.read.silicodart • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Imports presence/absence data from SilicoDArT to genlight {agegenet}
+format (ploidy=1) — gl.read.silicodart • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Imports presence/absence data from SilicoDArT to genlight {agegenet}
 format (ploidy=1) — gl.read.silicodart"><meta property="og:description" content="DaRT provide the data as a matrix of entities (individual animals) across the
  top and attributes (P/A of sequenced fragment) down the side in a format
  that is unique to DArT. This program reads the data in to adegenet format
@@ -20,7 +20,7 @@ format (ploidy=1) — gl.read.silicodart"><meta property="og:description" conten
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,44 +63,59 @@ format (ploidy=1)</h1>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gl.read.silicodart</span><span class="op">(</span>
-  <span class="va">filename</span>,
-  ind.metafile <span class="op">=</span> <span class="cn">NULL</span>,
-  nas <span class="op">=</span> <span class="st">"-"</span>,
-  topskip <span class="op">=</span> <span class="cn">NULL</span>,
-  lastmetric <span class="op">=</span> <span class="st">"Reproducibility"</span>,
-  probar <span class="op">=</span> <span class="cn">TRUE</span>,
-  verbose <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gl.read.silicodart</span><span class="op">(</span></span>
+<span>  <span class="va">filename</span>,</span>
+<span>  ind.metafile <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nas <span class="op">=</span> <span class="st">"-"</span>,</span>
+<span>  topskip <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lastmetric <span class="op">=</span> <span class="st">"Reproducibility"</span>,</span>
+<span>  probar <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>filename</dt>
 <dd><p>Name of csv file containing the SilicoDArT data [required].</p></dd>
+
+
 <dt>ind.metafile</dt>
 <dd><p>Name of csv file containing metadata assigned to each
 entity (individual) [default NULL].</p></dd>
+
+
 <dt>nas</dt>
 <dd><p>Missing data character [default '-'].</p></dd>
+
+
 <dt>topskip</dt>
 <dd><p>Number of rows to skip before the header row (containing the
 specimen identities) [optional].</p></dd>
+
+
 <dt>lastmetric</dt>
 <dd><p>Specifies the last non genetic column (Default is
 'Reproducibility'). Be sure to check if that is true, otherwise the number of
 individuals will not match. You can also specify the last column by a number
  [default "Reproducibility"].</p></dd>
+
+
 <dt>probar</dt>
 <dd><p>Show progress bar [default TRUE].</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, or as set by gl.set.verbose()].</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>genlight</code> with ploidy set to 1, containing
+    
+
+<p>An object of class <code>genlight</code> with ploidy set to 1, containing
 the presence/absence data, and locus and individual metadata.</p>
     </div>
     <div class="section level2">
@@ -136,21 +151,21 @@ first locus.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">silicodartfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>,<span class="st">'testset_SilicoDArT.csv'</span>, package<span class="op">=</span><span class="st">'dartR'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>,ind.metafile <span class="op">=</span><span class="st">'testset_metadata_silicodart.csv'</span>, package<span class="op">=</span><span class="st">'dartR'</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">testset.gs</span> <span class="op">&lt;-</span> <span class="fu">gl.read.silicodart</span><span class="op">(</span>filename <span class="op">=</span> <span class="va">silicodartfile</span>, ind.metafile <span class="op">=</span> <span class="va">metadata</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">silicodartfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>,<span class="st">'testset_SilicoDArT.csv'</span>, package<span class="op">=</span><span class="st">'dartR'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>,ind.metafile <span class="op">=</span><span class="st">'testset_metadata_silicodart.csv'</span>, package<span class="op">=</span><span class="st">'dartR'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">testset.gs</span> <span class="op">&lt;-</span> <span class="fu">gl.read.silicodart</span><span class="op">(</span>filename <span class="op">=</span> <span class="va">silicodartfile</span>, ind.metafile <span class="op">=</span> <span class="va">metadata</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.read.silicodart </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Reading data from file: /private/var/folders/_5/f_jv7k2n7bb_9qpsvxsv4q7j8ns_7c/T/RtmpwLsfGh/temp_libpath2c455be3fd11/dartR/extdata/testset_SilicoDArT.csv </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Reading data from file: /private/var/folders/_5/f_jv7k2n7bb_9qpsvxsv4q7j8ns_7c/T/RtmpTYlSdb/temp_libpath38852649ff08/dartR/extdata/testset_SilicoDArT.csv </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">    This may take some time, please wait!</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Topskip not provided. Guessing topskip...</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Set topskip to  5 . Proceeding ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Added the following locus metrics:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CloneID AlleleSequence TrimmedSequence Chrom_Turtle_v4 ChromPos_Turtle_v4 AlnCnt_Turtle_v4 AlnEvalue_Turtle_v4 CallRate OneRatio PIC AvgReadDepth StDevReadDepth Qpmr Reproducibility .</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Recognised: 218 individuals and 255 Sequence Tags using /private/var/folders/_5/f_jv7k2n7bb_9qpsvxsv4q7j8ns_7c/T/RtmpwLsfGh/temp_libpath2c455be3fd11/dartR/extdata/testset_SilicoDArT.csv </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Recognised: 218 individuals and 255 Sequence Tags using /private/var/folders/_5/f_jv7k2n7bb_9qpsvxsv4q7j8ns_7c/T/RtmpTYlSdb/temp_libpath38852649ff08/dartR/extdata/testset_SilicoDArT.csv </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Starting conversion to a genlight object ....</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">    Please note conversion of bigger data sets will take some time!</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">    Once finished, we recommend you save the object using gl.save(object, file="object.rdata")</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Adding individual metadata: /private/var/folders/_5/f_jv7k2n7bb_9qpsvxsv4q7j8ns_7c/T/RtmpwLsfGh/temp_libpath2c455be3fd11/dartR/extdata/testset_metadata_silicodart.csv .</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Adding individual metadata: /private/var/folders/_5/f_jv7k2n7bb_9qpsvxsv4q7j8ns_7c/T/RtmpTYlSdb/temp_libpath38852649ff08/dartR/extdata/testset_metadata_silicodart.csv .</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Ids for individual metadata (at least a subset of) are matching!</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Found  218 matching ids out of 218 ids provided in the ind.metadata file. Subsetting loci now!.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">     Added pop factor.</span></span>
@@ -175,7 +190,7 @@ first locus.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer></div>

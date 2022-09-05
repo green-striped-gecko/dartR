@@ -8,7 +8,7 @@
    in the stack. The output of this function can be used with the functions
    wassermann or
    lgrMMRR to test for the significance of a
-   layer on the genetic structure."><title>Performs least-cost path analysis based on a friction matrix — gl.genleastcost • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Performs least-cost path analysis based on a friction matrix — gl.genleastcost"><meta property="og:description" content="This function calculates the pairwise distances (Euclidean, cost path
+   layer on the genetic structure."><title>Performs least-cost path analysis based on a friction matrix — gl.genleastcost • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Performs least-cost path analysis based on a friction matrix — gl.genleastcost"><meta property="og:description" content="This function calculates the pairwise distances (Euclidean, cost path
  distances and genetic distances) of populations using a friction matrix and
   a spatial genind object. The genind object needs to have coordinates in the
   same projected coordinate system as the friction matrix. The friction
@@ -28,7 +28,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,16 +75,16 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gl.genleastcost</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">fric.raster</span>,
-  <span class="va">gen.distance</span>,
-  NN <span class="op">=</span> <span class="cn">NULL</span>,
-  pathtype <span class="op">=</span> <span class="st">"leastcost"</span>,
-  plotpath <span class="op">=</span> <span class="cn">TRUE</span>,
-  theta <span class="op">=</span> <span class="fl">1</span>,
-  verbose <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gl.genleastcost</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">fric.raster</span>,</span>
+<span>  <span class="va">gen.distance</span>,</span>
+<span>  NN <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pathtype <span class="op">=</span> <span class="st">"leastcost"</span>,</span>
+<span>  plotpath <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  theta <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -92,40 +92,57 @@
     <dl><dt>x</dt>
 <dd><p>A spatial genind object. See ?popgenreport how to provide
 coordinates in genind objects [required].</p></dd>
+
+
 <dt>fric.raster</dt>
 <dd><p>A friction matrix [required].</p></dd>
+
+
 <dt>gen.distance</dt>
 <dd><p>Specification which genetic distance method should be
 used to calculate pairwise genetic distances between populations ( 'D',
 'Gst.Nei', 'Gst.Hedrick') or individuals ('Smouse', 'Kosman', 'propShared')
  [required].</p></dd>
+
+
 <dt>NN</dt>
 <dd><p>Number of neighbours used when calculating the cost distance
 (possible values 4, 8 or 16). As the default is NULL a value has to be
 provided if pathtype='leastcost'. NN=8 is most commonly used. Be aware that
  linear structures may cause artefacts in the least-cost paths, therefore
  inspect the actual least-cost paths in the provided output [default NULL].</p></dd>
+
+
 <dt>pathtype</dt>
 <dd><p>Type of cost distance to be calculated (based on function in
 the <code>gdistance</code> package. Available distances are 'leastcost', 'commute'
  or 'rSPDistance'. See functions in the gdistance package for futher
  explanations. If the path type is set to 'leastcost' then paths and also
  pathlength are returned [default 'leastcost'].</p></dd>
+
+
 <dt>plotpath</dt>
 <dd><p>switch if least cost paths should be plotted (works only if
 pathtype='leastcost'. Be aware this slows down the computation, but it is
 recommended to do this to check least cost paths visually.</p></dd>
+
+
 <dt>theta</dt>
 <dd><p>value needed for rSPDistance function. See
 <code><a href="https://rdrr.io/pkg/gdistance/man/rSPDistance.html" class="external-link">rSPDistance</a></code> in package <code>gdistance</code> [default 1].</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Returns a list that consists of four pairwise distance matrices
+    
+
+<p>Returns a list that consists of four pairwise distance matrices
 (Euclidean, Cost, length of path and genetic) and the actual paths as spatial
  line objects.</p>
     </div>
@@ -155,19 +172,19 @@ barriers in landscape genetics. Molecular ecology, 4179-4191.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">possums.gl</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span>  <span class="co">#needed for that example</span></span>
-<span class="r-in"><span class="va">landscape.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>,<span class="st">'landscape.sim.rdata'</span>, </span>
-<span class="r-in">package<span class="op">=</span><span class="st">'dartR'</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">glc</span> <span class="op">&lt;-</span> <span class="fu">gl.genleastcost</span><span class="op">(</span>x<span class="op">=</span><span class="va">possums.gl</span>,fric.raster<span class="op">=</span><span class="va">landscape.sim</span> ,</span>
-<span class="r-in">gen.distance <span class="op">=</span> <span class="st">'D'</span>, NN<span class="op">=</span><span class="fl">8</span>, pathtype <span class="op">=</span> <span class="st">'leastcost'</span>,plotpath <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/green-striped-gecko/PopGenReport" class="external-link">PopGenReport</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">PopGenReport</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/PopGenReport/man/wassermann.html" class="external-link">wassermann</a></span><span class="op">(</span>eucl.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">eucl.mat</span>, cost.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">cost.mats</span>, </span>
-<span class="r-in"> gen.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">gen.mat</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/PopGenReport/man/lgrMMRR.html" class="external-link">lgrMMRR</a></span><span class="op">(</span>gen.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">gen.mat</span>, cost.mats <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">cost.mats</span>,  </span>
-<span class="r-in">eucl.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">eucl.mat</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">possums.gl</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span>  <span class="co">#needed for that example</span></span></span>
+<span class="r-in"><span><span class="va">landscape.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>,<span class="st">'landscape.sim.rdata'</span>, </span></span>
+<span class="r-in"><span>package<span class="op">=</span><span class="st">'dartR'</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">glc</span> <span class="op">&lt;-</span> <span class="fu">gl.genleastcost</span><span class="op">(</span>x<span class="op">=</span><span class="va">possums.gl</span>,fric.raster<span class="op">=</span><span class="va">landscape.sim</span> ,</span></span>
+<span class="r-in"><span>gen.distance <span class="op">=</span> <span class="st">'D'</span>, NN<span class="op">=</span><span class="fl">8</span>, pathtype <span class="op">=</span> <span class="st">'leastcost'</span>,plotpath <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/green-striped-gecko/PopGenReport" class="external-link">PopGenReport</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">PopGenReport</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/PopGenReport/man/wassermann.html" class="external-link">wassermann</a></span><span class="op">(</span>eucl.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">eucl.mat</span>, cost.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">cost.mats</span>, </span></span>
+<span class="r-in"><span> gen.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">gen.mat</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/PopGenReport/man/lgrMMRR.html" class="external-link">lgrMMRR</a></span><span class="op">(</span>gen.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">gen.mat</span>, cost.mats <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">cost.mats</span>,  </span></span>
+<span class="r-in"><span>eucl.mat <span class="op">=</span> <span class="va">glc</span><span class="op">$</span><span class="va">eucl.mat</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -179,7 +196,7 @@ barriers in landscape genetics. Molecular ecology, 4179-4191.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer></div>
