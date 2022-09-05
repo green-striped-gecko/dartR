@@ -6,7 +6,7 @@ The values of the variables can be modified using the columns
 "transfer_each_gen" and "number_transfers" of this file.
 See documentation and tutorial for a complete description of the simulations.
 These documents can be accessed by typing in the R console:
-browseVignettes(package="dartR”)'><title>Creates a dispersal file as input for the function gl.sim.WF.run — gl.sim.create_dispersal • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Creates a dispersal file as input for the function gl.sim.WF.run — gl.sim.create_dispersal"><meta property="og:description" content='This function writes a csv file called "dispersal_table.csv" which contains
+browseVignettes(package="dartR”)'><title>Creates a dispersal file as input for the function gl.sim.WF.run — gl.sim.create_dispersal • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Creates a dispersal file as input for the function gl.sim.WF.run — gl.sim.create_dispersal"><meta property="og:description" content='This function writes a csv file called "dispersal_table.csv" which contains
  the dispersal variables for each pair of populations to be used as input for
   the function gl.sim.WF.run.
 The values of the variables can be modified using the columns
@@ -24,7 +24,7 @@ browseVignettes(package="dartR”)'><!-- mathjax --><script src="https://cdnjs.c
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,45 +69,60 @@ browseVignettes(package="dartR”)</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gl.sim.create_dispersal</span><span class="op">(</span>
-  <span class="va">number_pops</span>,
-  dispersal_type <span class="op">=</span> <span class="st">"all_connected"</span>,
-  number_transfers <span class="op">=</span> <span class="fl">1</span>,
-  transfer_each_gen <span class="op">=</span> <span class="fl">1</span>,
-  outpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
-  outfile <span class="op">=</span> <span class="st">"dispersal_table.csv"</span>,
-  verbose <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gl.sim.create_dispersal</span><span class="op">(</span></span>
+<span>  <span class="va">number_pops</span>,</span>
+<span>  dispersal_type <span class="op">=</span> <span class="st">"all_connected"</span>,</span>
+<span>  number_transfers <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  transfer_each_gen <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  outpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  outfile <span class="op">=</span> <span class="st">"dispersal_table.csv"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>number_pops</dt>
 <dd><p>Number of populations [required].</p></dd>
+
+
 <dt>dispersal_type</dt>
 <dd><p>One of: "all_connected", "circle" or "line"
 [default "all_connected"].</p></dd>
+
+
 <dt>number_transfers</dt>
 <dd><p>Number of dispersing individuals. This value can be .
 modified by hand after the file has been created [default 1].</p></dd>
+
+
 <dt>transfer_each_gen</dt>
 <dd><p>Interval of number of generations in which dispersal
 occur. This value can be modified by hand after the file has been created
  [default 1].</p></dd>
+
+
 <dt>outpath</dt>
 <dd><p>Path where to save the output file. Use outpath=getwd() or
 outpath='.' when calling this function to direct output files to your working
  directory [default tempdir(), mandated by CRAN].</p></dd>
+
+
 <dt>outfile</dt>
 <dd><p>File name of the output file [default 'dispersal_table.csv'].</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Writes csv file containing the dispersal variables for each pair of
+    
+
+<p>Writes csv file containing the dispersal variables for each pair of
 populations to be used as input for the function <code><a href="gl.sim.WF.run.html">gl.sim.WF.run</a></code>.</p>
     </div>
     <div class="section level2">
@@ -125,9 +140,9 @@ populations to be used as input for the function <code><a href="gl.sim.WF.run.ht
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">gl.sim.create_dispersal</span><span class="op">(</span>number_pops<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">gl.sim.create_dispersal</span><span class="op">(</span>number_pops<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.sim.create_dispersal </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  The dispersal table is saved as:  /var/folders/_5/f_jv7k2n7bb_9qpsvxsv4q7j8ns_7c/T//RtmpcmepJX/dispersal_table.csv/</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  The dispersal table is saved as:  /var/folders/_5/f_jv7k2n7bb_9qpsvxsv4q7j8ns_7c/T//RtmpGdXW0r/dispersal_table.csv/</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.sim.create_dispersal </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
@@ -141,7 +156,7 @@ populations to be used as input for the function <code><a href="gl.sim.WF.run.ht
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer></div>

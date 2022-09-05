@@ -6,7 +6,7 @@ For the initial generation, the genotype for each individual’s chromosomes is
  randomly drawn from distributions at linkage equilibrium and in 
  Hardy-Weinberg equilibrium.
 See documentation and tutorial for a complete description of the simulations.
-These documents can be accessed at http://georges.biomatix.org/dartR"><title>Runs Wright-Fisher simulations — gl.sim.WF.run • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Runs Wright-Fisher simulations — gl.sim.WF.run"><meta property="og:description" content="This function simulates populations made up of diploid organisms that 
+These documents can be accessed at http://georges.biomatix.org/dartR"><title>Runs Wright-Fisher simulations — gl.sim.WF.run • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Runs Wright-Fisher simulations — gl.sim.WF.run"><meta property="og:description" content="This function simulates populations made up of diploid organisms that 
 reproduce in non-overlapping generations. Each individual has a pair of 
 homologous chromosomes that contains interspersed selected and neutral loci. 
 For the initial generation, the genotype for each individual’s chromosomes is
@@ -24,7 +24,7 @@ These documents can be accessed at http://georges.biomatix.org/dartR"><!-- mathj
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,20 +69,20 @@ These documents can be accessed at http://georges.biomatix.org/dartR</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gl.sim.WF.run</span><span class="op">(</span>
-  <span class="va">file_var</span>,
-  <span class="va">ref_table</span>,
-  x <span class="op">=</span> <span class="cn">NULL</span>,
-  file_dispersal <span class="op">=</span> <span class="cn">NULL</span>,
-  number_iterations <span class="op">=</span> <span class="fl">1</span>,
-  every_gen <span class="op">=</span> <span class="fl">10</span>,
-  sample_percent <span class="op">=</span> <span class="fl">50</span>,
-  store_phase1 <span class="op">=</span> <span class="cn">FALSE</span>,
-  interactive_vars <span class="op">=</span> <span class="cn">TRUE</span>,
-  seed <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gl.sim.WF.run</span><span class="op">(</span></span>
+<span>  <span class="va">file_var</span>,</span>
+<span>  <span class="va">ref_table</span>,</span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  file_dispersal <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  number_iterations <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  every_gen <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  sample_percent <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  store_phase1 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  interactive_vars <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -90,43 +90,68 @@ These documents can be accessed at http://georges.biomatix.org/dartR</p>
     <dl><dt>file_var</dt>
 <dd><p>Path of the variables file 'sim_variables.csv' (see details) 
 [required if interactive_vars = FALSE].</p></dd>
+
+
 <dt>ref_table</dt>
 <dd><p>Reference table created by the function 
 <code><a href="gl.sim.WF.table.html">gl.sim.WF.table</a></code> [required].</p></dd>
+
+
 <dt>x</dt>
 <dd><p>Name of the genlight object containing the SNP data to extract
 values for some simulation variables (see details) [default NULL].</p></dd>
+
+
 <dt>file_dispersal</dt>
 <dd><p>Path of the file with the dispersal table created with
 the function <code><a href="gl.sim.create_dispersal.html">gl.sim.create_dispersal</a></code> [default NULL].</p></dd>
+
+
 <dt>number_iterations</dt>
 <dd><p>Number of iterations of the simulations [default 1].</p></dd>
+
+
 <dt>every_gen</dt>
 <dd><p>Generation interval at which simulations should be stored in
 a genlight object [default 10].</p></dd>
+
+
 <dt>sample_percent</dt>
 <dd><p>Percentage of individuals, from the total population, 
 to sample and save in the genlight object every generation [default 50].</p></dd>
+
+
 <dt>store_phase1</dt>
 <dd><p>Whether to store simulations of phase 1 in genlight
 objects [default FALSE].</p></dd>
+
+
 <dt>interactive_vars</dt>
 <dd><p>Run a shiny app to input interactively the values of
 simulations variables [default TRUE].</p></dd>
+
+
 <dt>seed</dt>
 <dd><p>Set the seed for the simulations [default NULL].</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Any variable and its value can be added separately within the 
 function, will be changed over the input value supplied by the csv file. See 
 tutorial.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Returns genlight objects with simulated data.</p>
+    
+
+<p>Returns genlight objects with simulated data.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -181,13 +206,13 @@ or a subset of generations.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">ref_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.sim.WF.table.html">gl.sim.WF.table</a></span><span class="op">(</span>file_var<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, </span>
-<span class="r-in"><span class="st">'ref_variables.csv'</span>, package <span class="op">=</span> <span class="st">'dartR'</span><span class="op">)</span>,interactive_vars <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">res_sim</span> <span class="op">&lt;-</span> <span class="fu">gl.sim.WF.run</span><span class="op">(</span>file_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, </span>
-<span class="r-in"><span class="st">'sim_variables.csv'</span>, package <span class="op">=</span><span class="st">'dartR'</span><span class="op">)</span>,ref_table<span class="op">=</span><span class="va">ref_table</span>,</span>
-<span class="r-in">interactive_vars <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">ref_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.sim.WF.table.html">gl.sim.WF.table</a></span><span class="op">(</span>file_var<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, </span></span>
+<span class="r-in"><span><span class="st">'ref_variables.csv'</span>, package <span class="op">=</span> <span class="st">'dartR'</span><span class="op">)</span>,interactive_vars <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res_sim</span> <span class="op">&lt;-</span> <span class="fu">gl.sim.WF.run</span><span class="op">(</span>file_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, </span></span>
+<span class="r-in"><span><span class="st">'sim_variables.csv'</span>, package <span class="op">=</span><span class="st">'dartR'</span><span class="op">)</span>,ref_table<span class="op">=</span><span class="va">ref_table</span>,</span></span>
+<span class="r-in"><span>interactive_vars <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -199,7 +224,7 @@ or a subset of generations.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer></div>
