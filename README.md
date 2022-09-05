@@ -3,7 +3,7 @@
 
 # dartR <img src='man/figures/dartRlogo.png' align="right" height="180" />
 
-### An accessible genetic analysis platform for conservation, ecology and agriculture
+## An accessible genetic analysis platform for conservation, ecology and agriculture
 
 <!-- badges: start -->
 
@@ -34,9 +34,20 @@ Dev repositories:
 
 ## Overview
 
-dartR is a user-friendly R package that provides in the same platform a
-wide range of analyses and pipelines along with strong user support
-through quality tutorials and documentation.
+dartR is a user-friendly R package that delivers a variety of analyses
+and pipelines on the same platform, as well as excellent user support
+via high-quality tutorials and documentation.
+
+dartR is a collaboration between the University of Canberra, CSIRO and
+Diversity Arrays Technology, and is supported with funding from the ACT
+Priority Investment Program, CSIRO and the University of Canberra.
+
+<p align="center">
+<img src='man/figures/UC.png' height="100"/>    
+<img src='man/figures/csiro_logo.png' height="100"/>    
+<img src='man/figures/DArT-removebg-preview.png' height="100"/>    
+<img src='man/figures/ACT.png' height="100"/>
+</p>
 
 ## Installation
 
@@ -44,7 +55,6 @@ dartR is on CRAN, so to install it simply type:
 
 ``` r
 install.packages("dartR")
-library(dartR)
 ```
 
 You can use the function gl.install.vanilla.dartR to install all the
@@ -67,48 +77,72 @@ if you run into any problems during setup.
 
 ## Usage
 
-<img src='man/figures/Figure_1.png' align="right" width="630"/>
+dartR provides several functions for handling all the steps involved in
+genetic data analysis, from reading multiple data input formats to
+manipulating, filtering, exploring and analysing the data.
 
-This is a basic example which shows you how to solve a common problem:
+<p align="center">
+<img src='man/figures/Figure_1.png' width="800"/>
+</p>
+
+We use the prefix ‘gl’ in function names to acknowledge the use of the
+genlight object from package
+[adegenet](https://doi.org/10.1093/bioinformatics/btn129) as our input
+format.
+
+In most cases, the following term in the function name indicates a
+subset of functions.
+
+Similarly, in most cases the first function parameter (input) is the
+genlight object.
+
+For instance, you might use the code below to generate a report and then
+filter your data based on the percentage of missing data:
 
 ``` r
 library(dartR)
-## basic example code
+test <- platypus.gl
+rep <- gl.report.callrate(test)
+test_1 <- gl.filter.callrate(test)
 ```
 
 ## Getting started
 
-Are you a R rookie? If you want to learn R and RStudio without any fuss,
-have a look at our [R-refresher
-tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/Tutorial_1_dartR_RStudio_Refresher_22-Dec-21.pdf).
+1.  Are you a R rookie? If you want to learn R and RStudio without any
+    fuss, have a look at our [R-refresher
+    tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/Tutorial_1_dartR_RStudio_Refresher_22-Dec-21.pdf).
 
-Let’s get started by reading your genetic data into dartR; if you have
-DArT data, follow [this
-tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial3adartrdatastructuresandinput22-dec-21-2.pdf);
-if not, follow [this
-one](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial3bdartrdatastructuresandinputfromsourcesotherthandartlmagv2-2.pdf).
+2.  Let’s get started by reading your genetic data into dartR; if you
+    have DArT data, follow [this
+    tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial3adartrdatastructuresandinput22-dec-21-2.pdf);
+    if not, follow [this
+    one](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial3bdartrdatastructuresandinputfromsourcesotherthandartlmagv2-2.pdf).
 
-Checking out our [data manipulation
-tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf)
-is the easiest way to get your feet wet with dartR.
+3.  Checking out our [data manipulation
+    tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf)
+    is the easiest way to get your feet wet with dartR.
 
-[This
-tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial5dartrbasicfiltering22-dec-21-2.pdf)
-will provide some pointers on how to filter your data properly, an
-important step that depends on making sound threshold assessments.
+4.  [This
+    tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial5dartrbasicfiltering22-dec-21-2.pdf)
+    will provide some pointers on how to filter your data effectively,
+    an important step that depends on making sound threshold
+    assessments.
+
+5.  Check out our [simulations
+    tutorial](https://github.com/green-striped-gecko/dartR/wiki/Simulations-tutorial)
+    to learn more about our simulation model, a powerful tool for
+    illuminating intricate evolutionary and genetic processes.
 
 ## Getting help
 
-Q&A forum in support of users can be accessed
-[here](https://groups.google.com/g/dartr?pli=1).
+1.  Google groups Q&A forum in support of users can be accessed
+    [here](https://groups.google.com/g/dartr?pli=1).
 
-There are two main places to get help with R and R-Studio:
+2.  The [RStudio community](https://community.rstudio.com/) provides a
+    welcoming environment in which to ask any enquiry.
 
-1.  The [RStudio community](https://community.rstudio.com/) is a
-    friendly place to ask any question.
-
-2.  [Stack Overflow](https://stackoverflow.com/questions/tagged/r) is a
-    great source of answers to common questions.
+3.  Answers to frequently asked topics may usually be found on [Stack
+    Overflow](https://stackoverflow.com/questions/tagged/r).
 
 ## Contribute
 
@@ -118,8 +152,8 @@ is for you.
 
 ## Citation
 
-Please acknowledge dartR if you use it in your study. Enter the
-following in the R console to retrieve the citation information:
+Please acknowledge dartR if you use it in your study. Copy the following
+to the R console to retrieve the citation information:
 
 ``` r
 citation("dartR")
