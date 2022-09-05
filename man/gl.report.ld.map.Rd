@@ -2,18 +2,21 @@
 % Please edit documentation in R/gl.report.ld.map.r
 \name{gl.report.ld.map}
 \alias{gl.report.ld.map}
-\title{Calculates pairwise linkage disequilibrium}
+\title{Calculates pairwise linkage disequilibrium by population}
 \usage{
 gl.report.ld.map(
   x,
   ld_max_pairwise = NULL,
-  ld_resolution = NULL,
   maf = 0.05,
   ld_stat = "R.squared",
+  ind.limit = 10,
   stat_keep = "AvgPIC",
+  ld_threshold_pops = 0.2,
   plot.out = TRUE,
-  plot_theme = theme_dartR(),
-  plot_colors = two_colors,
+  plot_theme = NULL,
+  histogram_colors = NULL,
+  boxplot_colors = NULL,
+  bins = 50,
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -24,23 +27,35 @@ gl.report.ld.map(
 \item{ld_max_pairwise}{Maximum distance in number of base pairs at which LD 
 should be calculated [default NULL].}
 
-\item{ld_resolution}{Resolution at which LD should be reported in number of 
-base pairs [default NULL]}
-
-\item{maf}{Minor allele frequency threshold to filter out loci [default 0.05].}
+\item{maf}{Minor allele frequency (by population) threshold to filter out 
+loci. If a value > 1 is provided it will be interpreted as MAC (i.e. the
+ minimum number of times an allele needs to be observed) [default 0.05].}
 
 \item{ld_stat}{The LD measure to be calculated: "LLR", "OR", "Q", "Covar",
-"D.prime", "R.squared", and "R" [default "R.squared"].}
+"D.prime", "R.squared", and "R". See \code{\link[snpStats]{ld}}
+ (package snpStats) for details [default "R.squared"].}
 
-\item{stat_keep}{Name of the column from the slot loc.metrics to be used to 
-choose SNP to be kept [default "AvgPIC"].}
+\item{ind.limit}{Minimum number of individuals that a population should
+contain to take it in account to report loci in LD [default 10].}
+
+\item{stat_keep}{Name of the column from the slot \code{loc.metrics} to be
+used to choose SNP to be kept [default "AvgPIC"].}
+
+\item{ld_threshold_pops}{LD threshold to report in the plot of "Number of 
+populations in which the same SNP pair are in LD" [default 0.2].}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
-\item{plot_theme}{User specified theme [default theme_dartR()].}
+\item{plot_theme}{User specified theme [default NULL].}
 
-\item{plot_colors}{Vector with two color names for the borders and fill
-[default two_colors].}
+\item{histogram_colors}{Vector with two color names for the borders and fill
+[default NULL].}
+
+\item{boxplot_colors}{A color palette for box plots by population or a list
+ with as many colors as there are populations in the dataset
+[default NULL].}
+
+\item{bins}{Number of bins to display in histograms [default 50].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
@@ -54,50 +69,65 @@ A dataframe with information for each SNP pair in LD.
 }
 \description{
 This function calculates pairwise linkage disequilibrium (LD) by population 
-using the function \link[snpStats]{ld} (package snpStats).
+using the function \code{\link[snpStats]{ld}} (package snpStats).
 
-If SNPs are not mapped to a reference genome, the parameters ld_max_pairwise 
-and ld_resolution should be set as NULL (the default). In this case, the 
+If SNPs are not mapped to a reference genome, the parameter
+ \code{ld_max_pairwise}
+ should be set as NULL (the default). In this case, the 
 function will assign the same chromosome ("1") to all the SNPs in the dataset
  and assign a sequence from 1 to n loci as the position of each SNP. The 
  function will then calculate LD for all possible SNP pair combinations. 
  
-If SNPs are mapped to a reference genome, the parameters ld_max_pairwise and 
-ld_resolution should not be NULL. In this case, the information for SNP's 
-position should be stored in the genlight accessor "@position" and the SNP's 
-chromosome name in the accessor "@chromosome". The function will then 
-calculate LD within each chromosome and for all possible SNP pair 
-combinations within a distance of ld_max_pairwise.
+If SNPs are mapped to a reference genome, the parameter 
+\code{ld_max_pairwise}
+ should be filled out (i.e. not NULL). In this case, the
+ information for SNP's position should be stored in the genlight accessor
+  "@position" and the SNP's chromosome name in the accessor "@chromosome"
+   (see examples). The function will then calculate LD within each chromosome
+    and for all possible SNP pair combinations within a distance of
+     \code{ld_max_pairwise}.
 }
 \details{
-This function reports pairwise LD of those SNPs in which the LD measure is 
-> 0 in all the populations. 
-The LD plot shows the pairwise LD measure against distance in number
-of base pairs pooled over all the chromosomes and a red line representing the
-threshold (R.squared = 0.2) that is commonly used to imply that two loci are
-unlinked (Delourme et al., 2013; Li et al., 2014).
+This function reports LD between SNP pairs by population. 
+The function \code{\link{gl.filter.ld}} filters out the SNPs in LD using as
+input the results of \code{\link{gl.report.ld.map}}. The actual number of 
+SNPs to be filtered out depends on the parameters set in the function 
+\code{\link{gl.filter.ld}}.
+
+Boxplots of LD by population and
+a histogram showing LD frequency are presented.
 }
 \examples{
-\dontrun{
 x <- platypus.gl
+x <- gl.filter.callrate(x,threshold = 1)
 x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
-x$chromosome <- x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1
-gl.report.ld.map(x,ld_max_pairwise = 1000000,ld_resolution = 100000)
+x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
+ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
 }
-}
-\references{
-\itemize{
-\item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., 
-André, I., . . . Marty, A. (2013). High-density SNP-based genetic map 
-development and linkage disequilibrium assessment in Brassica napusL. BMC 
-genomics, 14(1), 120.
-\item Li, X., Han, Y., Wei, Y., Acharya, A., Farmer, A. D., Ho, J., . . . 
-Brummer, E. C. (2014). Development of an alfalfa SNP array and its use to 
-evaluate patterns of population structure and linkage disequilibrium. PLoS 
-One, 9(1), e84329.
- }
+\seealso{
+\code{\link{gl.filter.ld}}
+
+Other report functions: 
+\code{\link{gl.report.bases}()},
+\code{\link{gl.report.callrate}()},
+\code{\link{gl.report.diversity}()},
+\code{\link{gl.report.hamming}()},
+\code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.hwe}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.parent.offspring}()},
+\code{\link{gl.report.pa}()},
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.sexlinked}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
 Custodian: Luis Mijangos -- Post to
  \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{report functions}

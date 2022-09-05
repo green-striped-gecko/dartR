@@ -32,7 +32,7 @@ gl.sim.mutate <- function(x,
             if (!cs %% 2)
                 nv <- 1
             else
-                nv = sample(c(0, 2), 1)
+                nv <-sample(c(0, 2), 1)
             xx[rl] <- nv
             x@gen[[ri]] <- new("SNPbin", xx)
         }  #end missing

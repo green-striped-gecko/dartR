@@ -24,7 +24,8 @@ gl.check.verbosity <- function(x = NULL) {
         } else {
             cat(
                 warn(
-                    "Warning: Parameter verbose must be an integer in the range 0 to 5, set to 2\n"
+                    "Warning: Parameter verbose must be an integer in the range 
+                    0 to 5, set to 2\n"
                 )
             )
             verbose <- 2

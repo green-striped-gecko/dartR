@@ -120,11 +120,108 @@ utils.read.dart <- function(filename,
             make.unique(as.character(ind.names), sep = "_")
     }
     
+    stdmetricscols <- 1:lmet
+    # if (length(stdmetricscols) != length(stdmetrics)) { cat(paste('\nCould not find all standard metrics.\n',stdmetrics[!(stdmetrics
+    # %in% names(snpraw) )] ,' is missing.\n Carefully check the spelling of your headers!\n')) stop() } if (!is.null(addmetrics)) {
+    # addmetricscols <- which( names(snpraw) %in% addmetrics ) if (length(addmetricscols) != length(addmetrics)) { cat(paste('\nCould not
+    # find all additional metrics.\n',addmetrics[!(addmetrics %in% names(snpraw) )] ,' is missing.\n Carefully check the spelling of your
+    # headers! or set addmetrics to NULL\n')) stop() } stdmetricscols <- c(stdmetricscols, addmetricscols) }
+    
+    covmetrics <- snpraw[, stdmetricscols]
+    
+    ##### Various checks (first are there two rows per allele?  we do not need cloneid any more....  covmetrics$CloneID =
+    ##### as.character(covmetrics$CloneID) check that there are two lines per locus... covmetrics = separate(covmetrics, CloneID, into =
+    ##### c('clid','clrest'),sep = '\\|', extra='merge')
+    
+    # covmetrics$AlleleID = as.character(covmetrics$AlleleID)
+    
+    # check that there are two lines per locus... covmetrics = separate(covmetrics, AlleleID, into = c('allid','alrest'),sep = '\\|',
+    # extra='merge')
+    covmetrics$clone <-
+      (sub("\\|.*", "", covmetrics$AlleleID, perl = T))
+    spp <-
+      (sub(".+-+(\\d{1,3}):.+", "\\1", covmetrics$AlleleID))
+    
+    
+    #### find uid within allelid
+    covmetrics$uid <- paste(covmetrics$clone, spp, sep = "-")
+    ### there should be only twos (and maybe fours)
+    tt <- table(table(covmetrics$uid))
+
+    # Testing for SNPs with the same ID
+    # Jason Carling e-mail
+    # the marker discovery and calling pipeline which we use (called ds14) has a 
+    # mechanism to prevent this situation from occurring. When the clusters are 
+    # parsed, the software will not allow more than a single marker with the same 
+    # CloneID, SNP position, and SNP variant. However, there are a number of 
+    # scenarios I can think of which could occur after the initial marker outputs
+    # are produced which could violate this rule, resulting in the situation you 
+    # have described. One example could be the combination of markers from multiple
+    # software outputs into a single new report file. This can occur either 
+    # manually, or using SNP re-calling software which calls the markers based on an 
+    # input definition file, rather than running the marker discovery de novo. 
+    # Secondly, marker renaming is sometimes undertaken, when newly discovered 
+    # sequences are added to our CloneID database, and these IDs are retrospectively
+    # incorporated into the marker report to replace temporary IDs. I have not yet 
+    # determined where the marker name clash was introduced in this case, but I can 
+    # answer your question by saying that unfortunately, we cannot completely 
+    # prevent this sort of problem for the reasons indicated above due to the
+    # potential for processes which modify names or combine data sets after the 
+    # initial marker discovery and output.
+    
+    if(length(tt)>1){
+      # if format is two rows
+      if(as.numeric(names(tt[2]))==4){
+        
+        t1 <- as.data.frame(cbind(1:nrow(covmetrics),covmetrics$uid))
+        t2 <- table(t1$V2)
+        t3 <- names(t2[t2>2])
+        t4 <- unlist(lapply(t3,function(x){
+          which(t1$V2==x)
+        }))
+        t5  <- t1[t4,]
+        # removing SNPs with the same ID
+        
+        t5$V1 <- as.numeric(t5$V1)
+        covmetrics <- covmetrics[-t5$V1,]
+        
+        snpraw <- snpraw[-t5$V1,]
+          
+        cat(warn(
+          "  There were",tt[2],"SNPs with the same ID. These SNPs will be removed. SNPs names are:",paste(unique(t5$V2),collapse = " "),"\n"
+          
+        ))
+        
+      }else{
+        
+        t1 <- as.data.frame(cbind(1:nrow(covmetrics),covmetrics$uid))
+        t2 <- table(t1$V2)
+        t3 <- names(t2[t2>1])
+        t4 <- unlist(lapply(t3,function(x){
+          which(t1$V2==x)
+        }))
+        t5  <- t1[t4,]
+        t5$V1 <- as.numeric(t5$V1)
+        # removing SNPs with the same ID
+        covmetrics <- covmetrics[-t5$V1,]
+        snpraw <- snpraw[-t5$V1,]
+        
+        cat(warn(
+          "  There were",tt[2],"SNPs with the same ID. These SNPs will be removed. SNPs names are:",paste(unique(t5$V2),collapse = " "),"\n"
+          
+        ))
+        
+        
+      }
+      
+      
+    }
+      
     datas <- snpraw[, (lmet + 1):ncol(snpraw)]
     
-    nrows = NULL
+    nrows <-NULL
     if (is.null(nrows)) {
-        gnrows = 3 - max(datas, na.rm = TRUE)  #if max(datas==1) then two row format, if two then one row format
+        gnrows <-3 - max(datas, na.rm = TRUE)  #if max(datas==1) then two row format, if two then one row format
         
         if (gnrows == 1 | gnrows == 2) {
             nrows <- gnrows
@@ -143,12 +240,25 @@ utils.read.dart <- function(filename,
         
     }
     
-    stdmetricscols <- 1:lmet
-    # if (length(stdmetricscols) != length(stdmetrics)) { cat(paste('\nCould not find all standard metrics.\n',stdmetrics[!(stdmetrics
-    # %in% names(snpraw) )] ,' is missing.\n Carefully check the spelling of your headers!\n')) stop() } if (!is.null(addmetrics)) {
-    # addmetricscols <- which( names(snpraw) %in% addmetrics ) if (length(addmetricscols) != length(addmetrics)) { cat(paste('\nCould not
-    # find all additional metrics.\n',addmetrics[!(addmetrics %in% names(snpraw) )] ,' is missing.\n Carefully check the spelling of your
-    # headers! or set addmetrics to NULL\n')) stop() } stdmetricscols <- c(stdmetricscols, addmetricscols) }
+    if (nrows != as.numeric(names(tt[1]))) {
+      cat(
+        warn(
+          "  Warning: The no. rows per Clone does not fit with nrow format. Most likely your data are not read in correctly!\n"
+        )
+      )
+    }
+    
+    if (verbose >= 2) {
+      cat(report(
+        paste(
+          "Number of rows per clone (should be only ",
+          nrows,
+          "s):",
+          names(tt),
+          "\n "
+        )
+      ))
+    }
     
     if (verbose >= 2) {
         cat(report("Added the following locus metrics:\n"))
@@ -156,44 +266,7 @@ utils.read.dart <- function(filename,
             paste(names(snpraw)[stdmetricscols], collapse = " "), ".\n"
         )))
     }
-    covmetrics <- snpraw[, stdmetricscols]
     
-    ##### Various checks (first are there two rows per allele?  we do not need cloneid any more....  covmetrics$CloneID =
-    ##### as.character(covmetrics$CloneID) check that there are two lines per locus... covmetrics = separate(covmetrics, CloneID, into =
-    ##### c('clid','clrest'),sep = '\\|', extra='merge')
-    
-    # covmetrics$AlleleID = as.character(covmetrics$AlleleID)
-    
-    # check that there are two lines per locus... covmetrics = separate(covmetrics, AlleleID, into = c('allid','alrest'),sep = '\\|',
-    # extra='merge')
-    covmetrics$clone <-
-        (sub("\\|.*", "", covmetrics$AlleleID, perl = T))
-    spp <-
-        (sub(".+-+(\\d{1,3}):.+", "\\1", covmetrics$AlleleID))
-    
-    
-    #### find uid within allelid
-    covmetrics$uid <- paste(covmetrics$clone, spp, sep = "-")
-    ### there should be only twos (and maybe fours)
-    tt <- table(table(covmetrics$uid))
-    if (verbose >= 2) {
-        cat(report(
-            paste(
-                "Number of rows per clone (should be only ",
-                nrows,
-                "s):",
-                names(tt),
-                "\n "
-            )
-        ))
-    }
-    if (nrows != as.numeric(names(tt))) {
-        cat(
-            warn(
-                "  Warning: The no. rows per Clone does not fit with nrow format. Most likely your data are not read in correctly!\n"
-            )
-        )
-    }
     nind <- ncol(datas)
     nsnp <- nrow(covmetrics) / nrows
     

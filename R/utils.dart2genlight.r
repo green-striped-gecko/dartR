@@ -53,7 +53,7 @@ utils.dart2genlight <- function(dart,
         cat(report(
             "nrows not provided. Trying to guess if one row or two row format...\n"
         ))
-        gnrows = 3 - max(dart$gendata, na.rm = TRUE)
+        gnrows <-3 - max(dart$gendata, na.rm = TRUE)
         
         if (gnrows == 1 | gnrows == 2) {
             nrows <- gnrows
@@ -103,7 +103,7 @@ utils.dart2genlight <- function(dart,
     
     sdata <- dart[["gendata"]]
     # every second line only....
-    esl = seq(nrows, nrow(sdata), nrows)
+    esl <-seq(nrows, nrow(sdata), nrows)
     
     pos <- sraw$SnpPosition[esl]
     alleles <- as.character(sraw$SNP)[esl]
@@ -114,7 +114,7 @@ utils.dart2genlight <- function(dart,
     
     if (nrows == 2) {
         for (i in 1:nind) {
-            isnp = paste(sdata[esl - 1, i], sdata[esl, i], sep = "/")
+            isnp <-paste(sdata[esl - 1, i], sdata[esl, i], sep = "/")
             g <- isnp
             g <- gsub("0/1", 2, g)
             g <- gsub("1/0", 0, g)
@@ -127,7 +127,7 @@ utils.dart2genlight <- function(dart,
         }
     } else {
         for (i in 1:nind) {
-            isnp = sdata[esl, i]
+            isnp <-sdata[esl, i]
             g <- isnp
             g <- 3 - g
             g <- ifelse(g == 3, 0, g)
@@ -182,7 +182,7 @@ utils.dart2genlight <- function(dart,
                      stringsAsFactors = T)
         # is there an entry for every individual
         
-        id.col = match("id", names(ind.cov))
+        id.col <-match("id", names(ind.cov))
         
         if (is.na(id.col)) {
             stop(error("Fatal Error: There is no id column\n"))
@@ -251,7 +251,7 @@ utils.dart2genlight <- function(dart,
             }
         }
         
-        pop.col = match("pop", names(ind.cov))
+        pop.col <-match("pop", names(ind.cov))
         
         if (is.na(pop.col)) {
             if (verbose >= 1) {
@@ -269,8 +269,8 @@ utils.dart2genlight <- function(dart,
             }
         }
         
-        lat.col = match("lat", names(ind.cov))
-        lon.col = match("lon", names(ind.cov))
+        lat.col <-match("lat", names(ind.cov))
+        lon.col <-match("lon", names(ind.cov))
         if (verbose >= 2) {
             if (is.na(lat.col)) {
                 cat(

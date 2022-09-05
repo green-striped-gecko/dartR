@@ -49,7 +49,7 @@ gl.print.history <- function(x = NULL,
         dd <- data.frame(nr = 1:nh, history = as.character(hist2))
         
         # max width
-        dd$history = sapply(lapply(dd$history, strwrap, width = 80),
+        dd$history <-sapply(lapply(dd$history, strwrap, width = 80),
                             paste,
                             collapse = "\n")
         print(knitr::kable(dd, align = c("c", "l", "l")))

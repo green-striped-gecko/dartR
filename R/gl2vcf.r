@@ -121,7 +121,7 @@ gl2vcf <- function(x,
             cat(report("  Using the chromosome information in the field",snp_chr, "from loc.metrics.\n"))
           }
           
-          x$chromosome <- unname(unlist(x$other$loc.metrics[snp_chr]))
+          x$chromosome <- as.factor(unname(unlist(x$other$loc.metrics[snp_chr])))
           
         }else{
           

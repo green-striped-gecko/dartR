@@ -146,10 +146,12 @@ gl.pcoa.plot <- function(glPca,
     
     # CHECK DATATYPE
     datatype1 <-
-        utils.check.datatype(glPca, accept = c("glPca","list"), verbose = verbose)
+        utils.check.datatype(glPca, accept = c("glPca","list"),
+                             verbose = verbose)
     datatype2 <-
         utils.check.datatype(x,
-                             accept = c("SNP", "SilicoDArT", "fd", "dist","list"),
+                             accept = c("SNP", "SilicoDArT", "fd",
+                                        "dist","list"),
                              verbose = verbose)
     
     # SCRIPT SPECIFIC ERROR CHECKING
