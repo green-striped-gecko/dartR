@@ -60,15 +60,14 @@ install.packages("dartR")
 Because of CRAN limitations, the default installation does not include
 all packages needed to run all the functions; hence, specialised
 analyses need the installation of additional packages. The following
-code guarantees that all necessary functions for all `dartR` analyses
-are set up and ready to go.
+code guarantees that all necessary packages for all `dartR` analyses are
+set up and ready to go.
 
 ``` r
 gl.install.vanilla.dartR()
 ```
 
-You can install the development version of `dartR` from
-[GitHub](https://github.com/) with:
+You can install the development version of `dartR` from GitHub with:
 
 ``` r
 gl.install.vanilla.dartR(flavour = "dev")
@@ -155,8 +154,9 @@ is for you.
 
 ## Citation
 
-Please acknowledge `dartR` if you use it in your study. Copy the
-following to the R console to retrieve the citation information:
+Please acknowledge `dartR` if you use it in your study. Copy and paste
+the following code to the R console to retrieve the citation
+information:
 
 ``` r
 citation("dartR")
