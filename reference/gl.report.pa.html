@@ -61,6 +61,7 @@ differences (AFD) between pairs of populations.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  x2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
+<span>  loc_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plot.out <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  font_plot <span class="op">=</span> <span class="fl">14</span>,</span>
 <span>  map.interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -84,6 +85,12 @@ provided here, but they must have the same number of SNPs [default NULL].</p></d
 <dt>method</dt>
 <dd><p>Method to calculate private alleles: 'pairwise' comparison or
 compare each population against the rest 'one2rest' [default 'pairwise'].</p></dd>
+
+
+<dt>loc_names</dt>
+<dd><p>Whether names of loci with private alleles and fixed 
+differences should reported. If TRUE, loci names are reported using a list
+ [default FALSE].</p></dd>
 
 
 <dt>plot.out</dt>
@@ -125,7 +132,9 @@ report [default 2 or as specified using gl.set.verbosity].</p></dd>
  of individuals in each population, the number of loci with fixed differences
  (same for both populations) in pop1 (compared to pop2) and vice versa. Same
  for private alleles and finally the absolute mean allele frequency
- difference between loci (AFD).</p>
+ difference between loci (AFD). If loc_names = TRUE, loci names with private
+  alleles and fixed differences are reported in a list in addition to the 
+  dataframe.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
