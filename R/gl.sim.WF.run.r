@@ -598,12 +598,12 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
                   rbind(pop_list[[pop_sample]][sample(
                     which(pop_list[[pop_sample]]$V1 == "Male"),
                     size =  population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),],
                   pop_list[[pop_sample]][sample(
                     which(pop_list[[pop_sample]]$V1 == "Female"),
                     size = population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),])
                 pop_temp$V2 <- x
                 return(pop_temp)
@@ -617,12 +617,12 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
                   rbind(pop_list[[x]][sample(
                     which(pop_list[[x]]$V1 == "Male"),
                     size =  population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),],
                   pop_list[[x]][sample(
                     which(pop_list[[x]]$V1 == "Female"),
                     size = population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),])
                 pop_temp$V2 <- x
                 return(pop_temp)

@@ -8,6 +8,7 @@ gl.report.pa(
   x,
   x2 = NULL,
   method = "pairwise",
+  loc_names = FALSE,
   plot.out = TRUE,
   font_plot = 14,
   map.interactive = FALSE,
@@ -24,6 +25,10 @@ provided here, but they must have the same number of SNPs [default NULL].}
 
 \item{method}{Method to calculate private alleles: 'pairwise' comparison or
 compare each population against the rest 'one2rest' [default 'pairwise'].}
+
+\item{loc_names}{Whether names of loci with private alleles and fixed 
+differences should reported. If TRUE, loci names are reported using a list
+ [default FALSE].}
 
 \item{plot.out}{Specify if Sankey plot is to be produced [default TRUE].}
 
@@ -49,7 +54,9 @@ A data.frame. Each row shows, for each pair of populations the number
  of individuals in each population, the number of loci with fixed differences
  (same for both populations) in pop1 (compared to pop2) and vice versa. Same
  for private alleles and finally the absolute mean allele frequency
- difference between loci (AFD).
+ difference between loci (AFD). If loc_names = TRUE, loci names with private
+  alleles and fixed differences are reported in a list in addition to the 
+  dataframe.
 }
 \description{
 This function reports private alleles in one population compared with a
