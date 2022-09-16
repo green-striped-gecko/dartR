@@ -10,6 +10,9 @@
 #' provided here, but they must have the same number of SNPs [default NULL].
 #' @param method Method to calculate private alleles: 'pairwise' comparison or
 #' compare each population against the rest 'one2rest' [default 'pairwise'].
+#' @param loc_names Whether names of loci with private alleles and fixed 
+#' differences should reported. If TRUE, loci names are reported using a list
+#'  [default FALSE].
 #' @param plot.out Specify if Sankey plot is to be produced [default TRUE].
 #' @param font_plot Numeric font size in pixels for the node text labels
 #' [default 14].
@@ -76,7 +79,9 @@
 #'  of individuals in each population, the number of loci with fixed differences
 #'  (same for both populations) in pop1 (compared to pop2) and vice versa. Same
 #'  for private alleles and finally the absolute mean allele frequency
-#'  difference between loci (AFD).
+#'  difference between loci (AFD). If loc_names = TRUE, loci names with private
+#'   alleles and fixed differences are reported in a list in addition to the 
+#'   dataframe. 
 #' @author Custodian: Bernd Gruber -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @references \itemize{
@@ -92,10 +97,10 @@
 #' @importFrom tidyr pivot_longer
 #' @export
 
-
 gl.report.pa <- function(x,
                          x2 = NULL,
                          method = "pairwise",
+                         loc_names = FALSE,
                          plot.out = TRUE,
                          font_plot = 14,
                          map.interactive = FALSE,
@@ -182,6 +187,18 @@ gl.report.pa <- function(x,
         AFD = NA
       )
     
+    pall_loc_names <- rep(list(as.list(rep(NA, 3))), nrow(pc))
+    
+    names(pall_loc_names) <- paste0(names(pops)[pc[, 1]],
+                                    "_",
+                                    names(pops)[pc[, 2]])
+    
+    pall_loc_names <- lapply(pall_loc_names,function(x){
+      names(x) <- c("pop1_pop2_pa","pop2_pop1_pa","fd")
+      return(x)
+    })
+    
+
     for (i in 1:nrow(pc)) {
       i1 <- pall[i, 1]
       i2 <- pall[i, 2]
@@ -192,14 +209,34 @@ gl.report.pa <- function(x,
       p2alf <- colMeans(p2, na.rm = T) / 2
       
       pall[i, c("N1","N2")] <- c(nrow(p1), nrow(p2))
-      pall[i, "fixed"] <- sum(abs(p1alf - p2alf) == 1, na.rm = T)
+      # pall[i, "fixed"] <- sum(abs(p1alf - p2alf) == 1, na.rm = T)
       
-      pall[i, "priv1"] <- sum(p2alf == 0 &
-                          p1alf != 0, na.rm = T) + sum(p2alf == 1 &
-                                                         p1alf != 1, na.rm = T)
-      pall[i, "priv2"] <- sum(p1alf == 0 &
-                          p2alf != 0, na.rm = T) + sum(p1alf == 1 &
-                                                         p2alf != 1, na.rm = T)
+      # pall[i, "priv1"] <- sum(p2alf == 0 &
+      #                     p1alf != 0, na.rm = T) + sum(p2alf == 1 &
+      #                                                 p1alf != 1, na.rm = T)
+      # pall[i, "priv2"] <- sum(p1alf == 0 &
+      #                     p2alf != 0, na.rm = T) + sum(p1alf == 1 &
+      #                                                  p2alf != 1, na.rm = T)
+      
+      # Changing code to get the names of the SNP with fixed differences and 
+      # private alleles
+      pop1_pop2_pa <- unique(unname(unlist(c(which(p2alf == 0 & p1alf != 0),
+                                             which(p2alf == 1 & p1alf != 1)))))
+      pop1_pop2_pa_loc_names <- locNames(x)[pop1_pop2_pa]
+      pop2_pop1_pa <- unique(unname(unlist(c(which(p1alf == 0 & p2alf != 0),
+                                             which(p1alf == 1 & p2alf != 1)))))
+      pop2_pop1_pa_loc_names <- locNames(x)[pop2_pop1_pa]
+      pop1_pop2_fd <- unique(unname(unlist(which(abs(p1alf - p2alf) == 1))))
+      pop1_pop2_fd_loc_names <- locNames(x)[pop1_pop2_fd]
+      
+      pall[i, "fixed"] <- length(pop1_pop2_fd)
+      pall[i, "priv1"] <- length(pop1_pop2_pa)
+      pall[i, "priv2"] <- length(pop2_pop1_pa)
+      
+      pall_loc_names[[i]][["pop1_pop2_pa"]] <- pop1_pop2_pa_loc_names
+      pall_loc_names[[i]][["pop2_pop1_pa"]] <- pop2_pop1_pa_loc_names
+      pall_loc_names[[i]][["fd"]] <- pop1_pop2_fd_loc_names
+      
       pall[i, "totalpriv"] <- pall[i, 8] + pall[i, 9]
       pall[i, "AFD"] <- round(mean(abs(p1alf - p2alf), na.rm = T), 3)
       
@@ -314,6 +351,18 @@ gl.report.pa <- function(x,
         "totalpriv",
         "AFD"
       )
+    
+    pall_loc_names <- rep(list(as.list(rep(NA, 3))), nPop(x))
+    
+    names(pall_loc_names) <- paste0(popNames(x),
+                                    "_",
+                                    "Rest")
+    
+    pall_loc_names <- lapply(pall_loc_names,function(x){
+      names(x) <- c("pop1_pop2_pa","pop2_pop1_pa","fd")
+      return(x)
+    })
+    
     for (y in 1:nPop(x)) {
       gl2 <- x
       pop(gl2) <-
@@ -344,16 +393,33 @@ gl.report.pa <- function(x,
         p1alf <- colMeans(p1, na.rm = T) / 2
         p2alf <- colMeans(p2, na.rm = T) / 2
         
+        pop1_pop2_pa <- unique(unname(unlist(c(which(p2alf == 0 & p1alf != 0),
+                                               which(p2alf == 1 & p1alf != 1)))))
+        pop1_pop2_pa_loc_names <- locNames(x)[pop1_pop2_pa]
+        pop2_pop1_pa <- unique(unname(unlist(c(which(p1alf == 0 & p2alf != 0),
+                                               which(p1alf == 1 & p2alf != 1)))))
+        pop2_pop1_pa_loc_names <- locNames(x)[pop2_pop1_pa]
+        pop1_pop2_fd <- unique(unname(unlist(which(abs(p1alf - p2alf) == 1))))
+        pop1_pop2_fd_loc_names <- locNames(x)[pop1_pop2_fd]
+        
+        pall[i, "fixed"] <- length(pop1_pop2_fd)
+        pall[i, "priv1"] <- length(pop1_pop2_pa)
+        pall[i, "priv2"] <- length(pop2_pop1_pa)
+        
+        pall_loc_names[[y]][["pop1_pop2_pa"]] <- pop1_pop2_pa_loc_names
+        pall_loc_names[[y]][["pop2_pop1_pa"]] <- pop2_pop1_pa_loc_names
+        pall_loc_names[[y]][["fd"]] <- pop1_pop2_fd_loc_names
+        
         pall[i, 5:6] <- c(nrow(p1), nrow(p2))
-        pall[i, 7] <- sum(abs(p1alf - p2alf) == 1, na.rm = T)
-        
-        pall[i, 8] <- sum(p2alf == 0 &
-                            p1alf != 0, na.rm = T) + 
-          sum(p2alf == 1 & p1alf != 1, na.rm = T)
-        
-        pall[i, 9] <- sum(p1alf == 0 &
-                            p2alf != 0, na.rm = T) + 
-          sum(p1alf == 1 & p2alf != 1, na.rm = T)
+        # pall[i, 7] <- sum(abs(p1alf - p2alf) == 1, na.rm = T)
+        # 
+        # pall[i, 8] <- sum(p2alf == 0 &
+        #                     p1alf != 0, na.rm = T) + 
+        #   sum(p2alf == 1 & p1alf != 1, na.rm = T)
+        # 
+        # pall[i, 9] <- sum(p1alf == 0 &
+        #                     p2alf != 0, na.rm = T) + 
+        #   sum(p1alf == 1 & p2alf != 1, na.rm = T)
         
         pall[i, 10] <- pall[i, 8] + pall[i, 9]
         pall[i, 11] <-
@@ -507,6 +573,14 @@ gl.report.pa <- function(x,
   
   # RETURN
   
-  invisible(df)
+  if(loc_names==TRUE){
+    
+    return(invisible(list(table=df,names_loci=pall_loc_names)))
+    
+  }else{
+    
+   return(invisible(df))
+    
+  }
   
 }

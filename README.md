@@ -135,13 +135,19 @@ test_1 <- gl.filter.callrate(test)
     to learn more about our simulation model, a powerful tool for
     illuminating intricate evolutionary and genetic processes.
 
+6.  In more advanced topics, check our technical notes on [Genetic
+    Distances and their Visualization in Population
+    Genetics](http://georges.biomatix.org/storage/app/media/uploaded-files/TECHNICAL_NOTE_Genetic_Distance_18-Feb-22.pdf)
+    and [Fixed Difference
+    Analysis](http://georges.biomatix.org/storage/app/media/uploaded-files/TechNote_fixed_difference_analysis_25-Feb-22.pdf).
+
 ## Getting help
 
 1.  Google groups Q&A forum in support of users can be accessed
     [here](https://groups.google.com/g/dartr?pli=1).
 
 2.  The [RStudio community](https://community.rstudio.com/) provides a
-    welcoming environment in which to ask any enquiry.
+    welcoming environment in which to ask any inquiry.
 
 3.  Answers to frequently asked topics may usually be found on [Stack
     Overflow](https://stackoverflow.com/questions/tagged/r).
@@ -162,14 +168,10 @@ information:
 citation("dartR")
 ```
 
-Check out our articles:
-
-- [dartR v2: An accessible genetic analysis platform for conservation,
-  ecology and agriculture](https://doi.org/10.1111/2041-210X.13918)
-
-- [dartR: An R package to facilitate analysis of SNP data generated from
-  reduced representation genome
-  sequencing](https://doi.org/10.1111/1755-0998.12745)
+Check out our
+[articles](https://github.com/green-striped-gecko/dartR/wiki/dartR-team-publications)
+and our
+[awards](https://github.com/green-striped-gecko/dartR/wiki/dartR-awards).
 
 Have fun working with `dartR`!
 

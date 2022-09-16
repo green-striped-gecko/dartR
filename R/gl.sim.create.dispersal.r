@@ -27,7 +27,7 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
-#' @return Writes csv file containing the dispersal variables for each pair of
+#' @return A csv file containing the dispersal variables for each pair of
 #' populations to be used as input for the function \code{\link{gl.sim.WF.run}}.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
