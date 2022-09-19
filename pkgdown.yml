@@ -3,7 +3,7 @@ pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   dartRTutorials: dartRTutorials.html
-last_built: 2022-09-16T06:07Z
+last_built: 2022-09-19T06:27Z
 urls:
   reference: https://green-striped-gecko.github.io/dartR/reference
   article: https://green-striped-gecko.github.io/dartR/articles
