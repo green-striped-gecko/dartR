@@ -165,9 +165,16 @@ for (int j = 0; j < loc; j++) {
 }
 
 merge_gl_fasta <- function(gl_list, parallel = FALSE) {
+  
   matrix_temp <- lapply(gl_list, function(y) {
     return(as.data.frame(cbind(ind_names = indNames(y), as.matrix(y))))
   })
+  
+  loc_names <- lapply(matrix_temp,function(x){
+  colnames(x)[-1]  
+  })
+
+  loc_names <- Reduce("c",loc_names)
   
   gl_temp <-
     Reduce(function(x, y) {
@@ -177,6 +184,10 @@ merge_gl_fasta <- function(gl_list, parallel = FALSE) {
   res_temp <-  matrix2gen(gl_temp[, 2:ncol(gl_temp)], parallel = parallel)
   
   res <- new("genlight", res_temp, ploidy = 2L)
+  
+  res$loc.names <- loc_names
+  alleles(res) <- rep("C/G", nLoc(res))
+  res$ind.names <- gl_temp$ind_names
   
   res_final <- gl.compliance.check(res, verbose = 0)
   
