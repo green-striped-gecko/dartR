@@ -35,15 +35,17 @@ The following IUPAC Ambiguity Codes are taken as heterozygotes:
 Ambiguity characters are often used to code heterozygotes. However, using
  heterozygotes as ambiguity characters may bias many estimates. See more
   information in the link below:
-https://evodify.com/heterozygotes-ambiguity-characters/
+\url{https://evodify.com/heterozygotes-ambiguity-characters/}
 }
 \examples{
-\dontrun{
-folder_samples <- getwd()
-file_names <- list.files(path = folder_samples, pattern = "*.fas",
-full.names = TRUE)
-gl_list <- gl.read.fasta(file_names)
-}
+ # Folder where the fasta files are located. 
+ folder_samples <- system.file('extdata', package ='dartR')
+ # listing the FASTA files, including their path. Files have an extension
+ # that contains "fas".
+ file_names <- list.files(path = folder_samples, pattern = "*.fas", 
+                          full.names = TRUE)
+ # reading fasta files
+  obj <- gl.read.fasta(file_names)
 }
 \author{
 Custodian: Luis Mijangos -- Post to
