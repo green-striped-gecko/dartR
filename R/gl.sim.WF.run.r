@@ -10,6 +10,10 @@
 #' 
 #' See documentation and tutorial for a complete description of the simulations.
 #' These documents can be accessed at http://georges.biomatix.org/dartR 
+#' 
+#' Take into account that the simulations will take a little bit longer the
+#'  first time you use the function gl.sim.WF.run() because C++ functions must
+#'   be compiled.
 #' @param file_var Path of the variables file 'sim_variables.csv' (see details) 
 #' [required if interactive_vars = FALSE].
 #' @param ref_table Reference table created by the function 
