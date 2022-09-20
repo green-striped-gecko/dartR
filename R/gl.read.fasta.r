@@ -55,6 +55,10 @@ gl.read.fasta <- function(fasta_files,
                     parallel = parallel,
                     n_cores = n_cores)
   
+  # res <- utils.read.fasta(fasta_files,
+  #                         parallel = parallel,
+  #                         n_cores = n_cores)
+  
   fin_res <- merge_gl_fasta(gl_list, parallel = parallel)
   
   # FLAG SCRIPT END

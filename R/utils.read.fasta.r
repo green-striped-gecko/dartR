@@ -63,7 +63,7 @@ utils.read.fasta <-  function(file,
   nb.alleles <- lengths(POOL)
   snp.posi <- which(nb.alleles == 2 | nb.alleles == 3)
   if (length(snp.posi) == 0) {
-    cat(warn("  No polymorphism in the alignment - returning empty object./n"))
+    cat(warn("  No polymorphism in the alignment - returning empty object.\n"))
     return(new("genlight"))
   }
   
