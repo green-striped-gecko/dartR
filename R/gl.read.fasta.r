@@ -11,7 +11,7 @@
 #'  \item K is heterozygote	for GT and TG
 #'  }
 #'  
-#'  #' The following IUPAC Ambiguity Codes are taken as missing data:
+#' The following IUPAC Ambiguity Codes are taken as missing data:
 #' \itemize{
 #'  \item V
 #'  \item H 
@@ -73,18 +73,21 @@ gl.read.fasta <- function(fasta_files,
   gl_list <- lapply(fasta_files,
                     utils.read.fasta,
                     parallel = parallel,
-                    n_cores = n_cores)
+                    n_cores = n_cores,
+                    verbose = verbose)
   
-  x <- merge_gl_fasta(gl_list, parallel = parallel)
+  x <- merge_gl_fasta(gl_list, parallel = parallel,verbose = verbose)
+  
+  x <- gl.compliance.check(x, verbose = verbose)
  
    # add history
   x@other$history <- list(match.call())
-  x <- gl.recalc.metrics(x,verbose = 0)
+  x <- gl.recalc.metrics(x, verbose = 0)
   
-  if (verbose > 2) {
+  if (verbose >= 2) {
     cat(
       important(
-        "Genlight object does not have individual metrics. You need to add them 'manually' to the @other$ind.metrics slot.\n"
+        "  Genlight object does not have individual metrics. You need to add them 'manually' to the @other$ind.metrics slot.\n"
       )
     )
   }

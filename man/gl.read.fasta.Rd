@@ -35,7 +35,7 @@ The following IUPAC Ambiguity Codes are taken as heterozygotes:
  \item K is heterozygote	for GT and TG
  }
  
- #' The following IUPAC Ambiguity Codes are taken as missing data:
+The following IUPAC Ambiguity Codes are taken as missing data:
 \itemize{
  \item V
  \item H 
