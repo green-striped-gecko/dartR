@@ -27,12 +27,12 @@ A genlight object.
 \description{
 The following IUPAC Ambiguity Codes are taken as heterozygotes:
 \itemize{
- \item M means	A or C 	
- \item R means	A or G 	
- \item W means	A or T 	
- \item S means	C or G 	
- \item Y means	C or T 	
- \item K means	G or T
+ \item M is heterozygote for	AC and CA	
+ \item R is heterozygote	for AG and GA	
+ \item W is heterozygote	for AT and TA	
+ \item S is heterozygote	for CG and GC
+ \item Y is heterozygote	for CT and TC
+ \item K is heterozygote	for GT and TG
  }
  
  The function can deal with missing data in individuals, e.g. when FASTA 
