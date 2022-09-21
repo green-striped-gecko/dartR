@@ -11,8 +11,19 @@
 #'  \item K is heterozygote	for GT and TG
 #'  }
 #'  
+#'  #' The following IUPAC Ambiguity Codes are taken as missing data:
+#' \itemize{
+#'  \item V
+#'  \item H 
+#'  \item D 
+#'  \item B
+#'  \item N 
+#'  }
+#'  
 #'  The function can deal with missing data in individuals, e.g. when FASTA 
 #'  files have different number of individuals due to missing data.
+#'  
+#'  The allele with the highest frequency is taken as the reference allele.
 #'  
 #' @param fasta_files Fasta files to read [required].
 #' @param parallel A logical indicating whether multiple cores -if available-
