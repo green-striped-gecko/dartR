@@ -2,7 +2,13 @@
 
 utils.read.fasta <-  function(file,
                               parallel = parallel,
-                              n_cores = NULL) {
+                              n_cores = NULL,
+                              verbose = verbose) {
+  
+  if(verbose >= 2){
+  cat(report("  Reading",basename(file),"\n"))
+  }
+  
   ## find length of a genome
   NLOC <-
     nchar(scan(
@@ -59,12 +65,10 @@ utils.read.fasta <-  function(file,
   POOL <-
     lapply(POOL, function(e)
       e[e %in% letterOK])
-  ## POOL <- lapply(POOL, setdiff, "-")
   nb.alleles <- lengths(POOL)
   snp.posi <- which(nb.alleles == 2 | nb.alleles == 3)
   if (length(snp.posi) == 0) {
-    cat(warn("  No polymorphism in the alignment - returning empty object.\n"))
-    return(new("genlight"))
+    return(cat(warn("  No polymorphism in the alignment",basename(file),"\n")))
   }
   
   txt <- scan(file,
@@ -73,7 +77,6 @@ utils.read.fasta <-  function(file,
               quiet = TRUE)
   
   ## read SNPs
-  nb.ind <- length(grep("^>", txt))
   # split per individuals
   txt <- split(txt, rep(1:nb.ind, each = 2))
   if (parallel) {
@@ -90,16 +93,16 @@ utils.read.fasta <-  function(file,
         strsplit(paste(e[-1], collapse = ""), split = "")[[1]][snp.posi])
   }
   
-  txt <- lapply(txt,stringr::str_replace_all,"A", "AA")
-  txt <- lapply(txt,stringr::str_replace_all,"T" ,"TT")
-  txt <- lapply(txt,stringr::str_replace_all, "G","GG")
-  txt <- lapply(txt,stringr::str_replace_all, "C","CC")
-  txt <- lapply(txt,stringr::str_replace_all, "M","AC")
-  txt <- lapply(txt,stringr::str_replace_all, "R","AG")
-  txt <- lapply(txt,stringr::str_replace_all, "W","AT")
-  txt <- lapply(txt,stringr::str_replace_all, "S","CG")
-  txt <- lapply(txt,stringr::str_replace_all, "Y","CT")
-  txt <- lapply(txt,stringr::str_replace_all, "K","GT")
+  txt <- lapply(txt,stringr::str_replace_all, "A", "AA")
+  txt <- lapply(txt,stringr::str_replace_all, "T", "TT")
+  txt <- lapply(txt,stringr::str_replace_all, "G", "GG")
+  txt <- lapply(txt,stringr::str_replace_all, "C", "CC")
+  txt <- lapply(txt,stringr::str_replace_all, "M", "AC")
+  txt <- lapply(txt,stringr::str_replace_all, "R", "AG")
+  txt <- lapply(txt,stringr::str_replace_all, "W", "AT")
+  txt <- lapply(txt,stringr::str_replace_all, "S", "CG")
+  txt <- lapply(txt,stringr::str_replace_all, "Y", "CT")
+  txt <- lapply(txt,stringr::str_replace_all, "K", "GT")
   
   t1 <- lapply(1:length(txt[[1]]),function(z){
     t2 <- unlist(lapply(txt,"[[",z))
@@ -132,6 +135,12 @@ utils.read.fasta <-  function(file,
   
   ref_alt <- lapply(ref_alt,unique)
   
+  mono_loci <- which(unlist(lapply(ref_alt,length))!=2)
+  
+  if(length(mono_loci)>0){
+    ref_alt[[mono_loci]] <- c(ref_alt[[mono_loci]], ref_alt[[mono_loci]])
+  }
+  
   loc.all <- unlist(lapply(ref_alt,function(x){
     paste0(x[1],"/",x[2])
           }))
@@ -155,6 +164,10 @@ utils.read.fasta <-  function(file,
   
   txt3[] <- lapply(txt3, as.integer)
   
+  if(dim(txt3)[1]==1){
+    txt3 <- t(txt3)
+  }
+  
   res <- list()
   
   res <- c(res, apply(txt3,1, function(e)
@@ -171,7 +184,19 @@ utils.read.fasta <-  function(file,
   
 }
 
-merge_gl_fasta <- function(gl_list, parallel = FALSE) {
+merge_gl_fasta <- function(gl_list, 
+                           parallel = FALSE,
+                           verbose = verbose) {
+  
+  if(verbose >= 2){
+    cat(report("  Merging files...\n"))
+  }
+  
+ mono_file <- unlist(lapply(gl_list,function(x){class(x)[[1]]}))
+ 
+ mono_file <- which(mono_file=="NULL")
+  
+  gl_list <- gl_list[-mono_file]
   
   matrix_temp <- lapply(gl_list, function(y) {
     return(as.data.frame(cbind(ind_names = indNames(y), as.matrix(y))))
@@ -202,8 +227,6 @@ merge_gl_fasta <- function(gl_list, parallel = FALSE) {
   alleles(res) <- loc_all
   res$ind.names <- gl_temp$ind_names
   
-  res_final <- gl.compliance.check(res, verbose = 0)
-  
-  return(res_final)
+  return(res)
   
 }
