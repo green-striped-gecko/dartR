@@ -90,69 +90,83 @@ utils.read.fasta <-  function(file,
         strsplit(paste(e[-1], collapse = ""), split = "")[[1]][snp.posi])
   }
   
-  txt2 <- lapply(txt, paste0, collapse = "")
-  txt2 <- stringr::str_replace_all(txt2, "A", "1")
-  txt2 <-  stringr::str_replace_all(txt2, "T", "2")
-  txt2 <-  stringr::str_replace_all(txt2, "G", "3")
-  txt2 <-  stringr::str_replace_all(txt2, "C", "4")
-  txt2 <-  stringr::str_replace_all(txt2, "M", "5")
-  txt2 <-  stringr::str_replace_all(txt2, "R", "5")
-  txt2 <-  stringr::str_replace_all(txt2, "W", "5")
-  txt2 <-  stringr::str_replace_all(txt2, "S", "5")
-  txt2 <-  stringr::str_replace_all(txt2, "Y", "5")
-  txt2 <-  stringr::str_replace_all(txt2, "K", "5")
-  txt3 <- cbind(txt2, txt2)
+  txt <- lapply(txt,stringr::str_replace_all,"A", "AA")
+  txt <- lapply(txt,stringr::str_replace_all,"T" ,"TT")
+  txt <- lapply(txt,stringr::str_replace_all, "G","GG")
+  txt <- lapply(txt,stringr::str_replace_all, "C","CC")
+  txt <- lapply(txt,stringr::str_replace_all, "M","AC")
+  txt <- lapply(txt,stringr::str_replace_all, "R","AG")
+  txt <- lapply(txt,stringr::str_replace_all, "W","AT")
+  txt <- lapply(txt,stringr::str_replace_all, "S","CG")
+  txt <- lapply(txt,stringr::str_replace_all, "Y","CT")
+  txt <- lapply(txt,stringr::str_replace_all, "K","GT")
   
-  # make genotypes
-  #to hack package checking...
-  make_geno <- function() {
-    
-  }
-  
-  Rcpp::cppFunction(
-    plugins = "cpp11",
-    
-    'List make_geno(StringMatrix mat) {
-    int ind = mat.nrow();
-    int loc = strlen(mat(0,0));
-    List out(ind);
-for (int i = 0; i < ind; i++) {
- std::string chr1 (mat(i,0));
- std::string chr2 (mat(i,1));
- StringVector temp(loc);
-for (int j = 0; j < loc; j++) {
- StringVector geno = StringVector::create(chr1[j],chr2[j]);
-    temp[j] = collapse(geno);
-  }
-      out[i] = temp;
-    }
-    return out;
-  }'
-  )
-  
-  plink_ped <- make_geno(txt3)
-  plink_ped_2 <- lapply(plink_ped, function(x) {
-    x[x == "55"] <- 1
-    x[x == "11"] <- 0
-    x[x == "22"] <- 2
-    x[x == "33"] <- 0
-    x[x == "44"] <- 2
-    
-    return(x)
-    
+  t1 <- lapply(1:length(txt[[1]]),function(z){
+    t2 <- unlist(lapply(txt,"[[",z))
+    t3 <- table(t2)
+    return(t3)
   })
+  
+  myRef <- strsplit(names(unlist(lapply(t1,which.max))),"")
+  myAlt <- strsplit(names(unlist(lapply(t1,which.min))),"")
+  
+  ref_alt <- lapply(1:length(myRef),function(x){
+    return(c(myRef[[x]],myAlt[[x]]))
+  })
+  
+  ref_alt <- lapply(ref_alt,unique)
+  
+  loc.all <- unlist(lapply(ref_alt,function(x){
+    paste0(x[1],"/",x[2])
+          }))
+  
+
+  txt2 <- lapply(1:length(txt[[1]]), function(x) {
+    hom_ref <- paste0(ref_alt[[x]][1],ref_alt[[x]][1])
+    hom_alt <- paste0(ref_alt[[x]][2],ref_alt[[x]][2])
+
+    res <- lapply(txt,function(y){
+      if(y[x]==hom_ref){
+        return(0)
+      } else if(y[x]==hom_alt){
+        return(2)
+      } else {
+        return(1)
+      }
+    })
+  })
+  
+  txt3 <- as.data.frame(Reduce(cbind,txt2))
+  
+  txt3[] <- lapply(txt3, as.integer)
+    
+
+  #   txt[[x]])
+  #   txt[txt == "AA"] <- 1
+  #   x[x == "11"] <- 0
+  #   x[x == "22"] <- 2
+  #   x[x == "33"] <- 0
+  #   x[x == "44"] <- 2
+  #   
+  #   return(x)
+  #   
+  # })
   
   res <- list()
   
-  txt <-
-    lapply(plink_ped_2, function(e)
-      suppressWarnings(as.integer(e)))
+  # txt <-
+  #   lapply(txt, function(e)
+  #     suppressWarnings(as.integer(e)))
   
-  res <-
-    c(res, lapply(txt, function(e)
+  res <- c(res, apply(txt3,1, function(e)
       new(
         "SNPbin", snp = e, ploidy = 2L
       )))
+  
+    # c(res, lapply(txt, function(e)
+    #   new(
+    #     "SNPbin", snp = e, ploidy = 2L
+    #   )))
   
   res <- new("genlight", res, ploidy = 2L)
   

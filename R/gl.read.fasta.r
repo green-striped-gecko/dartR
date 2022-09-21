@@ -2,10 +2,18 @@
 #' @title Reads FASTA files and converts them to genlight object
 #' @description
 #' The following IUPAC Ambiguity Codes are taken as heterozygotes:
-#'  W, S, M, K, R, Y. 
+#' \itemize{
+#'  \item M means	A or C 	
+#'  \item R means	A or G 	
+#'  \item W means	A or T 	
+#'  \item S means	C or G 	
+#'  \item Y means	C or T 	
+#'  \item K means	G or T
+#'  }
 #'  
-#'  Take into account that the function will take a little bit longer the first
-#'   time you run it because C++ functions must be compiled.
+#'  The function can deal with missing data in individuals, e.g. when FASTA 
+#'  files have different number of individuals due to missing data.
+#'  
 #' @param fasta_files Fasta files to read [required].
 #' @param parallel A logical indicating whether multiple cores -if available-
 #'  should be used for the computations (TRUE), or not (FALSE); requires the
@@ -56,7 +64,19 @@ gl.read.fasta <- function(fasta_files,
                     parallel = parallel,
                     n_cores = n_cores)
   
-  fin_res <- merge_gl_fasta(gl_list, parallel = parallel)
+  x <- merge_gl_fasta(gl_list, parallel = parallel)
+ 
+   # add history
+  x@other$history <- list(match.call())
+  x <- gl.recalc.metrics(x,verbose = 0)
+  
+  if (verbose > 2) {
+    cat(
+      important(
+        "Genlight object does not have individual metrics. You need to add them 'manually' to the @other$ind.metrics slot.\n"
+      )
+    )
+  }
   
   # FLAG SCRIPT END
   
@@ -65,6 +85,6 @@ gl.read.fasta <- function(fasta_files,
   }
   
   # RETURN
-  return(invisible(fin_res))
+  return(invisible(x))
   
 }

@@ -26,10 +26,17 @@ A genlight object.
 }
 \description{
 The following IUPAC Ambiguity Codes are taken as heterozygotes:
- W, S, M, K, R, Y. 
+\itemize{
+ \item M means	A or C 	
+ \item R means	A or G 	
+ \item W means	A or T 	
+ \item S means	C or G 	
+ \item Y means	C or T 	
+ \item K means	G or T
+ }
  
- Take into account that the function will take a little bit longer the first
-  time you run it because C++ functions must be compiled.
+ The function can deal with missing data in individuals, e.g. when FASTA 
+ files have different number of individuals due to missing data.
 }
 \details{
 Ambiguity characters are often used to code heterozygotes. However, using
