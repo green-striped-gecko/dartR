@@ -107,6 +107,22 @@ utils.read.fasta <-  function(file,
     return(t3)
   })
   
+  t1 <- lapply(t1,function(x){
+    
+    drop_allele <- which(names(x) == "-" | 
+            names(x)=="V" |
+            names(x)=="H" |
+            names(x)=="D" | 
+            names(x)=="B" |
+            names(x)=="N")
+    
+    if(length(drop_allele)>0){
+      return(x[-drop_allele])
+    }else{
+      return(x)
+    }
+  })
+  
   myRef <- strsplit(names(unlist(lapply(t1,which.max))),"")
   myAlt <- strsplit(names(unlist(lapply(t1,which.min))),"")
   
@@ -119,7 +135,6 @@ utils.read.fasta <-  function(file,
   loc.all <- unlist(lapply(ref_alt,function(x){
     paste0(x[1],"/",x[2])
           }))
-  
 
   txt2 <- lapply(1:length(txt[[1]]), function(x) {
     hom_ref <- paste0(ref_alt[[x]][1],ref_alt[[x]][1])
@@ -139,41 +154,19 @@ utils.read.fasta <-  function(file,
   txt3 <- as.data.frame(Reduce(cbind,txt2))
   
   txt3[] <- lapply(txt3, as.integer)
-    
-
-  #   txt[[x]])
-  #   txt[txt == "AA"] <- 1
-  #   x[x == "11"] <- 0
-  #   x[x == "22"] <- 2
-  #   x[x == "33"] <- 0
-  #   x[x == "44"] <- 2
-  #   
-  #   return(x)
-  #   
-  # })
   
   res <- list()
-  
-  # txt <-
-  #   lapply(txt, function(e)
-  #     suppressWarnings(as.integer(e)))
   
   res <- c(res, apply(txt3,1, function(e)
       new(
         "SNPbin", snp = e, ploidy = 2L
       )))
   
-    # c(res, lapply(txt, function(e)
-    #   new(
-    #     "SNPbin", snp = e, ploidy = 2L
-    #   )))
-  
   res <- new("genlight", res, ploidy = 2L)
   
   indNames(res) <- IND.LAB
-  alleles(res) <- rep("C/G", nLoc(res))
-  locNames(res) <-
-    paste0(sub("\\..*", "", basename(file)), "_", snp.posi)
+  alleles(res) <- loc.all
+  locNames(res) <-  paste0(sub("\\..*", "", basename(file)), "_", snp.posi)
   return(res)
   
 }
@@ -190,6 +183,12 @@ merge_gl_fasta <- function(gl_list, parallel = FALSE) {
 
   loc_names <- Reduce("c",loc_names)
   
+  loc_all <- lapply(gl_list, function(y) {
+    return(y$loc.all)
+  })
+  
+  loc_all <- Reduce("c",loc_all)
+  
   gl_temp <-
     Reduce(function(x, y) {
       merge(x, y, by = "ind_names", all = TRUE)
@@ -200,7 +199,7 @@ merge_gl_fasta <- function(gl_list, parallel = FALSE) {
   res <- new("genlight", res_temp, ploidy = 2L)
   
   res$loc.names <- loc_names
-  alleles(res) <- rep("C/G", nLoc(res))
+  alleles(res) <- loc_all
   res$ind.names <- gl_temp$ind_names
   
   res_final <- gl.compliance.check(res, verbose = 0)

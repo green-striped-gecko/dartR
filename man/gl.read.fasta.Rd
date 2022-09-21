@@ -35,8 +35,19 @@ The following IUPAC Ambiguity Codes are taken as heterozygotes:
  \item K is heterozygote	for GT and TG
  }
  
+ #' The following IUPAC Ambiguity Codes are taken as missing data:
+\itemize{
+ \item V
+ \item H 
+ \item D 
+ \item B
+ \item N 
+ }
+ 
  The function can deal with missing data in individuals, e.g. when FASTA 
  files have different number of individuals due to missing data.
+ 
+ The allele with the highest frequency is taken as the reference allele.
 }
 \details{
 Ambiguity characters are often used to code heterozygotes. However, using
