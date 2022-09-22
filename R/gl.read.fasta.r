@@ -25,6 +25,8 @@
 #'  
 #'  The allele with the highest frequency is taken as the reference allele.
 #'  
+#'  SNPs with more than two alleles are skipped.
+#'  
 #' @param fasta_files Fasta files to read [required].
 #' @param parallel A logical indicating whether multiple cores -if available-
 #'  should be used for the computations (TRUE), or not (FALSE); requires the
@@ -76,7 +78,7 @@ gl.read.fasta <- function(fasta_files,
                     n_cores = n_cores,
                     verbose = verbose)
   
-  x <- merge_gl_fasta(gl_list, parallel = parallel,verbose = verbose)
+  x <- merge_gl_fasta(gl_list, parallel = parallel, verbose = verbose)
   
   x <- gl.compliance.check(x, verbose = verbose)
  

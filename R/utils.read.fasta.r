@@ -135,10 +135,24 @@ utils.read.fasta <-  function(file,
   
   ref_alt <- lapply(ref_alt,unique)
   
-  mono_loci <- which(unlist(lapply(ref_alt,length))!=2)
+  multi_loci <- which(unlist(lapply(ref_alt,length))>2)
+  
+  if(length(multi_loci)>0){
+    for(y in multi_loci){
+      ref_alt[[y]] <- "G"
+    }
+    cat(important("  SNP positions",paste(snp.posi[multi_loci],collapse = " "), 
+                  "from file", basename(file), "have more than 2 alleles. They 
+                  are skipped\n" ))
+    
+  }
+  
+  mono_loci <- which(unlist(lapply(ref_alt,length))==1)
   
   if(length(mono_loci)>0){
-    ref_alt[[mono_loci]] <- c(ref_alt[[mono_loci]], ref_alt[[mono_loci]])
+    for(i in mono_loci){
+      ref_alt[[i]] <- c(ref_alt[[i]], ref_alt[[i]])
+    }
   }
   
   loc.all <- unlist(lapply(ref_alt,function(x){
@@ -180,6 +194,11 @@ utils.read.fasta <-  function(file,
   indNames(res) <- IND.LAB
   alleles(res) <- loc.all
   locNames(res) <-  paste0(sub("\\..*", "", basename(file)), "_", snp.posi)
+  
+  if(length(multi_loci)>0){
+    res <- gl.drop.loc(res,loc.list = locNames(res)[multi_loci],verbose = 0)
+  }
+  
   return(res)
   
 }
@@ -195,8 +214,14 @@ merge_gl_fasta <- function(gl_list,
  mono_file <- unlist(lapply(gl_list,function(x){class(x)[[1]]}))
  
  mono_file <- which(mono_file=="NULL")
+ 
+ if(length(mono_file)>0){
+   gl_list <- gl_list[-mono_file]
+ }
   
-  gl_list <- gl_list[-mono_file]
+  if(length(gl_list)==1){
+    res <- gl_list[[1]]
+  }else{
   
   matrix_temp <- lapply(gl_list, function(y) {
     return(as.data.frame(cbind(ind_names = indNames(y), as.matrix(y))))
@@ -226,6 +251,7 @@ merge_gl_fasta <- function(gl_list,
   res$loc.names <- loc_names
   alleles(res) <- loc_all
   res$ind.names <- gl_temp$ind_names
+  }
   
   return(res)
   

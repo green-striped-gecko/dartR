@@ -48,6 +48,8 @@ The following IUPAC Ambiguity Codes are taken as missing data:
  files have different number of individuals due to missing data.
  
  The allele with the highest frequency is taken as the reference allele.
+ 
+ SNPs with more than two alleles are skipped.
 }
 \details{
 Ambiguity characters are often used to code heterozygotes. However, using
