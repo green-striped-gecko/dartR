@@ -130,7 +130,7 @@
 #' heterozygotes and alternate SNP homozygotes; probability of departure from
 #' H-W proportions, per locus significance with and without correction for
 #' multiple comparisons and the number of population where the same locus is 
-#' significantly out of hwe.
+#' significantly out of HWE.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
@@ -610,20 +610,19 @@ gl.report.hwe <- function(x,
     # removing column with color name
     df <- data.table(result[,-11])
     npop <- Locus <- NULL
-    df[, npop := .N, by=Locus]
-    
+
     #### Report the results
     if(sig_only) {
         if (multi_comp == F) {
             df <- df[which(df$Prob <= alpha_val),]
+            df[, npop := .N, by=Locus]
         }
         if (multi_comp == T) {
             df <- df[which(df$Prob.adj <= alpha_val),]
+            df[, npop := .N, by=Locus]
         }
     }
     df <- df[order(df$Locus),]
-    
-    
     
     # SAVE INTERMEDIATES TO TEMPDIR
     if (save2tmp) {
