@@ -151,7 +151,7 @@ gl.LDNe <- function(x,
   }
   
   #change into tempdir (run it there)
-  old.path <-getwd()
+  old.path <- getwd()
   setwd(tempdir())
   system(cmd)
   res <- read.delim(outfile)
@@ -180,6 +180,19 @@ gl.LDNe <- function(x,
   CI_high_JackKnife <-
     lapply(res[grep("^\\* JackKnife", res) + 1], function(x)
       strsplit(x, "\\s{3,}")[[1]][-1])
+  
+  # JackKnife works only with more than 2 individuals 
+  
+  ind_threshold <- which(table(pop(x))<3)
+  
+  if(length(ind_threshold)>0){
+    
+    for(r in unname(ind_threshold)){
+      CI_low_JackKnife <- c(CI_low_JackKnife[1:(r-1)],NA,CI_low_JackKnife[r:length(CI_low_JackKnife)] )
+      CI_high_JackKnife <- c(CI_high_JackKnife[1:(r-1)],NA,CI_high_JackKnife[r:length(CI_high_JackKnife)] )
+    }
+  }
+  
   harmonic_mean <-
     lapply(res[res %like% "Harmonic"], function(x)
       strsplit(x, "\\s{3,}")[[1]][-1])
