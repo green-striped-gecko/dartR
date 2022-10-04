@@ -127,10 +127,9 @@ parameter to locate it."
         sr <- utils.structure.run(gg, exec = exec, ...)
         
         ev <- utils.structure.evanno(sr)
-        pa <-
-            ((ev$plots$mean.ln.k + ev$plots$mean.ln.k) / (ev$plots$ln.ppk + 
-                                                            ev$plots$delta.k)
-            ) + plot_theme
+        
+        pa <- ((ev$plots$mean.ln.k + ev$plots$mean.ln.k) / 
+                 (ev$plots$ln.ppk + ev$plots$delta.k)) + plot_theme
         
         # PRINTING OUTPUTS
         if (plot.out) {

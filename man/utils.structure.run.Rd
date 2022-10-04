@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.structure.run.r
 \name{utils.structure.run}
 \alias{utils.structure.run}
-\title{Utility function to run strcture}
+\title{Utility function to run Structure}
 \usage{
 utils.structure.run(
   g,
@@ -44,7 +44,8 @@ input and output files used by STRUCTURE} \item{\code{label}}{label for the
 run} } } }
 }
 \description{
-These functions were copied from package strataG, which is no longer on CRAN (maintained by Eric Archer)
+These functions were copied from package strataG, which is no longer on CRAN
+ (maintained by Eric Archer)
 }
 \author{
 Bernd Gruber (bugs? Post to
