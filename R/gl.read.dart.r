@@ -101,9 +101,10 @@ gl.read.dart <- function(filename,
             plate_row = plate_row,
             verbose = verbose
         )
+    
     glout <-
         utils.dart2genlight(
-          dart= dout,
+          dart = dout,
             ind.metafile = ind.metafile,
             probar = probar,
             verbose = verbose
