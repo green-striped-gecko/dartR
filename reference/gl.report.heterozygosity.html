@@ -169,6 +169,9 @@ the alternative allele.</p></li>
 expected heterozygosity and FIS (Inbreeding coefficient) across populations
 together with a table of mean observed and expected heterozygosities and FIS
 by population and their respective standard deviations (SD).</p>
+<p>In the output, it is also reported the number of loci used to estimate
+ heterozygosity(nLoc), the number of polymorphic loci (polyLoc), the number
+  of monomorphic loci (monoLoc) and loci with all missing data (all_NALoc).</p>
 <p>Output for method='ind' is a histogram and a boxplot of heterozygosity across
 individuals.</p>
 <p>Plots and table are saved to the session temporary directory (tempdir)</p>
@@ -216,14 +219,14 @@ individuals.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="gl.report.heterozygosity-1.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           pop     nInd nLoc        Ho      HoSD       He     HeSD      uHe</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  SEVERN_ABOVE 21.69526  991 0.1198739 0.1753207 0.132964 0.174096 0.136101</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  SEVERN_BELOW 15.90918  991 0.1144862 0.1743597 0.129830 0.174659 0.134042</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   TENTERFIELD 38.06036  994 0.1198424 0.1609034 0.142741 0.173964 0.144642</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     uHeSD       FIS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.178203 0.1192294</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.180327 0.1458953</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.176279 0.1714527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           pop     nInd nLoc polyLoc monoLoc all_NALoc        Ho      HoSD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  SEVERN_ABOVE 21.69526  991     496     504         9 0.1198739 0.1753207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  SEVERN_BELOW 15.90918  991     461     539         9 0.1144862 0.1743597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   TENTERFIELD 38.06036  994     581     419         6 0.1198424 0.1609034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        He     HeSD      uHe    uHeSD       FIS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.132964 0.174096 0.136101 0.178203 0.1192294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.129830 0.174659 0.134042 0.180327 0.1458953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.142741 0.173964 0.144642 0.176279 0.1714527</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.report.heterozygosity </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">gl.report.heterozygosity</span><span class="op">(</span><span class="va">platypus.gl</span>,method<span class="op">=</span><span class="st">'ind'</span><span class="op">)</span></span></span>
@@ -673,18 +676,18 @@ individuals.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="gl.report.heterozygosity-4.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       pop     nInd nLoc     nLoc.adj        Ho      HoSD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_ABOVE SEVERN_ABOVE 21.69526  991 0.0002811348 0.1198739 0.1753207</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_BELOW SEVERN_BELOW 15.90918  991 0.0002811348 0.1144862 0.1743597</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TENTERFIELD   TENTERFIELD 38.06036  994 0.0002819857 0.1198424 0.1609034</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    Ho.adj    Ho.adjSD       He     HeSD      uHe    uHeSD</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_ABOVE 3.370072e-05 0.003559680 0.132964 0.174096 0.136101 0.178203</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_BELOW 3.218607e-05 0.003496007 0.129830 0.174659 0.134042 0.180327</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TENTERFIELD  3.379382e-05 0.003367792 0.142741 0.173964 0.144642 0.176279</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 He.adj   He.adjSD       FIS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_ABOVE 3.738e-05 0.00367170 0.1192294</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_BELOW 3.650e-05 0.00364760 0.1458953</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TENTERFIELD  4.025e-05 0.00377745 0.1714527</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       pop     nInd nLoc     nLoc.adj polyLoc monoLoc all_NALoc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_ABOVE SEVERN_ABOVE 21.69526  991 0.0002811348     496     504         9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_BELOW SEVERN_BELOW 15.90918  991 0.0002811348     461     539         9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TENTERFIELD   TENTERFIELD 38.06036  994 0.0002819857     581     419         6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     Ho      HoSD       Ho.adj    Ho.adjSD       He     HeSD</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_ABOVE 0.1198739 0.1753207 3.370072e-05 0.003559680 0.132964 0.174096</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_BELOW 0.1144862 0.1743597 3.218607e-05 0.003496007 0.129830 0.174659</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TENTERFIELD  0.1198424 0.1609034 3.379382e-05 0.003367792 0.142741 0.173964</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                   uHe    uHeSD    He.adj   He.adjSD       FIS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_ABOVE 0.136101 0.178203 3.738e-05 0.00367170 0.1192294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SEVERN_BELOW 0.134042 0.180327 3.650e-05 0.00364760 0.1458953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TENTERFIELD  0.144642 0.176279 4.025e-05 0.00377745 0.1714527</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.report.heterozygosity </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
