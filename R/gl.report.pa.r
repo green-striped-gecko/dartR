@@ -249,28 +249,27 @@ gl.report.pa <- function(x,
     if (plot.out) {
       mm <- matrix(0, nPop(x), nPop(x))
       
-      for (i in 1:nrow(pall))
+      for (i in 1:nrow(pall)){
         mm[pall[i, 1], pall[i, 2]] <- pall$priv2[i]
-      for (i in 1:nrow(pall))
+      }
+      
+      for (i in 1:nrow(pall)){
         mm[pall[i, 2], pall[i, 1]] <- pall$priv1[i]
+      }
       
       colnames(mm) <- popNames(x)
       rownames(mm) <- popNames(x)
       
       data <- as.data.frame(mm)
       value <- target <- name <- NULL
-      data_long <-
-        tibble::rownames_to_column(data, "source")
+      data_long <- tibble::rownames_to_column(data, "target")
       data_long <- tibble::as_tibble(data_long)
-      data_long <-
-        tidyr::pivot_longer(data_long,-source, "target")
+      data_long <- tidyr::pivot_longer(data_long,-target, "source")
       data_long <- data_long[data_long$value > 0,]
       
-      data_long$target <-
-        gsub("\\.", " ", data_long$target)
+      data_long$target <- gsub("\\.", " ", data_long$target)
       data_long$source <- paste0("src_", data_long$source)
-      data_long$target <-
-        paste0("trgt_", data_long$target)
+      data_long$target <- paste0("trgt_", data_long$target)
       
       nodes <-
         data.frame(name = unique(c(
@@ -303,14 +302,12 @@ gl.report.pa <- function(x,
         }
       }
       
-      colors_pops <-
-        paste0("\"", paste0(colors_pops, collapse = "\",\""), "\"")
+      colors_pops <- paste0("\"", paste0(colors_pops, collapse = "\",\""), "\"")
       
-      colorScal <-
-        paste("d3.scaleOrdinal().range([", colors_pops, "])")
+      colorScal <- paste("d3.scaleOrdinal().range([", colors_pops, "])")
       # color links
-      data_long$color <-
-        gsub("src_", "", data_long$source)
+      data_long$color <-  gsub("src_", "", data_long$source)
+
       
       p3 <-
         suppressMessages(
@@ -480,11 +477,9 @@ gl.report.pa <- function(x,
       
       data_long <- rbind(data_long_1, data_long_2)
       
-      nodes <-
-        as.data.frame(matrix(nrow = (nPop(x) * 2) + 1, ncol = 1))
+      nodes <- as.data.frame(matrix(nrow = (nPop(x) * 2) + 1, ncol = 1))
       colnames(nodes) <- c("name")
-      nodes$name <-
-        c(data_long_1$source, "Rest", data_long_2$target)
+      nodes$name <- c(data_long_1$source, "Rest", data_long_2$target)
       
       colors_pops <-
         paste0("\"", paste0(colors_pops, collapse = "\",\""), "\"")
