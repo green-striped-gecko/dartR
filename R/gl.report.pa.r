@@ -65,6 +65,14 @@
 #' differentiation metric displaying intuitive properties which provides a
 #' valuable alternative to FST. For details about its properties and how it is
 #' calculated see Berner (2019).
+#' 
+#' The function also reports an estimation of the lower bound of the number of
+#'  undetected private alleles using the Good-Turing frequency formula, 
+#'  originally developed for cryptography, which estimates in an ecological 
+#'  context the true frequencies of rare species in a single assemblage based on
+#'   an incomplete sample of individuals. The approach is described in Chao et 
+#'   al. (2017). For this function, the equation 2c is used. This estimate is 
+#'   reported in the output table as Chao1 and Chao2. 
 #'
 #' In this function a Sankey Diagram is used to visualize patterns of private
 #' alleles between populations. This diagram allows to display flows (private
@@ -88,6 +96,9 @@
 #' \item Berner, D. (2019). Allele frequency difference AFD – an intuitive
 #' alternative to FST for quantifying genetic population differentiation. Genes,
 #'  10(4), 308.
+#'  \item Chao, Anne, et al. "Deciphering the enigma of undetected species,
+#'  phylogenetic, and functional diversity based on Good‐Turing theory." 
+#'  Ecology 98.11 (2017): 2914-2929.
 #' }
 #' @examples
 #' out <- gl.report.pa(testset.gl[1:20,])
