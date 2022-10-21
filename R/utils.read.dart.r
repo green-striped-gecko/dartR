@@ -95,6 +95,9 @@ utils.read.dart <- function(filename,
         lmet <- lastmetric
     }
     
+    service <- NA 
+    plate_location <- NA 
+    if(exists("tdummy")){
     # extracting service information
     service <- tdummy[service_row, (lmet + 1):ncol(tdummy)]
     # extracting plate information
@@ -106,6 +109,7 @@ utils.read.dart <- function(filename,
         unlist(unname(tdummy[(plate_row + 2), (lmet + 1):ncol(tdummy)]))
     plate_location <-
         paste0(plate, "-", plate_row_res, plate_col_res)
+    }
     
     ind.names <- colnames(snpraw)[(lmet + 1):ncol(snpraw)]
     ind.names <-

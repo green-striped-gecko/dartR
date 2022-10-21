@@ -46,10 +46,9 @@
 #'
 #' @examples
 #' \dontrun{
-#' #CLUMPP needs to be installed to be able to run the example
 #' #bc <- bandicoot.gl[,1:100]
 #' #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, 
-#' exec = './structure.exe')
+#' # exec = './structure.exe')
 #' #ev <- gl.evanno(sr)
 #' #ev
 #' #qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
@@ -127,10 +126,9 @@ parameter to locate it."
         sr <- utils.structure.run(gg, exec = exec, ...)
         
         ev <- utils.structure.evanno(sr)
-        pa <-
-            ((ev$plots$mean.ln.k + ev$plots$mean.ln.k) / (ev$plots$ln.ppk + 
-                                                            ev$plots$delta.k)
-            ) + plot_theme
+        
+        pa <- ((ev$plots$mean.ln.k + ev$plots$mean.ln.k) / 
+                 (ev$plots$ln.ppk + ev$plots$delta.k)) + plot_theme
         
         # PRINTING OUTPUTS
         if (plot.out) {

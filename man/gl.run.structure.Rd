@@ -66,10 +66,9 @@ To make use of this function you need to download STRUCTURE for you system
 }
 \examples{
 \dontrun{
-#CLUMPP needs to be installed to be able to run the example
 #bc <- bandicoot.gl[,1:100]
 #sr <- gl.run.structure(bc, k.range = 2:5, num.k.rep = 3, 
-exec = './structure.exe')
+# exec = './structure.exe')
 #ev <- gl.evanno(sr)
 #ev
 #qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')

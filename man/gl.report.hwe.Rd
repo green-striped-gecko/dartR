@@ -72,7 +72,7 @@ A dataframe containing loci, counts of reference SNP homozygotes,
 heterozygotes and alternate SNP homozygotes; probability of departure from
 H-W proportions, per locus significance with and without correction for
 multiple comparisons and the number of population where the same locus is 
-significantly out of hwe.
+significantly out of HWE.
 }
 \description{
 Calculates the probabilities of agreement with H-W proportions based on 

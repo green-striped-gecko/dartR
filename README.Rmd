@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# `dartR` <img src='man/figures/dartRlogo.png' align="right" height="180" />
+# `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/dartRlogo.png' align="right" height="140" /></a>
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
 
 <!-- badges: start -->
@@ -64,13 +64,13 @@ Dev repositories:
 install.packages("dartR")
 ```
 
-You can use the function gl.install.vanilla.dartR to install all the packages that are used by `dartR`.
+Because of CRAN limitations, the default installation does not include all packages needed to run all the functions; hence, specialised analyses need the installation of additional packages. The following code guarantees that all necessary packages for all `dartR` analyses are set up and ready to go.
 
 ```{r, eval = FALSE}
 gl.install.vanilla.dartR()
 ```
 
-You can install the development version of `dartR` from [GitHub](https://github.com/) with:
+You can install the development version of `dartR` from GitHub with:
 
 ``` {r, eval = FALSE}
 gl.install.vanilla.dartR(flavour = "dev")
@@ -113,11 +113,13 @@ test_1 <- gl.filter.callrate(test)
 
 5. Check out our [simulations tutorial][sim_tutorial] to learn more about our simulation model, a powerful tool for illuminating intricate evolutionary and genetic processes.
 
+6. In more advanced topics, check our technical notes on [Genetic Distances and  their Visualization in Population Genetics][tech_note_distances] and [Fixed Difference Analysis][tech_notes_fixed_differences].
+
 ## Getting help 
 
 1.  Google groups Q&A forum in support of users can be accessed [here][google_groups].
 
-2. The [RStudio community][community] provides a welcoming environment in which to ask any enquiry.
+2. The [RStudio community][community] provides a welcoming environment in which to ask any inquiry.
 
 3. Answers to frequently asked topics may usually be found on [Stack Overflow][so].
 
@@ -127,17 +129,13 @@ If you want to help shape the future of `dartR`, [this tutorial][developer_tutor
 
 ## Citation 
 
-Please acknowledge `dartR` if you use it in your study. Copy the following to the R console to retrieve the citation information:
+Please acknowledge `dartR` if you use it in your study. Copy and paste the following code to the R console to retrieve the citation information:
 
 ```{r, eval = FALSE}
 citation("dartR")
 ```
 
-Check out our articles:
-
-- [dartR v2: An accessible genetic analysis platform for conservation, ecology and agriculture][article_2]
-
-- [dartR: An R package to facilitate analysis of SNP data generated from reduced representation genome sequencing][article_1]
+Check out our [articles][articles] and our [awards][awards].
 
 Have fun working with `dartR`! 
 
@@ -154,8 +152,10 @@ Bernd, Arthur, Luis, Carlo & Olly
 [installation_tutorial]: https://github.com/green-striped-gecko/dartR/wiki/Installation-tutorial
 [sim_tutorial]: https://github.com/green-striped-gecko/dartR/wiki/Simulations-tutorial
 [google_groups]: https://groups.google.com/g/dartr?pli=1
-[article_1]: https://doi.org/10.1111/1755-0998.12745
-[article_2]: https://doi.org/10.1111/2041-210X.13918
 [community]: https://community.rstudio.com/
 [so]: https://stackoverflow.com/questions/tagged/r
 [adegenet]: https://doi.org/10.1093/bioinformatics/btn129
+[articles]: https://github.com/green-striped-gecko/dartR/wiki/dartR-team-publications
+[awards]: https://github.com/green-striped-gecko/dartR/wiki/dartR-awards
+[tech_note_distances]: http://georges.biomatix.org/storage/app/media/uploaded-files/TECHNICAL_NOTE_Genetic_Distance_18-Feb-22.pdf
+[tech_notes_fixed_differences]: http://georges.biomatix.org/storage/app/media/uploaded-files/TechNote_fixed_difference_analysis_25-Feb-22.pdf

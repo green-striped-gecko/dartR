@@ -10,6 +10,10 @@
 #' 
 #' See documentation and tutorial for a complete description of the simulations.
 #' These documents can be accessed at http://georges.biomatix.org/dartR 
+#' 
+#' Take into account that the simulations will take a little bit longer the
+#'  first time you use the function gl.sim.WF.run() because C++ functions must
+#'   be compiled.
 #' @param file_var Path of the variables file 'sim_variables.csv' (see details) 
 #' [required if interactive_vars = FALSE].
 #' @param ref_table Reference table created by the function 
@@ -598,12 +602,12 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
                   rbind(pop_list[[pop_sample]][sample(
                     which(pop_list[[pop_sample]]$V1 == "Male"),
                     size =  population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),],
                   pop_list[[pop_sample]][sample(
                     which(pop_list[[pop_sample]]$V1 == "Female"),
                     size = population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),])
                 pop_temp$V2 <- x
                 return(pop_temp)
@@ -617,12 +621,12 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
                   rbind(pop_list[[x]][sample(
                     which(pop_list[[x]]$V1 == "Male"),
                     size =  population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),],
                   pop_list[[x]][sample(
                     which(pop_list[[x]]$V1 == "Female"),
                     size = population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),])
                 pop_temp$V2 <- x
                 return(pop_temp)

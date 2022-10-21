@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `dartR` <img src='man/figures/dartRlogo.png' align="right" height="180" />
+# `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/dartRlogo.png' align="right" height="140" /></a>
 
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
 
@@ -57,15 +57,17 @@ Priority Investment Program, CSIRO and the University of Canberra.
 install.packages("dartR")
 ```
 
-You can use the function gl.install.vanilla.dartR to install all the
-packages that are used by `dartR`.
+Because of CRAN limitations, the default installation does not include
+all packages needed to run all the functions; hence, specialised
+analyses need the installation of additional packages. The following
+code guarantees that all necessary packages for all `dartR` analyses are
+set up and ready to go.
 
 ``` r
 gl.install.vanilla.dartR()
 ```
 
-You can install the development version of `dartR` from
-[GitHub](https://github.com/) with:
+You can install the development version of `dartR` from GitHub with:
 
 ``` r
 gl.install.vanilla.dartR(flavour = "dev")
@@ -133,13 +135,19 @@ test_1 <- gl.filter.callrate(test)
     to learn more about our simulation model, a powerful tool for
     illuminating intricate evolutionary and genetic processes.
 
+6.  In more advanced topics, check our technical notes on [Genetic
+    Distances and their Visualization in Population
+    Genetics](http://georges.biomatix.org/storage/app/media/uploaded-files/TECHNICAL_NOTE_Genetic_Distance_18-Feb-22.pdf)
+    and [Fixed Difference
+    Analysis](http://georges.biomatix.org/storage/app/media/uploaded-files/TechNote_fixed_difference_analysis_25-Feb-22.pdf).
+
 ## Getting help
 
 1.  Google groups Q&A forum in support of users can be accessed
     [here](https://groups.google.com/g/dartr?pli=1).
 
 2.  The [RStudio community](https://community.rstudio.com/) provides a
-    welcoming environment in which to ask any enquiry.
+    welcoming environment in which to ask any inquiry.
 
 3.  Answers to frequently asked topics may usually be found on [Stack
     Overflow](https://stackoverflow.com/questions/tagged/r).
@@ -152,21 +160,18 @@ is for you.
 
 ## Citation
 
-Please acknowledge `dartR` if you use it in your study. Copy the
-following to the R console to retrieve the citation information:
+Please acknowledge `dartR` if you use it in your study. Copy and paste
+the following code to the R console to retrieve the citation
+information:
 
 ``` r
 citation("dartR")
 ```
 
-Check out our articles:
-
--   [dartR v2: An accessible genetic analysis platform for conservation,
-    ecology and agriculture](https://doi.org/10.1111/2041-210X.13918)
-
--   [dartR: An R package to facilitate analysis of SNP data generated
-    from reduced representation genome
-    sequencing](https://doi.org/10.1111/1755-0998.12745)
+Check out our
+[articles](https://github.com/green-striped-gecko/dartR/wiki/dartR-team-publications)
+and our
+[awards](https://github.com/green-striped-gecko/dartR/wiki/dartR-awards).
 
 Have fun working with `dartR`!
 
