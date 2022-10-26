@@ -76,44 +76,45 @@ gl.read.PLINK <- function(filename,
     dir.out <- tempdir() # use a tmp dir to handle transformation
     plink.fns <- list.files(path=dirname(filename), pattern=paste0("^", basename(filename)), full.names=TRUE, recursive=TRUE)
     plink.fn <- plink.fns[grep(".bed$", plink.fns)]
-    if(length(plink.fn)>1) { 
+    if(length(plink.fn)>1) { # If there is more than one .bed
       stop(
       error(
         "Found more than one .bed file and don't know which one to use\n"
        )
      )
     } else {
-      if(length(plink.fn) == 0) {
-        plink.fn <- plink.fns[grep(".ped$", plink.fns)]
-        if(length(plink.fn) == 0 | length(plink.fn)>1) {
-          stop(
-            error(paste(
-              "Found no .bed files and", length(plink.fn), ".ped file(s). This function needs either one .bed or .ped file\n"
-            )
-            )
-          )
-      } else {
-        if(length(plink.fn) == 1) {
-          utils.plink.run(dir.in = dirname(filename), plink.cmd = plink.cmd, plink.path = plink.path, out = basename(filename), 
-                          syntax = paste("--file", basename(filename), "--make-bed"))
-          plink.fn <- list.files(path=dirname(filename), pattern=".bed$", full.names=TRUE, recursive=TRUE)
-        } else {
-          stop(
-            error(
-              "Couldn't find any .bed or .ped file\n"
-            )
-          )
-        }
-        
-      }
-    }
+      if(length(plink.fn) == 0) { # If there is no .bed
+            plink.fn <- plink.fns[grep(".ped$", plink.fns)] # look for .ped
+            if(length(plink.fn) == 0 | length(plink.fn)>1) { # If there is no or >1 .ped 
+              stop(
+                error(paste(
+                  "Found no .bed files and", length(plink.fn), ".ped file(s). This function needs either one .bed or .ped file\n"
+                )
+                )
+              )
+          } else { # This should mean that there is one .ped
+            if(length(plink.fn) == 1) { # But it is checked here for safety
+              utils.plink.run(dir.in = dirname(filename), plink.cmd = plink.cmd, plink.path = plink.path, out = basename(filename), 
+                              syntax = paste("--file", basename(filename), "--make-bed"))
+              plink.fn <- list.files(path=dirname(filename), pattern=".bed$", full.names=TRUE, recursive=TRUE)
+            } else { # If we got it wrong stop the FUN
+              stop(
+                error(
+                  "Couldn't find any .bed or .ped file\n"
+                )
+              )
+            }
+            
+          } # Close if there is 1 .ped
+        } # close if there is no .bed 
+      } # Close the else L85 from here onwards there should be only 1 .bed in plink.fn
     
     snpMatrix <- snpStats::read.plink(bed=sub(x=plink.fn, pattern=".bed$", ""))
     gen <- snpMatrix[[1]]
     fam <- snpMatrix[[2]]
     map <- snpMatrix[[3]]
     row.names(gen) <- fam$member
-    write.SnpMatrix(gen, file.path(dir.out, "snpMatrixComb.txt"))
+    snpStats::write.SnpMatrix(gen, file.path(dir.out, "snpMatrixComb.txt"))
     
     suppressWarnings(
       genCombdt <- data.table::fread(file=file.path(dir.out, "snpMatrixComb.txt"))
@@ -144,6 +145,7 @@ gl.read.PLINK <- function(filename,
         )
         stop()
     }
+    
     if (length(unique(map$snp.name)) != length(map$snp.name)) {
         cat(error(
             "Fatal Error: AlleleID not unique, check and edit your input file\n"
@@ -151,7 +153,6 @@ gl.read.PLINK <- function(filename,
         stop()
     }
     
-
     pop(gl) <- array("A", nInd(gl))
     names(gl@other$loc.metrics)[2] <- "AlleleID"
     gl@other$loc.metrics <- gl@other$loc.metrics[, c("AlleleID", names(gl@other$loc.metrics)[-2])] # Fix order of cols
@@ -188,10 +189,10 @@ gl.read.PLINK <- function(filename,
                         "AlleleID in the input data file\n"
                     )
                 )
-            }
-        }
+            
         row.names(loc.metrics) <- loc.metrics$AlleleID
         gl@other$loc.metrics <- cbind(gl@other$loc.metrics, loc.metrics[map$snp.name,])
+    }
         
     gl <- gl.recalc.metrics(gl, verbose = 0)
     
