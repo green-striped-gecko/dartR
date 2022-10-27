@@ -6,19 +6,27 @@
 \usage{
 gl2migraten(
   x,
+  outfile = "migrateHapMap",
+  outpath = tempdir(),
   n = NULL,
   method = "random",
   mono.rm = FALSE,
   plink.cmd = "plink",
   plink.path = "path",
   plink.flags = NULL,
-  outfile = "migrateHapMap",
-  outpath = tempdir(),
   verbose = NULL
 )
 }
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
+
+\item{outfile}{File name of the output file [default 'migrateHapMap'].}
+
+\item{outpath}{Path where to save the output file
+[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
+ when calling this function to direct output files to your working directory.
+ @param plink.flags Character vector with additioanl flags to pass to plink 
+ during the conversion (e.g "--dog") [default NULL]}
 
 \item{n}{Number of loci to include in the subsample [required].}
 
@@ -32,14 +40,6 @@ chosen. Information content is stored in AvgPIC in the case of SNP data and in
 \item{plink.path}{The path where the executable is. If plink is listed in
 the PATH then there is no need for this. This is what the option "path"
 means}
-
-\item{outfile}{File name of the output file [default 'migrateHapMap'].}
-
-\item{outpath}{Path where to save the output file
-[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
- when calling this function to direct output files to your working directory.
- @param plink.flags Character vector with additioanl flags to pass to plink 
- during the conversion (e.g "--dog") [default NULL]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report

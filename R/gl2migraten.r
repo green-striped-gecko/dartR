@@ -54,14 +54,14 @@
 
 #' }
 gl2migraten <- function(x, 
+                        outfile = "migrateHapMap",
+                        outpath = tempdir(),
                         n=NULL, 
                         method = "random", 
                         mono.rm=FALSE,
                         plink.cmd="plink", 
                         plink.path="path",
                         plink.flags=NULL,
-                        outfile = "migrateHapMap",
-                        outpath = tempdir(),
                         verbose=NULL) {
   
   # SET VERBOSITY
