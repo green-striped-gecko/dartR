@@ -10,6 +10,7 @@ gl.read.PLINK(
   loc.metafile = NULL,
   plink.cmd = "plink",
   plink.path = "path",
+  plink.flags = NULL,
   verbose = NULL
 )
 }
@@ -34,14 +35,17 @@ progress log; 3, progress and results summary; 5, full report
 A genlight object with the SNP data and associated metadata included.
 }
 \description{
-This function imports PLINK data into a genlight object and append available metadata.
+This function imports PLINK data into a genlight object and append 
+available metadata.
 }
 \details{
-Additional metadata can be included
-passing .csv files. These will be appended to the existing metadata present in the PLINK files. This 
-function handles .ped or .bed file (with the associate files - e.g. .fam, .bim). However, if a .ped 
-file is provided, PLINK needs to be installed and it is used to convert 
-the .ped into a .bed, which is then converted into a genlight.
+This function handles .ped or .bed file (with the associate files - 
+e.g. .fam, .bim). However, if a .ped file is provided, PLINK needs to be 
+installed and it is used to convert the .ped into a .bed, which is then
+ converted into a genlight.
+
+Additional metadata can be included passing .csv files. These will be appended 
+to the existing metadata present in the PLINK files. 
 
 The locus metadata needs to be in a csv file with headings, with a mandatory
 column headed AlleleID corresponding exactly to the locus identity labels

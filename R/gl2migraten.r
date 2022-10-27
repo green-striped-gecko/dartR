@@ -20,6 +20,8 @@
 #' @param outpath Path where to save the output file
 #' [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
 #'  when calling this function to direct output files to your working directory.
+#'  @param plink.flags Character vector with additioanl flags to pass to plink 
+#'  during the conversion (e.g "--dog") [default NULL]
 #'  @inheritParams utils.plink.run
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
@@ -50,6 +52,7 @@
 gl2migraten <- function(x, 
                         plink.cmd="plink", 
                         plink.path="path",
+                        plink.flags=NULL,
                         outfile = "migrateHapMap",
                         outpath = tempdir(),
                         verbose=NULL) {
@@ -75,12 +78,13 @@ gl2migraten <- function(x,
   #------------------------------------------------------#
   # get the data into plink's tped format which is easier to convert
   tmp.out <- tempdir()
-  gl2plink(x, plink_path = plink.path, bed_file = FALSE, outfile = "plink.out", outpath = tmp.out)
+  gl2plink(x, plink_path = plink.path, bed_file = FALSE, outfile = "plink.out", 
+           outpath = tmp.out)
   
-  use.plink(tmp.out, plink.cmd=plink.cmd, plink.path, out="tplink.out", 
+  utils.plink.run(tmp.out, plink.cmd=plink.cmd, plink.path, out="tplink.out", 
             # rm bfile because creating a .bed doesn't work for me on W
             # syntax="--bfile plink.out --recode --transpose")
-            syntax="--file plink.out --recode --transpose")
+            syntax=paste("--file plink.out --recode --transpose", plink.flags))
   
   tped.dt <- data.table::fread(file.path(plink.out, "tplink.out"))
   popIDsdip <- rep(pop(x), each=2)

@@ -8,6 +8,7 @@ gl2migraten(
   x,
   plink.cmd = "plink",
   plink.path = "path",
+  plink.flags = NULL,
   outfile = "migrateHapMap",
   outpath = tempdir(),
   verbose = NULL
@@ -21,6 +22,8 @@ gl2migraten(
 \item{outpath}{Path where to save the output file
 [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
  when calling this function to direct output files to your working directory.
+ @param plink.flags Character vector with additioanl flags to pass to plink 
+ during the conversion (e.g "--dog") [default NULL]
  @inheritParams utils.plink.run}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,

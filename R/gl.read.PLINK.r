@@ -1,12 +1,15 @@
 #' @name gl.read.PLINK
 #' @title Reads PLINK data file into a genlight object
-#' @description This function imports PLINK data into a genlight object and append available metadata. 
+#' @description This function imports PLINK data into a genlight object and append 
+#' available metadata. 
 #' 
-#' @details  Additional metadata can be included
-#' passing .csv files. These will be appended to the existing metadata present in the PLINK files. This 
-#' function handles .ped or .bed file (with the associate files - e.g. .fam, .bim). However, if a .ped 
-#' file is provided, PLINK needs to be installed and it is used to convert 
-#' the .ped into a .bed, which is then converted into a genlight.
+#' @details This function handles .ped or .bed file (with the associate files - 
+#' e.g. .fam, .bim). However, if a .ped file is provided, PLINK needs to be 
+#' installed and it is used to convert the .ped into a .bed, which is then
+#'  converted into a genlight.
+#' 
+#' Additional metadata can be included passing .csv files. These will be appended 
+#' to the existing metadata present in the PLINK files. 
 #' 
 #' The locus metadata needs to be in a csv file with headings, with a mandatory
 #' column headed AlleleID corresponding exactly to the locus identity labels
@@ -21,6 +24,7 @@
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
 #' @inheritParams utils.plink.run
+#' @inheritParams gl2migraten
 #' @return A genlight object with the SNP data and associated metadata included.
 #' @export
 #' @author Custodian: Carlo Pacioni -- Post to
@@ -33,6 +37,7 @@ gl.read.PLINK <- function(filename,
                         loc.metafile = NULL,
                         plink.cmd="plink", 
                         plink.path="path",
+                        plink.flags=NULL,
                         verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
@@ -74,7 +79,9 @@ gl.read.PLINK <- function(filename,
     
     # DO THE JOB
     dir.out <- tempdir() # use a tmp dir to handle transformation
-    plink.fns <- list.files(path=dirname(filename), pattern=paste0("^", basename(filename)), full.names=TRUE, recursive=TRUE)
+    plink.fns <- list.files(path=dirname(filename), 
+                            pattern=paste0("^", basename(filename)), 
+                            full.names=TRUE, recursive=TRUE)
     plink.fn <- plink.fns[grep(".bed$", plink.fns)]
     if(length(plink.fn)>1) { # If there is more than one .bed
       stop(
@@ -87,16 +94,19 @@ gl.read.PLINK <- function(filename,
             plink.fn <- plink.fns[grep(".ped$", plink.fns)] # look for .ped
             if(length(plink.fn) == 0 | length(plink.fn)>1) { # If there is no or >1 .ped 
               stop(
-                error(paste(
-                  "Found no .bed files and", length(plink.fn), ".ped file(s). This function needs either one .bed or .ped file\n"
-                )
+                error(
+                  "Found no .bed files and", length(plink.fn), 
+                  ".ped file(s). This function needs either one .bed or .ped file\n"
                 )
               )
           } else { # This should mean that there is one .ped
             if(length(plink.fn) == 1) { # But it is checked here for safety
-              utils.plink.run(dir.in = dirname(filename), plink.cmd = plink.cmd, plink.path = plink.path, out = basename(filename), 
-                              syntax = paste("--file", basename(filename), "--make-bed"))
-              plink.fn <- list.files(path=dirname(filename), pattern=".bed$", full.names=TRUE, recursive=TRUE)
+              utils.plink.run(dir.in = dirname(filename), plink.cmd = plink.cmd, 
+                              plink.path = plink.path, out = basename(filename), 
+                              syntax = paste("--file", basename(filename), 
+                                             "--make-bed", plink.flags))
+              plink.fn <- list.files(path=dirname(filename), pattern=".bed$", 
+                                     full.names=TRUE, recursive=TRUE)
             } else { # If we got it wrong stop the FUN
               stop(
                 error(
@@ -127,7 +137,9 @@ gl.read.PLINK <- function(filename,
                ind.names=fam$member,
                loc.names=map$snp.name,
                chromosome=map$chromosome,
-               position=map$position, # Need to confirm that we want here the chr position and that the SNP position on the read goes only in the loc.metrics
+               position=map$position, # Need to confirm that we want here 
+                     #the chr position and that the SNP position on the read 
+                     # goes only in the loc.metrics
                other=list(ind.metrics=cbind(id=fam$member, 
                                             snpStats::row.summary(gen), # This adds Call.rate, Certain.calls, Heterozygosity
                                             Family=fam$pedigree,
@@ -155,7 +167,8 @@ gl.read.PLINK <- function(filename,
     
     pop(gl) <- array("A", nInd(gl))
     names(gl@other$loc.metrics)[2] <- "AlleleID"
-    gl@other$loc.metrics <- gl@other$loc.metrics[, c("AlleleID", names(gl@other$loc.metrics)[-2])] # Fix order of cols
+    gl@other$loc.metrics <- 
+      gl@other$loc.metrics[, c("AlleleID", names(gl@other$loc.metrics)[-2])] # Fix order of cols
     gl <- gl.compliance.check(gl, verbose = verbose)
     
     # NOW THE LOCUS METADATA
