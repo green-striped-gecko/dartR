@@ -7,7 +7,10 @@
 #' v3.7.2 onward. For the (limited) testing I have done with migrate-n and SNP data, 
 #' migrate-n seems to be able to handle up to 20k SNPs (v3.7.2) and 3-5k SNPs in v4
 #' and later. That seems to depend on some memory issues that Peter Beerli may be able
-#' to resolve (or may have resolved by the time you use this function).
+#' to resolve (or may have resolved by the time you use this function). To workaround
+#' this problem (or simply because you want a faster analysis), there is the option
+#' of subsetting the SNPs to a set number \code{n}. If \code{n=NULL},
+#' the genlight object is processed as it. 
 #' 
 #' This function needs PLINK installed, which is used for intermediate data manipulation.
 #' 
@@ -22,10 +25,12 @@
 #'  when calling this function to direct output files to your working directory.
 #'  @param plink.flags Character vector with additioanl flags to pass to plink 
 #'  during the conversion (e.g "--dog") [default NULL]
-#'  @inheritParams utils.plink.run
+#'  
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
+#' @inheritParams utils.plink.run
+#' @inheritParams gl.subsample.loci
 #' @return NULL
 #' @references
 #' Beerli, P. (2004). Effect of unsampled populations on the estimation of 
@@ -39,8 +44,7 @@
 #' 
 #' Beerli, P. and Palczewski, M. (2010). Unified framework to evaluate panmixia 
 #' and migration direction among multiple sampling locations. Genetics 185, 313-326.
-
-
+#' 
 #' @rawNamespace import(data.table, except = c(melt,dcast))
 #' @export
 #' @author Custodian: Carlo Pacioni (Post to
@@ -50,6 +54,9 @@
 
 #' }
 gl2migraten <- function(x, 
+                        n=NULL, 
+                        method = "random", 
+                        mono.rm=FALSE,
                         plink.cmd="plink", 
                         plink.path="path",
                         plink.flags=NULL,
@@ -78,6 +85,8 @@ gl2migraten <- function(x,
   #------------------------------------------------------#
   # get the data into plink's tped format which is easier to convert
   tmp.out <- tempdir()
+  if(!is.null(n)) x <- gl.subsample.loci(x=x, n=n, method = method, 
+                                         mono.rm = mono.rm, verbose = verbose)
   gl2plink(x, plink_path = plink.path, bed_file = FALSE, outfile = "plink.out", 
            outpath = tmp.out)
   

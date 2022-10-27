@@ -6,6 +6,9 @@
 \usage{
 gl2migraten(
   x,
+  n = NULL,
+  method = "random",
+  mono.rm = FALSE,
   plink.cmd = "plink",
   plink.path = "path",
   plink.flags = NULL,
@@ -17,14 +20,26 @@ gl2migraten(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
+\item{n}{Number of loci to include in the subsample [required].}
+
+\item{method}{Method: 'random', in which case the loci are sampled at random;
+or 'pic', in which case the top n loci ranked on information content are
+chosen. Information content is stored in AvgPIC in the case of SNP data and in
+ PIC in the the case of presence/absence (SilicoDArT) data [default 'random'].}
+
+\item{mono.rm}{Delete monomorphic loci before sampling [default FALSE].}
+
+\item{plink.path}{The path where the executable is. If plink is listed in
+the PATH then there is no need for this. This is what the option "path"
+means}
+
 \item{outfile}{File name of the output file [default 'migrateHapMap'].}
 
 \item{outpath}{Path where to save the output file
 [default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
  when calling this function to direct output files to your working directory.
  @param plink.flags Character vector with additioanl flags to pass to plink 
- during the conversion (e.g "--dog") [default NULL]
- @inheritParams utils.plink.run}
+ during the conversion (e.g "--dog") [default NULL]}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -38,7 +53,10 @@ The input file generated is compatible with migrate-n (Beerli )
 v3.7.2 onward. For the (limited) testing I have done with migrate-n and SNP data, 
 migrate-n seems to be able to handle up to 20k SNPs (v3.7.2) and 3-5k SNPs in v4
 and later. That seems to depend on some memory issues that Peter Beerli may be able
-to resolve (or may have resolved by the time you use this function).
+to resolve (or may have resolved by the time you use this function). To workaround
+this problem (or simply because you want a faster analysis), there is the option
+of subsetting the SNPs to a set number \code{n}. If \code{n=NULL},
+the genlight object is processed as it. 
 
 This function needs PLINK installed, which is used for intermediate data manipulation.
 
