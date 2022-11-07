@@ -26,11 +26,11 @@ coord_tern <- function(Tlim = NULL, Llim = NULL, Rlim = NULL, expand = TRUE){
   rs      = CoordTern$required_scales
   ra      = CoordTern$required_aes
   mapping = sapply(rs,function(x) getOption(sprintf('tern.default.%s',x)) )
-  if(!all(ra %in% as.character(mapping)))
-    stop(sprintf("Options for %s are %s, must be assigned and NOT duplicated, alter the 'tern.default.X' (X=%s) global option",
-                 joinCharacterSeries(rs,'and'),
-                 joinCharacterSeries(ra,'and'),
-                 joinCharacterSeries(rs,'or')),call.=FALSE)
+  # if(!all(ra %in% as.character(mapping)))
+  #   stop(sprintf("Options for %s are %s, must be assigned and NOT duplicated, alter the 'tern.default.X' (X=%s) global option",
+  #                joinCharacterSeries(rs,'and'),
+  #                joinCharacterSeries(ra,'and'),
+  #                joinCharacterSeries(rs,'or')),call.=FALSE)
   ggproto(NULL, CoordTern,
           mapping         = as.list(mapping),
           limits          = list(x = c(0,1), y = c(0,1)*.ratio(), T=Tlim, L=Llim, R=Rlim),
@@ -360,13 +360,13 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
     #major ticklength
     tl.major <- 0
     tryCatch({
-      tl.major <- convertUnit(theme$tern.axis.ticks.length.major,"npc",valueOnly=T)
+      tl.major <- grid::convertUnit(theme$tern.axis.ticks.length.major,"npc",valueOnly=T)
     },error=function(e){ warning(e) })
     
     #minor ticklength
     tl.minor <- 0
     tryCatch({
-      tl.minor <- convertUnit(theme$tern.axis.ticks.length.minor,"npc",valueOnly=T)
+      tl.minor <- grid::convertUnit(theme$tern.axis.ticks.length.minor,"npc",valueOnly=T)
     },error=function(e){  warning(e) })
     
     #Assign new id.
@@ -441,11 +441,11 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
     if(inherits(e, "element_blank"))
       return(items)
     
-    g <- polygonGrob( data.extreme$x, 
+    g <- grid::polygonGrob( data.extreme$x, 
                       data.extreme$y, 
                       default.units = "npc",
                       id   = rep(1,nrow(data.extreme)),
-                      gp   = gpar(  col  = e$colour %||% 'transparent',
+                      gp   = grid::gpar(  col  = e$colour %||% 'transparent',
                                     fill = alpha(e$fill %||% 'transparent',ifthenelse(!is.numeric(e$alpha),1,e$alpha)),
                                     lwd  = 0, #ifthenelse(!is.numeric(e$size),0,e$size)*find_global_tern(".pt"),
                                     lty  = e$linetype
@@ -530,13 +530,13 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
       
       
       g = lapply(1:nrow(df),function(ix){ 
-        segmentsGrob(x0 = df[ix,ix.x[1]], 
+        grid::segmentsGrob(x0 = df[ix,ix.x[1]], 
                      x1 = df[ix,ix.x[2]], 
                      y0 = df[ix,ix.y[1]], 
                      y1 = df[ix,ix.y[2]],
                      default.units ="npc",
                      arrow         = NULL,
-                     gp            = gpar(col     = e$colour %||% 'transparent', 
+                     gp            = grid::gpar(col     = e$colour %||% 'transparent', 
                                           lty     = e$linetype,
                                           lineend = 'butt',
                                           lwd     = e$size %||% 0)
@@ -557,7 +557,7 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
     ix = which(seq.tlr == x)
     
     #Generate the data
-    df = ldply(c(T,F),function(major){
+    df = plyr::ldply(c(T,F),function(major){
       .get.grid.data(self,theme,data.extreme,X = x, major = major, angle = angle[ix], angle.text = angle.text[ix])
     })
     
@@ -602,15 +602,15 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
       dA        = angle - atan2(ytf - yts, xtf - xts)*180/pi #DEGREES, Angle Difference between Ticks and Labels
       adj       = as.numeric(!outside)
       
-      g = textGrob(
+      g = grid::textGrob(
         label   = label_formatter(df$Labels,latex=latex),
-        x       = ifthenelse(showprimary || !outside,xtf,xts) + convertX(cos(pi*(df$Angle/180 + adj))*unit(2,'pt'),'npc',valueOnly = T),
-        y       = ifthenelse(showprimary || !outside,ytf,yts) + convertY(sin(pi*(df$Angle/180 + adj))*unit(2,'pt'),'npc',valueOnly = T),
+        x       = ifthenelse(showprimary || !outside,xtf,xts) + grid::convertX(cos(pi*(df$Angle/180 + adj))*unit(2,'pt'),'npc',valueOnly = T),
+        y       = ifthenelse(showprimary || !outside,ytf,yts) + grid::convertY(sin(pi*(df$Angle/180 + adj))*unit(2,'pt'),'npc',valueOnly = T),
         hjust   = +0.5*cos(pi*(dA/180 - 1)) + is.numericor(e$hjust,0), #BACK TO RADIANS
         vjust   = -0.5*sin(pi*(dA/180 - 1)) + is.numericor(e$vjust,0), #BACK TO RADIANS
         rot     = angle,
         default.units = 'npc',
-        gp  = gpar(
+        gp  = grid::gpar(
           col        = e$colour %||% 'transparent',
           fontsize   = e$size %||% 0,
           fontfamily = e$family,
@@ -633,7 +633,7 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
     angle       = .get.angles(clockwise) + (!outside)*180
     angle.text  = .get.angles.ticklabels(clockwise) + .theme.get.rotation(self)
     #Generate the data
-    df = ldply(X,function(x){
+    df = plyr::ldply(X,function(x){
       ix =  which(seq.tlr == x)
       .get.grid.data(self,theme,data.extreme,X = x, major = TRUE, angle = angle[ix], angle.text = angle.text[ix])
     })
@@ -678,13 +678,13 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
       tryCatch({
         e = calc_element(name,theme)
         g = lapply(1:nrow(df),function(ix){ 
-          segmentsGrob(x0 = df$x[ix], 
+          grid::segmentsGrob(x0 = df$x[ix], 
                        x1 = df$xend.grid[ix], 
                        y0 = df$y[ix], 
                        y1 = df$yend.grid[ix],
                        default.units ="npc",
                        arrow         = NULL,
-                       gp            = gpar(col     = e$colour %||% 'transparent', 
+                       gp            = grid::gpar(col     = e$colour %||% 'transparent', 
                                             lty     = e$linetype,
                                             lineend = 'butt',
                                             lwd     = (e$size %||% 0)*.pt)
@@ -858,10 +858,10 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
         if(inherits(e, "element_blank"))
           return(items)
         
-        g = segmentsGrob(x0 = d$x[ix], x1 = d$xend[ix], y0 = d$y[ix], y1 = d$yend[ix],
+        g = grid::segmentsGrob(x0 = d$x[ix], x1 = d$xend[ix], y0 = d$y[ix], y1 = d$yend[ix],
                          default.units ="npc",
                          arrow         = e$lineend,
-                         gp            = gpar(col     = e$colour %||% 'transparent', 
+                         gp            = grid::gpar(col     = e$colour %||% 'transparent', 
                                               lty     = e$linetype,
                                               lineend = 'butt',
                                               lwd     = e$size)
@@ -882,14 +882,14 @@ view_scales_from_scale <- function(scale, coord_limits = NULL, expand = TRUE, ex
         
         latex = calc_element('tern.plot.latex',theme)
         dA    = e$angle + d$AL - 180*(atan2((d$yend - d$y)*.ratio(), d$xend - d$x)/pi + as.numeric(clockwise))
-        g     = textGrob( label = arrow_label_formatter(d$LA[ix],d$W[ix],latex=latex), 
-                          x     = d$xmn[ix] + convertX(cos(pi*(d$angle[ix] + rotation)/180)*unit(2,'pt'),'npc',valueOnly = T), 
-                          y     = d$ymn[ix] + convertY(sin(pi*(d$angle[ix] + rotation)/180)*unit(2,'pt'),'npc',valueOnly = T), 
+        g     = grid::textGrob( label = arrow_label_formatter(d$LA[ix],d$W[ix],latex=latex), 
+                          x     = d$xmn[ix] + grid::convertX(cos(pi*(d$angle[ix] + rotation)/180)*unit(2,'pt'),'npc',valueOnly = T), 
+                          y     = d$ymn[ix] + grid::convertY(sin(pi*(d$angle[ix] + rotation)/180)*unit(2,'pt'),'npc',valueOnly = T), 
                           hjust = e$hjust + 0.5*sin(dA[ix]*pi/180), 
                           vjust = e$vjust + 0.5*cos(dA[ix]*pi/180),
                           rot   = d$AL[ix] + e$angle, 
                           default.units="npc", 
-                          gp   = gpar(col        = e$colour %||% 'transparent', 
+                          gp   = grid::gpar(col        = e$colour %||% 'transparent', 
                                       fontsize   = e$size,
                                       fontfamily = e$family, 
                                       fontface   = e$face, 
@@ -970,7 +970,7 @@ tlr2xy <- function(data,coord,...,inverse=FALSE,scale=TRUE,drop=FALSE){
   #Run Some Checks
   if(!inherits(coord,"CoordTern")) 
     stop("argument 'coord' must be a CoordTern coordinate structure")
-  if(class(data) != "data.frame")
+  if(is.data.frame(data) == FALSE)
     stop("argument 'data' must be of type 'data.frame'")
   if(!is.logical(inverse) | !is.logical(scale))
     stop("argument 'inverse' and 'scale' (both) must be logical")
@@ -1381,7 +1381,7 @@ tern_dep <- function(version, msg) {
 #internal
 .makeValid <- function(x){
   x = x[[1]]
-  if(class(x) == 'character'){
+  if(is.character(x)){
     x = gsub("%","'%'",x)
     x = gsub('([[:punct:]])\\1+', '\\1', x)
     x = gsub(" ","~",x)
@@ -1409,8 +1409,8 @@ arrow_label_formatter.character   = function(label,suffix=NULL,sep="/",latex = F
   suffix = if(suffix  == "")   NULL else suffix
   sep    = if(is.null(suffix)) ""   else .trimAndPad(sep)
   result = paste(label,suffix,sep=sep)
-  if(latex[1]) result = TeX(result)
-  result
+  # if(latex[1]) result = TeX(result)
+  # result
 }
 .trimAndPad <- function(x){
   x = gsub("^(\\s+)","",gsub("(\\s+)$","",x))
@@ -1447,19 +1447,6 @@ joinCharacterSeries <- function(x,lastWord='and'){
 # @keywords internal
 # @rdname undocumented
 identityInv = function(z) identity(z)
-
-
-# \code{getFormulaVars} is a function that returns a list of either dependent or independent variables used
-# in an input formula
-# @param x formula object
-# @param dependent whether to return the dependent variables (TRUE) or the indpenedent variables (FALSE)
-# @rdname undocumented
-# @keywords internal
-# @author Nicholas Hamilton
-getFormulaVars = function(x,dependent=TRUE) {
-  if(class(x) != 'formula') stop("x argument must be a formula",call.=FALSE)
-  all.vars(x[[if(dependent) 3 else 2]])
-}
 
 # Function to add missing scales and other items to the plot and its coordinates sytem
 # @param ggplot object
@@ -1538,9 +1525,9 @@ theme_void <- function(base_size = 12, base_family = "") {
 # @export
 grid.arrange = function (..., newpage = TRUE) {
   if (newpage) 
-    grid.newpage()
+    grid::grid.newpage()
   g <- arrangeGrob(...)
-  grid.draw(g)
+  grid::grid.draw(g)
   invisible(g)
 }
 
@@ -1744,53 +1731,183 @@ arrangeGrob = function (..., grobs = list(...), layout_matrix, vp = NULL, name =
     widths <- unit(rep(1, ncol), "null")
   if (is.null(heights)) 
     heights <- unit(rep(1, nrow), "null")
-  if (!is.unit(widths)) 
+  if (!grid::is.unit(widths)) 
     widths <- unit(widths, "null")
-  if (!is.unit(heights)) 
+  if (!grid::is.unit(heights)) 
     heights <- unit(heights, "null")
-  gt <- gtable(name = name, respect = respect, heights = heights, ##NH
+  gt <- gtable::gtable(name = name, respect = respect, heights = heights, ##NH
                widths = widths, vp = vp)
-  gt <- gtable_add_grob(gt, grobs, t = positions$t, b = positions$b, 
+  gt <- gtable::gtable_add_grob(gt, grobs, t = positions$t, b = positions$b, 
                         l = positions$l, r = positions$r, z = seq_along(grobs), 
                         clip = clip)
   if (is.character(top)) {
-    top <- textGrob(top)
+    top <- grid::textGrob(top)
   }
-  if (is.grob(top)) {
-    h <- grobHeight(top) + padding
-    gt <- gtable_add_rows(gt, heights = h, 0)
-    gt <- gtable_add_grob(gt, top, t = 1, l = 1, r = ncol(gt), 
+  if (grid::is.grob(top)) {
+    h <- grid::grobHeight(top) + padding
+    gt <- gtable::gtable_add_rows(gt, heights = h, 0)
+    gt <- gtable::gtable_add_grob(gt, top, t = 1, l = 1, r = ncol(gt), 
                           z = Inf, clip = clip)
   }
   if (is.character(bottom)) {
-    bottom <- textGrob(bottom)
+    bottom <- grid::textGrob(bottom)
   }
-  if (is.grob(bottom)) {
-    h <- grobHeight(bottom) + padding
-    gt <- gtable_add_rows(gt, heights = h, -1)
-    gt <- gtable_add_grob(gt, bottom, t = nrow(gt), l = 1, 
+  if (grid::is.grob(bottom)) {
+    h <- grid::grobHeight(bottom) + padding
+    gt <- gtable::gtable_add_rows(gt, heights = h, -1)
+    gt <- gtable::gtable_add_grob(gt, bottom, t = nrow(gt), l = 1, 
                           r = ncol(gt), z = Inf, clip = clip)
   }
   if (is.character(left)) {
-    left <- textGrob(left, rot = 90)
+    left <- grid::textGrob(left, rot = 90)
   }
-  if (is.grob(left)) {
-    w <- grobWidth(left) + padding
-    gt <- gtable_add_cols(gt, widths = w, 0)
-    gt <- gtable_add_grob(gt, left, t = 1, b = nrow(gt), 
+  if (grid::is.grob(left)) {
+    w <- grid::grobWidth(left) + padding
+    gt <- gtable::gtable_add_cols(gt, widths = w, 0)
+    gt <- gtable::gtable_add_grob(gt, left, t = 1, b = nrow(gt), 
                           l = 1, r = 1, z = Inf, clip = clip)
   }
   if (is.character(right)) {
-    right <- textGrob(right, rot = -90)
+    right <- grid::textGrob(right, rot = -90)
   }
-  if (is.grob(right)) {
-    w <- grobWidth(right) + padding
-    gt <- gtable_add_cols(gt, widths = w, -1)
-    gt <- gtable_add_grob(gt, right, t = 1, b = nrow(gt), 
+  if (grid::is.grob(right)) {
+    w <- grid::grobWidth(right) + padding
+    gt <- gtable::gtable_add_cols(gt, widths = w, -1)
+    gt <- gtable::gtable_add_grob(gt, right, t = 1, b = nrow(gt), 
                           l = ncol(gt), r = ncol(gt), z = Inf, clip = clip)
   }
   gt
 }
 
+# Apply Manual Clipping Mask
+# 
+# This function creates a manual clipping mask, which in turn suppresses the standard clipping mask that would otherwise
+# be rendered in the foregound rendering procedure, giving the user control over the exact placement with respect to 
+# other layers. For example, the user may wish to have the clipping mask placed after 
+# the \code{geom_point(...)} layer, but before the \code{geom_label(...)} layer, this situation has been
+# demonstrated in the example below. In the event that the user wishes to suppress the mask altogether, then a convenience
+# function has been provided, \code{theme_nomask()}.
+# @examples 
+# data(Feldspar)
+# x = ggtern(Feldspar,aes(Ab,An,Or,label=Experiment)) + geom_point()
+# 
+# #Default Behaviour
+# x + geom_label()
+# 
+# #Insert manual mask before the labels, to prevent them being truncated
+# x + geom_point(size=6) + geom_mask() + geom_label()
+# @author Nicholas Hamilton
+# @rdname geom_mask
+# @export
+geom_mask <- function() {
+  layer(
+    data        = data.frame(x=1,y=1,z=1),
+    mapping     = NULL,
+    stat        = "identity",
+    geom        = GeomMask,
+    position    = "identity",
+    show.legend = FALSE,
+    inherit.aes = FALSE,
+    params      = list(
+      na.rm     = TRUE
+    )
+  )
+}
 
-
+# @format NULL
+# @usage NULL
+# @rdname geom_mask
+# @export
+GeomMask <- ggproto("GeomMask", Geom,
+                    default_aes = aes("x","y","z"),
+                    draw_panel  = function(self, data, panel_params, coord){
+                      
+                      #Initially Empty Items
+                      items = list()
+                      
+                      #Only for coord tern
+                      if(inherits(coord,'CoordTern')){
+                        
+                        tryCatch({
+                          theme = coord$theme %||% theme_get()
+                          e     = calc_element('tern.plot.background',theme,verbose=FALSE)
+                          
+                          if(!identical(e,element_blank())){
+                            
+                            #Debug Mode
+                            dbg   = getOption('tern.mask.debug',FALSE)
+                            
+                            #1st pass is master triangle.
+                            ex  = .get.tern.extremes(coord,panel_params,transform=FALSE)
+                            ex  = coord$transform(ex,panel_params = panel_params)
+                            ex  = rbind(ex,ex[1,,drop=F])
+                            
+                            #Build a specific viewport value
+                            vp <- viewport(x     = 0.5, 
+                                           y     = 0.5, 
+                                           width = 1, 
+                                           height= 1, 
+                                           just  = c("center","center"),
+                                           clip  = 'inherit' #OFF
+                            )
+                            
+                            #Key Limits
+                            a = c(0.0,1.0)
+                            b = c(0.5,0.5)
+                            
+                            #1st pass traces the all borders includeing the inside triangle,
+                            #2nd pass renders the convex hull (outer border)
+                            for(ix in c(1:2)){
+                              
+                              #Build the xvalues and yvalues
+                              #When ix == 1, include the center triangular cut-out
+                              xvals = c(a[1],a[1],if(ix==1){c(b[1],ex$x,b[2])},a[2],a[2],a[1])
+                              yvals = c(a[1],a[2],if(ix==1){c(a[2],ex$y,a[2])},a[2],a[1],a[1])
+                              
+                              #Local Fill Variable
+                              fillLoc = if(ix == 2 | is.null(e$fill)) NA else e$fill
+                              
+                              #Draw the full set of mask lines if in debug mode, for debugging.
+                              if(dbg){
+                                sizeLoc = if(ix == 2) 0.5 else 1
+                                colLoc  = if(ix == 2) 'black' else 'red'
+                              }else{
+                                sizeLoc = if(ix == 2) is.numericor(e$size,0) else 0
+                                colLoc  = if(ix == 2) e$colour else fillLoc
+                              }
+                              
+                              #Build the Grob with the custom viewport
+                              grob     <- polygonGrob(  x = xvals,
+                                                        y = yvals,
+                                                        default.units = "npc",
+                                                        id   = rep(1,length(xvals)),
+                                                        vp   = vp,
+                                                        name = sprintf("mask-%i",ix),
+                                                        gp   = gpar(  col  = colLoc %||% 'transparent',
+                                                                      fill = fillLoc %||% 'transparent',
+                                                                      lwd  = sizeLoc,
+                                                                      lty  = e$linetype)
+                                                        
+                              )
+                              
+                              #Add the grob to the items
+                              items[[length(items) + 1]] = grob
+                            }
+                          }
+                          
+                          #Render Axis items on top of the mask, if grids are on top, this
+                          #will be rendered in the coord_tern render_fg routine instead.
+                          if(!.theme.get.gridsontop(theme)){
+                            extrm = .get.tern.extremes(coord,panel_params,transform=TRUE)
+                            items = .render.fgset(coord,extrm,scale_details,theme,items)
+                          }
+                          
+                        },error=function(e){
+                          writeLines(as.character(e))
+                        })
+                      }
+                      
+                      do.call("gList",items)
+                    },
+                    draw_key = FALSE
+)

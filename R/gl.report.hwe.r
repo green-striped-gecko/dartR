@@ -595,7 +595,7 @@ gl.report.hwe <- function(x,
         seq_2 <- c(seq_2, length(p_list))
         for (i in 1:ceiling((length(p_list) / max_plots))) {
             p_final <-
-           ggtern::grid.arrange(grobs = p_list[seq_1[i]:seq_2[i]], ncol = 2)
+           grid.arrange(grobs = p_list[seq_1[i]:seq_2[i]], ncol = 2)
             # SAVE INTERMEDIATES TO TEMPDIR
             if (save2tmp) {
                 # creating temp file names
