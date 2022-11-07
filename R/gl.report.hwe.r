@@ -201,14 +201,14 @@ gl.report.hwe <- function(x,
         ))
     }
     
-    pkg <- "ggtern"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
-    }
+    # pkg <- "ggtern"
+    # if (!(requireNamespace(pkg, quietly = TRUE))) {
+    #     stop(error(
+    #         "Package",
+    #         pkg,
+    #         " needed for this function to work. Please install it."
+    #     ))
+    # }
     
     if (datatype == "SilicoDArT") {
         cat(error("  Detected Presence/Absence (SilicoDArT) data\n"))
@@ -531,7 +531,9 @@ gl.report.hwe <- function(x,
             
             
             p_temp <-
-                ggtern::ggtern() + geom_point(
+              ggplot() + geom_point(
+                
+              # ggtern::ggtern() + geom_point(
                     data = mat_genotypes,
                     aes(
                         x = AA,
@@ -568,13 +570,15 @@ gl.report.hwe <- function(x,
                     ),
                     size = 1,
                     color = "darkgreen"
-                ) + ggtern::theme_void() + theme(
+                ) + theme_void() + theme(
                     plot.subtitle = element_text(hjust = 0.5, vjust = 1),
                     tern.axis.line = element_line(color = "black",
                                                   size = 1)
-                ) + ggtern::theme_hidelabels() + labs(subtitle = subtitle_plot)
-            
-            p_list[[count]] <- p_temp
+                # ) + ggtern::theme_hidelabels() + labs(subtitle = subtitle_plot) 
+            ) + theme_hidelabels() + 
+              labs(subtitle = subtitle_plot) 
+
+            p_list[[count]] <- p_temp + coord_tern()
             
         }
         
