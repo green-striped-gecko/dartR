@@ -173,7 +173,9 @@ allele (AA), heterozygous (AB) and homozygous for the alternative allele
 For these plots to work it is necessary to install the package ggtern.
 }
 \examples{
+\dontrun{
 gl.report.hwe(x = bandicoot.gl)
+}
 }
 \references{
 \itemize{
