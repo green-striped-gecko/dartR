@@ -116,8 +116,10 @@ series of tests conducted (De Meeûs et al 2009).
 }
 }
 \examples{
+\dontrun{
 res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]), 
 stdErr=FALSE, n.cores=1)
+}
 }
 \references{
 \itemize{ 

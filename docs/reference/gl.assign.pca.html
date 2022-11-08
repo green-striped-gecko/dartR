@@ -8,7 +8,7 @@ orthogonal axes (independent), and the top two dimensions are considered.
 Populations for which the unknown lies outside the specified confidence
 limits are no longer removed from the dataset.
 
-"><title>Assign an individual of unknown provenance to population based on PCA — gl.assign.pca • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Assign an individual of unknown provenance to population based on PCA — gl.assign.pca"><meta property="og:description" content="This script assigns an individual of unknown provenance to one or more target
+"><title>Assign an individual of unknown provenance to population based on PCA — gl.assign.pca • dartR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Assign an individual of unknown provenance to population based on PCA — gl.assign.pca"><meta property="og:description" content="This script assigns an individual of unknown provenance to one or more target
  populations based on its proximity to each population defined by a
  confidence ellipse in ordinated space of two dimensions.
 The following process is followed:
@@ -28,7 +28,7 @@ limits are no longer removed from the dataset.
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,30 +72,41 @@ limits are no longer removed from the dataset.</p></li>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gl.assign.pca</span><span class="op">(</span><span class="va">x</span>, <span class="va">unknown</span>, plevel <span class="op">=</span> <span class="fl">0.999</span>, plot.out <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gl.assign.pca</span><span class="op">(</span><span class="va">x</span>, <span class="va">unknown</span>, plevel <span class="op">=</span> <span class="fl">0.999</span>, plot.out <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
 <dd><p>Name of the input genlight object [required].</p></dd>
+
+
 <dt>unknown</dt>
 <dd><p>Identity label of the focal individual whose provenance is
 unknown [required].</p></dd>
+
+
 <dt>plevel</dt>
 <dd><p>Probability level for bounding ellipses in the PCoA plot
 [default 0.999].</p></dd>
+
+
 <dt>plot.out</dt>
 <dd><p>If TRUE, plot the 2D PCA showing the position 
 of the unknown [default TRUE]</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A genlight object containing only those populations that are
+    
+
+<p>A genlight object containing only those populations that are
 putative source populations for the unknown individual.</p>
     </div>
     <div class="section level2">
@@ -109,11 +120,12 @@ an indication that the unknown does not belong to a target population
 alleles have been detected and the position of the unknown in relation to the
 confidence ellipses as is plotted by this script. Note, this plot is
 considering only the top two dimensions of the ordination, and so an unknown
-lying outside the confidence ellipse can be unambiguously interpreted as it lying outside
-the confidence envelope. However, if the unknown lies inside the confidence
-ellipse in two dimensions, then it may still lie outside the confidence
-envelope in deeper dimensions. This second step is good for eliminating populations from
-consideration, but does not provide confidence in assignment.</p>
+lying outside the confidence ellipse can be unambiguously interpreted as it 
+lying outside the confidence envelope. However, if the unknown lies inside 
+the confidence ellipse in two dimensions, then it may still lie outside the 
+confidence envelope in deeper dimensions. This second step is good for 
+eliminating populations from consideration, but does not provide confidence 
+in assignment.</p>
 <p>The third step is to consider the assignment probabilities, using the script
 gl.assign.mahalanobis(). This approach calculates the squared Generalised 
 Linear Distance (Mahalanobis distance) of the unknown from the centroid 
@@ -128,17 +140,18 @@ outlier with respect to a particular population at alpha = 0.001 as default.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
-    <p>Custodian: Arthur Georges -- Post to <a href="https://groups.google.com/d/forum/dartr" class="external-link">https://groups.google.com/d/forum/dartr</a></p>
+    <p>Custodian: Arthur Georges -- Post to 
+<a href="https://groups.google.com/d/forum/dartr" class="external-link">https://groups.google.com/d/forum/dartr</a></p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co">#Test run with a focal individual from the Macleay River (EmmacMaclGeor) </span></span>
-<span class="r-in"><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.assign.pa.html">gl.assign.pa</a></span><span class="op">(</span><span class="va">testset.gl</span>, unknown<span class="op">=</span><span class="st">'UC_00146'</span>, nmin<span class="op">=</span><span class="fl">10</span>, threshold<span class="op">=</span><span class="fl">1</span>,</span>
-<span class="r-in">verbose<span class="op">=</span><span class="fl">3</span><span class="op">)</span> </span>
-<span class="r-in"><span class="va">test_2</span> <span class="op">&lt;-</span> <span class="fu">gl.assign.pca</span><span class="op">(</span><span class="va">test</span>, unknown<span class="op">=</span><span class="st">'UC_00146'</span>, plevel<span class="op">=</span><span class="fl">0.95</span>, verbose<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">#Test run with a focal individual from the Macleay River (EmmacMaclGeor) </span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.assign.pa.html">gl.assign.pa</a></span><span class="op">(</span><span class="va">testset.gl</span>, unknown<span class="op">=</span><span class="st">'UC_00146'</span>, nmin<span class="op">=</span><span class="fl">10</span>, threshold<span class="op">=</span><span class="fl">1</span>,</span></span>
+<span class="r-in"><span>verbose<span class="op">=</span><span class="fl">3</span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="va">test_2</span> <span class="op">&lt;-</span> <span class="fu">gl.assign.pca</span><span class="op">(</span><span class="va">test</span>, unknown<span class="op">=</span><span class="st">'UC_00146'</span>, plevel<span class="op">=</span><span class="fl">0.95</span>, verbose<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -150,7 +163,7 @@ outlier with respect to a particular population at alpha = 0.001 as default.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer></div>

@@ -1,4 +1,4 @@
-matrix2gen <- function(snp_matrix, parallel) {
+matrix2gen <- function(snp_matrix, parallel = FALSE) {
   if (parallel) {
     i@gen <-
       parallel::mclapply(1:nrow(snp_matrix), function(i)

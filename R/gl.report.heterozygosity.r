@@ -76,6 +76,11 @@
 #' expected heterozygosity and FIS (Inbreeding coefficient) across populations
 #' together with a table of mean observed and expected heterozygosities and FIS
 #' by population and their respective standard deviations (SD).
+#' 
+#' In the output, it is also reported by population: the number of loci used to
+#'  estimate heterozygosity(nLoc), the number of polymorphic loci (polyLoc), 
+#'  the number of monomorphic loci (monoLoc) and loci with all missing data
+#'   (all_NALoc).
 #'
 #' Output for method='ind' is a histogram and a boxplot of heterozygosity across
 #' individuals.
@@ -230,6 +235,34 @@ gl.report.heterozygosity <- function(x,
                 ))))
         ##########
         
+        # calculate the number of polymorphic and monomorphic loci by population
+        poly_loc <- NULL
+        mono_loc <- NULL
+        all_na_loc <- NULL
+        
+        for(y in 1:length(sgl)){
+
+          y_temp <- sgl[[y]]
+          hold <- y_temp
+          mono_tmp <- gl.alf(y_temp)
+          loc.list <- rownames(mono_tmp[which(mono_tmp$alf1==1 |
+                                                mono_tmp$alf1 == 0),])
+          loc.list_NA <- rownames(mono_tmp[which(is.na(mono_tmp$alf1)),])
+
+          # Remove NAs from list of monomorphic loci and loci with all NAs
+          loc.list <- loc.list[!is.na(loc.list)]
+
+          # remove monomorphic loci and loci with all NAs
+          if (length(loc.list) > 0) {
+            y_temp <- gl.drop.loc(y_temp, loc.list = loc.list, verbose = 0)
+          }
+
+          poly_loc <-  c(poly_loc, nLoc(y_temp))  
+          mono_loc <- c(mono_loc, (nLoc(hold) - nLoc(y_temp)))
+          all_na_loc <- c(all_na_loc, length(loc.list_NA))
+
+        }
+     
         # Apply correction CP ###
         Ho.adj <- Ho * n_loc / (n_loc + n.invariant)
         # Manually compute SD for Ho.adj sum of the square of differences from
@@ -298,7 +331,6 @@ gl.report.heterozygosity <- function(x,
             q <- (2 * q + hets) / 2
             H <- 1 - (p ^ 2 + q ^ 2)
             
-            
             ### CP ### Unbiased He (i.e. corrected for sample size) hard
             # coded for diploid
             uH <-
@@ -331,6 +363,9 @@ gl.report.heterozygosity <- function(x,
                 nInd = n_ind,
                 nLoc = n_loc,
                 nLoc.adj = n_loc / (n_loc + n.invariant),
+                polyLoc = poly_loc ,
+                monoLoc = mono_loc , 
+                all_NALoc = all_na_loc, 
                 Ho = as.numeric(Ho),
                 HoSD = HoSD,
                 Ho.adj = as.numeric(Ho.adj),
@@ -553,6 +588,9 @@ cat("    Maximum Observed Heterozygosity: ", round(max(df$Ho, na.rm = TRUE), 6))
                     "pop",
                     "nInd",
                     "nLoc",
+                    "polyLoc",
+                    "monoLoc", 
+                    "all_NALoc", 
                     "Ho",
                     "HoSD",
                     "He",

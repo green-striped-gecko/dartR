@@ -48,7 +48,7 @@ Returns a list with the reference table used as input for the function
 }
 \description{
 This function creates a reference table to be used as input for the function
- \code{\link{gl.sim.WF.run}}. The created table has seven columns with the 
+ \code{\link{gl.sim.WF.run}}. The created table has eight columns with the 
  following information for each locus to be simulated:
 \itemize{ 
 \item q - initial frequency.
