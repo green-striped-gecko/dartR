@@ -165,7 +165,7 @@ cat("   Mean Call Rate",mean(pop_tmp$other$loc.metrics$CallRate,na.rm = TRUE) ,
             cat("    Maximum      : ", stats[6], "\n")
             cat("    Missing Rate Overall: ", round(sum(is.na(
                 as.matrix(x)
-            )) / (nLoc(x) * nInd(x)), 2), "\n\n")
+            )) / (nLoc(x) * nInd(x)), 4), "\n\n")
             
             # Determine the loss of loci for a given threshold
             quantile_res <-
@@ -250,7 +250,7 @@ cat("   Mean Call Rate",mean(pop_tmp$other$loc.metrics$CallRate,na.rm = TRUE) ,
         cat("    Maximum      : ", stats[6], "\n")
         cat("    Missing Rate Overall: ", round(sum(is.na(
             as.matrix(x)
-        )) / (nLoc(x) * nInd(x)), 2), "\n\n")
+        )) / (nLoc(x) * nInd(x)), 4), "\n\n")
         
   # Determine the loss of individuals for a given threshold using quantiles
         quantile_res <-

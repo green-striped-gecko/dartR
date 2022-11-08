@@ -68,7 +68,11 @@ For the initial generation, the genotype for each individual’s chromosomes is
  Hardy-Weinberg equilibrium. 
 
 See documentation and tutorial for a complete description of the simulations.
-These documents can be accessed at http://georges.biomatix.org/dartR
+These documents can be accessed at http://georges.biomatix.org/dartR 
+
+Take into account that the simulations will take a little bit longer the
+ first time you use the function gl.sim.WF.run() because C++ functions must
+  be compiled.
 }
 \details{
 Values for simulation variables can be submitted into the function 
