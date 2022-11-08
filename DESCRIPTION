@@ -40,6 +40,7 @@ Suggests:
     doParallel,
     expm,
     gdistance,
+    ggtern,
     gganimate,
     ggrepel,
     grid,
@@ -88,6 +89,7 @@ Suggests:
     vcfR,
     zoo,
     viridis
+Remotes: mijangos81/ggtern
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.2.1
