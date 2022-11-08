@@ -38,7 +38,7 @@ progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-Writes csv file containing the dispersal variables for each pair of
+A csv file containing the dispersal variables for each pair of
 populations to be used as input for the function \code{\link{gl.sim.WF.run}}.
 }
 \description{

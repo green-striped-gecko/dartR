@@ -227,8 +227,8 @@ gl2svdquartets <- function(x,
     a[1] <- 1
     b <- table(poplabels)
     for (i in 2:length(b)) {
-        b[i] = b[i] + b[i - 1]
-        a[i] = b[i - 1] + 1
+        b[i] <-b[i] + b[i - 1]
+        a[i] <-b[i - 1] + 1
     }
     plabels <- unique(poplabels)
     

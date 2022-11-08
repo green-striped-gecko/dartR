@@ -110,6 +110,15 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
      toinstall <- suggests[!suggests %in% ip]
      available <- available.packages()[, "Package"]
      toinsav <- toinstall[toinstall %in% available]
+     
+     if(verbose>=2){
+       cat(report("  Installing package ggtern from provisional GitHub Repository\n"))
+     }
+       
+     #Installing package ggtern from personal github repository because it seems
+     #that this package is not maintained anymore
+     devtools::install_github("mijangos81/ggtern")
+     
     
     if (length(toinsav) > 0) {
         if (verbose >= 2) {
@@ -203,9 +212,9 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
     
     if (verbose>= 2 & is.null(err) & !is.null(flavour)) {
         if (flavour != "CRAN") {
-            fl = paste0("Github [", flavour, "]")
+            fl <-paste0("Github [", flavour, "]")
         } else {
-            fl = "CRAN"
+            fl <-"CRAN"
             cat(report(
                 paste(
                     "  You have installed dartR",

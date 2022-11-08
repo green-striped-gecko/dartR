@@ -41,7 +41,7 @@
 #' df <- gl.report.rdepth(testset.gl)
 #' df <- gl.report.rdepth(testset.gs)
 #' @seealso \code{\link{gl.filter.rdepth}}
-#' @family filters and filter reports
+#' @family report functions
 #' @import patchwork
 #' @export
 
@@ -100,15 +100,23 @@ gl.report.rdepth <- function(x,
         
         # Boxplot
         p1 <-
-            ggplot(data.frame(rdepth), aes(y = rdepth)) + geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + coord_flip() + plot_theme +
-            xlim(range = c(-1, 1)) + ylim(c(0, max)) + ylab(" ") + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + ggtitle(title)
+            ggplot(data.frame(rdepth), aes(y = rdepth)) + 
+          geom_boxplot(color = plot_colors[1], fill = plot_colors[2]) + 
+          coord_flip() + plot_theme +
+            xlim(range = c(-1, 1)) + 
+          ylim(c(0, max)) +
+          ylab(" ") + 
+          theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) + 
+          ggtitle(title)
         
         # Histogram
         p2 <-
-            ggplot(data.frame(rdepth), aes(x = rdepth)) + geom_histogram(bins = 100,
-                                                                         color = plot_colors[1],
-                                                                         fill = plot_colors[2]) + xlim(c(0,
-                                                                                                         max)) + xlab("Read Depth") + ylab("Count") + plot_theme
+            ggplot(data.frame(rdepth), aes(x = rdepth)) +
+          geom_histogram(bins=100,color=plot_colors[1],fill = plot_colors[2]) + 
+          xlim(c(0,max)) +
+          xlab("Read Depth") + 
+          ylab("Count") +
+          plot_theme
     }
     
     # Print out some statistics
@@ -183,7 +191,8 @@ gl.report.rdepth <- function(x,
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

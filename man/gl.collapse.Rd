@@ -8,7 +8,8 @@
 gl.collapse(fd, tpop = 0, tloc = 0, pb = FALSE, verbose = NULL)
 }
 \arguments{
-\item{fd}{Name of the list of matrices produced by gl.fixed.diff() [required].}
+\item{fd}{Name of the list of matrices produced by gl.fixed.diff() 
+[required].}
 
 \item{tpop}{Threshold number of fixed differences above which populations
 will not be amalgamated [default 0].}
@@ -16,7 +17,8 @@ will not be amalgamated [default 0].}
 \item{tloc}{Threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs
 5:95 is fixed) [default 0].}
 
-\item{pb}{If TRUE, show a progress bar on time consuming loops [default FALSE].}
+\item{pb}{If TRUE, show a progress bar on time consuming loops 
+[default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -52,5 +54,6 @@ fd3 <- gl.collapse(fd2,tpop=1)
 fd3
 }
 \author{
-Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+Custodian: Arthur Georges -- Post to 
+\url{https://groups.google.com/d/forum/dartr}
 }

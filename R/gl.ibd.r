@@ -18,7 +18,7 @@
 #' 'D' [\link[StAMPP]{stamppNeisD}] or individual based 'propShared',
 #'  [gl.propShared], 'euclidean' [gl.dist.ind, method='Euclidean'] [default "Fst"].
 #' @param coordinates Can be either 'latlon', 'xy' or a two column data.frame
-#' with column names 'lat','lon', 'x', 'y')  Coordinates are provided via
+#' with column names 'lat','lon', 'x', 'y'). Coordinates are provided via
 #' \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon
 #' data will be projected to meters using Mercator system [google maps] or if
 #' xy then distance is directly calculated on the coordinates.
@@ -26,16 +26,12 @@
 #' [default NULL].
 #' @param Dgeo Euclidean distance matrix if no genlight object is provided
 #' [default NULL].
-#' @param Dgeo_trans Transformation to be used on the Euclidean distances. see
-#' Dgen_trans [default 'log(Dgeo)'].
+#' @param Dgeo_trans Transformation to be used on the Euclidean distances. See
+#' Dgen_trans [default "Dgeo"].
 #' @param Dgen_trans You can provide a formula to transform the genetic
-#' distance. For example Rousset (see below) suggests to study
-#' \code{Fst/(1-Fst)} against log transformed distances as this is the
-#' expectations of Fst versus distances in the case of a stepping stone model.
-#' The transformation can be applied as a formula using Dgen as the variable to
-#'  be transformed. So, for the Fst transformation of Rousset use
-#'  \code{Dgen_trans = 'Dgen/(1-Dgen)'. Any valid R expression can be used here.
-#'  [default 'Dgen', which is the identity function.]}
+#' distance. The transformation can be applied as a formula using Dgen as the
+#'  variable to be transformed. For example: \code{Dgen_trans = 'Dgen/(1-Dgen)'.
+#'   Any valid R expression can be used here [default 'Dgen', which is the identity function.]}
 #' @param permutations Number of permutations in the Mantel test [default 999].
 #' @param plot.out Should an isolation by distance plot be returned
 #' [default TRUE].
@@ -95,7 +91,7 @@ gl.ibd <- function(x = NULL,
                    coordinates = "latlon",
                    Dgen = NULL,
                    Dgeo = NULL,
-                   Dgeo_trans = "log(Dgeo)",
+                   Dgeo_trans = "Dgeo",
                    Dgen_trans = "Dgen",
                    permutations = 999,
                    plot.out = TRUE,
@@ -106,7 +102,7 @@ gl.ibd <- function(x = NULL,
     # CHECK IF PACKAGES ARE INSTALLED
     if (!(requireNamespace("dismo", quietly = TRUE))) {
         stop(error(
-            "Package dismo needed for this function to work. Please install it."
+            "Package dismo needed for this function to work. Please install it.\n"
         ))
     } else {
         
@@ -117,8 +113,9 @@ gl.ibd <- function(x = NULL,
         
         verbose <- gl.check.verbosity(verbose)
         
-        if (!is.null(x))
+        if (!is.null(x)){
             dt <- utils.check.datatype(x, verbose = 0)
+        }
         
         # specific error checks
         
@@ -126,16 +123,16 @@ gl.ibd <- function(x = NULL,
             if (verbose > 0)
                 cat(
                     report(
-                        "Analysis performed using provided genetic and Euclidean distance matrices. If a genlight object is provided, it is ignored."
+                        "Analysis performed using provided genetic and Euclidean distance matrices. If a genlight object is provided, it is ignored.\n"
                     )
                 )
-            ta = "dgendgeo"
+            ta <-"dgendgeo"
         }
         
         if (is(x, "genlight")) {
             if (verbose > 0)
                 cat(report("Analysis performed on the genlight object.\n"))
-            ta = "genlight"
+            ta <-"genlight"
         }
         
         # check coordinates (if no Dgen and Dgeo is provided)
@@ -145,7 +142,7 @@ gl.ibd <- function(x = NULL,
                 if (coordinates == "latlon") {
                     if (is.null(x@other$latlon))
                         stop(error(
-                            "Cannot find coordinates in x@other$latlon"
+                            "Cannot find coordinates in x@other$latlon.\n"
                         ))
                     coords <-
                         dismo::Mercator(x@other$latlon[, c("lon", "lat")])
@@ -156,14 +153,14 @@ gl.ibd <- function(x = NULL,
                             )
                         )
                     }
-                    coordstring = "x@other$latlon (Mercator transformed)"
+                    coordstring <-"x@other$latlon (Mercator transformed)"
                 }
                 
                 if (coordinates == "xy") {
                     if (is.null(x@other$xy))
-                        stop(error("Cannot find coordinates in x@other$xy"))
+                        stop(error("Cannot find coordinates in x@other$xy.\n"))
                     coords <- x@other$xy
-                    coordstring = "x@other$xy"
+                    coordstring <-"x@other$xy"
                 }
                 
             }
@@ -171,47 +168,51 @@ gl.ibd <- function(x = NULL,
             if (is(coordinates, "data.frame")) {
                 if (length(setdiff(colnames(coordinates), c("lat", "lon"))) == 0) {
                     coords <- dismo::Mercator(coordinates[, c("lon", "lat")])
-                    coordstring = "data.frame lat/lon (Mercator transformed)"
+                    coordstring <-"data.frame lat/lon (Mercator transformed)"
                 }
                 
                 if (length(setdiff(colnames(coordinates), c("x", "y"))) == 0) {
                     coords <- coordinates[, c("x", "y")]
-                    coordstring = "data.frame x/y"
+                    coordstring <-"data.frame x/y"
                 }
                 
-                if (is.null(coords))
+                if (is.null(coords)){
                     stop(
                         error(
-                            "No valid coordinates provided. check the provided data.frame and its format."
+                            "No valid coordinates provided. check the provided data.frame and its format.\n"
                         )
                     )
             }
+            }
             
-            if (is.null(coords))
-                stop(error("No valid coordinates provided!"))
+            if (is.null(coords)){
+                stop(error("No valid coordinates provided!\n"))
+            }
             
             # make sure coordinates have the correct length
-            if (nrow(coords) != nInd(x) & ta == "genlight")
+            if (nrow(coords) != nInd(x) & ta == "genlight"){
                 stop(error(
-                    "Cannot find coordinates for each individual in slot @other$latlon"
+                    "Cannot find coordinates for each individual in slot @other$latlon.\n"
                 ))
+            }
             
-            typedis = NULL
+            typedis <-NULL
             if (distance == "Fst" | distance == "D") {
-                typedis = "pop"
+                typedis <-"pop"
             }
             
             if (distance == "propShared" |
                 distance == "euclidean") {
-                typedis = "ind"
+                typedis <-"ind"
             }
             
-            if (typedis == "pop" & nPop(x) < 2)
+            if (typedis == "pop" & nPop(x) < 2){
                 stop(
                     error(
-                        "You specified a population based distance, but there is either no population or only a single population specified within your genlight object. Check via table(pop(genlight))."
+                        "You specified a population based distance, but there is either no population or only a single population specified within your genlight object. Check via table(pop(genlight)).\n"
                     )
                 )
+            }
             
             if (is.null(Dgeo) & typedis == "pop") {
                 if (nPop(x) > 1) {
@@ -222,7 +223,7 @@ gl.ibd <- function(x = NULL,
                 } else {
                     stop(
                         error(
-                            "Less than 2 populations provided, therefore no pairwise distances can be calculated"
+                            "Less than 2 populations provided, therefore no pairwise distances can be calculated.\n"
                         )
                     )
                 }
@@ -234,7 +235,7 @@ gl.ibd <- function(x = NULL,
                 } else {
                     stop(
                         error(
-                            "Less than 2 individuals provided, therefore no pairwise distances can be calculated"
+                            "Less than 2 individuals provided, therefore no pairwise distances can be calculated.\n"
                         )
                     )
                 }
@@ -273,9 +274,9 @@ gl.ibd <- function(x = NULL,
             }
         } else {
             # end of ta=='genlight' ta='dgendgeo
-            coordstring = "Dgeo provided."
-            distance = "Dgen provided"
-            typedis = "ind"
+            coordstring <-"Dgeo provided."
+            distance <-"Dgen provided"
+            typedis <-"ind"
         }
         # make sure both matrices are distance objects if provided via Dgen and Dgeo directly
         Dgen <- as.dist(Dgen)
@@ -288,7 +289,7 @@ gl.ibd <- function(x = NULL,
         if (sum(is.infinite(Dgeo)) > 0) {
             stop(
                 error(
-                    "Most likely some pairwise individual distances were zero and the transformation created missing values [e.g. log(Dgeo)]. This affects the Mantel test and points are omitted from the plot. Consider adding a suitable tranformation e.g. an offset to your Dgeo transformation if using a log transformation [e.g. Dgeo_trans='log(Dgeo+1)'] or adding some 'noise' to the coordinates."
+                    "Most likely some pairwise individual distances were zero and the transformation created missing values [e.g. log(Dgeo)]. This affects the Mantel test and points are omitted from the plot. Consider adding a suitable tranformation e.g. an offset to your Dgeo transformation if using a log transformation [e.g. Dgeo_trans='log(Dgeo+1)'] or adding some 'noise' to the coordinates.\n"
                 )
             )
             
@@ -296,12 +297,12 @@ gl.ibd <- function(x = NULL,
         
         if (is.null(Dgeo))
             stop(error(
-                "Cannot calculate distance matrix or no distance matrix provided!"
+                "Cannot calculate distance matrix or no distance matrix provided\n!"
             ))
         if (is.null(Dgen))
             stop(
                 error(
-                    "Cannot calculate genetic distance matrix or no genetic distance matrix provided!"
+                    "Cannot calculate genetic distance matrix or no genetic distance matrix provided!\n"
                 )
             )
         
@@ -333,8 +334,13 @@ gl.ibd <- function(x = NULL,
         res <-
             data.frame(Dgen = as.numeric(Dgen), Dgeo = as.numeric(Dgeo))
         if (is.null(paircols)) {
+          
             p3 <-
-                ggplot(res, aes(x = Dgeo, y = Dgen)) + geom_point() + geom_smooth(method = "lm", se = TRUE) + ylab(Dgen_trans) + xlab(Dgeo_trans) +
+                ggplot(res, aes(x = Dgeo, y = Dgen)) + 
+              geom_point() + 
+              geom_smooth(method = "lm", se = TRUE) + 
+              ylab(Dgen_trans) + 
+              xlab(Dgeo_trans) +
                 annotate(
                     "text",
                     label = lm_eqn(res),
@@ -342,12 +348,12 @@ gl.ibd <- function(x = NULL,
                     y = -Inf,
                     parse = TRUE,
                     hjust = 1.05,
-                    vjust = 0
-                ) + plot_theme
+                    vjust = 0) + 
+              plot_theme
+            
         } else {
             Legend <- col2 <- NA  #ggplot bug
-            cols <-
-                which(lower.tri(as.matrix(Dgen)), arr.ind = T)
+            cols <- which(lower.tri(as.matrix(Dgen)), arr.ind = T)
             c1 <- cols[, 2]
             c2 <- cols[, 1]
             cn <- colnames(as.matrix(Dgen))
@@ -356,7 +362,7 @@ gl.ibd <- function(x = NULL,
                 if (is(x, "genlight"))
                     cn <- pop(x)
                 else
-                    cn = rownames(as.matrix(Dgen))
+                    cn <-rownames(as.matrix(Dgen))
             }
             res <-
                 data.frame(
@@ -366,22 +372,20 @@ gl.ibd <- function(x = NULL,
                     col2 = cn[c2]
                 )
             p3 <-
-                ggplot(res) + geom_point(aes(Dgeo, Dgen, col = Legend), size = 5) + geom_point(aes(Dgeo, Dgen, col = col2), size = 2) + geom_point(aes(Dgeo,
-                                                                                                                                                       Dgen),
-                                                                                                                                                   size = 2,
-                                                                                                                                                   shape = 1) + guides(size = "none",
-                                                                                                                                                                       color = guide_legend(title = "Populations")) + geom_smooth(aes(x = Dgeo,
-                                                                                                                                                                                                                                      y = Dgen),
-                                                                                                                                                                                                                                  method = "lm",
-                                                                                                                                                                                                                                  se = TRUE) + ylab(Dgen_trans) + annotate(
-                                                                                                                                                                                                                                      "text",
-                                                                                                                                                                                                                                      label = lm_eqn(res),
-                                                                                                                                                                                                                                      x = Inf,
-                                                                                                                                                                                                                                      y = -Inf,
-                                                                                                                                                                                                                                      parse = TRUE,
-                                                                                                                                                                                                                                      hjust = 1.05,
-                                                                                                                                                                                                                                      vjust = 0
-                                                                                                                                                                                                                                  ) + xlab(Dgeo_trans) + plot_theme
+                ggplot(res) + 
+              geom_point(aes(Dgeo, Dgen, col = Legend), size = 5) + 
+              geom_point(aes(Dgeo, Dgen, col = col2), size = 2) + 
+              geom_point(aes(Dgeo, Dgen),size = 2,shape = 1) + 
+              guides(size = "none",color = guide_legend(title = "Populations")) + 
+              geom_smooth(aes(x = Dgeo, y = Dgen),method = "lm", se = TRUE) + 
+              ylab(Dgen_trans) + 
+              annotate("text",label = lm_eqn(res), 
+                       x = Inf,
+                       y = -Inf, 
+                       parse = TRUE,
+                       hjust = 1.05,
+                       vjust = 0) +
+              xlab(Dgeo_trans) + plot_theme
             
         }
         

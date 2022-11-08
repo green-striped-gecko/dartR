@@ -10,6 +10,10 @@
 #' 
 #' See documentation and tutorial for a complete description of the simulations.
 #' These documents can be accessed at http://georges.biomatix.org/dartR 
+#' 
+#' Take into account that the simulations will take a little bit longer the
+#'  first time you use the function gl.sim.WF.run() because C++ functions must
+#'   be compiled.
 #' @param file_var Path of the variables file 'sim_variables.csv' (see details) 
 #' [required if interactive_vars = FALSE].
 #' @param ref_table Reference table created by the function 
@@ -142,19 +146,19 @@ gl.sim.WF.run <-
       sim_vars <- interactive_sim_run()
       
      sim_vars[sim_vars$variable=="population_size_phase2" ,"value"] <-
-      paste0("'",sim_vars[sim_vars$variable=="population_size_phase2" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="population_size_phase2" ,"value"],"'")
 
      sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <-
-       paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
 
      sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
-       paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
      
      sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"] <- 
-       paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"],"'")
      
      sim_vars[sim_vars$variable=="natural_selection_model" ,"value"] <- 
-       paste0("'",sim_vars[sim_vars$variable=="natural_selection_model" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="natural_selection_model" ,"value"],"'")
      
      sim_vars <- sim_vars[order(sim_vars$variable),]
      
@@ -193,19 +197,19 @@ gl.sim.WF.run <-
       sim_vars[val_change,"value"] <- unlist(input_list)
       
       sim_vars[sim_vars$variable=="population_size_phase2" ,"value"] <-
-        paste0("'",sim_vars[sim_vars$variable=="population_size_phase2" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="population_size_phase2" ,"value"],"'")
       
       sim_vars[sim_vars$variable=="population_size_phase1" ,"value"] <-
-        paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="population_size_phase1" ,"value"],"'")
       
       sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"] <- 
-        paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase2" ,"value"],"'")
       
       sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"] <- 
-        paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="dispersal_type_phase1" ,"value"],"'")
       
       sim_vars[sim_vars$variable=="natural_selection_model" ,"value"] <- 
-        paste0("'",sim_vars[sim_vars$variable=="natural_selection_model" ,"value"],"'")
+paste0("'",sim_vars[sim_vars$variable=="natural_selection_model" ,"value"],"'")
       
       vars_assign <-
         unlist(unname(
@@ -220,13 +224,16 @@ gl.sim.WF.run <-
     
     neutral_loci_location <- which(reference$type == "neutral" |
                                      reference$type == "real")
-    adv_loci <- which(reference$type=="mutation_adv" | reference$type=="advantageous")
+    adv_loci <- 
+      which(reference$type=="mutation_adv" | reference$type=="advantageous")
     mutation_loci_adv <- which(reference$type == "mutation_adv" )
     mutation_loci_del <- which(reference$type == "mutation_del")
     mutation_loci_neu <- which(reference$type == "mutation_neu")
     
-    mutation_loci_location <- c(mutation_loci_adv,mutation_loci_del,mutation_loci_neu)
-    mutation_loci_location <- mutation_loci_location[order(mutation_loci_location)]
+    mutation_loci_location <- 
+      c(mutation_loci_adv,mutation_loci_del,mutation_loci_neu)
+    mutation_loci_location <- 
+      mutation_loci_location[order(mutation_loci_location)]
     
     real <- which(reference$type == "real")
     
@@ -235,18 +242,23 @@ gl.sim.WF.run <-
     # this is the option of real_freq from the reference table 
     real_freq_table <- ref_vars[ref_vars$variable=="real_freq","value"]
     if(real_freq_table != real_freq){
-      cat(error("  The value for the real_freq parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
+      cat(error("  The value for the real_freq parameter was set differently in 
+                the simulations and in the creation of the reference table. 
+                They should be the same. Please check it\n"))
       stop()
     }
     
     # this is the option of real_loc from the reference table 
     real_loc_table <- ref_vars[ref_vars$variable=="real_loc","value"]
     if(real_loc_table != real_loc){
-      cat(error("  The value for the real_loc parameter was set differently in the simulations and in the creation of the reference table. They should be the same. Please check it\n"))
+      cat(error("  The value for the real_loc parameter was set differently in 
+                the simulations and in the creation of the reference table. 
+                They should be the same. Please check it\n"))
       stop()
     }
     
-    if( (real_pops ==TRUE | real_pop_size ==TRUE | real_loc ==TRUE | real_freq==TRUE) && is.null(x)){
+    if( (real_pops ==TRUE | real_pop_size ==TRUE | real_loc ==TRUE | 
+         real_freq==TRUE) && is.null(x)){
       cat(error(" The real dataset to extract information is missing\n"))
       stop()
     }
@@ -260,25 +272,26 @@ gl.sim.WF.run <-
     
     # This is the list to store the final genlight objects
     gen_store <- c(seq(1, number_generations, every_gen), number_generations)
-    final_res <- rep(list(as.list(rep(NA, length(gen_store)))), number_iterations)
+    final_res <- rep(list(as.list(rep(NA, length(gen_store)))), 
+                     number_iterations)
     
     loci_number <- nrow(reference)
     recombination_map <- reference[, c("c", "loc_bp", "loc_cM")]
-    # In order for the recombination rate to be accurate, we must account for
-    # the case when the probability of the total recombination rate is less than
-    # 1 (i.e. < 100 cM) or more than 1 (> 100 cM). For the first case, the program
-    # subtracts from 1 the sum of all the recombination rates and this value
-    # inserted in the last row of the recombination_map table. If this row is
-    # chosen as the recombination point, recombination does not occur. For
-    # example, if a chromosome of 20 cM’s is simulated, the last row of the
-    # recombination_map will have a value of 0.8 and therefore 80% of the times
-    # recombination will not occur. For the second case, having more than 100 cM,
-    # means that more than 1 recombination event occurs. So, one recombination
-    # event is perform for each 100 cM. Then, the program subtracts the number of
-    # recombination events from the sum of all the recombination rates and this
-    # value inserted in the last row of the recombination_map table, in the same
-    # way as in the first case.
-    # number of recombination events per meiosis
+  # In order for the recombination rate to be accurate, we must account for
+  # the case when the probability of the total recombination rate is less than
+  # 1 (i.e. < 100 cM) or more than 1 (> 100 cM). For the first case, the program
+  # subtracts from 1 the sum of all the recombination rates and this value
+  # inserted in the last row of the recombination_map table. If this row is
+  # chosen as the recombination point, recombination does not occur. For
+  # example, if a chromosome of 20 cM’s is simulated, the last row of the
+  # recombination_map will have a value of 0.8 and therefore 80% of the times
+  # recombination will not occur. For the second case, having more than 100 cM,
+  # means that more than 1 recombination event occurs. So, one recombination
+  # event is perform for each 100 cM. Then, the program subtracts the number of
+  # recombination events from the sum of all the recombination rates and this
+  # value inserted in the last row of the recombination_map table, in the same
+  # way as in the first case.
+  # number of recombination events per meiosis
     recom_event <- ceiling(sum(recombination_map[, "c"],na.rm = TRUE))
     # filling the probability of recombination when the total recombination rate
     # is less than an integer (recom_event) and placing it at the end of the
@@ -288,8 +301,9 @@ gl.sim.WF.run <-
     recombination_map[loci_number + 1, 2] <- recombination_map[loci_number, 2]
     recombination_map[loci_number + 1, 3] <- recombination_map[loci_number, 3]
     
-    # one is subtracted from the recombination map to account for the last row that
-    # was added in the recombination map to avoid that the recombination function crashes
+# one is subtracted from the recombination map to account for the last row that
+# was added in the recombination map to avoid that the recombination function 
+    # crashes
     plink_map <- as.data.frame(matrix(nrow = nrow(reference), ncol = 4))
     plink_map[, 1] <- reference$chr_name
     plink_map[, 2] <- rownames(reference)
@@ -298,16 +312,21 @@ gl.sim.WF.run <-
     
     dispersal_type_phase2 <- gsub('\"', "", dispersal_type_phase2, fixed = TRUE)
     dispersal_type_phase1 <- gsub('\"', "", dispersal_type_phase1, fixed = TRUE)
-    natural_selection_model <- gsub('\"', "", natural_selection_model, fixed = TRUE)
+    natural_selection_model <- gsub('\"', "", natural_selection_model, 
+                                    fixed = TRUE)
     chromosome_name <- gsub('\"', "", chromosome_name, fixed = TRUE)
 
-    population_size_phase2 <- gsub('\"', "", population_size_phase2, fixed = TRUE)
+    population_size_phase2 <- gsub('\"', "", population_size_phase2,
+                                   fixed = TRUE)
     
-    population_size_phase2 <- as.numeric(unlist(strsplit(population_size_phase2, " ")))
+    population_size_phase2 <- 
+      as.numeric(unlist(strsplit(population_size_phase2, " ")))
       
-    population_size_phase1 <- gsub('\"', "", population_size_phase1, fixed = TRUE)
+    population_size_phase1 <- 
+      gsub('\"', "", population_size_phase1, fixed = TRUE)
     
-    population_size_phase1 <- as.numeric(unlist(strsplit(population_size_phase1, " ")))
+    population_size_phase1 <-
+      as.numeric(unlist(strsplit(population_size_phase1, " ")))
     
     local_adap <- gsub('\"', "", local_adap, fixed = TRUE)
     
@@ -333,7 +352,8 @@ gl.sim.WF.run <-
     if (real_freq == TRUE & !is.null(x) & real_loc == TRUE) {
       pop_list_freq_temp <- seppop(x)
       loc_to_keep <-
-        locNames(pop_list_freq_temp[[1]])[which(pop_list_freq_temp[[1]]$chromosome == chromosome_name)]
+locNames(pop_list_freq_temp[[1]])[which(pop_list_freq_temp[[1]]$chromosome == 
+                                          chromosome_name)]
       pop_list_freq_temp <-
         lapply(pop_list_freq_temp,
                gl.keep.loc,
@@ -352,19 +372,20 @@ gl.sim.WF.run <-
       pop_list_freq <- rep(NA, number_pops)
     }
 
-    # This is to calculate the density of mutations per centimorgan. The density
-    # is based on the number of heterozygous loci in each individual. Based on HW
-    # equation (p^2+2pq+q^2), the proportion of heterozygotes (2pq) for each locus
-    # is calculated and then averaged. This proportion is then multiplied by the
-    # number of loci and divided by the length of the chromosome in centiMorgans.
-    # According to Haddrill 2010, the mean number of heterozygous deleterious
-    # mutations per fly is 5,000 deleterious mutations per individual, with an
-    # estimated mean selection coefficient (sh) of 1.1X10^-5. The chromosome
-    # arm 2L has 17% of the total number of non-synonymous mutations and is 55/2
-    # cM long (cM are divided by two because there is no recombination in males),
-    # with these parameters the density per cM is (5000*0.17)/(55/2) = 30.9
+  # This is to calculate the density of mutations per centimorgan. The density
+  # is based on the number of heterozygous loci in each individual. Based on HW
+  # equation (p^2+2pq+q^2), the proportion of heterozygotes (2pq) for each locus
+  # is calculated and then averaged. This proportion is then multiplied by the
+  # number of loci and divided by the length of the chromosome in centiMorgans.
+  # According to Haddrill 2010, the mean number of heterozygous deleterious
+  # mutations per fly is 5,000 deleterious mutations per individual, with an
+  # estimated mean selection coefficient (sh) of 1.1X10^-5. The chromosome
+  # arm 2L has 17% of the total number of non-synonymous mutations and is 55/2
+  # cM long (cM are divided by two because there is no recombination in males),
+  # with these parameters the density per cM is (5000*0.17)/(55/2) = 30.9
     freq_deleterious <- reference[-as.numeric(neutral_loci_location),]
-    freq_deleterious_b <- mean(2 * (freq_deleterious$q) * (1 - freq_deleterious$q))
+    freq_deleterious_b <- mean(2 * (freq_deleterious$q) *
+                                 (1 - freq_deleterious$q))
     density_mutations_per_cm <- (freq_deleterious_b * nrow(freq_deleterious)) /
       (recombination_map[loci_number, "loc_cM"] * 100)
    
@@ -426,17 +447,19 @@ gl.sim.WF.run <-
       }
       
       if(phase1 == TRUE & number_pops_phase1!=number_pops_phase2 ){
-        cat(error("  Number of populations in phase 1 and phase 2 must be the same\n"))
+cat(error("  Number of populations in phase 1 and phase 2 must be the same\n"))
         stop()
       }
       
       if(length(population_size_phase2)!=number_pops_phase2){
-        cat(error("  Number of entries for population sizes do not agree with the number of populations for phase 2\n"))
+        cat(error("  Number of entries for population sizes do not agree with 
+                  the number of populations for phase 2\n"))
         stop()
       }
       
       if(length(population_size_phase1)!=number_pops_phase1 & phase1==TRUE){
-        cat(error("  Number of entries for population sizes do not agree with the number of populations for phase 1\n"))
+        cat(error("  Number of entries for population sizes do not agree with 
+                  the number of populations for phase 1\n"))
         stop()
       }
       
@@ -510,12 +533,12 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             q_prob_t2 <- cbind(q_prob_t,1-q_prob_t)
             q_prob <- split(q_prob_t2, row(q_prob_t2))
             
-            stringi::stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
+stringi::stri_sub_all(pop[individual_pop, 3], from=real,length = 1) <- 
               mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
                      q_prob,
                      USE.NAMES = FALSE)
             
-            stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
+stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <- 
               mapply(function(y){sample(x=c(1,0),size=1,prob=y,replace=FALSE)},
                      q_prob,
                      USE.NAMES = FALSE)
@@ -571,7 +594,7 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
           
           if (phase1 == TRUE) {
             if (same_line == TRUE) {
-              # pop_list_temp is used because pop_list is used to sample populations
+ # pop_list_temp is used because pop_list is used to sample populations
               pop_sample <- sample(pops_vector, 1)
               
               pop_list_temp <- lapply(pops_vector, function(x) {
@@ -579,12 +602,12 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
                   rbind(pop_list[[pop_sample]][sample(
                     which(pop_list[[pop_sample]]$V1 == "Male"),
                     size =  population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),],
                   pop_list[[pop_sample]][sample(
                     which(pop_list[[pop_sample]]$V1 == "Female"),
                     size = population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),])
                 pop_temp$V2 <- x
                 return(pop_temp)
@@ -598,12 +621,12 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
                   rbind(pop_list[[x]][sample(
                     which(pop_list[[x]]$V1 == "Male"),
                     size =  population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),],
                   pop_list[[x]][sample(
                     which(pop_list[[x]]$V1 == "Female"),
                     size = population_size[x] / 2,
-                    replace = T
+                    replace = TRUE
                   ),])
                 pop_temp$V2 <- x
                 return(pop_temp)
@@ -743,11 +766,14 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
               if (offspring_pop[offspring_ind, "runif"] < mut_rate) {
                 locus_to_mutate <- sample(mutation_loci_location, 1)
                 mutation_loci_location <-
-                  mutation_loci_location[-which(mutation_loci_location == locus_to_mutate)]
-                chromosomes <- c(offspring_pop[offspring_ind, 3], offspring_pop[offspring_ind, 4])
+                  mutation_loci_location[-which(mutation_loci_location == 
+                                                  locus_to_mutate)]
+                chromosomes <- c(offspring_pop[offspring_ind, 3], 
+                                 offspring_pop[offspring_ind, 4])
                 chr_to_mutate <- sample(1:2, 1)
                 chr_to_mutate_b <- chromosomes[chr_to_mutate]
-                substr(chr_to_mutate_b, as.numeric(locus_to_mutate), as.numeric(locus_to_mutate)) <- "1"
+                substr(chr_to_mutate_b, as.numeric(locus_to_mutate),
+                       as.numeric(locus_to_mutate)) <- "1"
                 chromosomes[chr_to_mutate] <- chr_to_mutate_b
                 offspring_pop[offspring_ind, 3] <- chromosomes[1]
                 offspring_pop[offspring_ind, 4] <- chromosomes[2]
@@ -766,9 +792,12 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
         if (selection == TRUE) {
           if(!is.null(local_adap)){
             pops_local <- setdiff(pops_vector, local_adap)
-            reference_local <- replicate(length(pops_vector), reference[,c("s","h")], simplify = FALSE)
+            reference_local <- replicate(length(pops_vector), 
+                                         reference[,c("s","h")], 
+                                         simplify = FALSE)
             
-            reference_local[pops_local] <- lapply(reference_local[pops_local], function(y){
+            reference_local[pops_local] <- lapply(reference_local[pops_local], 
+                                                  function(y){
               y[adv_loci,"s"] <- 0
               return(y)
             })
@@ -785,9 +814,12 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
             
           } else if(!is.null(clinal_adap)){
             pops_clinal <- seq(clinal_adap[1],clinal_adap[2],1)
-            reference_clinal_temp <- replicate(length(pops_vector), reference[,c("s","h")], simplify = FALSE)
+            reference_clinal_temp <- replicate(length(pops_vector), 
+                                               reference[,c("s","h")], 
+                                               simplify = FALSE)
             
-            clinal_s <- 1 - c(0,(1:(length(pops_clinal)-1)*(clinal_strength/100)))
+            clinal_s <- 1 - c(0,(1:(length(pops_clinal)-1)*
+                                   (clinal_strength/100)))
             
             reference_clinal <- lapply(pops_clinal,function(y){
               reference_clinal_temp[[y]][adv_loci,"s"] <-  
@@ -824,8 +856,8 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
         # testing whether any population became extinct, if so break the
         # iteration and pass to the next 
         test_extinction <- unlist(lapply(pops_vector, function(x) {
-          length(which(offspring_list[[x]]$V1 == "Male")) < population_size / 2 |
-            length(which(offspring_list[[x]]$V1 == "Female")) < population_size / 2
+        length(which(offspring_list[[x]]$V1 == "Male")) < population_size / 2 |
+        length(which(offspring_list[[x]]$V1 == "Female")) < population_size / 2
         }))
 
         if (any(test_extinction == TRUE)) {
@@ -844,9 +876,10 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
           
           if (sample_percent != 100) {
             
-            population_size_temp <- round(population_size * (sample_percent/100))
+          population_size_temp <- round(population_size * (sample_percent/100))
             # Converting odd even population sizes to even 
-            population_size_temp <- (population_size_temp %% 2 != 0) + population_size_temp
+            population_size_temp <- (population_size_temp %% 2 != 0) +
+              population_size_temp
             pop_list_temp <- lapply(pops_vector, function(x) {
               rbind(pop_list[[x]][sample(which(pop_list[[x]]$V1 == "Male"),
                                          size =  population_size_temp[x] / 2),],
@@ -864,7 +897,8 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
           # formatting the values of the variables to be saved in the genlight
           # object
           s_vars_temp <- rbind(ref_vars, sim_vars)
-          s_vars_temp <- setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
+          s_vars_temp <- setNames(data.frame(t(s_vars_temp[,-1])),
+                                  s_vars_temp[, 1])
           s_vars_temp$generation <- generation
           s_vars_temp$iteration <- iteration
           s_vars_temp$seed <- seed
@@ -900,9 +934,9 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
         
         if (selection == FALSE) {
           pop_list <- lapply(pops_vector, function(x) {
-            rbind(offspring_list[[x]][sample(which(offspring_list[[x]]$V1 == "Male"),
+      rbind(offspring_list[[x]][sample(which(offspring_list[[x]]$V1 == "Male"),
                                              size =  population_size[x] / 2),],
-                  offspring_list[[x]][sample(which(offspring_list[[x]]$V1 == "Female"),
+         offspring_list[[x]][sample(which(offspring_list[[x]]$V1 == "Female"),
                                              size = population_size[x] / 2),])
           })
         }
@@ -910,26 +944,26 @@ NumericVector p = NumericVector::create(q[z],1-q[z]);
         if (selection == TRUE &
             natural_selection_model == "absolute") {
           pop_list <- lapply(pops_vector, function(x) {
-            rbind(offspring_list[[x]][sample(which(offspring_list[[x]]$V1 == "Male"),
+     rbind(offspring_list[[x]][sample(which(offspring_list[[x]]$V1 == "Male"),
                                              size =  population_size[x] / 2),],
-                  offspring_list[[x]][sample(which(offspring_list[[x]]$V1 == "Female"),
+          offspring_list[[x]][sample(which(offspring_list[[x]]$V1 == "Female"),
                                              size = population_size[x] / 2),])
           })
         }
         
         if (selection == TRUE &
             natural_selection_model == "relative") {
-          # We modeled selection as Lesecque et al. 2012: offspring are randomly
-          # selected to become parents of the next generation in proportion to
-          # their relative fitness, for example, if we had four individuals
-          # with fitness (W) of 0.1, 0.2, 0.3, and 0.2 the first individual
-          # would be selected on average 0.1/(0.1+0.2+0.3+0.2)=0.125 of the time
-          # to become parent of the next generation. The vector of probabilities
-          # used in sample is multiplied by two because in the selection function
-          # (selection_fun), the proportional relative fitness was calculated for
-          # all offspring together, and below the males and females are separated
-          # in groups, with the objective that exactly the parents of the next
-          # generation are half males and half females
+        # We modeled selection as Lesecque et al. 2012: offspring are randomly
+        # selected to become parents of the next generation in proportion to
+        # their relative fitness, for example, if we had four individuals
+        # with fitness (W) of 0.1, 0.2, 0.3, and 0.2 the first individual
+        # would be selected on average 0.1/(0.1+0.2+0.3+0.2)=0.125 of the time
+        # to become parent of the next generation. The vector of probabilities
+        # used in sample is multiplied by two because in the selection function
+        # (selection_fun), the proportional relative fitness was calculated for
+        # all offspring together, and below the males and females are separated
+        # in groups, with the objective that exactly the parents of the next
+        # generation are half males and half females
           
           pop_list <- lapply(pops_vector, function(x) {
             males_pop <-
@@ -986,7 +1020,8 @@ Rcpp::cppFunction(plugins="cpp11",
 
           freqs <- make_freqs(pops_seqs)
           deleterious_eliminated <- which(freqs==0)
-          mutation_loci_location <- union(mutation_loci_location,deleterious_eliminated)
+          mutation_loci_location <- 
+            union(mutation_loci_location,deleterious_eliminated)
         
         }
        #toc()
@@ -1001,14 +1036,16 @@ Rcpp::cppFunction(plugins="cpp11",
           
           if (sample_percent < 100) {
             
-            population_size_temp <- round(population_size * (sample_percent/100))
+            population_size_temp <- round(population_size * 
+                                            (sample_percent/100))
             # Converting odd population sizes to even 
-            population_size_temp <- (population_size_temp %% 2 != 0) + population_size_temp
+            population_size_temp <- (population_size_temp %% 2 != 0) + 
+              population_size_temp
             pop_list_temp <- lapply(pops_vector, function(x) {
               rbind(pop_list[[x]][sample(which(pop_list[[x]]$V1 == "Male"),
-                                               size =  population_size_temp[x] / 2),],
+                                      size =  population_size_temp[x] / 2),],
                     pop_list[[x]][sample(which(pop_list[[x]]$V1 == "Female"),
-                                               size = population_size_temp[x] / 2),])
+                                      size = population_size_temp[x] / 2),])
             })
             
           }else{
@@ -1021,7 +1058,8 @@ Rcpp::cppFunction(plugins="cpp11",
           # formatting the values of the variables to be saved in the genlight
           # object
           s_vars_temp <- rbind(ref_vars, sim_vars)
-          s_vars_temp <- setNames(data.frame(t(s_vars_temp[,-1])), s_vars_temp[, 1])
+          s_vars_temp <- setNames(data.frame(t(s_vars_temp[,-1])), 
+                                  s_vars_temp[, 1])
           s_vars_temp$generation <- generation
           s_vars_temp$iteration <- iteration
           s_vars_temp$seed <- seed
@@ -1030,8 +1068,10 @@ Rcpp::cppFunction(plugins="cpp11",
           s_vars_temp$file_dispersal <- file_dispersal
           
           if(dispersal==TRUE){
-          s_vars_temp$number_transfers_phase2 <- paste(dispersal_pairs$number_transfers, collapse = " ")  
-          s_vars_temp$transfer_each_gen_phase2 <- paste(dispersal_pairs$transfer_each_gen, collapse = " ") 
+          s_vars_temp$number_transfers_phase2 <- 
+            paste(dispersal_pairs$number_transfers, collapse = " ")  
+          s_vars_temp$transfer_each_gen_phase2 <-
+            paste(dispersal_pairs$transfer_each_gen, collapse = " ") 
           }
           
           final_res[[iteration]][[count_store]] <-
@@ -1052,7 +1092,7 @@ Rcpp::cppFunction(plugins="cpp11",
             
           }else{
             
-            popNames(final_res[[iteration]][[count_store]]) <- as.character(pops_vector)
+  popNames(final_res[[iteration]][[count_store]]) <- as.character(pops_vector)
             
           }
           

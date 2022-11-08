@@ -76,6 +76,11 @@
 #' expected heterozygosity and FIS (Inbreeding coefficient) across populations
 #' together with a table of mean observed and expected heterozygosities and FIS
 #' by population and their respective standard deviations (SD).
+#' 
+#' In the output, it is also reported by population: the number of loci used to
+#'  estimate heterozygosity(nLoc), the number of polymorphic loci (polyLoc), 
+#'  the number of monomorphic loci (monoLoc) and loci with all missing data
+#'   (all_NALoc).
 #'
 #' Output for method='ind' is a histogram and a boxplot of heterozygosity across
 #' individuals.
@@ -101,7 +106,7 @@
 #'
 #' @seealso \code{\link{gl.filter.heterozygosity}}
 #'
-#' @family reporting functions
+#' @family report functions
 #' @export
 
 gl.report.heterozygosity <- function(x,
@@ -131,7 +136,8 @@ gl.report.heterozygosity <- function(x,
     if (!(method == "pop" | method == "ind")) {
         cat(
             warn(
-                "Warning: Method must either be by population or by individual, set to method='pop'\n"
+                "Warning: Method must either be by population or by individual,
+                set to method='pop'\n"
             )
         )
         method <- "pop"
@@ -139,13 +145,15 @@ gl.report.heterozygosity <- function(x,
     
     if (n.invariant < 0) {
         cat(warn(
-            "Warning: Number of invariant loci must be non-negative, set to zero\n"
+            "Warning: Number of invariant loci must be non-negative, set to 
+            zero\n"
         ))
         n.invariant <- 0
         if (verbose == 5) {
             cat(
                 report(
-                    "  No. of invariant loci can be esimated using gl.report.secondaries\n"
+                    "  No. of invariant loci can be esimated using 
+                    gl.report.secondaries\n"
                 )
             )
         }
@@ -155,7 +163,10 @@ gl.report.heterozygosity <- function(x,
         n.invariant > 0) {
         cat(
             warn(
-                "  Warning: Estimation of adjusted heterozygosity requires that secondaries not to be removed. A gl.filter.secondaries call was found in the history. This may cause the results to be incorrect\n"
+                "  Warning: Estimation of adjusted heterozygosity requires that 
+                secondaries not to be removed. A gl.filter.secondaries call was 
+                found in the history. This may cause the results to be 
+                incorrect\n"
             )
         )
     }
@@ -173,7 +184,8 @@ gl.report.heterozygosity <- function(x,
                 cat(
                     warn(
                         "  No population assignments detected,
-                             individuals assigned to a single population labelled 'pop1'\n"
+                             individuals assigned to a single population
+                        labelled 'pop1'\n"
                     )
                 )
             }
@@ -188,7 +200,8 @@ gl.report.heterozygosity <- function(x,
         if (verbose >= 2) {
             cat(
                 report(
-                    "  Calculating Observed Heterozygosities, averaged across loci, for each population\n"
+                    "  Calculating Observed Heterozygosities, averaged across 
+                    loci, for each population\n"
                 )
             )
         }
@@ -222,6 +235,34 @@ gl.report.heterozygosity <- function(x,
                 ))))
         ##########
         
+        # calculate the number of polymorphic and monomorphic loci by population
+        poly_loc <- NULL
+        mono_loc <- NULL
+        all_na_loc <- NULL
+        
+        for(y in 1:length(sgl)){
+
+          y_temp <- sgl[[y]]
+          hold <- y_temp
+          mono_tmp <- gl.alf(y_temp)
+          loc.list <- rownames(mono_tmp[which(mono_tmp$alf1==1 |
+                                                mono_tmp$alf1 == 0),])
+          loc.list_NA <- rownames(mono_tmp[which(is.na(mono_tmp$alf1)),])
+
+          # Remove NAs from list of monomorphic loci and loci with all NAs
+          loc.list <- loc.list[!is.na(loc.list)]
+
+          # remove monomorphic loci and loci with all NAs
+          if (length(loc.list) > 0) {
+            y_temp <- gl.drop.loc(y_temp, loc.list = loc.list, verbose = 0)
+          }
+
+          poly_loc <-  c(poly_loc, nLoc(y_temp))  
+          mono_loc <- c(mono_loc, (nLoc(hold) - nLoc(y_temp)))
+          all_na_loc <- c(all_na_loc, length(loc.list_NA))
+
+        }
+     
         # Apply correction CP ###
         Ho.adj <- Ho * n_loc / (n_loc + n.invariant)
         # Manually compute SD for Ho.adj sum of the square of differences from
@@ -230,7 +271,8 @@ gl.report.heterozygosity <- function(x,
         Ho.adjSD <-
             sqrt((
                 mapply(function(x, Mean)
-                    sum((x - Mean) ^ 2, na.rm = TRUE), Ho.loc, Mean = Ho.adj) + n.invariant * Ho.adj ^
+                    sum((x - Mean) ^ 2, na.rm = TRUE), Ho.loc, Mean = Ho.adj) +
+                  n.invariant * Ho.adj ^
                     2
             ) / (n_loc +
                      n.invariant - 1))
@@ -243,7 +285,8 @@ gl.report.heterozygosity <- function(x,
             # samples remove the loci that are completely missing
             if (length(loci.na) > 0) {
                 nind <-
-                    mean(nrow(as.matrix(x)) - colSums(is.na(as.matrix(x)))[-loci.na])
+                    mean(nrow(as.matrix(x)) - 
+                           colSums(is.na(as.matrix(x)))[-loci.na])
                 # the number of samples in the matrix the number of
                 # non-genotyped samples
             } else {
@@ -288,7 +331,6 @@ gl.report.heterozygosity <- function(x,
             q <- (2 * q + hets) / 2
             H <- 1 - (p ^ 2 + q ^ 2)
             
-            
             ### CP ### Unbiased He (i.e. corrected for sample size) hard
             # coded for diploid
             uH <-
@@ -305,9 +347,11 @@ gl.report.heterozygosity <- function(x,
             Hexp.adjSD[i] <-
                 sqrt((sum((
                     H - Hexp.adj[i]
-                ) ^ 2, na.rm = TRUE) + n.invariant * Hexp.adj[i] ^ 2) / (n_loc[i] + n.invariant - 1))
+                ) ^ 2, na.rm = TRUE) + n.invariant * Hexp.adj[i] ^ 2) / 
+                  (n_loc[i] + n.invariant - 1))
             ##########
-            FIS_temp <- 1 - (mean(unlist(Ho.loc[i]),na.rm = T) / mean(uH,na.rm = T))
+            FIS_temp <- 1 - (mean(unlist(Ho.loc[i]),na.rm = T) / 
+                               mean(uH,na.rm = T))
             FIS[i] <- mean(FIS_temp, na.rm = T)
             #FISSD[i] <- sd(FIS_temp, na.rm = T)
         }
@@ -319,6 +363,9 @@ gl.report.heterozygosity <- function(x,
                 nInd = n_ind,
                 nLoc = n_loc,
                 nLoc.adj = n_loc / (n_loc + n.invariant),
+                polyLoc = poly_loc ,
+                monoLoc = mono_loc , 
+                all_NALoc = all_na_loc, 
                 Ho = as.numeric(Ho),
                 HoSD = HoSD,
                 Ho.adj = as.numeric(Ho.adj),
@@ -361,7 +408,7 @@ gl.report.heterozygosity <- function(x,
                 colors_pops_plot <-
                     colors_pops_plot[colors_pops_plot$variable == "Ho", ]
                 colors_pops_plot <-
-                    colors_pops_plot[order(as.character(colors_pops_plot$value)), ]
+               colors_pops_plot[order(as.character(colors_pops_plot$value)), ]
                 
                 p3 <-
                     ggplot(df.ordered,
@@ -420,7 +467,8 @@ gl.report.heterozygosity <- function(x,
                     )) + geom_bar(position = "dodge",
                                   stat = "identity",
                                   color = "black") +
-                    scale_fill_manual(values = df.ordered$color) + scale_x_discrete(labels = paste(
+                    scale_fill_manual(values = df.ordered$color) + 
+                  scale_x_discrete(labels = paste(
                         df.ordered$pop,
                         round(df.ordered$nInd, 0),
                         sep = " | "
@@ -431,7 +479,9 @@ gl.report.heterozygosity <- function(x,
                         axis.ticks.y = element_blank(),
                         axis.title.y = element_blank(),
                         legend.position = "none"
-                    ) + labs(fill = "Population") + ggtitle("Adjusted Observed Heterozygosity by Population")
+                    ) + 
+                  labs(fill = "Population") + 
+                  ggtitle("Adjusted Observed Heterozygosity by Population")
                 
                 p2 <-
                     ggplot(df.ordered, aes(
@@ -441,7 +491,8 @@ gl.report.heterozygosity <- function(x,
                     )) + geom_bar(position = "dodge",
                                   stat = "identity",
                                   color = "black") +
-                    scale_fill_manual(values = df.ordered$color) + scale_x_discrete(labels = paste(
+                    scale_fill_manual(values = df.ordered$color) + 
+                  scale_x_discrete(labels = paste(
                         df.ordered$pop,
                         round(df.ordered$nInd, 0),
                         sep = " | "
@@ -458,7 +509,8 @@ gl.report.heterozygosity <- function(x,
                         axis.title.y = element_blank(),
                         legend.position = "none"
                     ) +
-                    labs(fill = "Population") + ggtitle("Adjusted Expected Heterozygosity by Population")
+                    labs(fill = "Population") + 
+                  ggtitle("Adjusted Expected Heterozygosity by Population")
                 
                 p3 <- (p1 / p2)
             }
@@ -466,47 +518,47 @@ gl.report.heterozygosity <- function(x,
         
         # OUTPUT REPORT
         if (verbose >= 3) {
-            cat("  Reporting Heterozygosity by Population\n")
-            cat("\n  No. of loci =", nLoc(x), "\n")
-            cat("  No. of individuals =", nInd(x), "\n")
-            cat("  No. of populations =", nPop(x), "\n")
-            cat("    Minimum Observed Heterozygosity: ", round(min(df$Ho, na.rm = TRUE), 6))
+cat("  Reporting Heterozygosity by Population\n")
+cat("\n  No. of loci =", nLoc(x), "\n")
+cat("  No. of individuals =", nInd(x), "\n")
+cat("  No. of populations =", nPop(x), "\n")
+cat("    Minimum Observed Heterozygosity: ", round(min(df$Ho, na.rm = TRUE), 6))
             if (n.invariant > 0) {
-                cat("   [Corrected:", round(min(df$Ho.adj, na.rm = TRUE), 6), "]\n")
+          cat("   [Corrected:", round(min(df$Ho.adj, na.rm = TRUE), 6), "]\n")
             } else {
                 cat("\n")
             }
-            cat("    Maximum Observed Heterozygosity: ", round(max(df$Ho, na.rm = TRUE), 6))
+cat("    Maximum Observed Heterozygosity: ", round(max(df$Ho, na.rm = TRUE), 6))
             if (n.invariant > 0) {
-                cat("   [Corrected:", round(max(df$Ho.adj, na.rm = TRUE), 6), "]\n")
+        cat("   [Corrected:", round(max(df$Ho.adj, na.rm = TRUE), 6), "]\n")
             } else {
                 cat("\n")
             }
             cat("    Average Observed Heterozygosity: ",
                 round(mean(df$Ho, na.rm = TRUE), 6))
             if (n.invariant > 0) {
-                cat("   [Corrected:", round(mean(df$Ho.adj, na.rm = TRUE), 6), "]\n\n")
+      cat("   [Corrected:", round(mean(df$Ho.adj, na.rm = TRUE), 6), "]\n\n")
             } else {
                 cat("\n\n")
             }
             cat("    Minimum Unbiased Expected Heterozygosity: ",
                 round(min(df$uHe, na.rm = TRUE), 6))
             if (n.invariant > 0) {
-                cat("   [Corrected:", round(min(df$He.adj, na.rm = TRUE), 6), "]\n")
+           cat("   [Corrected:", round(min(df$He.adj, na.rm = TRUE), 6), "]\n")
             } else {
                 cat("\n")
             }
             cat("    Maximum Unbiased Expected Heterozygosity: ",
                 round(max(df$uHe, na.rm = TRUE), 6))
             if (n.invariant > 0) {
-                cat("   [Corrected:", round(max(df$He.adj, na.rm = TRUE), 6), "]\n")
+         cat("   [Corrected:", round(max(df$He.adj, na.rm = TRUE), 6), "]\n")
             } else {
                 cat("\n")
             }
             cat("    Average Unbiased Expected Heterozygosity: ",
                 round(mean(df$uHe, na.rm = TRUE), 6))
             if (n.invariant > 0) {
-                cat("   [Corrected:", round(mean(df$He.adj, na.rm = TRUE), 6), "]\n\n")
+      cat("   [Corrected:", round(mean(df$He.adj, na.rm = TRUE), 6), "]\n\n")
             } else {
                 cat("\n\n")
             }
@@ -519,7 +571,7 @@ gl.report.heterozygosity <- function(x,
                 )
             } else {
                 cat(
-                    "  Heterozygosity estimates not corrected for uncalled invariant loci\n"
+     "  Heterozygosity estimates not corrected for uncalled invariant loci\n"
                 )
             }
         }
@@ -536,6 +588,9 @@ gl.report.heterozygosity <- function(x,
                     "pop",
                     "nInd",
                     "nLoc",
+                    "polyLoc",
+                    "monoLoc", 
+                    "all_NALoc", 
                     "Ho",
                     "HoSD",
                     "He",
@@ -558,7 +613,7 @@ gl.report.heterozygosity <- function(x,
                 "  Calculating observed heterozygosity for individuals\n"
             ))
             cat(report(
-                "  Note: No adjustment for invariant loci (n.invariant set to 0)\n"
+         "  Note: No adjustment for invariant loci (n.invariant set to 0)\n"
             ))
         }
         # Convert to matrix
@@ -589,23 +644,31 @@ gl.report.heterozygosity <- function(x,
         if (plot.out) {
             upper <- ceiling(max(df$Ho) * 10) / 10
             p1 <-
-                ggplot(df, aes(y = Ho)) + geom_boxplot(color = plot_colors_ind[1], fill = plot_colors_ind[2]) + coord_flip() + plot_theme +
-                xlim(range = c(-1, 1)) + ylim(0, upper) + ylab(" ") + theme(axis.text.y = element_blank(),
-                                                                            axis.ticks.y = element_blank()) +
+                ggplot(df, aes(y = Ho)) + 
+        geom_boxplot(color = plot_colors_ind[1], fill = plot_colors_ind[2]) + 
+              coord_flip() + 
+              plot_theme +
+                xlim(range = c(-1, 1)) +
+              ylim(0, upper) + 
+              ylab(" ") + 
+         theme(axis.text.y = element_blank(),axis.ticks.y = element_blank()) +
                 ggtitle("Observed Heterozygosity by Individual")
             
             # Histogram
             p2 <-
-                ggplot(df, aes(x = Ho)) + geom_histogram(bins = 25,
-                                                         color = plot_colors_ind[1],
-                                                         fill = plot_colors_ind[2]) + coord_cartesian(xlim = c(0,
-                                                                                                               upper)) + xlab("Observed heterozygosity") + ylab("Count") + plot_theme
+                ggplot(df, aes(x = Ho)) +
+geom_histogram(bins =25,color = plot_colors_ind[1],fill =plot_colors_ind[2]) +
+              coord_cartesian(xlim = c(0, upper)) +
+              xlab("Observed heterozygosity") + 
+              ylab("Count") +
+              plot_theme
         }
         
         outliers_temp <-
             ggplot_build(p1)$data[[1]]$outliers[[1]]
         outliers <-
-            data.frame(ID = as.character(df$ind.name[df$Ho %in% outliers_temp]), Ho = outliers_temp)
+            data.frame(ID = as.character(df$ind.name[df$Ho %in% outliers_temp]), 
+                       Ho = outliers_temp)
         
         # OUTPUT REPORT
         if (verbose >= 3) {
@@ -665,7 +728,8 @@ gl.report.heterozygosity <- function(x,
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

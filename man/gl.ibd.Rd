@@ -10,7 +10,7 @@ gl.ibd(
   coordinates = "latlon",
   Dgen = NULL,
   Dgeo = NULL,
-  Dgeo_trans = "log(Dgeo)",
+  Dgeo_trans = "Dgeo",
   Dgen_trans = "Dgen",
   permutations = 999,
   plot.out = TRUE,
@@ -30,7 +30,7 @@ analysis. Can be either population based 'Fst' [\link[StAMPP]{stamppFst}],
  [gl.propShared], 'euclidean' [gl.dist.ind, method='Euclidean'] [default "Fst"].}
 
 \item{coordinates}{Can be either 'latlon', 'xy' or a two column data.frame
-with column names 'lat','lon', 'x', 'y')  Coordinates are provided via
+with column names 'lat','lon', 'x', 'y'). Coordinates are provided via
 \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon
 data will be projected to meters using Mercator system [google maps] or if
 xy then distance is directly calculated on the coordinates.}
@@ -41,17 +41,13 @@ xy then distance is directly calculated on the coordinates.}
 \item{Dgeo}{Euclidean distance matrix if no genlight object is provided
 [default NULL].}
 
-\item{Dgeo_trans}{Transformation to be used on the Euclidean distances. see
-Dgen_trans [default 'log(Dgeo)'].}
+\item{Dgeo_trans}{Transformation to be used on the Euclidean distances. See
+Dgen_trans [default "Dgeo"].}
 
 \item{Dgen_trans}{You can provide a formula to transform the genetic
-distance. For example Rousset (see below) suggests to study
-\code{Fst/(1-Fst)} against log transformed distances as this is the
-expectations of Fst versus distances in the case of a stepping stone model.
-The transformation can be applied as a formula using Dgen as the variable to
- be transformed. So, for the Fst transformation of Rousset use
- \code{Dgen_trans = 'Dgen/(1-Dgen)'. Any valid R expression can be used here.
- [default 'Dgen', which is the identity function.]}}
+distance. The transformation can be applied as a formula using Dgen as the
+ variable to be transformed. For example: \code{Dgen_trans = 'Dgen/(1-Dgen)'.
+  Any valid R expression can be used here [default 'Dgen', which is the identity function.]}}
 
 \item{permutations}{Number of permutations in the Mantel test [default 999].}
 

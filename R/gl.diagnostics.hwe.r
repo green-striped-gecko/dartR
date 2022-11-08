@@ -5,8 +5,8 @@
 #' proportions. This function helps diagnose potential problems.
 #' @inheritParams gl.report.hwe
 #' @inheritParams utils.jackknife
-#' @param n.cores The number of cores to use. If "auto" [default], it will 
-#' use all but one available cores.
+#' @param n.cores The number of cores to use. If "auto", it will 
+#' use all but one available cores [default "auto"].
 #' @param bins Number of bins to display in histograms [default 20].
 #' @param stdErr Whether standard errors for Fis and Fst should be computed 
 #' (default: TRUE)
@@ -16,7 +16,8 @@
 #'   expected number of significant HWE tests [default two_colors_contrast].
 #' @param plot_theme User specified theme [default theme_dartR()].
 #' @details This function initially runs \code{\link{gl.report.hwe}} and reports
-#' the ternary plots. The remaining outputs follow the recommendations from Waples
+#' the ternary plots. The remaining outputs follow the recommendations from
+#'  Waples
 #' (2015) paper and De Meeûs 2018. These include: 
 #' \enumerate{ 
 #' \item A histogram
@@ -42,18 +43,24 @@
 #' the returned list (if \code{stdErr=TRUE}). These are computed with the 
 #' Jackknife method over loci (See De Meeûs 2007 for details on how this is 
 #' computed) and it may take some time for these computations to complete. 
-#' De Meeûs 2018 suggests that under a global significant heterozygosity deficit: 
+#' De Meeûs 2018 suggests that under a global significant heterozygosity 
+#' deficit: 
+#' 
 #' - if the
 #' correlation between Fis and Fst is strongly positive, and StdErrFis >>
 #' StdErrFst, Null alleles are likely to be the cause. 
+#' 
 #' - if the correlation
 #' between Fis and Fst is ~0 or mildly positive, and StdErrFis > StdErrFst,
 #' Wahlund may be the cause. 
+#' 
 #' - if the correlation between Fis and Fst is ~0, and
-#' StdErrFis ~ StdErrFst, selfing or sib mating could to be the cause. It is
+#' StdErrFis ~ StdErrFst, selfing or sib mating could to be the cause.
+#' 
+#'  It is
 #' important to realise that these statistics only suggest a pattern (pointers).
-#' Their absence is not conclusive evidence of the absence of the problem, as their
-#' presence does not confirm the cause of the problem. 
+#' Their absence is not conclusive evidence of the absence of the problem, as 
+#' their presence does not confirm the cause of the problem. 
 #' \item A table where the
 #' number of observed and expected significant HWE tests are reported by each
 #' population, indicating whether these are due to heterozygosity excess or
@@ -72,8 +79,9 @@
 #' @author Custodian: Carlo Pacioni -- Post to
 #'   \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' \donttest{
-#' res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]),n.cores=1)
+#' \dontrun{
+#' res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]), 
+#' stdErr=FALSE, n.cores=1)
 #' }
 #' @references \itemize{ 
 #' \item de Meeûs, T., McCoy, K.D., Prugnolle, F.,
@@ -121,7 +129,8 @@ gl.diagnostics.hwe <- function(x,
   
   # DO THE JOB
   # Set NULL to variables to pass CRAN checks
-  Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-Excess<-pvalue<-ChiSquare<-Fst<-gen <-He <-value<- variable <-fst_obs<-NULL
+  Prob<-Sig<-N<-Locus<-Population<-Freq<-Data<-dumpop<-Deficiency<-Fis<-
+    Excess<-pvalue<-ChiSquare<-Fst<-gen <-He <-value<- variable <-fst_obs<-NULL
   
   # Helper function
   extractParam <- function(i, l, param) {
@@ -166,7 +175,8 @@ gl.diagnostics.hwe <- function(x,
   
   # Include the non-sig tests
   nTimesBypop.df <-
-    rbind(data.frame(Var1 = 0, Freq = nTimesBypop["no_sig", sum(N)]), nTimesBypop.df)
+    rbind(data.frame(Var1 = 0, Freq = nTimesBypop["no_sig", sum(N)]),
+          nTimesBypop.df)
   nTimesBypop.df$Data <- "Observed"
   
   # Generate the null distribution
@@ -192,7 +202,8 @@ gl.diagnostics.hwe <- function(x,
     scale_y_log10() +
     xlab("Number of populations in which loci depart from HWE") +
     ylab("Count") +
-    ggtitle(label =  "Number of significant HWE tests for\nthe same locus in multiple populations")+
+    ggtitle(label =  "Number of significant HWE tests for\nthe same locus in 
+            multiple populations")+
     plot_theme 
   
   # Collate HWE tests and Fis per locus and pop
@@ -236,10 +247,12 @@ gl.diagnostics.hwe <- function(x,
   
   # Fis vs Fst plot
   
-  corr <- round(cor(Fstats$perloc$Fis, Fstats$perloc$Fst, "pairwise.complete.obs"), 3)
+  corr <- round(cor(Fstats$perloc$Fis, Fstats$perloc$Fst, 
+                    "pairwise.complete.obs"), 3)
   p3 <- ggplot(Fstats$perloc, aes(Fst, Fis)) + 
     geom_point(size=2,color=colors_barplot[1],alpha=0.5) + 
-    geom_smooth(method = "lm",color=colors_barplot[2],fill=colors_barplot[2],size=1) +
+    geom_smooth(method = "lm",color=colors_barplot[2],fill=colors_barplot[2],
+                size=1) +
     annotate("text", 
              x=min(Fstats$perloc$Fst, na.rm = TRUE) +
                (max(Fstats$perloc$Fst, na.rm = TRUE) - 
@@ -263,8 +276,11 @@ gl.diagnostics.hwe <- function(x,
     stdErrFst <- sqrt(var(jckFst)/nLoc(x))
     stdErrFis <- sqrt(var(jckFis)/nLoc(x)) 
     
-    cat(report("The variation of Fis and Fst, respectively\n (measured as standard error with the Jackknife method - see De Meeus 2018) is:",
-               paste(c(stdErrFis, stdErrFst), collapse = ", "), "\n Fis vs Fst ratio is:", 
+    cat(report("The variation of Fis and Fst, respectively\n (measured as 
+               standard error with the Jackknife method - see De Meeus 2018) 
+               is:",
+               paste(c(stdErrFis, stdErrFst), collapse = ", "), "\n Fis vs Fst 
+               ratio is:", 
                round(stdErrFis/stdErrFst, 2), "\n"))
   }
   
@@ -299,7 +315,8 @@ gl.diagnostics.hwe <- function(x,
       cat(report("  Saving tabulation to session tempfile\n"))
       cat(
         report(
-          "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+          "  NOTE: Retrieve output files from tempdir using gl.list.reports() 
+          and gl.print.reports()\n"
         )
       )
     }

@@ -1,4 +1,4 @@
-#' @name gl.filter.locmetrics
+#' @name gl.filter.locmetric
 #' @title Filters loci on the basis of numeric information stored in
 #'  other$loc.metrics in a genlight \{adegenet\} object
 #' @description
@@ -6,6 +6,16 @@
 #' to filter loci. The loci to keep can be within the upper and lower thresholds
 #'  ('within') or outside of the upper and lower thresholds ('outside').
 #'
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param metric Name of the metric to be used for filtering [required].
+#' @param upper Filter upper threshold [required].
+#' @param lower Filter lower threshold  [required].
+#' @param keep Whether keep loci within of upper and lower thresholds or keep
+#' loci outside of upper and lower thresholds [within].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' progress log; 3, progress and results summary; 5, full report
+#' [default 2, unless specified using gl.set.verbosity].
+#' @details
 #' The fields that are included in dartR, and a short description, are found
 #' below. Optionally, the user can also set his/her own filter by adding a
 #' vector into $other$loc.metrics as shown in the example.
@@ -35,17 +45,9 @@
 #' \item RepAvg - proportion of technical replicate assay pairs for which the
 #' marker score is consistent.
 #' }
-#' @param x Name of the genlight object containing the SNP data [required].
-#' @param metric Name of the metric to be used for filtering [required].
-#' @param upper Filter upper threshold [required].
-#' @param lower Filter lower threshold  [required].
-#' @param keep Whether keep loci within of upper and lower thresholds or keep
-#' loci outside of upper and lower thresholds [within].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-#' progress log; 3, progress and results summary; 5, full report
-#' [default 2, unless specified using gl.set.verbosity].
 #' @return The reduced genlight dataset.
 #' @export
+#' @family filter functions
 #' @author Luis Mijangos -- Post to 
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
@@ -77,18 +79,21 @@ gl.filter.locmetric <- function(x,
     if (nLoc(x) != nrow(x@other$loc.metrics)) {
         stop(
             error(
-                "The number of rows in the loc.metrics table does not match the number of loci in your genlight object!"
+                "The number of rows in the loc.metrics table does not match the
+                number of loci in your genlight object!"
             )
         )
     }
     
-    # Set a population if none is specified (such as if the genlight object has been generated manually)
+    # Set a population if none is specified (such as if the genlight object has 
+    #been generated manually)
     if (is.null(pop(x)) |
         is.na(length(pop(x))) | length(pop(x)) <= 0) {
         if (verbose >= 2) {
             cat(
                 report(
-                    "  Population assignments not detected, individuals assigned to a single population labelled 'pop1'\n"
+                    "  Population assignments not detected, individuals assigned
+                    to a single population labelled 'pop1'\n"
                 )
             )
         }
@@ -102,7 +107,8 @@ gl.filter.locmetric <- function(x,
         cat(warn("  Warning: genlight object contains monomorphic loci\n"))
     }
     
-    # FUNCTION SPECIFIC ERROR CHECKING check whether the field exists in the genlight object
+    # FUNCTION SPECIFIC ERROR CHECKING check whether the field exists in the 
+    #genlight object
     if (!(metric %in% colnames(x$other$loc.metrics))) {
         stop(error("Fatal Error: name of the metric not found\n"))
     }

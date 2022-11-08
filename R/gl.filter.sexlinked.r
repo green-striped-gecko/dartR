@@ -105,7 +105,9 @@ gl.filter.sexlinked <- function(x,
     if (is.null(filter)) {
         stop(
             error(
-                "Filter option needs to be set to either 'keep' or 'drop'. Please refer to the help pages if in doubt. [?gl.filter.sexlinked]."
+                "Filter option needs to be set to either 'keep' or 'drop'. 
+                Please refer to the help pages if in doubt. 
+                [?gl.filter.sexlinked]."
             )
         )
     }
@@ -122,7 +124,8 @@ gl.filter.sexlinked <- function(x,
     
     # DO THE JOB
     
-    # sex should be provided as it is not a default setting, if not provided it will be searched here: reproducibility
+    # sex should be provided as it is not a default setting, if not provided it 
+    #will be searched here: reproducibility
     if (is.null(sex)) {
         sex <- x@other$ind.metrics$sex
     }
@@ -130,7 +133,9 @@ gl.filter.sexlinked <- function(x,
     if (is.null(sex)) {
         stop(
             error(
-                "No definition for the sex of individuals is provided. If not provided via the function is needs to be at gl@other$ind.metrics$sex."
+                "No definition for the sex of individuals is provided. If not 
+                provided via the function is needs to be at 
+                gl@other$ind.metrics$sex."
             )
         )
     }
@@ -138,7 +143,9 @@ gl.filter.sexlinked <- function(x,
     if (length(sex) != nInd(x)) {
         stop(
             error(
-                "The number of individuals and the number of entries defining the sex do not match. Check your genlight object and your sex defining column."
+                "The number of individuals and the number of entries defining 
+                the sex do not match. Check your genlight object and your sex 
+                defining column."
             )
         )
     }
@@ -160,7 +167,8 @@ gl.filter.sexlinked <- function(x,
         # For each individual
         f <- array(data = NA, dim = c(ncol(matf), 3))
         for (i in 1:ncol(matf)) {
-            # sum of genotypes 0 for homozygous for reference allele, 1 for heterozygous and 2 for homozygous for alternative allele
+            # sum of genotypes 0 for homozygous for reference allele, 1 for
+          #heterozygous and 2 for homozygous for alternative allele
             for (j in 1:3) {
                 dummy <- sum(matf[, i] == (j - 1), na.rm = T)
                 if (is.na(dummy))
@@ -170,7 +178,8 @@ gl.filter.sexlinked <- function(x,
         }
         dff <- data.frame(f)
         row.names(dff) <- locNames(x)
-        # genotypes 0 for homozygous for reference allele is in F0, 1 for heterozygous is in F1 and 2 for homozygous for alternative
+        # genotypes 0 for homozygous for reference allele is in F0, 1 for
+        #heterozygous is in F1 and 2 for homozygous for alternative
         # allele is in F2
         colnames(dff) <- c("F0", "F1", "F2")
         
@@ -188,7 +197,8 @@ gl.filter.sexlinked <- function(x,
         }
         dfm <- data.frame(m)
         row.names(dfm) <- locNames(x)
-        # genotypes 0 for homozygous for reference allele is in M0, 1 for heterozygous is in M1 and 2 for homozygous for alternative
+        # genotypes 0 for homozygous for reference allele is in M0, 1 for 
+        #heterozygous is in M1 and 2 for homozygous for alternative
         # allele is in M2
         colnames(dfm) <- c("M0", "M1", "M2")
         
@@ -201,18 +211,21 @@ gl.filter.sexlinked <- function(x,
         # Check for hets in all males, homs in all females (XY); ditto for ZW
         sumf <- df$F0 + df$F1 + df$F2
         summ <- df$M0 + df$M1 + df$M2
-        # Pull loci that are 100% homozygous for females and 100% heterozygous for males
+        # Pull loci that are 100% homozygous for females and 100% heterozygous 
+        #for males
         indexxy <-
             ((df$F0 / (sumf) >= (1 - t.hom) |
                   df$F2 / (sumf) >= (1 - t.hom)) &
                  df$M1 / (summ) >= (1 - t.het))
-        # when all loci are homozygous for the reference allele e.g. df$F0/(sumf), the division is NaN. So, all the NaN's are set as
+        # when all loci are homozygous for the reference allele e.g. 
+        #df$F0/(sumf), the division is NaN. So, all the NaN's are set as
         # TRUE
         indexxy[is.na(indexxy)] <- TRUE
         
         if (sum(indexxy, na.rm = T) > 0) {
             xy <- cbind(locnr = which(indexxy == TRUE), df[indexxy, ])
-            # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity is NaN. these cases are removed
+            # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity 
+            #is NaN. these cases are removed
             xy$fhet <- xy$F1 / (xy$F0 + xy$F1 + xy$F2)
             xy$mhet <- xy$M1 / (xy$M0 + xy$M1 + xy$M2)
             xy <- xy[complete.cases(xy), ]
@@ -222,18 +235,21 @@ gl.filter.sexlinked <- function(x,
             xy <- data.frame()
         }
         
-        # Pull loci that are 100% homozygous for males and 100% heterozygous for females
+        # Pull loci that are 100% homozygous for males and 100% heterozygous for 
+        #females
         indexzw <-
             ((df$M0 / (summ) >= (1 - t.hom) |
                   df$M2 / (summ) >= (1 - t.hom)) &
                  df$F1 / (sumf) >= (1 - t.het))
-        # when all loci are homozygous for the reference allele e.g. df$M0/(summ), the division is NaN. So all the NaN's are set as
+        # when all loci are homozygous for the reference allele e.g.
+        #df$M0/(summ), the division is NaN. So all the NaN's are set as
         # TRUE
         indexzw[is.na(indexzw)] <- TRUE
         
         if (sum(indexzw, na.rm = T) > 0) {
             zw <- cbind(locnr = which(indexzw == TRUE), df[indexzw, ])
-            # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity is NaN. these cases are removed
+            # when F0, F1, F2 or M0, M1, M2 are all 0 due to NAs heterozygosity
+            #is NaN. these cases are removed
             zw$fhet <- zw$F1 / (zw$F0 + zw$F1 + zw$F2)
             zw$mhet <- zw$M1 / (zw$M0 + zw$M1 + zw$M2)
             zw <- zw[complete.cases(zw), ]
@@ -255,39 +271,42 @@ gl.filter.sexlinked <- function(x,
         if (nrow(zw) == 0 & verbose > 0) {
             cat(
                 important(
-                    "  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n"
+ "  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n"
                 )
             )
         } else {
             if (verbose > 0) {
-                cat("  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n\n")
-                cat(
-                    paste(
-                        "    Threshold proportion for homozygotes in the heterozygotic sex (ZW) is",
+cat("  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n\n")
+cat(
+paste(
+"    Threshold proportion for homozygotes in the heterozygotic sex (ZW) is",
                         t.hom,
                         "\n"
                     )
                 )
                 cat(
                     paste(
-                        "    Threshold proportion for heterozygotes in the homozygotic sex (ZZ) is",
+"    Threshold proportion for heterozygotes in the homozygotic sex (ZZ) is",
                         t.het,
                         "\n\n"
                     )
                 )
-                cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat("     - F0 is the number of homozygous loci for the reference allele in females\n")
-                cat("     - F1 is the number of heterozygous loci in females\n")
-                cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
-                cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
-                cat("     - M1 is the number of heterozygous loci in males\n")
-                cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
-                cat("     - fhet is heterozygosity in females\n")
-                cat("     - mhet is heterozygosity in males\n\n")
-                print(zw)
-                cat(
-                    important(
-                        "  Note: The most reliable putative markers will have a read depth > 10.\n"
+cat("- locnr is the location of the locus in the input genlight object\n")
+cat("- F0 is the number of homozygous loci for the reference allele in 
+    females\n")
+cat("- F1 is the number of heterozygous loci in females\n")
+cat("- F2 is the number of homozygous loci for the alternative allele in 
+    females\n")
+cat("- M0 is the number of homozygous loci for the reference allele in males\n")
+cat("- M1 is the number of heterozygous loci in males\n")
+cat("- M2 is the number of homozygous loci for the alternative allele in 
+    males\n")
+cat("- fhet is heterozygosity in females\n")
+cat("- mhet is heterozygosity in males\n\n")
+print(zw)
+cat(
+important(
+"  Note: The most reliable putative markers will have a read depth > 10.\n"
                     )
                 )
             }
@@ -296,39 +315,42 @@ gl.filter.sexlinked <- function(x,
         if (nrow(xy) == 0 & verbose > 0) {
             cat(
                 important(
-                    "  No sex linked markers consistent with male heterogamety (XX/XY)\n"
+"  No sex linked markers consistent with male heterogamety (XX/XY)\n"
                 )
             )
         } else {
             if (verbose > 0) {
-                cat(" Sex linked loci consistent with male heterogamety (XX/XY)\n\n")
+cat(" Sex linked loci consistent with male heterogamety (XX/XY)\n\n")
                 cat(
                     paste(
-                        "    Threshold proportion for homozygotes in the heterozygotic sex (XY) is",
+"    Threshold proportion for homozygotes in the heterozygotic sex (XY) is",
                         t.hom,
                         "\n"
                     )
                 )
                 cat(
                     paste(
-                        "    Threshold proportion for heterozygotes in the homozygotic sex (XX) is",
+"    Threshold proportion for heterozygotes in the homozygotic sex (XX) is",
                         t.het,
                         "\n"
                     )
                 )
-                cat("     - locnr is the location of the locus in the input genlight object\n")
-                cat("     - F0 is the number of homozygous loci for the reference allele in females\n")
-                cat("     - F1 is the number of heterozygous loci in females\n")
-                cat("     - F2 is the number of homozygous loci for the alternative allele in females\n")
-                cat("     - M0 is the number of homozygous loci for the reference allele in males\n")
-                cat("     - M1 is the number of heterozygous loci in males\n")
-                cat("     - M2 is the number of homozygous loci for the alternative allele in males\n")
-                cat("     - fhet is heterozygosity in females\n")
-                cat("     - mhet is heterozygosity in males\n")
+cat("- locnr is the location of the locus in the input genlight object\n")
+cat("- F0 is the number of homozygous loci for the reference allele in 
+    females\n")
+cat("- F1 is the number of heterozygous loci in females\n")
+cat("- F2 is the number of homozygous loci for the alternative allele in 
+    females\n")
+cat("- M0 is the number of homozygous loci for the reference allele in males\n")
+cat("- M1 is the number of heterozygous loci in males\n")
+cat("- M2 is the number of homozygous loci for the alternative allele in 
+    males\n")
+cat("- fhet is heterozygosity in females\n")
+cat("- mhet is heterozygosity in males\n")
                 print(xy)
                 cat(
                     important(
-                        "  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"
+"  \nNote: The most reliable putative markers will have a read depth > 10.\n\n"
                     )
                 )
             }
@@ -380,7 +402,8 @@ gl.filter.sexlinked <- function(x,
                                   alpha = 1 / 3,
                                   size = 3,
                                   color = three_colors[2]
-                              ) + xlab("Female Heterozygosity") + ylab("Male Heterozygosity") + xlim(0, 1) + ylim(0, 1) +
+                              ) + xlab("Female Heterozygosity") + 
+              ylab("Male Heterozygosity") + xlim(0, 1) + ylim(0, 1) +
                 plot_theme
             
             suppressWarnings(print(gg))
@@ -435,7 +458,8 @@ gl.filter.sexlinked <- function(x,
         indexzw <-
             (df$F1 / (sumf) >= (1 - t.pres) &
                  df$M0 / (summ) >= (1 - t.pres))
-        # when all loci are homozygous for the reference allele e.g. df$M0/(summ), the division is NaN. So all the NAN's are set as TRUE
+        # when all loci are homozygous for the reference allele e.g. 
+        #df$M0/(summ), the division is NaN. So all the NAN's are set as TRUE
         indexzw[is.na(indexzw)] <- TRUE
         
         if (sum(indexzw, na.rm = T) > 0) {
@@ -450,7 +474,8 @@ gl.filter.sexlinked <- function(x,
         indexxy <-
             (df$M1 / (summ) >= (1 - t.pres) &
                  df$F0 / (sumf) >= (1 - t.pres))
-        # when all loci are homozygous for the reference allele e.g. df$F0/(sumf), the division is NaN. So, all the NaN's are set as TRUE
+        # when all loci are homozygous for the reference allele e.g. 
+        #df$F0/(sumf), the division is NaN. So, all the NaN's are set as TRUE
         indexxy[is.na(indexxy)] <- TRUE
         
         if (sum(indexxy, na.rm = T) > 0) {
@@ -464,18 +489,18 @@ gl.filter.sexlinked <- function(x,
         if (nrow(zw) == 0 & verbose > 0) {
             cat(
                 important(
-                    "  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n"
+ "  No sex linked markers consistent with female heterogamety (ZZ/ZW)\n"
                 )
             )
         } else {
             if (verbose > 0) {
-                cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n")
+cat("\n  Sex linked loci consistent with female heterogamety (ZZ/ZW)\n")
                 cat(paste(
                     "    Threshold proportion for presence/absence is",
                     t.pres,
                     "\n"
                 ))
-                cat("     - locnr is the location of the locus in the input genlight object\n")
+ cat("     - locnr is the location of the locus in the input genlight object\n")
                 cat("     - F0 is the number of loci absent in females\n")
                 cat("     - F1 is the number of loci present in females\n")
                 cat("     - M0 is the number of loci absent in males\n")
@@ -483,7 +508,7 @@ gl.filter.sexlinked <- function(x,
                 print(zw)
                 cat(
                     important(
-                        "  Note: The most reliable putative markers will have a read depth > 10.\n"
+ "  Note: The most reliable putative markers will have a read depth > 10.\n"
                     )
                 )
             }
@@ -492,18 +517,18 @@ gl.filter.sexlinked <- function(x,
             if (verbose > 0)
                 cat(
                     important(
-                        "  No sex linked markers consistent with male heterogamety (XX/XY)\n"
+"  No sex linked markers consistent with male heterogamety (XX/XY)\n"
                     )
                 )
         } else {
             if (verbose > 0) {
-                cat("  Sex linked loci consistent with male heterogamety (XX/XY)\n")
+cat("  Sex linked loci consistent with male heterogamety (XX/XY)\n")
                 cat(paste(
                     "    Threshold proportion for presence/absence is",
                     t.pres,
                     "\n"
                 ))
-                cat("     - locnr is the location of the locus in the input genlight object\n")
+cat("     - locnr is the location of the locus in the input genlight object\n")
                 cat("     - F0 is the number of loci absent in females\n")
                 cat("     - F1 is the number of loci present in females\n")
                 cat("     - M0 is the number of loci absent in males\n")
@@ -511,7 +536,7 @@ gl.filter.sexlinked <- function(x,
                 print(xy)
                 cat(
                     important(
-                        "  Note: The most reliable putative markers will have a read depth > 10.\n"
+"  Note: The most reliable putative markers will have a read depth > 10.\n"
                     )
                 )
             }
@@ -564,7 +589,8 @@ gl.filter.sexlinked <- function(x,
                                   alpha = 1 / 3,
                                   size = 3,
                                   color = three_colors[2]
-                              ) + xlab("% present in females") + ylab("% present in males") + xlim(0, 1) + ylim(0, 1) + plot_theme
+                              ) + xlab("% present in females") + 
+              ylab("% present in males") + xlim(0, 1) + ylim(0, 1) + plot_theme
             
             suppressWarnings(print(gg))
         }
@@ -602,7 +628,8 @@ gl.filter.sexlinked <- function(x,
         if (verbose > 0) {
             cat(
                 important(
-                    "  No sex-linked loci identified and filter option was 'keep', therefore NULL is returned.\n"
+"  No sex-linked loci identified and filter option was 'keep', therefore NULL is
+returned.\n"
                 )
             )
         }
@@ -612,7 +639,8 @@ gl.filter.sexlinked <- function(x,
         if (verbose > 0) {
             cat(
                 important(
-                    "  No sex-linked loci identified and filter option was 'drop', therefore the genlight object is returned unchanged.\n"
+ "  No sex-linked loci identified and filter option was 'drop', therefore the 
+ genlight object is returned unchanged.\n"
                 )
             )
         }

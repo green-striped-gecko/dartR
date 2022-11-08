@@ -36,7 +36,26 @@ obvious reasons.
 \examples{
 result <- gl.filter.overshoot(testset.gl, verbose=3)
 }
+\seealso{
+Other filter functions: 
+\code{\link{gl.filter.allna}()},
+\code{\link{gl.filter.callrate}()},
+\code{\link{gl.filter.heterozygosity}()},
+\code{\link{gl.filter.hwe}()},
+\code{\link{gl.filter.ld}()},
+\code{\link{gl.filter.locmetric}()},
+\code{\link{gl.filter.maf}()},
+\code{\link{gl.filter.monomorphs}()},
+\code{\link{gl.filter.parent.offspring}()},
+\code{\link{gl.filter.pa}()},
+\code{\link{gl.filter.rdepth}()},
+\code{\link{gl.filter.reproducibility}()},
+\code{\link{gl.filter.secondaries}()},
+\code{\link{gl.filter.sexlinked}()},
+\code{\link{gl.filter.taglength}()}
+}
 \author{
 Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{filter functions}

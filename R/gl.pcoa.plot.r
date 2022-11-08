@@ -146,10 +146,12 @@ gl.pcoa.plot <- function(glPca,
     
     # CHECK DATATYPE
     datatype1 <-
-        utils.check.datatype(glPca, accept = c("glPca","list"), verbose = verbose)
+        utils.check.datatype(glPca, accept = c("glPca","list"),
+                             verbose = verbose)
     datatype2 <-
         utils.check.datatype(x,
-                             accept = c("SNP", "SilicoDArT", "fd", "dist","list"),
+                             accept = c("SNP", "SilicoDArT", "fd",
+                                        "dist","list"),
                              verbose = verbose)
     
     # SCRIPT SPECIFIC ERROR CHECKING
@@ -488,8 +490,7 @@ gl.pcoa.plot <- function(glPca,
                 plott + geom_hline(yintercept = 0) + 
                 geom_vline(xintercept = 0) + 
                 theme(legend.position = "none")
-            # Scale the axes in proportion to % explained, if requested if(scale==TRUE) { plott <- plott +
-            # coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+            # Scale the axes in proportion to % explained, if requested if(scale==TRUE) 
             if (scale == TRUE) {
                 plott <- plott + coord_fixed(ratio = e[yaxis]/ e[xaxis])
             }
@@ -545,10 +546,9 @@ gl.pcoa.plot <- function(glPca,
                     )
                 ) +
                 labs(x = xlab, y = ylab) + geom_hline(yintercept = 0) + geom_vline(xintercept = 0) + theme(legend.position = "none")
-            # Scale the axes in proportion to % explained, if requested if(scale==TRUE) { plott <- plott +
-            # coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+            # Scale the axes in proportion to % explained, if requested if(scale==TRUE) 
             if (scale == TRUE) {
-                plott <- plott + coord_fixed(ratio = 1)
+              plott <- plott + coord_fixed(ratio = e[yaxis]/ e[xaxis])
             }
             # Add ellipses if requested
             if (ellipse == TRUE) {
@@ -630,10 +630,9 @@ gl.pcoa.plot <- function(glPca,
             }
             plott <-
                 plott + geom_hline(yintercept = 0) + geom_vline(xintercept = 0)
-            # Scale the axes in proportion to % explained, if requested if(scale==TRUE) { plott <- plott +
-            # coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+            # Scale the axes in proportion to % explained, if requested if(scale==TRUE)
             if (scale == TRUE) {
-                plott <- plott + coord_fixed(ratio = 1)
+              plott <- plott + coord_fixed(ratio = e[yaxis]/ e[xaxis])
             }
             # Add ellipses if requested
             if (ellipse == TRUE) {
@@ -692,10 +691,9 @@ gl.pcoa.plot <- function(glPca,
             }
             plott <-
                 plott + geom_hline(yintercept = 0) + geom_vline(xintercept = 0) + theme(legend.position = "none")
-            # Scale the axes in proportion to % explained, if requested if(scale==TRUE) { plott <- plott +
-            # coord_fixed(ratio=e[yaxis]/e[xaxis]) }
+            # Scale the axes in proportion to % explained, if requested if(scale==TRUE)
             if (scale == TRUE) {
-                plott <- plott + coord_fixed(ratio = 1)
+              plott <- plott + coord_fixed(ratio = e[yaxis]/ e[xaxis])
             }
             # Add ellipses if requested
             if (ellipse == TRUE) {
