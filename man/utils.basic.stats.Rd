@@ -20,6 +20,7 @@ version of \code{hierfstat::basics.stats} (although Dstp and Fstp are not
 currently computed) but it is much faster.
 }
 \examples{
+require("dartR.data")
 out <- utils.basic.stats(platypus.gl)
 }
 \author{

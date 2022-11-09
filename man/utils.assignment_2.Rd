@@ -31,6 +31,7 @@ This function is a re-implementation of the function multilocus_assignment
 https://dyerlab.github.io/applied_population_genetics/population-assignment.html
 }
 \examples{
+require("dartR.data")
 res <- utils.assignment_2(platypus.gl,unknown="T27")
 }
 \author{

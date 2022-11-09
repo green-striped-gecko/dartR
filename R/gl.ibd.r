@@ -244,11 +244,13 @@ gl.ibd <- function(x = NULL,
             # apply logarithm to distance
             
             if (is.null(Dgen) & distance == "Fst") {
+                class(x)<- "genlight" #stampp issue
                 Dgen <-
                     as.dist(StAMPP::stamppFst(x, nboots = 1))
             }
             
             if (is.null(Dgen) & distance == "D") {
+              class(x)<- "genlight" #stampp issue
                 Dgen <-
                     as.dist(StAMPP::stamppNeisD(x, pop = TRUE))
             }

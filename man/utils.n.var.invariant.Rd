@@ -38,6 +38,7 @@ estimates the number of variant and invariant sites only when it is executed on
 \code{genlight} objects before secondaries are removed.
 }
 \examples{
+require("dartR.data")
 out <- utils.n.var.invariant(platypus.gl)
 }
 \seealso{
