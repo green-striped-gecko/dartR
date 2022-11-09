@@ -36,6 +36,7 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' require("dartR.data")
 #' x <- platypus.gl
 #' x <- gl.filter.callrate(x,threshold = 1)
 #' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)

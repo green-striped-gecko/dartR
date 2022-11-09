@@ -86,6 +86,7 @@
 #' @author Custodian: Arthur Georges (Post to
 #'   \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#' require("dartR.data")
 #' n.inv <- gl.report.secondaries(platypus.gl)
 #' gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
 #' @seealso

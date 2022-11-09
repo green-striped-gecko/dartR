@@ -80,6 +80,7 @@
 #'   \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' \dontrun{
+#' require("dartR.data")
 #' res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]), 
 #' stdErr=FALSE, n.cores=1)
 #' }

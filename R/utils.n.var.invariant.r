@@ -29,6 +29,7 @@
 #' \code{\link{gl.filter.secondaries}},\code{\link{gl.report.heterozygosity}}
 #' @export
 #' @examples
+#' require("dartR.data")
 #' out <- utils.n.var.invariant(platypus.gl)
 
 utils.n.var.invariant <- function(x,
