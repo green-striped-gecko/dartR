@@ -25,6 +25,7 @@
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \dontrun{
+#' require("dartR.data")
 #' # SNP data
 #' geno <- gl2genepop(testset.gl[1:3,1:9])
 #' head(geno)

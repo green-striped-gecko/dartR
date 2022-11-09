@@ -92,6 +92,7 @@ A function that receives a single value between 0 and 1 and returns a color.
  Examples: colorRamp(c("#000000", "#FFFFFF"), interpolate = "spline").
 }
 \examples{
+require("dartR.data")
 gl.map.interactive(bandicoot.gl)
 cols <- c("red","blue","yellow")[as.numeric(pop(platypus.gl))]
 gl.map.interactive(platypus.gl, ind.circle.cols=cols, ind.circle.cex=10, 

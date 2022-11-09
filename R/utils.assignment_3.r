@@ -21,6 +21,7 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' require("dartR.data")
 #' res <- utils.assignment_2(platypus.gl,unknown="T27")
 #' @export
 

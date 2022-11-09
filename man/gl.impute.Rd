@@ -72,6 +72,7 @@ imputed with method 'frequency' or 'HW'. Consider using the function
 \code{\link{gl.filter.allna}} with by.pop=TRUE to remove them first.
 }
 \examples{
+require("dartR.data")
 # SNP genotype data
 gl <- gl.filter.callrate(platypus.gl,threshold=0.95)
 gl <- gl.filter.allna(gl)

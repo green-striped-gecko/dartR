@@ -29,7 +29,7 @@ Description: Functions are provided that facilitate the import and analysis of
     faststructure packages.
 VignetteBuilder: knitr
 Encoding: UTF-8
-Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2, dplyr
+Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2, dplyr, dartR.data
 biocViews:
 Imports: ape,crayon,data.table,fields,foreach,gridExtra,MASS,methods,patchwork,plyr,PopGenReport,raster,reshape2,shiny,SNPRelate,sp,StAMPP,stats,stringr,tidyr,utils,vegan
 Suggests: 
