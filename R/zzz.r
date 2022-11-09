@@ -327,7 +327,7 @@ theme_dartR <- function(base_size = 11,
     
     packageStartupMessage(
         report(
-            "This installs all missing and required packages for your version of dartR. \nFor citation information please use:"
+            "This installs all missing and required packages for your version of dartR. In case something fails during installation please refer to this tutorial: https://github.com/green-striped-gecko/dartR/wiki/Installation-tutorial.\n\nFor information how to cite dartR, please use:"
         )
     )
     packageStartupMessage(code("citation('dartR')"))

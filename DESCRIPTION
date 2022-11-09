@@ -95,7 +95,8 @@ Suggests:
     vcfR,
     zoo,
     viridis
-Remotes: mijangos81/ggtern
+Remotes: 
+  mijangos81/ggtern
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.2.1
