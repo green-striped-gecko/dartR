@@ -15,6 +15,7 @@
 #' @author Luis Mijangos and Carlo Pacioni (bugs? Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#' require("dartR.data")
 #' out <- utils.basic.stats(platypus.gl)
 #' @export
 

@@ -30,7 +30,7 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
-#'@return A list with two elements: the DAF and MAF.
+#'@return Deprecated. Please use gl.sfs instead.
 #'@author Custodian: Carlo Pacioni (Post to
 #'  \url{https://groups.google.com/d/forum/dartr})
 #'@seealso \code{\link{gl.report.heterozygosity}},
@@ -45,75 +45,6 @@ gl2sfs <- function(x,
                    outfile_root = "gl2sfs",
                    outpath = tempdir(),
                    verbose = NULL) {
-    #---------- Helper ---------------#
-    count.freq.ref <- function(x) {
-        if (x == 0)
-            return(2)
-        else if (x == 1)
-            return(1)
-        else
-            return(0)
-    }
-    #---------------------------------#
-    
-    # SET VERBOSITY
-    verbose <- gl.check.verbosity(verbose)
-    
-    # FLAG SCRIPT START
-    funname <- match.call()[[1]]
-    utils.flag.start(func = funname,
-                     build = "Jody",
-                     verbosity = verbose)
-    
-    # CHECK DATATYPE
-    datatype <- utils.check.datatype(x, verbose = verbose)
-    
-    if (!all(x$ploidy == 2))
-        stop(error("This function currently caters only for diploid organisms"))
-    if (length(unique(x$pop)) > 1)
-        stop(error("This function currently caters only for samples from one population only"))
-    glm <- as.matrix(x)
-    if (sum(is.na(glm)) > 0)
-        stop(error("This function  currently caters only for genotypes without missing data"))
-    
-    daf <- table(colSums(glm))
-    
-    names(daf) <-
-        paste("d0", seq(0, length(daf) - 1), sep = "_")
-    
-    daf[1] <- daf[1] + n.invariant.tags
-    writeLines(c(
-        " 1 observations",
-        paste(paste("d0", seq(
-            0, length(daf) - 1
-        ), sep = "_"), collapse = " "),
-        paste(as.character(daf), collapse = " ")
-    ),
-    con = file.path(outpath, paste0(outfile_root, "_DAFpop0.obs")))
-    
-    freq.ref <-
-        colSums(apply(glm, FUN = count.freq.ref, MARGIN = c(1, 2)))
-    freq.alt <- colSums(glm)
-    maf <- table(c(freq.ref, freq.alt))
-    maf <- maf[which(as.numeric(names(maf)) <= nrow(glm))]
-    maf[1] <- maf[1] + n.invariant.tags
-    if (length(maf) == nrow(glm))
-        maf[length(maf)] <- maf[length(maf)] / 2
-    writeLines(c(
-        " 1 observations",
-        paste(paste("d0", seq(
-            0, length(maf) - 1
-        ), sep = "_"), collapse = " "),
-        paste(as.character(maf), collapse = " ")
-    ),
-    con = file.path(outpath, paste0(outfile_root, "_MAFpop0.obs")))
-    
-    # FLAG SCRIPT END
-    
-    if (verbose > 0) {
-        cat(report("Completed:", funname, "\n"))
-    }
-    
-    return(list(DAF = daf, MAF = maf))
+  cat(warn("Deprecated. Use gl.sfs instead.\n"))
 }
 

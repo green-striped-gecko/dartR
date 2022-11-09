@@ -98,6 +98,7 @@ Boxplots of LD by population and
 a histogram showing LD frequency are presented.
 }
 \examples{
+require("dartR.data")
 x <- platypus.gl
 x <- gl.filter.callrate(x,threshold = 1)
 x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1

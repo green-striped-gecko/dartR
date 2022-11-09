@@ -49,6 +49,7 @@
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \dontrun{
+#' require("dartR.data")
 #' gl2vcf(platypus.gl,snp_pos='ChromPos_Platypus_Chrom_NCBIv1',
 #'  snp_chr = 'Chrom_Platypus_Chrom_NCBIv1')
 #' }

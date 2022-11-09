@@ -130,11 +130,13 @@
 #' heterozygotes and alternate SNP homozygotes; probability of departure from
 #' H-W proportions, per locus significance with and without correction for
 #' multiple comparisons and the number of population where the same locus is 
-#' significantly out of hwe.
+#' significantly out of HWE.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' \dontrun{
 #' gl.report.hwe(x = bandicoot.gl)
+#' }
 #' @references
 #' \itemize{
 #'  \item Benjamini, Y., and Yekutieli, D. (2001). The control of the false
@@ -201,14 +203,14 @@ gl.report.hwe <- function(x,
         ))
     }
     
-    pkg <- "ggtern"
-    if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
-    }
+    # pkg <- "ggtern"
+    # if (!(requireNamespace(pkg, quietly = TRUE))) {
+    #     stop(error(
+    #         "Package",
+    #         pkg,
+    #         " needed for this function to work. Please install it."
+    #     ))
+    # }
     
     if (datatype == "SilicoDArT") {
         cat(error("  Detected Presence/Absence (SilicoDArT) data\n"))
@@ -531,7 +533,9 @@ gl.report.hwe <- function(x,
             
             
             p_temp <-
-                ggtern::ggtern() + geom_point(
+              ggplot() + geom_point(
+                
+              # ggtern::ggtern() + geom_point(
                     data = mat_genotypes,
                     aes(
                         x = AA,
@@ -568,13 +572,19 @@ gl.report.hwe <- function(x,
                     ),
                     size = 1,
                     color = "darkgreen"
-                ) + ggtern::theme_void() + theme(
+                ) + ggtern::theme_void() +
+              # ) + theme_void_2() +
+                theme(
                     plot.subtitle = element_text(hjust = 0.5, vjust = 1),
                     tern.axis.line = element_line(color = "black",
                                                   size = 1)
-                ) + ggtern::theme_hidelabels() + labs(subtitle = subtitle_plot)
+                # ) + ggtern::theme_hidelabels() + labs(subtitle = subtitle_plot)
+            ) + ggtern::theme_hidelabels() +
+              # ) + theme_hidelabels() +
+              labs(subtitle = subtitle_plot) 
+
+            p_list[[count]] <- p_temp  + ggtern::coord_tern()
             
-            p_list[[count]] <- p_temp
             
         }
         
@@ -591,7 +601,9 @@ gl.report.hwe <- function(x,
         seq_2 <- c(seq_2, length(p_list))
         for (i in 1:ceiling((length(p_list) / max_plots))) {
             p_final <-
-           ggtern::grid.arrange(grobs = p_list[seq_1[i]:seq_2[i]], ncol = 2)
+            ggtern::grid.arrange(grobs = p_list[seq_1[i]:seq_2[i]], ncol = 2)
+              # gridExtra::grid.arrange(grobs = p_list[seq_1[i]:seq_2[i]], ncol = 2)
+            
             # SAVE INTERMEDIATES TO TEMPDIR
             if (save2tmp) {
                 # creating temp file names
@@ -610,20 +622,19 @@ gl.report.hwe <- function(x,
     # removing column with color name
     df <- data.table(result[,-11])
     npop <- Locus <- NULL
-    df[, npop := .N, by=Locus]
-    
+
     #### Report the results
     if(sig_only) {
         if (multi_comp == F) {
             df <- df[which(df$Prob <= alpha_val),]
+            df[, npop := .N, by=Locus]
         }
         if (multi_comp == T) {
             df <- df[which(df$Prob.adj <= alpha_val),]
+            df[, npop := .N, by=Locus]
         }
     }
     df <- df[order(df$Locus),]
-    
-    
     
     # SAVE INTERMEDIATES TO TEMPDIR
     if (save2tmp) {
@@ -674,3 +685,5 @@ gl.report.hwe <- function(x,
     invisible(df)
     
 }
+
+

@@ -79,8 +79,11 @@
 #' @author Custodian: Carlo Pacioni -- Post to
 #'   \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' \dontrun{
+#' require("dartR.data")
 #' res <- gl.diagnostics.hwe(x = gl.filter.allna(platypus.gl[,1:50]), 
 #' stdErr=FALSE, n.cores=1)
+#' }
 #' @references \itemize{ 
 #' \item de Meeûs, T., McCoy, K.D., Prugnolle, F.,
 #' Chevillon, C., Durand, P., Hurtrez-Boussès, S., Renaud, F., 2007. Population

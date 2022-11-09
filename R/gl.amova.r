@@ -54,9 +54,9 @@ gl.amova <- function(x,
         ))
     }
     
-    if (is.null(distance))
-        dd <- StAMPP::stamppNeisD(x, FALSE)
-    else
+    if (is.null(distance)) {
+        class(x)<- "genlight"  #needs to be genlight due to stampp
+        dd <- StAMPP::stamppNeisD(x, FALSE) } else
         dd <- distance
     
     if (is(x,"genlight")) {

@@ -54,6 +54,7 @@
 #' @author Custodian: Luis Mijangos 
 #' (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#' require("dartR.data")
 #' # SNP genotype data
 #' gl <- gl.filter.callrate(platypus.gl,threshold=0.95)
 #' gl <- gl.filter.allna(gl)

@@ -107,6 +107,11 @@ expected heterozygosity and FIS (Inbreeding coefficient) across populations
 together with a table of mean observed and expected heterozygosities and FIS
 by population and their respective standard deviations (SD).
 
+In the output, it is also reported by population: the number of loci used to
+ estimate heterozygosity(nLoc), the number of polymorphic loci (polyLoc), 
+ the number of monomorphic loci (monoLoc) and loci with all missing data
+  (all_NALoc).
+
 Output for method='ind' is a histogram and a boxplot of heterozygosity across
 individuals.
 
@@ -118,6 +123,7 @@ individuals.
  }
 }
 \examples{
+require("dartR.data")
 df <- gl.report.heterozygosity(platypus.gl)
 df <- gl.report.heterozygosity(platypus.gl,method='ind')
 n.inv <- gl.report.secondaries(platypus.gl)

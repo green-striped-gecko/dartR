@@ -46,6 +46,7 @@
 #' @author Custodian: Luis Mijangos (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
+#' require("dartR.data")
 #' gl2eigenstrat(platypus.gl,snp_pos='ChromPos_Platypus_Chrom_NCBIv1',
 #' snp_chr = 'Chrom_Platypus_Chrom_NCBIv1')
 #' }

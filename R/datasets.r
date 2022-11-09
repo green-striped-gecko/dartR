@@ -1,34 +1,3 @@
-#' A genlight object created via the gl.read.dart function
-#'
-#' This is a test data set on platypus with 81 individuals, 3 populations and 
-#' 1,000 binary SNPs.
-#' @name platypus.gl
-#' @format genlight object
-#' @docType data
-#' @author Luis Mijangos (bugs? Post to 
-#' \url{https://groups.google.com/d/forum/dartr}
-#' @keywords datasets
-"platypus.gl"
-
-# Experimental populations of Drosophila melanogaster 
-# Population 27 at the end of the experiment (T2)
-# @name pop27_T2.rda
-# @format genlight object
-# @docType data
-# @author Luis Mijangos (bugs? Post to 
-# \url{https://groups.google.com/d/forum/dartr}
-# @keywords datasets
-# NULL
-
-# Experimental populations of Drosophila melanogaster 
-# Population 27 at the beginning of the experiment (T0)
-# @name pop27_T0.rda
-# @format genlight object
-# @docType data
-# @author Luis Mijangos (bugs? Post to 
-# \url{https://groups.google.com/d/forum/dartr}
-# @keywords datasets
-# NULL
 
 #' A simulated genlight object created to run a landscape genetic example
 #'

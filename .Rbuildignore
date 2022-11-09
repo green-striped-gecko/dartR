@@ -10,3 +10,6 @@ README.md
 ^pkgdown$
 ^codemeta\.json$
 ^README\.Rmd$
+CONTRIBUTING.md
+code_of_conduct.md
+pkgdown.yaml
