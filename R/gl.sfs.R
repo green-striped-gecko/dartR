@@ -11,8 +11,8 @@
 #' @return returns a site frequency spectrum, either a one dimensional vector (only a single population in the dartR/genlight object or singlepop=TRUE) or an n-dimensional array (n is the number of populations in the genlight/dartR object). If the dartR/genlight object consists of several populations the multidimensional site frequency spectrum for each population is returned [=a multidimensional site frequency spectrum]. Be aware the multidimensional spectrum works only for a limited number of population and individuals [if too high the table command used internally will through an error as the number of populations and individuals (and therefore dimensions) are too large]. To get a single sfs for a genlight/dartR object with multiple populations, you need to set singlepop to TRUE. The returned sfs can be used to analyse demographics, e.g. using fastsimcoal2.
 #' @export
 #' @examples 
-#' gl.msfs(possums.gl[1:30,]) 
-#' gl.msfs(possums.gl[c(1:5,31:33),], minbinsize=1)
+#' gl.sfs(possums.gl[1:30,]) 
+#' gl.sfs(possums.gl[c(1:5,31:33),], minbinsize=1)
 #'@references Excoffier L., Dupanloup I., Huerta-Sánchez E., Sousa V. C. and
 #'  Foll M. (2013) Robust demographic inference from genomic and SNP data. PLoS
 #'  genetics 9(10)
