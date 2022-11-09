@@ -18,7 +18,7 @@ combining all loci into a single analysis. The autocorrelation coefficient
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -295,7 +295,8 @@ Molecular Ecology 17, 4346-4358.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">gl.spatial.autoCorr</span><span class="op">(</span><span class="va">platypus.gl</span>, bins<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span>,<span class="fl">2000</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/green-striped-gecko/dartR.data" class="external-link">"dartR.data"</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">gl.spatial.autoCorr</span><span class="op">(</span><span class="va">platypus.gl</span>, bins<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10000</span>,<span class="fl">2000</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.spatial.autoCorr </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Analysis performed on the genlight object.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -305,46 +306,46 @@ Molecular Ecology 17, 4346-4358.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Genetic distance: Euclidean </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Tranformation of Dgen:  Dgen </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $SEVERN_ABOVE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Bin  N        r.uc Correction             r          L.r         U.r</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2000 76 -0.02564315 0.04545455  0.0198113993  0.002312778  0.03561445</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  4000 32 -0.07220725 0.04545455 -0.0267527002 -0.040290457 -0.01518399</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  6000 13 -0.04414587 0.04545455  0.0013086741 -0.009447039  0.01045120</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8000  8 -0.06046684 0.04545455 -0.0150122948 -0.047470830  0.01590765</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10000 23 -0.04622188 0.04545455 -0.0007673346 -0.015680543  0.02393686</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   L.r.null.uc  U.r.null.uc     L.r.null   U.r.null p.one.tail</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.05390120 -0.033745747 -0.008446657 0.01170880       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.06076263 -0.026982430 -0.015308083 0.01847212       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.07531807 -0.016426098 -0.029863525 0.02902845       0.40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.08592299 -0.003677308 -0.040468442 0.04177724       0.24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.06353995 -0.019302804 -0.018085400 0.02615174       0.49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Bin  N        r.uc Correction             r           L.r         U.r</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2000 76 -0.02564315 0.04545455  0.0198113993 -0.0008906271  0.03628147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  4000 32 -0.07220725 0.04545455 -0.0267527002 -0.0372968209 -0.01645399</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  6000 13 -0.04414587 0.04545455  0.0013086741 -0.0087808618  0.01037726</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8000  8 -0.06046684 0.04545455 -0.0150122948 -0.0450554194  0.01371407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10000 23 -0.04622188 0.04545455 -0.0007673346 -0.0187818587  0.02248255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   L.r.null.uc  U.r.null.uc     L.r.null    U.r.null p.one.tail</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.05451381 -0.035512362 -0.009059264 0.009942184       0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.06416483 -0.026297569 -0.018710289 0.019156976       0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.06917947 -0.015024374 -0.023724923 0.030430171       0.49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.08054624 -0.005161429 -0.035091699 0.040293117       0.22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.05899110 -0.023179081 -0.013536552 0.022275464       0.42</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $SEVERN_BELOW</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Bin  N        r.uc Correction             r           L.r         U.r</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2000 17 -0.05393927     0.0625  0.0085607267 -0.0081517510 0.026993042</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  4000 24 -0.04707985     0.0625  0.0154201481 -0.0007858195 0.027969276</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  6000  9 -0.06664774     0.0625 -0.0041477406 -0.0337792858 0.018218516</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8000 30 -0.06997976     0.0625 -0.0074797574 -0.0181557084 0.004435388</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10000 21 -0.06198526     0.0625  0.0005147397 -0.0152288093 0.016887349</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   L.r.null.uc U.r.null.uc     L.r.null    U.r.null p.one.tail</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.07794626 -0.04650016 -0.015446257 0.015999840       0.16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.07512266 -0.05083456 -0.012622660 0.011665438       0.01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.08170611 -0.04359087 -0.019206113 0.018909130       0.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.07157498 -0.05320173 -0.009074976 0.009298268       0.08</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.07392442 -0.05042172 -0.011424415 0.012078282       0.52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Bin  N        r.uc Correction             r          L.r         U.r</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2000 17 -0.05393927     0.0625  0.0085607267 -0.009553262 0.028705278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  4000 24 -0.04707985     0.0625  0.0154201481  0.006050686 0.032179255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  6000  9 -0.06664774     0.0625 -0.0041477406 -0.032065173 0.018662054</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8000 30 -0.06997976     0.0625 -0.0074797574 -0.018864076 0.004578295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10000 21 -0.06198526     0.0625  0.0005147397 -0.011901916 0.016645731</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   L.r.null.uc U.r.null.uc    L.r.null    U.r.null p.one.tail</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.07772073 -0.04537680 -0.01522073 0.017123199       0.14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.07639426 -0.04437529 -0.01389426 0.018124710       0.04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.08107637 -0.04284129 -0.01857637 0.019658711       0.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.07484190 -0.05369199 -0.01234190 0.008808009       0.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.07753805 -0.04787597 -0.01503805 0.014624032       0.49</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $TENTERFIELD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Bin   N         r.uc Correction             r          L.r         U.r</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2000 110 -0.001971616      0.025  2.302838e-02  0.005950337 0.042263326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  4000  54 -0.031927379      0.025 -6.927379e-03 -0.016126985 0.001342683</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  6000  67 -0.025089835      0.025 -8.983472e-05 -0.008733117 0.007285727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8000  20 -0.019438357      0.025  5.561643e-03 -0.010391694 0.020563092</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10000  37 -0.024745610      0.025  2.543903e-04 -0.012852254 0.016725363</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   L.r.null.uc  U.r.null.uc     L.r.null   U.r.null p.one.tail</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.03265925 -0.013704167 -0.007659248 0.01129583       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.03779513 -0.010843560 -0.012795125 0.01415644       0.12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.03669519 -0.010414323 -0.011695192 0.01458568       0.66</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.04024200  0.006949282 -0.015242005 0.03194928       0.26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.03817991 -0.006628547 -0.013179910 0.01837145       0.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2000 110 -0.001971616      0.025  2.302838e-02  0.006912928 0.047236880</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  4000  54 -0.031927379      0.025 -6.927379e-03 -0.015962511 0.002898660</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  6000  67 -0.025089835      0.025 -8.983472e-05 -0.007415212 0.006669053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8000  20 -0.019438357      0.025  5.561643e-03 -0.007183870 0.021577505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10000  37 -0.024745610      0.025  2.543903e-04 -0.012138002 0.011876650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   L.r.null.uc  U.r.null.uc     L.r.null    U.r.null p.one.tail</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.03203308 -0.017242165 -0.007033083 0.007757835       0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.03602354 -0.012858742 -0.011023545 0.012141258       0.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.03634766 -0.008152201 -0.011347657 0.016847799       0.58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.04328423  0.014616294 -0.018284232 0.039616294       0.26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.03872819  0.003196314 -0.013728185 0.028196314       0.38</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.spatial.autoCorr </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -364,8 +365,8 @@ Molecular Ecology 17, 4346-4358.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.spatial.autoCorr </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Analysis performed on the genlight object.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for 'x' is already present. Adding another scale for 'x', which will</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> replace the existing scale.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">x</span> is already present.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">x</span>, which will replace the existing scale.</span>
 <span class="r-plt img"><img src="gl.spatial.autoCorr-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Coordinates used from: x@other$latlon (Mercator transformed) </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Transformation of Dgeo: Dgeo </span></span>
@@ -373,17 +374,17 @@ Molecular Ecology 17, 4346-4358.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Tranformation of Dgen:  Dgen </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $TENTERFIELD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Bin   N         r.uc Correction             r          L.r         U.r</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2000 110 -0.001971616      0.025  2.302838e-02  0.006301535 0.044536680</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  4000  54 -0.031927379      0.025 -6.927379e-03 -0.019209735 0.002546752</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  6000  67 -0.025089835      0.025 -8.983472e-05 -0.008715119 0.007286583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8000  20 -0.019438357      0.025  5.561643e-03 -0.008337369 0.021617842</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10000  37 -0.024745610      0.025  2.543903e-04 -0.011151548 0.015403269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   L.r.null.uc  U.r.null.uc     L.r.null   U.r.null p.one.tail</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.03259789 -0.013597094 -0.007597893 0.01140291       0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.03804398 -0.009160720 -0.013043976 0.01583928       0.20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.03366245 -0.012162657 -0.008662450 0.01283734       0.67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.04249556  0.017929275 -0.017495561 0.04292928       0.26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.03844134 -0.001164588 -0.013441343 0.02383541       0.40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2000 110 -0.001971616      0.025  2.302838e-02  0.003575474 0.044568960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  4000  54 -0.031927379      0.025 -6.927379e-03 -0.014525092 0.002607201</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  6000  67 -0.025089835      0.025 -8.983472e-05 -0.008520326 0.008421506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  8000  20 -0.019438357      0.025  5.561643e-03 -0.007926311 0.017409221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 10000  37 -0.024745610      0.025  2.543903e-04 -0.013302025 0.010918821</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   L.r.null.uc   U.r.null.uc     L.r.null   U.r.null p.one.tail</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.03197577 -0.0142424854 -0.006975766 0.01075751       0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.03654385 -0.0122251946 -0.011543854 0.01277481       0.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.03603330 -0.0107183960 -0.011033301 0.01428160       0.58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.04387176  0.0124739261 -0.018871759 0.03747393       0.29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 -0.04113754 -0.0001926551 -0.016137544 0.02480734       0.36</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.spatial.autoCorr </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

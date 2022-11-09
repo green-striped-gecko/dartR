@@ -16,7 +16,7 @@ differences (AFD) between pairs of populations."><!-- mathjax --><script src="ht
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,6 +61,7 @@ differences (AFD) between pairs of populations.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  x2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
+<span>  loc_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plot.out <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  font_plot <span class="op">=</span> <span class="fl">14</span>,</span>
 <span>  map.interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -84,6 +85,12 @@ provided here, but they must have the same number of SNPs [default NULL].</p></d
 <dt>method</dt>
 <dd><p>Method to calculate private alleles: 'pairwise' comparison or
 compare each population against the rest 'one2rest' [default 'pairwise'].</p></dd>
+
+
+<dt>loc_names</dt>
+<dd><p>Whether names of loci with private alleles and fixed 
+differences should reported. If TRUE, loci names are reported using a list
+ [default FALSE].</p></dd>
 
 
 <dt>plot.out</dt>
@@ -125,7 +132,9 @@ report [default 2 or as specified using gl.set.verbosity].</p></dd>
  of individuals in each population, the number of loci with fixed differences
  (same for both populations) in pop1 (compared to pop2) and vice versa. Same
  for private alleles and finally the absolute mean allele frequency
- difference between loci (AFD).</p>
+ difference between loci (AFD). If loc_names = TRUE, loci names with private
+  alleles and fixed differences are reported in a list in addition to the 
+  dataframe.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -150,6 +159,13 @@ are symmetric)</p></li>
 differentiation metric displaying intuitive properties which provides a
 valuable alternative to FST. For details about its properties and how it is
 calculated see Berner (2019).</p>
+<p>The function also reports an estimation of the lower bound of the number of
+ undetected private alleles using the Good-Turing frequency formula, 
+ originally developed for cryptography, which estimates in an ecological 
+ context the true frequencies of rare species in a single assemblage based on
+  an incomplete sample of individuals. The approach is described in Chao et 
+  al. (2017). For this function, the equation 2c is used. This estimate is 
+  reported in the output table as Chao1 and Chao2.</p>
 <p>In this function a Sankey Diagram is used to visualize patterns of private
 alleles between populations. This diagram allows to display flows (private
 alleles) between nodes (populations). Their links are represented with arcs
@@ -164,6 +180,9 @@ session's temporary directory.</p>
 <ul><li><p>Berner, D. (2019). Allele frequency difference AFD – an intuitive
 alternative to FST for quantifying genetic population differentiation. Genes,
  10(4), 308.</p></li>
+<li><p>Chao, Anne, et al. "Deciphering the enigma of undetected species,
+ phylogenetic, and functional diversity based on Good‐Turing theory." 
+ Ecology 98.11 (2017): 2914-2929.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

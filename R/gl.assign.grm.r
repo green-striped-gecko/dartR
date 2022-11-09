@@ -21,9 +21,10 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' require("dartR.data")
 #' res <- gl.assign.grm(platypus.gl,unknown="T27")
 #' @export
-#' 
+#' @import dartR.data
 gl.assign.grm <- function(x,
                           unknown,
                           verbose=NULL){

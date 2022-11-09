@@ -68,6 +68,7 @@
 #'  \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
+#' require("dartR.data")
 #' test <- platypus.gl
 #' # assigning SNP position
 #' test$position <- test$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1

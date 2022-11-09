@@ -54,6 +54,7 @@
 #'  
 #' @author Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' require("dartR.data")
 #' gl.map.interactive(bandicoot.gl)
 #' cols <- c("red","blue","yellow")[as.numeric(pop(platypus.gl))]
 #' gl.map.interactive(platypus.gl, ind.circle.cols=cols, ind.circle.cex=10, 
