@@ -130,7 +130,7 @@ out <- gl.report.pa(testset.gl[1:20,])
 alternative to FST for quantifying genetic population differentiation. Genes,
  10(4), 308.
  \item Chao, Anne, et al. "Deciphering the enigma of undetected species,
- phylogenetic, and functional diversity based on Good‐Turing theory." 
+ phylogenetic, and functional diversity based on Good-Turing theory." 
  Ecology 98.11 (2017): 2914-2929.
 }
 }
