@@ -105,7 +105,7 @@ valuable alternative to FST. For details about its properties and how it is
 calculated see Berner (2019).
 
 The function also reports an estimation of the lower bound of the number of
- undetected private alleles using the Good-Turing frequency formula, 
+ undetected private alleles using the Good-Turing frequency formula,
  originally developed for cryptography, which estimates in an ecological 
  context the true frequencies of rare species in a single assemblage based on
   an incomplete sample of individuals. The approach is described in Chao et 
