@@ -67,7 +67,7 @@
 #' calculated see Berner (2019).
 #' 
 #' The function also reports an estimation of the lower bound of the number of
-#'  undetected private alleles using the Good-Turing frequency formula, 
+#'  undetected private alleles using the Good-Turing frequency formula,
 #'  originally developed for cryptography, which estimates in an ecological 
 #'  context the true frequencies of rare species in a single assemblage based on
 #'   an incomplete sample of individuals. The approach is described in Chao et 
@@ -97,7 +97,7 @@
 #' alternative to FST for quantifying genetic population differentiation. Genes,
 #'  10(4), 308.
 #'  \item Chao, Anne, et al. "Deciphering the enigma of undetected species,
-#'  phylogenetic, and functional diversity based on Good‐Turing theory." 
+#'  phylogenetic, and functional diversity based on Good-Turing theory." 
 #'  Ecology 98.11 (2017): 2914-2929.
 #' }
 #' @examples
