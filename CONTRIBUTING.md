@@ -1,4 +1,4 @@
-# Contributing to dartR
+# Contributing to dartR 
 
 <!-- This CONTRIBUTING.md is adapted from https://gist.github.com/peterdesmet/e90a1b0dc17af6c12daf6e8b2f044e7c -->
 
