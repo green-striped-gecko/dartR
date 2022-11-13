@@ -7,9 +7,6 @@
     <loc>https://green-striped-gecko.github.io/dartR/CONTRIBUTING.html</loc>
   </url>
   <url>
-    <loc>https://green-striped-gecko.github.io/dartR/LICENSE.html</loc>
-  </url>
-  <url>
     <loc>https://green-striped-gecko.github.io/dartR/articles/dartRTutorials.html</loc>
   </url>
   <url>
@@ -26,6 +23,9 @@
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/bandicoot.gl.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/cbind.dartR.html</loc>
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/gi2gl.html</loc>
@@ -370,6 +370,9 @@
     <loc>https://green-striped-gecko.github.io/dartR/reference/gl.set.verbosity.html</loc>
   </url>
   <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.sfs.html</loc>
+  </url>
+  <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/gl.sim.WF.run.html</loc>
   </url>
   <url>
@@ -491,6 +494,12 @@
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/possums.gl.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/rbind.dartR.html</loc>
+  </url>
+  <url>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/sub-dartR-ANY-ANY-ANY-method.html</loc>
   </url>
   <url>
     <loc>https://green-striped-gecko.github.io/dartR/reference/testset.gl.html</loc>
