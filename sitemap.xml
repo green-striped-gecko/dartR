@@ -1,606 +1,603 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/404.html</loc>
   </url>
   <url>
-    <loc>/articles/dartRTutorials.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/CONTRIBUTING.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/articles/dartRTutorials.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/articles/index.html</loc>
   </url>
   <url>
-    <loc>/reference/bandicoot.gl.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/authors.html</loc>
   </url>
   <url>
-    <loc>/reference/cbind.dartR.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/code_of_conduct.html</loc>
   </url>
   <url>
-    <loc>/reference/gi2gl.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/index.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.He.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/bandicoot.gl.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.Ho.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gi2gl.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.LDNe.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.He.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.alf.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.Ho.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.amova.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.LDNe.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.assign.grm.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.alf.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.assign.mahalanobis.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.amova.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.assign.pa.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.assign.grm.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.assign.pca.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.assign.mahalanobis.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.basic.stats.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.assign.pa.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.blast.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.assign.pca.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.check.verbosity.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.basic.stats.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.collapse.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.blast.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.compliance.check.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.check.verbosity.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.costdistances.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.collapse.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.define.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.compliance.check.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.diagnostics.hwe.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.costdistances.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.diagnostics.sim.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.define.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.dist.ind.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.diagnostics.hwe.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.dist.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.diagnostics.sim.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.drop.ind.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.dist.ind.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.drop.loc.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.dist.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.drop.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.drop.ind.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.edit.recode.ind.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.drop.loc.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.edit.recode.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.drop.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.evanno.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.edit.recode.ind.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.fdsim.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.edit.recode.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.allna.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.evanno.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.callrate.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.fdsim.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.hamming.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.allna.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.heterozygosity.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.callrate.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.hwe.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.hamming.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.ld.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.heterozygosity.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.locmetric.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.hwe.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.maf.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.ld.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.monomorphs.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.locmetric.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.overshoot.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.maf.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.pa.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.monomorphs.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.parent.offspring.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.overshoot.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.rdepth.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.pa.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.reproducibility.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.parent.offspring.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.secondaries.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.rdepth.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.sexlinked.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.reproducibility.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.filter.taglength.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.secondaries.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.fixed.diff.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.sexlinked.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.fst.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.filter.taglength.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.genleastcost.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.fixed.diff.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.grm.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.fst.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.grm.network.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.genleastcost.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.hwe.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.grm.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.ibd.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.grm.network.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.impute.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.hwe.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.install.vanilla.dartR.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.ibd.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.join.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.impute.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.keep.ind.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.install.vanilla.dartR.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.keep.loc.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.join.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.keep.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.keep.ind.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.ld.distance.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.keep.loc.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.ld.haplotype.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.keep.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.list.reports.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.ld.distance.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.load.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.ld.haplotype.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.make.recode.ind.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.list.reports.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.make.recode.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.load.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.map.interactive.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.make.recode.ind.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.map.structure.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.make.recode.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.merge.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.map.interactive.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.nhybrids.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.map.structure.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.outflank.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.merge.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.pcoa.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.nhybrids.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.pcoa.plot.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.outflank.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.percent.freq.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.pcoa.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.play.history.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.pcoa.plot.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.plot.heatmap.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.percent.freq.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.plot.network.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.play.history.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.plot.structure.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.plot.heatmap.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.print.history.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.plot.network.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.print.reports.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.plot.structure.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.propShared.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.print.history.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.random.snp.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.print.reports.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.read.csv.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.propShared.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.read.dart.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.random.snp.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.read.fasta.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.read.csv.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.read.silicodart.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.read.dart.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.read.vcf.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.read.fasta.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.reassign.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.read.silicodart.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.recalc.metrics.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.read.vcf.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.recode.ind.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.reassign.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.recode.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.recalc.metrics.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.rename.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.recode.ind.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.bases.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.recode.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.callrate.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.rename.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.diversity.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.bases.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.hamming.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.callrate.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.heterozygosity.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.diversity.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.hwe.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.hamming.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.ld.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.heterozygosity.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.ld.map.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.hwe.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.locmetric.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.ld.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.maf.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.ld.map.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.monomorphs.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.locmetric.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.overshoot.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.maf.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.pa.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.monomorphs.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.parent.offspring.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.overshoot.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.rdepth.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.pa.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.reproducibility.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.parent.offspring.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.secondaries.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.rdepth.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.sexlinked.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.reproducibility.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.report.taglength.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.secondaries.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.run.structure.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.sexlinked.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.save.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.report.taglength.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.select.colors.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.run.structure.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.select.shapes.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.save.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.set.verbosity.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.select.colors.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.sfs.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.select.shapes.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.sim.WF.run.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.set.verbosity.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.sim.WF.table.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.sim.WF.run.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.sim.create_dispersal.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.sim.WF.table.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.sim.emigration.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.sim.create_dispersal.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.sim.ind.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.sim.emigration.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.sim.mutate.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.sim.ind.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.sim.offspring.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.sim.mutate.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.smearplot.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.sim.offspring.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.spatial.autoCorr.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.smearplot.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.subsample.loci.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.spatial.autoCorr.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.test.heterozygosity.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.subsample.loci.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.tree.nj.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.test.heterozygosity.html</loc>
   </url>
   <url>
-    <loc>/reference/gl.write.csv.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.tree.nj.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2bayescan.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl.write.csv.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2demerelate.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2bayescan.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2eigenstrat.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2demerelate.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2fasta.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2eigenstrat.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2faststructure.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2fasta.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2gds.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2faststructure.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2genalex.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2gds.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2genepop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2genalex.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2geno.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2genepop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2gi.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2geno.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2hiphop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2gi.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2phylip.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2hiphop.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2plink.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2phylip.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2related.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2plink.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2sa.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2related.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2sfs.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2sa.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2shp.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2sfs.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2snapp.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2shp.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2structure.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2snapp.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2svdquartets.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2structure.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2treemix.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2svdquartets.html</loc>
   </url>
   <url>
-    <loc>/reference/gl2vcf.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2treemix.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/gl2vcf.html</loc>
   </url>
   <url>
-    <loc>/reference/interactive_reference.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/interactive_sim_run.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/interactive_reference.html</loc>
   </url>
   <url>
-    <loc>/reference/is.fixed.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/interactive_sim_run.html</loc>
   </url>
   <url>
-    <loc>/reference/platy.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/is.fixed.html</loc>
   </url>
   <url>
-    <loc>/reference/possums.gl.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/platy.html</loc>
   </url>
   <url>
-    <loc>/reference/rbind.dartR.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/possums.gl.html</loc>
   </url>
   <url>
-    <loc>/reference/sub-dartR-ANY-ANY-ANY-method.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/testset.gl.html</loc>
   </url>
   <url>
-    <loc>/reference/testset.gl.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/testset.gs.html</loc>
   </url>
   <url>
-    <loc>/reference/testset.gs.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/testset_SNPs_2Row.html</loc>
   </url>
   <url>
-    <loc>/reference/testset_SNPs_2Row.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/testset_metadata.html</loc>
   </url>
   <url>
-    <loc>/reference/testset_metadata.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/testset_pop_recode.html</loc>
   </url>
   <url>
-    <loc>/reference/testset_pop_recode.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/theme_dartR.html</loc>
   </url>
   <url>
-    <loc>/reference/theme_dartR.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.assignment.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.assignment.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.assignment_2.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.assignment_2.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.assignment_3.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.assignment_3.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.assignment_4.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.assignment_4.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.basic.stats.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.basic.stats.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.check.datatype.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.check.datatype.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.dart2genlight.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.dart2genlight.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.dist.binary.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.dist.binary.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.dist.ind.snp.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.dist.ind.snp.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.flag.start.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.flag.start.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.hamming.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.hamming.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.het.pop.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.het.pop.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.jackknife.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.jackknife.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.n.var.invariant.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.n.var.invariant.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.outflank.MakeDiploidFSTMat.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.outflank.MakeDiploidFSTMat.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.outflank.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.outflank.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.outflank.plotter.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.outflank.plotter.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.read.dart.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.read.dart.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.recalc.avgpic.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.recalc.avgpic.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.recalc.callrate.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.recalc.callrate.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.recalc.freqhets.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.recalc.freqhets.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.recalc.freqhomref.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.recalc.freqhomref.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.recalc.freqhomsnp.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.recalc.freqhomsnp.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.recalc.maf.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.recalc.maf.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.reset.flags.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.reset.flags.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.spautocorr.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.spautocorr.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.structure.evanno.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.structure.evanno.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.structure.genind2gtypes.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.structure.genind2gtypes.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/utils.structure.run.html</loc>
   </url>
   <url>
-    <loc>/reference/utils.structure.run.html</loc>
-  </url>
-  <url>
-    <loc>/reference/zzz.html</loc>
+    <loc>https://green-striped-gecko.github.io/dartR/reference/zzz.html</loc>
   </url>
 </urlset>
