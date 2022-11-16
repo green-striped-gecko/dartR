@@ -7,6 +7,7 @@
 gl.report.callrate(
   x,
   method = "loc",
+  by_pop = FALSE,
   plot.out = TRUE,
   plot_theme = theme_dartR(),
   plot_colors = two_colors,
@@ -21,6 +22,8 @@ gl.report.callrate(
 
 \item{method}{Specify the type of report by locus (method='loc') or
 individual (method='ind') [default 'loc'].}
+
+\item{by_pop}{Whether report by population [default FALSE].}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
@@ -78,21 +81,27 @@ directory.
 \seealso{
 \code{\link{gl.filter.callrate}}
 
-Other filters and filter reports: 
-\code{\link{gl.filter.allna}()},
-\code{\link{gl.filter.monomorphs}()},
-\code{\link{gl.filter.rdepth}()},
-\code{\link{gl.filter.reproducibility}()},
-\code{\link{gl.filter.secondaries}()},
+Other report functions: 
+\code{\link{gl.report.bases}()},
+\code{\link{gl.report.diversity}()},
 \code{\link{gl.report.hamming}()},
+\code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.hwe}()},
+\code{\link{gl.report.ld.map}()},
 \code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
 \code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
+\code{\link{gl.report.parent.offspring}()},
+\code{\link{gl.report.pa}()},
 \code{\link{gl.report.rdepth}()},
 \code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.sexlinked}()},
 \code{\link{gl.report.taglength}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{filters and filter reports}
+\concept{report functions}

@@ -8,8 +8,8 @@
 #'
 #' Four methods are employed:
 #'
-#' Method 1 -- heterozygous positions are replaced by the standard ambiguity c
-#' odes. The resultant sequence fragments are concatenated across loci to
+#' Method 1 -- heterozygous positions are replaced by the standard ambiguity 
+#' codes. The resultant sequence fragments are concatenated across loci to
 #' generate a single combined sequence to be used in subsequent ML phylogenetic
 #' analyses.
 #'
@@ -70,8 +70,7 @@ gl2fasta <- function(x,
                      probar = FALSE,
                      verbose = NULL) {
     outfilespec <- file.path(outpath, outfile)
-    hold <- x
-    
+
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -82,8 +81,7 @@ gl2fasta <- function(x,
                      verbosity = verbose)
     
     # CHECK DATATYPE
-    datatype <-
-        utils.check.datatype(x, accept = "SNP", verbose = verbose)
+    datatype <- utils.check.datatype(x, accept = "SNP", verbose = verbose)
     
     # FUNCTION SPECIFIC ERROR CHECKING
     
@@ -102,7 +100,7 @@ gl2fasta <- function(x,
         if (verbose >= 2) {
             cat(
                 warn(
-                    "  Warning: Dataset contains monomorphic loci which will be included in the output fastA file\n"
+                    "  Warning: Dataset contains monomorphic loci which will be included in the output fasta file\n"
                 )
             )
         }
@@ -118,43 +116,44 @@ gl2fasta <- function(x,
     if (length(x@position) != nLoc(x)) {
         stop(
             error(
-                "Fatal Error: Data must include position information for each loci in the @position slot.\n"
+"Fatal Error: Data must include position information for each loci in the @position slot.\n"
             )
         )
     }
     if (length(x@loc.all) != nLoc(x)) {
-        stop("Fatal Error: Data must include type of alleles in the @loc.all slot.\n")
+        stop(error(
+  "Fatal Error: Data must include type of alleles in the @loc.all slot.\n"))
     }
     
     if (method == 1 && verbose >= 2) {
         cat(
             report(
-                "Assigning ambiguity codes to heterozygote SNPs, concatenating trimmed sequence\n"
+                "  Assigning ambiguity codes to heterozygote SNPs, concatenating trimmed sequence\n"
             )
         )
     } else if (method == 2 && verbose >= 2) {
         cat(
             report(
-                "Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating trimmed sequence\n"
+                "  Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating trimmed sequence\n"
             )
         )
     } else if (method == 3 && verbose >= 2) {
         cat(
             report(
-                "Assigning ambiguity codes to heterozygote SNPs, concatenating SNPs\n"
+                "  Assigning ambiguity codes to heterozygote SNPs, concatenating SNPs\n"
             )
         )
     } else if (method == 4 && verbose >= 2) {
         cat(
             report(
-                "Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating SNPs\n"
+                "  Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating SNPs\n"
             )
         )
     } else {
         if (verbose >= 2) {
             cat(warn("Method not properly specified\n"))
             cat(
-                warn("Replace score for heterozygotic loci with"):cat(
+                warn("  Replace score for heterozygotic loci with"):cat(
                     "  method=1 -- ambiguity codes, concatenate fragments) [default]\n"
                 )
             )
@@ -176,23 +175,22 @@ gl2fasta <- function(x,
     }
     
     # DO THE JOB
-    if (verbose >= 2) {
-        cat(report(
-            paste(
-                "  Removing loci for which snp position is outside the length of the trimmed sequences\n"
-            )
-        ))
-    }
     
+    if (verbose >= 2) {
+      cat(report(
+        paste(
+          "  Removing loci for which SNP position is outside the length of the trimmed sequences\n"
+        )
+      ))
+    }
     x <- gl.filter.overshoot(x, verbose = 0)
     
     # METHOD = AMBIGUITY CODES
     
     if (method == 1 || method == 3) {
         allnames <- locNames(x)
-        snp = as.character(x@loc.all)
-        trimmed <-
-            as.character(x@other$loc.metrics$TrimmedSequence)
+        snp <- as.character(x@loc.all)
+        trimmed <- as.character(x@other$loc.metrics$TrimmedSequence)
         snpmatrix <- as.matrix(x)
         
         # Create a lookup table for the ambiguity codes A T G C A A W R M) T W T K Y G R K G S C M Y S C
@@ -224,21 +222,9 @@ gl2fasta <- function(x,
         rownames(conversion) <- colnames(conversion)
         
         # Extract alleles 1 and 2
-        allelepos = x@position
-        allele1 = gsub("(.)/(.)", "\\1", snp, perl = T)
-        allele2 = gsub("(.)/(.)", "\\2", snp, perl = T)
-        
-        
-        if (verbose >= 2) {
-            cat(report(
-                paste(
-                    "  Removing loci for which SNP position is outside the length of the trimmed sequences\n"
-                )
-            ))
-        }
-        x <- gl.filter.overshoot(x, verbose = 0)
-        
-        sequences <- NA
+        allelepos <- x@position
+        allele1 <- gsub("(.)/(.)", "\\1", snp, perl = T)
+        allele2 <- gsub("(.)/(.)", "\\2", snp, perl = T)
         
         # Prepare the output fastA file
         if (verbose >= 2) {
@@ -254,16 +240,16 @@ gl2fasta <- function(x,
                     code <- "N"
                 } else {
                     if (snpmatrix[i, j] == 0) {
-                        a1 = allele1[j]
-                        a2 = allele1[j]
+                        a1 <-allele1[j]
+                        a2 <-allele1[j]
                     }
                     if (snpmatrix[i, j] == 1) {
-                        a1 = allele1[j]
-                        a2 = allele2[j]
+                        a1 <-allele1[j]
+                        a2 <-allele2[j]
                     }
                     if (snpmatrix[i, j] == 2) {
-                        a1 = allele2[j]
-                        a2 = allele2[j]
+                        a1 <-allele2[j]
+                        a2 <-allele2[j]
                     }
                     code <- conversion[a1, a2]
                 }
@@ -363,17 +349,14 @@ gl2fasta <- function(x,
                 # If the score is homozygous for the alternate allele
                 if (matrix[i, j] == 2 && !is.na(matrix[i, j])) {
                     # Split the trimmed into a beginning sequence, the SNP and an end sequences
-                    start <-
-                        stringr::str_sub(trimmed, end = snpos - 1)
-                    snpbase <-
-                        stringr::str_sub(trimmed,
+                    start <- stringr::str_sub(trimmed, end = snpos - 1)
+                    snpbase <- stringr::str_sub(trimmed,
                                          start = (snpos),
                                          end = (snpos))
-                    end <-
-                        stringr::str_sub(trimmed, start = snpos + 1)
+                    end <- stringr::str_sub(trimmed, start = snpos + 1)
                     # Extract the SNP transition bases (e.g. A and T)
-                    state1 = gsub("(.)/(.)", "\\1", snp, perl = T)
-                    state2 = gsub("(.)/(.)", "\\2", snp, perl = T)
+                    state1 <-gsub("(.)/(.)", "\\1", snp, perl = T)
+                    state2 <-gsub("(.)/(.)", "\\2", snp, perl = T)
                     # Change the SNP state to the alternate
                     if (snpbase == state1) {
                         snpbase <- state2

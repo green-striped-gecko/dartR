@@ -21,7 +21,8 @@
 #' degrees of freedom, and a vector of variance components.
 #' @importFrom StAMPP stamppNeisD
 #' @export
-#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Bernd Gruber (bugs? Post to 
+#' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' #permutations should be higher, here set to 10 because of speed
 #' out <- gl.amova(bandicoot.gl, permutations=10)
@@ -53,9 +54,9 @@ gl.amova <- function(x,
         ))
     }
     
-    if (is.null(distance))
-        dd <- StAMPP::stamppNeisD(x, FALSE)
-    else
+    if (is.null(distance)) {
+        class(x)<- "genlight"  #needs to be genlight due to stampp
+        dd <- StAMPP::stamppNeisD(x, FALSE) } else
         dd <- distance
     
     if (is(x,"genlight")) {
@@ -64,21 +65,21 @@ gl.amova <- function(x,
         sample <- row.names(geno)
         pop.names <- pop(geno2)
         ploidy <- ploidy(geno2)
-        geno = geno * (1 / ploidy)
-        geno[is.na(geno)] = NaN
+        geno <-geno * (1 / ploidy)
+        geno[is.na(geno)] <- NaN
         format <- vector(length = length(geno[, 1]))
-        format[1:length(geno[, 1])] = "genlight"
+        format[1:length(geno[, 1])] <- "genlight"
         pops <- unique(pop.names)
         pop.num <- vector(length = length(geno[, 1]))
         for (i in 1:length(geno[, 1])) {
-            pop.num[i] = which(pop.names[i] == pops)
+            pop.num[i] <- which(pop.names[i] == pops)
         }
         genoLHS <-
             as.data.frame(cbind(sample, pop.names, pop.num, ploidy, format))
         geno <- cbind(genoLHS, geno)
-        geno[, 2] = as.character(pop.names)
-        geno[, 4] = as.numeric(as.character(geno[, 4]))
-        row.names(geno) = NULL
+        geno[, 2] <- as.character(pop.names)
+        geno[, 4] <- as.numeric(as.character(geno[, 4]))
+        row.names(geno) <- NULL
     }
     pop.names <- geno[, 2]
     pop.names <- factor(pop.names)

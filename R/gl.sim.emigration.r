@@ -51,12 +51,12 @@ gl.sim.emigration <- function(x,
     else
         p <- x
     pn <- names(p)
-    n.pops = length(p)
+    n.pops <-length(p)
     migs <- matrix(0, nrow = n.pops, ncol = n.pops)
     migrants <- NA
     if (is.null(emi.table)) {
         # convert disdis into prob
-        emi.m = emi.m / rep(colSums(emi.m), each = ncol(emi.m))
+        emi.m <-emi.m / rep(colSums(emi.m), each = ncol(emi.m))
         for (i in 1:n.pops) {
             pop.size <- nrow(p[[i]])
             if (!is.null(pop.size)) {

@@ -5,3 +5,11 @@
 README.md
 ^\.github$
 ^LICENSE\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^codemeta\.json$
+^README\.Rmd$
+CONTRIBUTING.md
+code_of_conduct.md
+pkgdown.yaml

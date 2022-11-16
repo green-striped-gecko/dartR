@@ -45,7 +45,7 @@ gl.fst.pop <- function(x,
     datatype <- utils.check.datatype(x, verbose = verbose)
     
     # DO THE JOB
-    
+    class(x)<- "genlight" #needs to be genlight due to stampp
     fsts <-
         stamppFst(x,
                   nboots = nboots,

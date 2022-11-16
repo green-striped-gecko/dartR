@@ -134,7 +134,8 @@ gl.filter.parent.offspring <- function(x,
     if (verbose >= 2) {
         cat(
             report(
-                "  Generating null expectation for distribution of counts of pedigree incompatibility\n"
+                "  Generating null expectation for distribution of counts of 
+                pedigree incompatibility\n"
             )
         )
     }
@@ -144,18 +145,21 @@ gl.filter.parent.offspring <- function(x,
     if (is.null(x@other$loc.metrics$RepAvg)) {
         cat(
             warn(
-                "  Dataset does not include RepAvg among the locus metrics, therefore the reproducibility filter was not used\n"
+                "  Dataset does not include RepAvg among the locus metrics, 
+                therefore the reproducibility filter was not used\n"
             )
         )
     } else {
         x <-
-            gl.filter.reproducibility(x, threshold = min.reproducibility, verbose = 0)
+            gl.filter.reproducibility(x, threshold = min.reproducibility, 
+                                      verbose = 0)
     }
     # Filter stringently on read depth, to further minimize miscalls
     if (is.null(x@other$loc.metrics$rdepth)) {
         cat(
             warn(
-                "  Dataset does not include rdepth among the locus metrics, therefore the read depth filter was not used\n"
+                "  Dataset does not include rdepth among the locus metrics,
+                therefore the read depth filter was not used\n"
             )
         )
     } else {
@@ -187,12 +191,14 @@ gl.filter.parent.offspring <- function(x,
     if (verbose >= 2) {
         cat(
             report(
-                "  Identifying outliers with lower than expected counts of pedigree inconsistencies\n"
+                "  Identifying outliers with lower than expected counts of 
+                pedigree inconsistencies\n"
             )
         )
     }
     title <-
-        paste0("SNP data (DArTSeq)\nCounts of pedigree incompatible loci per pair")
+        paste0("SNP data (DArTSeq)\nCounts of pedigree incompatible loci per 
+               pair")
     
     counts_plot <- as.data.frame(counts)
     
@@ -225,7 +231,7 @@ gl.filter.parent.offspring <- function(x,
     # if individuals in parent offspring relationship are found
     if (length(lower.extremes) > 0) {
         tmp <- count
-        tmp[lower.tri(tmp)] = t(tmp)[lower.tri(tmp)]
+        tmp[lower.tri(tmp)] <-t(tmp)[lower.tri(tmp)]
         for (i in 1:length(outliers$Outlier)) {
             # Identify
             tmp2 <- tmp[tmp == outliers$Outlier[i]]
@@ -233,7 +239,8 @@ gl.filter.parent.offspring <- function(x,
             outliers$ind2[i] <- popNames(x)[!is.na(tmp2)][2]
             # Z-scores
             zscore <-
-                (mean(count, na.rm = TRUE) - outliers$Outlier[i]) / sd(count, na.rm = TRUE)
+                (mean(count, na.rm = TRUE) - outliers$Outlier[i]) / 
+              sd(count, na.rm = TRUE)
             outliers$zscore[i] <- round(zscore, 2)
             outliers$p[i] <-
                 round(pnorm(
@@ -278,14 +285,19 @@ gl.filter.parent.offspring <- function(x,
             }
             
             ind_to_remove_temp <-
-                outliers[!duplicated(outliers[, c("ind1", "ind2")]), c("ind1", "ind2")]
+                outliers[!duplicated(outliers[, c("ind1", "ind2")]),
+                         c("ind1", "ind2")]
             ind_to_remove <- vector()
             for (i in 1:nrow(ind_to_remove_temp)) {
                 ind_to_remove_temp_2 <- unname(unlist(ind_to_remove_temp[i, ]))
                 ind_1 <-
-                    sum(glNA(hold[which(indNames(hold) == ind_to_remove_temp_2[1])], alleleAsUnit = FALSE))
+                    sum(glNA(hold[which(indNames(hold) == 
+                                          ind_to_remove_temp_2[1])], 
+                             alleleAsUnit = FALSE))
                 ind_2 <-
-                    sum(glNA(hold[which(indNames(hold) == ind_to_remove_temp_2[2])], alleleAsUnit = FALSE))
+                    sum(glNA(hold[which(indNames(hold) == 
+                                          ind_to_remove_temp_2[2])],
+                             alleleAsUnit = FALSE))
                 ind_to_remove_temp_3 <-
                     as.data.frame(cbind(ind_to_remove_temp_2, c(ind_1, ind_2)))
                 colnames(ind_to_remove_temp_3) <-
@@ -305,7 +317,8 @@ gl.filter.parent.offspring <- function(x,
             }
             
             ind_to_remove_temp <-
-                outliers[!duplicated(outliers[, c("ind1", "ind2")]), c("ind1", "ind2")]
+                outliers[!duplicated(outliers[, c("ind1", "ind2")]),
+                         c("ind1", "ind2")]
             ind_to_remove <-
                 apply(ind_to_remove_temp, 1, function(x) {
                     x[sample(1:2, 1)]
@@ -323,7 +336,7 @@ gl.filter.parent.offspring <- function(x,
         # REPORT THE RESULTS
         if (verbose >= 2) {
             cat("  \nInitial number of individuals:", nInd(x), "\n")
-            cat("  Pairs of individuals in a parent offspring relationship:\n\n")
+         cat("  Pairs of individuals in a parent offspring relationship:\n\n")
             print(outliers)
             cat("    \nIndividuals removed: ")
             cat(ind_to_remove, sep = "\n")
@@ -336,7 +349,9 @@ gl.filter.parent.offspring <- function(x,
         if (verbose > 0) {
             cat(
                 important(
-                    "No individuals were found to be in parent offspring relationship, therefore the genlight object is returned unchanged.\n"
+                    "No individuals were found to be in parent offspring 
+                    relationship, therefore the genlight object is returned
+                    unchanged.\n"
                 )
             )
         }
@@ -373,7 +388,8 @@ gl.filter.parent.offspring <- function(x,
             cat(report("  Saving tabulation to session tempfile\n"))
             cat(
                 report(
-                    "  NOTE: Retrieve output files from tempdir using gl.list.reports() and gl.print.reports()\n"
+                    "  NOTE: Retrieve output files from tempdir using 
+                    gl.list.reports() and gl.print.reports()\n"
                 )
             )
         }

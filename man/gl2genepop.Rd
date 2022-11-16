@@ -46,6 +46,7 @@ invisible data.frame by the function.
 }
 \examples{
 \dontrun{
+require("dartR.data")
 # SNP data
 geno <- gl2genepop(testset.gl[1:3,1:9])
 head(geno)

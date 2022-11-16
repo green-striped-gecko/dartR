@@ -49,6 +49,7 @@
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \dontrun{
+#' require("dartR.data")
 #' gl2vcf(platypus.gl,snp_pos='ChromPos_Platypus_Chrom_NCBIv1',
 #'  snp_chr = 'Chrom_Platypus_Chrom_NCBIv1')
 #' }
@@ -79,6 +80,58 @@ gl2vcf <- function(x,
     datatype <- utils.check.datatype(x, verbose = verbose)
     
     # DO THE JOB
+    
+    # assigning SNP position information 
+    if(snp_pos == "0"){
+      x$position <- rep(as.integer(0),nLoc(x))
+      
+    }else{
+      
+      if(snp_pos %in% names(x$other$loc.metrics)){
+        
+        if(verbose>=2){
+          cat(report("  Using the SNP position information in the field",snp_chr, "from loc.metrics.\n"))
+        }
+        
+        x$position <- unname(unlist(x$other$loc.metrics[snp_pos]))
+        
+      }else{
+        
+        stop(error("  The field",snp_pos, "with the SNP position information is not present in loc.metrics.\n"))
+        
+      }
+    }
+    
+    # assigning chromosome information 
+    if(is.null(x$chromosome)){
+   
+      if(snp_chr == "0" ){
+        x$chromosome <- rep(as.factor("0"),nLoc(x))
+        
+        if(verbose>=2){
+          
+          cat(report("  Chromosome information is not present in the slot 'chromosome'. Setting '0' as the name chromosome for all the SNPs.\n"))
+          
+        }
+        
+      }else{
+        
+        if(snp_chr %in% names(x$other$loc.metrics)){
+          
+          if(verbose>=2){
+            cat(report("  Using the chromosome information in the field",snp_chr, "from loc.metrics.\n"))
+          }
+          
+          x$chromosome <- as.factor(unname(unlist(x$other$loc.metrics[snp_chr])))
+          
+        }else{
+          
+          stop(error("  The field",snp_chr, "with the chromosome information is not present in loc.metrics.\n"))
+          
+        }
+      }
+    }
+   
     
     gl2plink(
         x = x,
@@ -138,8 +191,8 @@ gl2vcf <- function(x,
             )
         }
     
-    system_verbose = function(...) {
-        report = system(..., intern = T)
+    system_verbose <-function(...) {
+        report <-system(..., intern = T)
         message(
             paste0(
                 "\n\n----------Output of function start:\n\n",

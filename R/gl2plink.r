@@ -68,6 +68,7 @@
 #'  \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' \donttest{
+#' require("dartR.data")
 #' test <- platypus.gl
 #' # assigning SNP position
 #' test$position <- test$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
@@ -186,7 +187,7 @@ gl2plink <- function(x,
                 else if (inp == 2)
                     xx[i, ii] <- homs2[ii]
             } else{
-                xx[i, ii] = "0/0"
+                xx[i, ii] <-"0/0"
             }
         }
     }
@@ -230,7 +231,6 @@ gl2plink <- function(x,
                         prefix.in,
                         "--allow-no-sex",
                         "--allow-extra-chr",
-                        # paste("--reference-allele",file.path(tempdir(),'mylist.txt')),
                         "--out",
                         prefix.out,
                         extra.options
@@ -240,8 +240,8 @@ gl2plink <- function(x,
             }
         
         
-        system_verbose = function(...) {
-            report = system(..., intern = T)
+        system_verbose <-function(...) {
+            report <-system(..., intern = T)
             message(
                 paste0(
                     "\n\n----------Output of function start:\n\n",

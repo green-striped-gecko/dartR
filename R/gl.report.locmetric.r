@@ -99,7 +99,7 @@
 #' @seealso \code{\link{gl.filter.locmetric}}, \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #'
-#' @family filters and filter reports
+#' @family report functions
 #'
 #' @export
 #'

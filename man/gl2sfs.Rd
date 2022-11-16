@@ -26,7 +26,7 @@ progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-A list with two elements: the DAF and MAF.
+Deprecated. Please use gl.sfs instead.
 }
 \description{
 The output of this function is suitable for analysis in fastsimcoal2 or dada.

@@ -1,40 +1,9 @@
-#' A genlight object created via the gl.read.dart function
-#'
-#' This is a test data set on platypus with 81 individuals, 3 populations and 
-#' 1,000 binary SNPs.
-#' @name platypus.gl
-#' @format genlight object
-#' @docType data
-#' @author Luis Mijangos (bugs? Post to 
-#' \url{https://groups.google.com/d/forum/dartr}
-#' @keywords datasets
-"platypus.gl"
-
-# Experimental populations of Drosophila melanogaster 
-# Population 27 at the end of the experiment (T2)
-# @name pop27_T2.rda
-# @format genlight object
-# @docType data
-# @author Luis Mijangos (bugs? Post to 
-# \url{https://groups.google.com/d/forum/dartr}
-# @keywords datasets
-# NULL
-
-# Experimental populations of Drosophila melanogaster 
-# Population 27 at the beginning of the experiment (T0)
-# @name pop27_T0.rda
-# @format genlight object
-# @docType data
-# @author Luis Mijangos (bugs? Post to 
-# \url{https://groups.google.com/d/forum/dartr}
-# @keywords datasets
-# NULL
 
 #' A simulated genlight object created to run a landscape genetic example
 #'
 #'This a test data set to run a landscape genetics example. It contains 10 
-#'populations of 30 individuals each and each individual has 300 loci. There are 
-#'no covariates for individuals or loci.
+#'populations of 30 individuals each and each individual has 300 loci. There 
+#'are no covariates for individuals or loci.
 #' @name possums.gl
 #' @format genlight object
 #' @docType data
@@ -127,8 +96,8 @@ NULL
 #' library(PopGenReport)
 #' read.csv( paste(.libPaths()[1],'/dartR/extdata/platy.csv',sep='' ))
 #' platy <- read.genetable( paste(.libPaths()[1],'/dartR/extdata/platy.csv',
-#' sep='' ), ind=1, pop=2, lat=3, long=4, other.min=5, other.max=6, oneColPerAll=FALSE,
-#' sep='/')
+#' sep='' ), ind=1, pop=2, lat=3, long=4, other.min=5, other.max=6, 
+#' oneColPerAll=FALSE, sep='/')
 #' platy.gl <- gi2gl(platy, parallel=FALSE)
 #' df.loc <- data.frame(RepAvg = runif(nLoc(platy.gl)), CallRate = 1)
 #' platy.gl@other$loc.metrics <- df.loc

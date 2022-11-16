@@ -9,12 +9,14 @@
 #' The script then applies the new population assignments to the genlight object
 #'  and recalculates the distance and associated matrices.
 #'
-#' @param fd Name of the list of matrices produced by gl.fixed.diff() [required].
+#' @param fd Name of the list of matrices produced by gl.fixed.diff() 
+#' [required].
 #' @param tloc Threshold defining a fixed difference (e.g. 0.05 implies 95:5 vs
 #'  5:95 is fixed) [default 0].
 #' @param tpop Threshold number of fixed differences above which populations
 #' will not be amalgamated [default 0].
-#' @param pb If TRUE, show a progress bar on time consuming loops [default FALSE].
+#' @param pb If TRUE, show a progress bar on time consuming loops 
+#' [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity]
@@ -31,7 +33,8 @@
 #'         }
 #' @importFrom methods show
 #' @export
-#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to 
+#' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' fd <- gl.fixed.diff(testset.gl,tloc=0.05)
 #' fd
@@ -62,7 +65,8 @@ gl.collapse <- function(fd,
     
     if (tloc > 0.5 || tloc < 0) {
         stop(error(
-            "Fatal Error: Parameter tloc should be positive in the range 0 to 0.5\n"
+            "Fatal Error: Parameter tloc should be positive in the range 0 to
+            0.5\n"
         ))
     }
     
@@ -78,7 +82,8 @@ gl.collapse <- function(fd,
         if (tloc > 0) {
             cat(
                 report(
-                    "  Comparing populations for fixed differences with tolerance",
+                    "  Comparing populations for fixed differences with 
+                    tolerance",
                     tloc,
                     "\n"
                 )
@@ -92,7 +97,8 @@ gl.collapse <- function(fd,
         if (tpop == 1) {
             cat(
                 report(
-                    "  Amalgamating populations with corrobrated fixed differences, tpop =",
+                    "  Amalgamating populations with corrobrated fixed 
+                    differences, tpop =",
                     tpop,
                     "\n"
                 )
@@ -247,17 +253,18 @@ gl.collapse <- function(fd,
         if (pb) {
             cat("\n")
         }
-        cat(
-            report(
-                "Returning a list of class 'fd' containing the new genlight object and square matricies, as follows:\n",
-                "         [[1]] $gl -- input genlight object;\n",
-                "         [[2]] $fd -- raw fixed differences;\n",
-                "         [[3]] $pcfd -- percent fixed differences;\n",
-                "         [[4]] $nobs -- mean no. of individuals used in each comparison;\n",
-                "         [[5]] $nloc -- total number of loci used in each comparison;\n",
-                "         [[6]] $expfpos -- NAs, populated by gl.fixed.diff [by simulation];\n",
-                "         [[7]] $sdfpos -- NAs, populated by gl.fixed.diff [by simulation];\n",
-                "         [[8]] $prob -- NAs, populated by gl.fixed.diff [by simulation].\n"
+ cat(
+report(
+"Returning a list of class 'fd' containing the new genlight object and square
+matricies, as follows:\n",
+"         [[1]] $gl -- input genlight object;\n",
+"         [[2]] $fd -- raw fixed differences;\n",
+"         [[3]] $pcfd -- percent fixed differences;\n",
+"         [[4]] $nobs -- mean no. of individuals used in each comparison;\n",
+"         [[5]] $nloc -- total number of loci used in each comparison;\n",
+"         [[6]] $expfpos -- NAs, populated by gl.fixed.diff [by simulation];\n",
+"         [[7]] $sdfpos -- NAs, populated by gl.fixed.diff [by simulation];\n",
+"         [[8]] $prob -- NAs, populated by gl.fixed.diff [by simulation].\n"
             )
         )
     }

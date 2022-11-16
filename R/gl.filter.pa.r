@@ -20,11 +20,13 @@
 #' @return The reduced genlight dataset, containing now only fixed and private
 #' alleles.
 #' @export
+#' @family filter functions
 #' @author Authors: Bernd Gruber & Ella Kelly (University of Melbourne);
 #' Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' result <- gl.filter.pa(testset.gl, pop1=pop(testset.gl)[1], pop2=pop(testset.gl)[2],verbose=3)
+#' result <- gl.filter.pa(testset.gl, pop1=pop(testset.gl)[1], 
+#' pop2=pop(testset.gl)[2],verbose=3)
 
 gl.filter.pa <- function(x,
                          pop1,
@@ -52,14 +54,16 @@ gl.filter.pa <- function(x,
     p2 <- as.matrix(pops[[pop2]])
     p1alf <- colMeans(p1, na.rm = T) / 2
     p2alf <- colMeans(p2, na.rm = T) / 2
+    # private alleles for pop 1
     priv1 <-
         c(names(p1alf)[p2alf == 0 &
                            p1alf != 0], names(p1alf)[p2alf == 1 &
-                                                         p1alf != 1])  # private alleles for pop 1
+                                                         p1alf != 1])  
+    # private alleles for pop 2
     priv2 <-
         c(names(p2alf)[p1alf == 0 &
                            p2alf != 0], names(p2alf)[p1alf == 1 &
-                                                         p2alf != 1])  # private alleles for pop 2
+                                                         p2alf != 1])  
     pfLoci <- unique(c(priv1, priv2))  # put all together
     index <- locNames(x) %in% pfLoci
     if (invers)

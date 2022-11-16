@@ -385,7 +385,7 @@ gl.report.ld <- function(x,
                 nobj <- name
                 filename <- paste0("LD_", name, ".rdata")
             } else {
-                filename = "LDallp.rdata"
+                filename <-"LDallp.rdata"
                 nobj <- "LDallp"
             }
             

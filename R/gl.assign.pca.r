@@ -23,11 +23,12 @@
 #' alleles have been detected and the position of the unknown in relation to the
 #' confidence ellipses as is plotted by this script. Note, this plot is
 #' considering only the top two dimensions of the ordination, and so an unknown
-#' lying outside the confidence ellipse can be unambiguously interpreted as it lying outside
-#' the confidence envelope. However, if the unknown lies inside the confidence
-#' ellipse in two dimensions, then it may still lie outside the confidence
-#' envelope in deeper dimensions. This second step is good for eliminating populations from
-#' consideration, but does not provide confidence in assignment.
+#' lying outside the confidence ellipse can be unambiguously interpreted as it 
+#' lying outside the confidence envelope. However, if the unknown lies inside 
+#' the confidence ellipse in two dimensions, then it may still lie outside the 
+#' confidence envelope in deeper dimensions. This second step is good for 
+#' eliminating populations from consideration, but does not provide confidence 
+#' in assignment.
 #'
 #' The third step is to consider the assignment probabilities, using the script
 #' gl.assign.mahalanobis(). This approach calculates the squared Generalised 
@@ -60,7 +61,8 @@
 #' @importFrom stats dnorm qnorm
 #' @export
 #'
-#' @author Custodian: Arthur Georges -- Post to \url{https://groups.google.com/d/forum/dartr}
+#' @author Custodian: Arthur Georges -- Post to 
+#' \url{https://groups.google.com/d/forum/dartr}
 #' @examples 
 #' \dontrun{
 #' #Test run with a focal individual from the Macleay River (EmmacMaclGeor) 
@@ -104,7 +106,8 @@ gl.assign.pca <- function(x,
     if (nPop(x) < 2) {
         stop(
             error(
-                "Fatal Error: Only one population, including the unknown, no putative source\n"
+                "Fatal Error: Only one population, including the unknown, no 
+                putative source\n"
             )
         )
     }
@@ -114,7 +117,8 @@ gl.assign.pca <- function(x,
     if (!(unknown %in% indNames(x))) {
         stop(
             error(
-                "Fatal Error: Unknown must be listed among the individuals in the genlight object!\n"
+                "Fatal Error: Unknown must be listed among the individuals in 
+                the genlight object!\n"
             )
         )
     }
@@ -138,7 +142,8 @@ gl.assign.pca <- function(x,
     
     # Ordinate a reduced space of 2 dimensions
     if (verbose >= 2){
-        cat(report("  Calculating a PCA to represent the unknown in the context of putative sources\n"))
+        cat(report("  Calculating a PCA to represent the unknown in the context
+                   of putative sources\n"))
     }
     pcoa <- gl.pcoa(x, nfactors = 2, verbose = 0)
     # Plot
@@ -151,7 +156,8 @@ gl.assign.pca <- function(x,
     df <- data.frame(pcoa$scores)
     df <- cbind(as.character(pop(x)), df)
     names(df) <- c("pop", "x", "y")
-    # Determine if the unknown lies within the confidence ellipses specified by plevel
+    # Determine if the unknown lies within the confidence ellipses specified by 
+    #plevel
     result <- data.frame()
     count <- 0
     for (i in popNames(x)) {
@@ -172,7 +178,8 @@ gl.assign.pca <- function(x,
     nhits <- length(result$pop[result$hit])
     nohits <- length(result$pop[!result$hit])
     if(verbose >= 2){
-        cat(report("  Eliminating populations for which the unknown is outside their confidence envelope\n"))
+        cat(report("  Eliminating populations for which the unknown is outside
+                   their confidence envelope\n"))
     }
     if (verbose >= 3) {
         if (nhits > 0) {
@@ -196,10 +203,12 @@ gl.assign.pca <- function(x,
         x2 <- x
     } else {
         x2 <-
-            gl.drop.pop(x, pop.list = result[result$hit == FALSE, "pop"], verbose = 0)
+            gl.drop.pop(x, pop.list = result[result$hit == FALSE, "pop"], 
+                        verbose = 0)
     }
     if(verbose >= 2){
-        cat(report("  Returning a genlight object with remaining putative source populations plus the unknown\n"))
+        cat(report("  Returning a genlight object with remaining putative source
+                   populations plus the unknown\n"))
     }
     
     # FLAG SCRIPT END

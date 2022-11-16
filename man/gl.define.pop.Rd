@@ -2,7 +2,8 @@
 % Please edit documentation in R/gl.define.pop.r
 \name{gl.define.pop}
 \alias{gl.define.pop}
-\title{Defines a new population in a genlight object for specified individuals}
+\title{Defines a new population in a genlight object for specified 
+individuals}
 \usage{
 gl.define.pop(x, ind.list, new, verbose = NULL)
 }
@@ -29,7 +30,8 @@ The script returns a genlight object with the new population assignment.
 }
 \examples{
 popNames(testset.gl)
-gl <- gl.define.pop(testset.gl, ind.list=c('AA019073','AA004859'), new='newguys')
+gl <- gl.define.pop(testset.gl, ind.list=c('AA019073','AA004859'), 
+new='newguys')
 popNames(gl)
 indNames(gl)[pop(gl)=='newguys']
 }

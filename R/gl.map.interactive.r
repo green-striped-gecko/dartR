@@ -14,9 +14,20 @@
 #'  populations [default TRUE].
 #' @param pop.labels.cex Size of population labels [default 12].
 #' @param ind.circles Should individuals plotted as circles [default TRUE].
-#' @param ind.circle.cols colors off circles. Colors can be provided as usual by names (e.g. "black") and are re-cycled. So a color c("blue","red") colors individuals alternatively between blue and red using the genlight object order of individuals. For transparency see parameter ind.circle.transparency. Defaults to rainbow colors by population  if not provided. If you want to have your own colors for each population, check the platypus.gl example below.
-#' @param ind.circle.cex (size or circles in pixels ). Defaults to 10.
-#' @param ind.circle.transparency Transparency of circles between 0=invisible and 1=no transparency. Defaults to 0.8.
+#' @param ind.circle.cols Colors of circles. Colors can be provided as usual by 
+#' names (e.g. "black") and are re-cycled. So a color c("blue","red") colors 
+#' individuals alternatively between blue and red using the genlight object
+#'  order of individuals. For transparency see parameter 
+#'  ind.circle.transparency. Defaults to rainbow colors by population  if not
+#'   provided. If you want to have your own colors for each population, check
+#'    the platypus.gl example below.
+#' @param ind.circle.cex (size or circles in pixels ) [default 10].
+#' @param ind.circle.transparency Transparency of circles between 0=invisible 
+#' and 1=no transparency. Defaults to 0.8.
+#' @param palette_links Color palette for the links in case a matrix is provided
+#'  [default NULL].
+#' @param leg_title Legend's title for the links in case a matrix is provided
+#'  [default NULL].
 #' @param provider Passed to leaflet [default "Esri.NatGeoWorldMap"].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
@@ -28,13 +39,26 @@
 #' A wrapper around the \pkg{leaflet} package. For possible background 
 #' maps check as specified via the provider:
 #' \url{http://leaflet-extras.github.io/leaflet-providers/preview/index.html}
+#' 
+#' The palette_links argument can be any of the following:
+#' A character vector of RGB or named colors. Examples: palette(), 
+#' c("#000000", "#0000FF", "#FFFFFF"), topo.colors(10)
+#' 
+#' The name of an RColorBrewer palette, e.g. "BuPu" or "Greens".
+#' 
+#' The full name of a viridis palette: "viridis", "magma", "inferno", 
+#' or "plasma".
+#' 
+#' A function that receives a single value between 0 and 1 and returns a color.
+#'  Examples: colorRamp(c("#000000", "#FFFFFF"), interpolate = "spline").
+#'  
 #' @author Bernd Gruber -- Post to \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' require("dartR.data")
 #' gl.map.interactive(bandicoot.gl)
 #' cols <- c("red","blue","yellow")[as.numeric(pop(platypus.gl))]
 #' gl.map.interactive(platypus.gl, ind.circle.cols=cols, ind.circle.cex=10, 
 #' ind.circle.transparency=0.5)
-
 
 gl.map.interactive <- function(x,
                                matrix = NULL,
@@ -44,8 +68,10 @@ gl.map.interactive <- function(x,
                                pop.labels.cex = 12,
                                ind.circles = TRUE,
                                ind.circle.cols = NULL,
-                               ind.circle.cex=10,
-                               ind.circle.transparency=0.8,                                  
+                               ind.circle.cex = 10,
+                               ind.circle.transparency = 0.8,        
+                               palette_links = NULL,
+                               leg_title = NULL,
                                provider = "Esri.NatGeoWorldMap",
                                verbose = NULL) {
     
@@ -85,7 +111,7 @@ gl.map.interactive <- function(x,
         
         if (sum(colnames(x@other$latlon) %in% c("lat", "lon")) != 2) {
             stop(error(
-                "Coordinates under gl@other$latlon are not named 'lat' and 'lon'."
+ "Coordinates under gl@other$latlon are not named 'lat' and 'lon'."
             ))
         }
         
@@ -93,7 +119,8 @@ gl.map.interactive <- function(x,
             if (nrow(matrix) != nInd(x) & nrow(matrix) != nPop(x)) {
                 stop(
                     error(
-                        "The dimension of the provided matrix does neither match the number of individuals nor the number of populations."
+"The dimension of the provided matrix does neither match the number of 
+individuals nor the number of populations."
                     )
                 )
             }
@@ -150,10 +177,13 @@ gl.map.interactive <- function(x,
         }
         
         if (!is.null(matrix)) {
+          matrix <- matrix[order(indNames(x)),]
             # standardize
             if (standard) {
                 matrix[, ] <-
-                    ((matrix[, ] - min(matrix, na.rm = T)) / (max(matrix, na.rm = T) - min(matrix, na.rm = T))) * 9 + 1
+                    ((matrix[, ] - min(matrix, na.rm = T)) / 
+                       (max(matrix, na.rm = T) - 
+                          min(matrix, na.rm = T))) * 9 + 1
             }
             
             if (nrow(matrix) == nPop(x)) {
@@ -161,22 +191,39 @@ gl.map.interactive <- function(x,
             } else {
                 xys <- df
             }
+          
+          if(is.null(palette_links)){
+            palette_links <- 
+          diverging_palette(length(unique(unlist(unname(as.vector(matrix))))))
+          }
             
+          qpal <- leaflet::colorNumeric(
+            palette = palette_links,
+            domain = unique(unlist(unname(as.vector(matrix)))))
+          
             if (symmetric) {
                 for (ii in 1:nrow(matrix)) {
                     for (i in ii:nrow(matrix)) {
-                        if (!is.null(matrix[i, ii]))
+                        if (!is.null(matrix[i, ii]) & matrix[i, ii] > 0 ){
                             m <- m %>%
                                 leaflet::addPolylines(
                                     lng = c(xys[i, "lon"], xys[ii, "lon"]),
                                     lat = c(xys[i, "lat"], xys[ii, "lat"]),
-                                    weight = matrix[i,
-                                                    ii],
-                                    color = "#0000FF",
+                                    color = qpal(matrix[i,ii]),
                                     opacity = 1
                                 )
+                        }else{
+                          next()
+                        }
                     }
                 }
+              m <- m %>% leaflet::addLegend(
+                pal = qpal, 
+                values = unique(unlist(unname(as.vector(matrix)))), 
+                group = "addPolylines", 
+                position = "bottomleft",
+                title = leg_title) 
+       
             }
             
             if (!symmetric) {
@@ -187,14 +234,17 @@ gl.map.interactive <- function(x,
                             to <- xys[ii, ]
                             if (!is.null(matrix[i, ii]) &
                                 !is.null(matrix[ii, i])) {
-                                if (matrix[i, ii] > matrix[ii, i])
-                                    lcols = "#FFAA00"
-                                else
-                                    lcols = "#00AAFF"
-                                if (matrix[i, ii] == matrix[ii, i])
-                                    lcols = "#00AA00"
-                            } else
-                                lcols = "#333333"
+                                if (matrix[i, ii] > matrix[ii, i]){
+                                    lcols <-"#FFAA00"
+                                }else{
+                                    lcols <-"#00AAFF"
+                                }
+                                if (matrix[i, ii] == matrix[ii, i]){
+                                    lcols <-"#00AA00"
+                                }
+                            } else{
+                                lcols <-"#333333"
+                            }
                             m <- m %>%
                                 leaflet.minicharts::addFlows(
                                     lng0 = as.numeric(from["lon"]),
@@ -204,7 +254,7 @@ gl.map.interactive <- function(x,
                                     flow = matrix[i, ii],
                                     color = lcols,
                                     maxThickness = 10,
-                                    minThickness = 1,
+                                    minThickness = 0,
                                     maxFlow = max(matrix,
                                                   na.rm = T),
                                     opacity = 0.8

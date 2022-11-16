@@ -8,6 +8,7 @@ gl.report.pa(
   x,
   x2 = NULL,
   method = "pairwise",
+  loc_names = FALSE,
   plot.out = TRUE,
   font_plot = 14,
   map.interactive = FALSE,
@@ -25,9 +26,13 @@ provided here, but they must have the same number of SNPs [default NULL].}
 \item{method}{Method to calculate private alleles: 'pairwise' comparison or
 compare each population against the rest 'one2rest' [default 'pairwise'].}
 
+\item{loc_names}{Whether names of loci with private alleles and fixed 
+differences should reported. If TRUE, loci names are reported using a list
+ [default FALSE].}
+
 \item{plot.out}{Specify if Sankey plot is to be produced [default TRUE].}
 
-\item{font_plot}{Numeric font size in pixels for the node text labels 
+\item{font_plot}{Numeric font size in pixels for the node text labels
 [default 14].}
 
 \item{map.interactive}{Specify whether an interactive map showing private
@@ -47,9 +52,11 @@ report [default 2 or as specified using gl.set.verbosity].}
 \value{
 A data.frame. Each row shows, for each pair of populations the number
  of individuals in each population, the number of loci with fixed differences
- (same for both populations) in pop1 (compared to pop2) and vice versa. Same 
+ (same for both populations) in pop1 (compared to pop2) and vice versa. Same
  for private alleles and finally the absolute mean allele frequency
- difference between loci (AFD).
+ difference between loci (AFD). If loc_names = TRUE, loci names with private
+  alleles and fixed differences are reported in a list in addition to the 
+  dataframe.
 }
 \description{
 This function reports private alleles in one population compared with a
@@ -65,8 +72,8 @@ If no x2 is provided, the function uses the pop(gl) hierarchy to determine
 pairs of populations, otherwise it runs a single comparison between x and
 x2.
 
-\strong{Hint:} in case you want to run comparisons between individuals 
-(assuming individual names are unique), you can simply redefine your 
+\strong{Hint:} in case you want to run comparisons between individuals
+(assuming individual names are unique), you can simply redefine your
 population names with your individual names, as below:
 
 \code{pop(gl) <- indNames(gl)}
@@ -97,6 +104,14 @@ differentiation metric displaying intuitive properties which provides a
 valuable alternative to FST. For details about its properties and how it is
 calculated see Berner (2019).
 
+The function also reports an estimation of the lower bound of the number of
+ undetected private alleles using the Good-Turing frequency formula,
+ originally developed for cryptography, which estimates in an ecological 
+ context the true frequencies of rare species in a single assemblage based on
+  an incomplete sample of individuals. The approach is described in Chao et 
+  al. (2017). For this function, the equation 2c is used. This estimate is 
+  reported in the output table as Chao1 and Chao2. 
+
 In this function a Sankey Diagram is used to visualize patterns of private
 alleles between populations. This diagram allows to display flows (private
 alleles) between nodes (populations). Their links are represented with arcs
@@ -114,22 +129,36 @@ out <- gl.report.pa(testset.gl[1:20,])
 \item Berner, D. (2019). Allele frequency difference AFD – an intuitive
 alternative to FST for quantifying genetic population differentiation. Genes,
  10(4), 308.
+ \item Chao, Anne, et al. "Deciphering the enigma of undetected species,
+ phylogenetic, and functional diversity based on Good-Turing theory." 
+ Ecology 98.11 (2017): 2914-2929.
 }
 }
 \seealso{
 \code{\link{gl.list.reports}},
  \code{\link{gl.print.reports}}
 
-Other reporting functions: 
-\code{\link{gl.diagnostics.hwe}()},
+Other report functions: 
 \code{\link{gl.report.bases}()},
+\code{\link{gl.report.callrate}()},
 \code{\link{gl.report.diversity}()},
+\code{\link{gl.report.hamming}()},
 \code{\link{gl.report.heterozygosity}()},
+\code{\link{gl.report.hwe}()},
+\code{\link{gl.report.ld.map}()},
+\code{\link{gl.report.locmetric}()},
+\code{\link{gl.report.maf}()},
+\code{\link{gl.report.monomorphs}()},
+\code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.parent.offspring}()},
-\code{\link{gl.report.sexlinked}()}
+\code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.reproducibility}()},
+\code{\link{gl.report.secondaries}()},
+\code{\link{gl.report.sexlinked}()},
+\code{\link{gl.report.taglength}()}
 }
 \author{
-Custodian: Bernd Gruber -- Post to 
+Custodian: Bernd Gruber -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
-\concept{reporting functions}
+\concept{report functions}
