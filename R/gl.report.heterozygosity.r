@@ -99,6 +99,7 @@
 #' \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
+#' require("dartR.data")
 #' df <- gl.report.heterozygosity(platypus.gl)
 #' df <- gl.report.heterozygosity(platypus.gl,method='ind')
 #' n.inv <- gl.report.secondaries(platypus.gl)

@@ -35,7 +35,7 @@ Description: Functions are provided that facilitate the import and analysis of
     the information by typing citation("dartR") in the console.
 VignetteBuilder: knitr
 Encoding: UTF-8
-Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2, dplyr
+Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2, dplyr, dartR.data
 biocViews:
 Imports: ape,crayon,data.table,fields,foreach,gridExtra,MASS,methods,patchwork,plyr,PopGenReport,raster,reshape2,shiny,SNPRelate,sp,StAMPP,stats,stringr,tidyr,utils,vegan
 Suggests: 
@@ -95,8 +95,7 @@ Suggests:
     vcfR,
     zoo,
     viridis
-Remotes: 
-  mijangos81/ggtern
+Remotes: mijangos81/ggtern, green-striped-gecko/dartR.data
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.2.1

@@ -82,8 +82,7 @@ gl2fasta <- function(x,
                      verbosity = verbose)
     
     # CHECK DATATYPE
-    datatype <-
-        utils.check.datatype(x, accept = "SNP", verbose = verbose)
+    datatype <- utils.check.datatype(x, accept = "SNP", verbose = verbose)
     
     # FUNCTION SPECIFIC ERROR CHECKING
     
@@ -102,7 +101,7 @@ gl2fasta <- function(x,
         if (verbose >= 2) {
             cat(
                 warn(
-                    "  Warning: Dataset contains monomorphic loci which will be included in the output fastA file\n"
+                    "  Warning: Dataset contains monomorphic loci which will be included in the output fasta file\n"
                 )
             )
         }
@@ -118,12 +117,13 @@ gl2fasta <- function(x,
     if (length(x@position) != nLoc(x)) {
         stop(
             error(
-                "Fatal Error: Data must include position information for each loci in the @position slot.\n"
+"Fatal Error: Data must include position information for each loci in the @position slot.\n"
             )
         )
     }
     if (length(x@loc.all) != nLoc(x)) {
-        stop("Fatal Error: Data must include type of alleles in the @loc.all slot.\n")
+        stop(error(
+  "Fatal Error: Data must include type of alleles in the @loc.all slot.\n"))
     }
     
     if (method == 1 && verbose >= 2) {
