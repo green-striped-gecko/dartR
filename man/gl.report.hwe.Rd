@@ -172,11 +172,6 @@ allele (AA), heterozygous (AB) and homozygous for the alternative allele
 
 For these plots to work it is necessary to install the package ggtern.
 }
-\examples{
-\dontrun{
-gl.report.hwe(x = bandicoot.gl)
-}
-}
 \references{
 \itemize{
  \item Benjamini, Y., and Yekutieli, D. (2001). The control of the false
@@ -228,5 +223,9 @@ Other report functions:
 \author{
 Custodian: Luis Mijangos -- Post to
 \url{https://groups.google.com/d/forum/dartr}
+#@examples
+#\dontrun{
+#gl.report.hwe(x = bandicoot.gl)
+#}
 }
 \concept{report functions}

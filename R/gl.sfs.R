@@ -106,7 +106,9 @@ gl.sfs<- function(x, minbinsize=0, folded=TRUE, singlepop=FALSE, plot.out=TRUE, 
     sfs <- aa
   }
   #needs to be saved and turned into a ggplot
-  if (plot.out & length(dim(sfs))<3) barplot(sfs) else cat(report("The sfs has more than 2 dimensions, therefore no plot is returned\n"))
+  if (plot.out) {
+  if (length(dim(sfs))<3) barplot(sfs) else cat(report("The sfs has more than 2 dimensions, therefore no plot is returned\n"))
+  }
   # FLAG SCRIPT END
   
   if (verbose >= 1) {
