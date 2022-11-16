@@ -133,10 +133,10 @@
 #' significantly out of HWE.
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-#' #@examples
-#' #\dontrun{
-#' #gl.report.hwe(x = bandicoot.gl)
-#' #}
+ #@examples
+ #\dontrun{
+ #gl.report.hwe(x = bandicoot.gl)
+ #}
 #' @references
 #' \itemize{
 #'  \item Benjamini, Y., and Yekutieli, D. (2001). The control of the false
