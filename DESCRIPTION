@@ -95,7 +95,6 @@ Suggests:
     vcfR,
     zoo,
     viridis
-Remotes: mijangos81/ggtern, green-striped-gecko/dartR.data
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.2.1
