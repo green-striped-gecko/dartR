@@ -35,9 +35,9 @@
 gl.read.PLINK <- function(filename,
                         ind.metafile = NULL,
                         loc.metafile = NULL,
-                        plink.cmd="plink", 
-                        plink.path="path",
-                        plink.flags=NULL,
+                        plink.cmd = "plink", 
+                        plink.path = "path",
+                        plink.flags = NULL,
                         verbose = NULL) {
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)

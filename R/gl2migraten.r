@@ -56,13 +56,13 @@
 gl2migraten <- function(x, 
                         outfile = "migrateHapMap",
                         outpath = tempdir(),
-                        n=NULL, 
+                        n = NULL, 
                         method = "random", 
-                        mono.rm=FALSE,
-                        plink.cmd="plink", 
-                        plink.path="path",
-                        plink.flags=NULL,
-                        verbose=NULL) {
+                        mono.rm = FALSE,
+                        plink.cmd = "plink", 
+                        plink.path,
+                        plink.flags = NULL,
+                        verbose = NULL) {
   
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
@@ -85,24 +85,30 @@ gl2migraten <- function(x,
   #------------------------------------------------------#
   # get the data into plink's tped format which is easier to convert
   tmp.out <- tempdir()
-  if(!is.null(n)) x <- gl.subsample.loci(x=x, n=n, method = method, 
-                                         mono.rm = mono.rm, verbose = verbose)
+  if(!is.null(n)){ 
+    x <- gl.subsample.loci(x = x, 
+                           n = n, 
+                           method = method, 
+                           mono.rm = mono.rm, 
+                           verbose = verbose)
+  }
+  
   gl2plink(x, plink_path = plink.path, bed_file = FALSE, outfile = "plink.out", 
            outpath = tmp.out)
   
-  utils.plink.run(tmp.out, plink.cmd=plink.cmd, plink.path, out="tplink.out", 
+  utils.plink.run(dir.in=tmp.out, plink.cmd=plink.cmd, plink.path, out="tplink.out", 
             # rm bfile because creating a .bed doesn't work for me on W
             # syntax="--bfile plink.out --recode --transpose")
-            syntax=paste("--file plink.out --recode --transpose", plink.flags))
+            syntax=paste("--file plink.out --recode transpose --allow-extra-chr", plink.flags))
   
-  tped.dt <- data.table::fread(file.path(plink.out, "tplink.out"))
+  tped.dt <- data.table::fread(paste0(tmp.out,"/tplink.out.tped"))
   popIDsdip <- rep(pop(x), each=2)
-  setnames(tped.dt, new = c("Chr", "snp.name", "gen.pos", "phys.pos", popIDsdip))
-  firstLine <- paste("H", length(unique(popIDs)), nrow(tped.dt))
+  data.table::setnames(tped.dt, new = c("Chr", "snp.name", "gen.pos", "phys.pos", popIDsdip))
+  firstLine <- paste("H", length(unique(popIDsdip)), nrow(tped.dt))
   
   write(x = firstLine, file = file.path(outpath, outfile))
   
-  for(p in unique(popIDs)) {
+  for(p in unique(popIDsdip)) {
     if (verbose > 2) {
       cat(report("Start converting data for population", p, "\n"))
     }

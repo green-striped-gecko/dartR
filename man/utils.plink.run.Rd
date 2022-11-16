@@ -16,6 +16,9 @@ utils.plink.run(
 \arguments{
 \item{dir.in}{The path where the data files are}
 
+\item{plink.cmd}{The 'name' to call plink. This will depend on the file name 
+(without the extension '.exe' if on windows) or the name of the PATH variable}
+
 \item{plink.path}{The path where the executable is. If plink is listed in
 the PATH then there is no need for this. This is what the option "path"
 means}
@@ -26,9 +29,6 @@ means}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report [default NULL].}
-
-\item{pink.cmd}{The 'name' to call plink. This will depend on the file name
-(without the extension '.exe' if on windows) or the name of the PATH variable}
 
 \item{fn}{The root of the data file name}
 }

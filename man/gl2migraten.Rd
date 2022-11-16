@@ -12,7 +12,7 @@ gl2migraten(
   method = "random",
   mono.rm = FALSE,
   plink.cmd = "plink",
-  plink.path = "path",
+  plink.path,
   plink.flags = NULL,
   verbose = NULL
 )
@@ -36,6 +36,9 @@ chosen. Information content is stored in AvgPIC in the case of SNP data and in
  PIC in the the case of presence/absence (SilicoDArT) data [default 'random'].}
 
 \item{mono.rm}{Delete monomorphic loci before sampling [default FALSE].}
+
+\item{plink.cmd}{The 'name' to call plink. This will depend on the file name 
+(without the extension '.exe' if on windows) or the name of the PATH variable}
 
 \item{plink.path}{The path where the executable is. If plink is listed in
 the PATH then there is no need for this. This is what the option "path"

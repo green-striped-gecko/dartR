@@ -231,7 +231,6 @@ gl2plink <- function(x,
                         prefix.in,
                         "--allow-no-sex",
                         "--allow-extra-chr",
-                        # paste("--reference-allele",file.path(tempdir(),'mylist.txt')),
                         "--out",
                         prefix.out,
                         extra.options
