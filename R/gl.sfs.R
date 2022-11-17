@@ -48,7 +48,7 @@ gl.sfs<- function(x, minbinsize=0, folded=TRUE, singlepop=FALSE, plot.out=TRUE, 
     pop(x)<- rep("A", nInd(x))
   }
   
-  
+  if (!singlepop &  (prod(table(pop(x))*2+1))>2^30) cat(error("Cannot create a multidimensional sfs, due to too high dimensions. Reduce the number of populations/individuals or use singlepop=TRUE."))
   # DO THE JOB
     if (nPop(x)==1 | singlepop==TRUE)
   {
@@ -106,8 +106,15 @@ gl.sfs<- function(x, minbinsize=0, folded=TRUE, singlepop=FALSE, plot.out=TRUE, 
     sfs <- aa
   }
   #needs to be saved and turned into a ggplot
-  if (plot.out & length(dim(sfs))<3) barplot(sfs) else cat(report("The sfs has more than 2 dimensions, therefore no plot is returned\n"))
-  # FLAG SCRIPT END
+  if (plot.out) {
+    if (length(dim(sfs))<3) {
+     df <- data.frame(sfs)
+     df$names <- 1:length(sfs)
+     ggplot(df, aes(x=names, y=sfs))+geom_bar(stat="identity")+xlab("bin")+ylab("Frequency")
+      
+    } else cat(report("The sfs has more than 2 dimensions, therefore no plot is returned\n"))
+  }
+    # FLAG SCRIPT END
   
   if (verbose >= 1) {
     cat(report("Completed:", funname, "\n"))
