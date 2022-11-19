@@ -56,7 +56,7 @@
 <span>  method <span class="op">=</span> <span class="st">"random"</span>,</span>
 <span>  mono.rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  plink.cmd <span class="op">=</span> <span class="st">"plink"</span>,</span>
-<span>  plink.path <span class="op">=</span> <span class="st">"path"</span>,</span>
+<span>  <span class="va">plink.path</span>,</span>
 <span>  plink.flags <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -93,6 +93,11 @@ chosen. Information content is stored in AvgPIC in the case of SNP data and in
 
 <dt>mono.rm</dt>
 <dd><p>Delete monomorphic loci before sampling [default FALSE].</p></dd>
+
+
+<dt>plink.cmd</dt>
+<dd><p>The 'name' to call plink. This will depend on the file name 
+(without the extension '.exe' if on windows) or the name of the PATH variable</p></dd>
 
 
 <dt>plink.path</dt>
