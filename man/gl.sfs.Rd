@@ -35,7 +35,7 @@ returns a site frequency spectrum, either a one dimensional vector (only a singl
 Creates a site frequency spectrum based on a dartR or genlight object
 }
 \examples{
-gl.sfs(possums.gl[1:30,]) 
+gl.sfs(bandicoot.gl, singlepop=TRUE) 
 gl.sfs(possums.gl[c(1:5,31:33),], minbinsize=1)
 }
 \references{
