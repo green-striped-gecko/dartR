@@ -107,9 +107,11 @@ gl.filter.taglength <- function(x,
         ))
     }
     index <- (nchar.tags >= lower & nchar.tags <= upper)
-    x2 <- x[, index]
-    # Remove the corresponding records from the loci metadata
-    x2@other$loc.metrics <- x@other$loc.metrics[index, ]
+
+      x2 <- x[, index]
+      # Remove the corresponding records from the loci metadata
+      x2@other$loc.metrics <- x@other$loc.metrics[index, ]
+    
     if (verbose > 2) {
         cat(report("  No. of loci deleted =", (n0 - nLoc(x2)), "\n"))
     }

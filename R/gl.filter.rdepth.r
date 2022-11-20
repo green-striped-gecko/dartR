@@ -99,9 +99,10 @@ gl.filter.rdepth <-  function(x,
     
     index <- (rdepth >= lower & rdepth <= upper)
     
-    x2 <- x[, index]
-    # Remove the corresponding records from the loci metadata
-    x2@other$loc.metrics <- x@other$loc.metrics[index,]
+      x2 <- x[, index]
+      # Remove the corresponding records from the loci metadata
+      x2@other$loc.metrics <- x@other$loc.metrics[index,]
+    
     
     # PLOT HISTOGRAMS, BEFORE AFTER
     if (plot.out) {

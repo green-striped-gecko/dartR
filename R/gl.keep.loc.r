@@ -136,10 +136,11 @@ gl.keep.loc <- function(x,
         ))
         x2 <- x
     } else {
+      
         # Remove loci flagged for deletion
         x2 <- x[, x$loc.names %in% loc.list]
-        x2@other$loc.metrics <-
-            x@other$loc.metrics[x$loc.names %in% loc.list, ]
+        x2@other$loc.metrics <- x@other$loc.metrics[x$loc.names %in% loc.list, ]
+
     }
     
     # REPORT A SUMMARY

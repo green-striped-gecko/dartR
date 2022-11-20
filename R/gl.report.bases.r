@@ -88,16 +88,11 @@ gl.report.bases <- function(x,
         cat(report("  Counting the bases\n"))
     }
     
-    A <-
-        sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "A"))
-    G <-
-        sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "G"))
-    C <-
-        sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "C"))
-    T <-
-        sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "T"))
-    total <-
-        sum(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
+    A <- sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "A"))
+    G <- sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "G"))
+    C <- sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "C"))
+    T <- sum(stringr::str_count(x@other$loc.metrics$TrimmedSequence, "T"))
+    total <- sum(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
     total.ATGC <- sum(A, G, C, T)
     if (verbose >= 2) {
         if (total != total.ATGC) {
@@ -112,17 +107,13 @@ gl.report.bases <- function(x,
     C <- C * 100 / total
     
     # Calculate the fragment lengths
-    mn <-
-        mean(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
-    mx <-
-        max(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
-    mi <-
-        min(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
+    mn <- mean(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
+    mx <- max(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
+    mi <- min(stringr::str_length(x@other$loc.metrics$TrimmedSequence))
     
     if (datatype == "SNP") {
         # Extract the SNPs
-        matrix <-
-            stringr::str_split_fixed(x@other$loc.metrics$SNP, ":", 2)
+        matrix <- stringr::str_split_fixed(x@other$loc.metrics$SNP, ":", 2)
         state.change <- matrix[, 2]
         
         if (verbose >= 2) {
@@ -156,10 +147,8 @@ gl.report.bases <- function(x,
                 )
             }
         }
-        ts <-
-            ts * 100 / length(x@other$loc.metrics$TrimmedSequence)
-        tv <-
-            tv * 100 / length(x@other$loc.metrics$TrimmedSequence)
+        ts <- ts * 100 / length(x@other$loc.metrics$TrimmedSequence)
+        tv <- tv * 100 / length(x@other$loc.metrics$TrimmedSequence)
         ratio <- ts / tv
     }
     

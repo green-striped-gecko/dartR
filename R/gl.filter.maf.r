@@ -163,8 +163,10 @@ gl.filter.maf <- function(x,
         # populations
         loci.list <- Reduce("+",loci.list)
         loci.list <- which(loci.list>=pop.limit)
-        x2 <- x[, -loci.list]
-        x2@other$loc.metrics <- x@other$loc.metrics[-loci.list,]
+        
+          x2 <- x[, -loci.list]
+          x2@other$loc.metrics <- x@other$loc.metrics[-loci.list,]
+        
         x2 <- utils.recalc.maf(x2, verbose = 0)
     }else{
         # Recalculate the relevant loc.metrics
@@ -179,8 +181,10 @@ gl.filter.maf <- function(x,
         
         # Remove loci with NA count <= 1-threshold
         index <- x@other$loc.metrics$maf >= threshold
-        x2 <- x[, index]
-        x2@other$loc.metrics <- x@other$loc.metrics[index,]
+        
+          x2 <- x[, index]
+          x2@other$loc.metrics <- x@other$loc.metrics[index,]
+        
         x2 <- utils.recalc.maf(x2, verbose = 0)
     }
     

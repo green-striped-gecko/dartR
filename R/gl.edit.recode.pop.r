@@ -137,7 +137,8 @@ gl.edit.recode.pop <-  function(x,
     }
     pop(x) <- pop.list
     
-    # If there are populations to be deleted, then recalculate relevant locus metadata and remove monomorphic loci
+    # If there are populations to be deleted, then recalculate relevant locus 
+    # metadata and remove monomorphic loci
     
     if ("delete" %in% x$pop | "Delete" %in% x$pop) {
         # Remove populations flagged for deletion

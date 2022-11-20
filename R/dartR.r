@@ -1,5 +1,5 @@
 
-#seppop needs to be importet to work for dartR
+#seppop needs to be imported to work for dartR
 #also internal functions for "[" methods
 seppop <- getFromNamespace("seppop", "adegenet")
 .seppop_internal <- getFromNamespace(".seppop_internal", "adegenet")
@@ -138,7 +138,7 @@ setMethod ("show", "dartR", function(object){
 #' @param ... other parameters
 #' @param pop list of populations to be kept
 #' @param treatOther elements in other (and ind.metrics & loci.metrics) as indexed as well. default: TRUE
-#' @param quiet warnings are surpessed. default: TRUE
+#' @param quiet warnings are suppressed. default: TRUE
 #' @param drop reduced to a vector if a single individual/loci is selected. default: FALSE [should never set to TRUE]
 
 
@@ -158,7 +158,6 @@ setMethod("[", signature(x = "dartR", i = "ANY", j = "ANY", drop = "ANY"),
             if (!is.null(pop) && !is.null(pop(x))){
               i <- .get_pop_inds(x, pop)
             }
-            
             
             ## SUBSET INDIVIDUALS ##
             ## genotypes
@@ -180,13 +179,13 @@ setMethod("[", signature(x = "dartR", i = "ANY", j = "ANY", drop = "ANY"),
             } else {
               ori.pop <- NULL
             }
+            
             ## strata
             if(!is.null(x@strata)) {
               ori.strata <- x@strata <- x@strata[i, , drop = FALSE]
             } else {
               ori.strata <- NULL
             }
-            
             
             ## HANDLE 'OTHER' SLOT ##
             nOther <- length(other(x))
@@ -209,7 +208,6 @@ setMethod("[", signature(x = "dartR", i = "ANY", j = "ANY", drop = "ANY"),
               
             } # end treatOther
             
-            
             ## SUBSET LOCI ##
             
             ## handle ind.names, loc.names, chromosome, position, and alleles
@@ -228,11 +226,12 @@ setMethod("[", signature(x = "dartR", i = "ANY", j = "ANY", drop = "ANY"),
             return(x)
           }) # end [] for genlight
 
-
 ###############################################################
 #' adjust cbind for dartR
 #' 
-#' cbind is a bit lazy and does not take care for the metadata (so data in the other slot is lost). You can get most of the loci metadata back using gl.compliance.check.
+#' cbind is a bit lazy and does not take care for the metadata (so data in the 
+#' other slot is lost). You can get most of the loci metadata back using 
+#' gl.compliance.check.
 #' @param ... list of dartR objects
 #' @export 
 cbind.dartR <- function(...){
@@ -265,7 +264,6 @@ cbind.dartR <- function(...){
   if(any(apply(temp,1,function(r) length(unique(r)))>1)) stop("non-consistent ploidy across datasets")
   ori.ploidy <- ploidy(myList[[1]])
   
-  
   ## merge one individual at a time ##
   res <- list()
   for(i in 1:n.ind){
@@ -290,7 +288,9 @@ cbind.dartR <- function(...){
 
 #' adjust rbind for dartR
 #' 
-#' rbind is a bit lazy and does not take care for the metadata (so data in the other slot is lost). You can get most of the loci metadata back using gl.compliance.check.
+#' rbind is a bit lazy and does not take care for the metadata (so data in the 
+#' other slot is lost). You can get most of the loci metadata back using
+#'  gl.compliance.check.
 #' @param ... list of dartR objects
 #' @export 
 rbind.dartR <- function(...){

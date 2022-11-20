@@ -70,8 +70,7 @@ gl2fasta <- function(x,
                      probar = FALSE,
                      verbose = NULL) {
     outfilespec <- file.path(outpath, outfile)
-    hold <- x
-    
+
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -129,32 +128,32 @@ gl2fasta <- function(x,
     if (method == 1 && verbose >= 2) {
         cat(
             report(
-                "Assigning ambiguity codes to heterozygote SNPs, concatenating trimmed sequence\n"
+                "  Assigning ambiguity codes to heterozygote SNPs, concatenating trimmed sequence\n"
             )
         )
     } else if (method == 2 && verbose >= 2) {
         cat(
             report(
-                "Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating trimmed sequence\n"
+                "  Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating trimmed sequence\n"
             )
         )
     } else if (method == 3 && verbose >= 2) {
         cat(
             report(
-                "Assigning ambiguity codes to heterozygote SNPs, concatenating SNPs\n"
+                "  Assigning ambiguity codes to heterozygote SNPs, concatenating SNPs\n"
             )
         )
     } else if (method == 4 && verbose >= 2) {
         cat(
             report(
-                "Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating SNPs\n"
+                "  Randomly allocating heterozygotes (1) to homozygotic state (0 or 2), concatenating SNPs\n"
             )
         )
     } else {
         if (verbose >= 2) {
             cat(warn("Method not properly specified\n"))
             cat(
-                warn("Replace score for heterozygotic loci with"):cat(
+                warn("  Replace score for heterozygotic loci with"):cat(
                     "  method=1 -- ambiguity codes, concatenate fragments) [default]\n"
                 )
             )
@@ -176,14 +175,14 @@ gl2fasta <- function(x,
     }
     
     # DO THE JOB
-    if (verbose >= 2) {
-        cat(report(
-            paste(
-                "  Removing loci for which snp position is outside the length of the trimmed sequences\n"
-            )
-        ))
-    }
     
+    if (verbose >= 2) {
+      cat(report(
+        paste(
+          "  Removing loci for which SNP position is outside the length of the trimmed sequences\n"
+        )
+      ))
+    }
     x <- gl.filter.overshoot(x, verbose = 0)
     
     # METHOD = AMBIGUITY CODES
@@ -224,20 +223,8 @@ gl2fasta <- function(x,
         
         # Extract alleles 1 and 2
         allelepos <- x@position
-        allele1 <-gsub("(.)/(.)", "\\1", snp, perl = T)
-        allele2 <-gsub("(.)/(.)", "\\2", snp, perl = T)
-        
-        
-        if (verbose >= 2) {
-            cat(report(
-                paste(
-                    "  Removing loci for which SNP position is outside the length of the trimmed sequences\n"
-                )
-            ))
-        }
-        x <- gl.filter.overshoot(x, verbose = 0)
-        
-        sequences <- NA
+        allele1 <- gsub("(.)/(.)", "\\1", snp, perl = T)
+        allele2 <- gsub("(.)/(.)", "\\2", snp, perl = T)
         
         # Prepare the output fastA file
         if (verbose >= 2) {
@@ -362,14 +349,11 @@ gl2fasta <- function(x,
                 # If the score is homozygous for the alternate allele
                 if (matrix[i, j] == 2 && !is.na(matrix[i, j])) {
                     # Split the trimmed into a beginning sequence, the SNP and an end sequences
-                    start <-
-                        stringr::str_sub(trimmed, end = snpos - 1)
-                    snpbase <-
-                        stringr::str_sub(trimmed,
+                    start <- stringr::str_sub(trimmed, end = snpos - 1)
+                    snpbase <- stringr::str_sub(trimmed,
                                          start = (snpos),
                                          end = (snpos))
-                    end <-
-                        stringr::str_sub(trimmed, start = snpos + 1)
+                    end <- stringr::str_sub(trimmed, start = snpos + 1)
                     # Extract the SNP transition bases (e.g. A and T)
                     state1 <-gsub("(.)/(.)", "\\1", snp, perl = T)
                     state2 <-gsub("(.)/(.)", "\\2", snp, perl = T)
