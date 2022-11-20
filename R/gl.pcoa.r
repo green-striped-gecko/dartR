@@ -539,8 +539,13 @@ gl.pcoa <- function(x,
     ylab <- paste("Percentage Contribution")
     
     p1 <-
-        ggplot(df, aes(x = eigenvalue, y = percent)) + geom_line(color = plot_colors[2]) + geom_point(color = plot_colors[1], size = 4) +
-        geom_hline(yintercept = 10, color = "blue") + plot_theme + xlab(xlab) + ylab(ylab) + ggtitle(title)
+        ggplot(df, aes(x = eigenvalue, y = percent)) + 
+      geom_line(color = plot_colors[2]) + 
+      geom_point(color = plot_colors[1], size = 4) +
+        geom_hline(yintercept = 10, color = "blue") + 
+      plot_theme + xlab(xlab) + 
+      ylab(ylab) + 
+      ggtitle(title)
     
     if (any(eig.raw < 0)) {
         main <- "Noise Axes -- Warning: some eigenvalues < 0"
@@ -549,10 +554,13 @@ gl.pcoa <- function(x,
     }
     
     p2 <-
-        ggplot(as.data.frame(eig.raw.noise), aes(x = eig.raw.noise)) + geom_histogram(bins = 50,
-                                                                                      color = plot_colors[1],
-                                                                                      fill = plot_colors[2]) +
-        geom_vline(xintercept = 0, color = "blue") + plot_theme + xlab("Eigenvalue") + ylab("Count") + ggtitle(main)
+        ggplot(as.data.frame(eig.raw.noise), aes(x = eig.raw.noise)) + 
+      geom_histogram(bins = 50, color = plot_colors[1], fill = plot_colors[2]) +
+        geom_vline(xintercept = 0, color = "blue") +
+      plot_theme + 
+      xlab("Eigenvalue") + 
+      ylab("Count") + 
+      ggtitle(main)
     
     # printing outputs
     p3 <- (p1 / p2)

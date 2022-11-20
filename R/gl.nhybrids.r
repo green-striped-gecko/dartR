@@ -264,9 +264,13 @@ gl.nhybrids <- function(gl,
                                   loc.limit,
                                   method = "random",
                                   verbose = 0)
-            gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
-            gl.fixed.all@other$loc.metrics <-
+           
+         
+              gl.fixed.all <- gl[, (locNames(gl) %in% fixed.loci)]
+              gl.fixed.all@other$loc.metrics <-
                 gl@other$loc.metrics[(locNames(gl) %in% fixed.loci), ]
+            
+       
             gl2nhyb <- gl.fixed.used
         } else {
             if (method == "random") {
