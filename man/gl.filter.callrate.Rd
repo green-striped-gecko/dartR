@@ -25,9 +25,8 @@ gl.filter.callrate(
 object containing the SilocoDArT data [required].}
 
 \item{method}{Use method='loc' to specify that loci are to be filtered, 'ind'
- to specify
-that specimens are to be filtered, 'pop' to remove loci that fail to meet the
- specified threshold in any one population [default 'loc'].}
+to specify that specimens are to be filtered, 'pop' to remove loci that 
+fail to meet the specified threshold in any one population [default 'loc'].}
 
 \item{threshold}{Threshold value below which loci will be removed
 [default 0.95].}
