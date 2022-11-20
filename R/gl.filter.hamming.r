@@ -173,10 +173,8 @@ gl.filter.hamming <- function(x,
     }
     d <- d[!is.na(d)]
     
-    x <- x[, (index)]
-    
-    # That pesky genlight bug
-    x@other$loc.metrics <- x@other$loc.metrics[(index), ]
+      x2 <- x[, (index)]
+      x2@other$loc.metrics <- x@other$loc.metrics[(index), ]
     
     # PLOT HISTOGRAMS, BEFORE AFTER
     if (plot.out) {
@@ -240,11 +238,11 @@ gl.filter.hamming <- function(x,
             round(threshold * taglength, 0),
             "bp\n"
         ))
-        cat(paste("    Loci deleted", (n0 - nLoc(x)), "\n"))
-        cat(paste("    Final No. of loci:", nLoc(x), "\n"))
-        cat(paste("    No. of individuals:", nInd(x), "\n"))
+        cat(paste("    Loci deleted", (n0 - nLoc(x2)), "\n"))
+        cat(paste("    Final No. of loci:", nLoc(x2), "\n"))
+        cat(paste("    No. of individuals:", nInd(x2), "\n"))
         cat(paste("    No. of populations: ", length(levels(
-            factor(pop(x))
+            factor(pop(x2))
         )), "\n"))
     }
     
@@ -271,8 +269,8 @@ gl.filter.hamming <- function(x,
     }
     
     # ADD TO HISTORY
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()
+    nh <- length(x2@other$history)
+    x2@other$history[[nh + 1]] <- match.call()
     
     # FLAG SCRIPT END
     if (verbose > 0) {
@@ -281,5 +279,5 @@ gl.filter.hamming <- function(x,
     
     # RETURN
     
-    return(x)
+    return(x2)
 }

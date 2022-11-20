@@ -111,21 +111,25 @@ gl.subsample.loci <- function(x,
                 "\n"
             ))
         }
-        randsel <- sample(1:nLoc(x), n, replace = F)
-        x.new <- x[, randsel]
-        x.new@other$loc.metrics <- x@other$loc.metrics[randsel, ]
+        randsel <- sample(1:nLoc(x), n, replace = FALSE)
+        
+          x.new <- x[, randsel]
+          x.new@other$loc.metrics <- x@other$loc.metrics[randsel, ]
         
         if (verbose >= 3) {
             cat(report("  No. of loci retained =", ncol(x.new), "\n"))
         }
         
     } else if (method == "PIC" | method == "pic") {
-        x.new <- x[, order(-pic)]
-        x.new <- x.new[, 1:n]
-        x.new@other$loc.metrics <- x.new@other$loc.metrics[1:n, ]
+        x <- x[, order(-pic)]
+        
+        x.new <- x[, 1:n]
+        x.new@other$loc.metrics <- x@other$loc.metrics[1:n, ]
+    
         if (verbose >= 3) {
             cat(report("  No. of loci retained =", ncol(x.new), "\n"))
         }
+        
     } else {
         stop(error("Fatal Error: method must be 'random' or 'pic'\n"))
     }
