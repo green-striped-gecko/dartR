@@ -1,4 +1,4 @@
-#' @name utils.spautocorr
+#' @name utils.spautocor
 #' @title Spatial autocorrelation coefficient calculations
 #'
 #' @description  Carries out calculation for spatial autocorrelation coefficient

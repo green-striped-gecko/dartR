@@ -42,9 +42,8 @@
 #' @param x Name of the genlight object containing the SNP data, or the genind
 #'  object containing the SilocoDArT data [required].
 #' @param method Use method='loc' to specify that loci are to be filtered, 'ind'
-#'  to specify
-#' that specimens are to be filtered, 'pop' to remove loci that fail to meet the
-#'  specified threshold in any one population [default 'loc'].
+#'  to specify that specimens are to be filtered, 'pop' to remove loci that 
+#'  fail to meet the specified threshold in any one population [default 'loc'].
 #' @param threshold Threshold value below which loci will be removed
 #' [default 0.95].
 #' @param mono.rm Remove monomorphic loci after analysis is complete
@@ -200,7 +199,7 @@ gl.filter.callrate <- function(x,
             coord_cartesian(xlim = c(min, 1)) + 
             geom_vline(xintercept = threshold,
                        color = "red",
-                       size = 1) + 
+                       linewidth = 1) + 
             xlab(xlabel) + 
             ylab("Count") +
             plot_theme
@@ -221,7 +220,7 @@ gl.filter.callrate <- function(x,
             coord_cartesian(xlim = c(min, 1)) +
             geom_vline(xintercept = threshold,
                        color = "red",
-                       size = 1) +
+                       linewidth = 1) +
             xlab(xlabel) +
             ylab("Count") +
             plot_theme
@@ -444,7 +443,7 @@ gl.filter.callrate <- function(x,
                            color = plot_colors[1],
                            fill = plot_colors[2]) +
             coord_cartesian(xlim = c(min,1)) + 
-            geom_vline(xintercept = threshold, color = "red", size = 1) + 
+            geom_vline(xintercept = threshold, color = "red", linewidth = 1) + 
             xlab(xlabel) + 
             ylab("Count") + 
             plot_theme
@@ -462,7 +461,7 @@ gl.filter.callrate <- function(x,
                            color = plot_colors[1], 
                            fill = plot_colors[2]) +
             coord_cartesian(xlim = c(min, 1)) + 
-            geom_vline(xintercept = threshold,color = "red", size = 1) + 
+            geom_vline(xintercept = threshold,color = "red", linewidth = 1) + 
             xlab(xlabel) + 
             ylab("Count") +
             plot_theme
@@ -495,10 +494,11 @@ gl.filter.callrate <- function(x,
                 ))
         locall <- Reduce(intersect, ll)
         index <- which(locNames(x) %in% locall)
-        x <- x[, locall]
-        x@other$loc.metrics <- x@other$loc.metrics[locall,]
         
-        x <- utils.recalc.callrate(x, verbose = 0)
+        x2 <- x[, locall]
+        x2@other$loc.metrics <- x@other$loc.metrics[locall,]
+        
+        x2 <- utils.recalc.callrate(x2, verbose = 0)
         
         # Plot a histogram of Call Rate
         
@@ -516,12 +516,12 @@ gl.filter.callrate <- function(x,
                            color = plot_colors[1],
                            fill = plot_colors[2]) + 
             coord_cartesian(xlim = c(min, 1)) + 
-            geom_vline(xintercept = threshold, color = "red", size = 1) + 
+            geom_vline(xintercept = threshold, color = "red", linewidth = 1) + 
             xlab(xlabel) + 
             ylab("Count") + 
             plot_theme
         
-        tmp <- x@other$loc.metrics$CallRate
+        tmp <- x2@other$loc.metrics$CallRate
         min <- min(tmp, threshold, na.rm = TRUE)
         min <- trunc(min * 100) / 100
         if (datatype == "SNP") {
@@ -535,12 +535,11 @@ gl.filter.callrate <- function(x,
                            color = plot_colors[1],
                            fill = plot_colors[2]) + 
             coord_cartesian(xlim = c(min, 1)) +
-            geom_vline(xintercept = threshold,color = "red", size = 1) + 
+            geom_vline(xintercept = threshold,color = "red", linewidth = 1) + 
             xlab(xlabel) + 
             ylab("Count") + 
             plot_theme
         
-        x2 <- x
         if (mono.rm) {
             # Remove monomorphic loci
             x2 <- gl.filter.monomorphs(x2, verbose = 0)

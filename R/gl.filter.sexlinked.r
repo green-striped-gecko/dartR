@@ -618,13 +618,15 @@ cat("     - locnr is the location of the locus in the input genlight object\n")
         if (filter == "drop") {
             index <- -index
         }
-        x <- x[, index]
-        x@other$loc.metrics <- x@other$loc.metrics[index, ]
+
+        x2 <- x[, index]
+        x2@other$loc.metrics <- x@other$loc.metrics[index, ]
+      
     }
     
     # case no
     if (length(index) == 0 & filter == "keep") {
-        x <- NULL
+        x2 <- NULL
         if (verbose > 0) {
             cat(
                 important(
@@ -644,12 +646,13 @@ returned.\n"
                 )
             )
         }
+      x2 <- x
     }
     
     # ADD TO HISTORY
-    if (!is.null(x)) {
-        nh <- length(x@other$history)
-        x@other$history[[nh + 1]] <- match.call()
+    if (!is.null(x2)) {
+        nh <- length(x2@other$history)
+        x2@other$history[[nh + 1]] <- match.call()
     }
     # FLAG SCRIPT END
     
@@ -659,5 +662,5 @@ returned.\n"
     
     # RETURN
     
-    invisible(x)
+    invisible(x2)
 }

@@ -146,7 +146,7 @@ utils.dart2genlight <- function(dart,
             loc.names = locname,
             loc.all = a2,
             position = pos,
-            parallel = F
+            parallel = FALSE
         )
     
     if (probar) {
