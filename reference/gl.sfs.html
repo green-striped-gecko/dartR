@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,27 +106,22 @@ progress log ; 3, progress and results summary; 5, full report
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">gl.sfs</span><span class="op">(</span><span class="va">bandicoot.gl</span>, singlepop<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">gl.sfs</span><span class="op">(</span><span class="va">possums.gl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>,<span class="op">]</span><span class="op">)</span> </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.sfs </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Your data contains missing data, better to use gl.impute to fill those gaps meaningful!</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">The sfs has more than 2 dimensions, therefore no plot is returned</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="gl.sfs-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.sfs </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  d0  d1  d2  d3  d4  d5  d6  d7  d8  d9 d10 d11 d12 d13 d14 d15 d16 d17 d18 d19 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   8   4   0   1   6   8   6   8   8   5   8   6   9  10   9   8   6  12   8  14 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> d20 d21 d22 d23 d24 d25 d26 d27 d28 d29 d30 d31 d32 d33 d34 d35 d36 d37 d38 d39 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  12  20  17  14  11  18   8  12  15  13  12  13  10  17  11  18  14  14  19   7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> d40 d41 d42 d43 d44 d45 d46 d47 d48 d49 d50 d51 d52 d53 d54 d55 d56 d57 d58 d59 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  15   8   7  12  21  15  14  16  10  13   8  11  10  18   9  13   8  12  11   7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> d60 d61 d62 d63 d64 d65 d66 d67 d68 d69 d70 d71 d72 d73 d74 d75 d76 d77 d78 d79 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  11  14  15  10  12   6  17  12  14   6  11  10  12  13  12   9   3   8   6  11 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> d80 d81 d82 d83 d84 d85 d86 d87 d88 d89 d90 d91 d92 d93 d94 d95 d96 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   4   7   9   6   7   8   6  14  10   8   4  10  13   6   5  10   4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  24   6   6   3   5   3   3   4   6   8   2   7   5   1   4   6   4   8  11  11 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d20 d21 d22 d23 d24 d25 d26 d27 d28 d29 d30 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4   5   3   9  14   7   9   6   7   5   4 </span>
 <span class="r-in"><span><span class="fu">gl.sfs</span><span class="op">(</span><span class="va">possums.gl</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">31</span><span class="op">:</span><span class="fl">33</span><span class="op">)</span>,<span class="op">]</span>, minbinsize<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.sfs </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">The sfs has more than 2 dimensions, therefore no plot is returned</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="gl.sfs-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.sfs </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      B</span>
