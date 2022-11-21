@@ -57,11 +57,12 @@ gl.dist.pop <- function(x,
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "reshape2"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     # SET VERBOSITY

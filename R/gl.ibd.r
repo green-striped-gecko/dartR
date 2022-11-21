@@ -99,12 +99,17 @@ gl.ibd <- function(x = NULL,
                    plot_theme = theme_dartR(),
                    save2tmp = FALSE,
                    verbose = NULL) {
+  
     # CHECK IF PACKAGES ARE INSTALLED
-    if (!(requireNamespace("dismo", quietly = TRUE))) {
-        stop(error(
-            "Package dismo needed for this function to work. Please install it.\n"
-        ))
-    } else {
+  pkg <- "dismo"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
+    ))
+    return(-1)
+  } else {
         
         # TRAP COMMAND
         funname <- match.call()[[1]]

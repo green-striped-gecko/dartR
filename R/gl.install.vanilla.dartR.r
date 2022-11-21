@@ -43,22 +43,22 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
     
     pkg <- "devtools"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(
-            error(
-                "Package ",
-                pkg,
-                " needed for this function to work. Please install it using install.packages('devtools')."
-            )
-        )
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     pkg <- "stringr"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package ",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     # DO THE JOB

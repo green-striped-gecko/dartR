@@ -159,36 +159,34 @@ gl.pcoa.plot <- function(glPca,
     if (interactive | !is.null(zaxis)) {
         pkg <- "plotly"
         if (!(requireNamespace(pkg, quietly = TRUE))) {
-            stop(
-                error(
-                    "Package ",
-                    pkg,
-                    " needed for this function to work. Please install it."
-                )
-            )
+          cat(error(
+            "Package",
+            pkg,
+            " needed for this function to work. Please install it.\n"
+          ))
+          return(-1)
         }
     }
     
     if (datatype1=="list") {
         pkg <- "gganimate"
         if (!(requireNamespace(pkg, quietly = TRUE))) {
-            stop(
-                error(
-                    "Package ",
-                    pkg,
-                    " needed for this function to work. Please install it."
-                )
-            )
+          cat(error(
+            "Package",
+            pkg,
+            " needed for this function to work. Please install it.\n"
+          ))
+          return(-1)
         }
+        
         pkg <- "tibble"
         if (!(requireNamespace(pkg, quietly = TRUE))) {
-            stop(
-                error(
-                    "Package ",
-                    pkg,
-                    " needed for this function to work. Please install it."
-                )
-            )
+          cat(error(
+            "Package",
+            pkg,
+            " needed for this function to work. Please install it.\n"
+          ))
+          return(-1)
         }
         x <- x[[1]]
         glPca <- glPca[[1]]
