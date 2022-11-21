@@ -70,6 +70,7 @@ jobs:
       - name: Install Windows dependencies [terra]
         if: runner.os == 'Windows'
         run: |
+          install.packages("remotes")
           remotes::install_github("rspatial/terra")          
       - name: Install dependencies
         run: |
