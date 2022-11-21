@@ -66,7 +66,12 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install gdal proj geos
-          
+      
+      - name: Install Windows dependencies [terra]
+        if: runner.os =="Windows"
+        run: |
+          install.packages(c("remotes","testthat"),dependencies=TRUE)          
+          remotes::install_github("rspatial/terra")          
       - name: Install dependencies
         run: |
           options(repos = c(CRAN = "https://cloud.r-project.org/"
