@@ -108,7 +108,6 @@ gl.map.interactive <- function(x,
         " needed for this function to work. Please install it.\n"
       ))
       return(-1)
-    }
     } else {
        
         if (is.null(x@other$latlon)) {
