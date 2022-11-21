@@ -71,7 +71,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           install.packages("remotes")
-          remotes::install_github("rspatial/terra") 
+          remotes::install_github("rspatial/terra", dependencies=TRUE) 
         shell: Rscript {0}
           
       - name: Install dependencies
