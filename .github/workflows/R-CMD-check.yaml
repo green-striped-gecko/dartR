@@ -71,7 +71,8 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           install.packages("remotes")
-          remotes::install_github("rspatial/terra", dependencies=TRUE) 
+          install.packages("rgdal", type = "binary")
+          remotes::install_github("rspatial/terra", dependencies=TRUE, build=FALSE) 
         shell: Rscript {0}
           
       - name: Install dependencies
