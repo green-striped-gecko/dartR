@@ -69,12 +69,14 @@ gl.plot.network <- function(D,
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "igraph"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
+    
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
