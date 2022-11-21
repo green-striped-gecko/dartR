@@ -201,12 +201,16 @@ gl.spatial.autoCorr <- function(x = NULL,
                                 verbose = NULL) {
   
   # CHECK IF PACKAGES ARE INSTALLED
-  if (!(requireNamespace("dismo", quietly = TRUE))) {
-    stop(error(
-      "Package dismo needed for this function to work. Please install it.\n"
+  pkg <- "dismo"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
-  
+
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   

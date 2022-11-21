@@ -80,14 +80,12 @@ gl.run.structure <- function(x,
     
     pkg <- "purrr"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(
-            error(
-                "Package ",
-                pkg,
-                " needed for this function to work. Please install it using 
-                install.packages('devtools')."
-            )
-        )
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
         # check that Structure is installed
         structure <- file.exists(exec)

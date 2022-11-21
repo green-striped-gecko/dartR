@@ -93,13 +93,13 @@ gl.assign.pca <- function(x,
     # check if package is installed
     pkg <- "SIBER"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            "needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
-    requireNamespace(pkg, quietly = TRUE)
 
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = 0)
