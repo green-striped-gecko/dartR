@@ -28,9 +28,15 @@ gl.read.vcf <- function(vcffile,
     
     x <- NULL
     
-    if (!(requireNamespace("vcfR", quietly = TRUE))) {
-        stop(error("To use this function you need to install package: vcfR.\n"))
-    } else {
+    pkg <- "vcfR"
+      if (!(requireNamespace(pkg, quietly = TRUE))) {
+        cat(error(
+          "Package",
+          pkg,
+          " needed for this function to work. Please install it.\n"
+        ))
+        return(-1)
+      } else {
         vcf <- vcfR::read.vcfR(file = vcffile, verbose = verbose)
         myRef <- vcfR::getREF(vcf)
         myAlt <- vcfR::getALT(vcf)

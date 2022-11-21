@@ -88,11 +88,12 @@ gl2fasta <- function(x,
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "seqinr"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     # Check monomorphs have been removed up to date

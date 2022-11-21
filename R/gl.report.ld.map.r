@@ -104,19 +104,22 @@ gl.report.ld.map <- function(x,
   # check if packages are installed
   pkg <- "snpStats"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "fields"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
   
   # DO THE JOB

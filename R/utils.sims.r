@@ -370,35 +370,42 @@ interactive_reference <- function() {
   
   pkg <- "shinyBS"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      "needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "shinythemes"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      "needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "shinyjs"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      "needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "shinyWidgets"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      "needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
   
   ui <- fluidPage(
@@ -1543,38 +1550,44 @@ interactive_reference <- function() {
 
 interactive_sim_run <- function() {
   
-  
   pkg <- "shinyBS"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      "needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "shinythemes"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      "needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "shinyjs"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      "needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "shinyWidgets"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      "needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
   
   ui <- fluidPage(
