@@ -36,7 +36,7 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@v2
-      - uses: r-lib/actions/setup-tinytex@v1
+      - uses: r-lib/actions/setup-tinytex@v2
 
       - name: Query dependencies
         run: |
@@ -70,7 +70,6 @@ jobs:
       - name: Install Windows dependencies [terra]
         if: runner.os == 'Windows'
         run: |
-          install.packages(c("remotes","testthat"),dependencies=TRUE)          
           remotes::install_github("rspatial/terra")          
       - name: Install dependencies
         run: |
