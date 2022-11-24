@@ -76,7 +76,7 @@ session is closed.
  }
 }
 \examples{
-out <- gl.test.heterozygosity(bandicoot.gl, nreps=10, verbose=3, plot.out=TRUE)
+out <- gl.test.heterozygosity(platypus.gl, nreps=1, verbose=3, plot.out=TRUE)
 }
 \author{
 Custodian: Luis Mijangos (Post to

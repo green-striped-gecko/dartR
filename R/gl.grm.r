@@ -48,7 +48,7 @@
 #' realized relationship matrix. G3: Genes, Genomics, Genetics 2, 1405.
 #' }
 #' @examples
-#' gl.grm(bandicoot.gl[1:20,])
+#' gl.grm(platypus.gl[1:10,1:100])
 #'
 #' @seealso \code{\link{gl.grm.network}}
 #' @family inbreeding functions

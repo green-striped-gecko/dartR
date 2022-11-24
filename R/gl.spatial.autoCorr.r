@@ -173,9 +173,13 @@
 #' Molecular Ecology 17, 4346-4358.
 #' }
 #' @examples
+#' \donttest{
 #' require("dartR.data")
 #' res <- gl.spatial.autoCorr(platypus.gl, bins=seq(0,10000,2000))
 #' # using one population, showing sample size
+#' test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
+#' res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
+#' }
 #' test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
 #' res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
 #' @importFrom tidyr pivot_wider

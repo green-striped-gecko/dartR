@@ -24,7 +24,7 @@ Based on function \code{\link[hierfstat]{basic.stats}}. Check ?basic.stats
 for help.
 }
 \examples{
-out <- gl.basic.stats(possums.gl)
+out <- gl.basic.stats(possums.gl[1:10,1:100])
 }
 \author{
 Bernd Gruber (bugs? Post to

@@ -59,7 +59,8 @@ positives, given the observed allele frequency profiles and the sample sizes.
 the expected number of false positives is calculated.
 }
 \examples{
-fd <- gl.fdsim(testset.gl,poppair=c('EmsubRopeMata','EmmacBurnBara'),sympatric=TRUE,verbose=3)
+fd <- gl.fdsim(testset.gl[,1:100],poppair=c('EmsubRopeMata','EmmacBurnBara'),
+sympatric=TRUE,verbose=3)
 }
 \author{
 Custodian: Arthur Georges (Post to

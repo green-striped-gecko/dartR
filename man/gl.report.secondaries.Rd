@@ -115,8 +115,9 @@ The function \code{\link{gl.filter.secondaries}} will filter out the
 }
 \examples{
 require("dartR.data")
-n.inv <- gl.report.secondaries(platypus.gl)
-gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
+test <- gl.filter.callrate(platypus.gl,threshold = 1)
+n.inv <- gl.report.secondaries(test)
+gl.report.heterozygosity(test, n.invariant = n.inv[7, 2])
 }
 \references{
 Schmidt, T.L., Jasper, M.-E., Weeks, A.R., Hoffmann, A.A., 2021.

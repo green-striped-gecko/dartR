@@ -56,8 +56,15 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
+#'  \donttest{
 #' gl.report.hamming(testset.gl[,1:100])
 #' gl.report.hamming(testset.gs[,1:100])
+#' }
+#' 
+#' #' # SNP data
+#' test <- platypus.gl
+#' test <- gl.subsample.loci(platypus.gl,n=50)
+#' result <- gl.filter.hamming(test, threshold=0.25, verbose=3)
 #'
 #' @seealso \code{\link{gl.filter.hamming}}
 #'

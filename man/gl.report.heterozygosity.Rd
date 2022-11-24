@@ -123,11 +123,14 @@ individuals.
  }
 }
 \examples{
+ \donttest{
 require("dartR.data")
 df <- gl.report.heterozygosity(platypus.gl)
 df <- gl.report.heterozygosity(platypus.gl,method='ind')
 n.inv <- gl.report.secondaries(platypus.gl)
 gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
+}
+df <- gl.report.heterozygosity(platypus.gl)
 
 }
 \seealso{

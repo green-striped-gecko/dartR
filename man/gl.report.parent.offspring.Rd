@@ -105,7 +105,7 @@ metrics, the filters for reproducibility and read depth are no used.
  }
 }
 \examples{
-out <- gl.report.parent.offspring(testset.gl[1:10])
+out <- gl.report.parent.offspring(testset.gl[1:10,1:100])
 }
 \seealso{
 \code{\link{gl.list.reports}}, \code{\link{gl.report.rdepth}} ,

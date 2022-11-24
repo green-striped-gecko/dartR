@@ -103,10 +103,12 @@ The output of the function includes a table with the haplotypes
 require("dartR.data")
 x <- platypus.gl
 x <- gl.filter.callrate(x,threshold = 1)
+x <- gl.keep.pop(x, pop.list = "TENTERFIELD")
 x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 ld_res <- gl.ld.haplotype(x,chrom_name = "NC_041728.1_chromosome_1",
-                       ld_max_pairwise = 10000000 )
+                          ld_max_pairwise = 10000000 )
+     
 }
 \seealso{
 Other ld functions: 

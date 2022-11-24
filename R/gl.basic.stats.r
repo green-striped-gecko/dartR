@@ -12,7 +12,7 @@
 #' @author Bernd Gruber (bugs? Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' out <- gl.basic.stats(possums.gl)
+#' out <- gl.basic.stats(possums.gl[1:10,1:100])
 #' @export
 
 gl.basic.stats <- function(x,

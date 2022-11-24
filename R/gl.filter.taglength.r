@@ -20,6 +20,7 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @family filter functions
 #' @examples
+#'  \donttest{
 #' # SNP data
 #'   gl.report.taglength(testset.gl)
 #'   result <- gl.filter.taglength(testset.gl,lower=60)
@@ -28,6 +29,9 @@
 #'   gl.report.taglength(testset.gs)
 #'   result <- gl.filter.taglength(testset.gs,lower=60)
 #'   gl.report.taglength(result)
+#'   }
+#'   test <- gl.subsample.loci(platypus.gl, n =100)
+#'   res <- gl.report.taglength(test)
 
 gl.filter.taglength <- function(x,
                                 lower = 20,

@@ -40,10 +40,14 @@ This function is a wrapper for the nj\{ape\} function applied to Euclidian
 distances calculated from the genlight object.
 }
 \examples{
+ \donttest{
 # SNP data
   gl.tree.nj(testset.gl,type='fan')
 # Tag P/A data
   gl.tree.nj(testset.gs,type='fan')
+  }
+  res <- gl.tree.nj(platypus.gl)
+  
 }
 \author{
 Custodian: Arthur Georges (Post to
