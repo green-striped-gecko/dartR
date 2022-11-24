@@ -189,7 +189,8 @@ of SilicoDArT data.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">gl.filter.sexlinked</span><span class="op">(</span><span class="va">testset.gl</span>, filter<span class="op">=</span><span class="st">'drop'</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">gl.filter.sexlinked</span><span class="op">(</span><span class="va">testset.gl</span>, filter<span class="op">=</span><span class="st">'drop'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.filter.sexlinked </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: genlight object contains monomorphic loci</span></span>
@@ -208,6 +209,7 @@ of SilicoDArT data.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"> genlight object is returned unchanged.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.filter.sexlinked </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">gl.filter.sexlinked</span><span class="op">(</span><span class="va">testset.gs</span>, filter<span class="op">=</span><span class="st">'drop'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.filter.sexlinked </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with Presence/Absence (SilicoDArT) data</span></span>

@@ -198,37 +198,7 @@ F-statistics under isolation by distance. Genetics, 145(4), 1219-1228.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#only first 100 loci</span></span></span>
-<span class="r-in"><span><span class="va">ibd</span> <span class="op">&lt;-</span> <span class="fu">gl.ibd</span><span class="op">(</span><span class="va">bandicoot.gl</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Analysis performed on the genlight object.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Coordinates transformed to Mercator (google) projection to calculate distances in meters.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'nperm' &gt;= set of all permutations: complete enumeration.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Set of permutations &lt; 'minperm'. Generating entire set.</span>
-<span class="r-plt img"><img src="gl.ibd-1.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Coordinates used from: x@other$latlon (Mercator transformed) </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Transformation of Dgeo: Dgeo </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Genetic distance: Fst </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Tranformation of Dgen:  Dgen </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mantel statistic based on Pearson's product-moment correlation </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> vegan::mantel(xdis = Dgen, ydis = Dgeo, permutations = permutations,      na.rm = TRUE) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mantel statistic r: 0.6683 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Significance: 0.14167 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Upper quantiles of permutations (null model):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   90%   95% 97.5%   99% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.711 0.765 0.804 0.828 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Permutation: free</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of permutations: 119</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.ibd </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co">#because of speed only the first 100 loci</span></span></span>
 <span class="r-in"><span><span class="va">ibd</span> <span class="op">&lt;-</span> <span class="fu">gl.ibd</span><span class="op">(</span><span class="va">bandicoot.gl</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, Dgeo_trans<span class="op">=</span><span class="st">'log(Dgeo)'</span> ,Dgen_trans<span class="op">=</span><span class="st">'Dgen/(1-Dgen)'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Analysis performed on the genlight object.</span></span>
@@ -236,7 +206,7 @@ F-statistics under isolation by distance. Genetics, 145(4), 1219-1228.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 'nperm' &gt;= set of all permutations: complete enumeration.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Set of permutations &lt; 'minperm'. Generating entire set.</span>
-<span class="r-plt img"><img src="gl.ibd-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gl.ibd-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Coordinates used from: x@other$latlon (Mercator transformed) </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Transformation of Dgeo: log(Dgeo) </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Genetic distance: Fst </span></span>
@@ -265,7 +235,7 @@ F-statistics under isolation by distance. Genetics, 145(4), 1219-1228.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Analysis performed on the genlight object.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Coordinates transformed to Mercator (google) projection to calculate distances in meters.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt img"><img src="gl.ibd-3.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="gl.ibd-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Coordinates used from: x@other$latlon (Mercator transformed) </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Transformation of Dgeo: Dgeo </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Genetic distance: euclidean </span></span>
@@ -277,13 +247,46 @@ F-statistics under isolation by distance. Genetics, 145(4), 1219-1228.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> vegan::mantel(xdis = Dgen, ydis = Dgeo, permutations = permutations,      na.rm = TRUE) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mantel statistic r: 0.3406 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Significance: 0.023 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Significance: 0.025 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Upper quantiles of permutations (null model):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   90%   95% 97.5%   99% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.216 0.280 0.332 0.374 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.224 0.287 0.339 0.376 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Permutation: free</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of permutations: 999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.ibd </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#only first 100 loci</span></span></span>
+<span class="r-in"><span><span class="va">ibd</span> <span class="op">&lt;-</span> <span class="fu">gl.ibd</span><span class="op">(</span><span class="va">bandicoot.gl</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Analysis performed on the genlight object.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Coordinates transformed to Mercator (google) projection to calculate distances in meters.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 'nperm' &gt;= set of all permutations: complete enumeration.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Set of permutations &lt; 'minperm'. Generating entire set.</span>
+<span class="r-plt img"><img src="gl.ibd-3.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Coordinates used from: x@other$latlon (Mercator transformed) </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Transformation of Dgeo: Dgeo </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Genetic distance: Fst </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Tranformation of Dgen:  Dgen </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mantel statistic based on Pearson's product-moment correlation </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> vegan::mantel(xdis = Dgen, ydis = Dgeo, permutations = permutations,      na.rm = TRUE) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mantel statistic r: 0.6683 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Significance: 0.14167 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Upper quantiles of permutations (null model):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   90%   95% 97.5%   99% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.711 0.765 0.804 0.828 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Permutation: free</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of permutations: 119</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.ibd </span></span>

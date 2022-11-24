@@ -188,7 +188,8 @@ as implemented in <code><a href="utils.hamming.html">utils.hamming</a></code></p
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">gl.report.hamming</span><span class="op">(</span><span class="va">testset.gl</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="fu">gl.report.hamming</span><span class="op">(</span><span class="va">testset.gl</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.report.hamming </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Calculating pairwise Hamming distances between trimmed </span></span>
@@ -265,6 +266,38 @@ as implemented in <code><a href="utils.hamming.html">utils.hamming</a></code></p
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20       5% 0.57500000     4705    95.1      245     4.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21       0% 0.02898551     4950   100.0        0     0.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.report.hamming </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#' # SNP data</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">platypus.gl</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.subsample.loci.html">gl.subsample.loci</a></span><span class="op">(</span><span class="va">platypus.gl</span>,n<span class="op">=</span><span class="fl">50</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.subsample.loci </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: data include loci that are scored NA across all individuals.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Consider filtering using gl &lt;- gl.filter.allna(gl)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: Dataset contains monomorphic loci which will be included in the gl.subsample.loci selections</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Subsampling at random 50 loci from genlight object </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.subsample.loci </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.filter.hamming.html">gl.filter.hamming</a></span><span class="op">(</span><span class="va">test</span>, threshold<span class="op">=</span><span class="fl">0.25</span>, verbose<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.filter.hamming </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Note: Hamming distance ranges from zero (sequence identity)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">                to 1 (no bases shared at any position)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Note: Calculating pairwise Hamming distances between trimmed </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">                reference sequence tags</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Filtering loci with a Hamming Distance of less than 0.25 </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="gl.report.hamming-3.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Summary of filtered dataset</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Initial No. of loci: 50 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Hamming d &gt; 0.25 = 17 bp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Loci deleted 0 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Final No. of loci: 50 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     No. of individuals: 81 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     No. of populations:  3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.filter.hamming </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

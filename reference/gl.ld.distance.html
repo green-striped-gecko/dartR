@@ -157,8 +157,16 @@ One, 9(1), e84329.</p></li>
 <span class="r-plt img"><img src="gl.ld.distance-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.filter.callrate </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">chromosome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">other</span><span class="op">$</span><span class="va">loc.metrics</span><span class="op">$</span><span class="va">Chrom_Platypus_Chrom_NCBIv1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.filter.monomorphs.html">gl.filter.monomorphs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.filter.monomorphs </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Identifying monomorphic loci</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Removing monomorphic loci and loci with all missing </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">                       data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.filter.monomorphs </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">position</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">other</span><span class="op">$</span><span class="va">loc.metrics</span><span class="op">$</span><span class="va">ChromPos_Platypus_Chrom_NCBIv1</span></span></span>
+<span class="r-in"><span><span class="va">x</span><span class="op">$</span><span class="va">chromosome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">other</span><span class="op">$</span><span class="va">loc.metrics</span><span class="op">$</span><span class="va">Chrom_Platypus_Chrom_NCBIv1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ld_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.report.ld.map.html">gl.report.ld.map</a></span><span class="op">(</span><span class="va">x</span>,ld_max_pairwise <span class="op">=</span> <span class="fl">10000000</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.report.ld.map </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
@@ -169,7 +177,7 @@ One, 9(1), e84329.</p></li>
 <span class="r-plt img"><img src="gl.ld.distance-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.report.ld.map </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="va">ld_res_2</span> <span class="op">&lt;-</span> <span class="fu">gl.ld.distance</span><span class="op">(</span><span class="va">ld_res</span>,ld_resolution<span class="op">=</span><span class="fl">1000000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ld_res_2</span> <span class="op">&lt;-</span> <span class="fu">gl.ld.distance</span><span class="op">(</span><span class="va">ld_res</span>,ld_resolution<span class="op">=</span> <span class="fl">1000000</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.ld.distance </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="gl.ld.distance-3.png" alt="" width="700" height="433"></span>

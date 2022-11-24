@@ -151,8 +151,10 @@ session is closed.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">gl.test.heterozygosity</span><span class="op">(</span><span class="va">bandicoot.gl</span>, nreps<span class="op">=</span><span class="fl">10</span>, verbose<span class="op">=</span><span class="fl">3</span>, plot.out<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">gl.test.heterozygosity</span><span class="op">(</span><span class="va">platypus.gl</span>, nreps<span class="op">=</span><span class="fl">1</span>, verbose<span class="op">=</span><span class="fl">3</span>, plot.out<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: data include loci that are scored NA across all individuals.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Consider filtering using gl &lt;- gl.filter.allna(gl)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: genlight object contains monomorphic loci which will be factored into heterozygosity estimates</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -160,22 +162,14 @@ session is closed.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Calculating the sampling distributions for pairwise differences between populations by re-randomization</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">  Please be patient .... go have a coffee</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Cycling through the 10 pairs of populations</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Cycling through the 3 pairs of populations</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Plotting sampling distributions</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="gl.test.heterozygosity-1.png" alt="" width="700" height="433"></span>
-<span class="r-plt img"><img src="gl.test.heterozygosity-2.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    pop1 pop2      diff  significance pval</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   NSW  QLD  0.007525     sig @0.01  0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   NSW   SA  0.005484     sig @0.01  0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   NSW  VIC  0.002705 non-sig @0.05  0.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   NSW   WA  0.001447 non-sig @0.05  0.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   QLD   SA -0.002041     sig @0.05  0.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   QLD  VIC -0.004820     sig @0.01  0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   QLD   WA -0.006078     sig @0.01  0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    SA  VIC -0.002779 non-sig @0.05  0.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    SA   WA -0.004037     sig @0.01  0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  VIC   WA -0.001258 non-sig @0.05  0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           pop1         pop2      diff significance pval</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 SEVERN_ABOVE SEVERN_BELOW  0.003134    sig @0.01    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 SEVERN_ABOVE  TENTERFIELD -0.009777    sig @0.01    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 SEVERN_BELOW  TENTERFIELD -0.012911    sig @0.01    0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.test.heterozygosity </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

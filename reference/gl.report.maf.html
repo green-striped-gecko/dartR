@@ -175,45 +175,47 @@ progress log ; 3, progress and results summary; 5, full report
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gl</span> <span class="op">&lt;-</span> <span class="fu">gl.report.maf</span><span class="op">(</span><span class="va">testset.gl</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gl</span> <span class="op">&lt;-</span> <span class="fu">gl.report.maf</span><span class="op">(</span><span class="va">platypus.gl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.report.maf </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: data include loci that are scored NA across all individuals.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Consider filtering using gl &lt;- gl.filter.allna(gl)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.report.maf </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Reporting Minor Allele Frequency (MAF) by Locus</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   No. of loci = 255 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   No. of individuals = 250 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Minimum      :  0.002 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     1st quantile :  0.004 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Median       :  0.016 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Mean         :  0.04948711 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     3r quantile  :  0.03747878 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Maximum      :  0.4895833 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Missing Rate Overall:  0.12 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   No. of loci = 1000 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   No. of individuals = 81 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Minimum      :  0.00617284 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1st quantile :  0.03797468 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Median       :  0.1125 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Mean         :  0.1589901 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3r quantile  :  0.2531646 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Maximum      :  0.5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Missing Rate Overall:  0.07 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="gl.report.maf-1.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Quantile   Threshold Retained Percent Filtered Percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      100% 0.489583333        1     0.9      110    99.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       95% 0.243902439        6     5.4      105    94.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       90% 0.131250000       12    10.8       99    89.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4       85% 0.092592593       17    15.3       94    84.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       80% 0.046184739       23    20.7       88    79.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6       75% 0.039473684       28    25.2       83    74.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7       70% 0.026000000       34    30.6       77    69.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8       65% 0.022267206       39    35.1       72    64.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9       60% 0.020833333       46    41.4       65    58.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10      55% 0.018442623       50    45.0       61    55.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11      50% 0.016000000       56    50.5       55    49.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12      45% 0.010729614       62    55.9       49    44.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13      40% 0.008888889       67    60.4       44    39.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14      35% 0.006122449       73    65.8       38    34.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15      30% 0.004166667       78    70.3       33    29.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16      25% 0.004000000       84    75.7       27    24.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17      20% 0.002118644       89    80.2       22    19.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18      15% 0.002016129       95    85.6       16    14.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19      10% 0.002000000      100    90.1       11     9.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20       5% 0.002000000      111   100.0        0     0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21       0% 0.002000000      111   100.0        0     0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Quantile  Threshold Retained Percent Filtered Percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      100% 0.50000000        1     0.2      640    99.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       95% 0.44444444       34     5.3      607    94.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       90% 0.39102564       65    10.1      576    89.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       85% 0.34375000       97    15.1      544    84.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       80% 0.29375000      129    20.1      512    79.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       75% 0.25316456      161    25.1      480    74.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       70% 0.21875000      193    30.1      448    69.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       65% 0.18750000      225    35.1      416    64.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       60% 0.16049383      257    40.1      384    59.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      55% 0.13580247      292    45.6      349    54.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11      50% 0.11250000      322    50.2      319    49.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12      45% 0.09259259      360    56.2      281    43.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13      40% 0.08024691      392    61.2      249    38.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14      35% 0.06250000      418    65.2      223    34.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15      30% 0.05000000      450    70.2      191    29.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16      25% 0.03797468      481    75.0      160    25.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17      20% 0.03086420      513    80.0      128    20.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18      15% 0.01851852      554    86.4       87    13.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19      10% 0.01234568      585    91.3       56     8.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       5% 0.00625000      610    95.2       31     4.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       0% 0.00617284      641   100.0        0     0.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.report.maf </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>

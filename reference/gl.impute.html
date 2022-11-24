@@ -132,7 +132,8 @@ imputed with method 'frequency' or 'HW'. Consider using the function
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/green-striped-gecko/dartR.data" class="external-link">"dartR.data"</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/green-striped-gecko/dartR.data" class="external-link">"dartR.data"</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># SNP genotype data</span></span></span>
 <span class="r-in"><span><span class="va">gl</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.filter.callrate.html">gl.filter.callrate</a></span><span class="op">(</span><span class="va">platypus.gl</span>,threshold<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.filter.callrate </span></span>
@@ -406,6 +407,16 @@ imputed with method 'frequency' or 'HW'. Consider using the function
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">  No more individuals left to impute individual 215 </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">  No more individuals left to impute individual 216 </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">  No more individuals left to impute individual 217 </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Residual missing values were filled randomly drawing from the global allele profiles by locus</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.impute </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="va">gs</span> <span class="op">&lt;-</span> <span class="fu">gl.impute</span><span class="op">(</span><span class="va">platypus.gl</span>,method <span class="op">=</span><span class="st">"random"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.impute </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: data include loci that are scored NA across all individuals.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Consider filtering using gl &lt;- gl.filter.allna(gl)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: Population  TENTERFIELD  has  55  loci with all missing values.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Residual missing values were filled randomly drawing from the global allele profiles by locus</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.impute </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

@@ -186,24 +186,33 @@ Broadens the Spectrum of Molecular Ecology and Evolution. TREE 32(12)
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">div</span> <span class="op">&lt;-</span> <span class="fu">gl.report.diversity</span><span class="op">(</span><span class="va">bandicoot.gl</span>, table <span class="op">=</span> <span class="cn">FALSE</span>, pbar<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">div</span> <span class="op">&lt;-</span> <span class="fu">gl.report.diversity</span><span class="op">(</span><span class="va">bandicoot.gl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, table <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span> pbar<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.report.diversity </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>longer object length is not a multiple of shorter object length</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>longer object length is not a multiple of shorter object length</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>longer object length is not a multiple of shorter object length</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>longer object length is not a multiple of shorter object length</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>longer object length is not a multiple of shorter object length</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>longer object length is not a multiple of shorter object length</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>longer object length is not a multiple of shorter object length</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>longer object length is not a multiple of shorter object length</span>
 <span class="r-plt img"><img src="gl.report.diversity-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.report.diversity </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">div</span><span class="op">$</span><span class="va">zero_H_alpha</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   NSW   QLD    SA   VIC    WA </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.976 0.953 0.971 0.955 0.969 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        NSW        QLD         SA        VIC         WA </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.43000000 0.08045977 0.65000000 0.32000000 0.90000000 </span>
 <span class="r-in"><span><span class="va">div</span><span class="op">$</span><span class="va">two_H_beta</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            NSW        QLD         SA        VIC         WA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NSW         NA 0.09217064 0.07346963 0.09439301 0.06026841</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> QLD 0.01826078         NA 0.07981291 0.10033314 0.07104084</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SA  0.01754599 0.02379334         NA 0.08656451 0.06633836</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> VIC 0.01373344 0.01988503 0.01877315         NA 0.07976419</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> WA  0.01482367 0.02073515 0.01810546 0.01547102         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           NSW       QLD        SA       VIC        WA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NSW        NA 0.2194315 0.2531350 0.2773004 0.2080315</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> QLD 0.3182117        NA 0.1908566 0.2145991 0.1758510</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SA  0.1540063 0.2797106        NA 0.2117318 0.1370718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> VIC 0.2208454 0.3351417 0.2074499        NA 0.2179300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> WA  0.1284917 0.2596723 0.1008261 0.1685408        NA</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">div</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "nlocpop"         "nlocpairpop"     "zero_H_alpha"    "zero_H_alpha_sd"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "one_H_alpha"     "one_H_alpha_sd"  "two_H_alpha"     "two_H_alpha_sd" </span>

@@ -113,7 +113,8 @@ in the range specified by the lower and upper threshold.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># SNP data</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># SNP data</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="gl.report.taglength.html">gl.report.taglength</a></span><span class="op">(</span><span class="va">testset.gl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.report.taglength </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
@@ -281,6 +282,55 @@ in the range specified by the lower and upper threshold.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 19      10%        69      180    91.8       16     8.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20       5%        62      188    95.9        8     4.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21       0%        60      196   100.0        0     0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.report.taglength </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span>  <span class="co"># }</span></span></span>
+<span class="r-in"><span>  <span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.subsample.loci.html">gl.subsample.loci</a></span><span class="op">(</span><span class="va">platypus.gl</span>, n <span class="op">=</span><span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.subsample.loci </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: data include loci that are scored NA across all individuals.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Consider filtering using gl &lt;- gl.filter.allna(gl)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: Dataset contains monomorphic loci which will be included in the gl.subsample.loci selections</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Subsampling at random 100 loci from genlight object </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.subsample.loci </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.report.taglength.html">gl.report.taglength</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.report.taglength </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Reporting Tag Length</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   No. of loci = 100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   No. of individuals = 81 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Minimum      :  33 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1st quantile :  69 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Median       :  69 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Mean         :  67.83 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3r quantile  :  69 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Maximum      :  69 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Missing Rate Overall:  0.09 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="gl.filter.taglength-5.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Quantile Threshold Retained Percent Filtered Percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      100%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       95%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       90%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       85%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       80%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6       75%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7       70%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8       65%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9       60%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10      55%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11      50%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12      45%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13      40%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14      35%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15      30%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16      25%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17      20%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18      15%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19      10%        69       94      94        6       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       5%        64       96      96        4       4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       0%        33      100     100        0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.report.taglength </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
