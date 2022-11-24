@@ -54,8 +54,13 @@
 #' @author Arthur Georges, Bernd Gruber & Floriaan Devloo-Delva
 #' (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#'  \donttest{
 #' out <- gl.report.sexlinked(testset.gl)
 #' out <- gl.report.sexlinked(testset.gs)
+#' }
+#' test <- gl.filter.callrate(platypus.gl)
+#' test <- gl.filter.monomorphs(test)
+#' out <- gl.report.sexlinked(test)
 #' @family report functions
 #' @export
 
@@ -618,3 +623,4 @@ cat("- M1 is the number of loci present in males\n\n")
     invisible(l)
     
 }
+

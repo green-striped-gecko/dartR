@@ -100,6 +100,7 @@ Resultant ggplot(s) and the tabulation(s) are saved to the session's
  temporary directory.
 }
 \examples{
+ \donttest{
 # SNP data
   result <- gl.filter.callrate(testset.gl[1:10], method='loc', threshold=0.8,
    verbose=3)
@@ -114,6 +115,8 @@ Resultant ggplot(s) and the tabulation(s) are saved to the session's
   threshold=0.8, verbose=3)
   result <- gl.filter.callrate(testset.gs[1:10], method='pop', 
   threshold=0.8, verbose=3)
+  }
+  res <- gl.filter.callrate(platypus.gl)
 
 }
 \seealso{

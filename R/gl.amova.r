@@ -24,8 +24,8 @@
 #' @author Bernd Gruber (bugs? Post to 
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' #permutations should be higher, here set to 10 because of speed
-#' out <- gl.amova(bandicoot.gl, permutations=10)
+#' #permutations should be higher, here set to 1 because of speed
+#' out <- gl.amova(bandicoot.gl, permutations=1)
 #'
 
 gl.amova <- function(x,

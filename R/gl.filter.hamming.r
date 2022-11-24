@@ -50,9 +50,9 @@
 #'
 #' @examples
 #' # SNP data
-#'   result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
-#'
-#' @seealso \code{\link{gl.filter.hamming}}
+#' test <- platypus.gl
+#' test <- gl.subsample.loci(platypus.gl,n=50)
+#' result <- gl.filter.hamming(test, threshold=0.25, verbose=3)
 #'
 #' @family filters functions
 #' @import patchwork

@@ -46,7 +46,7 @@
 #' @author Custodian: Luis Mijangos (Post to
 #'  \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' out <- gl.test.heterozygosity(bandicoot.gl, nreps=10, verbose=3, plot.out=TRUE)
+#' out <- gl.test.heterozygosity(platypus.gl, nreps=1, verbose=3, plot.out=TRUE)
 #' @family Genetic variation within populations
 #' @import patchwork
 #' @export

@@ -73,11 +73,15 @@ loc.all e.g. 'G/A') and the position of the SNP in slot position of the
  how to format these slots.)
 }
 \examples{
+ \donttest{
 gl <- gl.filter.reproducibility(testset.gl,t=1)
 gl <- gl.filter.overshoot(gl,verbose=3)
 gl <- gl.filter.callrate(testset.gl,t=.98)
 gl <- gl.filter.monomorphs(gl)
 gl2fasta(gl, method=1, outfile='test.fasta',verbose=3)
+}
+test <- gl.subsample.loci(platypus.gl,n=100)
+gl2fasta(test)
 }
 \author{
 Custodian: Luis Mijangos (Post to

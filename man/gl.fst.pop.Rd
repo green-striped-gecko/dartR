@@ -36,7 +36,9 @@ probability of Fst values to be different from zero. For detailed information
 please check the help pages (?stamppFst).
 }
 \examples{
-out <- gl.fst.pop(possums.gl, nboots=1)
+test <- gl.filter.callrate(platypus.gl,threshold = 1)
+test <- gl.filter.monomorphs(test)
+out <- gl.fst.pop(test, nboots=1)
 }
 \author{
 Bernd Gruber (bugs? Post to

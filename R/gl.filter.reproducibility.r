@@ -30,12 +30,18 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#'  \donttest{
 #' # SNP data
 #'   gl.report.reproducibility(testset.gl)
 #'   result <- gl.filter.reproducibility(testset.gl, threshold=0.99, verbose=3)
 #' # Tag P/A data
 #'   gl.report.reproducibility(testset.gs)
 #'   result <- gl.filter.reproducibility(testset.gs, threshold=0.99)
+#'   }
+#'   
+#'   test <- gl.subsample.loci(platypus.gl,n=100)
+#'   res <- gl.filter.reproducibility(test)
+#'   
 #' @seealso \code{\link{gl.report.reproducibility}}
 #' @family filter functions
 #' @import patchwork

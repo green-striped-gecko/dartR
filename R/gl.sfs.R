@@ -107,10 +107,11 @@ gl.sfs<- function(x, minbinsize=0, folded=TRUE, singlepop=FALSE, plot.out=TRUE, 
   }
   #needs to be saved and turned into a ggplot
   if (plot.out) {
-    if (nPop(x)==1) {
+    if (!is.array(sfs)) {
      df <- data.frame(sfs)
      df$names <- 1:length(sfs)
-     ggplot(df, aes(x=names, y=sfs))+geom_bar(stat="identity")+xlab("bin")+ylab("Frequency")
+     gp<- ggplot(df, aes(x=names, y=sfs))+geom_bar(stat="identity")+xlab("bin")+ylab("Frequency")
+     print(gp)
       
     } else cat(report("The sfs has more than 2 dimensions, therefore no plot is returned\n"))
   }

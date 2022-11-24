@@ -34,8 +34,8 @@ aware due to a conflict of the amova functions from various packages I had
 to 'hack' StAMPP::stamppAmova to avoid a namespace conflict.
 }
 \examples{
-#permutations should be higher, here set to 10 because of speed
-out <- gl.amova(bandicoot.gl, permutations=10)
+#permutations should be higher, here set to 1 because of speed
+out <- gl.amova(bandicoot.gl, permutations=1)
 
 }
 \author{
