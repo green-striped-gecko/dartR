@@ -117,7 +117,7 @@ metrics, the filters for reproducibility and read depth are no used.
  }
 }
 \examples{
-out <- gl.filter.parent.offspring(testset.gl[1:10])
+out <- gl.filter.parent.offspring(testset.gl[1:10,1:50])
 
 }
 \seealso{

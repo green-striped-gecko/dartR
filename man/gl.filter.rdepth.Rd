@@ -64,11 +64,14 @@ For examples of themes, see:
  }
 }
 \examples{
+ \donttest{
 # SNP data
   gl.report.rdepth(testset.gl)
   result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
 # Tag P/A data
   result <- gl.filter.rdepth(testset.gs, lower=8, upper=50, verbose=3)
+  }
+  res <- gl.filter.rdepth(platypus.gl)
 
 }
 \seealso{

@@ -32,6 +32,7 @@
 #' @author author(s): Arthur Georges. Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#'  \donttest{
 #' # SNP genotypes
 #' D <- gl.dist.pop(possums.gl[1:90,1:100], method='euclidean')
 #' D <- gl.dist.pop(possums.gl[1:90,1:100], method='euclidean',scale=TRUE)
@@ -43,6 +44,8 @@
 #' }
 #' #Presence-Absence data [only 10 individuals due to speed]
 #' D <- gl.dist.pop(testset.gs[1:10,], method='euclidean')
+#' }
+#' res <- gl.dist.pop(platypus.gl)
 
 gl.dist.pop <- function(x,
                         method = "euclidean",

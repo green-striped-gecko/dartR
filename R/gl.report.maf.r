@@ -51,7 +51,7 @@
 #' @author Custodian: Arthur Georges (Post to 
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' gl <- gl.report.maf(testset.gl)
+#' gl <- gl.report.maf(platypus.gl)
 #' @seealso \code{\link{gl.filter.maf}}, \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #' @family report functions

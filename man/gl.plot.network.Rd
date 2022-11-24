@@ -77,8 +77,10 @@ Distributed Recursive (Graph) Layout. SAND Reports 2936:1-10, 2008.
 Colors of node symbols are those of the rainbow.
 }
 \examples{
- D <- gl.grm(bandicoot.gl)
- gl.plot.network(D,bandicoot.gl)
+test <- gl.subsample.loci(platypus.gl, n = 100)
+test <- gl.keep.ind(test,ind.list = indNames(test)[1:10])
+D <- gl.grm(test)
+gl.plot.network(D,test)
 }
 \author{
 Custodian: Arthur Georges -- Post to

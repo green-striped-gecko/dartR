@@ -79,12 +79,15 @@
 #' Rousset, F. (1997). Genetic differentiation and estimation of gene flow from
 #' F-statistics under isolation by distance. Genetics, 145(4), 1219-1228.
 #' @examples
-#' #only first 100 loci
-#' ibd <- gl.ibd(bandicoot.gl[,1:100])
+#'  \donttest{
 #' #because of speed only the first 100 loci
 #' ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans='log(Dgeo)' ,Dgen_trans='Dgen/(1-Dgen)')
 #' #because of speed only the first 10 individuals)
 #' ibd <- gl.ibd(bandicoot.gl[1:10,], distance='euclidean', paircols='pop', Dgeo_trans='Dgeo')
+#' }
+#' 
+#' #only first 100 loci
+#' ibd <- gl.ibd(bandicoot.gl[,1:100])
 
 gl.ibd <- function(x = NULL,
                    distance = "Fst",

@@ -53,8 +53,10 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #'@examples
-#'  D <- gl.grm(bandicoot.gl)
-#'  gl.plot.network(D,bandicoot.gl)
+#' test <- gl.subsample.loci(platypus.gl, n = 100)
+#' test <- gl.keep.ind(test,ind.list = indNames(test)[1:10])
+#' D <- gl.grm(test)
+#' gl.plot.network(D,test)
 
 gl.plot.network <- function(D,
                             x = NULL,

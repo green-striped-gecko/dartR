@@ -70,6 +70,7 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
+#'  \donttest{
 #' # SNP data
 #'   result <- gl.filter.callrate(testset.gl[1:10], method='loc', threshold=0.8,
 #'    verbose=3)
@@ -84,6 +85,8 @@
 #'   threshold=0.8, verbose=3)
 #'   result <- gl.filter.callrate(testset.gs[1:10], method='pop', 
 #'   threshold=0.8, verbose=3)
+#'   }
+#'   res <- gl.filter.callrate(platypus.gl)
 #'
 #' @seealso \code{\link{gl.report.callrate}}
 #' @family filter functions

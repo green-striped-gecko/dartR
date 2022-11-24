@@ -21,11 +21,18 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' \donttest{
 #' test <- bandicoot.gl
 #' test <- gl.filter.callrate(test,threshold = 1)
 #' res <- gl.report.ld.map(test)
 #' res_2 <- gl.filter.ld(x=test,ld_report = res)
 #' res_3 <- gl.report.ld.map(res_2)
+#' }
+#' test <- gl.filter.callrate(platypus.gl, threshold = 1)
+#' test <- gl.filter.monomorphs(test)
+#' test <- test[,1:250]
+#' report <- gl.report.ld.map(test)
+#' res <- gl.filter.ld(x=test,ld_report = report)
 #' @seealso \code{\link{gl.report.ld.map}}
 #' @family filter functions
 #' @export

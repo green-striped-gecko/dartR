@@ -197,9 +197,13 @@ Examples of other themes that can be used can be consulted in \itemize{
  }
 }
 \examples{
+\donttest{
 require("dartR.data")
 res <- gl.spatial.autoCorr(platypus.gl, bins=seq(0,10000,2000))
 # using one population, showing sample size
+test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
+res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
+}
 test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
 res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
 }

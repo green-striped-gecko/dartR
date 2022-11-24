@@ -82,8 +82,13 @@ of SilicoDArT data.
  }
 }
 \examples{
+ \donttest{
 out <- gl.report.sexlinked(testset.gl)
 out <- gl.report.sexlinked(testset.gs)
+}
+test <- gl.filter.callrate(platypus.gl)
+test <- gl.filter.monomorphs(test)
+out <- gl.report.sexlinked(test)
 }
 \seealso{
 Other report functions: 

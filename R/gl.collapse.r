@@ -36,12 +36,16 @@
 #' @author Custodian: Arthur Georges -- Post to 
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#'  \donttest{
 #' fd <- gl.fixed.diff(testset.gl,tloc=0.05)
 #' fd
 #' fd2 <- gl.collapse(fd,tpop=1)
 #' fd2
 #' fd3 <- gl.collapse(fd2,tpop=1)
 #' fd3
+#' }
+#'  fd <- gl.fixed.diff(testset.gl,tloc=0.05)
+#'  fd2 <- gl.collapse(fd)
 
 gl.collapse <- function(fd,
                         tpop = 0,

@@ -54,6 +54,7 @@
 #' @author Custodian: Luis Mijangos 
 #' (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#'  \donttest{
 #' require("dartR.data")
 #' # SNP genotype data
 #' gl <- gl.filter.callrate(platypus.gl,threshold=0.95)
@@ -63,6 +64,8 @@
 #' gs <- gl.filter.callrate(testset.gs,threshold=0.95)
 #' gl <- gl.filter.allna(gl)
 #' gs <- gl.impute(gs, method="neighbour")
+#' }
+#' gs <- gl.impute(platypus.gl,method ="random")
 
 gl.impute <-  function(x,
                        method = "neighbour",

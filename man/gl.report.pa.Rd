@@ -122,7 +122,7 @@ if save2temp=TRUE, resultant plot(s) and the tabulation(s) are saved to the
 session's temporary directory.
 }
 \examples{
-out <- gl.report.pa(testset.gl[1:20,])
+out <- gl.report.pa(platypus.gl)
 }
 \references{
 \itemize{
