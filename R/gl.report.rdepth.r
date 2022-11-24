@@ -37,8 +37,10 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#'  \donttest{
 #' # SNP data
 #' df <- gl.report.rdepth(testset.gl)
+#' }
 #' df <- gl.report.rdepth(testset.gs)
 #' @seealso \code{\link{gl.filter.rdepth}}
 #' @family report functions

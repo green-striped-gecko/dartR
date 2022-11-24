@@ -76,11 +76,10 @@ percentage. 5 base differences out of 100 bases is a 20% Hamming distance.
 }
 \examples{
 # SNP data
-  result <- gl.filter.hamming(testset.gl, threshold=0.25, verbose=3)
+test <- platypus.gl
+test <- gl.subsample.loci(platypus.gl,n=50)
+result <- gl.filter.hamming(test, threshold=0.25, verbose=3)
 
-}
-\seealso{
-\code{\link{gl.filter.hamming}}
 }
 \author{
 Custodian: Arthur Georges -- Post to

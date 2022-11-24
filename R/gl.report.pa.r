@@ -101,7 +101,7 @@
 #'  Ecology 98.11 (2017): 2914-2929.
 #' }
 #' @examples
-#' out <- gl.report.pa(testset.gl[1:20,])
+#' out <- gl.report.pa(platypus.gl)
 #' @seealso \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #' @family report functions

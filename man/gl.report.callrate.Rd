@@ -69,6 +69,7 @@ Resultant ggplots and the tabulation are saved to the session's temporary
 directory.
 }
 \examples{
+ \donttest{
 # SNP data
   test.gl <- testset.gl[1:20,]
   gl.report.callrate(test.gl)
@@ -77,6 +78,10 @@ directory.
   test.gs <- testset.gs[1:20,]
   gl.report.callrate(test.gs)
   gl.report.callrate(test.gs,method='ind')
+  }
+  test.gl <- testset.gl[1:20,]
+  gl.report.callrate(test.gl)
+  
 }
 \seealso{
 \code{\link{gl.filter.callrate}}

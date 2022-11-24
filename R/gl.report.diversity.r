@@ -75,7 +75,8 @@
 #'  Contributors: William B. Sherwin, Alexander Sentinella
 #'
 #' @examples
-#' div <- gl.report.diversity(bandicoot.gl, table = FALSE, pbar=FALSE)
+#' div <- gl.report.diversity(bandicoot.gl[1:10,1:100], table = FALSE,
+#'  pbar=FALSE)
 #' div$zero_H_alpha
 #' div$two_H_beta
 #' names(div)

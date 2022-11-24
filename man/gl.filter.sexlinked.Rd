@@ -91,7 +91,9 @@ of SilicoDArT data.
  }
 }
 \examples{
+  \donttest{
 out <- gl.filter.sexlinked(testset.gl, filter='drop')
+}
 out <- gl.filter.sexlinked(testset.gs, filter='drop')
 
 }

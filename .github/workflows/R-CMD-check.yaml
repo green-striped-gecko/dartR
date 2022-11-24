@@ -36,7 +36,7 @@ jobs:
           r-version: ${{ matrix.config.r }}
 
       - uses: r-lib/actions/setup-pandoc@v2
-      - uses: r-lib/actions/setup-tinytex@v1
+      - uses: r-lib/actions/setup-tinytex@v2
 
       - name: Query dependencies
         run: |
@@ -66,6 +66,14 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install gdal proj geos
+      
+      - name: Install Windows dependencies [terra]
+        if: runner.os == 'Windows'
+        run: |
+          install.packages("remotes")
+          install.packages("rgdal", type = "binary")
+          remotes::install_github("rspatial/terra", dependencies=TRUE, build=FALSE) 
+        shell: Rscript {0}
           
       - name: Install dependencies
         run: |

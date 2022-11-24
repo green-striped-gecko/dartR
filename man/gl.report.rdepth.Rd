@@ -59,8 +59,10 @@ The function displays a table of minimum, maximum, mean and quantiles for
  }
 }
 \examples{
+ \donttest{
 # SNP data
 df <- gl.report.rdepth(testset.gl)
+}
 df <- gl.report.rdepth(testset.gs)
 }
 \seealso{

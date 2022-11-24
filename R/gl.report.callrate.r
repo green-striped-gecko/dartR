@@ -41,6 +41,7 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#'  \donttest{
 #' # SNP data
 #'   test.gl <- testset.gl[1:20,]
 #'   gl.report.callrate(test.gl)
@@ -49,6 +50,10 @@
 #'   test.gs <- testset.gs[1:20,]
 #'   gl.report.callrate(test.gs)
 #'   gl.report.callrate(test.gs,method='ind')
+#'   }
+#'   test.gl <- testset.gl[1:20,]
+#'   gl.report.callrate(test.gl)
+#'   
 #' @seealso \code{\link{gl.filter.callrate}}
 #' @family report functions
 #' @import patchwork

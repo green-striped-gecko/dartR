@@ -64,7 +64,9 @@
 #'  \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
+#'   \donttest{
 #' out <- gl.filter.sexlinked(testset.gl, filter='drop')
+#' }
 #' out <- gl.filter.sexlinked(testset.gs, filter='drop')
 #'
 #' @family filter functions

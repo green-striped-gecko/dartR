@@ -68,8 +68,10 @@ The function displays a table of minimum, maximum, mean and quantiles for
  }
 }
 \examples{
+ \donttest{
 # SNP data
   out <- gl.report.reproducibility(testset.gl)
+  }
 # Tag P/A data
   out <- gl.report.reproducibility(testset.gs)
 
