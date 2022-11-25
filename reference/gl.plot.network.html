@@ -18,7 +18,7 @@ diagram."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -151,7 +151,12 @@ Distributed Recursive (Graph) Layout. SAND Reports 2936:1-10, 2008.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.subsample.loci.html">gl.subsample.loci</a></span><span class="op">(</span><span class="va">platypus.gl</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"rrBLUP"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"gplots"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.subsample.loci.html">gl.subsample.loci</a></span><span class="op">(</span><span class="va">platypus.gl</span>, n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.keep.ind.html">gl.keep.ind</a></span><span class="op">(</span><span class="va">test</span>,ind.list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/adegenet/man/accessors.html" class="external-link">indNames</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.grm.html">gl.grm</a></span><span class="op">(</span><span class="va">test</span>, legendx<span class="op">=</span><span class="fl">0.04</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">gl.plot.network</span><span class="op">(</span><span class="va">D</span>,<span class="va">test</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.subsample.loci </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: data include loci that are scored NA across all individuals.</span></span>
@@ -159,25 +164,20 @@ Distributed Recursive (Graph) Layout. SAND Reports 2936:1-10, 2008.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: Dataset contains monomorphic loci which will be included in the gl.subsample.loci selections</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Subsampling at random 100 loci from genlight object </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.subsample.loci </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.keep.ind.html">gl.keep.ind</a></span><span class="op">(</span><span class="va">test</span>,ind.list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/adegenet/man/accessors.html" class="external-link">indNames</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.keep.ind </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: data include loci that are scored NA across all individuals.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Consider filtering using gl &lt;- gl.filter.allna(gl)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Deleting all but the listed individuals T27, T35, SDS4, SDS12, SUS20, SUS28, SUS36, T3, T11, T19 </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: Resultant dataset may contain monomorphic loci</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Locus metrics not recalculated</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.keep.ind </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.grm.html">gl.grm</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.grm </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: data include loci that are scored NA across all individuals.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Consider filtering using gl &lt;- gl.filter.allna(gl)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt img"><img src="gl.plot.network-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.grm </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">gl.plot.network</span><span class="op">(</span><span class="va">D</span>,<span class="va">test</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.plot.network </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: data include loci that are scored NA across all individuals.</span></span>
@@ -185,6 +185,7 @@ Distributed Recursive (Graph) Layout. SAND Reports 2936:1-10, 2008.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
+<span class="r-plt img"><img src="gl.plot.network-1.png" alt="" width="700" height="433"></span>
 <span class="r-plt img"><img src="gl.plot.network-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.plot.network </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

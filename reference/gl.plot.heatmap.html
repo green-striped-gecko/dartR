@@ -14,7 +14,7 @@ heatmap.2 (package gplots)."><!-- mathjax --><script src="https://cdnjs.cloudfla
     
     <a class="navbar-brand me-2" href="../index.html">dartR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,10 +87,26 @@ progress log; 3, progress and results summary; 5, full report
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>   <span class="va">gl</span> <span class="op">&lt;-</span> <span class="va">testset.gl</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></span>
 <span class="r-in"><span>   <span class="va">D</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">gl</span><span class="op">)</span>,upper<span class="op">=</span><span class="cn">TRUE</span>,diag<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>   <span class="fu">gl.plot.heatmap</span><span class="op">(</span><span class="va">D</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="va">D2</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.dist.pop.html">gl.dist.pop</a></span><span class="op">(</span><span class="va">possums.gl</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">gl.plot.heatmap</span><span class="op">(</span><span class="va">D2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="va">D3</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.fixed.diff.html">gl.fixed.diff</a></span><span class="op">(</span><span class="va">testset.gl</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">gl.plot.heatmap</span><span class="op">(</span><span class="va">D3</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="op">}</span></span></span>
+<span class="r-in"><span>   <span class="kw">if</span> <span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"gplots"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>   <span class="va">D2</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.dist.pop.html">gl.dist.pop</a></span><span class="op">(</span><span class="va">possums.gl</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">gl.plot.heatmap</span><span class="op">(</span><span class="va">D2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.dist.pop </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Calculating distances:  euclidean </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Refer to the dartR Distance Analysis tutorial for algorithms</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Returning a stats::dist object</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.dist.pop </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.plot.heatmap </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
@@ -101,77 +117,10 @@ progress log; 3, progress and results summary; 5, full report
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing a distance matrix</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="gl.plot.heatmap-1.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.plot.heatmap </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span>   <span class="va">D2</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.dist.pop.html">gl.dist.pop</a></span><span class="op">(</span><span class="va">possums.gl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.dist.pop </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Calculating distances:  euclidean </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Refer to the dartR Distance Analysis tutorial for algorithms</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing a distance matrix</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="gl.plot.heatmap-2.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Returning a stats::dist object</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.dist.pop </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span>   <span class="fu">gl.plot.heatmap</span><span class="op">(</span><span class="va">D2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.plot.heatmap </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing a distance matrix</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt img"><img src="gl.plot.heatmap-3.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.plot.heatmap </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span>   <span class="va">D3</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.fixed.diff.html">gl.fixed.diff</a></span><span class="op">(</span><span class="va">testset.gl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.fixed.diff </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Comparing populations for absolute fixed differences</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  Warning: Monomorphic loci retained, used in calculations</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Comparing populations pairwise -- this may take time. Please be patient</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.fixed.diff </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span>   <span class="fu">gl.plot.heatmap</span><span class="op">(</span><span class="va">D3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.plot.heatmap </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing a fixed difference (fd) object with SNP data</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt img"><img src="gl.plot.heatmap-4.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.plot.heatmap </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span>   <span class="co"># }</span></span></span>
-<span class="r-in"><span>   <span class="va">D2</span> <span class="op">&lt;-</span> <span class="fu"><a href="gl.dist.pop.html">gl.dist.pop</a></span><span class="op">(</span><span class="va">possums.gl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.dist.pop </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing genlight object with SNP data</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Calculating distances:  euclidean </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Refer to the dartR Distance Analysis tutorial for algorithms</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt img"><img src="gl.plot.heatmap-5.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Returning a stats::dist object</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.dist.pop </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span>   <span class="fu">gl.plot.heatmap</span><span class="op">(</span><span class="va">D2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Starting gl.plot.heatmap </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Found more than one class "dist" in cache; using the first, from namespace 'spam'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Also defined by ‘BiocGenerics’</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  Processing a distance matrix</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt img"><img src="gl.plot.heatmap-6.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Completed: gl.plot.heatmap </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
