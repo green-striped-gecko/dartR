@@ -111,7 +111,7 @@
 #' # relatedness matrix
 #' res <- gl.grm(t1,plotheatmap = FALSE)
 #' # relatedness network
-#' res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
+#' if (res!=-1) res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
 #'@references
 #'\itemize{
 #'\item Endelman, J. B. , Jannink, J.-L. (2012). Shrinkage estimation of the 

@@ -56,6 +56,7 @@ vec[indNames(x) == unknown] <- "unknown"
 pop(x) <- as.factor(vec)  
 
 x_grm <- gl.grm(x,plotheatmap = FALSE,verbose=0)
+if(x_grm==-1) return(-1)
 x_grm[upper.tri(x_grm, diag = TRUE)] <- NA
 x_columns <- as.data.frame(as.table(x_grm))
 x_columns <- x_columns[which(!is.na(x_columns$Freq)), ]

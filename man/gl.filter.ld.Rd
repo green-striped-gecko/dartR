@@ -51,7 +51,7 @@ test <- gl.filter.callrate(platypus.gl, threshold = 1)
 test <- gl.filter.monomorphs(test)
 test <- test[,1:250]
 report <- gl.report.ld.map(test)
-res <- gl.filter.ld(x=test,ld_report = report)
+if (report!=-1) res <- gl.filter.ld(x=test,ld_report = report)
 }
 \seealso{
 \code{\link{gl.report.ld.map}}

@@ -43,7 +43,7 @@
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 #' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 #' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
-#' ld_res_2 <- gl.ld.distance(ld_res,ld_resolution= 1000000)
+#' if (ld_res!=-1) ld_res_2 <- gl.ld.distance(ld_res,ld_resolution= 1000000)
 #' @family ld functions
 #' @export
 

@@ -147,7 +147,7 @@ t1 <- gl.subsample.loci(t1,n = 100)
 # relatedness matrix
 res <- gl.grm(t1,plotheatmap = FALSE)
 # relatedness network
-res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
+if (res!=-1) res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
 }
 \references{
 \itemize{

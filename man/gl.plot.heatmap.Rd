@@ -34,8 +34,10 @@ dissimilarity matrix. This function is a wrapper for
    D3 <- gl.fixed.diff(testset.gl)
    gl.plot.heatmap(D3)
    }
+   if ((requireNamespace(pkg, quietly = TRUE))) {
    D2 <- gl.dist.pop(possums.gl)
    gl.plot.heatmap(D2)
+   }
 }
 \author{
 Custodian: Luis Mijangos -- Post to
