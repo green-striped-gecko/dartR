@@ -22,6 +22,7 @@
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' \donttest{
+#' if ((requireNamespace("snpStats", quielty=TRUE) & (requireNamespace("fields", quietly = TRUE)))) {
 #' test <- bandicoot.gl
 #' test <- gl.filter.callrate(test,threshold = 1)
 #' res <- gl.report.ld.map(test)
@@ -32,7 +33,8 @@
 #' test <- gl.filter.monomorphs(test)
 #' test <- test[,1:250]
 #' report <- gl.report.ld.map(test)
-#' if (report!=-1) res <- gl.filter.ld(x=test,ld_report = report)
+#' res <- gl.filter.ld(x=test,ld_report = report)
+#' }
 #' @seealso \code{\link{gl.report.ld.map}}
 #' @family filter functions
 #' @export
