@@ -40,7 +40,7 @@ comparison, the function stores its  name in a list. In subsequent pairwise
  comparisons, if the SNP is already in the list, the other SNP will be kept.
 }
 \examples{
-\donttest{
+\dontrun{
 test <- bandicoot.gl
 test <- gl.filter.callrate(test,threshold = 1)
 res <- gl.report.ld.map(test)
