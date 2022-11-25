@@ -41,6 +41,7 @@ comparison, the function stores its  name in a list. In subsequent pairwise
 }
 \examples{
 \donttest{
+if ((requireNamespace("snpStats", quielty=TRUE) & (requireNamespace("fields", quietly = TRUE)))) {
 test <- bandicoot.gl
 test <- gl.filter.callrate(test,threshold = 1)
 res <- gl.report.ld.map(test)
@@ -51,7 +52,8 @@ test <- gl.filter.callrate(platypus.gl, threshold = 1)
 test <- gl.filter.monomorphs(test)
 test <- test[,1:250]
 report <- gl.report.ld.map(test)
-if (report!=-1) res <- gl.filter.ld(x=test,ld_report = report)
+res <- gl.filter.ld(x=test,ld_report = report)
+}
 }
 \seealso{
 \code{\link{gl.report.ld.map}}
