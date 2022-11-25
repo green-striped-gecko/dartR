@@ -22,7 +22,7 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' require("dartR.data")
-#' if ((requireNamespace("rrBLUP", quielty=TRUE) & (requireNamespace("gplots", quietly = TRUE)))) {
+#' if ((requireNamespace("rrBLUP", quietly=TRUE) & (requireNamespace("gplots", quietly = TRUE)))) {
 #' res <- gl.assign.grm(platypus.gl,unknown="T27")
 #' }
 #' @export

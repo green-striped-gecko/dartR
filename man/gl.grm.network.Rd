@@ -140,7 +140,7 @@ Four layout options are implemented in this function:
 }
 }
 \examples{
-if ((requireNamespace("fields", quielty=TRUE) & (requireNamespace("snpStats", quietly = TRUE)))) {
+if ((requireNamespace("fields", quietly=TRUE) & (requireNamespace("snpStats", quietly = TRUE)))) {
 t1 <- possums.gl
 # filtering on call rate 
 t1 <- gl.filter.callrate(t1)
