@@ -140,6 +140,7 @@ Four layout options are implemented in this function:
 }
 }
 \examples{
+if ((requireNamespace("fields", quietly=TRUE) & (requireNamespace("snpStats", quietly = TRUE)))) {
 t1 <- possums.gl
 # filtering on call rate 
 t1 <- gl.filter.callrate(t1)
@@ -148,6 +149,7 @@ t1 <- gl.subsample.loci(t1,n = 100)
 res <- gl.grm(t1,plotheatmap = FALSE)
 # relatedness network
 res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
+}
 }
 \references{
 \itemize{

@@ -158,6 +158,16 @@ gl.pcoa.plot <- function(glPca,
                              verbose = verbose)
     
     # SCRIPT SPECIFIC ERROR CHECKING
+    pkg <- "directlabels"
+    if (!(requireNamespace(pkg, quietly = TRUE))) {
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
+    }
+    
     
     if (interactive | !is.null(zaxis)) {
         pkg <- "plotly"

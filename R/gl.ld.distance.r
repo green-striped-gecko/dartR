@@ -37,6 +37,7 @@
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' require("dartR.data")
+#' if ((requireNamespace("snpStats", quietly=TRUE) & (requireNamespace("fields", quietly = TRUE)))) {
 #' x <- platypus.gl
 #' x <- gl.filter.callrate(x,threshold = 1)
 #' x <- gl.filter.monomorphs(x)
@@ -44,6 +45,7 @@
 #' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 #' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
 #' ld_res_2 <- gl.ld.distance(ld_res,ld_resolution= 1000000)
+#' }
 #' @family ld functions
 #' @export
 

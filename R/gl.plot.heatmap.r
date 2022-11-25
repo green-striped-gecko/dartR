@@ -18,7 +18,7 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'    gl <- testset.gl[1:10,]
 #'    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
 #'    gl.plot.heatmap(D)
@@ -27,8 +27,10 @@
 #'    D3 <- gl.fixed.diff(testset.gl)
 #'    gl.plot.heatmap(D3)
 #'    }
+#'    if ((requireNamespace("gplots", quietly = TRUE))) {
 #'    D2 <- gl.dist.pop(possums.gl)
 #'    gl.plot.heatmap(D2)
+#'    }
 
 gl.plot.heatmap <- function(D,
                             palette_divergent = diverging_palette,
