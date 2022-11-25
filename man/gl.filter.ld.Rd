@@ -41,7 +41,7 @@ comparison, the function stores its  name in a list. In subsequent pairwise
 }
 \examples{
 \donttest{
-if ((requireNamespace("snpStats", quielty=TRUE) & (requireNamespace("fields", quietly = TRUE)))) {
+if ((requireNamespace("snpStats", quietly=TRUE) & (requireNamespace("fields", quietly = TRUE)))) {
 test <- bandicoot.gl
 test <- gl.filter.callrate(test,threshold = 1)
 res <- gl.report.ld.map(test)
