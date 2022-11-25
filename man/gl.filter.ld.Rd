@@ -41,13 +41,13 @@ comparison, the function stores its  name in a list. In subsequent pairwise
 }
 \examples{
 \donttest{
-if ((requireNamespace("snpStats", quietly=TRUE) & (requireNamespace("fields", quietly = TRUE)))) {
 test <- bandicoot.gl
 test <- gl.filter.callrate(test,threshold = 1)
 res <- gl.report.ld.map(test)
 res_2 <- gl.filter.ld(x=test,ld_report = res)
 res_3 <- gl.report.ld.map(res_2)
 }
+if ((requireNamespace("snpStats", quietly=TRUE) & (requireNamespace("fields", quietly = TRUE)))) {
 test <- gl.filter.callrate(platypus.gl, threshold = 1)
 test <- gl.filter.monomorphs(test)
 test <- test[,1:250]
