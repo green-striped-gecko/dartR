@@ -47,6 +47,7 @@ all the chromosomes and a red line representing the threshold (R.squared =
 0.2) that is commonly used to imply that two loci are unlinked (Delourme et
 al., 2013; Li et al., 2014).
 }
+<<<<<<< HEAD
 \examples{
 if ((requireNamespace("snpStats", quietly = TRUE)) & (requireNamespace("fields", quietly = TRUE))) {
 require("dartR.data")
@@ -59,6 +60,8 @@ ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
 ld_res_2 <- gl.ld.distance(ld_res,ld_resolution= 1000000)
 }
 }
+=======
+>>>>>>> 6049356ae4630d4e1d5d4f8000c11d1c586983a8
 \references{
 \itemize{
 \item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., 
