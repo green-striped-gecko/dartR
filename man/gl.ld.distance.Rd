@@ -50,7 +50,6 @@ al., 2013; Li et al., 2014).
 \examples{
 if ((requireNamespace("snpStats", quietly = TRUE)) & (requireNamespace("fields", quietly = TRUE))) {
 require("dartR.data")
-if ((requireNamespace("snpStats", quietly=TRUE) & (requireNamespace("fields", quietly = TRUE)))) {
 x <- platypus.gl
 x <- gl.filter.callrate(x,threshold = 1)
 x <- gl.filter.monomorphs(x)

@@ -140,11 +140,7 @@ Four layout options are implemented in this function:
 }
 }
 \examples{
-<<<<<<< HEAD
-if (requireNamespace("igraph", quietly = TRUE) & requireNamespace("rrBLUP", quietly = TRUE)) {
-=======
-if ((requireNamespace("fields", quietly=TRUE) & (requireNamespace("snpStats", quietly = TRUE)))) {
->>>>>>> d28d45582e89ae3e8259c9ad0092cbf71af9f9a5
+if (requireNamespace("igraph", quietly = TRUE) & requireNamespace("rrBLUP", quietly = TRUE) & requireNamespace("fields", quietly=TRUE)) {
 t1 <- possums.gl
 # filtering on call rate 
 t1 <- gl.filter.callrate(t1)
