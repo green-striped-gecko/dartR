@@ -104,6 +104,7 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' if (requireNamespace("igraph", quietly = TRUE) & requireNamespace("rrBLUP", quietly = TRUE)) {
 #' t1 <- possums.gl
 #' # filtering on call rate 
 #' t1 <- gl.filter.callrate(t1)
@@ -111,7 +112,8 @@
 #' # relatedness matrix
 #' res <- gl.grm(t1,plotheatmap = FALSE)
 #' # relatedness network
-#' if (res!=-1) res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
+#' res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
+#' }
 #'@references
 #'\itemize{
 #'\item Endelman, J. B. , Jannink, J.-L. (2012). Shrinkage estimation of the 
