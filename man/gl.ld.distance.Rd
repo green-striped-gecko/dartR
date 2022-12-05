@@ -47,19 +47,6 @@ all the chromosomes and a red line representing the threshold (R.squared =
 0.2) that is commonly used to imply that two loci are unlinked (Delourme et
 al., 2013; Li et al., 2014).
 }
-\examples{
-if ((requireNamespace("snpStats", quietly = TRUE)) & (requireNamespace("fields", quietly = TRUE))) {
-require("dartR.data")
-if ((requireNamespace("snpStats", quietly=TRUE) & (requireNamespace("fields", quietly = TRUE)))) {
-x <- platypus.gl
-x <- gl.filter.callrate(x,threshold = 1)
-x <- gl.filter.monomorphs(x)
-x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
-x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
-ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
-ld_res_2 <- gl.ld.distance(ld_res,ld_resolution= 1000000)
-}
-}
 \references{
 \itemize{
 \item Delourme, R., Falentin, C., Fomeju, B. F., Boillot, M., Lassalle, G., 
