@@ -223,5 +223,9 @@ Other report functions:
 \author{
 Custodian: Luis Mijangos -- Post to
 \url{https://groups.google.com/d/forum/dartr}
+#@examples
+#\dontrun{
+#gl.report.hwe(x = bandicoot.gl)
+#}
 }
 \concept{report functions}
