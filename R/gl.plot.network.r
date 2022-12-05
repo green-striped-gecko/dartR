@@ -53,10 +53,10 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #'@examples
+#' if ((requireNamespace("rrBLUP", quietly = TRUE)) & (requireNamespace("gplots", quietly = TRUE))) {
 #' test <- gl.subsample.loci(platypus.gl, n = 100)
 #' test <- gl.keep.ind(test,ind.list = indNames(test)[1:10])
-#' if ((requireNamespace("rrBLUP", quietly = TRUE))) {
-#' D <- gl.grm(test)
+#' D <- gl.grm(test, legendx=0.04)
 #' gl.plot.network(D,test)
 #' }
 

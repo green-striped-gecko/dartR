@@ -104,7 +104,7 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' if (requireNamespace("igraph", quietly = TRUE) & requireNamespace("rrBLUP", quietly = TRUE)) {
+#' if (requireNamespace("igraph", quietly = TRUE) & requireNamespace("rrBLUP", quietly = TRUE) & requireNamespace("fields", quietly=TRUE)) {
 #' t1 <- possums.gl
 #' # filtering on call rate 
 #' t1 <- gl.filter.callrate(t1)

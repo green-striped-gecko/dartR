@@ -32,7 +32,11 @@ https://dyerlab.github.io/applied_population_genetics/population-assignment.html
 }
 \examples{
 require("dartR.data")
+<<<<<<< HEAD
 if ((requireNamespace("rrBLUP", quietly = TRUE)) &(requireNamespace("gplots", quietly = TRUE)) ) {
+=======
+if ((requireNamespace("rrBLUP", quietly=TRUE) & (requireNamespace("gplots", quietly = TRUE)))) {
+>>>>>>> d28d45582e89ae3e8259c9ad0092cbf71af9f9a5
 res <- gl.assign.grm(platypus.gl,unknown="T27")
 }
 }
