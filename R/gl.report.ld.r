@@ -44,23 +44,36 @@ gl.report.ld <- function(x,
                          chunkname = NULL,
                          probar = FALSE,
                          verbose = NULL) {
-    if (!(requireNamespace("doParallel", quietly = TRUE))) {
-        stop(error(
-            "Package doParallel needed for this function to work. Please install it."
-        ))
-    }
-    
-    if (!(requireNamespace("data.table", quietly = TRUE))) {
-        stop(error(
-            "Package data.table needed for this function to work. Please install it."
-        ))
-    }
-    
-    if (!(requireNamespace("foreach", quietly = TRUE))) {
-        stop(error(
-            "Package foreach needed for this function to work. Please install it."
-        ))
-    } else {
+  
+  pkg <- "doParallel"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
+    ))
+    return(-1)
+  }
+  
+  pkg <- "data.table"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
+    ))
+    return(-1)
+  }
+  
+  pkg <- "foreach"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
+    ))
+    return(-1)
+  } else {
         # SET VERBOSITY
         verbose <- gl.check.verbosity(verbose)
         

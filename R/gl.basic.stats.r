@@ -12,7 +12,9 @@
 #' @author Bernd Gruber (bugs? Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' out <- gl.basic.stats(possums.gl)
+#' if (!(requireNamespace("hierfstat", quietly = TRUE))) {
+#' out <- gl.basic.stats(possums.gl[1:10,1:100])
+#' }
 #' @export
 
 gl.basic.stats <- function(x,
@@ -33,13 +35,13 @@ gl.basic.stats <- function(x,
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "hierfstat"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
-    
     
     # DO THE JOB
     

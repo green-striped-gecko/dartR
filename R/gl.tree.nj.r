@@ -23,11 +23,14 @@
 #' @author Custodian: Arthur Georges (Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#'  \donttest{
 #' # SNP data
 #'   gl.tree.nj(testset.gl,type='fan')
 #' # Tag P/A data
 #'   gl.tree.nj(testset.gs,type='fan')
-
+#'   }
+#'   res <- gl.tree.nj(platypus.gl)
+#'   
 gl.tree.nj <- function(x,
                        type = "phylogram",
                        outgroup = NULL,

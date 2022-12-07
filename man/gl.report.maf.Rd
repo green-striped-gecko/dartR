@@ -81,7 +81,7 @@ Examples of other themes that can be used can be consulted in \itemize{
  }
 }
 \examples{
-gl <- gl.report.maf(testset.gl)
+gl <- gl.report.maf(platypus.gl)
 }
 \seealso{
 \code{\link{gl.filter.maf}}, \code{\link{gl.list.reports}},

@@ -46,12 +46,16 @@ The script then applies the new population assignments to the genlight object
  and recalculates the distance and associated matrices.
 }
 \examples{
+ \donttest{
 fd <- gl.fixed.diff(testset.gl,tloc=0.05)
 fd
 fd2 <- gl.collapse(fd,tpop=1)
 fd2
 fd3 <- gl.collapse(fd2,tpop=1)
 fd3
+}
+ fd <- gl.fixed.diff(testset.gl,tloc=0.05)
+ fd2 <- gl.collapse(fd)
 }
 \author{
 Custodian: Arthur Georges -- Post to 

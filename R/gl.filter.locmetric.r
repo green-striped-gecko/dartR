@@ -121,15 +121,19 @@ gl.filter.locmetric <- function(x,
         index <-
             which(x@other$loc.metrics[, field] >= lower &
                       x@other$loc.metrics[, field] <= upper)
-        x2 <- x[, index]
-        x2@other$loc.metrics <- x@other$loc.metrics[index,]
+        
+          x2 <- x[, index]
+          x2@other$loc.metrics <- x@other$loc.metrics[index,]
+        
     }
     if (keep == "outside") {
         index <-
             which(x@other$loc.metrics[, field] <= lower &
                       x@other$loc.metrics[, field] >= upper)
-        x2 <- x[, index]
-        x2@other$loc.metrics <- x@other$loc.metrics[index,]
+        
+          x2 <- x[, index]
+          x2@other$loc.metrics <- x@other$loc.metrics[index,]
+
     }
     
     if (verbose > 2) {

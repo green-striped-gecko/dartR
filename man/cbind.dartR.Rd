@@ -10,5 +10,7 @@
 \item{...}{list of dartR objects}
 }
 \description{
-cbind is a bit lazy and does not take care for the metadata (so data in the other slot is lost). You can get most of the loci metadata back using gl.compliance.check.
+cbind is a bit lazy and does not take care for the metadata (so data in the 
+other slot is lost). You can get most of the loci metadata back using 
+gl.compliance.check.
 }

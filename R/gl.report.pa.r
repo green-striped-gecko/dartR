@@ -67,7 +67,7 @@
 #' calculated see Berner (2019).
 #' 
 #' The function also reports an estimation of the lower bound of the number of
-#'  undetected private alleles using the Good-Turing frequency formula, 
+#'  undetected private alleles using the Good-Turing frequency formula,
 #'  originally developed for cryptography, which estimates in an ecological 
 #'  context the true frequencies of rare species in a single assemblage based on
 #'   an incomplete sample of individuals. The approach is described in Chao et 
@@ -97,11 +97,11 @@
 #' alternative to FST for quantifying genetic population differentiation. Genes,
 #'  10(4), 308.
 #'  \item Chao, Anne, et al. "Deciphering the enigma of undetected species,
-#'  phylogenetic, and functional diversity based on Good‐Turing theory." 
+#'  phylogenetic, and functional diversity based on Good-Turing theory." 
 #'  Ecology 98.11 (2017): 2914-2929.
 #' }
 #' @examples
-#' out <- gl.report.pa(testset.gl[1:20,])
+#' out <- gl.report.pa(platypus.gl)
 #' @seealso \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #' @family report functions
@@ -138,28 +138,33 @@ gl.report.pa <- function(x,
   # check if package is installed
   pkg <- "tibble"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   # check if package is installed
   pkg <- "networkD3"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "tidyverse"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
   
   if (!is.null(x2)) {

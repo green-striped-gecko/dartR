@@ -90,7 +90,7 @@
 #'  \url{https://groups.google.com/d/forum/dartr}
 #'
 #' @examples
-#' out <- gl.filter.parent.offspring(testset.gl[1:10])
+#' out <- gl.filter.parent.offspring(testset.gl[1:10,1:50])
 #'
 #' @seealso \code{\link{gl.list.reports}}, \code{\link{gl.report.rdepth}} ,
 #'  \code{\link{gl.print.reports}},\code{\link{gl.report.reproducibility}},

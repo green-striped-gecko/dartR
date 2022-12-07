@@ -207,12 +207,18 @@ getStephens <- function(Q_list) {
   # convert list to array then transpose columms
   p <- aperm(simplify2array(Q_list), c(3, 1, 2))
   
-  if (requireNamespace("label.switching", quietly = TRUE)) {
-    perm <- label.switching::stephens(p)
-  } else {
-    stop("label.switching package not installed, please install it")
+  pkg <- "label.switching"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
+    ))
+    return(-1)
   }
   
+  perm <- label.switching::stephens(p)
+
   # reorder columns in according to new permuations
   # Rename columns
   column_names <- paste("Cluster ", seq_len(dim(p)[3]))

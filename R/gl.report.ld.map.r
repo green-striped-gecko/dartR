@@ -66,6 +66,7 @@
 #' require("dartR.data")
 #' x <- platypus.gl
 #' x <- gl.filter.callrate(x,threshold = 1)
+#' x <- gl.filter.monomorphs(x)
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 #' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 #' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
@@ -104,19 +105,22 @@ gl.report.ld.map <- function(x,
   # check if packages are installed
   pkg <- "snpStats"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "fields"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
   
   # DO THE JOB

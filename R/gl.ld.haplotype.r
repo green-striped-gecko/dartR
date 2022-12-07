@@ -64,10 +64,12 @@
 #' require("dartR.data")
 #' x <- platypus.gl
 #' x <- gl.filter.callrate(x,threshold = 1)
+#' x <- gl.keep.pop(x, pop.list = "TENTERFIELD")
 #' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 #' ld_res <- gl.ld.haplotype(x,chrom_name = "NC_041728.1_chromosome_1",
-#'                        ld_max_pairwise = 10000000 )
+#'                           ld_max_pairwise = 10000000 )
+#'      
 #' @author Custodian: Luis Mijangos -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @export
@@ -104,19 +106,22 @@ gl.ld.haplotype <- function(x,
   # check if packages are installed
   pkg <- "snpStats"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "fields"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
   
   # DO THE JOB

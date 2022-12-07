@@ -79,12 +79,15 @@
 #' Rousset, F. (1997). Genetic differentiation and estimation of gene flow from
 #' F-statistics under isolation by distance. Genetics, 145(4), 1219-1228.
 #' @examples
-#' #only first 100 loci
-#' ibd <- gl.ibd(bandicoot.gl[,1:100])
+#'  \donttest{
 #' #because of speed only the first 100 loci
 #' ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans='log(Dgeo)' ,Dgen_trans='Dgen/(1-Dgen)')
 #' #because of speed only the first 10 individuals)
 #' ibd <- gl.ibd(bandicoot.gl[1:10,], distance='euclidean', paircols='pop', Dgeo_trans='Dgeo')
+#' }
+#' 
+#' #only first 100 loci
+#' ibd <- gl.ibd(bandicoot.gl[,1:100])
 
 gl.ibd <- function(x = NULL,
                    distance = "Fst",
@@ -99,12 +102,17 @@ gl.ibd <- function(x = NULL,
                    plot_theme = theme_dartR(),
                    save2tmp = FALSE,
                    verbose = NULL) {
+  
     # CHECK IF PACKAGES ARE INSTALLED
-    if (!(requireNamespace("dismo", quietly = TRUE))) {
-        stop(error(
-            "Package dismo needed for this function to work. Please install it.\n"
-        ))
-    } else {
+  pkg <- "dismo"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
+    ))
+    return(-1)
+  } else {
         
         # TRAP COMMAND
         funname <- match.call()[[1]]

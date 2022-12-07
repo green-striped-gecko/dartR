@@ -48,9 +48,11 @@ The distance measure can be one of:
  }
 }
 \examples{
+ \donttest{
 D <- utils.dist.ind.snp(testset.gl, method='Manhattan')
-D <- utils.dist.ind.snp(testset.gl, method='Simple')
 D <- utils.dist.ind.snp(testset.gl, method='Euclidean',scale=TRUE)
+}
+D <- utils.dist.ind.snp(testset.gl, method='Simple')
 
 }
 \author{

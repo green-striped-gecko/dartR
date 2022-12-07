@@ -20,6 +20,7 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @family filter functions
 #' @examples
+#'  \donttest{
 #' # SNP data
 #'   gl.report.taglength(testset.gl)
 #'   result <- gl.filter.taglength(testset.gl,lower=60)
@@ -28,6 +29,9 @@
 #'   gl.report.taglength(testset.gs)
 #'   result <- gl.filter.taglength(testset.gs,lower=60)
 #'   gl.report.taglength(result)
+#'   }
+#'   test <- gl.subsample.loci(platypus.gl, n =100)
+#'   res <- gl.report.taglength(test)
 
 gl.filter.taglength <- function(x,
                                 lower = 20,
@@ -107,9 +111,11 @@ gl.filter.taglength <- function(x,
         ))
     }
     index <- (nchar.tags >= lower & nchar.tags <= upper)
-    x2 <- x[, index]
-    # Remove the corresponding records from the loci metadata
-    x2@other$loc.metrics <- x@other$loc.metrics[index, ]
+
+      x2 <- x[, index]
+      # Remove the corresponding records from the loci metadata
+      x2@other$loc.metrics <- x@other$loc.metrics[index, ]
+    
     if (verbose > 2) {
         cat(report("  No. of loci deleted =", (n0 - nLoc(x2)), "\n"))
     }

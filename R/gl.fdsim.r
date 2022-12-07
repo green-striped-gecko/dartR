@@ -39,7 +39,8 @@
 #' @author Custodian: Arthur Georges (Post to
 #'  \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' fd <- gl.fdsim(testset.gl,poppair=c('EmsubRopeMata','EmmacBurnBara'),sympatric=TRUE,verbose=3)
+#' fd <- gl.fdsim(testset.gl[,1:100],poppair=c('EmsubRopeMata','EmmacBurnBara'),
+#' sympatric=TRUE,verbose=3)
 
 gl.fdsim <-  function(x,
                       poppair,

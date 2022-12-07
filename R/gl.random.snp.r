@@ -29,7 +29,7 @@
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' require("dartR.data")
-#' res <- gl.random.snp(platypus.gl[1:10,1:10],verbose = 5)
+#' res <- gl.random.snp(platypus.gl[1:5,1:5],verbose = 5)
 #'
 #' @export
 

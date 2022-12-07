@@ -173,9 +173,13 @@
 #' Molecular Ecology 17, 4346-4358.
 #' }
 #' @examples
+#' \donttest{
 #' require("dartR.data")
 #' res <- gl.spatial.autoCorr(platypus.gl, bins=seq(0,10000,2000))
 #' # using one population, showing sample size
+#' test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
+#' res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
+#' }
 #' test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
 #' res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
 #' @importFrom tidyr pivot_wider
@@ -201,12 +205,16 @@ gl.spatial.autoCorr <- function(x = NULL,
                                 verbose = NULL) {
   
   # CHECK IF PACKAGES ARE INSTALLED
-  if (!(requireNamespace("dismo", quietly = TRUE))) {
-    stop(error(
-      "Package dismo needed for this function to work. Please install it.\n"
+  pkg <- "dismo"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
-  
+
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   

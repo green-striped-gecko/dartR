@@ -104,13 +104,17 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' if (requireNamespace("igraph", quietly = TRUE) & requireNamespace("rrBLUP",
+#' quietly = TRUE) & requireNamespace("fields", quietly=TRUE)) {
 #' t1 <- possums.gl
 #' # filtering on call rate 
 #' t1 <- gl.filter.callrate(t1)
+#' t1 <- gl.subsample.loci(t1,n = 100)
 #' # relatedness matrix
 #' res <- gl.grm(t1,plotheatmap = FALSE)
 #' # relatedness network
 #' res2 <- gl.grm.network(res,t1,relatedness_factor = 0.125)
+#' }
 #'@references
 #'\itemize{
 #'\item Endelman, J. B. , Jannink, J.-L. (2012). Shrinkage estimation of the 
@@ -169,11 +173,12 @@ gl.grm.network <- function(G,
     # check if package is installed
     pkg <- "igraph"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     if (!(method == "fr" ||

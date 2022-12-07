@@ -39,7 +39,7 @@ Resultant ggplots are saved to the session's temporary directory.
 }
 \examples{
 require("dartR.data")
-res <- gl.random.snp(platypus.gl[1:10,1:10],verbose = 5)
+res <- gl.random.snp(platypus.gl[1:5,1:5],verbose = 5)
 
 }
 \author{

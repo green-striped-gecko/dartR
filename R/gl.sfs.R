@@ -11,7 +11,7 @@
 #' @return returns a site frequency spectrum, either a one dimensional vector (only a single population in the dartR/genlight object or singlepop=TRUE) or an n-dimensional array (n is the number of populations in the genlight/dartR object). If the dartR/genlight object consists of several populations the multidimensional site frequency spectrum for each population is returned [=a multidimensional site frequency spectrum]. Be aware the multidimensional spectrum works only for a limited number of population and individuals [if too high the table command used internally will through an error as the number of populations and individuals (and therefore dimensions) are too large]. To get a single sfs for a genlight/dartR object with multiple populations, you need to set singlepop to TRUE. The returned sfs can be used to analyse demographics, e.g. using fastsimcoal2.
 #' @export
 #' @examples 
-#' gl.sfs(possums.gl[1:30,]) 
+#' gl.sfs(bandicoot.gl, singlepop=TRUE) 
 #' gl.sfs(possums.gl[c(1:5,31:33),], minbinsize=1)
 #'@references Excoffier L., Dupanloup I., Huerta-Sánchez E., Sousa V. C. and
 #'  Foll M. (2013) Robust demographic inference from genomic and SNP data. PLoS
@@ -48,7 +48,7 @@ gl.sfs<- function(x, minbinsize=0, folded=TRUE, singlepop=FALSE, plot.out=TRUE, 
     pop(x)<- rep("A", nInd(x))
   }
   
-  
+  if (!singlepop &  (prod(table(pop(x))*2+1))>2^30) {cat(error("Cannot create a multidimensional sfs, due to too high dimensions. Reduce the number of populations/individuals or use singlepop=TRUE."));stop()}
   # DO THE JOB
     if (nPop(x)==1 | singlepop==TRUE)
   {
@@ -107,9 +107,15 @@ gl.sfs<- function(x, minbinsize=0, folded=TRUE, singlepop=FALSE, plot.out=TRUE, 
   }
   #needs to be saved and turned into a ggplot
   if (plot.out) {
-  if (length(dim(sfs))<3) barplot(sfs) else cat(report("The sfs has more than 2 dimensions, therefore no plot is returned\n"))
+    if (!is.array(sfs)) {
+     df <- data.frame(sfs)
+     df$names <- 1:length(sfs)
+     gp<- ggplot(df, aes(x=names, y=sfs))+geom_bar(stat="identity")+xlab("bin")+ylab("Frequency")
+     print(gp)
+      
+    } else cat(report("The sfs has more than 2 dimensions, therefore no plot is returned\n"))
   }
-  # FLAG SCRIPT END
+    # FLAG SCRIPT END
   
   if (verbose >= 1) {
     cat(report("Completed:", funname, "\n"))

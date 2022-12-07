@@ -30,9 +30,11 @@
 #' @author Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#'  \donttest{
 #' D <- utils.dist.ind.snp(testset.gl, method='Manhattan')
-#' D <- utils.dist.ind.snp(testset.gl, method='Simple')
 #' D <- utils.dist.ind.snp(testset.gl, method='Euclidean',scale=TRUE)
+#' }
+#' D <- utils.dist.ind.snp(testset.gl, method='Simple')
 #' 
 
 utils.dist.ind.snp <- function(x,

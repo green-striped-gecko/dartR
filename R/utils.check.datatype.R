@@ -27,10 +27,14 @@
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#'  \donttest{
 #' datatype <- utils.check.datatype(testset.gl)
 #' datatype <- utils.check.datatype(as.matrix(testset.gl),accept='matrix')
 #' fd <- gl.fixed.diff(testset.gl)
 #' datatype <- utils.check.datatype(fd,accept='fd')
+#' }
+#' datatype <- utils.check.datatype(testset.gl)
+#' 
 #' @export
 
 utils.check.datatype <- function(x,
