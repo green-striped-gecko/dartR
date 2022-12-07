@@ -25,7 +25,7 @@ dissimilarity matrix. This function is a wrapper for
 \link[gplots]{heatmap.2} (package gplots).
 }
 \examples{
-\donttest{
+\dontrun{
    gl <- testset.gl[1:10,]
    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
    gl.plot.heatmap(D)
@@ -34,8 +34,10 @@ dissimilarity matrix. This function is a wrapper for
    D3 <- gl.fixed.diff(testset.gl)
    gl.plot.heatmap(D3)
    }
+   if ((requireNamespace("gplots", quietly = TRUE))) {
    D2 <- gl.dist.pop(possums.gl)
    gl.plot.heatmap(D2)
+   }
 }
 \author{
 Custodian: Luis Mijangos -- Post to
