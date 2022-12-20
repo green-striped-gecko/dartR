@@ -33,6 +33,18 @@
 #' To make use of this function you need to download STRUCTURE for you system
 #' (\bold{non GUI version}) from here
 #' \href{https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
+#' 
+#' \bold{Format note}
+#' 
+#' For this function to work, make sure that individual and population names 
+#' have no spaces. To substitute spaces by underscores you could use the R 
+#' function \code{gsub} as below.
+#' 
+#' \code{
+#' popNames(gl) <- gsub(" ","_",popNames(gl))
+#' 
+#' indNames(gl) <- gsub(" ","_",indNames(gl))  
+#' }
 #'
 #' @return An sr object (structure.result list output). Each list entry is a
 #' single structurerun output (there are k.range * num.k.rep number of runs).
