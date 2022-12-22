@@ -190,6 +190,7 @@ setMethod("[", signature(x = "dartR", i = "ANY", j = "ANY", drop = "ANY"),
             ## HANDLE 'OTHER' SLOT ##
             nOther <- length(other(x))
             namesOther <- names(other(x))
+            flags_tmp <- x$other$loc.metrics.flags
             counter <- 0
             if(treatOther & !(is.logical(i) && all(i))){
               f1 <- function(obj,n=ori.n){
@@ -205,6 +206,8 @@ setMethod("[", signature(x = "dartR", i = "ANY", j = "ANY", drop = "ANY"),
               } # end f1
               
               other(x) <- lapply(x@other, f1) # treat all elements
+              #putting back the flags
+              x$other$loc.metrics.flags <- flags_tmp
               
             } # end treatOther
             
