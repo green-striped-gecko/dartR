@@ -71,8 +71,8 @@ gl.filter.secondaries <- function(x,
                 x@other$loc.metrics$AlleleID,-x@other$loc.metrics$RepAvg,
                 -x@other$loc.metrics$AvgPIC
             )
-        x <- x[, loc.order]
-        x@other$loc.metrics <- x@other$loc.metrics[loc.order, ]
+        x2 <- x[, loc.order]
+        x2@other$loc.metrics <- x@other$loc.metrics[loc.order, ]
     } else {
         if (verbose > 1) {
             cat(report("  Selecting one SNP per sequence tag at random\n"))
