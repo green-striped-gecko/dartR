@@ -17,7 +17,7 @@ gl.impute(
 data [required].}
 
 \item{method}{Imputation method, either "frequency" or "HW" or "neighbour" 
-or "random" [default "HW"].}
+or "random" [default "neighbour"].}
 
 \item{fill.residual}{Should any residual missing values remaining after 
 imputation be set to 0, 1, 2 at random, taking into account global allele 

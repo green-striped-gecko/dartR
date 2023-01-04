@@ -749,7 +749,7 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
 
         ##### MUTATION #####
        #tic("mutation")
-        if(mutation==T){
+        if(mutation==TRUE){
           
           for(off_pop in 1:length(offspring_list)){
             
