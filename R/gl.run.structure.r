@@ -45,7 +45,14 @@
 #' 
 #' indNames(gl) <- gsub(" ","_",indNames(gl))  
 #' }
-#'
+#' 
+#' It's also worth noting that Structure truncates individual names at 11 
+#' characters. The function will fail if the names of individuals are not unique
+#'  after truncation. To avoid this possible problem, a number sequence, as 
+#'  shown in the code below, might be used instead of individual names.
+#' \code{
+#' indNames(gl) <- as.character(1:length(indNames(gl)))
+#'}
 #' @return An sr object (structure.result list output). Each list entry is a
 #' single structurerun output (there are k.range * num.k.rep number of runs).
 #' For example the summary output of the first run can be accessed via
