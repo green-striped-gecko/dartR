@@ -11,6 +11,8 @@
 #'
 #' The script returns a genlight object with the new population assignments and
 #' the recalculated locus metadata.
+#' 
+#' #' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
 #'
 #' @param x Name of the genlight object containing SNP genotypes or Tag P/A data
 #' (SilicoDArT) [required].
@@ -33,7 +35,7 @@
 #'    pop.list=c('EmsubRopeMata','EmvicVictJasp'),verbose=3)
 #'    gl2 <- gl.drop.pop(testset.gl, pop.list=c('EmsubRopeMata','EmvicVictJasp'),
 #'    mono.rm=TRUE,recalc=TRUE)
-#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c('Male','Unknown'),as.pop='sex')
+#'    gl2 <- gl.drop.pop(testset.gl, pop.list=c('Male','Unknown'),as.pop='sex',verbose=3)
 #'  # Tag P/A data
 #'    gs2 <- gl.drop.pop(testset.gs, pop.list=c('EmsubRopeMata','EmvicVictJasp'))
 #'
@@ -55,7 +57,7 @@ gl.drop.pop <-  function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Josh",
+                     build = "v.2023.1",
                      verbosity = verbose)
     
     # CHECK DATATYPE
