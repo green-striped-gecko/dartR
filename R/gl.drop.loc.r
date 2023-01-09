@@ -1,7 +1,9 @@
 #' @name gl.drop.loc
-#' @title Removes specified loci from a genlight \{adegenet\} object
+#' @title Removes specified loci from a genlight object
 #' @description
 #' The script returns a genlight object with specified loci deleted.
+#' 
+#' #' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
 #'
 #' @param x Name of the genlight object containing SNP genotypes or
 #' presence/absence data [required].
@@ -39,7 +41,7 @@ gl.drop.loc <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Josh",
+                     build = "v.2023.1",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -90,20 +92,6 @@ gl.drop.loc <- function(x,
         loc.list <- loc.list[-tmp2]
         
       }
-      
-        # for (case in loc.list) {
-        #     if (!(case %in% locNames(x))) {
-        #         if(verbose >= 2){
-        #             cat(
-        #             warn(
-        #                 "  Warning: Listed loci",
-        #                 case,
-        #                 "not present in the dataset -- ignored\n"
-        #             ))
-        #         }
-        #         loc.list <- loc.list[!(loc.list == case)]
-        #     }
-        # }
     }
     
     if (flag == "range") {
