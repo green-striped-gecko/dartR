@@ -2,8 +2,7 @@
 % Please edit documentation in R/gl.keep.ind.r
 \name{gl.keep.ind}
 \alias{gl.keep.ind}
-\title{Removes all but the specified individuals from a genlight \{adegenet\}
-object}
+\title{Removes all but the specified individuals from a genlight object}
 \usage{
 gl.keep.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
@@ -32,6 +31,8 @@ statistics made redundant by the deletion of individuals from the dataset.
 
 The script returns a genlight object with the individuals deleted and,
 optionally, the recalculated locus metadata.
+
+See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
 }
 \examples{
   # SNP data
