@@ -70,7 +70,7 @@ gl.outflank <- function(gi,
     # run outflank
     outf <-
         utils.outflank(
-            mdfm,
+          FstDataFrame=mdfm,
             LeftTrimFraction = LeftTrimFraction,
             RightTrimFraction = RightTrimFraction,
             Hmin = Hmin,

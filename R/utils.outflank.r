@@ -99,23 +99,33 @@ utils.outflank <- function(FstDataFrame,
                            Hmin = 0.1,
                            NumberOfSamples,
                            qthreshold = 0.05) {
-    # Setting up necessary columns in dataframe
-    Fstdata <-outputDFStarterNoCorr(FstDataFrame, Hmin)
+  
+  #Setting up necessary columns in dataframe
+  Fstdata <- outputDFStarterNoCorr(FstDataFrame, Hmin)
+  
+  # making working dataframe with real Fst (no NAs), storing NAs to add back
+  # later
+  # This also removes loci with He values lower than Hmin from the working data
+  # frame
+  nonkeepers <- which((is.na(Fstdata$FSTNoCorr)) | (Fstdata$He < Hmin))
+  if (length(nonkeepers) > 0) {
+    workingDataFrame <- Fstdata[-nonkeepers, ]
+  } else{
+    workingDataFrame <- Fstdata
+  }
+  
+  storedDataFrameNA <- Fstdata[nonkeepers, ]
+  
+  #Finding upper and lower bounds for trimming (eliminating NAs, but not
+  # negative FSTs)
+  sortedDataFrame <-
+    workingDataFrame[order(workingDataFrame$FSTNoCorr), ]
     
-    # making working dataframe with real Fst (no NAs), storing NAs to add back
-    #later
-    workingDataFrame <-Fstdata[which(!is.na(Fstdata$FSTNoCorr)),]
-    storedDataFrameNA <-Fstdata[which(is.na(Fstdata$FSTNoCorr)),]
-    
-    # Finding upper and lower bounds for trimming (eliminating NAs, but not
-    #negative FSTs)
-    sortedDataFrame <-workingDataFrame[order(workingDataFrame$FSTNoCorr),]
-    
-    NLociTotal <-length(sortedDataFrame$FSTNoCorr)
-    SmallestKeeper <-ceiling(NLociTotal * LeftTrimFraction)
-    LargestKeeper <-floor(NLociTotal * (1 - RightTrimFraction))
-    LowTrimPoint <-sortedDataFrame$FSTNoCorr[[SmallestKeeper]]
-    HighTrimPoint <-sortedDataFrame$FSTNoCorr[[LargestKeeper]]
+    NLociTotal <- length(sortedDataFrame$FSTNoCorr)
+    SmallestKeeper <- ceiling(NLociTotal * LeftTrimFraction)
+    LargestKeeper <- floor(NLociTotal * (1 - RightTrimFraction))
+    LowTrimPoint <- sortedDataFrame$FSTNoCorr[[SmallestKeeper]]
+    HighTrimPoint <- sortedDataFrame$FSTNoCorr[[LargestKeeper]]
     
     if (LowTrimPoint < 0) {
         writeLines(
@@ -136,9 +146,9 @@ utils.outflank <- function(FstDataFrame,
     }
     
     # finding dfInferred and Fstbar iteratively
-    putativeNeutralListTemp <-ifelse(workingDataFrame$FSTNoCorr > 0, TRUE, FALSE)
+    putativeNeutralListTemp <- ifelse(workingDataFrame$FSTNoCorr > 0, TRUE, FALSE)
     
-    oldOutlierFlag <-rep(FALSE, NLociTotal)
+    oldOutlierFlag <- rep(FALSE, NLociTotal)
     
     # Note: All negative FST loci are maked as putative outliers, which will
     #need to be tested with the coalescent model later. In the
