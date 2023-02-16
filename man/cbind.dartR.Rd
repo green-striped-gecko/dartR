@@ -9,8 +9,16 @@
 \arguments{
 \item{...}{list of dartR objects}
 }
+\value{
+A genlight object
+}
 \description{
-cbind is a bit lazy and does not take care for the metadata (so data in the 
-other slot is lost). You can get most of the loci metadata back using 
+cbind is a bit lazy and does not take care for the metadata (so data in the
+other slot is lost). You can get most of the loci metadata back using
 gl.compliance.check.
+}
+\examples{
+t1 <- platypus.gl
+class(t1) <- "dartR"
+t2 <- cbind(t1[,1:10],t1[,11:20])
 }

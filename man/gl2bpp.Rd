@@ -29,6 +29,9 @@ gl2bpp(
 progress log; 3, progress and results summary; 5, full report 
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 This function generates the sequence alignment file and the Imap file. The 
 control file should produced by the user.

@@ -115,7 +115,7 @@ structure_colors <- cols <-  c( "#E4E1E3", "#F6222E", "#FE00FA", "#16FF32",
 #' @examples
 #' #ggplot(data.frame(dummy=rnorm(1000)),aes(dummy)) +
 #' #geom_histogram(binwidth=0.1) + theme_dartR()
-#'
+#' 
 
 # The half-line (base-fontsize / 2) sets up the basic vertical rhythm of the
 # theme. Most margins will be set to this value.  However, when we work with

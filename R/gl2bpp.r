@@ -43,7 +43,7 @@
 #'     
 #'     Be mindful that there is little information in the literature on the
 #'      validity of this method. 
-#' @return NULL
+#' @return  returns no value (i.e. NULL)
 #' @references
 #' \itemize{
 #' \item Ellegren, Hans, et al. "The genomic landscape of species divergence in 

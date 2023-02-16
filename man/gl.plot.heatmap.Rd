@@ -19,6 +19,9 @@ progress log; 3, progress and results summary; 5, full report
 \item{...}{Parameters passed to function
 \link[gplots]{heatmap.2} (package gplots)}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 The script plots a heat map to represent the distances in the distance or
 dissimilarity matrix. This function is a wrapper for

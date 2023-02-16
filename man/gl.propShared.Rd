@@ -10,6 +10,9 @@ gl.propShared(x)
 \arguments{
 \item{x}{Name of the genlight containing the SNP genotypes [required].}
 }
+\value{
+A similarity matrix
+}
 \description{
 This script calculates an individual based distance matrix. It uses an C++
  implementation, so package Rcpp needs to be installed and it is therefore

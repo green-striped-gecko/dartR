@@ -178,8 +178,8 @@ utils.dart2genlight <- function(dart,
         ###### population and individual file to link AAnumbers to populations...
         ind.cov <-
             read.csv(ind.metafile,
-                     header = T,
-                     stringsAsFactors = T)
+                     header = TRUE,
+                     stringsAsFactors = TRUE)
         # is there an entry for every individual
         
         id.col <-match("id", names(ind.cov))

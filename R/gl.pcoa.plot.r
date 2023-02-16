@@ -73,7 +73,7 @@
 #' progress log; 3, progress and results summary; 5, full report
 #'  [default 2 or as specified using gl.set.verbosity].
 #'
-#' @return NULL
+#' @return returns no value (i.e. NULL)
 #'
 #' @author Custodian: Arthur Georges -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}

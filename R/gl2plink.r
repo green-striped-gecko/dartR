@@ -58,7 +58,7 @@
 #'   chromosome IDs" in the following link:
 #'   https://www.cog-genomics.org/plink/1.9/input
 #'   
-#' @return NULL
+#' @return  returns no value (i.e. NULL)
 #' @references
 #' Purcell, Shaun, et al. 'PLINK: a tool set for whole-genome association and
 #' population-based linkage analyses.' The American journal of human genetics

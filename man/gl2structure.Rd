@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl2structure.r
 \name{gl2structure}
 \alias{gl2structure}
-\title{Converts a genlight object to STRUCTURE formated files}
+\title{Converts a genlight object to STRUCTURE formatted files}
 \usage{
 gl2structure(
   x,
@@ -40,6 +40,9 @@ when calling this function to direct output files to your working directory.}
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
+}
+\value{
+returns no value (i.e. NULL)
 }
 \description{
 This function exports genlight objects to STRUCTURE formatted files (be aware
