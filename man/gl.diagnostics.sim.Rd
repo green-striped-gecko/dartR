@@ -65,6 +65,16 @@ where Ne is effective populations size of each individual subpopulation, m is
 dispersal rate and n the number of subpopulations (always 2).
 }
 }
+\examples{
+\dontrun{
+ref_table <- gl.sim.WF.table(file_var=system.file('extdata', 
+'ref_variables.csv', package = 'dartR'),interactive_vars = FALSE)
+res_sim <- gl.sim.WF.run(file_var = system.file('extdata', 
+'sim_variables.csv', package ='dartR'),ref_table=ref_table,
+interactive_vars = FALSE,number_pops_phase2=2,population_size_phase2="50 50")
+res <- gl.diagnostics.sim(x=res_sim,Ne=50)
+}
+}
 \references{
 \itemize{
 \item Crow JF, Kimura M. An introduction to population genetics theory. An 

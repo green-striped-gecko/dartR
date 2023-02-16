@@ -98,7 +98,7 @@ gl.ld.distance <- function(ld_report,
     pops <- as.factor(unique(ld_report$pop))
       
     if(is.null(plot_theme)){
-      plot_theme = theme_dartR()
+      plot_theme <- theme_dartR()
     }
     
     if(is.null(pop_colors)){

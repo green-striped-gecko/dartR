@@ -37,6 +37,9 @@ each is stored [default '0'].}
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 Package SNPRelate relies on a bit-level representation of a SNP dataset that
 competes with \{adegenet\} genlight objects and associated files. This

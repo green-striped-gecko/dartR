@@ -39,7 +39,7 @@
 #' Family ID is taken from  x$pop
 #' Within-family ID (cannot be '0') is taken from indNames(x)
 #' Variant identifier is taken from locNames(x)
-#' @return NULL
+#' @return  returns no value (i.e. NULL)
 #' @references
 #' Danecek, P., Auton, A., Abecasis, G., Albers, C. A., Banks, E., DePristo, M.
 #'  A., ... & 1000 Genomes Project Analysis Group. (2011). The variant call

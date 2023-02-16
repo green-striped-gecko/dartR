@@ -171,6 +171,7 @@ gl2alleles <- function (gl) {
   homs2 <-
     paste(substr(gl@loc.all, 3, 3), "/", substr(gl@loc.all, 3, 3), sep = "")
   xx <- matrix(NA, ncol = ncol(x), nrow = nrow(x))
+  
   for (i in 1:nrow(x)) {
     for (ii in 1:ncol(x)) {
       inp <- x[i, ii]
@@ -181,9 +182,9 @@ gl2alleles <- function (gl) {
           xx[i, ii] <- hets[ii]
         else if (inp == 2)
           xx[i, ii] <- homs2[ii]
+      } else {
+        xx[i, ii] <- NA
       }
-      else
-        xx[i, ii] = NA
     }
   }
   xx <- gsub("/", ":", xx)

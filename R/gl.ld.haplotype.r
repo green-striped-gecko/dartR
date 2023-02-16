@@ -427,7 +427,6 @@ p <- NULL
       }
       
       n_snps <- n_snps[!duplicated(n_snps[, 2]), ]
-    
       
       df.4.cut <-
         as.data.frame(table(cut(row_snp, breaks = n_snps)), stringsAsFactors =
@@ -441,7 +440,11 @@ p <- NULL
       df.4.cut_3 <- gsub("[][()]", "", df.4.cut$Var1, ",")
       df.4.cut_3 <- strsplit(df.4.cut_3, ",")
       df.4.cut_4 <- lapply(df.4.cut_3, as.numeric)
-      df.4.cut_4 <- as.data.frame(plyr::laply(df.4.cut_4, rbind))
+      if(length(df.4.cut_4)==1){
+        df.4.cut_4 <- data.frame(t(matrix((df.4.cut_4[[1]]))))
+      }else{
+        df.4.cut_4 <- as.data.frame(plyr::laply(df.4.cut_4, rbind))
+      }
       df.4.cut_4[, 3] <- (df.4.cut_4[, 2] - df.4.cut_4[, 1])
       
       # this is to calculate the real distance in bp of the polygon figure of LD
