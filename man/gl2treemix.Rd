@@ -26,6 +26,9 @@ gl2treemix(
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 The output file contains the SNP data in the format expected by treemix --
 see the treemix manual. The file will be gzipped before in order to be

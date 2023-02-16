@@ -8,6 +8,7 @@
 #' @param x Name of the genlight containing the SNP genotypes [required].
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
+#' @return A similarity matrix 
 #' @examples
 #' #takes some time at the first run of the function...
 #' \dontrun{

@@ -20,6 +20,9 @@ gl2geno(x, outfile = "gl_geno", outpath = tempdir(), verbose = NULL)
 progress log; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 The function converts a genlight object (SNP or presence/absence
  i.e. SilicoDArT data) into a file in the 'geno' and the 'lfmm' formats from 

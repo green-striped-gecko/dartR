@@ -60,6 +60,9 @@ containing the phenotype value. '1' = control, '2' = case, '0' = unknown
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 This function exports a genlight object into VCF format and save it into a
 file.

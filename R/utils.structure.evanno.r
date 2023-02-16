@@ -1,6 +1,7 @@
 #' Util function for evanno plots
 #' 
-#' These functions were copied from package strataG, which is no longer on CRAN (maintained by Eric Archer)
+#' These functions were copied from package strataG, which is no longer on CRAN 
+#' (maintained by Eric Archer)
 #' @export
 #' @author Bernd Gruber (bugs? Post to
 #'  \url{https://groups.google.com/d/forum/dartr}); original implementation of
@@ -12,11 +13,11 @@
 utils.structure.evanno <- function (sr, plot = TRUE) 
 {
   if (!"structure.result" %in% class(sr)) {
-    stop("'sr' is not a result from 'structure.run'.")
+    stop(error("'sr' is not a result from 'structure.run'."))
   }
   k.tbl <- table(sapply(sr, function(x) x$summary["k"]))
   if (length(k.tbl) < 3) 
-    stop("must have at least two values of k.")
+    stop(error("must have at least two values of k."))
   sr.smry <- t(sapply(sr, function(x) x$summary))
   ln.k <- tapply(sr.smry[, "est.ln.prob"], sr.smry[, 
                                                    "k"], mean)
@@ -27,21 +28,35 @@ utils.structure.evanno <- function (sr, plot = TRUE)
   delta.k <- sapply(2:(length(ln.k) - 1), function(i) {
     abs(ln.k[i + 1] - (2 * ln.k[i]) + ln.k[i - 1])/sd.ln.k[i]
   })
-  df <- data.frame(k = as.numeric(names(ln.k)), reps = as.numeric(table(sr.smry[, 
-                                                                                "k"])), mean.ln.k = as.numeric(ln.k), sd.ln.k = as.numeric(sd.ln.k), 
-                   ln.pk = c(NA, ln.pk), ln.ppk = c(NA, ln.ppk, NA), delta.k = c(NA, 
-                                                                                 delta.k, NA))
+  df <- data.frame(k = as.numeric(names(ln.k)), 
+                   reps = as.numeric(table(sr.smry[, "k"])),
+                   mean.ln.k = as.numeric(ln.k), 
+                   sd.ln.k = as.numeric(sd.ln.k), 
+                   ln.pk = c(NA, ln.pk), 
+                   ln.ppk = c(NA, ln.ppk, NA), 
+                   delta.k = c(NA, delta.k, NA))
+  
   rownames(df) <- NULL
   df$sd.min <- df$mean.ln.k - df$sd.ln.k
   df$sd.max <- df$mean.ln.k + df$sd.ln.k
-  plot.list <- list(mean.ln.k = ggplot2::ggplot(df, ggplot2::aes_string(x = "k", 
-                                                                        y = "mean.ln.k")) + ggplot2::ylab("mean LnP(K)") + 
+  plot.list <- list(mean.ln.k = 
+                      ggplot2::ggplot(df, 
+                                      ggplot2::aes_string(x = "k", 
+                                                          y = "mean.ln.k")) + 
+                      ggplot2::ylab("mean LnP(K)") + 
                       ggplot2::geom_segment(ggplot2::aes_string(x = "k", 
-                                                                xend = "k", y = "sd.min", yend = "sd.max")), 
-                    ln.pk = ggplot2::ggplot(df[!is.na(df$ln.pk), ], ggplot2::aes_string(x = "k", 
-                                                                                        y = "ln.pk")) + ggplot2::ylab("LnP'(K)"), 
-                    ln.ppk = ggplot2::ggplot(df[!is.na(df$ln.ppk), ], ggplot2::aes_string(x = "k", 
-                                                                                          y = "ln.ppk")) + ggplot2::ylab("LnP''(K)"))
+                                                                xend = "k", 
+                                                                y = "sd.min", 
+                                                                yend = "sd.max")), 
+                    ln.pk = ggplot2::ggplot(df[!is.na(df$ln.pk), ], 
+                                            ggplot2::aes_string(x = "k", 
+                                                                y = "ln.pk")) +
+                      ggplot2::ylab("LnP'(K)"), 
+                    ln.ppk = ggplot2::ggplot(df[!is.na(df$ln.ppk), ],
+                                             ggplot2::aes_string(x = "k", 
+                                                                 y = "ln.ppk")) +
+                      ggplot2::ylab("LnP''(K)"))
+  
   if (!all(is.na(df$delta.k))) {
     plot.list$delta.k <- ggplot2::ggplot(df[!is.na(df$delta.k), 
     ], ggplot2::aes_string(x = "k", y = "delta.k")) + 

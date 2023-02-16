@@ -306,7 +306,7 @@ gl.report.ld.map <- function(x,
     }
     
     if(is.null(plot_theme)){
-    plot_theme = theme_dartR()
+    plot_theme <- theme_dartR()
     }
     
     if(is.null(boxplot_colors)){

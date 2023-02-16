@@ -21,6 +21,9 @@ when calling this function to direct output files to your working directory.}
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 The output nexus file contains the SNP data and relevant PAUP command lines
 suitable for BEAUti.
