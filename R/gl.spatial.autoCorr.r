@@ -98,7 +98,7 @@
 #' with column names 'lat','lon', 'x', 'y')  Coordinates are provided via
 #' \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon
 #' data will be projected to meters using Mercator system [google maps] or if
-#' xy then distance is directly calculated on the coordinates [default .
+#' xy then distance is directly calculated on the coordinates [default "latlon"].
 #' @param Dgen_method Method to calculate genetic distances. See details
 #'  [default "Euclidean"].
 #' @param Dgeo_trans Transformation to be used on the geographic distances. See
@@ -584,7 +584,7 @@ gl.spatial.autoCorr <- function(x = NULL,
       spa_multi <-data.table::rbindlist(res, use.names = TRUE, 
                                         fill = TRUE, idcol = "Population")
       if(spa_multi [, max(Bin)] > 1000) {
-        lbls <- round(spa_multi$Bin/1000, 0) 
+        lbls <- round(spa_multi$Bin/1000, 1) 
       } else {
         lbls <- spa_multi$Bin
       }
