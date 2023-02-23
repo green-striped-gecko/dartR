@@ -39,7 +39,7 @@ This is typically an Euclidean distance but it can be any meaningful
 with column names 'lat','lon', 'x', 'y')  Coordinates are provided via
 \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon
 data will be projected to meters using Mercator system [google maps] or if
-xy then distance is directly calculated on the coordinates [default .}
+xy then distance is directly calculated on the coordinates [default "latlon"].}
 
 \item{Dgen_method}{Method to calculate genetic distances. See details
 [default "Euclidean"].}

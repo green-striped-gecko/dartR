@@ -364,7 +364,7 @@ gl.report.heterozygosity <- function(x,
         df <-
             data.frame(
                 pop = popNames(x),
-                nInd = n_ind,
+                nInd = round(n_ind,6),
                 nLoc = n_loc,
                 nLoc.adj = n_loc / (n_loc + n.invariant),
                 polyLoc = poly_loc ,
