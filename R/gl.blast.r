@@ -170,7 +170,7 @@ gl.blast <- function(x,
     # DO THE JOB
     
     # getting the query fasta files
-    if (class(x)[1] == "genlight") {
+    if (class(x)[1] == "genlight" | class(x)[1] == "dartR") {
         fasta.input <-
             c(rbind(
                 paste("> ", 1:nLoc(x)),
@@ -179,15 +179,15 @@ gl.blast <- function(x,
         write.table(
             fasta.input,
             file = paste0(tempdir(), "/fasta.input"),
-            quote = F,
-            row.names = F,
-            col.names = F
+            quote = FALSE,
+            row.names = FALSE,
+            col.names = FALSE
         )
     } else {
         file.copy(
             from = x,
             to = paste0(tempdir(), "/fasta.input"),
-            overwrite = T
+            overwrite = TRUE
         )
     }
     
@@ -296,8 +296,8 @@ gl.blast <- function(x,
         )
     )
     
-    file_size <-
-        file.info(paste0(tempdir(), "/output_blast.txt"))$size
+    file_size <- file.info(paste0(tempdir(), "/output_blast.txt"))$size
+    
     # reading file for filtering
     if (file_size > 0) {
         blast_res_unfiltered <-
