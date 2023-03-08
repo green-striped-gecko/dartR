@@ -57,8 +57,8 @@ gl.random.snp <- function(x,
     snp_matrix_temp_0 <- snp_matrix_temp == 0
     snp_matrix_temp_2 <- snp_matrix_temp == 2
     
-    snp_matrix_temp[snp_matrix_temp_0 == T] <- 2
-    snp_matrix_temp[snp_matrix_temp_2 == T] <- 0
+    snp_matrix_temp[snp_matrix_temp_0 == TRUE] <- 2
+    snp_matrix_temp[snp_matrix_temp_2 == TRUE] <- 0
     
     random_snps <- sample(1:nLoc(x), nLoc(x) / 2)
     
