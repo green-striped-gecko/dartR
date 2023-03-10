@@ -101,7 +101,7 @@
 #'  Ecology 98.11 (2017): 2914-2929.
 #' }
 #' @examples
-#' out <- gl.report.pa(testset.gl[1:20,])
+#' out <- gl.report.pa(platypus.gl)
 #' @seealso \code{\link{gl.list.reports}},
 #'  \code{\link{gl.print.reports}}
 #' @family report functions
@@ -138,28 +138,33 @@ gl.report.pa <- function(x,
   # check if package is installed
   pkg <- "tibble"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   # check if package is installed
   pkg <- "networkD3"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "tidyverse"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
   
   if (!is.null(x2)) {
@@ -216,8 +221,8 @@ gl.report.pa <- function(x,
       
       p1 <- as.matrix(pops[[i1]])
       p2 <- as.matrix(pops[[i2]])
-      p1alf <- colMeans(p1, na.rm = T) / 2
-      p2alf <- colMeans(p2, na.rm = T) / 2
+      p1alf <- colMeans(p1, na.rm = TRUE) / 2
+      p2alf <- colMeans(p2, na.rm = TRUE) / 2
       
       pall[i, c("N1","N2")] <- c(nrow(p1), nrow(p2))
       # pall[i, "fixed"] <- sum(abs(p1alf - p2alf) == 1, na.rm = T)
@@ -249,7 +254,7 @@ gl.report.pa <- function(x,
       pall_loc_names[[i]][["fd"]] <- pop1_pop2_fd_loc_names
       
       pall[i, "totalpriv"] <- pall[i, 8] + pall[i, 9]
-      pall[i, "AFD"] <- round(mean(abs(p1alf - p2alf), na.rm = T), 3)
+      pall[i, "AFD"] <- round(mean(abs(p1alf - p2alf), na.rm = TRUE), 3)
       
       pa_Chao <- utils.pa.Chao(x=x,pop1_m=pops[[i1]],pop2_m=pops[[i2]])
       pall[i,"Chao1"] <- round(pa_Chao[[1]],0)
@@ -275,7 +280,9 @@ gl.report.pa <- function(x,
       value <- target <- name <- NULL
       data_long <- tibble::rownames_to_column(data, "target")
       data_long <- tibble::as_tibble(data_long)
-      data_long <- tidyr::pivot_longer(data_long,-target, "source")
+      data_long <- tidyr::pivot_longer(data_long,
+                                       cols=-target,
+                                       names_to = "source")
       data_long <- data_long[data_long$value > 0,]
       
       data_long$target <- gsub("\\.", " ", data_long$target)

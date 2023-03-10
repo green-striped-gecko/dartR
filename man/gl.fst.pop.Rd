@@ -4,13 +4,13 @@
 \alias{gl.fst.pop}
 \title{Calculates a pairwise Fst values for populations in a genlight object}
 \usage{
-gl.fst.pop(x, nboots = 100, percent = 95, nclusters = 1, verbose = NULL)
+gl.fst.pop(x, nboots = 1, percent = 95, nclusters = 1, verbose = NULL)
 }
 \arguments{
 \item{x}{Name of the genlight containing the SNP genotypes [required].}
 
 \item{nboots}{Number of bootstraps to perform across loci to generate
-confidence intervals and p-values [default 100].}
+confidence intervals and p-values [default 1].}
 
 \item{percent}{Percentile to calculate the confidence interval around
 [default 95].}
@@ -36,7 +36,9 @@ probability of Fst values to be different from zero. For detailed information
 please check the help pages (?stamppFst).
 }
 \examples{
-out <- gl.fst.pop(possums.gl, nboots=1)
+test <- gl.filter.callrate(platypus.gl,threshold = 1)
+test <- gl.filter.monomorphs(test)
+out <- gl.fst.pop(test, nboots=1)
 }
 \author{
 Bernd Gruber (bugs? Post to

@@ -187,9 +187,9 @@ gl2alleles <- function (gl) {
           xx[i, ii] <- hets[ii]
         else if (inp == 2)
           xx[i, ii] <- homs2[ii]
+      } else{
+        xx[i, ii] <- NA
       }
-      else
-        xx[i, ii] = NA
     }
   }
   xx <- gsub("/", ":", xx)

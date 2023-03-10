@@ -17,7 +17,7 @@ gl.impute(
 data [required].}
 
 \item{method}{Imputation method, either "frequency" or "HW" or "neighbour" 
-or "random" [default "HW"].}
+or "random" [default "neighbour"].}
 
 \item{fill.residual}{Should any residual missing values remaining after 
 imputation be set to 0, 1, 2 at random, taking into account global allele 
@@ -72,6 +72,7 @@ imputed with method 'frequency' or 'HW'. Consider using the function
 \code{\link{gl.filter.allna}} with by.pop=TRUE to remove them first.
 }
 \examples{
+ \donttest{
 require("dartR.data")
 # SNP genotype data
 gl <- gl.filter.callrate(platypus.gl,threshold=0.95)
@@ -81,6 +82,8 @@ gl <- gl.impute(gl,method="neighbour")
 gs <- gl.filter.callrate(testset.gs,threshold=0.95)
 gl <- gl.filter.allna(gl)
 gs <- gl.impute(gs, method="neighbour")
+}
+gs <- gl.impute(platypus.gl,method ="random")
 }
 \author{
 Custodian: Luis Mijangos 

@@ -15,7 +15,8 @@
 #' and the correction factor described by Peakall et al 2003.
 #' 
 #' The input can be i) a genlight object (which has to have the latlon slot 
-#' populated), ii) a pair of \code{Dgeo} and \code{Dgen}, which have to be either
+#' populated), ii) a pair of \code{Dgeo} and \code{Dgen}, which have to be
+#'  either
 #'  \code{matrix} or \code{dist} objects, or iii) a \code{list} of the 
 #'  \code{matrix} or \code{dist} objects if the 
 #'  analysis needs to be carried out for multiple populations (in this case, 
@@ -23,7 +24,8 @@
 #'  \code{matrix} or \code{dist}) and the population order in the two lists has 
 #'  to be the same. 
 #' 
-#' If the input is a genlight object, the function calculates the linear distance
+#' If the input is a genlight object, the function calculates the linear 
+#' distance
 #' for \code{Dgeo} and the relevant \code{Dgen} matrix (see \code{Dgen_method}) 
 #' for each population. 
 #' When the method selected is a genetic similarity matrix (e.g. "simple" 
@@ -89,14 +91,14 @@
 #' @param x Genlight object [default NULL].
 #' @param Dgen Genetic distance matrix if no genlight object is provided
 #' [default NULL].
-#' @param Dgeo Geographic distance matrix if no genlight object is provided. This
-#'  is typically an Euclidean distance but it can be any meaningful 
+#' @param Dgeo Geographic distance matrix if no genlight object is provided.
+#'  This is typically an Euclidean distance but it can be any meaningful 
 #'  (geographical) distance metrics [default NULL].
 #' @param coordinates Can be either 'latlon', 'xy' or a two column data.frame
 #' with column names 'lat','lon', 'x', 'y')  Coordinates are provided via
 #' \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon
 #' data will be projected to meters using Mercator system [google maps] or if
-#' xy then distance is directly calculated on the coordinates [default .
+#' xy then distance is directly calculated on the coordinates [default "latlon"].
 #' @param Dgen_method Method to calculate genetic distances. See details
 #'  [default "Euclidean"].
 #' @param Dgeo_trans Transformation to be used on the geographic distances. See
@@ -115,8 +117,8 @@
 #' intervals from permutations are not shown [default FALSE].
 #' @param permutation Whether permutation calculations for the null hypothesis 
 #' of no spatial structure should be carried out [default TRUE].
-#' @param bootstrap Whether bootstrap calculations to compute the 95\% confidence
-#' intervals around r should be carried out [default TRUE].
+#' @param bootstrap Whether bootstrap calculations to compute the 95\% 
+#' confidence intervals around r should be carried out [default TRUE].
 #' @param plot_theme Theme for the plot. See details [default NULL].
 #' @param plot_colors_pop A color palette for populations or a list with
 #' as many colors as there are populations in the dataset [default NULL].
@@ -173,9 +175,13 @@
 #' Molecular Ecology 17, 4346-4358.
 #' }
 #' @examples
+#' \donttest{
 #' require("dartR.data")
 #' res <- gl.spatial.autoCorr(platypus.gl, bins=seq(0,10000,2000))
 #' # using one population, showing sample size
+#' test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
+#' res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
+#' }
 #' test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
 #' res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
 #' @importFrom tidyr pivot_wider
@@ -201,12 +207,16 @@ gl.spatial.autoCorr <- function(x = NULL,
                                 verbose = NULL) {
   
   # CHECK IF PACKAGES ARE INSTALLED
-  if (!(requireNamespace("dismo", quietly = TRUE))) {
-    stop(error(
-      "Package dismo needed for this function to work. Please install it.\n"
+  pkg <- "dismo"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
-  
+
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   
@@ -414,9 +424,9 @@ gl.spatial.autoCorr <- function(x = NULL,
     if (is.character(all.equal(len.elements.Dgeo, len.elements.Dgen))) {
       stop(error("  The arguments Dgen and Dgeo should have identical dimensions\n"))
     }
-    coordstring = "Dgeo provided."
-    distance = "Dgen provided"
-    typedis = "ind"
+    coordstring <- "Dgeo provided."
+    distance <- "Dgen provided"
+    typedis <- "ind"
   } # Close if matrices are provided
   #----------------------------------------------------------------------------#
 
@@ -574,7 +584,7 @@ gl.spatial.autoCorr <- function(x = NULL,
       spa_multi <-data.table::rbindlist(res, use.names = TRUE, 
                                         fill = TRUE, idcol = "Population")
       if(spa_multi [, max(Bin)] > 1000) {
-        lbls <- round(spa_multi$Bin/1000, 0) 
+        lbls <- round(spa_multi$Bin/1000, 1) 
       } else {
         lbls <- spa_multi$Bin
       }

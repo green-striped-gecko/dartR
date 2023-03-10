@@ -49,11 +49,12 @@ gl.outflank <- function(gi,
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "qvalue"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     # convert genlight to genind
@@ -69,7 +70,7 @@ gl.outflank <- function(gi,
     # run outflank
     outf <-
         utils.outflank(
-            mdfm,
+          FstDataFrame=mdfm,
             LeftTrimFraction = LeftTrimFraction,
             RightTrimFraction = RightTrimFraction,
             Hmin = Hmin,

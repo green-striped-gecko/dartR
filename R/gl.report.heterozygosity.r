@@ -73,7 +73,7 @@
 #'\strong{ Function's output }
 #'
 #' Output for method='pop' is an ordered barchart of observed heterozygosity,
-#' expected heterozygosity and FIS (Inbreeding coefficient) across populations
+#' unbiased expected heterozygosity and FIS (Inbreeding coefficient) across populations
 #' together with a table of mean observed and expected heterozygosities and FIS
 #' by population and their respective standard deviations (SD).
 #' 
@@ -99,11 +99,14 @@
 #' \url{https://groups.google.com/d/forum/dartr})
 #'
 #' @examples
+#'  \donttest{
 #' require("dartR.data")
 #' df <- gl.report.heterozygosity(platypus.gl)
 #' df <- gl.report.heterozygosity(platypus.gl,method='ind')
 #' n.inv <- gl.report.secondaries(platypus.gl)
 #' gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
+#' }
+#' df <- gl.report.heterozygosity(platypus.gl)
 #'
 #' @seealso \code{\link{gl.filter.heterozygosity}}
 #'
@@ -361,7 +364,7 @@ gl.report.heterozygosity <- function(x,
         df <-
             data.frame(
                 pop = popNames(x),
-                nInd = n_ind,
+                nInd = round(n_ind,6),
                 nLoc = n_loc,
                 nLoc.adj = n_loc / (n_loc + n.invariant),
                 polyLoc = poly_loc ,
@@ -400,7 +403,7 @@ gl.report.heterozygosity <- function(x,
                 df.ordered$pop <-
                     factor(df.ordered$pop, levels = df.ordered$pop)
                 df.ordered <-
-                    df.ordered[, c("pop", "nInd", "Ho", "He", "FIS", "color")]
+                    df.ordered[, c("pop", "nInd", "Ho", "uHe", "FIS", "color")]
                 df.ordered <-
                     reshape2::melt(df.ordered, id = c("pop", "color", "nInd"))
                 
@@ -428,7 +431,7 @@ gl.report.heterozygosity <- function(x,
                         sep = " | "
                     )) +
                     geom_text(
-                        label = rep(c("Ho", "He", "FIS"), length(unique(
+                        label = rep(c("Ho", "uHe", "FIS"), length(unique(
                             df.ordered$pop
                         ))),
                         position = position_dodge2(width = 0.9),
@@ -567,7 +570,7 @@ cat("    Maximum Observed Heterozygosity: ", round(max(df$Ho, na.rm = TRUE), 6))
             if (n.invariant > 0) {
                 cat(
                     "  Average correction factor for invariant loci =",
-                    mean(n_loc / (n_loc + n.invariant), na.rm = T),
+                    mean(n_loc / (n_loc + n.invariant), na.rm = TRUE),
                     "\n"
                 )
             } else {

@@ -87,8 +87,9 @@
 #'   \url{https://groups.google.com/d/forum/dartr})
 #' @examples
 #' require("dartR.data")
-#' n.inv <- gl.report.secondaries(platypus.gl)
-#' gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
+#' test <- gl.filter.callrate(platypus.gl,threshold = 1)
+#' n.inv <- gl.report.secondaries(test)
+#' gl.report.heterozygosity(test, n.invariant = n.inv[7, 2])
 #' @seealso
 #' \code{\link{gl.filter.secondaries}},\code{\link{gl.report.heterozygosity}},
 #' \code{\link{utils.n.var.invariant}}

@@ -27,6 +27,9 @@ overwritten. Set this option to TRUE to overwrite the file [default FALSE].}
 2, progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 The output csv file contains the snp data and other relevant lines suitable
  for genalex. This script is a wrapper for  \link[poppr]{genind2genalex}

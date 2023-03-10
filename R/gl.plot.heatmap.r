@@ -13,11 +13,12 @@
 #' [default 2 or as specified using gl.set.verbosity]
 #' @param ... Parameters passed to function
 #' \link[gplots]{heatmap.2} (package gplots)
-#' @return NULL
+#' @return returns no value (i.e. NULL)
 #' @export
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#' \dontrun{
 #'    gl <- testset.gl[1:10,]
 #'    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
 #'    gl.plot.heatmap(D)
@@ -25,6 +26,11 @@
 #'    gl.plot.heatmap(D2)
 #'    D3 <- gl.fixed.diff(testset.gl)
 #'    gl.plot.heatmap(D3)
+#'    }
+#'    if ((requireNamespace("gplots", quietly = TRUE))) {
+#'    D2 <- gl.dist.pop(possums.gl)
+#'    gl.plot.heatmap(D2)
+#'    }
 
 gl.plot.heatmap <- function(D,
                             palette_divergent = diverging_palette,

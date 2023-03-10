@@ -103,7 +103,7 @@ the alternative allele.
 \strong{ Function's output }
 
 Output for method='pop' is an ordered barchart of observed heterozygosity,
-expected heterozygosity and FIS (Inbreeding coefficient) across populations
+unbiased expected heterozygosity and FIS (Inbreeding coefficient) across populations
 together with a table of mean observed and expected heterozygosities and FIS
 by population and their respective standard deviations (SD).
 
@@ -123,11 +123,14 @@ individuals.
  }
 }
 \examples{
+ \donttest{
 require("dartR.data")
 df <- gl.report.heterozygosity(platypus.gl)
 df <- gl.report.heterozygosity(platypus.gl,method='ind')
 n.inv <- gl.report.secondaries(platypus.gl)
 gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
+}
+df <- gl.report.heterozygosity(platypus.gl)
 
 }
 \seealso{

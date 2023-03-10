@@ -12,7 +12,8 @@ utils.structure.evanno(sr, plot = TRUE)
 \item{plot}{should the plots be returned}
 }
 \description{
-These functions were copied from package strataG, which is no longer on CRAN (maintained by Eric Archer)
+These functions were copied from package strataG, which is no longer on CRAN 
+(maintained by Eric Archer)
 }
 \author{
 Bernd Gruber (bugs? Post to

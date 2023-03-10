@@ -58,9 +58,11 @@ The distance measure can be one of:
  the other, or both restriction sites). Your call.
 }
 \examples{
+ \donttest{
 D <- utils.dist.binary(testset.gs, method='Jaccard')
-D <- utils.dist.binary(testset.gs, method='Simple')
 D <- utils.dist.binary(testset.gs, method='Euclidean',scale=TRUE)
+}
+D <- utils.dist.binary(testset.gs, method='Simple')
 
 }
 \author{

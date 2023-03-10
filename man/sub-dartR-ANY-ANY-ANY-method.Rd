@@ -17,11 +17,13 @@
 
 \item{pop}{list of populations to be kept}
 
-\item{treatOther}{elements in other (and ind.metrics & loci.metrics) as indexed as well. default: TRUE}
+\item{treatOther}{elements in other (and ind.metrics & loci.metrics) as 
+indexed as well. default: TRUE}
 
-\item{quiet}{warnings are surpessed. default: TRUE}
+\item{quiet}{warnings are suppressed. default: TRUE}
 
-\item{drop}{reduced to a vector if a single individual/loci is selected. default: FALSE [should never set to TRUE]}
+\item{drop}{reduced to a vector if a single individual/loci is selected. 
+default: FALSE [should never set to TRUE]}
 }
 \description{
 indexing dartR objects correctly...

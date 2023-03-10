@@ -51,11 +51,12 @@ gl2shp <- function(x,
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "terra"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please   install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     } else {
         if (is.null(x@other$latlon)) {
             stop(error(

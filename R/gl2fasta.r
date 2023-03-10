@@ -57,11 +57,15 @@
 #' @author Custodian: Luis Mijangos (Post to
 #'  \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#'  \donttest{
 #' gl <- gl.filter.reproducibility(testset.gl,t=1)
 #' gl <- gl.filter.overshoot(gl,verbose=3)
 #' gl <- gl.filter.callrate(testset.gl,t=.98)
 #' gl <- gl.filter.monomorphs(gl)
 #' gl2fasta(gl, method=1, outfile='test.fasta',verbose=3)
+#' }
+#' test <- gl.subsample.loci(platypus.gl,n=100)
+#' gl2fasta(test)
 
 gl2fasta <- function(x,
                      method = 1,
@@ -88,11 +92,12 @@ gl2fasta <- function(x,
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "seqinr"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     # Check monomorphs have been removed up to date

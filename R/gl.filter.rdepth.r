@@ -41,11 +41,14 @@
 #' @author Custodian: Arthur Georges (Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#'  \donttest{
 #' # SNP data
 #'   gl.report.rdepth(testset.gl)
 #'   result <- gl.filter.rdepth(testset.gl, lower=8, upper=50, verbose=3)
 #' # Tag P/A data
 #'   result <- gl.filter.rdepth(testset.gs, lower=8, upper=50, verbose=3)
+#'   }
+#'   res <- gl.filter.rdepth(platypus.gl)
 #'
 #' @seealso \code{\link{gl.filter.rdepth}}
 #'
@@ -99,9 +102,10 @@ gl.filter.rdepth <-  function(x,
     
     index <- (rdepth >= lower & rdepth <= upper)
     
-    x2 <- x[, index]
-    # Remove the corresponding records from the loci metadata
-    x2@other$loc.metrics <- x@other$loc.metrics[index,]
+      x2 <- x[, index]
+      # Remove the corresponding records from the loci metadata
+      x2@other$loc.metrics <- x@other$loc.metrics[index,]
+    
     
     # PLOT HISTOGRAMS, BEFORE AFTER
     if (plot.out) {

@@ -48,7 +48,7 @@
 #' realized relationship matrix. G3: Genes, Genomics, Genetics 2, 1405.
 #' }
 #' @examples
-#' gl.grm(bandicoot.gl[1:20,])
+#' gl.grm(platypus.gl[1:10,1:100])
 #'
 #' @seealso \code{\link{gl.grm.network}}
 #' @family inbreeding functions
@@ -79,19 +79,22 @@ gl.grm <- function(x,
     # check if package is installed
     pkg <- "rrBLUP"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
+    
     pkg <- "gplots"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     # Set a population if none is specified (such as if the genlight object has been generated manually)

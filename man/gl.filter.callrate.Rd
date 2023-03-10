@@ -25,9 +25,8 @@ gl.filter.callrate(
 object containing the SilocoDArT data [required].}
 
 \item{method}{Use method='loc' to specify that loci are to be filtered, 'ind'
- to specify
-that specimens are to be filtered, 'pop' to remove loci that fail to meet the
- specified threshold in any one population [default 'loc'].}
+to specify that specimens are to be filtered, 'pop' to remove loci that 
+fail to meet the specified threshold in any one population [default 'loc'].}
 
 \item{threshold}{Threshold value below which loci will be removed
 [default 0.95].}
@@ -101,6 +100,7 @@ Resultant ggplot(s) and the tabulation(s) are saved to the session's
  temporary directory.
 }
 \examples{
+ \donttest{
 # SNP data
   result <- gl.filter.callrate(testset.gl[1:10], method='loc', threshold=0.8,
    verbose=3)
@@ -115,6 +115,8 @@ Resultant ggplot(s) and the tabulation(s) are saved to the session's
   threshold=0.8, verbose=3)
   result <- gl.filter.callrate(testset.gs[1:10], method='pop', 
   threshold=0.8, verbose=3)
+  }
+  res <- gl.filter.callrate(platypus.gl)
 
 }
 \seealso{

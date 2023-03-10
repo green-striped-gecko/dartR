@@ -64,10 +64,12 @@
 #' require("dartR.data")
 #' x <- platypus.gl
 #' x <- gl.filter.callrate(x,threshold = 1)
+#' x <- gl.keep.pop(x, pop.list = "TENTERFIELD")
 #' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 #' ld_res <- gl.ld.haplotype(x,chrom_name = "NC_041728.1_chromosome_1",
-#'                        ld_max_pairwise = 10000000 )
+#'                           ld_max_pairwise = 10000000 )
+#'      
 #' @author Custodian: Luis Mijangos -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @export
@@ -104,19 +106,22 @@ gl.ld.haplotype <- function(x,
   # check if packages are installed
   pkg <- "snpStats"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
+  
   pkg <- "fields"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
   
   # DO THE JOB
@@ -422,7 +427,6 @@ p <- NULL
       }
       
       n_snps <- n_snps[!duplicated(n_snps[, 2]), ]
-    
       
       df.4.cut <-
         as.data.frame(table(cut(row_snp, breaks = n_snps)), stringsAsFactors =
@@ -436,7 +440,11 @@ p <- NULL
       df.4.cut_3 <- gsub("[][()]", "", df.4.cut$Var1, ",")
       df.4.cut_3 <- strsplit(df.4.cut_3, ",")
       df.4.cut_4 <- lapply(df.4.cut_3, as.numeric)
-      df.4.cut_4 <- as.data.frame(plyr::laply(df.4.cut_4, rbind))
+      if(length(df.4.cut_4)==1){
+        df.4.cut_4 <- data.frame(t(matrix((df.4.cut_4[[1]]))))
+      }else{
+        df.4.cut_4 <- as.data.frame(plyr::laply(df.4.cut_4, rbind))
+      }
       df.4.cut_4[, 3] <- (df.4.cut_4[, 2] - df.4.cut_4[, 1])
       
       # this is to calculate the real distance in bp of the polygon figure of LD

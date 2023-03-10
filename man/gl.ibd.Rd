@@ -27,7 +27,8 @@ log(distance) is performed [required].}
 \item{distance}{Type of distance that is calculated and used for the
 analysis. Can be either population based 'Fst' [\link[StAMPP]{stamppFst}],
 'D' [\link[StAMPP]{stamppNeisD}] or individual based 'propShared',
- [gl.propShared], 'euclidean' [gl.dist.ind, method='Euclidean'] [default "Fst"].}
+ [gl.propShared], 'euclidean' [gl.dist.ind, method='Euclidean']
+ [default "Fst"].}
 
 \item{coordinates}{Can be either 'latlon', 'xy' or a two column data.frame
 with column names 'lat','lon', 'x', 'y'). Coordinates are provided via
@@ -47,7 +48,8 @@ Dgen_trans [default "Dgeo"].}
 \item{Dgen_trans}{You can provide a formula to transform the genetic
 distance. The transformation can be applied as a formula using Dgen as the
  variable to be transformed. For example: \code{Dgen_trans = 'Dgen/(1-Dgen)'.
-  Any valid R expression can be used here [default 'Dgen', which is the identity function.]}}
+  Any valid R expression can be used here
+   [default 'Dgen', which is the identity function.]}}
 
 \item{permutations}{Number of permutations in the Mantel test [default 999].}
 
@@ -77,7 +79,7 @@ statistics of the Mantel test).
 This function performs an isolation by distance analysis based on a Mantel
 test and also produces an isolation by distance plot. If a genlight object
 with coordinates is provided, then an Euclidean and genetic distance matrices
-are calculated. #'
+are calculated.'
 }
 \details{
 Currently pairwise Fst and D between populations and
@@ -95,22 +97,29 @@ gl.propShared or gl.dist.ind. For transformation you need to have the dismo
 package installed. As a new feature you can plot pairwise relationship using
 double colored points (paircols=TRUE). Pairwise relationship can be
 visualised via populations or individuals, depending which distance is
-calculated. Please note: Often a problem arises, if an individual based distance is
-calculated (e.g. propShared) and some individuals have identical coordinates
-as this results in distances of zero between those pairs of individuals.
-If the standard transformation [log(Dgeo)] is used, this results in an infinite
-value, because of trying to calculate'log(0)'. To avoid this, the easiest fix
-is to change the transformation from log(Dgeo) to log(Dgeo+1) or you could add
-some "noise" to the coordinates of the individuals (e.g. +- 1m, but be aware
-if you use lat lon then you rather want to add +0.00001 degrees or so).
+calculated. Please note: Often a problem arises, if an individual based 
+distance is calculated (e.g. propShared) and some individuals have identical
+ coordinates as this results in distances of zero between those pairs of 
+ individuals.
+ 
+If the standard transformation [log(Dgeo)] is used, this results in an 
+infinite value, because of trying to calculate'log(0)'. To avoid this, the 
+easiest fix is to change the transformation from log(Dgeo) to log(Dgeo+1) or 
+you could add some "noise" to the coordinates of the individuals (e.g. +- 1m,
+ but be aware if you use lat lon then you rather want to add +0.00001 degrees
+  or so).
 }
 \examples{
+ \donttest{
+#because of speed only the first 100 loci
+ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans='log(Dgeo)' ,
+Dgen_trans='Dgen/(1-Dgen)')
+#because of speed only the first 10 individuals)
+ibd <- gl.ibd(bandicoot.gl[1:10,], distance='euclidean', paircols='pop', 
+Dgeo_trans='Dgeo')
+}
 #only first 100 loci
 ibd <- gl.ibd(bandicoot.gl[,1:100])
-#because of speed only the first 100 loci
-ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans='log(Dgeo)' ,Dgen_trans='Dgen/(1-Dgen)')
-#because of speed only the first 10 individuals)
-ibd <- gl.ibd(bandicoot.gl[1:10,], distance='euclidean', paircols='pop', Dgeo_trans='Dgeo')
 }
 \references{
 Rousset, F. (1997). Genetic differentiation and estimation of gene flow from
@@ -120,5 +129,6 @@ F-statistics under isolation by distance. Genetics, 145(4), 1219-1228.
 \link[vegan]{mantel}, \link[StAMPP]{stamppFst}
 }
 \author{
-Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+Bernd Gruber (bugs? Post to 
+\url{https://groups.google.com/d/forum/dartr})
 }

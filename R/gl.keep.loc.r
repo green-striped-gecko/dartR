@@ -1,8 +1,10 @@
 #' @name gl.keep.loc
-#' @title Removes all but the specified loci from a genlight \{adegenet\} object
+#' @title Removes all but the specified loci from a genlight object
 #' @description
 #' The script returns a genlight object with the all but the specified loci
 #' deleted.
+#' 
+#' #' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
 #'
 #' @param x Name of the genlight object containing SNP genotypes or
 #' presence/absence data [required].
@@ -40,7 +42,7 @@ gl.keep.loc <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "v.2023.1",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -136,10 +138,11 @@ gl.keep.loc <- function(x,
         ))
         x2 <- x
     } else {
+      
         # Remove loci flagged for deletion
         x2 <- x[, x$loc.names %in% loc.list]
-        x2@other$loc.metrics <-
-            x@other$loc.metrics[x$loc.names %in% loc.list, ]
+        x2@other$loc.metrics <- x@other$loc.metrics[x$loc.names %in% loc.list, ]
+
     }
     
     # REPORT A SUMMARY

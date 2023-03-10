@@ -28,8 +28,8 @@ gl.spatial.autoCorr(
 \arguments{
 \item{x}{Genlight object [default NULL].}
 
-\item{Dgeo}{Geographic distance matrix if no genlight object is provided. This
-is typically an Euclidean distance but it can be any meaningful 
+\item{Dgeo}{Geographic distance matrix if no genlight object is provided.
+This is typically an Euclidean distance but it can be any meaningful 
 (geographical) distance metrics [default NULL].}
 
 \item{Dgen}{Genetic distance matrix if no genlight object is provided
@@ -39,7 +39,7 @@ is typically an Euclidean distance but it can be any meaningful
 with column names 'lat','lon', 'x', 'y')  Coordinates are provided via
 \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon
 data will be projected to meters using Mercator system [google maps] or if
-xy then distance is directly calculated on the coordinates [default .}
+xy then distance is directly calculated on the coordinates [default "latlon"].}
 
 \item{Dgen_method}{Method to calculate genetic distances. See details
 [default "Euclidean"].}
@@ -66,8 +66,8 @@ intervals from permutations are not shown [default FALSE].}
 \item{permutation}{Whether permutation calculations for the null hypothesis 
 of no spatial structure should be carried out [default TRUE].}
 
-\item{bootstrap}{Whether bootstrap calculations to compute the 95\% confidence
-intervals around r should be carried out [default TRUE].}
+\item{bootstrap}{Whether bootstrap calculations to compute the 95\% 
+confidence intervals around r should be carried out [default TRUE].}
 
 \item{plot_theme}{Theme for the plot. See details [default NULL].}
 
@@ -125,7 +125,8 @@ null hypothesis of no spatial structure and the one-tail test via permutation,
 and the correction factor described by Peakall et al 2003.
 
 The input can be i) a genlight object (which has to have the latlon slot 
-populated), ii) a pair of \code{Dgeo} and \code{Dgen}, which have to be either
+populated), ii) a pair of \code{Dgeo} and \code{Dgen}, which have to be
+ either
  \code{matrix} or \code{dist} objects, or iii) a \code{list} of the 
  \code{matrix} or \code{dist} objects if the 
  analysis needs to be carried out for multiple populations (in this case, 
@@ -133,7 +134,8 @@ populated), ii) a pair of \code{Dgeo} and \code{Dgen}, which have to be either
  \code{matrix} or \code{dist}) and the population order in the two lists has 
  to be the same. 
 
-If the input is a genlight object, the function calculates the linear distance
+If the input is a genlight object, the function calculates the linear 
+distance
 for \code{Dgeo} and the relevant \code{Dgen} matrix (see \code{Dgen_method}) 
 for each population. 
 When the method selected is a genetic similarity matrix (e.g. "simple" 
@@ -197,9 +199,13 @@ Examples of other themes that can be used can be consulted in \itemize{
  }
 }
 \examples{
+\donttest{
 require("dartR.data")
 res <- gl.spatial.autoCorr(platypus.gl, bins=seq(0,10000,2000))
 # using one population, showing sample size
+test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
+res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
+}
 test <- gl.keep.pop(platypus.gl,pop.list = "TENTERFIELD")
 res <- gl.spatial.autoCorr(test, bins=seq(0,10000,2000),CI_color = "green")
 }

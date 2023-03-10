@@ -6,6 +6,7 @@
 \usage{
 gl.tree.nj(
   x,
+  d_mat = NULL,
   type = "phylogram",
   outgroup = NULL,
   labelsize = 0.7,
@@ -16,11 +17,13 @@ gl.tree.nj(
 \arguments{
 \item{x}{Name of the genlight object containing the SNP data [required].}
 
+\item{d_mat}{Distance matrix [default NULL].}
+
 \item{type}{Type of dendrogram "phylogram"|"cladogram"|"fan"|"unrooted"
 [default "phylogram"].}
 
 \item{outgroup}{Vector containing the population names that are the outgroups
-[deefault NULL].}
+[default NULL].}
 
 \item{labelsize}{Size of the labels as a proportion of the graphics default
 [default 0.7].}
@@ -36,14 +39,20 @@ summary; 5, full report [default 2].}
 A tree file of class phylo.
 }
 \description{
-This function is a wrapper for the nj\{ape\} function applied to Euclidian
+This function is a wrapper for the nj\{ape\} function applied to Euclidean
 distances calculated from the genlight object.
 }
+\details{
+
+}
 \examples{
+ \donttest{
 # SNP data
   gl.tree.nj(testset.gl,type='fan')
 # Tag P/A data
   gl.tree.nj(testset.gs,type='fan')
+  }
+  res <- gl.tree.nj(platypus.gl)
 }
 \author{
 Custodian: Arthur Georges (Post to

@@ -7,7 +7,7 @@
 #'
 #' @param x Name of the genlight containing the SNP genotypes [required].
 #' @param nboots Number of bootstraps to perform across loci to generate
-#' confidence intervals and p-values [default 100].
+#' confidence intervals and p-values [default 1].
 #' @param percent Percentile to calculate the confidence interval around
 #'  [default 95].
 #' @param nclusters Number of processor threads or cores to use during
@@ -25,10 +25,12 @@
 #' @author Bernd Gruber (bugs? Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' out <- gl.fst.pop(possums.gl, nboots=1)
+#' test <- gl.filter.callrate(platypus.gl,threshold = 1)
+#' test <- gl.filter.monomorphs(test)
+#' out <- gl.fst.pop(test, nboots=1)
 
 gl.fst.pop <- function(x,
-                       nboots = 100,
+                       nboots = 1,
                        percent = 95,
                        nclusters = 1,
                        verbose = NULL) {

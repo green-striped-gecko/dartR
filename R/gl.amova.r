@@ -24,8 +24,8 @@
 #' @author Bernd Gruber (bugs? Post to 
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' #permutations should be higher, here set to 10 because of speed
-#' out <- gl.amova(bandicoot.gl, permutations=10)
+#' #permutations should be higher, here set to 1 because of speed
+#' out <- gl.amova(bandicoot.gl, permutations=1)
 #'
 
 gl.amova <- function(x,
@@ -47,11 +47,12 @@ gl.amova <- function(x,
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "pegas"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     if (is.null(distance)) {

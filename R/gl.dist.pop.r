@@ -32,17 +32,18 @@
 #' @author author(s): Arthur Georges. Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#'  \dontrun{
 #' # SNP genotypes
 #' D <- gl.dist.pop(possums.gl[1:90,1:100], method='euclidean')
 #' D <- gl.dist.pop(possums.gl[1:90,1:100], method='euclidean',scale=TRUE)
-#' \dontrun{
 #' #D <- gl.dist.pop(possums.gl, method='nei')
 #' #D <- gl.dist.pop(possums.gl, method='reynolds')
 #' #D <- gl.dist.pop(possums.gl, method='chord')
 #' #D <- gl.dist.pop(possums.gl, method='fixed-diff')
-#' }
 #' #Presence-Absence data [only 10 individuals due to speed]
 #' D <- gl.dist.pop(testset.gs[1:10,], method='euclidean')
+#' }
+#' res <- gl.dist.pop(platypus.gl)
 
 gl.dist.pop <- function(x,
                         method = "euclidean",
@@ -57,11 +58,12 @@ gl.dist.pop <- function(x,
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "reshape2"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     # SET VERBOSITY

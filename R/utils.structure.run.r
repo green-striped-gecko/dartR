@@ -379,6 +379,7 @@ utils.structure.run <- function (g,
     
     out.files <- lapply(rownames(rep.df), function(x) {
       sw.out <- structureWrite(g, label = x, maxpops = rep.df[x,"k"],...)
+
       files <- sw.out$files
       cmd <- paste0(exec, " -m ", files["mainparams"], 
                     " -e ", files["extraparams"], " -i ", 
@@ -404,6 +405,7 @@ utils.structure.run <- function (g,
       save(result, file = fname)
       fname
     })
+    
     run.result <- lapply(out.files, function(f) {
       result <- NULL
       load(f)

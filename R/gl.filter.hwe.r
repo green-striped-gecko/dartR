@@ -180,11 +180,12 @@ gl.filter.hwe <- function(x,
     # FUNCTION SPECIFIC ERROR CHECKING check if packages are installed
     pkg <- "HardyWeinberg"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-        stop(error(
-            "Package",
-            pkg,
-            " needed for this function to work. Please install it."
-        ))
+      cat(error(
+        "Package",
+        pkg,
+        " needed for this function to work. Please install it.\n"
+      ))
+      return(-1)
     }
     
     if (datatype == "SilicoDArT") {
@@ -441,12 +442,13 @@ gl.filter.hwe <- function(x,
     }
     
     index <- !locNames(hold) %in% failed.loci
-    hold <- hold[, index]
-    hold@other$loc.metrics <- hold@other$loc.metrics[index, ]
+
+      hold2 <- hold[, index]
+      hold2@other$loc.metrics <- hold@other$loc.metrics[index, ]
     
     #### Report the results
     if (verbose >= 2) {
-        if (multi_comp == T) {
+        if (multi_comp == TRUE) {
             cat(
                 "  Deleted",
                 length(failed.loci),
@@ -458,7 +460,7 @@ gl.filter.hwe <- function(x,
                 "\n"
             )
         }
-        if (multi_comp == F) {
+        if (multi_comp == FALSE) {
             cat(
                 "  Deleted",
                 length(failed.loci),
@@ -467,7 +469,7 @@ gl.filter.hwe <- function(x,
                 "applied locus by locus\n"
             )
         }
-        cat("  Loci retained:", nLoc(hold), "\n\n")
+        cat("  Loci retained:", nLoc(hold2), "\n\n")
         cat(
             important(
                 "    Adjustment of p-values for multiple comparisons vary with 
@@ -477,8 +479,8 @@ gl.filter.hwe <- function(x,
     }
     
     # ADD TO HISTORY
-    nh <- length(hold@other$history)
-    hold@other$history[[nh + 1]] <- match.call()
+    nh <- length(hold2@other$history)
+    hold2@other$history[[nh + 1]] <- match.call()
     
     # FLAG SCRIPT END
     if (verbose >= 1) {
@@ -486,6 +488,6 @@ gl.filter.hwe <- function(x,
     }
     
     # RETURN
-    invisible(hold)
+    invisible(hold2)
     
 }

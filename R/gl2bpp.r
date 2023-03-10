@@ -43,7 +43,7 @@
 #'     
 #'     Be mindful that there is little information in the literature on the
 #'      validity of this method. 
-#' @return NULL
+#' @return  returns no value (i.e. NULL)
 #' @references
 #' \itemize{
 #' \item Ellegren, Hans, et al. "The genomic landscape of species divergence in 
@@ -90,11 +90,12 @@ gl2bpp <- function(x,
   # CHECK IF PACKAGES ARE INSTALLED
   pkg <- "seqinr"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
-    stop(error(
+    cat(error(
       "Package",
       pkg,
-      " needed for this function to work. Please install it."
+      " needed for this function to work. Please install it.\n"
     ))
+    return(-1)
   }
   
   # Check monomorphs have been removed up to date

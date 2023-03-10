@@ -36,13 +36,16 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #'  \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#' if ((requireNamespace("snpStats", quietly = TRUE)) & (requireNamespace("fields", quietly = TRUE))) {
 #' require("dartR.data")
 #' x <- platypus.gl
 #' x <- gl.filter.callrate(x,threshold = 1)
-#' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
+#' x <- gl.filter.monomorphs(x)
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
+#' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 #' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
-#' ld_res_2 <- gl.ld.distance(ld_res,ld_resolution=1000000)
+#' ld_res_2 <- gl.ld.distance(ld_res,ld_resolution= 1000000)
+#' }
 #' @family ld functions
 #' @export
 
@@ -95,7 +98,7 @@ gl.ld.distance <- function(ld_report,
     pops <- as.factor(unique(ld_report$pop))
       
     if(is.null(plot_theme)){
-      plot_theme = theme_dartR()
+      plot_theme <- theme_dartR()
     }
     
     if(is.null(pop_colors)){

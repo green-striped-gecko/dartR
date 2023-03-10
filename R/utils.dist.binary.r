@@ -39,9 +39,11 @@
 #' @author Author: Arthur Georges. Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
+#'  \donttest{
 #' D <- utils.dist.binary(testset.gs, method='Jaccard')
-#' D <- utils.dist.binary(testset.gs, method='Simple')
 #' D <- utils.dist.binary(testset.gs, method='Euclidean',scale=TRUE)
+#' }
+#' D <- utils.dist.binary(testset.gs, method='Simple')
 #' 
 utils.dist.binary <- function(x,
                               method = "simple",

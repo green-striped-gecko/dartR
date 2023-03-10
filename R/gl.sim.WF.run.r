@@ -130,11 +130,12 @@ gl.sim.WF.run <-
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "stringi"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
-      stop(error(
+      cat(error(
         "Package",
         pkg,
-        " needed for this function to work. Please install it."
+        " needed for this function to work. Please install it.\n"
       ))
+      return(-1)
     }
     
     # DO THE JOB
@@ -748,7 +749,7 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
 
         ##### MUTATION #####
        #tic("mutation")
-        if(mutation==T){
+        if(mutation==TRUE){
           
           for(off_pop in 1:length(offspring_list)){
             

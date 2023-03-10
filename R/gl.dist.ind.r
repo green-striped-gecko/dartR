@@ -45,9 +45,11 @@
 #' @export
 #' @author Author(s): Arthur Georges. Custodian: Arthur Georges -- Post to #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' D <- gl.dist.ind(testset.gl[1:20,], method='euclidean',scale=TRUE)
+#'  \donttest{
 #' D <- gl.dist.ind(testset.gl[1:20,], method='manhattan')
 #' D <- gl.dist.ind(testset.gs[1:20,], method='Jaccard',swap=TRUE)
+#' }
+#' D <- gl.dist.ind(testset.gl[1:20,], method='euclidean',scale=TRUE)
 
 gl.dist.ind <- function(x,
                         method = NULL,

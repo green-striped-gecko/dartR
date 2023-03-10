@@ -19,12 +19,16 @@ progress log; 3, progress and results summary; 5, full report
 \item{...}{Parameters passed to function
 \link[gplots]{heatmap.2} (package gplots)}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 The script plots a heat map to represent the distances in the distance or
 dissimilarity matrix. This function is a wrapper for
 \link[gplots]{heatmap.2} (package gplots).
 }
 \examples{
+\dontrun{
    gl <- testset.gl[1:10,]
    D <- dist(as.matrix(gl),upper=TRUE,diag=TRUE)
    gl.plot.heatmap(D)
@@ -32,6 +36,11 @@ dissimilarity matrix. This function is a wrapper for
    gl.plot.heatmap(D2)
    D3 <- gl.fixed.diff(testset.gl)
    gl.plot.heatmap(D3)
+   }
+   if ((requireNamespace("gplots", quietly = TRUE))) {
+   D2 <- gl.dist.pop(possums.gl)
+   gl.plot.heatmap(D2)
+   }
 }
 \author{
 Custodian: Luis Mijangos -- Post to

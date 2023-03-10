@@ -66,14 +66,16 @@ gl.filter.pa <- function(x,
                                                          p2alf != 1])  
     pfLoci <- unique(c(priv1, priv2))  # put all together
     index <- locNames(x) %in% pfLoci
-    if (invers)
+    if (invers){
         index <- !index
-    x <- x[, index]
-    x@other$loc.metrics <- x@other$loc.metrics[index, ]
-    
+    }
+
+      x2 <- x[, index]
+      x2@other$loc.metrics <- x@other$loc.metrics[index, ]
+
     # ADD TO HISTORY
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()
+    nh <- length(x2@other$history)
+    x2@other$history[[nh + 1]] <- match.call()
     
     # FLAG SCRIPT END
     
@@ -81,5 +83,5 @@ gl.filter.pa <- function(x,
         cat(report("Completed:", funname, "\n"))
     }
     
-    return(x)
+    return(x2)
 }

@@ -103,10 +103,11 @@ gl.filter.overshoot <- function(x,
     }
     # extracting indexes of loci to keep
     index <- which((snpos <= nchar(trimmed)) == TRUE)
-    # loci to keep
-    xx <- x[, index]
-    # updating loc.metrics
-    xx@other$loc.metrics <- x@other$loc.metrics[index, ]
+    
+      # loci to keep
+      xx <- x[, index]
+      # updating loc.metrics
+      xx@other$loc.metrics <- x@other$loc.metrics[index, ]
     
     # SAVE INTERMEDIATES TO TEMPDIR
     if (save2tmp) {

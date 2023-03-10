@@ -7,7 +7,7 @@
 #' @param x Name of the genlight object containing the SNP or presence-absence
 #' data [required].
 #' @param method Imputation method, either "frequency" or "HW" or "neighbour" 
-#' or "random" [default "HW"].
+#' or "random" [default "neighbour"].
 #' @param fill.residual Should any residual missing values remaining after 
 #' imputation be set to 0, 1, 2 at random, taking into account global allele 
 #' frequencies at the particular locus [default TRUE].
@@ -54,6 +54,7 @@
 #' @author Custodian: Luis Mijangos 
 #' (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @examples
+#'  \donttest{
 #' require("dartR.data")
 #' # SNP genotype data
 #' gl <- gl.filter.callrate(platypus.gl,threshold=0.95)
@@ -63,6 +64,8 @@
 #' gs <- gl.filter.callrate(testset.gs,threshold=0.95)
 #' gl <- gl.filter.allna(gl)
 #' gs <- gl.impute(gs, method="neighbour")
+#' }
+#' gs <- gl.impute(platypus.gl,method ="random")
 
 gl.impute <-  function(x,
                        method = "neighbour",
@@ -130,7 +133,7 @@ gl.impute <-  function(x,
         
         q_allele <- glMean(y)
         pop_matrix <- as.matrix(y)
-        loc_na <- which(is.na(pop_matrix), arr.ind = T)
+        loc_na <- which(is.na(pop_matrix), arr.ind = TRUE)
 pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
             return(as.numeric(s_alleles(q_freq = x)))
           })))
@@ -163,7 +166,7 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
         
         q_allele <- glMean(y)
         pop_matrix <- as.matrix(y)
-        loc_na <- which(is.na(pop_matrix), arr.ind = T)
+        loc_na <- which(is.na(pop_matrix), arr.ind = TRUE)
         pop_matrix[loc_na] <-
           unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
             return(sample_genotype(q_freq = x))
@@ -235,7 +238,7 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
     
     for (ind in 1:nInd(x)) {
       ind_imp <- x_matrix[ind, ]
-      pw_dis_2 <- pw_dis[which(ind == pw_dis$Var1), ]
+      pw_dis_2 <- pw_dis[which(indNames(x)[ind] == pw_dis$Var1), ]
       pw_dis_3 <- pw_dis_2[order(pw_dis_2$Freq), ]
       pw_dis_4 <- pw_dis_3[-(pw_dis_3 == 0), ]
       
@@ -298,8 +301,8 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
     x3 <- x
     
     x_matrix <- as.matrix(x)
-    loc_na <- which(is.na(x_matrix), arr.ind = T)
-    x_matrix[loc_na] <- sample(c(0:2),size=nrow(loc_na),replace = T)
+    loc_na <- which(is.na(x_matrix), arr.ind = TRUE)
+    x_matrix[loc_na] <- sample(c(0:2),size=nrow(loc_na),replace = TRUE)
     x3@gen <- matrix2gen(x_matrix, parallel = parallel)
     
   }
@@ -308,7 +311,7 @@ pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
     
     q_allele <- glMean(x3)
     pop_matrix <- as.matrix(x3)
-    loc_na <- which(is.na(pop_matrix), arr.ind = T)
+    loc_na <- which(is.na(pop_matrix), arr.ind = TRUE)
     pop_matrix[loc_na] <- unname(unlist(lapply(q_allele[loc_na[, 2]], function(x) {
       return(as.numeric(s_alleles(q_freq = x)))
     })))

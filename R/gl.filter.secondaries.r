@@ -71,24 +71,27 @@ gl.filter.secondaries <- function(x,
                 x@other$loc.metrics$AlleleID,-x@other$loc.metrics$RepAvg,
                 -x@other$loc.metrics$AvgPIC
             )
-        x <- x[, loc.order]
-        x@other$loc.metrics <- x@other$loc.metrics[loc.order, ]
+        x2 <- x[, loc.order]
+        x2@other$loc.metrics <- x@other$loc.metrics[loc.order, ]
     } else {
         if (verbose > 1) {
             cat(report("  Selecting one SNP per sequence tag at random\n"))
         }
         n <- length(x@other$loc.metrics$AlleleID)
         index <- sample(1:(n + 10000), size = n, replace = FALSE)
-        x <- x[, order(index)]
-        x@other$loc.metrics <- x@other$loc.metrics[order(index), ]
+        
+          x2 <- x[, order(index)]
+          x2@other$loc.metrics <- x@other$loc.metrics[order(index), ]
+        
     }
     # Extract the clone ID number
-    a <- strsplit(as.character(x@other$loc.metrics$AlleleID), "\\|")
+    a <- strsplit(as.character(x2@other$loc.metrics$AlleleID), "\\|")
     b <- unlist(a)[c(TRUE, FALSE, FALSE)]
     # Identify and remove secondaries from the genlight object, including the
     #metadata
-    x <- x[, duplicated(b) == FALSE]
-    x@other$loc.metrics <- x@other$loc.metrics[duplicated(b) == FALSE, ]
+
+      x3 <- x2[, duplicated(b) == FALSE]
+      x3@other$loc.metrics <- x2@other$loc.metrics[duplicated(b) == FALSE, ]
     
     # Report secondaries from the genlight object
     if (verbose > 2) {
@@ -104,8 +107,8 @@ gl.filter.secondaries <- function(x,
     }
     
     # ADD TO HISTORY
-    nh <- length(x@other$history)
-    x@other$history[[nh + 1]] <- match.call()
+    nh <- length(x3@other$history)
+    x3@other$history[[nh + 1]] <- match.call()
     
     # FLAG SCRIPT END
     
@@ -113,5 +116,5 @@ gl.filter.secondaries <- function(x,
         cat(report("Completed:", funname, "\n"))
     }
     
-    return(x)
+    return(x3)
 }
