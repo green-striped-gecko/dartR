@@ -66,7 +66,6 @@ Suggests:
     mmod,
     networkD3,
     parallel,
-    pca3d,
     pegas,
     pheatmap,
     plotly,
