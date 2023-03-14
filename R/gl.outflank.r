@@ -65,22 +65,29 @@ gl.outflank <- function(gi,
     # missing value is 9!!! tempted to rewrite their model to be able to use genlight directly....
     snpmat <- as.matrix(gi)  #(matrix(NA, nrow=nind, ncol=nsnp)
     snpmat <- replace(snpmat, is.na(snpmat), 9)
-    mdfm <-
-        utils.outflank.MakeDiploidFSTMat(SNPmat = snpmat, list(colnames(snpmat)), list(as.character(gi@pop)))
+    mdfm <- utils.outflank.MakeDiploidFSTMat(SNPmat = snpmat, 
+                                             list(colnames(snpmat)), 
+                                             list(as.character(gi@pop)))
     # run outflank
     outf <-
         utils.outflank(
-          FstDataFrame=mdfm,
+          FstDataFrame = mdfm,
             LeftTrimFraction = LeftTrimFraction,
             RightTrimFraction = RightTrimFraction,
             Hmin = Hmin,
             NumberOfSamples = length(levels(gi@pop)),
             qthreshold = qthreshold
         )
+    
+    outf$results$LocusName <- gsub("\\..*","",outf$results$LocusName)
+    
+    outf$results <- outf$results[!duplicated(outf$results$LocusName),]
+    
     if (plot) {
         utils.outflank.plotter(outf)
     }
-    index.outflank <-
-        !(outf$results$OutlierFlag)  ## 6650 inliers and 188 outliers
+    
+    index.outflank <- !(outf$results$OutlierFlag)
+    
     return(list(index = index.outflank, outflank = outf))
 }
