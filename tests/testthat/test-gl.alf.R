@@ -5,3 +5,4 @@ test_that("number of rows",{
 test_that("class of return",{
 expect_equal(class(gl.alf(platypus.gl)),"data.frame")
 })
+
