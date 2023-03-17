@@ -155,7 +155,7 @@ gl2structure <- function(x,
     
     if (verbose >= 2) {
         cat(report(paste(
-            "Structure file saved as:", outfilespec
+            "  Structure file saved as:", outfilespec,"\n"
         )))
     }
     
