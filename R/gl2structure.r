@@ -1,4 +1,4 @@
-#' Converts a genlight object to STRUCTURE formated files
+#' Converts a genlight object to STRUCTURE formatted files
 #'
 #' This function exports genlight objects to STRUCTURE formatted files (be aware
 #' there is a gl2faststructure version as well). It is based on the code
@@ -25,6 +25,7 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
+#' @return  returns no value (i.e. NULL)
 #' @export
 #' @author Bernd Gruber (wrapper) and Lindsay V. Clark [lvclark@illinois.edu]
 #' @examples
@@ -154,7 +155,7 @@ gl2structure <- function(x,
     
     if (verbose >= 2) {
         cat(report(paste(
-            "Structure file saved as:", outfilespec
+            "  Structure file saved as:", outfilespec,"\n"
         )))
     }
     

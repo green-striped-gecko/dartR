@@ -486,16 +486,17 @@ gl.report.hwe <- function(x,
                     as.data.frame(
                         CritSam(
                             n = n_test,
-                            Dpos = T,
+                            Dpos = TRUE,
                             alphalimit = alpha_val,
                             pvaluetype = pvalue_type
                         )$Xn
                     )
+                
                 Crit_lower <-
                     as.data.frame(
                         CritSam(
                             n = n_test,
-                            Dpos = F,
+                            Dpos = FALSE,
                             alphalimit = alpha_val,
                             pvaluetype = pvalue_type
                         )$Xn
@@ -506,14 +507,15 @@ gl.report.hwe <- function(x,
                 Crit_upper <-
                     as.data.frame(CritSam_Chi(
                         n = n_test,
-                        Dpos = T,
+                        Dpos = TRUE,
                         alphalimit = alpha_val,
                         cc = cc_val
                     )$Xn)
+                
                 Crit_lower <-
                     as.data.frame(CritSam_Chi(
                         n = n_test,
-                        Dpos = F,
+                        Dpos = FALSE,
                         alphalimit = alpha_val,
                         cc = cc_val
                     )$Xn)
@@ -527,11 +529,11 @@ gl.report.hwe <- function(x,
                        " method\nalpha = ",
                        alpha_val,
                        "")
+            
             AA <- AB <- BB <- V1 <- V2 <- V3 <- NA
             
-            
             p_temp <-
-              ggplot() + geom_point(
+             suppressWarnings( ggplot() + geom_point(
                 
               # ggtern::ggtern() + geom_point(
                     data = mat_genotypes,
@@ -579,7 +581,7 @@ gl.report.hwe <- function(x,
                 # ) + ggtern::theme_hidelabels() + labs(subtitle = subtitle_plot)
             ) + ggtern::theme_hidelabels() +
               # ) + theme_hidelabels() +
-              labs(subtitle = subtitle_plot) 
+              labs(subtitle = subtitle_plot) )
 
             p_list[[count]] <- p_temp  + ggtern::coord_tern()
             

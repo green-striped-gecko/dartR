@@ -175,22 +175,28 @@ individuals nor the number of populations."
                     lat = centers[, "lat"],
                     label = popNames(x),
                     labelOptions = leaflet::labelOptions(
-                        noHide = T,
+                        noHide = TRUE,
                         direction = "top",
-                        textOnly = T,
+                        textOnly = TRUE,
                         textsize = paste0(pop.labels.cex, "px")
                     )
                 )
         }
         
         if (!is.null(matrix)) {
-          matrix <- matrix[order(indNames(x)),]
+          
+          if (nrow(matrix) == nPop(x)) {
+            matrix <- matrix
+          } else {
+            matrix <- matrix[order(indNames(x)),]
+          }
+          
             # standardize
             if (standard) {
                 matrix[, ] <-
-                    ((matrix[, ] - min(matrix, na.rm = T)) / 
-                       (max(matrix, na.rm = T) - 
-                          min(matrix, na.rm = T))) * 9 + 1
+                    ((matrix[, ] - min(matrix, na.rm = TRUE)) / 
+                       (max(matrix, na.rm = TRUE) - 
+                          min(matrix, na.rm = TRUE))) * 9 + 1
             }
             
             if (nrow(matrix) == nPop(x)) {
@@ -211,7 +217,8 @@ individuals nor the number of populations."
             if (symmetric) {
                 for (ii in 1:nrow(matrix)) {
                     for (i in ii:nrow(matrix)) {
-                        if (!is.null(matrix[i, ii]) & matrix[i, ii] > 0 ){
+                        if (!is.null(matrix[i, ii]) | !is.na(matrix[i, ii]) & 
+                            matrix[i, ii] > 0 ){
                             m <- m %>%
                                 leaflet::addPolylines(
                                     lng = c(xys[i, "lon"], xys[ii, "lon"]),
@@ -283,3 +290,4 @@ individuals nor the number of populations."
         
     }
 }
+

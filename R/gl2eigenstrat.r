@@ -32,7 +32,7 @@
 #' X chromosome is encoded as 23, Y is encoded as 24, mtDNA is encoded as
 #' 90, and XY is encoded as 91. SNPs with illegal chromosome values, such
 #' as 0, will be removed.
-#' @return NULL
+#' @return  returns no value (i.e. NULL)
 #' @references
 #' \itemize{
 #' \item Patterson, N., Price, A. L., & Reich, D. (2006). Population structure

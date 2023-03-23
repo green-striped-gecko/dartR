@@ -30,18 +30,18 @@ CritSam <- function(n, Dpos, alphalimit, pvaluetype) {
     fA <- NULL
     for (i in 1:nrow(X)) {
         fA <- c(fA, (2 * X[i, 1] + X[i, 2]) / (2 * n))
-        Ds <-
-            c(Ds, HardyWeinberg::HWChisq(X[i,], verbose = FALSE)$D)
-        pval <-
+        Ds <- suppressWarnings(
+            c(Ds, HardyWeinberg::HWChisq(X[i,], verbose = FALSE)$D))
+        pval <- suppressWarnings(
             c(
                 pval,
                 HardyWeinberg::HWExact(
                     X[i,],
                     alternative = "two.sided",
                     pvaluetype = pvaluetype,
-                    verbose = F
+                    verbose = FALSE
                 )$pval
-            )
+            ))
     }
     
     Y <- data.frame(X[, 1], X[, 2], X[, 3], fA, Ds, pval)
@@ -74,12 +74,12 @@ CritSam_Chi <- function(n, Dpos, alphalimit, cc) {
     fA <- NULL
     for (i in 1:nrow(X)) {
         fA <- c(fA, (2 * X[i, 1] + X[i, 2]) / (2 * n))
-        Ds <-
+        Ds <- suppressWarnings(
             c(Ds,
-              HardyWeinberg::HWChisq(X[i,], cc = cc, verbose = FALSE)$D)
-        pval <-
+              HardyWeinberg::HWChisq(X[i,], cc = cc, verbose = FALSE)$D))
+        pval <- suppressWarnings(
             c(pval,
-              HardyWeinberg::HWChisq(X[i,], cc = cc, verbose = FALSE)$pval)
+              HardyWeinberg::HWChisq(X[i,], cc = cc, verbose = FALSE)$pval))
     }
     
     Y <- data.frame(X[, 1], X[, 2], X[, 3], fA, Ds, pval)

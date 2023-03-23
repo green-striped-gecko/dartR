@@ -29,6 +29,9 @@ when calling this function to direct output files to your working directory.}
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 Recodes in the quite specific faststructure format (e.g first six columns
 need to be there, but are ignored...check faststructure documentation

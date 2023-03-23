@@ -6,7 +6,7 @@ utils.read.ped <- function (file,
                             sep = ".", 
                             na.strings = "0", 
                             lex.order = FALSE,
-                            show_warnings=T){
+                            show_warnings = TRUE){
   r0 <- as.raw(0)
   r1 <- as.raw(1)
   r2 <- as.raw(2)

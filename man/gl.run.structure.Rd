@@ -63,6 +63,26 @@ description please refer to this package (see references below).
 To make use of this function you need to download STRUCTURE for you system
 (\bold{non GUI version}) from here
 \href{https://web.stanford.edu/group/pritchardlab/structure_software/release_versions/v2.3.4/html/structure.html}{STRUCTURE}.
+
+\bold{Format note}
+
+For this function to work, make sure that individual and population names 
+have no spaces. To substitute spaces by underscores you could use the R 
+function \code{gsub} as below.
+
+\code{
+popNames(gl) <- gsub(" ","_",popNames(gl))
+
+indNames(gl) <- gsub(" ","_",indNames(gl))  
+}
+
+It's also worth noting that Structure truncates individual names at 11 
+characters. The function will fail if the names of individuals are not unique
+ after truncation. To avoid this possible problem, a number sequence, as 
+ shown in the code below, might be used instead of individual names.
+\code{
+indNames(gl) <- as.character(1:length(indNames(gl)))
+}
 }
 \examples{
 \dontrun{

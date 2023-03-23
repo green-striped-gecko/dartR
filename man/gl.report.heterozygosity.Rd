@@ -103,7 +103,7 @@ the alternative allele.
 \strong{ Function's output }
 
 Output for method='pop' is an ordered barchart of observed heterozygosity,
-expected heterozygosity and FIS (Inbreeding coefficient) across populations
+unbiased expected heterozygosity and FIS (Inbreeding coefficient) across populations
 together with a table of mean observed and expected heterozygosities and FIS
 by population and their respective standard deviations (SD).
 

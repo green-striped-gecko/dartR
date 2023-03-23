@@ -13,7 +13,7 @@
 #' [default 2 or as specified using gl.set.verbosity]
 #' @param ... Parameters passed to function
 #' \link[gplots]{heatmap.2} (package gplots)
-#' @return NULL
+#' @return returns no value (i.e. NULL)
 #' @export
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr})

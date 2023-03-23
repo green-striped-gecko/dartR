@@ -58,7 +58,7 @@
 #'   chromosome IDs" in the following link:
 #'   https://www.cog-genomics.org/plink/1.9/input
 #'   
-#' @return NULL
+#' @return  returns no value (i.e. NULL)
 #' @references
 #' Purcell, Shaun, et al. 'PLINK: a tool set for whole-genome association and
 #' population-based linkage analyses.' The American journal of human genetics
@@ -104,6 +104,11 @@ gl2plink <- function(x,
     # DO THE JOB
     
     outfilespec <- file.path(outpath, outfile)
+    
+    if(is.null(x$chromosome)){
+      x$chromosome <- as.factor(rep("1",nLoc(x)))
+      cat(warn("   Chromosome slot is empty. Using 1 as dummy name.\n"))
+    }
     
     snp_temp <- as.data.frame(cbind(as.character(x$chromosome),x$position))
     colnames(snp_temp) <- c("chrom","snp_pos")

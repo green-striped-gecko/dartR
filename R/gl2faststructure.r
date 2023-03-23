@@ -16,7 +16,7 @@
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
 #' @param probar Switch to show/hide progress bar [default FALSE].
-#' @return NULL
+#' @return  returns no value (i.e. NULL)
 #' @export
 #' @author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #' @importFrom utils getTxtProgressBar setTxtProgressBar txtProgressBar

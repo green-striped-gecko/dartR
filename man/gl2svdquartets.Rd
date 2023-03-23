@@ -32,6 +32,9 @@ genotypes, 0 or 1 for presence/absence data [default 2].}
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity]}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 The output nexus file contains the SNP data in one of two forms, depending
 upon what you regard as most appropriate. One form, that used by Chifman and

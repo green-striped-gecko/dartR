@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.drop.ind.r
 \name{gl.drop.ind}
 \alias{gl.drop.ind}
-\title{Removes specified individuals from a genlight \{adegenet\} object}
+\title{Removes specified individuals from a genlight object}
 \usage{
 gl.drop.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
@@ -30,6 +30,8 @@ statistics made redundant by the deletion of individuals from the dataset.
 
 The script returns a genlight object with the individuals deleted and,
 optionally, the recalculated locus metadata.
+
+#' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
 }
 \examples{
  # SNP data
