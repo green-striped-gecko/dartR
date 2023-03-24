@@ -7,6 +7,7 @@
 #'@param x genlight object containing SNP/silicodart genotypes
 #'@param nsample the number of individuals that should be sampled
 #'@param replace a switch to sample by replacement (default).
+#'@param verbose set verbosity
 #'@details This is convenience function to facilitate a bootstrap approach
 #'@return returns a genlight object with nsample samples from each populations.
 #'
