@@ -14,7 +14,7 @@
 #'@author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples 
-#'@dontrun {
+#'\dontrun{
 #' #bootstrap for 2 possums populations to check effect of sample size on fixed alleles
 #' gl.set.verbosity(0)
 #' pp <- possums.gl[1:60,]
