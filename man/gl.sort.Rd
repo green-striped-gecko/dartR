@@ -23,14 +23,19 @@ Often it is desirable to have the genlight object sorted individuals by populati
 This is convenience function to facilitate sorting of individuals within the genlight object. For example if you want to visualise the "band" of population in a gl.smearplot then the order of individuals is important. Also
 }
 \examples{
-sort by populations
+#sort by populations
 bc <- gl.sort(bandicoot.gl)
 #sort from West to East
 bc2 <- gl.sort(bandicoot.gl, sort.by="pop" ,
 order.by=c("WA", "SA", "VIC", "NSW", "QLD"))
 #sort by missing values
-miss <- rowSums(is.na(as.matrix(bandicoot.gl))
+miss <- rowSums(is.na(as.matrix(bandicoot.gl)))
 bc3 <- gl.sort(bandicoot.gl, sort.by="ind", order.by=miss)
+gl.smearplot(bc3)
+}
+\seealso{
+Other base dartR: 
+\code{\link{gl.sample}()}
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

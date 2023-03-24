@@ -13,14 +13,15 @@
 #'@author Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples 
-#'sort by populations
+#'#sort by populations
 #'bc <- gl.sort(bandicoot.gl)
 #'#sort from West to East
 #'bc2 <- gl.sort(bandicoot.gl, sort.by="pop" ,
 #'order.by=c("WA", "SA", "VIC", "NSW", "QLD"))
 #'#sort by missing values
-#'miss <- rowSums(is.na(as.matrix(bandicoot.gl))
+#'miss <- rowSums(is.na(as.matrix(bandicoot.gl)))
 #'bc3 <- gl.sort(bandicoot.gl, sort.by="ind", order.by=miss)
+#'gl.smearplot(bc3)
 #'@family base dartR
 #'@export 
 #'
