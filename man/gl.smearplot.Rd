@@ -9,7 +9,7 @@ gl.smearplot(
   ind_labels = FALSE,
   group_pop = FALSE,
   ind_labels_size = 10,
-  plot_colors = colorRampPalette(c("royalblue3", "firebrick1"))(3),
+  plot_colors = NULL,
   posi = "bottom",
   save2tmp = FALSE,
   verbose = NULL
@@ -27,7 +27,8 @@ gl.smearplot(
 
 \item{plot_colors}{Vector with four color names for homozygotes for the
 reference allele, heterozygotes, homozygotes for the alternative allele and
-for missing values (NA), e.g. four_colours [default NULL].}
+for missing values (NA), e.g. four_colours [default NULL].
+Can be set to "hetonly", which defines colors to only show heterozygotes in the genlight object}
 
 \item{posi}{Position of the legend: “left”, “top”, “right”, “bottom” or
 'none' [default = 'bottom'].}

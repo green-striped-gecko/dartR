@@ -16,6 +16,7 @@
 #' @param plot_colors Vector with four color names for homozygotes for the
 #' reference allele, heterozygotes, homozygotes for the alternative allele and
 #' for missing values (NA), e.g. four_colours [default NULL].
+#' Can be set to "hetonly", which defines colors to only show heterozygotes in the genlight object
 #' @param posi Position of the legend: “left”, “top”, “right”, “bottom” or
 #'  'none' [default = 'bottom'].
 #' @param save2tmp If TRUE, saves plot to the session temporary directory
@@ -37,7 +38,7 @@ gl.smearplot <- function(x,
                         ind_labels = FALSE,
                         group_pop = FALSE, 
                         ind_labels_size = 10,
-                        plot_colors = colorRampPalette(c("royalblue3", "firebrick1"))(3),
+                        plot_colors = NULL,
                         posi = "bottom",
                         save2tmp = FALSE,
                         verbose = NULL) {
@@ -66,14 +67,21 @@ gl.smearplot <- function(x,
                      verbosity = verbose)
     
     # SCRIPT SPECIFIC CHECKS
-    
-    if(is.null(plot_colors)){
-        plot_colors <- c("blue","magenta","red","beige") # = default for plot()
+    if (length(plot_colors)==1) {
+      if (plot_colors=="hetonly") plot_colors <- c("#dddddd", "#ff0000", "#dddddd","#dddddd" )
     }
+    if(is.null(plot_colors)){
+        plot_colors <- c("#a6cee3","#1f78b4","#b2df8a","#dddddd") # = default for plot()
+        plot_colors <- c("#1b9e77","#d95f02","#7570b3","#dddddd") # = default for plot()
+        
+            }
+    n10 <- nchar(as.character(nInd(x)))
+    lzs <- paste0("%0",as.character(n10),"d")
     if(ind_labels == TRUE){
-        individuals <- indNames(x)
+      
+      individuals <- paste0(sprintf(lzs,1:nInd(x)),"_",indNames(x))
     } else {
-        individuals <- seq(1:length(indNames(x)))
+        individuals <- paste0(sprintf(lzs,1:nInd(x)))
     }
     
     # DO THE JOB
@@ -85,8 +93,8 @@ gl.smearplot <- function(x,
     
     X <- reshape2::melt(X_temp, id.vars = c("pop", "id"))
     X$value <- as.character(X$value)
+    X$value <- ifelse(X$value=="NA", NA, X$value)
     colnames(X) <- c("pop", "id", "locus", "genotype")
-    
     loc_labels <- pretty(1:nLoc(x), 5)
     id_labels <- pretty(1:nInd(x), 5)
     
