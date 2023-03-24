@@ -35,8 +35,8 @@ gl.sample <- function(x,
                   replace = TRUE,
                   verbose = NULL) {
    #remove metadata to speed up  
-  if (!is.null(x@other$loc.metrics))  x@other$loc.metrics<- NULL
-  if (!is.null(x@other$ind.metrics))  x@other$ind.metrics<- NULL
+  #if (!is.null(x@other$loc.metrics))  x@other$loc.metrics<- NULL
+  #if (!is.null(x@other$ind.metrics))  x@other$ind.metrics<- NULL
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   # FLAG SCRIPT START
