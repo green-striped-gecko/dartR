@@ -34,7 +34,9 @@ gl.sample <- function(x,
                   nsample = min(table(pop(x))),
                   replace = TRUE,
                   verbose = NULL) {
-  
+   #remove metadata to speed up  
+  if (!is.null(x@other$loc.metrics))  x@other$loc.metrics<- NULL
+  if (!is.null(x@other$ind.metrics))  x@other$ind.metrics<- NULL
   # SET VERBOSITY
   verbose <- gl.check.verbosity(verbose)
   # FLAG SCRIPT START
@@ -49,7 +51,14 @@ gl.sample <- function(x,
   ss <- sapply(1:nPop(x), function(z) which(pop(x)==levels(pop(x))[z]), simplify = F) 
   samps <- unlist(lapply(ss, function(x) sample(x, nsample, replace=replace))) 
   #subset x by samples
-  xx <- x[samps, ]
+    ns <- ceiling(length(samps)/nInd(x))
+    ff <- rep(1:ns,nInd(x))[1:length(samps)] 
+    sp <- split(samps, ff)
+    px <- lapply(sp, function(z) x[z,] )
+    xx <- do.call(rbind, px)
+  n10 <- nchar(as.character(nInd(xx)))
+  lzs <- paste0("%0",as.character(n10),"d")
+  indNames(xx)<- paste0(sprintf(lzs,1:nInd(xx)),"_",indNames(xx))
   return(xx)
 }
     
