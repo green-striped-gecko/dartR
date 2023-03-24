@@ -42,7 +42,7 @@ gl.sample <- function(x,
   verbose <- gl.check.verbosity(verbose)
   # FLAG SCRIPT START
  funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jody",v=verbose)
+  utils.flag.start(func=funname,build="Jody",verbose=verbose)
   # CHECK DATATYPE
   datatype <- utils.check.datatype(x, verbose=verbose)
   # FUNCTION SPECIFIC ERROR CHECKING
