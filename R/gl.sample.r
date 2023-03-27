@@ -7,6 +7,7 @@
 #'@param x genlight object containing SNP/silicodart genotypes
 #'@param nsample the number of individuals that should be sampled
 #'@param replace a switch to sample by replacement (default).
+#'@param onepop switch to ignore population settings of the genlight object and sample from all individuals disregarding the population definition. [default FALSE]. 
 #'@param verbose set verbosity
 #'@details This is convenience function to facilitate a bootstrap approach
 #'@return returns a genlight object with nsample samples from each populations.
@@ -34,6 +35,7 @@
 gl.sample <- function(x,
                   nsample = min(table(pop(x))),
                   replace = TRUE,
+                  onepop = FALSE,
                   verbose = NULL) {
    #remove metadata to speed up  
   #if (!is.null(x@other$loc.metrics))  x@other$loc.metrics<- NULL
@@ -42,15 +44,20 @@ gl.sample <- function(x,
   verbose <- gl.check.verbosity(verbose)
   # FLAG SCRIPT START
  funname <- match.call()[[1]]
-  utils.flag.start(func=funname,build="Jody",verbose=verbose)
+  utils.flag.start(func=funname,build="Jody",verbosity=verbose)
   # CHECK DATATYPE
   datatype <- utils.check.datatype(x, verbose=verbose)
   # FUNCTION SPECIFIC ERROR CHECKING
   
   # DO THE JOB
+  dummyp <- pop(x)
+  if (onepop) pop(x)<- rep("A", nInd(x))
+  
   #find samples
   ss <- sapply(1:nPop(x), function(z) which(pop(x)==levels(pop(x))[z]), simplify = F) 
   samps <- unlist(lapply(ss, function(x) sample(x, nsample, replace=replace))) 
+  #reset population information in case needed
+  if (onepop) pop(x) <- dummyp
   #subset x by samples
     ns <- ceiling(length(samps)/nInd(x))
     ff <- rep(1:ns,nInd(x))[1:length(samps)] 

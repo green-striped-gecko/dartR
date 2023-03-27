@@ -4,7 +4,13 @@
 \alias{gl.sample}
 \title{Samples individuals from populations}
 \usage{
-gl.sample(x, nsample = min(table(pop(x))), replace = TRUE, verbose = NULL)
+gl.sample(
+  x,
+  nsample = min(table(pop(x))),
+  replace = TRUE,
+  onepop = FALSE,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{genlight object containing SNP/silicodart genotypes}
@@ -12,6 +18,8 @@ gl.sample(x, nsample = min(table(pop(x))), replace = TRUE, verbose = NULL)
 \item{nsample}{the number of individuals that should be sampled}
 
 \item{replace}{a switch to sample by replacement (default).}
+
+\item{onepop}{switch to ignore population settings of the genlight object and sample from all individuals disregarding the population definition. [default FALSE].}
 
 \item{verbose}{set verbosity}
 }
