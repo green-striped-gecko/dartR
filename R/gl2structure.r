@@ -106,9 +106,11 @@ gl2structure <- function(x,
     
     # make sets of possible genotypes
     G <- list()
+    
     for (i in 0:ploidy) {
         G[[i + 1]] <- c(rep(1, ploidy - i), rep(2, i))
     }
+    
     G[[ploidy + 2]] <- rep(-9, ploidy)  # for missing data
     
     # set up data frame for Structure
@@ -143,6 +145,9 @@ gl2structure <- function(x,
     }
     
     # export all data
+    
+    if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+      
     write.table(
         StructTab,
         row.names = FALSE,
@@ -152,6 +157,21 @@ gl2structure <- function(x,
         file = outfilespec,
         quote = FALSE
     )
+      
+    }else{
+      
+      write.table(
+        StructTab,
+        row.names = FALSE,
+        col.names = FALSE,
+        append = TRUE,
+        sep = "\t",
+        eol = "\r\n",
+        file = outfilespec,
+        quote = FALSE
+      )
+      
+    }
     
     if (verbose >= 2) {
         cat(report(paste(

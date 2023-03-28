@@ -8,6 +8,7 @@
 #' version of \code{hierfstat::basics.stats} but it is much faster.
 #' 
 #' @param x A genlight object containing the SNP genotypes [required].
+#' @param digits Number of decimals to report [default 4]
 #' @return A list with with the statistics for each population
 #' @export
 #' @author Luis Mijangos and Carlo Pacioni (bugs? Post to
@@ -17,7 +18,8 @@
 #' out <- utils.basic.stats(platypus.gl)
 #' @export
 
-utils.basic.stats <- function(x) {
+utils.basic.stats <- function(x,
+                              digits = 4) {
   
   n.ind <- table(pop(x))
   
@@ -137,11 +139,11 @@ utils.basic.stats <- function(x) {
   overall["Fstp"] <- overall["Dstp"] / overall["Htp"]
   overall["Gst_H"] <- overall["Fst"] / overall["Gst_max"]
   
-  all.res <- list("Ho" = as.data.frame(round(Ho, 4)), 
-                  "Hs" = as.data.frame(round(Hs, 4)), 
-                  "Fis" = as.data.frame(round(Fis, 4)), 
-                  perloc = as.data.frame(round(res, 4)), 
-                  overall = round(overall, 4))
+  all.res <- list("Ho" = as.data.frame(round(Ho, digits)), 
+                  "Hs" = as.data.frame(round(Hs, digits)), 
+                  "Fis" = as.data.frame(round(Fis, digits)), 
+                  perloc = as.data.frame(round(res, digits)), 
+                  overall = round(overall, digits))
   
   return(all.res)
   
