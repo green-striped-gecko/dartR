@@ -77,18 +77,29 @@ gl.smearplot <- function(x,
             }
     n10 <- nchar(as.character(nInd(x)))
     lzs <- paste0("%0",as.character(n10),"d")
+    
+    # Luis approach
     if(ind_labels == TRUE){
-      
-      individuals <- paste0(sprintf(lzs,1:nInd(x)),"_",indNames(x))
+      individuals <- indNames(x)
     } else {
-        individuals <- paste0(sprintf(lzs,1:nInd(x)))
+      individuals <- seq(1:length(indNames(x)))
     }
+    
+    # Bernd approach
+    # if(ind_labels == TRUE){
+    #   individuals <- paste0(sprintf(lzs,1:nInd(x)),"_",indNames(x))
+    # } else {
+    #     individuals <- paste0(sprintf(lzs,1:nInd(x)))
+    # }
     
     # DO THE JOB
     
     X_temp <- as.data.frame(as.matrix(x))
     colnames(X_temp) <- 1:nLoc(x)
     X_temp$id <- individuals
+    # converting id to factor using levels parameters
+    X_temp$id <- factor(X_temp$id, levels = X_temp$id)
+    
     X_temp$pop <- pop(x)
     
     X <- reshape2::melt(X_temp, id.vars = c("pop", "id"))
