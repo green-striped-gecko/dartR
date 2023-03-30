@@ -121,8 +121,10 @@ gl.smearplot <- function(x,
                 type = plot_colors[c(1, 3)],
                 na.value = plot_colors[4],
                 name = "Genotype",
-                labels = c("0", "1")
-            ) + theme_dartR() + theme(
+                # labels = c("0", "1")
+                labels = as.character(unique(X$genotype))) +
+          theme_dartR() + 
+          theme(
                 legend.position = posi,
                 axis.text.y = element_text(size = ind_labels_size)
             ) +
@@ -145,8 +147,9 @@ gl.smearplot <- function(x,
                 type = plot_colors,
                 na.value = plot_colors[4],
                 name = "Genotype",
-                labels = c("0", "1", "2")
-            ) + theme_dartR() + theme(
+                # labels = c("0", "1", "2")
+                labels = as.character(unique(X$genotype))) + 
+          theme_dartR() + theme(
                 legend.position = posi,
                 axis.text.y = element_text(size = ind_labels_size)
             ) +
