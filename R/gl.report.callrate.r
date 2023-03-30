@@ -314,7 +314,10 @@ ind.call.rate_pop <- ind.call.rate_pop[order(ind.call.rate_pop$pop,
     print(df)
     cat("\n\n")
     if (method == "ind") {
-    print(ind.call.rate_pop, row.names = FALSE)
+      ind_print <- ind.call.rate_pop
+      ind_print <- ind_print[order(ind_print$missing_data),]
+      ind_print$missing_data <- round(ind_print$missing_data, digits = 4)
+    print(ind_print, row.names = FALSE)
     }
     
     # SAVE INTERMEDIATES TO TEMPDIR
