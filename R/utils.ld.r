@@ -175,3 +175,9 @@ rotate.matrix <- function (x,
   return(img.rot)
   
 }
+
+
+
+
+
+
