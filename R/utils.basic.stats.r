@@ -21,6 +21,8 @@
 utils.basic.stats <- function(x,
                               digits = 4) {
   
+  x_hold <- x
+  
   n.ind <- table(pop(x))
   
   if(any(n.ind <= 1)){
@@ -138,7 +140,7 @@ utils.basic.stats <- function(x,
   overall["Dest"] <- overall["Dstp"] / (1 - overall["Hs"])
   overall["Fstp"] <- overall["Dstp"] / overall["Htp"]
   overall["Gst_H"] <- overall["Fst"] / overall["Gst_max"]
-  
+
   all.res <- list("Ho" = as.data.frame(round(Ho, digits)), 
                   "Hs" = as.data.frame(round(Hs, digits)), 
                   "Fis" = as.data.frame(round(Fis, digits)), 
