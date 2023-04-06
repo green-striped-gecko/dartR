@@ -154,7 +154,17 @@ gl.LDNe <- function(x,
   old.path <- getwd()
   setwd(tempdir())
   system(cmd)
-  res <- read.delim(outfile)
+  
+  x_lines <- readLines(outfile)
+  strt <- which(x_lines=="****************")-1
+  stp <- which(x_lines=="**************************************************************")-1
+  linez <- lapply(1:length(strt),function(y){
+    x_lines[strt[y]:stp[y]]
+  })
+  
+  res <- data.frame(Reduce(c,linez))
+  
+  # res <- read.delim(outfile)
   res <-
     unlist(lapply(res[, 1], function(x) {
       x <- gsub(pattern = "Infinite", replacement = "Inf", x)
@@ -162,7 +172,7 @@ gl.LDNe <- function(x,
   
   pops <-
     sapply(res[res %like% "Population"], function(x)
-      str_extract(x, "(?<=\\[).*(?=\\])"), USE.NAMES = F)
+      str_extract(x, "(?<=\\[).*(?=\\])"), USE.NAMES = FALSE)
   pops <- sub("_[^_]+$", "", pops)
   freq <- str_split(res[res %like% "Lowest"], '\\s{3,}')[[1]][-1]
   Estimated_Ne <-
