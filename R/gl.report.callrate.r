@@ -316,7 +316,7 @@ ind.call.rate_pop <- ind.call.rate_pop[order(ind.call.rate_pop$pop,
     if (method == "ind") {
       ind_print <- ind.call.rate_pop
       ind_print <- ind_print[order(ind_print$missing_data),]
-      ind_print$missing_data <- round(ind_print$missing_data, digits = 4)
+      # ind_print$missing_data <- round(ind_print$missing_data, digits = 4)
     print(ind_print, row.names = FALSE)
     }
     
