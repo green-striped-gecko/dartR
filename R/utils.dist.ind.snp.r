@@ -109,7 +109,7 @@ utils.dist.ind.snp <- function(x,
               sq <- sq[!is.na(sq)]
               L <- length(sq)
                 if(scale==TRUE){
-                    dd[j,i] <- sqrt(sum(sq)/L)
+                    dd[j,i] <- (1/2)*(sqrt(sum(sq)/L))
                 } else {
                     dd[j,i] <- sqrt(sum(sq))
                 }

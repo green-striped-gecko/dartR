@@ -16,6 +16,7 @@
 #' @param plot_colors Vector with four color names for homozygotes for the
 #' reference allele, heterozygotes, homozygotes for the alternative allele and
 #' for missing values (NA), e.g. four_colours [default NULL].
+#' Can be set to "hetonly", which defines colors to only show heterozygotes in the genlight object
 #' @param posi Position of the legend: “left”, “top”, “right”, “bottom” or
 #'  'none' [default = 'bottom'].
 #' @param save2tmp If TRUE, saves plot to the session temporary directory
@@ -37,7 +38,7 @@ gl.smearplot <- function(x,
                         ind_labels = FALSE,
                         group_pop = FALSE, 
                         ind_labels_size = 10,
-                        plot_colors = colorRampPalette(c("royalblue3", "firebrick1"))(3),
+                        plot_colors = NULL,
                         posi = "bottom",
                         save2tmp = FALSE,
                         verbose = NULL) {
@@ -66,27 +67,45 @@ gl.smearplot <- function(x,
                      verbosity = verbose)
     
     # SCRIPT SPECIFIC CHECKS
-    
+    if (length(plot_colors)==1) {
+      if (plot_colors=="hetonly") plot_colors <- c("#dddddd", "#ff0000", "#dddddd","#dddddd" )
+    }
     if(is.null(plot_colors)){
-        plot_colors <- c("blue","magenta","red","beige") # = default for plot()
-    }
+        plot_colors <- c("#a6cee3","#1f78b4","#b2df8a","#dddddd") # = default for plot()
+        plot_colors <- c("#1b9e77","#d95f02","#7570b3","#dddddd") # = default for plot()
+        
+            }
+    n10 <- nchar(as.character(nInd(x)))
+    lzs <- paste0("%0",as.character(n10),"d")
+    
+    # Luis approach
     if(ind_labels == TRUE){
-        individuals <- indNames(x)
+      individuals <- indNames(x)
     } else {
-        individuals <- seq(1:length(indNames(x)))
+      individuals <- seq(1:length(indNames(x)))
     }
+    
+    # Bernd approach
+    # if(ind_labels == TRUE){
+    #   individuals <- paste0(sprintf(lzs,1:nInd(x)),"_",indNames(x))
+    # } else {
+    #     individuals <- paste0(sprintf(lzs,1:nInd(x)))
+    # }
     
     # DO THE JOB
     
     X_temp <- as.data.frame(as.matrix(x))
     colnames(X_temp) <- 1:nLoc(x)
     X_temp$id <- individuals
+    # converting id to factor using levels parameters
+    X_temp$id <- factor(X_temp$id, levels = X_temp$id)
+    
     X_temp$pop <- pop(x)
     
     X <- reshape2::melt(X_temp, id.vars = c("pop", "id"))
     X$value <- as.character(X$value)
+    X$value <- ifelse(X$value=="NA", NA, X$value)
     colnames(X) <- c("pop", "id", "locus", "genotype")
-    
     loc_labels <- pretty(1:nLoc(x), 5)
     id_labels <- pretty(1:nInd(x), 5)
     
@@ -102,8 +121,10 @@ gl.smearplot <- function(x,
                 type = plot_colors[c(1, 3)],
                 na.value = plot_colors[4],
                 name = "Genotype",
-                labels = c("0", "1")
-            ) + theme_dartR() + theme(
+                # labels = c("0", "1")
+                labels = as.character(unique(X$genotype))) +
+          theme_dartR() + 
+          theme(
                 legend.position = posi,
                 axis.text.y = element_text(size = ind_labels_size)
             ) +
@@ -126,8 +147,9 @@ gl.smearplot <- function(x,
                 type = plot_colors,
                 na.value = plot_colors[4],
                 name = "Genotype",
-                labels = c("0", "1", "2")
-            ) + theme_dartR() + theme(
+                # labels = c("0", "1", "2")
+                labels = as.character(unique(X$genotype))) + 
+          theme_dartR() + theme(
                 legend.position = posi,
                 axis.text.y = element_text(size = ind_labels_size)
             ) +

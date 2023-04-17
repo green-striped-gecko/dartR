@@ -214,6 +214,7 @@ gl.blast <- function(x,
             )
         }
     }
+    
     ## if not found
     if (all(path_makeblastdb == "")) {
         stop(

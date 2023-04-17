@@ -1,12 +1,12 @@
-utils.read.ped <- function (file, 
-                            # n, 
-                            snps, 
-                            which, 
+utils.read.ped <- function (file,
+                            # n,
+                            snps,
+                            which,
                             split = "\t| +",
-                            sep = ".", 
-                            na.strings = "0", 
+                            sep = ".",
+                            na.strings = "0",
                             lex.order = FALSE,
-                            show_warnings = TRUE){
+                            show_warnings = TRUE) {
   r0 <- as.raw(0)
   r1 <- as.raw(1)
   r2 <- as.raw(2)
@@ -17,11 +17,11 @@ utils.read.ped <- function (file,
   n <- 0
   repeat {
     line <- readLines(con, n = 1)
-    if (length(line) == 0) 
+    if (length(line) == 0)
       break
     n <- n + 1
   }
-  if (n == 0){ 
+  if (n == 0) {
     stop("Nothing read")
   }
   seek(con, 0)
@@ -37,9 +37,9 @@ utils.read.ped <- function (file,
         which <- 1
         repeat {
           snps <- map[, which]
-          if (!any(duplicated(snps))) 
+          if (!any(duplicated(snps)))
             break
-          if (which == ncol(map)) 
+          if (which == ncol(map))
             stop("No unambiguous snp names found on file")
           which <- which + 1
         }
@@ -51,9 +51,9 @@ utils.read.ped <- function (file,
     line <- readLines(con, n = 1)
     fields <- strsplit(line, split)[[1]]
     nf <- length(fields)
-    if (nf%%2 != 0) 
+    if (nf %% 2 != 0)
       stop("Odd number of fields")
-    m <- (nf - 6)/2
+    m <- (nf - 6) / 2
     seek(con, 0)
   }
   nf <- 6 + 2 * m
@@ -101,27 +101,27 @@ utils.read.ped <- function (file,
     gt[one & !two] <- r1
     gt[one & two] <- r2
     gt[two & !one] <- r3
-    result[i, ] <- gt
+    result[i,] <- gt
   }
   close(con)
-  if (any(a1m & show_warnings==T)){ 
+  if (any(a1m & show_warnings == T)) {
     warning("no data for ", sum(a1m), " loci")
   }
   mono <- (a2m & !a1m)
-  if (any(mono & show_warnings==T)){ 
+  if (any(mono & show_warnings == T)) {
     warning(sum(mono), " loci were monomorphic")
   }
-  if (any(mallelic & show_warnings==T)) {
+  if (any(mallelic & show_warnings == T)) {
     result[, mallelic] <- r0
     warning(sum(mallelic), " loci were multi-allelic --- set to NA")
   }
-  if (gen){ 
+  if (gen) {
     snps <- paste("locus", 1:m, sep = sep)
   }
   if (any(duplicated(ped))) {
     if (any(duplicated(mem))) {
       rnames <- paste(ped, mem, sep = sep)
-      if (any(duplicated(rnames))){ 
+      if (any(duplicated(rnames))) {
         stop("could not create unique subject identifiers")
       }
     } else{
@@ -140,29 +140,44 @@ utils.read.ped <- function (file,
     a2[swa] <- a1[swa]
     a1 <- a1n
   }
-  fam <- data.frame(row.names = rnames, pedigree = ped, member = mem, 
-                    father = pa, mother = ma, sex = sex, affected = aff)
-  if (is.null(map)){ 
-    map <- data.frame(row.names = snps, snp.name = snps, 
-                      allele.1 = a1, allele.2 = a2)
+  fam <-
+    data.frame(
+      row.names = rnames,
+      pedigree = ped,
+      member = mem,
+      father = pa,
+      mother = ma,
+      sex = sex,
+      affected = aff
+    )
+  if (is.null(map)) {
+    map <- data.frame(
+      row.names = snps,
+      snp.name = snps,
+      allele.1 = a1,
+      allele.2 = a2
+    )
   } else {
     map$allele.1 <- a1
     map$allele.2 <- a2
     names(map)[which] <- "snp.names"
   }
-  list(genotypes = result, fam = fam, map = map)
+  list(genotypes = result,
+       fam = fam,
+       map = map)
 }
 
-rotate.matrix <- function (x, 
-                           angle = 10, 
-                           method = "bilinear"){
-  
+rotate.matrix <- function (x,
+                           angle = 10,
+                           method = "bilinear") {
   img <- x
-  angle.rad <- angle * pi/180
-  co.x <- matrix(rep(-(ncol(img)/2 - 0.5):(ncol(img)/2 - 
-                                             0.5), nrow(img)), nrow = nrow(img), byrow = T)
-  co.y <- matrix(rep(-(nrow(img)/2 - 0.5):(nrow(img)/2 - 
-                                             0.5), ncol(img)), ncol = ncol(img))
+  angle.rad <- angle * pi / 180
+  co.x <- matrix(rep(-(ncol(img) / 2 - 0.5):(ncol(img) / 2 -
+                                               0.5), nrow(img)),
+                 nrow = nrow(img), byrow = T)
+  co.y <- matrix(rep(-(nrow(img) / 2 - 0.5):(nrow(img) / 2 -
+                                               0.5), ncol(img)),
+                 ncol = ncol(img))
   co.xn <- round(co.x * cos(angle.rad) - co.y * sin(angle.rad))
   co.yn <- round(co.x * sin(angle.rad) + co.y * cos(angle.rad))
   co.xn2 <- co.xn + max(co.xn) + 1
@@ -171,7 +186,52 @@ rotate.matrix <- function (x,
   img.rot[(co.xn2 - 1) * max(co.yn2) + co.yn2] <- img
   dim(img.rot) <- c(max(co.yn2), max(co.xn2))
   attr(img.rot, "bits.per.sample") <- attr(img, "bits.per.sample")
-  attr(img.rot, "samples.per.pixel") <- attr(img, "samples.per.pixel")
+  attr(img.rot, "samples.per.pixel") <-
+    attr(img, "samples.per.pixel")
   return(img.rot)
   
+}
+
+## rotate angle degrees clockwise around center
+rotateCoords <- function(crds,
+                         angle = 0,
+                         center = c(min(crds[, 1]), min(crds[, 2]))) {
+  co <- cos(-angle * pi / 180)
+  si <- sin(-angle * pi / 180)
+  adj <- matrix(rep(center, nrow(crds)), ncol = 2, byrow = TRUE)
+  crds <- crds - adj
+  cbind(co * crds[, 1] - si * crds[, 2],
+        si * crds[, 1] + co * crds[, 2]) + adj
+}
+
+elide.polygons_2 <- function(p, rotate = 0, center = NULL) {
+  bb <- sp::bbox(p)
+  if (rotate != 0 && is.null(center)) {
+    center <- bb[, 1]
+  }
+  
+  pls <- slot(p, "polygons")
+  new_pls <- lapply(pls, function(x) {
+    Pls <- slot(x, "Polygons")
+    new_Pls <- lapply(Pls, function(y) {
+      crds <- slot(y, "coords")
+      crds <- rotateCoords(crds, angle = 45, center)
+      sp::Polygon(crds)
+    })
+    pres <- sp::Polygons(new_Pls, ID = slot(x, "ID"))
+    pres
+  })
+  res <- sp::SpatialPolygons(new_pls)
+  res
+}
+
+elide.polygonsdf_2 <- function(p,
+                               rotate = 0,
+                               center = NULL) {
+  res <- elide.polygons_2(as(p, "SpatialPolygons"),
+                          rotate = rotate,
+                          center = center)
+  df <- as(p, "data.frame")
+  res <- sp::SpatialPolygonsDataFrame(res, data = df)
+  res
 }
