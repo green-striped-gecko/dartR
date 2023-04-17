@@ -62,7 +62,6 @@ Suggests:
     lattice,
     leaflet,
     leaflet.minicharts,
-    maptools,
     markdown,
     mmod,
     networkD3,

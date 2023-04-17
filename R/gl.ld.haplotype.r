@@ -281,8 +281,11 @@ p <- NULL
           digits = 12,
           dissolve = TRUE
         )
-      polygon_haplo <- maptools::elide(polygon_haplo, rotate = 45)
+      
+      polygon_haplo <- elide.polygonsdf_2(polygon_haplo,rotate = 45)
+      # polygon_haplo <- maptools::elide(polygon_haplo, rotate = 45)
       polygon_haplo$id <- rownames(as.data.frame(polygon_haplo))
+
       #this only has the coordinates
       polygon_haplo.pts <- fortify(polygon_haplo, polygon_haplo = "id")
       # add the attributes back
