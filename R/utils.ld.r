@@ -210,11 +210,11 @@ elide.polygons_2 <- function(p, rotate = 0, center = NULL) {
     center <- bb[, 1]
   }
   
-  pls <- slot(p, "polygons")
+  pls <- methods::slot(p, "polygons")
   new_pls <- lapply(pls, function(x) {
-    Pls <- slot(x, "Polygons")
+    Pls <- methods::slot(x, "Polygons")
     new_Pls <- lapply(Pls, function(y) {
-      crds <- slot(y, "coords")
+      crds <- methods::slot(y, "coords")
       crds <- rotateCoords(crds, angle = 45, center)
       sp::Polygon(crds)
     })
@@ -231,7 +231,7 @@ elide.polygonsdf_2 <- function(p,
   res <- elide.polygons_2(as(p, "SpatialPolygons"),
                           rotate = rotate,
                           center = center)
-  df <- as(p, "data.frame")
+  df <- methods::as(p, "data.frame")
   res <- sp::SpatialPolygonsDataFrame(res, data = df)
   res
 }

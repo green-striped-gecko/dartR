@@ -91,7 +91,7 @@ indNames(gl) <- as.character(1:length(indNames(gl)))
 # exec = './structure.exe')
 #ev <- gl.evanno(sr)
 #ev
-#qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
+#qmat <- gl.plot.structure(sr, K=3)
 #head(qmat)
 #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 }

@@ -369,16 +369,17 @@ gl.ibd <- function(x = NULL,
             
         } else {
             Legend <- col2 <- NA  #ggplot bug
-            cols <- which(lower.tri(as.matrix(Dgen)), arr.ind = T)
+            cols <- which(lower.tri(as.matrix(Dgen)), arr.ind = TRUE)
             c1 <- cols[, 2]
             c2 <- cols[, 1]
             cn <- colnames(as.matrix(Dgen))
             # if someone wants to color pairwise individuals by pairwise colors
             if (typedis == "ind" & paircols == "pop") {
-                if (is(x, "genlight"))
+                if (is(x, "genlight")){
                     cn <- pop(x)
-                else
-                    cn <-rownames(as.matrix(Dgen))
+                }else{
+                    cn <- rownames(as.matrix(Dgen))
+                }
             }
             res <-
                 data.frame(
@@ -389,11 +390,11 @@ gl.ibd <- function(x = NULL,
                 )
             p3 <-
                 ggplot(res) + 
+              geom_smooth(aes(x = Dgeo, y = Dgen),method = "lm", se = TRUE) + 
               geom_point(aes(Dgeo, Dgen, col = Legend), size = 5) + 
               geom_point(aes(Dgeo, Dgen, col = col2), size = 2) + 
               geom_point(aes(Dgeo, Dgen),size = 2,shape = 1) + 
               guides(size = "none",color = guide_legend(title = "Populations")) + 
-              geom_smooth(aes(x = Dgeo, y = Dgen),method = "lm", se = TRUE) + 
               ylab(Dgen_trans) + 
               annotate("text",label = lm_eqn(res), 
                        x = Inf,
@@ -401,7 +402,8 @@ gl.ibd <- function(x = NULL,
                        parse = TRUE,
                        hjust = 1.05,
                        vjust = 0) +
-              xlab(Dgeo_trans) + plot_theme
+              xlab(Dgeo_trans) +
+              plot_theme
             
         }
         
