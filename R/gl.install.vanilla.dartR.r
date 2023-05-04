@@ -37,9 +37,9 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
     
     # ERROR CHECKING
     
-    if(is.null(flavour)){
-        flavour <- "CRAN"
-    }
+    # if(is.null(flavour)){
+    #     flavour <- "CRAN"
+    # }
     
     pkg <- "devtools"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
