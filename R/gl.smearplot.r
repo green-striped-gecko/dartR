@@ -195,5 +195,5 @@ gl.smearplot <- function(x,
     
     # RETURN
     
-    invisible(p3)
+    return(p3)
 }
