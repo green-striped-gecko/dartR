@@ -141,16 +141,15 @@ gl2plink <- function(x,
     write.table(
         gl_map,
         file = paste0(outfilespec, ".map"),
-        quote = F,
-        row.names = F,
-        col.names = F
+        quote = FALSE,
+        row.names = FALSE,
+        col.names = FALSE
     )
     
     ########## .fam (PLINK sample information file)
     
     sample.id_temp <- indNames(x)
-    sample.id_temp <-
-        gsub(" ", replacement = "_", sample.id_temp)
+    sample.id_temp <- gsub(" ", replacement = "_", sample.id_temp)
     
     # Family ID ('FID')
     FID <- as.character(x$pop)
@@ -173,8 +172,7 @@ gl2plink <- function(x,
         sex_code[nchar(sex_code) == 0] <- "0"
     }
     
-    gl_fam <-
-        cbind(FID, IID, ID_dad, ID_mom, sex_code, phen_value)
+    gl_fam <- cbind(FID, IID, ID_dad, ID_mom, sex_code, phen_value)
     
     x_mat <- as.matrix(x[, ])
     homs1 <- paste(substr(x@loc.all, 1, 1), "/", substr(x@loc.all, 1, 1), sep = "")
@@ -243,7 +241,6 @@ gl2plink <- function(x,
                 )
                 bedfile.out
             }
-        
         
         system_verbose <-function(...) {
             report <-system(..., intern = T)
