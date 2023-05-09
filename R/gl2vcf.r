@@ -131,7 +131,6 @@ gl2vcf <- function(x,
         }
       }
     }
-   
     
     gl2plink(
         x = x,
@@ -179,11 +178,10 @@ gl2vcf <- function(x,
                     else
                         "",
                     "--allow-no-sex",
-                    paste("--reference-allele",file.path(tempdir(),'mylist.txt')),
-                    # "--keep-allele-order",
-                    # "--real-ref-alleles",
-                    # paste("--a1-allele", file.path(outpath,'alleles.csv'),"1"),
-                    # paste("--a2-allele", file.path(outpath,'alleles.csv'),"2"),
+                    "--allow-extra-chr",
+                    paste("--reference-allele",
+                          file.path(tempdir(),
+                                    'mylist.txt')),
                     "--out",
                     prefix.out,
                     extra.options
@@ -191,8 +189,8 @@ gl2vcf <- function(x,
             )
         }
     
-    system_verbose <-function(...) {
-        report <-system(..., intern = T)
+    system_verbose <- function(...) {
+        report <- system(..., intern = TRUE)
         message(
             paste0(
                 "\n\n----------Output of function start:\n\n",
@@ -202,8 +200,7 @@ gl2vcf <- function(x,
         )
     }
     
-    make_plink(plink.path = paste0(plink_path, "/plink"),
-               extra.options = "--aec")
+    make_plink(plink.path = paste0(plink_path, "/plink"))
     
     # FLAG SCRIPT END
     
