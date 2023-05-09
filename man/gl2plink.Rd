@@ -93,6 +93,12 @@ If you like to use chromosome information when converting to plink format and
  names as 'contig1', 'contig2', etc. as described in the section "Nonstandard
   chromosome IDs" in the following link:
   https://www.cog-genomics.org/plink/1.9/input
+  
+ Note that the "plink_path" argument does not accept spaces in the path name.
+  A simple workaround is to put single quotes around the directory level with
+   a space, for example: "/Users/david/'R projects'/"
+   
+   Thank you David for the nice tip above
 }
 \examples{
 \donttest{

@@ -77,6 +77,21 @@ The chromosome information for unmapped SNPS is coded as 0.
 Family ID is taken from  x$pop
 Within-family ID (cannot be '0') is taken from indNames(x)
 Variant identifier is taken from locNames(x)
+
+#' Note that if names of populations or individuals contain spaces, they are 
+replaced by an underscore "_".
+
+If you like to use chromosome information when converting to plink format and
+ your chromosome names are not from human, you need to change the chromosome 
+ names as 'contig1', 'contig2', etc. as described in the section "Nonstandard
+  chromosome IDs" in the following link:
+  https://www.cog-genomics.org/plink/1.9/input
+  
+ Note that the "plink_path" argument does not accept spaces in the path name.
+  A simple workaround is to put single quotes around the directory level with
+   a space, for example: "/Users/david/'R projects'/"
+   
+   Thank you David for the nice tip above
 }
 \examples{
 \dontrun{
