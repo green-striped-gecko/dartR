@@ -58,11 +58,8 @@
 #'   chromosome IDs" in the following link:
 #'   https://www.cog-genomics.org/plink/1.9/input
 #'   
-#'  Note that the "plink_path" argument does not accept spaces in the path name.
-#'   A simple workaround is to put single quotes around the directory level with
-#'    a space, for example: "/Users/david/'R projects'/"
-#'    
-#'    Thank you David for the nice tip above
+#'  Note that the function might not work if there are spaces in the path to the
+#'   plink executable.
 #'   
 #' @return  returns no value (i.e. NULL)
 #' @references
