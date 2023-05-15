@@ -79,10 +79,11 @@ gl.LDNe <- function(x,
   # FUNCTION SPECIFIC ERROR CHECKING
   
   #works only with SNP data
-  if (datatype != "SNP")
+  if (datatype != "SNP"){
     cat(error(
       "  Only SNPs (diploid data can be transformed into genepop format!\n"
     ))
+  }
   
   # DO THE JOB
   # Set NULL to variables to pass CRAN checks

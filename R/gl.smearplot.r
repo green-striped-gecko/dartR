@@ -171,7 +171,7 @@ gl.smearplot <- function(x,
         p3 <- p3 + facet_wrap(~ pop,
                               ncol = 1,
                               dir = "v",
-                              scales = "free_y")
+                              scales = "free")
     }
     
     # PRINTING OUTPUTS
