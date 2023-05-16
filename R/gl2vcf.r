@@ -213,7 +213,14 @@ gl2vcf <- function(x,
         )
     }
     
-    make_plink(plink.path = paste0(plink_path, "/plink"))
+    # Find executable makeblastdb if unix
+    if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+      make_plink(plink.path = paste0(plink_path, "/plink"))
+    }
+    ## if windows
+    if (!grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+      make_plink(plink.path = paste0(plink_path, "/plink.exe"))
+    }
     
     # FLAG SCRIPT END
     
