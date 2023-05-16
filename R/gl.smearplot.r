@@ -126,7 +126,7 @@ gl.smearplot <- function(x,
                 fill = genotype
             )) + geom_raster() + scale_fill_discrete(
                 type = plot_colors[c(1, 3)],
-                na.value = plot_colors[4],
+                 na.value = plot_colors[4],
                 name = "Genotype",
                 labels = labels_genotype) +
           theme_dartR() + 
@@ -151,7 +151,7 @@ gl.smearplot <- function(x,
             )) + geom_raster() + 
                 scale_fill_discrete(
                 type = plot_colors,
-                na.value = plot_colors[4],
+                 na.value = plot_colors[4],
                 name = "Genotype",
                 labels = labels_genotype) +
           theme_dartR() + theme(
@@ -170,7 +170,7 @@ gl.smearplot <- function(x,
     if (ind_labels==TRUE & group_pop == TRUE) {
         p3 <- p3 + facet_wrap(~ pop,
                               ncol = 1,
-                              dir = "v",
+                              # dir = "v",
                               scales = "free")
     }
     
