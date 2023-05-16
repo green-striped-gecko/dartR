@@ -74,9 +74,12 @@ utils.dart2genlight <- function(dart,
     }
     
     if (sum(c("SNP", "SnpPosition") %in% names(sraw)) != 2) {
-        stop(error(
-            "Could not find SNP or SnpPosition in Dart file. Check you headers!!!"
-        ))
+        # stop(error(
+        #     "Could not find SNP or SnpPosition in Dart file. Check you headers!!!"
+        # ))
+      warn(
+        "Could not find SNP or SnpPosition in Dart file. Check you headers!!!"
+      )
     }
     
     if (verbose >= 2) {
@@ -105,7 +108,11 @@ utils.dart2genlight <- function(dart,
     # every second line only....
     esl <-seq(nrows, nrow(sdata), nrows)
     
-    pos <- sraw$SnpPosition[esl]
+    if("SnpPosition" %in% colnames(sraw)){
+      pos <- sraw$SnpPosition[esl]
+    }else{
+      pos <- NULL
+    }
     alleles <- as.character(sraw$SNP)[esl]
     a1 <- substr(alleles, nchar(alleles) - 2, nchar(alleles))
     a2 <- sub(">", "/", a1)
