@@ -157,8 +157,10 @@ gl.LDNe <- function(x,
   system(cmd)
   
   x_lines <- readLines(outfile)
-  strt <- which(x_lines=="****************")-1
-  stp <- which(x_lines=="**************************************************************")-1
+  strt <- which(str_count(x_lines, "\\*") > 10 & 
+                  str_count(x_lines, "\\*") < 20) - 1
+  stp <- which(str_count(x_lines, "\\*") > 21 & 
+                 str_count(x_lines, "\\*") < 100) - 1
   linez <- lapply(1:length(strt),function(y){
     x_lines[strt[y]:stp[y]]
   })
@@ -171,9 +173,10 @@ gl.LDNe <- function(x,
       x <- gsub(pattern = "Infinite", replacement = "Inf", x)
     }))
   
-  pops <-
-    sapply(res[res %like% "Population"], function(x)
-      str_extract(x, "(?<=\\[).*(?=\\])"), USE.NAMES = FALSE)
+  pops <- sapply(res[res %like% "Population"], function(x){
+    str_extract(x, "(?<=\\[).*(?=\\])")
+    }, USE.NAMES = FALSE)
+  
   pops <- sub("_[^_]+$", "", pops)
   freq <- str_split(res[res %like% "Lowest"], '\\s{3,}')[[1]][-1]
   Estimated_Ne <-
