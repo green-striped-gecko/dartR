@@ -168,13 +168,12 @@ utils.read.ped <- function (file,
 }
 
 rotate.matrix <- function (x,
-                           angle = 10,
-                           method = "bilinear") {
+                           angle = 10) {
   img <- x
   angle.rad <- angle * pi / 180
   co.x <- matrix(rep(-(ncol(img) / 2 - 0.5):(ncol(img) / 2 -
                                                0.5), nrow(img)),
-                 nrow = nrow(img), byrow = T)
+                 nrow = nrow(img), byrow = TRUE)
   co.y <- matrix(rep(-(nrow(img) / 2 - 0.5):(nrow(img) / 2 -
                                                0.5), ncol(img)),
                  ncol = ncol(img))
@@ -190,48 +189,4 @@ rotate.matrix <- function (x,
     attr(img, "samples.per.pixel")
   return(img.rot)
   
-}
-
-## rotate angle degrees clockwise around center
-rotateCoords <- function(crds,
-                         angle = 0,
-                         center = c(min(crds[, 1]), min(crds[, 2]))) {
-  co <- cos(-angle * pi / 180)
-  si <- sin(-angle * pi / 180)
-  adj <- matrix(rep(center, nrow(crds)), ncol = 2, byrow = TRUE)
-  crds <- crds - adj
-  cbind(co * crds[, 1] - si * crds[, 2],
-        si * crds[, 1] + co * crds[, 2]) + adj
-}
-
-elide.polygons_2 <- function(p, rotate = 0, center = NULL) {
-  bb <- sp::bbox(p)
-  if (rotate != 0 && is.null(center)) {
-    center <- bb[, 1]
-  }
-  
-  pls <- methods::slot(p, "polygons")
-  new_pls <- lapply(pls, function(x) {
-    Pls <- methods::slot(x, "Polygons")
-    new_Pls <- lapply(Pls, function(y) {
-      crds <- methods::slot(y, "coords")
-      crds <- rotateCoords(crds, angle = 45, center)
-      sp::Polygon(crds)
-    })
-    pres <- sp::Polygons(new_Pls, ID = slot(x, "ID"))
-    pres
-  })
-  res <- sp::SpatialPolygons(new_pls)
-  res
-}
-
-elide.polygonsdf_2 <- function(p,
-                               rotate = 0,
-                               center = NULL) {
-  res <- elide.polygons_2(as(p, "SpatialPolygons"),
-                          rotate = rotate,
-                          center = center)
-  df <- methods::as(p, "data.frame")
-  res <- sp::SpatialPolygonsDataFrame(res, data = df)
-  res
 }
