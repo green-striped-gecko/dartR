@@ -14,7 +14,7 @@ citEntry(
   textVersion = "Gruber, B, Unmack, PJ, Berry, OF, Georges, A. (2018). dartr: An r package to facilitate analysis of SNP data generated from reduced representation genome sequencing. Molecular Ecology Resources 18: 691-699. https://doi.org/10.1111/1755-0998.12745"
 )
 
-citEntry(entry = "Article",
+bibentry(bibtype = "Article",
          title        = "{dartR v2}: An accessible genetic analysis platform for conservation, ecology and agriculture",
          author       = "Jose Luis Mijangos, Oliver F Berry, Carlo Pacioni, Arthur Georges",
          journal      = "Methods in Ecology and Evolution",

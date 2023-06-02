@@ -98,7 +98,7 @@ License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2021-04-28 23:28:46 UTC; s425824
+Packaged: 2023-06-02 23:28:46 UTC; Bernd Gruber
 Author: Bernd Gruber [aut, cre],
   Arthur Georges [aut],
   Jose L. Mijangos [aut],
