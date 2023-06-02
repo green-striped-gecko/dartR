@@ -29,7 +29,7 @@
 #' @family dartR-base
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-# Examples -------------
+# Examples -------------#' 
 #' @examples
 #'  # SNP data
 #'    gl2 <- gl.drop.pop(testset.gl,
@@ -150,7 +150,6 @@ gl.drop.pop <-  function(x,
     }
     # End block -----------
 # REPORT A SUMMARY -------------
-    # Summary of outcomes --------------
     
     if (verbose >= 3) {
         if (!is.null(as.pop)) {
