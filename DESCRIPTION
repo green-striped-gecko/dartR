@@ -93,6 +93,7 @@ Suggests:
     zoo,
     viridis,
     testthat (>= 3.0.0)
+Remotes: github::mijangos81/ggtern
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.2.3
