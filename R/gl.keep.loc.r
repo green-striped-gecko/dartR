@@ -19,7 +19,7 @@
 #' progress but not results; 3, progress and results summary; 5, full report
 #'  [default 2 or as specified using gl.set.verbosity].
 #'
-#' export
+#' @export
 #' @return A genlight object with the reduced data
 #'
 #' @family dartR-base
@@ -33,7 +33,6 @@
 #'   gs2 <- gl.keep.loc(testset.gs, loc.list=c('20134188','19249144'))
 # See also ------------
 #' @seealso \code{\link{gl.drop.loc}} to drop rather than keep specified loci
-#' @export
 #'
 # End Block --------------
 # Function 
@@ -49,7 +48,7 @@ gl.keep.loc <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "v.2023.1",
+                     build = "v.2023.2",
                      verbosity = verbose)
     
     # CHECK DATATYPE

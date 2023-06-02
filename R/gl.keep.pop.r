@@ -56,7 +56,7 @@ gl.keep.pop <-  function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "v.2023.1",
+                     build = "v.2023.2",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -135,7 +135,7 @@ gl.keep.pop <-  function(x,
     # Remove rows flagged for deletion
     pops.to.keep <- which(x$pop %in% pop.list)
     x <- x[pops.to.keep,]
-    pop.hold <- pop.hold[pops.to.keep,]
+    pop.hold <- pop.hold[pops.to.keep]
     
     # Monomorphic loci may have been created ---------------
     x@other$loc.metrics.flags$monomorphs == FALSE

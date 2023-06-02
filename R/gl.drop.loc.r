@@ -48,7 +48,7 @@ gl.drop.loc <- function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "v.2023.1",
+                     build = "v.2023.2",
                      verbosity = verbose)
     
     # CHECK DATATYPE
