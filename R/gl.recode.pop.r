@@ -1,65 +1,84 @@
 #' @name gl.recode.pop
+# Preliminaries -- Parameter specifications -------------- 
 #' @title Recodes population assignments in a genlight object
 #' @description
-#' This script recodes population assignments and/or deletes populations from a
-#' DaRT genlight SNP file based on information provided in a csv population
+#' This function recodes population assignments and/or deletes populations from a
+#' DaRT genlight object based on information provided in a csv population
 #' recode file.
 #' @details
 #' Individuals are assigned to populations based on the specimen metadata data
 #' file (csv) used with gl.read.dart(). Recoding can be used to amalgamate
 #' populations or to selectively delete or retain populations.
+#' 
+#' When caution needs to be exercised because of the potential for breaking the
+#' 'chain of evidence' associated with the samples, recoding individuals using
+#' a recode table (csv) can provide a durable record of the changes.
 #'
-#' The population recode file contains a list of populations in the genlight
+#' The population recode file contains a list of populations taken from the genlight
 #'  object as the first column of the csv file, and the new population
-#'  assignments in the second column of the csv file. The keyword Delete used as
-#'  a new population assignment will result in the associated specimen being
-#'   dropped from the dataset.
+#'  assignments are located in the second column of the csv file. The keyword 
+#'  'Delete' used as a new population assignment will result in the associated 
+#'  specimen being dropped from the dataset.
+#'  
+#' The function works with genlight objects
+#' containing SNP genotypes and Tag P/A data (SilicoDArT).
 #'
-#' The script, having deleted populations, optionally identifies resultant
-#' monomorphic loci or loci with all values missing and deletes them
-#' (using gl.filter.monomorphs.r). The script also optionally recalculates the
-#' locus metadata as appropriate.
+#' For SNP genotype data, the function, having deleted populations, optionally 
+#' identifies resultant monomorphic loci or loci with all values missing 
+#' and deletes them. The script also optionally recalculates the
+#' locus metadata as appropriate. The optional deletion of monomorphic loci
+#' and the optional recalculation of locus statistics is not available for
+#' Tag P/A data (SilicoDArT).
 #'
-#' @param x Name of the genlight object containing the SNP data [required].
+#' @param x Name of the genlight object [required].
 #' @param pop.recode Name of the csv file containing the population
 #' reassignments [required].
-#' @param recalc Recalculate the locus metadata statistics if any individuals
+#' @param recalc If TRUE, recalculates the locus metadata statistics if any individuals
 #' are deleted in the filtering [default FALSE].
-#' @param mono.rm Remove monomorphic loci [default FALSE].
-#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-#' progress log; 3, progress and results summary; 5, full report
+#' @param mono.rm If TRUE, removes monomorphic loci [default FALSE].
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+#' progress log; 3, progress and results summary; 5, full report 
 #' [default 2 or as specified using gl.set.verbosity].
+#' 
 #' @return A genlight object with the recoded and reduced data.
 #' @export
+#' 
+#' @family dartR-base
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
+#' 
+# Examples --------------
 #' @examples
 #' \donttest{
 #'   mfile <- system.file('extdata', 'testset_pop_recode.csv', package='dartR')
 #'   nPop(testset.gl)
 #'   gl <- gl.recode.pop(testset.gl, pop.recode=mfile, verbose=3)
 #'  }
+#'  
+# See also -----------------
 #' @seealso \code{\link{gl.filter.monomorphs}}
 #' @seealso \code{\link{gl.recode.pop}}
-
+#' 
+# Function 
 gl.recode.pop <- function(x,
                           pop.recode,
                           recalc = FALSE,
                           mono.rm = FALSE,
                           verbose = NULL) {
-    # SET VERBOSITY
+# Preliminaries ------------
+  # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "v.2023.2",
                      verbosity = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
     
-    # FUNCTION SPECIFIC ERROR CHECKING
+    # Function specific error checking -------------------
     
     if (is.null(pop(x)) |
         is.na(length(pop(x))) | length(pop(x)) <= 0) {
@@ -95,7 +114,7 @@ gl.recode.pop <- function(x,
         )
     }
     
-    # DO THE JOB
+    # DO THE JOB ----------------
     
     if (verbose >= 2) {
         cat(report(
@@ -148,36 +167,40 @@ gl.recode.pop <- function(x,
                         verbose = 0)
     }
     
-    # Remove monomorphic loci
-    if (mono.rm) {
+    # Remove monomorphic loci -----------------
+    if(datatype=="SNP"){
+      if (mono.rm) {
         if (verbose >= 2) {
-            cat(report("  Deleting monomorphic loc\n"))
+          cat(report("  Deleting monomorphic loc\n"))
         }
         x <- gl.filter.monomorphs(x, verbose = 0)
-    }
-    # Check monomorphs have been removed
-    if (x@other$loc.metrics.flags$monomorphs == FALSE) {
+      }
+      # Check monomorphs have been removed
+      if (x@other$loc.metrics.flags$monomorphs == FALSE) {
         if (verbose >= 2) {
-            cat(warn(
-                "  Warning: Resultant dataset may contain monomorphic loci\n"
-            ))
+          cat(warn(
+            "  Warning: Resultant dataset may contain monomorphic loci\n"
+          ))
         }
+      }
     }
     
-    # Recalculate statistics
-    if (recalc) {
+    # Recalculate statistics ----------------
+    if(datatype=="SNP"){
+      if (recalc) {
         x <- gl.recalc.metrics(x, verbose = 0)
         if (verbose >= 2) {
-            cat(report("  Recalculating locus metrics\n"))
+          cat(report("  Recalculating locus metrics\n"))
         }
-    } else {
+      } else {
         if (verbose >= 2) {
-            cat(warn("  Locus metrics not recalculated\n"))
-            x <- utils.reset.flags(x, verbose = 0)
+          cat(warn("  Locus metrics not recalculated\n"))
+          x <- utils.reset.flags(x, verbose = 0)
         }
+      }
     }
     
-    # REPORT A SUMMARY
+    # REPORT A SUMMARY ------------------
     
     if (verbose >= 3) {
         cat("  Summary of recoded dataset\n")
@@ -195,15 +218,16 @@ gl.recode.pop <- function(x,
         }
     }
     
-    # ADD TO HISTORY
+    # ADD TO HISTORY ---------------------
     nh <- length(x@other$history)
     x@other$history[[nh + 1]] <- match.call()
     
-    # FLAG SCRIPT END
+    # FLAG SCRIPT END -----------------------
     
     if (verbose > 0) {
         cat(report("Completed:", funname, "\n"))
     }
+    # End block ------------------------
     
     return(x)
 }
