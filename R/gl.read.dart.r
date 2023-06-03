@@ -1,4 +1,4 @@
-#'@name gl.read.dart
+#' @name gl.read.dart
 # Preliminaries -- Parameter specifications -------------- 
 #'@title Imports DArT data into dartR and converts it into a dartR genlight object
 #'
