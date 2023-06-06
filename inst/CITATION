@@ -1,7 +1,7 @@
 citHeader("To cite dartR in publications use:")
 
-citEntry(
-  entry = "Article",
+bibentry(
+  bibtype = "Article",
   author = "Bernd Gruber, Peter J Unmack, Oliver F Berry, Arthur Georges",
   doi = "10.1111/1755-0998.12745",
   journal = "Molecular Ecology Resources",
