@@ -12,6 +12,7 @@ Main repository:
 [![CRAN
 checks](https://cranchecks.info/badges/summary/dartR)](https://cran.r-project.org/web/checks/check_results_dartR.html)
 [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+Beta:
 [![check-new](https://github.com/green-striped-gecko/dartR/actions/workflows/check-standard.yml/badge.svg)](https://github.com/green-striped-gecko/dartR/actions/workflows/check-standard.yml)
 [![](http://cranlogs.r-pkg.org/badges/last-week/dartR?color=orange)](https://cran.r-project.org/package=dartR)
 <!-- badges: end -->
