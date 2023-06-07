@@ -5,10 +5,12 @@
 \title{Calculates mean observed heterozygosity, mean expected heterozygosity and Fis
  per locus, per population and various population differentiation measures}
 \usage{
-utils.basic.stats(x)
+utils.basic.stats(x, digits = 4)
 }
 \arguments{
 \item{x}{A genlight object containing the SNP genotypes [required].}
+
+\item{digits}{Number of decimals to report [default 4]}
 }
 \value{
 A list with with the statistics for each population

@@ -77,18 +77,29 @@ gl.smearplot <- function(x,
             }
     n10 <- nchar(as.character(nInd(x)))
     lzs <- paste0("%0",as.character(n10),"d")
+    
+    # Luis approach
     if(ind_labels == TRUE){
-      
-      individuals <- paste0(sprintf(lzs,1:nInd(x)),"_",indNames(x))
+      individuals <- indNames(x)
     } else {
-        individuals <- paste0(sprintf(lzs,1:nInd(x)))
+      individuals <- seq(1:length(indNames(x)))
     }
+    
+    # Bernd approach
+    # if(ind_labels == TRUE){
+    #   individuals <- paste0(sprintf(lzs,1:nInd(x)),"_",indNames(x))
+    # } else {
+    #     individuals <- paste0(sprintf(lzs,1:nInd(x)))
+    # }
     
     # DO THE JOB
     
     X_temp <- as.data.frame(as.matrix(x))
     colnames(X_temp) <- 1:nLoc(x)
     X_temp$id <- individuals
+    # converting id to factor using levels parameters
+    X_temp$id <- factor(X_temp$id, levels = X_temp$id)
+    
     X_temp$pop <- pop(x)
     
     X <- reshape2::melt(X_temp, id.vars = c("pop", "id"))
@@ -100,6 +111,13 @@ gl.smearplot <- function(x,
     
     locus <- id <- genotype <- NA
     
+    labels_genotype <- as.character(unique(X$genotype)) 
+    labels_genotype[which(is.na(labels_genotype))] <- "Missing data"
+    labels_genotype["0"] <- "Homozygote reference\n allele"
+    labels_genotype["1"] <- "Heterozygote"
+    labels_genotype["2"] <- "Homozygote alternative\n allele"
+
+    
     if (datatype == "SilicoDArT") {
         p3 <-
             ggplot(X, aes(
@@ -108,10 +126,11 @@ gl.smearplot <- function(x,
                 fill = genotype
             )) + geom_raster() + scale_fill_discrete(
                 type = plot_colors[c(1, 3)],
-                na.value = plot_colors[4],
+                 na.value = plot_colors[4],
                 name = "Genotype",
-                labels = c("0", "1")
-            ) + theme_dartR() + theme(
+                labels = labels_genotype) +
+          theme_dartR() + 
+          theme(
                 legend.position = posi,
                 axis.text.y = element_text(size = ind_labels_size)
             ) +
@@ -132,10 +151,10 @@ gl.smearplot <- function(x,
             )) + geom_raster() + 
                 scale_fill_discrete(
                 type = plot_colors,
-                na.value = plot_colors[4],
+                 na.value = plot_colors[4],
                 name = "Genotype",
-                labels = c("0", "1", "2")
-            ) + theme_dartR() + theme(
+                labels = labels_genotype) +
+          theme_dartR() + theme(
                 legend.position = posi,
                 axis.text.y = element_text(size = ind_labels_size)
             ) +
@@ -151,8 +170,8 @@ gl.smearplot <- function(x,
     if (ind_labels==TRUE & group_pop == TRUE) {
         p3 <- p3 + facet_wrap(~ pop,
                               ncol = 1,
-                              dir = "v",
-                              scales = "free_y")
+                              # dir = "v",
+                              scales = "free")
     }
     
     # PRINTING OUTPUTS
@@ -181,5 +200,5 @@ gl.smearplot <- function(x,
     
     # RETURN
     
-    invisible(p3)
+    return(p3)
 }

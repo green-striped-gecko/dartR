@@ -39,6 +39,19 @@
 #' Family ID is taken from  x$pop
 #' Within-family ID (cannot be '0') is taken from indNames(x)
 #' Variant identifier is taken from locNames(x)
+#' 
+#' #' Note that if names of populations or individuals contain spaces, they are 
+#' replaced by an underscore "_".
+#' 
+#' If you like to use chromosome information when converting to plink format and
+#'  your chromosome names are not from human, you need to change the chromosome 
+#'  names as 'contig1', 'contig2', etc. as described in the section "Nonstandard
+#'   chromosome IDs" in the following link:
+#'   https://www.cog-genomics.org/plink/1.9/input
+#'   
+#'  Note that the function might not work if there are spaces in the path to the
+#'   plink executable.
+#'    
 #' @return  returns no value (i.e. NULL)
 #' @references
 #' Danecek, P., Auton, A., Abecasis, G., Albers, C. A., Banks, E., DePristo, M.
@@ -82,7 +95,7 @@ gl2vcf <- function(x,
     # DO THE JOB
     
     # assigning SNP position information 
-    if(snp_pos == "0"){
+    if(snp_pos == "0" & length(snp_pos) == 1){
       x$position <- rep(as.integer(0),nLoc(x))
       
     }else{
@@ -131,7 +144,6 @@ gl2vcf <- function(x,
         }
       }
     }
-   
     
     gl2plink(
         x = x,
@@ -179,11 +191,10 @@ gl2vcf <- function(x,
                     else
                         "",
                     "--allow-no-sex",
-                    paste("--reference-allele",file.path(tempdir(),'mylist.txt')),
-                    # "--keep-allele-order",
-                    # "--real-ref-alleles",
-                    # paste("--a1-allele", file.path(outpath,'alleles.csv'),"1"),
-                    # paste("--a2-allele", file.path(outpath,'alleles.csv'),"2"),
+                    "--allow-extra-chr",
+                    paste("--reference-allele",
+                          file.path(tempdir(),
+                                    'mylist.txt')),
                     "--out",
                     prefix.out,
                     extra.options
@@ -191,8 +202,8 @@ gl2vcf <- function(x,
             )
         }
     
-    system_verbose <-function(...) {
-        report <-system(..., intern = T)
+    system_verbose <- function(...) {
+        report <- system(..., intern = TRUE)
         message(
             paste0(
                 "\n\n----------Output of function start:\n\n",
@@ -202,8 +213,14 @@ gl2vcf <- function(x,
         )
     }
     
-    make_plink(plink.path = paste0(plink_path, "/plink"),
-               extra.options = "--aec")
+    # Find executable makeblastdb if unix
+    if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+      make_plink(plink.path = paste0(plink_path, "/plink"))
+    }
+    ## if windows
+    if (!grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+      make_plink(plink.path = paste0(plink_path, "/plink.exe"))
+    }
     
     # FLAG SCRIPT END
     

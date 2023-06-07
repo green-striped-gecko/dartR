@@ -47,6 +47,9 @@ A second form, recommended by Dave Swofford, has a single line per
 ambiguity codes (method=2).
 
 If the data are tag presence/absence, then method=2 is assumed.
+
+Note that the genlight object must contain at least two populations for this
+ function to work.
 }
 \examples{
 gg <- testset.gl[1:20,1:100]

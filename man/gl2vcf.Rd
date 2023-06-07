@@ -77,6 +77,18 @@ The chromosome information for unmapped SNPS is coded as 0.
 Family ID is taken from  x$pop
 Within-family ID (cannot be '0') is taken from indNames(x)
 Variant identifier is taken from locNames(x)
+
+#' Note that if names of populations or individuals contain spaces, they are 
+replaced by an underscore "_".
+
+If you like to use chromosome information when converting to plink format and
+ your chromosome names are not from human, you need to change the chromosome 
+ names as 'contig1', 'contig2', etc. as described in the section "Nonstandard
+  chromosome IDs" in the following link:
+  https://www.cog-genomics.org/plink/1.9/input
+  
+ Note that the function might not work if there are spaces in the path to the
+  plink executable.
 }
 \examples{
 \dontrun{

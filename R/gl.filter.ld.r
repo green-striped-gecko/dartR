@@ -31,7 +31,7 @@
 #' if ((requireNamespace("snpStats", quietly = TRUE)) & (requireNamespace("fields", quietly = TRUE))) {
 #' test <- gl.filter.callrate(platypus.gl, threshold = 1)
 #' test <- gl.filter.monomorphs(test)
-#' test <- test[,1:250]
+#' test <- test[,1:20]
 #' report <- gl.report.ld.map(test)
 #' res <- gl.filter.ld(x=test,ld_report = report)
 #' }

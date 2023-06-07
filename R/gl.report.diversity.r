@@ -134,7 +134,7 @@ gl.report.diversity <- function(x,
     nlocpop <-
         lapply(pops, function(x)
             sum(!is.na(colMeans(
-                as.matrix(x), na.rm = T
+                as.matrix(x), na.rm = TRUE
             ))))
     
     if (pbar) {
@@ -144,13 +144,14 @@ gl.report.diversity <- function(x,
         }
         ## 0Halpha (average number of alleles, ignoring missing values and sd)
     }
+    
     zero_H_alpha_es <- lapply(pops, function(x) {
-        dummys <- ((colMeans(as.matrix(x), na.rm = T) %% 2) > 0) + 1 - 1
+        dummys <- ((colMeans(as.matrix(x), na.rm = TRUE) %% 2) > 0) + 1 - 1
         return(list(
-            estH = mean(dummys, na.rm = T),
-            sdH = sd(dummys, na.rm = T),
-            estD = mean(dummys, na.rm = T) + 1,
-            sdD = sd(dummys, na.rm = T)
+            estH = mean(dummys, na.rm = TRUE),
+            sdH = sd(dummys, na.rm = TRUE),
+            estD = mean(dummys, na.rm = TRUE) + 1,
+            sdD = sd(dummys, na.rm = TRUE)
         ))
     })
     zero_H_alpha <-
@@ -172,6 +173,7 @@ gl.report.diversity <- function(x,
             cat(report(" Calculating one_H/D_alpha ...          "))
         }
     }
+    
     ### one_H_alpha
     shannon <- function(x) {
         x <- x[x > 0]
@@ -230,7 +232,7 @@ gl.report.diversity <- function(x,
     
     # two_H_alpha
     two_H_alpha_es <- lapply(pops, function(x) {
-        p <- colMeans(as.matrix(x), na.rm = T) / 2
+        p <- colMeans(as.matrix(x), na.rm = TRUE) / 2
         
         p <- p[!is.na(p)]  #ignore loci with just missing data
         dummys <- (1 - (p * p + (1 - p) * (1 - p)))
@@ -274,8 +276,8 @@ gl.report.diversity <- function(x,
         nlocpairpop <- apply(pairs, 1, function(x) {
             pop1 <- pops[[x[1]]]
             pop2 <- pops[[x[2]]]
-            pp1 <- colMeans(as.matrix(pop1), na.rm = T) / 2
-            pp2 <- colMeans(as.matrix(pop2), na.rm = T) / 2
+            pp1 <- colMeans(as.matrix(pop1), na.rm = TRUE) / 2
+            pp2 <- colMeans(as.matrix(pop2), na.rm = TRUE) / 2
             index <- !is.na(pp1) & !is.na(pp2)
             return(sum(index))
         })
@@ -294,10 +296,10 @@ gl.report.diversity <- function(x,
         zero_H_beta_es <- apply(pairs, 1, function(x) {
             pop1 <- pops[[x[1]]]
             pop2 <- pops[[x[2]]]
-            pp1 <- colMeans(as.matrix(pop1), na.rm = T) / 2
+            pp1 <- colMeans(as.matrix(pop1), na.rm = TRUE) / 2
             
             pp1 <- ifelse(pp1 > 0 & pp1 < 1, 0.5, pp1)
-            pp2 <- colMeans(as.matrix(pop2), na.rm = T) / 2
+            pp2 <- colMeans(as.matrix(pop2), na.rm = TRUE) / 2
             pp2 <- ifelse(pp2 > 0 & pp2 < 1, 0.5, pp2)
             
             index <- !is.na(pp1) & !is.na(pp2)

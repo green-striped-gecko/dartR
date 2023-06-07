@@ -37,9 +37,9 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
     
     # ERROR CHECKING
     
-    if(is.null(flavour)){
-        flavour <- "CRAN"
-    }
+    # if(is.null(flavour)){
+    #     flavour <- "CRAN"
+    # }
     
     pkg <- "devtools"
     if (!(requireNamespace(pkg, quietly = TRUE))) {
@@ -111,13 +111,13 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
      available <- available.packages()[, "Package"]
      toinsav <- toinstall[toinstall %in% available]
      
-     if(verbose>=2){
-       cat(report("  Installing package ggtern from provisional GitHub Repository\n"))
-     }
-       
-     #Installing package ggtern from personal github repository because it seems
-     #that this package is not maintained anymore
-     devtools::install_github("mijangos81/ggtern")
+     # if(verbose>=2){
+     #   cat(report("  Installing package ggtern from provisional GitHub Repository\n"))
+     # }
+     #   
+     # #Installing package ggtern from personal github repository because it seems
+     # #that this package is not maintained anymore
+     # devtools::install_github("mijangos81/ggtern")
      
     
     if (length(toinsav) > 0) {
