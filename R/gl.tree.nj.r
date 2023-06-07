@@ -1,11 +1,16 @@
 #' Outputs an nj tree to summarize genetic similarity among populations
 #'
-#' This function is a wrapper for the nj\{ape\} function applied to Euclidian
+#' This function is a wrapper for the nj function or package ape applied to Euclidean
 #' distances calculated from the genlight object.
+#' @details
+#' An euclidean distance matrix is calculated by default [d_mat = NULL]. 
+#' Optionally the user can use as input for the tree any other distance matrix
+#' using this parameter, see for example the function  \code{\link{gl.dist.pop}}.
 #'
 #' @param x Name of the genlight object containing the SNP data [required].
+#' @param d_mat Distance matrix [default NULL].
 #' @param outgroup Vector containing the population names that are the outgroups
-#'  [deefault NULL].
+#'  [default NULL].
 #' @param type Type of dendrogram "phylogram"|"cladogram"|"fan"|"unrooted"
 #'  [default "phylogram"].
 #' @param labelsize Size of the labels as a proportion of the graphics default
@@ -30,8 +35,9 @@
 #'   gl.tree.nj(testset.gs,type='fan')
 #'   }
 #'   res <- gl.tree.nj(platypus.gl)
-#'   
+
 gl.tree.nj <- function(x,
+                       d_mat = NULL,
                        type = "phylogram",
                        outgroup = NULL,
                        labelsize = 0.7,
@@ -51,20 +57,26 @@ gl.tree.nj <- function(x,
     
     # DO THE JOB
     
-    # Convert gl object to a matrix of allele frequencies, locus by population
-    if (verbose >= 2) {
+    if(is.null(d_mat)){
+      
+      # Convert gl object to a matrix of allele frequencies, locus by population
+      if (verbose >= 2) {
         cat(report(
-            "  Converting to a matrix of frequencies, locus by populations\n"
+          "  Converting to a matrix of frequencies, locus by populations\n"
         ))
-    }
-    t <-apply(as.matrix(x), 2, tapply, pop(x), function(e)
+      }
+      t <- apply(as.matrix(x), 2, tapply, pop(x), function(e)
         mean(e) / 2)
-    # Compute Euclidean distance
-    if (verbose >= 2) {
+      # Compute Euclidean distance
+      if (verbose >= 2) {
         cat(report("  Computing Euclidean distances\n"))
+      }
+      d <- round(as.matrix(dist(t)), 4)
+      # row.names(d) <- c(paste(row.names(d),' ')) row.names(d) <- substr(row.names(d),1,10)
+      
+    }else{
+      d <- d_mat
     }
-    d <- round(as.matrix(dist(t)), 4)
-    # row.names(d) <- c(paste(row.names(d),' ')) row.names(d) <- substr(row.names(d),1,10)
     
     # Plot the distances as an nj tree
     tree <- ape::nj(d)

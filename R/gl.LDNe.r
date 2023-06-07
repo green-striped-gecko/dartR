@@ -79,10 +79,11 @@ gl.LDNe <- function(x,
   # FUNCTION SPECIFIC ERROR CHECKING
   
   #works only with SNP data
-  if (datatype != "SNP")
+  if (datatype != "SNP"){
     cat(error(
       "  Only SNPs (diploid data can be transformed into genepop format!\n"
     ))
+  }
   
   # DO THE JOB
   # Set NULL to variables to pass CRAN checks
@@ -154,15 +155,28 @@ gl.LDNe <- function(x,
   old.path <- getwd()
   setwd(tempdir())
   system(cmd)
-  res <- read.delim(outfile)
+  
+  x_lines <- readLines(outfile)
+  strt <- which(str_count(x_lines, "\\*") > 10 & 
+                  str_count(x_lines, "\\*") < 20) - 1
+  stp <- which(str_count(x_lines, "\\*") > 21 & 
+                 str_count(x_lines, "\\*") < 100) - 1
+  linez <- lapply(1:length(strt),function(y){
+    x_lines[strt[y]:stp[y]]
+  })
+  
+  res <- data.frame(Reduce(c,linez))
+  
+  # res <- read.delim(outfile)
   res <-
     unlist(lapply(res[, 1], function(x) {
       x <- gsub(pattern = "Infinite", replacement = "Inf", x)
     }))
   
-  pops <-
-    sapply(res[res %like% "Population"], function(x)
-      str_extract(x, "(?<=\\[).*(?=\\])"), USE.NAMES = F)
+  pops <- sapply(res[res %like% "Population"], function(x){
+    str_extract(x, "(?<=\\[).*(?=\\])")
+    }, USE.NAMES = FALSE)
+  
   pops <- sub("_[^_]+$", "", pops)
   freq <- str_split(res[res %like% "Lowest"], '\\s{3,}')[[1]][-1]
   Estimated_Ne <-

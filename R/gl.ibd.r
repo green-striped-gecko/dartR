@@ -3,7 +3,7 @@
 #' This function performs an isolation by distance analysis based on a Mantel
 #' test and also produces an isolation by distance plot. If a genlight object
 #' with coordinates is provided, then an Euclidean and genetic distance matrices
-#' are calculated. #'
+#' are calculated.'
 #' @importFrom vegan mantel
 #' @importFrom MASS kde2d
 #' @importFrom grDevices colorRampPalette
@@ -16,7 +16,8 @@
 #' @param distance Type of distance that is calculated and used for the
 #' analysis. Can be either population based 'Fst' [\link[StAMPP]{stamppFst}],
 #' 'D' [\link[StAMPP]{stamppNeisD}] or individual based 'propShared',
-#'  [gl.propShared], 'euclidean' [gl.dist.ind, method='Euclidean'] [default "Fst"].
+#'  [gl.propShared], 'euclidean' [gl.dist.ind, method='Euclidean']
+#'  [default "Fst"].
 #' @param coordinates Can be either 'latlon', 'xy' or a two column data.frame
 #' with column names 'lat','lon', 'x', 'y'). Coordinates are provided via
 #' \code{gl@other$latlon} ['latlon'] or via \code{gl@other$xy} ['xy']. If latlon
@@ -31,7 +32,8 @@
 #' @param Dgen_trans You can provide a formula to transform the genetic
 #' distance. The transformation can be applied as a formula using Dgen as the
 #'  variable to be transformed. For example: \code{Dgen_trans = 'Dgen/(1-Dgen)'.
-#'   Any valid R expression can be used here [default 'Dgen', which is the identity function.]}
+#'   Any valid R expression can be used here
+#'    [default 'Dgen', which is the identity function.]}
 #' @param permutations Number of permutations in the Mantel test [default 999].
 #' @param plot.out Should an isolation by distance plot be returned
 #' [default TRUE].
@@ -61,19 +63,23 @@
 #' package installed. As a new feature you can plot pairwise relationship using
 #' double colored points (paircols=TRUE). Pairwise relationship can be
 #' visualised via populations or individuals, depending which distance is
-#' calculated. Please note: Often a problem arises, if an individual based distance is
-#' calculated (e.g. propShared) and some individuals have identical coordinates
-#' as this results in distances of zero between those pairs of individuals.
-#' If the standard transformation [log(Dgeo)] is used, this results in an infinite
-#' value, because of trying to calculate'log(0)'. To avoid this, the easiest fix
-#' is to change the transformation from log(Dgeo) to log(Dgeo+1) or you could add
-#' some "noise" to the coordinates of the individuals (e.g. +- 1m, but be aware
-#' if you use lat lon then you rather want to add +0.00001 degrees or so).
+#' calculated. Please note: Often a problem arises, if an individual based 
+#' distance is calculated (e.g. propShared) and some individuals have identical
+#'  coordinates as this results in distances of zero between those pairs of 
+#'  individuals.
+#'  
+#' If the standard transformation [log(Dgeo)] is used, this results in an 
+#' infinite value, because of trying to calculate'log(0)'. To avoid this, the 
+#' easiest fix is to change the transformation from log(Dgeo) to log(Dgeo+1) or 
+#' you could add some "noise" to the coordinates of the individuals (e.g. +- 1m,
+#'  but be aware if you use lat lon then you rather want to add +0.00001 degrees
+#'   or so).
 #' @return Returns a list of the following components: Dgen (the genetic
 #' distance matrix), Dgeo (the Euclidean distance matrix), Mantel (the
 #' statistics of the Mantel test).
 #' @export
-#' @author Bernd Gruber (bugs? Post to \url{https://groups.google.com/d/forum/dartr})
+#' @author Bernd Gruber (bugs? Post to 
+#' \url{https://groups.google.com/d/forum/dartr})
 #' @seealso \link[vegan]{mantel}, \link[StAMPP]{stamppFst}
 #' @references
 #' Rousset, F. (1997). Genetic differentiation and estimation of gene flow from
@@ -81,11 +87,12 @@
 #' @examples
 #'  \donttest{
 #' #because of speed only the first 100 loci
-#' ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans='log(Dgeo)' ,Dgen_trans='Dgen/(1-Dgen)')
+#' ibd <- gl.ibd(bandicoot.gl[,1:100], Dgeo_trans='log(Dgeo)' ,
+#' Dgen_trans='Dgen/(1-Dgen)')
 #' #because of speed only the first 10 individuals)
-#' ibd <- gl.ibd(bandicoot.gl[1:10,], distance='euclidean', paircols='pop', Dgeo_trans='Dgeo')
+#' ibd <- gl.ibd(bandicoot.gl[1:10,], distance='euclidean', paircols='pop', 
+#' Dgeo_trans='Dgeo')
 #' }
-#' 
 #' #only first 100 loci
 #' ibd <- gl.ibd(bandicoot.gl[,1:100])
 
@@ -135,6 +142,10 @@ gl.ibd <- function(x = NULL,
                     )
                 )
             ta <-"dgendgeo"
+            # make sure both matrices are distance objects if provided via Dgen 
+            # and Dgeo directly
+            Dgen <- as.dist(Dgen)
+            Dgeo <- as.dist(Dgeo)
         }
         
         if (is(x, "genlight")) {
@@ -176,7 +187,7 @@ gl.ibd <- function(x = NULL,
             if (is(coordinates, "data.frame")) {
                 if (length(setdiff(colnames(coordinates), c("lat", "lon"))) == 0) {
                     coords <- dismo::Mercator(coordinates[, c("lon", "lat")])
-                    coordstring <-"data.frame lat/lon (Mercator transformed)"
+                    coordstring <- "data.frame lat/lon (Mercator transformed)"
                 }
                 
                 if (length(setdiff(colnames(coordinates), c("x", "y"))) == 0) {
@@ -226,7 +237,7 @@ gl.ibd <- function(x = NULL,
                 if (nPop(x) > 1) {
                     pop.xy <-
                         apply(coords, 2, function(a)
-                            tapply(a, pop(x), mean, na.rm = T))
+                            tapply(a, pop(x), mean, na.rm = TRUE))
                     Dgeo <- dist(pop.xy)
                 } else {
                     stop(
@@ -282,13 +293,10 @@ gl.ibd <- function(x = NULL,
             }
         } else {
             # end of ta=='genlight' ta='dgendgeo
-            coordstring <-"Dgeo provided."
-            distance <-"Dgen provided"
-            typedis <-"ind"
+            coordstring <- "Dgeo provided."
+            distance <- "Dgen provided"
+            typedis <- "ind"
         }
-        # make sure both matrices are distance objects if provided via Dgen and Dgeo directly
-        Dgen <- as.dist(Dgen)
-        Dgeo <- as.dist(Dgeo)
         
         # use tranformations
         Dgen <- eval(parse(text = Dgen_trans))
@@ -361,16 +369,17 @@ gl.ibd <- function(x = NULL,
             
         } else {
             Legend <- col2 <- NA  #ggplot bug
-            cols <- which(lower.tri(as.matrix(Dgen)), arr.ind = T)
+            cols <- which(lower.tri(as.matrix(Dgen)), arr.ind = TRUE)
             c1 <- cols[, 2]
             c2 <- cols[, 1]
             cn <- colnames(as.matrix(Dgen))
             # if someone wants to color pairwise individuals by pairwise colors
             if (typedis == "ind" & paircols == "pop") {
-                if (is(x, "genlight"))
+                if (is(x, "genlight")){
                     cn <- pop(x)
-                else
-                    cn <-rownames(as.matrix(Dgen))
+                }else{
+                    cn <- rownames(as.matrix(Dgen))
+                }
             }
             res <-
                 data.frame(
@@ -381,11 +390,11 @@ gl.ibd <- function(x = NULL,
                 )
             p3 <-
                 ggplot(res) + 
+              geom_smooth(aes(x = Dgeo, y = Dgen),method = "lm", se = TRUE) + 
               geom_point(aes(Dgeo, Dgen, col = Legend), size = 5) + 
               geom_point(aes(Dgeo, Dgen, col = col2), size = 2) + 
               geom_point(aes(Dgeo, Dgen),size = 2,shape = 1) + 
               guides(size = "none",color = guide_legend(title = "Populations")) + 
-              geom_smooth(aes(x = Dgeo, y = Dgen),method = "lm", se = TRUE) + 
               ylab(Dgen_trans) + 
               annotate("text",label = lm_eqn(res), 
                        x = Inf,
@@ -393,7 +402,8 @@ gl.ibd <- function(x = NULL,
                        parse = TRUE,
                        hjust = 1.05,
                        vjust = 0) +
-              xlab(Dgeo_trans) + plot_theme
+              xlab(Dgeo_trans) +
+              plot_theme
             
         }
         

@@ -109,7 +109,8 @@ Below is a table modified from Speed & Balding (2015) showing kinship values,
  and their confidence intervals (CI), for different relationships that could 
  be used to guide the choosing of the relatedness threshold in the function.
 
-|Relationship|Kinship|95% CI|
+|Relationship                               |Kinship  |     95% CI       |
+
 |Identical twins/clones/same individual     | 0.5     |        -         |
 
 |Sibling/Parent-Offspring                   | 0.25    |    (0.204, 0.296)|

@@ -1,15 +1,14 @@
 #' @name utils.basic.stats
 #' @title 
 #' Calculates mean observed heterozygosity, mean expected heterozygosity and Fis
-#'  per locus, per population and Fst across all populations 
+#'  per locus, per population and various population differentiation measures
 #' @description
-#'  
 #'  This is a re-implementation of \code{hierfstat::basics.stats} specifically 
 #'  for genlight objects. Formula (and hence results) match exactly the original 
-#' version of \code{hierfstat::basics.stats} (although Dstp and Fstp are not 
-#' currently computed) but it is much faster.
+#' version of \code{hierfstat::basics.stats} but it is much faster.
 #' 
 #' @param x A genlight object containing the SNP genotypes [required].
+#' @param digits Number of decimals to report [default 4]
 #' @return A list with with the statistics for each population
 #' @export
 #' @author Luis Mijangos and Carlo Pacioni (bugs? Post to
@@ -19,7 +18,10 @@
 #' out <- utils.basic.stats(platypus.gl)
 #' @export
 
-utils.basic.stats <- function(x) {
+utils.basic.stats <- function(x,
+                              digits = 4) {
+  
+  x_hold <- x
   
   n.ind <- table(pop(x))
   
@@ -100,7 +102,7 @@ utils.basic.stats <- function(x) {
   mHs <- mn/(mn - 1) * (1 - msp2 - mHo/2/mn)
   
   if(length(pop.names)>1){
-    q_mean <- rowMeans(Reduce(cbind,q),na.rm = T)
+    q_mean <- rowMeans(Reduce(cbind,q),na.rm = TRUE)
   }else{
     q_mean <- Reduce(cbind,q)
   }
@@ -110,25 +112,40 @@ utils.basic.stats <- function(x) {
   
   Dst <- Ht - mHs
   
+  Dstp <- n.pop/(n.pop-1) * Dst
+  
+  Htp <- mHs + Dstp
+  
   Fst <- Dst / Ht
+  
+  Gst_max <- ((n.pop - 1) * (1 - mHs)) / (n.pop - 1 + mHs)
+  
+  Gst_H <- Fst / Gst_max
+  
+  Fstp <- Dstp/Htp
+  
+  Dest <- Dstp/(1 - mHs)
   
   Fis <- 1 - (Ho/Hs)
   
   mFis <- 1 - (mHo/mHs)
   
-  res <- cbind(mHo,mHs,Ht,Dst,Fst,mFis)
+  res <- cbind(mHo,mHs,Ht,Dst,Htp,Dstp,Fst,Fstp,mFis,Dest,Gst_max,Gst_H)
   
-  colnames(res) <- c("Ho","Hs","Ht","Dst","Fst","Fis")
+  colnames(res) <- c("Ho","Hs","Ht","Dst","Htp","Dstp","Fst","Fstp","Fis","Dest","Gst_max","Gst_H")
   
   overall <- colMeans(res, na.rm=TRUE)
   overall["Fst"] <- overall["Dst"] / overall["Ht"]
   overall["Fis"] <- 1 - (overall["Ho"] / overall["Hs"])
-  
-  all.res <- list("Ho" = as.data.frame(round(Ho, 4)), 
-                  "Hs" = as.data.frame(round(Hs, 4)), 
-                  "Fis" = as.data.frame(round(Fis, 4)), 
-                  perloc = as.data.frame(round(res, 4)), 
-                  overall = round(overall, 4))
+  overall["Dest"] <- overall["Dstp"] / (1 - overall["Hs"])
+  overall["Fstp"] <- overall["Dstp"] / overall["Htp"]
+  overall["Gst_H"] <- overall["Fst"] / overall["Gst_max"]
+
+  all.res <- list("Ho" = as.data.frame(round(Ho, digits)), 
+                  "Hs" = as.data.frame(round(Hs, digits)), 
+                  "Fis" = as.data.frame(round(Fis, digits)), 
+                  perloc = as.data.frame(round(res, digits)), 
+                  overall = round(overall, digits))
   
   return(all.res)
   

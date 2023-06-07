@@ -124,6 +124,16 @@ gl.ld.haplotype <- function(x,
     return(-1)
   }
   
+  pkg <- "sp"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
+    ))
+    return(-1)
+  }
+  
   # DO THE JOB
   
   group <- het <- lat <- long <- NULL
@@ -281,8 +291,11 @@ p <- NULL
           digits = 12,
           dissolve = TRUE
         )
-      polygon_haplo <- maptools::elide(polygon_haplo, rotate = 45)
+      
+      # polygon_haplo <- elide.polygonsdf_2(polygon_haplo,rotate = 45)
+       polygon_haplo <- sp::elide(polygon_haplo, rotate = 45)
       polygon_haplo$id <- rownames(as.data.frame(polygon_haplo))
+
       #this only has the coordinates
       polygon_haplo.pts <- fortify(polygon_haplo, polygon_haplo = "id")
       # add the attributes back
@@ -306,8 +319,7 @@ p <- NULL
       dimnames(ld_matrix_3) <- NULL
       matrix_rotate <-
         rotate.matrix(x = ld_matrix_3,
-                      angle = -45,
-                      method = "simple")
+                      angle = -45)
       matrix_rotate_2 <- matrix_rotate
       matrix_rotate_2[matrix_rotate_2 == 0] <- NA
       matrix_rotate_3 <-
@@ -427,7 +439,6 @@ p <- NULL
       }
       
       n_snps <- n_snps[!duplicated(n_snps[, 2]), ]
-    
       
       df.4.cut <-
         as.data.frame(table(cut(row_snp, breaks = n_snps)), stringsAsFactors =
@@ -441,7 +452,11 @@ p <- NULL
       df.4.cut_3 <- gsub("[][()]", "", df.4.cut$Var1, ",")
       df.4.cut_3 <- strsplit(df.4.cut_3, ",")
       df.4.cut_4 <- lapply(df.4.cut_3, as.numeric)
-      df.4.cut_4 <- as.data.frame(plyr::laply(df.4.cut_4, rbind))
+      if(length(df.4.cut_4)==1){
+        df.4.cut_4 <- data.frame(t(matrix((df.4.cut_4[[1]]))))
+      }else{
+        df.4.cut_4 <- as.data.frame(plyr::laply(df.4.cut_4, rbind))
+      }
       df.4.cut_4[, 3] <- (df.4.cut_4[, 2] - df.4.cut_4[, 1])
       
       # this is to calculate the real distance in bp of the polygon figure of LD

@@ -44,6 +44,9 @@ containing the phenotype value ('Case', 'Control') [default 'Case'].}
 progress log ; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 The output of this function are three files:
 \itemize{

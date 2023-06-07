@@ -21,8 +21,8 @@ utils.spautocor(
 \item{permutation}{Whether permutation calculations for the null hypothesis 
 of no spatial structure should be carried out [default TRUE].}
 
-\item{bootstrap}{Whether bootstrap calculations to compute the 95\% confidence
-intervals around r should be carried out [default TRUE].}
+\item{bootstrap}{Whether bootstrap calculations to compute the 95\% 
+confidence intervals around r should be carried out [default TRUE].}
 
 \item{bins}{The number of bins for the distance classes
 (i.e. \code{length(bins) == 1)} or a vectors with the break points. See 

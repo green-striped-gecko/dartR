@@ -16,11 +16,18 @@ gl.sfs(
 \arguments{
 \item{x}{dartR/genlight object}
 
-\item{minbinsize}{remove bins from the left of the sfs. For example to remove singletons (alleles only occurring once among all individuals) set minbinsize to 2. If set to zero, also monomorphic (d0) loci are returned.}
+\item{minbinsize}{remove bins from the left of the sfs. For example to remove
+singletons (alleles only occurring once among all individuals) set
+minbinsize to 2. If set to zero, also monomorphic (d0) loci are returned.}
 
-\item{folded}{if set to TRUE (default) a folded sfs (minor allele frequency sfs) is returned. If set to FALSE then an unfolded (derived allele frequency sfs) is returned. It is assumed that 0 is homozygote for the reference and 2 is homozygote for the derived allele. So you need to make sure your coding is correct.}
+\item{folded}{if set to TRUE (default) a folded sfs (minor allele frequency
+sfs) is returned. If set to FALSE then an unfolded (derived allele frequency
+ sfs) is returned. It is assumed that 0 is homozygote for the reference and
+ 2 is homozygote for the derived allele. So you need to make sure your
+ coding is correct.}
 
-\item{singlepop}{switch to force to create a one-dimensional sfs, even though the genlight/dartR object contains more than one population}
+\item{singlepop}{switch to force to create a one-dimensional sfs, even
+though the genlight/dartR object contains more than one population}
 
 \item{plot.out}{Specify if plot is to be produced [default TRUE].}
 
@@ -29,13 +36,25 @@ progress log ; 3, progress and results summary; 5, full report
 [default 2, unless specified using gl.set.verbosity].}
 }
 \value{
-returns a site frequency spectrum, either a one dimensional vector (only a single population in the dartR/genlight object or singlepop=TRUE) or an n-dimensional array (n is the number of populations in the genlight/dartR object). If the dartR/genlight object consists of several populations the multidimensional site frequency spectrum for each population is returned [=a multidimensional site frequency spectrum]. Be aware the multidimensional spectrum works only for a limited number of population and individuals [if too high the table command used internally will through an error as the number of populations and individuals (and therefore dimensions) are too large]. To get a single sfs for a genlight/dartR object with multiple populations, you need to set singlepop to TRUE. The returned sfs can be used to analyse demographics, e.g. using fastsimcoal2.
+returns a site frequency spectrum, either a one dimensional vector
+(only a single population in the dartR/genlight object or singlepop=TRUE) or
+an n-dimensional array (n is the number of populations in the genlight/dartR
+ object). If the dartR/genlight object consists of several populations the
+  multidimensional site frequency spectrum for each population is returned
+   [=a multidimensional site frequency spectrum]. Be aware the
+   multidimensional spectrum works only for a limited number of population
+    and individuals [if too high the table command used internally will
+    through an error as the number of populations and individuals (and
+    therefore dimensions) are too large]. To get a single sfs for a
+    genlight/dartR object with multiple populations, you need to set
+    singlepop to TRUE. The returned sfs can be used to analyse demographics,
+     e.g. using fastsimcoal2.
 }
 \description{
 Creates a site frequency spectrum based on a dartR or genlight object
 }
 \examples{
-gl.sfs(bandicoot.gl, singlepop=TRUE) 
+gl.sfs(bandicoot.gl, singlepop=TRUE)
 gl.sfs(possums.gl[c(1:5,31:33),], minbinsize=1)
 }
 \references{

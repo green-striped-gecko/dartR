@@ -42,7 +42,7 @@
 #'
 #' Remember to close the GDS file before working in a different GDS object with
 #' the function \link[SNPRelate]{snpgdsClose} (package SNPRelate).
-#' @return NULL
+#' @return  returns no value (i.e. NULL)
 #' @export
 #' @importFrom SNPRelate snpgdsCreateGeno snpgdsOpen snpgdsSummary snpgdsClose
 #' @author Custodian: Luis Mijangos (Post to

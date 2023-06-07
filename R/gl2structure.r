@@ -1,4 +1,4 @@
-#' Converts a genlight object to STRUCTURE formated files
+#' Converts a genlight object to STRUCTURE formatted files
 #'
 #' This function exports genlight objects to STRUCTURE formatted files (be aware
 #' there is a gl2faststructure version as well). It is based on the code
@@ -25,6 +25,7 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity].
+#' @return  returns no value (i.e. NULL)
 #' @export
 #' @author Bernd Gruber (wrapper) and Lindsay V. Clark [lvclark@illinois.edu]
 #' @examples
@@ -105,9 +106,11 @@ gl2structure <- function(x,
     
     # make sets of possible genotypes
     G <- list()
+    
     for (i in 0:ploidy) {
         G[[i + 1]] <- c(rep(1, ploidy - i), rep(2, i))
     }
+    
     G[[ploidy + 2]] <- rep(-9, ploidy)  # for missing data
     
     # set up data frame for Structure
@@ -142,6 +145,9 @@ gl2structure <- function(x,
     }
     
     # export all data
+    
+    if (grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
+      
     write.table(
         StructTab,
         row.names = FALSE,
@@ -151,10 +157,25 @@ gl2structure <- function(x,
         file = outfilespec,
         quote = FALSE
     )
+      
+    }else{
+      
+      write.table(
+        StructTab,
+        row.names = FALSE,
+        col.names = FALSE,
+        append = TRUE,
+        sep = "\t",
+        eol = "\r\n",
+        file = outfilespec,
+        quote = FALSE
+      )
+      
+    }
     
     if (verbose >= 2) {
         cat(report(paste(
-            "Structure file saved as:", outfilespec
+            "  Structure file saved as:", outfilespec,"\n"
         )))
     }
     

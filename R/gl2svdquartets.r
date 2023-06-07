@@ -10,6 +10,9 @@
 #' ambiguity codes (method=2).
 #'
 #' If the data are tag presence/absence, then method=2 is assumed.
+#' 
+#' Note that the genlight object must contain at least two populations for this
+#'  function to work.
 #'
 #' @references Chifman, J. and L. Kubatko. 2014. Quartet inference from SNP data
 #' under the coalescent. Bioinformatics 30: 3317-3324
@@ -28,7 +31,7 @@
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity]
-#' @return NULL
+#' @return  returns no value (i.e. NULL)
 #' @export
 #' @author Custodian: Arthur Georges (Post to
 #' \url{https://groups.google.com/d/forum/dartr})
@@ -42,6 +45,7 @@ gl2svdquartets <- function(x,
                            outpath = tempdir(),
                            method = 2,
                            verbose = NULL) {
+  
     outfilespec <- file.path(outpath, outfile)
     
     # SET VERBOSITY
@@ -73,6 +77,11 @@ gl2svdquartets <- function(x,
             )
         )
         method <- 2
+    }
+    
+    if(nPop(x)<2){
+      cat(error(" Fatal error: The genlight object contains only one population. At least two populations are needed for this function to work. \n"))
+      stop()
     }
     
     # DO THE JOB

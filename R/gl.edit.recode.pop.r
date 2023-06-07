@@ -13,7 +13,7 @@
 #' first column is the population assignment in the genlight object, the second
 #' column provides the new assignment.
 #'
-#' This script will input an existing reassignment table for editting and
+#' This script will input an existing reassignment table for editing and
 #' optionally save it as a new table, or if the name of an input table is not
 #' supplied, will generate a table using the population assignments in the
 #' parent genlight object.
@@ -95,7 +95,7 @@ gl.edit.recode.pop <-  function(x,
     }
     recode.table <- cbind(levels(pop(x)), levels(pop(x)))
     
-    # Create recode table for editting, and bring up the editor
+    # Create recode table for editing, and bring up the editor
     new <- as.matrix(edit(recode.table))
     # new <- new[,1:2]
     

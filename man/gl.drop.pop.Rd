@@ -44,6 +44,8 @@ the dataset.
 
 The script returns a genlight object with the new population assignments and
 the recalculated locus metadata.
+
+#' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
 }
 \examples{
  # SNP data
@@ -51,7 +53,7 @@ the recalculated locus metadata.
    pop.list=c('EmsubRopeMata','EmvicVictJasp'),verbose=3)
    gl2 <- gl.drop.pop(testset.gl, pop.list=c('EmsubRopeMata','EmvicVictJasp'),
    mono.rm=TRUE,recalc=TRUE)
-   gl2 <- gl.drop.pop(testset.gl, pop.list=c('Male','Unknown'),as.pop='sex')
+   gl2 <- gl.drop.pop(testset.gl, pop.list=c('Male','Unknown'),as.pop='sex',verbose=3)
  # Tag P/A data
    gs2 <- gl.drop.pop(testset.gs, pop.list=c('EmsubRopeMata','EmvicVictJasp'))
 

@@ -134,7 +134,7 @@ gl.report.diversity <- function(x,
     nlocpop <-
         lapply(pops, function(x)
             sum(!is.na(colMeans(
-                as.matrix(x), na.rm = T
+                as.matrix(x), na.rm = TRUE
             ))))
     
     if (pbar) {
@@ -144,13 +144,14 @@ gl.report.diversity <- function(x,
         }
         ## 0Halpha (average number of alleles, ignoring missing values and sd)
     }
+    
     zero_H_alpha_es <- lapply(pops, function(x) {
-        dummys <- ((colMeans(as.matrix(x), na.rm = T) %% 2) > 0) + 1 - 1
+        dummys <- ((colMeans(as.matrix(x), na.rm = TRUE) %% 2) > 0) + 1 - 1
         return(list(
-            estH = mean(dummys, na.rm = T),
-            sdH = sd(dummys, na.rm = T),
-            estD = mean(dummys, na.rm = T) + 1,
-            sdD = sd(dummys, na.rm = T)
+            estH = mean(dummys, na.rm = TRUE),
+            sdH = sd(dummys, na.rm = TRUE),
+            estD = mean(dummys, na.rm = TRUE) + 1,
+            sdD = sd(dummys, na.rm = TRUE)
         ))
     })
     zero_H_alpha <-
@@ -172,13 +173,13 @@ gl.report.diversity <- function(x,
             cat(report(" Calculating one_H/D_alpha ...          "))
         }
     }
+    
     ### one_H_alpha
     shannon <- function(x) {
         x <- x[x > 0]
         p <- x / sum(x)
         - sum(p * log(p))
     }
-    
     
     one_H_alpha_es <- lapply(pops, function(x) {
         mat_temp <- as.matrix(x)
@@ -208,6 +209,7 @@ gl.report.diversity <- function(x,
             dummys = dummys
         ))
     })
+    
     one_H_alpha <-
         unlist(lapply(one_H_alpha_es, function(x)
             x[[1]]))
@@ -220,15 +222,17 @@ gl.report.diversity <- function(x,
     one_D_alpha_sd <-
         unlist(lapply(one_H_alpha_es, function(x)
             x[[4]]))
+    
     if (pbar) {
         setTxtProgressBar(pb, 3)
         if (verbose >= 2) {
             cat(report(" Calculating two_H/D_alpha ...           "))
         }
     }
+    
     # two_H_alpha
     two_H_alpha_es <- lapply(pops, function(x) {
-        p <- colMeans(as.matrix(x), na.rm = T) / 2
+        p <- colMeans(as.matrix(x), na.rm = TRUE) / 2
         
         p <- p[!is.na(p)]  #ignore loci with just missing data
         dummys <- (1 - (p * p + (1 - p) * (1 - p)))
@@ -254,7 +258,7 @@ gl.report.diversity <- function(x,
         unlist(lapply(two_H_alpha_es, function(x)
             x[[4]]))
     
-    # initiallize betas as NA
+    # initialize betas as NA
     mat_zero_H_beta <- NA
     mat_one_H_beta <- NA
     mat_two_H_beta <- NA
@@ -272,8 +276,8 @@ gl.report.diversity <- function(x,
         nlocpairpop <- apply(pairs, 1, function(x) {
             pop1 <- pops[[x[1]]]
             pop2 <- pops[[x[2]]]
-            pp1 <- colMeans(as.matrix(pop1), na.rm = T) / 2
-            pp2 <- colMeans(as.matrix(pop2), na.rm = T) / 2
+            pp1 <- colMeans(as.matrix(pop1), na.rm = TRUE) / 2
+            pp2 <- colMeans(as.matrix(pop2), na.rm = TRUE) / 2
             index <- !is.na(pp1) & !is.na(pp2)
             return(sum(index))
         })
@@ -292,10 +296,10 @@ gl.report.diversity <- function(x,
         zero_H_beta_es <- apply(pairs, 1, function(x) {
             pop1 <- pops[[x[1]]]
             pop2 <- pops[[x[2]]]
-            pp1 <- colMeans(as.matrix(pop1), na.rm = T) / 2
+            pp1 <- colMeans(as.matrix(pop1), na.rm = TRUE) / 2
             
             pp1 <- ifelse(pp1 > 0 & pp1 < 1, 0.5, pp1)
-            pp2 <- colMeans(as.matrix(pop2), na.rm = T) / 2
+            pp2 <- colMeans(as.matrix(pop2), na.rm = TRUE) / 2
             pp2 <- ifelse(pp2 > 0 & pp2 < 1, 0.5, pp2)
             
             index <- !is.na(pp1) & !is.na(pp2)
@@ -349,20 +353,18 @@ gl.report.diversity <- function(x,
         }
         
         # one_H_beta calculate one_H_alpha_all for combined pops
-        p <- colMeans(as.matrix(x), na.rm = T) / 2
-        i0 <-
-            which(!is.na(p))  #ignore loci with just missing data
+        p <- colMeans(as.matrix(x), na.rm = TRUE) / 2
+        # ignore loci with just missing data
+        i0 <- which(!is.na(p))  
         logp <- ifelse(!is.finite(log(p)), 0, log(p))
         log1_p <- ifelse(!is.finite(log(1 - p)), 0, log(1 - p))
         one_H_alpha_all <- -(p * logp + (1 - p) * log1_p)
         
         one_H_beta_es <- apply(pairs, 1, function(x) {
-            i1 <-
-                which(!is.na(colMeans(as.matrix(pops[[x[1]]]), na.rm = T) / 2))
-            i2 <-
-                which(!is.na(colMeans(as.matrix(pops[[x[2]]]), na.rm = T) / 2))
-            tt <- table(c(i0, i1, i2))
-            index <- as.numeric(names(tt)[tt == 3])
+    i1 <- which(!is.na(colMeans(as.matrix(pops[[x[1]]]), na.rm = TRUE) / 2))
+    i2 <- which(!is.na(colMeans(as.matrix(pops[[x[2]]]), na.rm = TRUE) / 2))
+    tt <- table(c(i0, i1, i2))
+    index <- as.numeric(names(tt)[tt == 3])
             dummys <-
                 one_H_alpha_all[i0 %in% index] - 
               (one_H_alpha_es[[x[1]]]$dummys[i1 %in% index] + 
@@ -405,23 +407,21 @@ gl.report.diversity <- function(x,
             cat(report(" Calculating two_H/D_beta...    "))
         }
         
-        p <- colMeans(as.matrix(x), na.rm = T) / 2
-        i0 <-
-            which(!is.na(p))  #ignore loci with just missing data
+        p <- colMeans(as.matrix(x), na.rm = TRUE) / 2
+        #ignore loci with just missing data
+        i0 <- which(!is.na(p)) 
         two_H_alpha_all <- (1 - (p * p + (1 - p) * (1 - p)))
         
         two_H_beta_es <- apply(pairs, 1, function(x) {
-            i1 <-
-                which(!is.na(colMeans(as.matrix(pops[[x[1]]]), na.rm = T) / 2))
-            i2 <-
-                which(!is.na(colMeans(as.matrix(pops[[x[2]]]), na.rm = T) / 2))
+      i1 <- which(!is.na(colMeans(as.matrix(pops[[x[1]]]), na.rm = TRUE) / 2))
+      i2 <- which(!is.na(colMeans(as.matrix(pops[[x[2]]]), na.rm = TRUE) / 2))
             tt <- table(c(i0, i1, i2))
             index <- as.numeric(names(tt)[tt == 3])
             
             m2Ha <-
                 (two_H_alpha_es[[x[1]]]$dummys[i1 %in% index] + 
-                   two_H_alpha_es[[x[2]]]$dummys[i2 %in% index]) /
-                2
+                   two_H_alpha_es[[x[2]]]$dummys[i2 %in% index]) / 2
+            
             dummys <-
                 ((two_H_alpha_all[i0 %in% index] - m2Ha) / 
                    (1 - m2Ha)) * (npops / (npops - 1))
@@ -470,8 +470,7 @@ gl.report.diversity <- function(x,
     
     fs <- cbind(zero_D_alpha, one_D_alpha, two_D_alpha)
     colnames(fs) <- c("q=0", "q=1", "q=2")
-    sds <-
-        cbind(zero_D_alpha_sd, one_D_alpha_sd, two_D_alpha_sd)
+    sds <- cbind(zero_D_alpha_sd, one_D_alpha_sd, two_D_alpha_sd)
     up <- fs + sds
     colnames(up) <- c("up_q0", "up_q1", "up_q2")
     low <- fs - sds
@@ -482,8 +481,7 @@ gl.report.diversity <- function(x,
     fs_plot_low <- reshape2::melt(low)
     # avoid no visible bindings
     value <- NULL
-    fs_final <-
-        as.data.frame(cbind(fs_plot, fs_plot_up[, 3], fs_plot_low[, 3]))
+    fs_final <- as.data.frame(cbind(fs_plot, fs_plot_up[, 3], fs_plot_low[, 3]))
     colnames(fs_final) <- c("pop", "q", "value", "up", "low")
     
     if(plot.out==TRUE){

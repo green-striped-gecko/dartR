@@ -58,6 +58,9 @@ containing the phenotype value. '1' = control, '2' = case, '0' = unknown
 progress log; 3, progress and results summary; 5, full report
 [default 2 or as specified using gl.set.verbosity].}
 }
+\value{
+returns no value (i.e. NULL)
+}
 \description{
 This function exports a genlight object into PLINK format and save it into a
 file.
@@ -90,6 +93,9 @@ If you like to use chromosome information when converting to plink format and
  names as 'contig1', 'contig2', etc. as described in the section "Nonstandard
   chromosome IDs" in the following link:
   https://www.cog-genomics.org/plink/1.9/input
+  
+ Note that the function might not work if there are spaces in the path to the
+  plink executable.
 }
 \examples{
 \donttest{

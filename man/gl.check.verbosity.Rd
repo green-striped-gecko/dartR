@@ -14,8 +14,11 @@ The verbosity, in variable verbose
 }
 \description{
 The verbosity can be set in one of two ways -- (a) explicitly by the user by
-passing a value using the parameter verbose= in a function, or (b) by setting
+passing a value using the parameter verbose in a function, or (b) by setting
 the verbosity globally as part of the r environment (gl.set.verbosity).
+}
+\examples{
+gl.check.verbosity()
 }
 \author{
 Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

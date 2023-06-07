@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.keep.loc.r
 \name{gl.keep.loc}
 \alias{gl.keep.loc}
-\title{Removes all but the specified loci from a genlight \{adegenet\} object}
+\title{Removes all but the specified loci from a genlight object}
 \usage{
 gl.keep.loc(x, loc.list = NULL, first = NULL, last = NULL, verbose = NULL)
 }
@@ -29,6 +29,8 @@ A genlight object with the reduced data
 \description{
 The script returns a genlight object with the all but the specified loci
 deleted.
+
+#' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
 }
 \examples{
 # SNP data

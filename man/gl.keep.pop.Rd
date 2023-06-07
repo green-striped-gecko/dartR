@@ -43,6 +43,8 @@ statistics made redundant by the deletion of individuals from the dataset.
 
 The script returns a genlight object with the new population assignments and
 the recalculated locus metadata.
+
+#' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
 }
 \examples{
  # SNP data

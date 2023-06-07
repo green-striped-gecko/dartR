@@ -3,12 +3,14 @@
 \name{utils.basic.stats}
 \alias{utils.basic.stats}
 \title{Calculates mean observed heterozygosity, mean expected heterozygosity and Fis
- per locus, per population and Fst across all populations}
+ per locus, per population and various population differentiation measures}
 \usage{
-utils.basic.stats(x)
+utils.basic.stats(x, digits = 4)
 }
 \arguments{
 \item{x}{A genlight object containing the SNP genotypes [required].}
+
+\item{digits}{Number of decimals to report [default 4]}
 }
 \value{
 A list with with the statistics for each population
@@ -16,8 +18,7 @@ A list with with the statistics for each population
 \description{
 This is a re-implementation of \code{hierfstat::basics.stats} specifically 
  for genlight objects. Formula (and hence results) match exactly the original 
-version of \code{hierfstat::basics.stats} (although Dstp and Fstp are not 
-currently computed) but it is much faster.
+version of \code{hierfstat::basics.stats} but it is much faster.
 }
 \examples{
 require("dartR.data")
