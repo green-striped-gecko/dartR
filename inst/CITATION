@@ -5,7 +5,7 @@ bibentry(
   author = "Bernd Gruber, Peter J Unmack, Oliver F Berry, Arthur Georges",
   doi = "10.1111/1755-0998.12745",
   journal = "Molecular Ecology Resources",
-  keywords = "bioinformatics,next-generation-sequencing, phylogenomics,SNPs, population genomics, R pacakge, RADSeq",
+  keywords = "bioinformatics,next-generation-sequencing, phylogenomics,SNPs, population genomics, R package, RADSeq",
   pages = "691--699",
   title = " dartr: An r package to facilitate analysis of SNP data generated from reduced representation genome sequencing",
   
