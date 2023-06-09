@@ -70,11 +70,9 @@ For this function to work, make sure that individual and population names
 have no spaces. To substitute spaces by underscores you could use the R 
 function \code{gsub} as below.
 
-\code{
-popNames(gl) <- gsub(" ","_",popNames(gl))
+\code{popNames(gl) <- gsub(" ","_",popNames(gl))}
 
-indNames(gl) <- gsub(" ","_",indNames(gl))  
-}
+\code{indNames(gl) <- gsub(" ","_",indNames(gl)) }
 
 It's also worth noting that Structure truncates individual names at 11 
 characters. The function will fail if the names of individuals are not unique
