@@ -40,11 +40,9 @@
 #' have no spaces. To substitute spaces by underscores you could use the R 
 #' function \code{gsub} as below.
 #' 
-#' \code{
-#' popNames(gl) <- gsub(" ","_",popNames(gl))
+#' \code{popNames(gl) <- gsub(" ","_",popNames(gl))}
 #' 
-#' indNames(gl) <- gsub(" ","_",indNames(gl))  
-#' }
+#' \code{indNames(gl) <- gsub(" ","_",indNames(gl)) }
 #' 
 #' It's also worth noting that Structure truncates individual names at 11 
 #' characters. The function will fail if the names of individuals are not unique
@@ -70,7 +68,7 @@
 #' # exec = './structure.exe')
 #' #ev <- gl.evanno(sr)
 #' #ev
-#' #qmat <- gl.plot.structure(sr, k=3, CLUMPP='d:/structure/')
+#' #qmat <- gl.plot.structure(sr, K=3)
 #' #head(qmat)
 #' #gl.map.structure(qmat, bc, scalex=1, scaley=0.5)
 #' }

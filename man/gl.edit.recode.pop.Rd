@@ -51,7 +51,7 @@ populations. This can be done with a pop.recode table with two columns. The
 first column is the population assignment in the genlight object, the second
 column provides the new assignment.
 
-This script will input an existing reassignment table for editting and
+This script will input an existing reassignment table for editing and
 optionally save it as a new table, or if the name of an input table is not
 supplied, will generate a table using the population assignments in the
 parent genlight object.

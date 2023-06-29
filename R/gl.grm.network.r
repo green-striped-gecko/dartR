@@ -16,7 +16,7 @@
 #' @param node.label.size Size of the node labels [default 3].
 #' @param node.label.color Color of the text of the node labels
 #' [default 'black'].
-#' @param link.color  Color palette for links [default NULL].
+#' @param link.color Color palette for links [default NULL].
 #' @param link.size Size of the links [default 2].
 #' @param relatedness_factor Factor of relatedness [default 0.125].
 #' @param title Title for the plot
@@ -70,7 +70,8 @@
 #'  and their confidence intervals (CI), for different relationships that could 
 #'  be used to guide the choosing of the relatedness threshold in the function.
 #'
-#'|Relationship|Kinship|95% CI|
+#'|Relationship                               |Kinship  |     95% CI       |
+#'
 #'|Identical twins/clones/same individual     | 0.5     |        -         |
 #'
 #'|Sibling/Parent-Offspring                   | 0.25    |    (0.204, 0.296)|

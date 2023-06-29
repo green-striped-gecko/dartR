@@ -124,6 +124,16 @@ gl.ld.haplotype <- function(x,
     return(-1)
   }
   
+  pkg <- "sp"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
+    ))
+    return(-1)
+  }
+  
   # DO THE JOB
   
   group <- het <- lat <- long <- NULL
@@ -281,8 +291,11 @@ p <- NULL
           digits = 12,
           dissolve = TRUE
         )
-      polygon_haplo <- maptools::elide(polygon_haplo, rotate = 45)
+      
+      # polygon_haplo <- elide.polygonsdf_2(polygon_haplo,rotate = 45)
+       polygon_haplo <- sp::elide(polygon_haplo, rotate = 45)
       polygon_haplo$id <- rownames(as.data.frame(polygon_haplo))
+
       #this only has the coordinates
       polygon_haplo.pts <- fortify(polygon_haplo, polygon_haplo = "id")
       # add the attributes back
@@ -306,8 +319,7 @@ p <- NULL
       dimnames(ld_matrix_3) <- NULL
       matrix_rotate <-
         rotate.matrix(x = ld_matrix_3,
-                      angle = -45,
-                      method = "simple")
+                      angle = -45)
       matrix_rotate_2 <- matrix_rotate
       matrix_rotate_2[matrix_rotate_2 == 0] <- NA
       matrix_rotate_3 <-
