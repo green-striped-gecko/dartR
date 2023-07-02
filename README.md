@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/logo_2.png' align="right" height="140" /></a>
+# `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/logo_2.png' align="right" height="300" /></a>
 
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
 
