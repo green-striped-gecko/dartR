@@ -760,7 +760,7 @@ gl.pcoa.plot <- function(glPca,
                     )
                 )
             )
-        show(plott)
+        print(plott)
         if (verbose >= 2) {
             cat(warn("  May need to zoom out to place 3D plot within bounds\n"))
         }
