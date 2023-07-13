@@ -6,8 +6,8 @@
 #' \link[gplots]{heatmap.2} (package gplots).
 #'
 #' @param D Name of the distance matrix or class fd object [required].
-#' @param palette_divergent A divergent palette for the distance values
-#'  [default diverging_palette].
+#' @param color_palette A color palette for the distance values [NULL].
+#' @param n_colors Number of colors for the color palette [default 10].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity]
@@ -33,7 +33,8 @@
 #'    }
 
 gl.plot.heatmap <- function(D,
-                            palette_divergent = diverging_palette,
+                            color_palette = NULL,
+                            n_colors = 10,
                             verbose = NULL,
                             ...) {
     # SET VERBOSITY
@@ -53,21 +54,33 @@ gl.plot.heatmap <- function(D,
     
     # DO THE JOB
     
+    if(is.null(color_palette)){
+      
+      col_palette <- diverging_palette(n_colors)
+      
+    } else {
+      
+      col_palette <- color_palette(n_colors)
+      
+    }
+    
     if (datatype == "dist" | datatype == "matrix") {
         p3 <-
             gplots::heatmap.2(
                 as.matrix(D),
-                col = palette_divergent(255),
+                col = col_palette,
                 dendrogram = "column",
                 trace = "none",
+                na.color = "gray",
                 ...
             )
     }
+    
     if (datatype == "fd") {
         p3 <-
             gplots::heatmap.2(
                 as.matrix(D$fd),
-                col = palette_divergent(255),
+                col = col_palette,
                 dendrogram = "column",
                 trace = "none",
                 ...
