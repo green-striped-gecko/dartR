@@ -21,11 +21,12 @@
 
 utils.read.dart <- function(filename,
                             nas = "-",
-                            topskip = NULL,
-                            lastmetric = "RepAvg",
+                             topskip = NULL,
+                             lastmetric = "RepAvg",
                             service_row = 1,
                             plate_row = 3,
                             verbose = NULL) {
+  
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -112,8 +113,8 @@ utils.read.dart <- function(filename,
     }
     
     ind.names <- colnames(snpraw)[(lmet + 1):ncol(snpraw)]
-    ind.names <-
-        trimws(ind.names, which = "both")  #trim for spaces
+    ind.names <- trimws(ind.names, which = "both")  #trim for spaces
+    
     if (length(ind.names) != length(unique(ind.names))) {
         cat(
             warn(
