@@ -11,7 +11,6 @@ gl.read.dart(
   mono.rm = FALSE,
   nas = "-",
   topskip = NULL,
-  lastmetric = "RepAvg",
   covfilename = NULL,
   service_row = 1,
   plate_row = 3,
@@ -37,11 +36,6 @@ case individuals have been manually deleted from the input csv file
 \item{topskip}{A number specifying the number of rows to be skipped. If not
 provided the number of rows to be skipped are 'guessed' by the number of rows
 with '*' at the beginning [default NULL].}
-
-\item{lastmetric}{Specifies the last non-genetic column (Default is 'RepAvg').
-Be sure to check if that is true, otherwise the number of individuals will
-not match. You can also specify the last column by a number
- [default 'RepAvg'].}
 
 \item{covfilename}{Use ind.metafile parameter [depreciated, NULL].}
 

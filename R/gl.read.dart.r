@@ -17,10 +17,10 @@
 #'@param topskip A number specifying the number of rows to be skipped. If not
 #'provided the number of rows to be skipped are 'guessed' by the number of rows
 #' with '*' at the beginning [default NULL].
-#'@param lastmetric Specifies the last non-genetic column (Default is 'RepAvg').
-#' Be sure to check if that is true, otherwise the number of individuals will
-#' not match. You can also specify the last column by a number
-#'  [default 'RepAvg'].
+#@param lastmetric Specifies the last non-genetic column (Default is 'RepAvg').
+# Be sure to check if that is true, otherwise the number of individuals will
+# not match. You can also specify the last column by a number
+#  [default 'RepAvg'].
 #'@param service_row The row number in which the information of the DArT service
 #'is contained [default 1].
 #'@param plate_row The row number in which the information of the plate location
@@ -65,12 +65,27 @@ gl.read.dart <- function(filename,
                          mono.rm = FALSE,
                          nas = "-",
                          topskip = NULL,
-                         lastmetric = "RepAvg",
+                         # lastmetric = "RepAvg",
                          covfilename = NULL,
                          service_row = 1,
                          plate_row = 3,
                          probar = FALSE,
                          verbose = NULL) {
+  
+  # Function kindly provided by Andrew Kowalczyk
+  
+  getLastMarkerMetaDataField <- function(filepath){
+    top <- read.csv(filepath,
+                    header = FALSE,
+                    nrows = 20,
+                    stringsAsFactors = FALSE)
+    
+    last_metric <- top[last(which(top[,1]=="*"))+1, last(which(top[1,]=="*"))]  
+    return(last_metric)
+  }
+  
+  lastmetric <- getLastMarkerMetaDataField(filename)
+  
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
@@ -114,7 +129,8 @@ gl.read.dart <- function(filename,
         cat(report(" Data read in. Please check carefully the output above\n"))
     }
     
-    # Setting the recalc flags (TRUE=up-to-date, FALSE=no longer valid) for all locus metrics capable of being recalculated
+    # Setting the recalc flags (TRUE=up-to-date, FALSE=no longer valid) for all
+    # locus metrics capable of being recalculated
     recalc.flags <-
         c(
             "AvgPIC",
@@ -137,6 +153,22 @@ gl.read.dart <- function(filename,
     names(glout@other$loc.metrics.flags) <- recalc.flags
     glout@other$verbose <- 2
     
+    # calculating "by hand" rather than getting them from DArT's report because
+    # sometimes they are not reported
+    # OneRatioRef	The proportion of samples for which the genotype score is "1", 
+    # in the Reference allele row	
+    # OneRatioSnp	The proportion of samples for which the genotype score is "1", 
+    # in the SNP allele row	
+    glout@other$loc.metrics$OneRatioRef  <- apply(as.matrix(glout),2,
+                                                  function(y){
+      (sum(!is.na(y[y==0])) + sum(!is.na(y[y==1])) )/ sum(!is.na(y))
+    })
+    
+    glout@other$loc.metrics$OneRatioSnp  <- apply(as.matrix(glout),2,
+                                                  function(y){
+      (sum(!is.na(y[y==2])) + sum(!is.na(y[y==1])) )/ sum(!is.na(y))
+    })
+
     # Calculate locus metrics not provided by DArT Calculate Read Depth
     if (is.null(glout@other$loc.metrics$rdepth)) {
         if (verbose >= 2) {
@@ -147,8 +179,7 @@ gl.read.dart <- function(filename,
         glout@other$loc.metrics$rdepth <- array(NA, nLoc(glout))
         for (i in 1:nLoc(glout)) {
             called.ind <-
-                round(nInd(glout) * glout@other$loc.metrics$CallRate[i],
-                      0)
+                round(nInd(glout) * glout@other$loc.metrics$CallRate[i], 0)
             ref.count <-
                 called.ind * glout@other$loc.metrics$OneRatioRef[i]
             alt.count <-
