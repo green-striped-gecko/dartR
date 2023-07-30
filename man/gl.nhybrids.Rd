@@ -12,6 +12,7 @@ gl.nhybrids(
   p1 = NULL,
   threshold = 0,
   method = "random",
+  loc.limit = 200,
   plot = TRUE,
   plot_theme = theme_dartR(),
   plot_colors = two_colors,
@@ -42,6 +43,9 @@ considered to be fixed [default 0].}
 
 \item{method}{Specifies the method (random or AvgPIC) to select 200 loci for
 NewHybrids [default random].}
+
+\item{loc.limit}{Specifies the number of loci to use in the analysis 
+[default 200]}
 
 \item{plot}{If TRUE, a plot of the frequency of homozygous reference,
 heterozygotes and homozygous alternate (SNP) is produced for the F1
@@ -88,16 +92,16 @@ The reduced genlight object, if parentals are provided; output of
 This function compares two sets of parental populations to identify loci that
 exhibit a fixed difference, returns an genlight object with the reduced
 data, and creates an input file for the program NewHybrids using the top 200
-(or hard specified loc.limit) loci. In the absence of two identified
-parental populations, the script will select a random set 200 loci only
-(method='random') or the first 200 loci ranked on information content
+(or user-specified lower loc.limit) loci. In the absence of two identified
+parental populations, the script will select a random set of up to 200 loci only
+(method='random') or up to the first 200 loci ranked on information content
 (method='AvgPIC').
 
 A fixed difference occurs when a SNP allele is present in all individuals
 of one population and absent in the other. There is provision for setting
 a level of tolerance, e.g. threshold = 0.05 which considers alleles present
 at greater than 95% in one population and less than 5% in the other to be
-a fixed difference. Only the 200 loci are retained, because of limitations
+a fixed difference. Only up to 200 loci are retained, because of limitations
 of NewHybids.
 
 If you specify a directory for the NewHybrids executable file, then the
@@ -114,7 +118,7 @@ set
 It is important to stringently filter the data on RepAvg and CallRate if
 using the random option. One might elect to repeat the analysis
 (method='random') and combine the resultant posterior probabilities should
-200 loci be considered insufficient.
+the maximum of 200 loci be considered insufficient.
 
 The F1 individuals should be homozygous at all loci for which the parental
 populations are fixed and different, assuming parental populations have been
@@ -146,3 +150,4 @@ species hybrids using multilocus genetic data. Genetics. 160:1217-1229.
 Custodian: Arthur Georges -- Post to
  \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{phylo}

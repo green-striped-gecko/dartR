@@ -354,9 +354,9 @@ gl.report.heterozygosity <- function(x,
                 ) ^ 2, na.rm = TRUE) + n.invariant * Hexp.adj[i] ^ 2) / 
                   (n_loc[i] + n.invariant - 1))
             ##########
-            FIS_temp <- 1 - (mean(unlist(Ho.loc[i]),na.rm = T) / 
-                               mean(uH,na.rm = T))
-            FIS[i] <- mean(FIS_temp, na.rm = T)
+            FIS_temp <- 1 - (mean(unlist(Ho.loc[i]),na.rm = TRUE) / 
+                               mean(uH, na.rm = TRUE))
+            FIS[i] <- mean(FIS_temp, na.rm = TRUE)
             #FISSD[i] <- sd(FIS_temp, na.rm = T)
         }
         
@@ -397,6 +397,7 @@ gl.report.heterozygosity <- function(x,
             }
             
             if (n.invariant == 0) {
+              
                 df.ordered <- df
                 df.ordered$color <- colors_pops
                 df.ordered <- df.ordered[order(df.ordered$Ho),]
