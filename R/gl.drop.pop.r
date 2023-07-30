@@ -10,7 +10,7 @@
 #' the deletion of individuals from the dataset (recalc=TRUE).
 #'
 #' The script returns a dartR genlight object with the retained populations 
-#' the recalculated locus metadata. The script works with both genlight objects
+#' and the recalculated locus metadata. The script works with both genlight objects
 #' containing SNP genotypes and Tag P/A data (SilicoDArT).
 #' 
 #' @param x Name of the genlight object [required].
@@ -29,7 +29,7 @@
 #' @family dartR-base
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-# Examples -------------
+# Examples -------------#' 
 #' @examples
 #'  # SNP data
 #'    gl2 <- gl.drop.pop(testset.gl,
@@ -117,7 +117,7 @@ gl.drop.pop <-  function(x,
     ind.to.keep <- which(!(x$pop %in% pop.list))
     x <- x[ind.to.keep,]
     # Drop them from pop.hold as well, which has the original population assignments
-    pop.hold <- pop.hold[ind.to.keep,]
+    pop.hold <- pop.hold[ind.to.keep]
 
     # Monomorphic loci may have been created ------
     x@other$loc.metrics.flags$monomorphs <- FALSE
@@ -150,7 +150,6 @@ gl.drop.pop <-  function(x,
     }
     # End block -----------
 # REPORT A SUMMARY -------------
-    # Summary of outcomes --------------
     
     if (verbose >= 3) {
         if (!is.null(as.pop)) {

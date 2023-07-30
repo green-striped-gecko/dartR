@@ -1,50 +1,59 @@
-#'@name gl.read.dart
-#'
-#'@title Imports DArT data into dartR and converts it into a genlight object
+#' @name gl.read.dart
+# Preliminaries -- Parameter specifications -------------- 
+#'@title Imports DArT data into dartR and converts it into a dartR genlight object
 #'
 #'@description
 #'This function is a wrapper function that allows you to convert your DArT file
-#'into a genlight object in one step. In previous versions you had to use
-#'read.dart and then dart2genlight. In case you have individual metadata for
-#'each individual/sample you can specify as before in the dart2genlight command
-#'the file that combines the data.
+#'into a genlight object of class dartR.
+#'@details
+#'The function will determine automatically if the data are in Diversity Arrays
+#'one-row csv format or two-row csv format. 
+#'
+#'The number of locus metadata columns 
+#'in the input data is determined by a signature last column, by default 'RepAvg'.
+#'This can be alternatively specified using parameter 'lastmetric'. 
+#'
+#'The first 
+#'row of data is determined from the number of rows with an * in the first 
+#'column. This can be alternatively specified with the topskip parameter.
+#'
+#'The DArT service code is added to the ind.metrics of the genlight object. 
+#'The row containing the service code for each individual can be specified with 
+#'the service.row parameter.
+#'
+#'#'The DArT plate well is added to the ind.metrics of the genlight object. 
+#'The row containing the plate well for each individual can be specified with 
+#'the plate.row parameter.
+#'
+#'If individuals have been deleted from the input file manually, then the locus
+#'metrics supplied by DArT will no longer be correct and some loci may be
+#'monomorphic. To accommodate this, set mono.rm and recalc to TRUE.
 #'
 #'@param filename File containing the SNP data (csv file) [required].
 #'@param ind.metafile File that contains additional information on individuals
 #' [required].
-#'@param covfilename Use ind.metafile parameter [depreciated, NULL].
+#'@param covfilename Depricated, sse ind.metafile parameter [NULL].
 #'@param nas A character specifying NAs [default '-'].
-#'@param topskip A number specifying the number of rows to be skipped. If not
-#'provided the number of rows to be skipped are 'guessed' by the number of rows
-#' with '*' at the beginning [default NULL].
-#@param lastmetric Specifies the last non-genetic column (Default is 'RepAvg').
-# Be sure to check if that is true, otherwise the number of individuals will
-# not match. You can also specify the last column by a number
-#  [default 'RepAvg'].
-#'@param service_row The row number in which the information of the DArT service
+#'@param topskip A number specifying the number of initial rows to be skipped. [default NULL].
+#'@param lastmetric Specifies the last column of locus metadata. Can be specified 
+#'as a column number.
+#'  [default 'RepAvg'].
+#'@param service.row The row number for the DArT service
 #'is contained [default 1].
-#'@param plate_row The row number in which the information of the plate location
-#' is contained [default 3].
-#'@param recalc Force the recalculation of locus metrics, in case individuals
-#'have been manually deleted from the input csv file [default TRUE].
-#'@param mono.rm Force the removal of monomorphic loci (including all NAs), in
-#'case individuals have been manually deleted from the input csv file
+#'@param plate.row The row number the plate well [default 3].
+#'@param recalc If TRUE, force the recalculation of locus metrics [default TRUE].
+#'@param mono.rm If TRUE, force the removal of monomorphic loci (including all NAs.
 #' [default FALSE].
 #'@param probar Show progress bar [default FALSE].
 #'@param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #'progress log ; 3, progress and results summary; 5, full report
 #' [default 2, or as set by gl.set.verbose()].
 #'
-#'@details
-#' The dartR genlight object can then be fed into a number of initial screening,
-#'  export and export functions provided by the package. For some of the
-#'  functions it is necessary to have the metadata that was provided from DArT.
-#'  Please check the vignette for more information. Additional information can
-#'  also be found in the help documents for \code{\link{utils.read.dart}}.
-#'
-#'@return A genlight object that contains individual metrics
+#'@return A dartR genlight object that contains individual and locus metrics
 #'[if data were provided] and locus metrics [from a DArT report].
+#'@export
 #'
+#'@family dartR-base
 #'@author Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 #'
 #'@examples
@@ -54,11 +63,8 @@
 #'
 #'@seealso \code{\link{utils.read.dart}}
 #'
-#'@family input data
-#'
-#'@export
-#'
-
+# ------------------------
+# Function
 gl.read.dart <- function(filename,
                          ind.metafile = NULL,
                          recalc = TRUE,
@@ -67,10 +73,11 @@ gl.read.dart <- function(filename,
                          topskip = NULL,
                          # lastmetric = "RepAvg",
                          covfilename = NULL,
-                         service_row = 1,
-                         plate_row = 3,
+                         service.row = 1,
+                         plate.row = 3,
                          probar = FALSE,
                          verbose = NULL) {
+# Preliminaries -----------------
   
   # Function kindly provided by Andrew Kowalczyk
   
@@ -92,28 +99,29 @@ gl.read.dart <- function(filename,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "v.2023.2",
                      verbosity = verbose)
     
     if (verbose == 0) {
         probar <-FALSE
     }
     
-    # DO THE JOB
+    # DO THE JOB ----------------------
     
-    # Deal with the redundant covfilename parameter
+    # Deal with the depricated covfilename parameter
     if (is.null(ind.metafile)) {
         ind.metafile <- covfilename
     }
     
+    # Read in the data
     dout <-
         utils.read.dart(
             filename = filename,
             nas = nas,
             topskip = topskip,
             lastmetric = lastmetric,
-            service_row = service_row,
-            plate_row = plate_row,
+            service.row = service.row,
+            plate.row = plate.row,
             verbose = verbose
         )
     
@@ -126,7 +134,7 @@ gl.read.dart <- function(filename,
         )
     
     if (verbose >= 2) {
-        cat(report(" Data read in. Please check carefully the output above\n"))
+        cat(report("  ",nrow(glout),"rows and",ncol(glout),"columns of data read\n"))
     }
     
     # Setting the recalc flags (TRUE=up-to-date, FALSE=no longer valid) for all
@@ -153,6 +161,8 @@ gl.read.dart <- function(filename,
     names(glout@other$loc.metrics.flags) <- recalc.flags
     glout@other$verbose <- 2
     
+    # Calculate locus metrics not provided by DArT 
+    #Calculate Read Depth
     # calculating "by hand" rather than getting them from DArT's report because
     # sometimes they are not reported
     # OneRatioRef	The proportion of samples for which the genotype score is "1", 
@@ -169,7 +179,6 @@ gl.read.dart <- function(filename,
       (sum(!is.na(y[y==2])) + sum(!is.na(y[y==1])) )/ sum(!is.na(y))
     })
 
-    # Calculate locus metrics not provided by DArT Calculate Read Depth
     if (is.null(glout@other$loc.metrics$rdepth)) {
         if (verbose >= 2) {
             cat(report(
@@ -257,16 +266,16 @@ gl.read.dart <- function(filename,
         }
     }
     
-    # Create the history repository
+    # Create the history repository --------------------
     if (is.null(glout@other$history)) {
         glout@other$history <- list(match.call())
     }
     
-    # FLAG SCRIPT END
-    
+    # FLAG SCRIPT END ---------------------
     if (verbose > 0) {
         cat(report(paste("Completed:", funname, "\n")))
     }
+    # End Block -----------------
     
     return(glout)
 }
