@@ -1,31 +1,34 @@
 #' @name gl.keep.pop
-#' @title Removes all but the specified populations from a genlight object
+# Preliminaries -- Parameter specifications -------------- 
+#' @title Removes all but the specified populations from a dartR genlight object
 #' @description
-#' Individuals are assigned to populations based on the specimen metadata data
-#' file (csv) used with gl.read.dart().
+#' Individuals are assigned to populations based on associated specimen metadata
+#' stored in the dartR genlight object. 
 #'
-#' The script, having deleted the specified populations, optionally identifies
-#' resultant monomorphic loci or loci with all values missing and deletes them
-#' (using gl.filter.monomorphs.r). The script also optionally recalculates
-#' statistics made redundant by the deletion of individuals from the dataset.
+#' This script deletes all individuals apart from those in listed populations (pop.list).
+#' Monomorphic loci and loci that are scored all NA are optionally deleted (mono.rm=TRUE). 
+#' The script also optionally recalculates locus metatdata statistics to accommodate
+#' the deletion of individuals from the dataset (recalc=TRUE).
 #'
-#' The script returns a genlight object with the new population assignments and
-#' the recalculated locus metadata.
+#' The script returns a dartR genlight object with the retained populations 
+#' and the recalculated locus metadata. The script works with both genlight objects
+#' containing SNP genotypes and Tag P/A data (SilicoDArT).
 #' 
-#' #' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
-#'
-#' @param x Name of the genlight object containing the SNP or presence/absence
-#'  (SilicoDArT) data [required].
-#' @param pop.list A list of populations to be kept [required].
-#' @param as.pop Assign another metric to represent population [default NULL].
-#' @param recalc Recalculate the locus metadata statistics [default FALSE].
-#' @param mono.rm Remove monomorphic loci [default FALSE].
+#' @param x Name of the genlight object [required].
+#' @param pop.list List of populations to be retained [required].
+#' @param as.pop Temporarily assign another locus metric as the population for
+#' the purposes of deletions [default NULL].
+#' @param recalc If TRUE, recalculate the locus metadata statistics [default FALSE].
+#' @param mono.rm If TRUE, remove monomorphic and all NA loci [default FALSE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-#' progress log; 3, progress and results summary; 5, full report
-#' [default 2 or as specified using gl.set.verbosity]
-#' @return A genlight object with the reduced data
+#' progress but not results; 3, progress and results summary; 5, full report
+#'  [default 2 or as specified using gl.set.verbosity].
+
+#' @export
+#' @return A reduced dartR genlight object
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
+#Examples -------------
 #' @examples
 #'  # SNP data
 #'    gl2 <- gl.keep.pop(testset.gl, pop.list=c('EmsubRopeMata', 'EmvicVictJasp'))
@@ -34,17 +37,17 @@
 #'    gl2 <- gl.keep.pop(testset.gl, pop.list=c('Female'),as.pop='sex')
 #'  # Tag P/A data
 #'    gs2 <- gl.keep.pop(testset.gs, pop.list=c('EmsubRopeMata','EmvicVictJasp'))
-#'
+# See also ------------
 #' @seealso \code{\link{gl.drop.pop}} to drop rather than keep specified populations
-#' @export
-
+# --------------
+# Function 
 gl.keep.pop <-  function(x,
                          pop.list,
                          as.pop = NULL,
                          recalc = FALSE,
                          mono.rm = FALSE,
                          verbose = NULL) {
-    
+   # Preliminaries -------------    
     hold <- x
     
     # SET VERBOSITY
@@ -53,14 +56,13 @@ gl.keep.pop <-  function(x,
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "v.2023.1",
+                     build = "v.2023.2",
                      verbosity = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
     
-    # FUNCTION SPECIFIC ERROR CHECKING
-    
+    # Function-specific error checking -----------    
     # Population labels assigned?
     if (is.null(as.pop)) {
         if (is.null(pop(x)) | is.na(length(pop(x))) | length(pop(x)) <= 0) {
@@ -72,7 +74,7 @@ gl.keep.pop <-  function(x,
         }
     }
     
-    # Assign the new population list if as.pop is specified
+    # Assign the new population list if as.pop is specified -----------
     pop.hold <- pop(x)
     
     if (!is.null(as.pop)) {
@@ -117,7 +119,7 @@ gl.keep.pop <-  function(x,
         stop(error("Fatal Error: no populations listed to keep!\n"))
     }
     
-    # DO THE JOB
+# DO THE JOB -------------
     
     if (verbose >= 2) {
         cat(report(
@@ -131,11 +133,11 @@ gl.keep.pop <-  function(x,
     
     # Keep only rows flagged for retention
     # Remove rows flagged for deletion
-    pops_to_keep <- which(x$pop %in% pop.list)
-    x <- x[pops_to_keep,]
-    pop.hold <- pop.hold[pops_to_keep]
+    pops.to.keep <- which(x$pop %in% pop.list)
+    x <- x[pops.to.keep,]
+    pop.hold <- pop.hold[pops.to.keep]
     
-    # Monomorphic loci may have been created
+    # Monomorphic loci may have been created ---------------
     x@other$loc.metrics.flags$monomorphs == FALSE
     
     # Remove monomorphic loci
@@ -154,7 +156,7 @@ gl.keep.pop <-  function(x,
         }
     }
     
-    # Recalculate statistics
+    # Recalculate statistics -----------
     if (recalc) {
         x <- gl.recalc.metrics(x, verbose = 0)
         if (verbose >= 2) {
@@ -166,9 +168,7 @@ gl.keep.pop <-  function(x,
             x <- utils.reset.flags(x, verbose = 0)
         }
     }
-    
-    # REPORT A SUMMARY
-    
+# REPORT A SUMMARY ----------------
     if (verbose >= 3) {
         if (!is.null(as.pop)) {
             cat("  Summary of recoded dataset\n")
@@ -198,7 +198,7 @@ gl.keep.pop <-  function(x,
         }
     }
     
-    # Reassign the initial population list if as.pop is specified
+    # Reassign the initial population list if as.pop is specified --------------
     
     if (!is.null(as.pop)) {
         pop(x) <- pop.hold
@@ -209,15 +209,15 @@ gl.keep.pop <-  function(x,
         }
     }
     
-    # ADD TO HISTORY
+    # ADD TO HISTORY ------------
     nh <- length(x@other$history)
     x@other$history[[nh + 1]] <- match.call()
     
-    # FLAG SCRIPT END
+    # FLAG SCRIPT END ---------------
     
     if (verbose >= 1) {
         cat(report("Completed:", funname, "\n"))
     }
-    
+    # End block
     return(x)
 }

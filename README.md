@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/logo_2.png' align="right" height="300" /></a>
+# `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/dartR_logo.png' align="right" height="300" /></a>
 
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
 
@@ -12,6 +12,7 @@ Main repository:
 [![CRAN
 checks](https://cranchecks.info/badges/summary/dartR)](https://cran.r-project.org/web/checks/check_results_dartR.html)
 [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
+
 Beta:
 [![check-new](https://github.com/green-striped-gecko/dartR/actions/workflows/check-standard.yml/badge.svg)](https://github.com/green-striped-gecko/dartR/actions/workflows/check-standard.yml)
 [![](http://cranlogs.r-pkg.org/badges/last-week/dartR?color=orange)](https://cran.r-project.org/package=dartR)
@@ -39,15 +40,14 @@ Dev repositories:
 and pipelines on the same platform, as well as excellent user support
 via high-quality tutorials and documentation.
 
-`dartR` is a collaboration between the University of Canberra, CSIRO and
-Diversity Arrays Technology, and is supported with funding from the ACT
-Priority Investment Program, CSIRO and the University of Canberra.
+`dartR` is a collaboration between the University of Canberra, CSIRO,
+Diversity Arrays Technology, Arthur Rylah Institute for Environmental
+Research and Monash University. `dartR` is supported with funding from
+the ACT Priority Investment Program, CSIRO and the University of
+Canberra.
 
 <p align="center">
-<img src='man/figures/UC.png' height="100"/>    
-<img src='man/figures/csiro_logo.png' height="100"/>    
-<img src='man/figures/DArT-removebg-preview.png' height="100"/>    
-<img src='man/figures/ACT.png' height="100"/>
+<img src='man/figures/institutions.png' width="800"/>
 </p>
 
 ## Installation
