@@ -8,7 +8,7 @@
 #' @param x Name of the genlight object containing the SNP or presence/absence
 #' (SilicoDArT) data [required].
 #' @param nboots Number of bootstraps [default 0].
-#' @param conf Condfident intervals [default 0.95].
+#' @param conf Confident intervals [default 0.95].
 #' @param parallel The type of parallel operation to be used (if any). If 
 #' missing, the default is taken from the option "boot.parallel" (and if that is
 #'  not set, "no").
@@ -33,7 +33,26 @@
 #'  such as width and height, when the ggplot is to be saved.
 #' @details
 #' 
-#' Efron [1979] suggested that Bootstraps should be at least 200.)
+#'  Even though FST and its relatives can predict evolutionary processes 
+#'  (Holsinger & Weir, 2009), they are not true measures of genetic
+#'   differentiation in the sense that they are dependent on the diversity
+#'    within populations (Meirmans & Hedrick, 2011), the number of populations 
+#'    analysed (Alcala & Rosenberg, 2017) and are not monotonic 
+#'    (Sherwin et al., 2017). Recent approaches have been developed to 
+#'    accommodate these mathematical restrictions (G'ST and Jost's D; Hedrick, 
+#'    2005; Jost, 2008). More recently, novel approaches based on information 
+#'    theory (Mutual Information; Sherwin et al., 2017) and allele frequencies 
+#'    (Allele Frequency Difference; Berner, 2019) have distinct properties that
+#'     make them valuable resources to interpret genetic differentiation. 
+#'     
+#'     Note that each measure of genetic differentiation has advantages and 
+#'     drawbacks, and the decision of using a particular measure is usually 
+#'     based on the research question.
+#'  \figure{Ho_equation.jpg}   
+#' 
+#'  \strong{Bootstrapping}
+#'  
+#' Efron (1979) suggested that Bootstraps should be at least 200.
 #' 
 #'  A color vector can be obtained with gl.select.colors() and then passed to the function
 #'  with the plot.colors parameter.
@@ -54,9 +73,14 @@
 #' \url{https://groups.google.com/d/forum/dartr}
 
 #' @examples
+#' 
 #' @references
 #' \itemize{
 #' \item
+#' Holsinger, K. E., & Weir, B. S. (2009). Genetics in geographically structured
+#'  populations: defining, estimating and interpreting F ST. Nature Reviews 
+#'  Genetics, 10(9), 639- 650.
+#'  
 #' Efron, B. (1979). Bootstrap methods: Another look at the jackknife.
 #' Annals of Statistics 7, 1–26.
 #' }
@@ -123,7 +147,6 @@ gl.report.fstat <- function(x,
     paste0(names(pops)[y[1]],"_vs_",names(pops)[y[2]])
   })
   
-  
   ### pairwise
   if (npops > 2) {
     pairpop <- apply(pairs_pops, 1, function(y) {
@@ -133,7 +156,6 @@ gl.report.fstat <- function(x,
         res <- boot::boot(data = tpop,
                     statistic = pop.diff,
                     R = nboots)
-        
       } else{
         res <- utils.basic.stats(tpop, digits = digits)$overall
       }
@@ -146,7 +168,7 @@ gl.report.fstat <- function(x,
     tpop <- rbind(pops[[1]], pops[[2]])
     
     if (nboots > 0) {
-      pairpop <- boot(data = tpop,
+      pairpop <- boot::boot(data = tpop,
                       statistic = pop.diff,
                       R = nboots)
       
@@ -167,8 +189,7 @@ gl.report.fstat <- function(x,
     
     for (i in 1:length(mat_pops)) {
       mat_pops[[i]][lower.tri(mat_pops[[i]])] <- pairpop_2[i, ]
-      colnames(mat_pops[[i]]) <-
-        rownames(mat_pops[[i]]) <- names(pops)
+      colnames(mat_pops[[i]]) <- rownames(mat_pops[[i]]) <- names(pops)
     }
     
     names(mat_pops) <- rownames(pairpop_2)
@@ -260,15 +281,14 @@ gl.report.fstat <- function(x,
 
   # Printing outputs -----------
 
-
   # solution to print gplots https://stackoverflow.com/a/19191951
   create_heatmap <- function(...) {
     plot_heatmap <- function() gl.plot.heatmap(...)
   }
   
   p3 <- create_heatmap(mat_pops[[plot.stat]],
-                       cexRow = 0.5,
-                       cexCol = 0.5)
+                       cexRow = 0.75,
+                       cexCol = 0.75)
 
   # PLOT THE RESULTS -----------------
   

@@ -40,6 +40,7 @@ gl.load <- function(file,
     
     if (verbose > 0) {
         cat(report("Completed:", funname, "\n"))
+      
     }
     
     invisible(x)

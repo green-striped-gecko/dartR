@@ -28,7 +28,7 @@ gl.report.fstat(
 
 \item{nboots}{Number of bootstraps [default 0].}
 
-\item{conf}{Condfident intervals [default 0.95].}
+\item{conf}{Confident intervals [default 0.95].}
 
 \item{parallel}{The type of parallel operation to be used (if any). If 
 missing, the default is taken from the option "boot.parallel" (and if that is
@@ -67,7 +67,26 @@ such as width and height, when the ggplot is to be saved.}
 Reports various statistics of genetic differentiation between populations
 }
 \details{
-Efron [1979] suggested that Bootstraps should be at least 200.)
+Even though FST and its relatives can predict evolutionary processes 
+ (Holsinger & Weir, 2009), they are not true measures of genetic
+  differentiation in the sense that they are dependent on the diversity
+   within populations (Meirmans & Hedrick, 2011), the number of populations 
+   analysed (Alcala & Rosenberg, 2017) and are not monotonic 
+   (Sherwin et al., 2017). Recent approaches have been developed to 
+   accommodate these mathematical restrictions (G'ST and Jost's D; Hedrick, 
+   2005; Jost, 2008). More recently, novel approaches based on information 
+   theory (Mutual Information; Sherwin et al., 2017) and allele frequencies 
+   (Allele Frequency Difference; Berner, 2019) have distinct properties that
+    make them valuable resources to interpret genetic differentiation. 
+    
+    Note that each measure of genetic differentiation has advantages and 
+    drawbacks, and the decision of using a particular measure is usually 
+    based on the research question.
+ \figure{Ho_equation.jpg}   
+
+ \strong{Bootstrapping}
+ 
+Efron (1979) suggested that Bootstraps should be at least 200.
 
  A color vector can be obtained with gl.select.colors() and then passed to the function
  with the plot.colors parameter.
@@ -84,6 +103,10 @@ specified for the plot to be saved.
 \references{
 \itemize{
 \item
+Holsinger, K. E., & Weir, B. S. (2009). Genetics in geographically structured
+ populations: defining, estimating and interpreting F ST. Nature Reviews 
+ Genetics, 10(9), 639- 650.
+ 
 Efron, B. (1979). Bootstrap methods: Another look at the jackknife.
 Annals of Statistics 7, 1–26.
 }
