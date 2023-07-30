@@ -1,10 +1,12 @@
 #' @name gl.edit.recode.pop
-#' @title Creates or edits a population re-assignment table
+# Preliminaries -- Parameter specifications -------------- 
+#' @title Creates or edits and applies a population re-assignment table
 #' @description
-#' A script to edit population assignments in a genlight object, or to
+#' A function to edit population assignments in a dartR genlight object, or to
 #' create a reassignment table taking the population assignments
 #' from a genlight object, or to edit existing population assignments in
-#' a pop.recode.table.
+#' a pop.recode.table. The amended recode table is then applied to the genlight
+#' object.
 #' @details
 #' Genlight objects assign specimens to populations based on information in the
 #' ind.metadata file provided when the genlight object is first generated.
@@ -13,48 +15,61 @@
 #' first column is the population assignment in the genlight object, the second
 #' column provides the new assignment.
 #'
-#' This script will input an existing reassignment table for editing and
+#' This function will input an existing reassignment table for editing and
 #' optionally save it as a new table, or if the name of an input table is not
 #' supplied, will generate a table using the population assignments in the
-#' parent genlight object.
+#' parent genlight object. It will then apply the recodings to the genlight 
+#' object.
+#' 
+#' When caution needs to be exercised because of the potential for breaking the
+#' 'chain of evidence' associated with the samples, recoding individuals using
+#' a recode table (csv) can provide a durable record of the changes.
 #'
-#' The script, having deleted populations, optionally identifies resultant
-#' monomorphic loci or loci with all values missing and deletes them (using
-#' gl.filter.monomorphs.r). The script also optionally recalculates statistics
-#'  made redundant by the deletion of individuals from the dataset.
+#' For SNP genotype data, the function, having deleted populations, optionally 
+#' identifies resultant monomorphic loci or loci with all values missing 
+#' and deletes them. The script also optionally recalculates the
+#' locus metadata as appropriate. The optional deletion of monomorphic loci
+#' and the optional recalculation of locus statistics is not available for
+#' Tag P/A data (SilicoDArT).
 #'
-#' Use outpath=getwd() or outpath='.' when calling this function to direct
+#' Use outpath=getwd() when calling this function to direct
 #' output files to your working directory.
 #'
-#' The script returns a genlight object with the new population assignments and
-#' the recalculated locus metadata.
+#' The function returns a dartR genlight object with the new population assignments  
+#' and the recalculated locus metadata. 
 #'
-#' @param x Name of the genlight object for which populations are to be
-#'  reassigned [required].
+#' @param x Name of the genlight object  [required].
 #' @param pop.recode Path to recode file [default NULL].
 #' @param out.recode.file Name of the file to output the new individual labels
 #' [default NULL].
 #' @param outpath Path where to save the output file [default tempdir(), mandated by CRAN].
-#' @param recalc Recalculate the locus metadata statistics if any individuals are deleted
+#' @param recalc If TRUE, recalculate the locus metadata statistics
 #' [default TRUE].
-#' @param mono.rm Remove monomorphic loci [default TRUE].
+#' @param mono.rm If TRUE, remove monomorphic loci [default TRUE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-#' progress log; 3, progress and results summary; 5, full report
-#' [default 2 or as specified using gl.set.verbosity].
-#' @return An object of class ('genlight') with the revised population assignments
+#' progress but not results; 3, progress and results summary; 5, full report
+#'  [default 2 or as specified using gl.set.verbosity].
+#'  
 #' @import utils
-#' @export
-#' @author Custodian: Arthur Georges --Post to
+#' @export#'  
+#' @return A genlight object with the revised population assignments
+#' 
+#' @family dartR-base
+#' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-#' @seealso \code{\link{gl.recode.pop}}, \code{\link{gl.drop.pop}},
-#' \code{\link{gl.keep.pop}}, \code{\link{gl.merge.pop}},
-#' \code{\link{gl.reassign.pop}}
+#' 
+# Examples --------------
 #' @examples
 #' \dontrun{
 #' gl <- gl.edit.recode.pop(testset.gl)
 #' gs <- gl.edit.recode.pop(testset.gs)
 #' }
+#' # See also -------------------
+#' @seealso \code{\link{gl.recode.pop}}, \code{\link{gl.drop.pop}},
+#' \code{\link{gl.keep.pop}}, \code{\link{gl.merge.pop}},
+#' \code{\link{gl.reassign.pop}}
 
+# Function -----------
 gl.edit.recode.pop <-  function(x,
                                 pop.recode = NULL,
                                 out.recode.file = NULL,
@@ -62,13 +77,14 @@ gl.edit.recode.pop <-  function(x,
                                 recalc = FALSE,
                                 mono.rm = FALSE,
                                 verbose = NULL) {
-    # SET VERBOSITY
+  # Preliminaries -------------
+      # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
+                     build = "v.2023.2",
                      verbosity = verbose)
     
     # CHECK DATATYPE
@@ -76,15 +92,15 @@ gl.edit.recode.pop <-  function(x,
     
     outfilespec <- file.path(outpath, out.recode.file)
     
-    # FUNCTION SPECIFIC ERROR CHECKING
+    # Function-specific error checking -----------    
     
     if (is.null(pop(x)) |
         is.na(length(pop(x))) | length(pop(x)) <= 0) {
         stop(error("Fatal Error: Population names not detected\n"))
     }
     
-    # DO THE JOB
-    
+    # DO THE JOB --------------
+
     # Store variables
     hold <- x
     
@@ -95,7 +111,7 @@ gl.edit.recode.pop <-  function(x,
     }
     recode.table <- cbind(levels(pop(x)), levels(pop(x)))
     
-    # Create recode table for editing, and bring up the editor
+    # Create recode table for editting, and bring up the editor
     new <- as.matrix(edit(recode.table))
     # new <- new[,1:2]
     
@@ -155,36 +171,40 @@ gl.edit.recode.pop <-  function(x,
                         verbose = 0)
     }
     
-    # Remove monomorphic loci
-    if (mono.rm) {
+    # Remove monomorphic loci -----------------
+    if(datatype=="SNP"){
+      if (mono.rm) {
         if (verbose >= 2) {
-            cat(report("  Deleting monomorphic loc\n"))
+          cat(report("  Deleting monomorphic loc\n"))
         }
         x <- gl.filter.monomorphs(x, verbose = 0)
-    }
-    # Check monomorphs have been removed
-    if (x@other$loc.metrics.flags$monomorphs == FALSE) {
+      }
+      # Check monomorphs have been removed
+      if (x@other$loc.metrics.flags$monomorphs == FALSE) {
         if (verbose >= 2) {
-            cat(warn(
-                "  Warning: Resultant dataset may contain monomorphic loci\n"
-            ))
+          cat(warn(
+            "  Warning: Resultant dataset may contain monomorphic loci\n"
+          ))
         }
+      }
     }
     
-    # Recalculate statistics
-    if (recalc) {
+    # Recalculate statistics ---------------
+    if(datatype=="SNP"){
+      if (recalc) {
         x <- gl.recalc.metrics(x, verbose = 0)
         if (verbose >= 2) {
-            cat(report("  Recalculating locus metrics\n"))
+          cat(report("  Recalculating locus metrics\n"))
         }
-    } else {
+      } else {
         if (verbose >= 2) {
-            cat(warn("  Locus metrics not recalculated\n"))
-            x <- utils.reset.flags(x, verbose = 0)
+          cat(warn("  Locus metrics not recalculated\n"))
+          x <- utils.reset.flags(x, verbose = 0)
         }
+      }
     }
     
-    # REPORT A SUMMARY
+    # REPORT A SUMMARY ---------------
     
     if (verbose >= 2) {
         cat("  Summary of recoded dataset\n")
@@ -200,15 +220,16 @@ gl.edit.recode.pop <-  function(x,
         }
     }
     
-    # ADD TO HISTORY
+    # ADD TO HISTORY --------------
     nh <- length(x@other$history)
     x@other$history[[nh + 1]] <- match.call()
     
-    # FLAG SCRIPT END
+    # FLAG SCRIPT END ---------------
     
     if (verbose > 0) {
         cat(report("Completed:", funname, "\n"))
     }
+    # End Block --------------
     
     return(x)
 }
