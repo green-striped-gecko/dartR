@@ -2,41 +2,38 @@
 % Please edit documentation in R/gl.drop.ind.r
 \name{gl.drop.ind}
 \alias{gl.drop.ind}
-\title{Removes specified individuals from a genlight object}
+\title{Removes specified individuals from a dartR genlight object}
 \usage{
 gl.drop.ind(x, ind.list, recalc = FALSE, mono.rm = FALSE, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing SNP genotypes [required].}
+\item{x}{Name of the genlight object [required].}
 
-\item{ind.list}{A list of individuals to be removed [required].}
+\item{ind.list}{List of individuals to be removed [required].}
 
-\item{recalc}{Recalculate the locus metadata statistics [default FALSE].}
+\item{recalc}{If TRUE, recalculate the locus metadata statistics [default FALSE].}
 
-\item{mono.rm}{Remove monomorphic loci [default FALSE].}
+\item{mono.rm}{If TRUE, remove monomorphic and all NA loci [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log; 3, progress and results summary; 5, full report
-[default 2 or as specified using gl.set.verbosity].}
+progress but not results; 3, progress and results summary; 5, full report
+ [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A genlight object with the reduced data
+A reduced dartR genlight object
 }
 \description{
-The script, having deleted individuals, optionally identifies resultant
-monomorphic loci or loci with all values missing and deletes them
-(using gl.filter.monomorphs.r). The script also optionally recalculates
-statistics made redundant by the deletion of individuals from the dataset.
+This function deletes individuals and their associated metadata.
+Monomorphic loci and loci that are scored all NA are optionally deleted (mono.rm=TRUE). 
+The script also optionally recalculates locus metatdata statistics to accommodate
+the deletion of individuals from the dataset (recalc=TRUE).
 
-The script returns a genlight object with the individuals deleted and,
-optionally, the recalculated locus metadata.
-
-#' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
+The script returns a dartR genlight object with the retained individuals 
+and the recalculated locus metadata. The script works with both genlight objects
+containing SNP genotypes and Tag P/A data (SilicoDArT).
 }
 \examples{
  # SNP data
-   gl2 <- gl.drop.ind(testset.gl,
-   ind.list=c('AA019073','AA004859'))
    gl2 <- gl.drop.ind(testset.gl,
    ind.list=c('AA019073','AA004859'))
  # Tag P/A data
@@ -44,13 +41,29 @@ optionally, the recalculated locus metadata.
    ind.list=c('AA020656','AA19077','AA004859'))
    gs2 <- gl.drop.ind(testset.gs, ind.list=c('AA020656'
    ,'AA19077','AA004859'),mono.rm=TRUE, recalc=TRUE)
-
 }
 \seealso{
 \code{\link{gl.keep.ind}} to keep rather than drop specified
 individuals
+
+Other dartR-base: 
+\code{\link{gl.drop.loc}()},
+\code{\link{gl.drop.pop}()},
+\code{\link{gl.edit.recode.ind}()},
+\code{\link{gl.edit.recode.pop}()},
+\code{\link{gl.keep.loc}()},
+\code{\link{gl.make.recode.ind}()},
+\code{\link{gl.read.dart}()},
+\code{\link{gl.recode.ind}()},
+\code{\link{gl.recode.pop}()},
+\code{\link{gl.set.verbosity}()},
+\code{\link{utils.dart2genlight
+Converts DarT to genlight.
+Internal function called by gl.read.dart()}},
+\code{\link{utils.read.dart}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{dartR-base}
