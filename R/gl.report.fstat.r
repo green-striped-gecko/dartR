@@ -48,7 +48,31 @@
 #'     Note that each measure of genetic differentiation has advantages and 
 #'     drawbacks, and the decision of using a particular measure is usually 
 #'     based on the research question.
-#'  \figure{Ho_equation.jpg}   
+#'     "Ho" - Observed heterozygosity (Nei, 1987, pp. 164–165)
+#'     \figure{Ho_equation.jpg}   
+#'     "Hs" - Expected heterozygosity corrected for sample size (Nei, 1987, pp. 164–165)
+#'     \figure{He_equation.jpg}   
+#'     \figure{He_equation_2.jpg}   
+#'     "Ht"
+#'     \figure{Ho_equation.jpg}   
+#'     "Dst"
+#'     \figure{Ho_equation.jpg}   
+#'     "Htp"
+#'     \figure{Ho_equation.jpg}   
+#'     "Dstp"
+#'     \figure{Ho_equation.jpg}   
+#'     "Fst"
+#'     \figure{Ho_equation.jpg}   
+#'     "Fstp"
+#'     \figure{Ho_equation.jpg}   
+#'     "Fis"
+#'     \figure{Ho_equation.jpg}   
+#'     "Dest"
+#'     \figure{Ho_equation.jpg}   
+#'     "Gst_max"
+#'     \figure{Ho_equation.jpg}   
+#'     "Gst_H"
+#'     \figure{Ho_equation.jpg}   
 #' 
 #'  \strong{Bootstrapping}
 #'  

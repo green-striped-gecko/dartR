@@ -13,44 +13,66 @@ gl.make.recode.ind(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required].}
+\item{x}{Name of the genlight object [required].}
 
 \item{out.recode.file}{File name of the output file (including extension)
 [default default_recode_ind.csv].}
 
 \item{outpath}{Path where to save the output file
-[default tempdir(), mandated by CRAN]. Use outpath=getwd() or outpath='.'
-when calling this function to direct output files to your working directory.}
+[default tempdir(), mandated by CRAN].}
 
-\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log; 3, progress and results summary; 5, full report
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2, 
+progress log; 3, progress and results summary; 5, full report 
 [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
 A vector containing the new individual names.
 }
 \description{
-Renaming individuals may be required when there have been errors in
-labelling arising in the process from sample to DArT files. There may be
-occasions where renaming individuals is required for preparation of figures.
-Caution needs to be exercised because of the potential for breaking the
-'chain of evidence' between the samples themselves and the analyses. Recoding
-individuals can be done with a recode table (csv).
+Renaming individuals may be required when there have been errors in labeling
+ arising in the process from sample to sequencing files. There may be occasions
+ where renaming individuals is required for preparation of figures.
 }
 \details{
-This script facilitates the construction of a recode table by producing a
+This function facilitates the construction of a recode table by producing a
  proforma file with current individual (=specimen) names in two identical
  columns. Edit the second column to reassign individual names. Use keyword
- Delete to delete an individual.
+ 'Delete' to delete an individual.
+ 
+ When caution needs to be exercised because of the potential for breaking the
+ 'chain of evidence' associated with the samples, recoding individuals using
+ a recode table (csv) can provide a clear record of the changes.
+ 
+Use outpath=getwd() or when calling this function to direct output files 
+to your working directory.
 
-Apply the recoding using gl.recode.ind(). Deleting individuals can
-potentially generate monomorphic loci or loci with all values missing. Clean
-this up with gl.filter.monomorphic().
+The function works with both genlight objects
+containing SNP genotypes and Tag P/A data (SilicoDArT).
+
+Apply the recoding using gl.recode.ind().
 }
 \examples{
 result <- gl.make.recode.ind(testset.gl, out.recode.file ='Emmac_recode_ind.csv',outpath=tempdir())
+}
+\seealso{
+Other dartR-base: 
+\code{\link{gl.drop.ind}()},
+\code{\link{gl.drop.loc}()},
+\code{\link{gl.drop.pop}()},
+\code{\link{gl.edit.recode.ind}()},
+\code{\link{gl.edit.recode.pop}()},
+\code{\link{gl.keep.loc}()},
+\code{\link{gl.read.dart}()},
+\code{\link{gl.recode.ind}()},
+\code{\link{gl.recode.pop}()},
+\code{\link{gl.set.verbosity}()},
+\code{\link{utils.dart2genlight
+Converts DarT to genlight.
+Internal function called by gl.read.dart()}},
+\code{\link{utils.read.dart}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{dartR-base}

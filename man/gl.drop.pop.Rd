@@ -41,7 +41,7 @@ The script also optionally recalculates locus metatdata statistics to accommodat
 the deletion of individuals from the dataset (recalc=TRUE).
 
 The script returns a dartR genlight object with the retained populations 
-the recalculated locus metadata. The script works with both genlight objects
+and the recalculated locus metadata. The script works with both genlight objects
 containing SNP genotypes and Tag P/A data (SilicoDArT).
 }
 \examples{
@@ -56,6 +56,22 @@ containing SNP genotypes and Tag P/A data (SilicoDArT).
 }
 \seealso{
 \code{\link{gl.keep.pop}} to keep rather than drop specified populations
+
+Other dartR-base: 
+\code{\link{gl.drop.ind}()},
+\code{\link{gl.drop.loc}()},
+\code{\link{gl.edit.recode.ind}()},
+\code{\link{gl.edit.recode.pop}()},
+\code{\link{gl.keep.loc}()},
+\code{\link{gl.make.recode.ind}()},
+\code{\link{gl.read.dart}()},
+\code{\link{gl.recode.ind}()},
+\code{\link{gl.recode.pop}()},
+\code{\link{gl.set.verbosity}()},
+\code{\link{utils.dart2genlight
+Converts DarT to genlight.
+Internal function called by gl.read.dart()}},
+\code{\link{utils.read.dart}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to

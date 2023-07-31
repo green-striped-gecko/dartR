@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.read.dart.r
 \name{gl.read.dart}
 \alias{gl.read.dart}
-\title{Imports DArT data into dartR and converts it into a genlight object}
+\title{Imports DArT data into dartR and converts it into a dartR genlight object}
 \usage{
 gl.read.dart(
   filename,
@@ -12,8 +12,8 @@ gl.read.dart(
   nas = "-",
   topskip = NULL,
   covfilename = NULL,
-  service_row = 1,
-  plate_row = 3,
+  service.row = 1,
+  plate.row = 3,
   probar = FALSE,
   verbose = NULL
 )
@@ -24,50 +24,63 @@ gl.read.dart(
 \item{ind.metafile}{File that contains additional information on individuals
 [required].}
 
-\item{recalc}{Force the recalculation of locus metrics, in case individuals
-have been manually deleted from the input csv file [default TRUE].}
+\item{recalc}{If TRUE, force the recalculation of locus metrics [default TRUE].}
 
-\item{mono.rm}{Force the removal of monomorphic loci (including all NAs), in
-case individuals have been manually deleted from the input csv file
+\item{mono.rm}{If TRUE, force the removal of monomorphic loci (including all NAs.
 [default FALSE].}
 
 \item{nas}{A character specifying NAs [default '-'].}
 
-\item{topskip}{A number specifying the number of rows to be skipped. If not
-provided the number of rows to be skipped are 'guessed' by the number of rows
-with '*' at the beginning [default NULL].}
+\item{topskip}{A number specifying the number of initial rows to be skipped. [default NULL].}
 
-\item{covfilename}{Use ind.metafile parameter [depreciated, NULL].}
+\item{covfilename}{Depricated, sse ind.metafile parameter [NULL].}
 
-\item{service_row}{The row number in which the information of the DArT service
+\item{service.row}{The row number for the DArT service
 is contained [default 1].}
 
-\item{plate_row}{The row number in which the information of the plate location
-is contained [default 3].}
+\item{plate.row}{The row number the plate well [default 3].}
 
 \item{probar}{Show progress bar [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log ; 3, progress and results summary; 5, full report
 [default 2, or as set by gl.set.verbose()].}
+
+\item{lastmetric}{Specifies the last column of locus metadata. Can be specified 
+as a column number.
+ [default 'RepAvg'].}
 }
 \value{
-A genlight object that contains individual metrics
+A dartR genlight object that contains individual and locus metrics
 [if data were provided] and locus metrics [from a DArT report].
 }
 \description{
 This function is a wrapper function that allows you to convert your DArT file
-into a genlight object in one step. In previous versions you had to use
-read.dart and then dart2genlight. In case you have individual metadata for
-each individual/sample you can specify as before in the dart2genlight command
-the file that combines the data.
+into a genlight object of class dartR.
 }
 \details{
-The dartR genlight object can then be fed into a number of initial screening,
- export and export functions provided by the package. For some of the
- functions it is necessary to have the metadata that was provided from DArT.
- Please check the vignette for more information. Additional information can
- also be found in the help documents for \code{\link{utils.read.dart}}.
+The function will determine automatically if the data are in Diversity Arrays
+one-row csv format or two-row csv format. 
+
+The number of locus metadata columns 
+in the input data is determined by a signature last column, by default 'RepAvg'.
+This can be alternatively specified using parameter 'lastmetric'. 
+
+The first 
+row of data is determined from the number of rows with an * in the first 
+column. This can be alternatively specified with the topskip parameter.
+
+The DArT service code is added to the ind.metrics of the genlight object. 
+The row containing the service code for each individual can be specified with 
+the service.row parameter.
+
+#'The DArT plate well is added to the ind.metrics of the genlight object. 
+The row containing the plate well for each individual can be specified with 
+the plate.row parameter.
+
+If individuals have been deleted from the input file manually, then the locus
+metrics supplied by DArT will no longer be correct and some loci may be
+monomorphic. To accommodate this, set mono.rm and recalc to TRUE.
 }
 \examples{
 dartfile <- system.file('extdata','testset_SNPs_2Row.csv', package='dartR')
@@ -77,8 +90,24 @@ gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=TRUE)
 }
 \seealso{
 \code{\link{utils.read.dart}}
+
+Other dartR-base: 
+\code{\link{gl.drop.ind}()},
+\code{\link{gl.drop.loc}()},
+\code{\link{gl.drop.pop}()},
+\code{\link{gl.edit.recode.ind}()},
+\code{\link{gl.edit.recode.pop}()},
+\code{\link{gl.keep.loc}()},
+\code{\link{gl.make.recode.ind}()},
+\code{\link{gl.recode.ind}()},
+\code{\link{gl.recode.pop}()},
+\code{\link{gl.set.verbosity}()},
+\code{\link{utils.dart2genlight
+Converts DarT to genlight.
+Internal function called by gl.read.dart()}},
+\code{\link{utils.read.dart}()}
 }
 \author{
 Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }
-\concept{input data}
+\concept{dartR-base}

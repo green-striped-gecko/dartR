@@ -2,13 +2,12 @@
 % Please edit documentation in R/gl.drop.loc.r
 \name{gl.drop.loc}
 \alias{gl.drop.loc}
-\title{Removes specified loci from a genlight object}
+\title{Removes specified loci from a dartR genlight object}
 \usage{
 gl.drop.loc(x, loc.list = NULL, first = NULL, last = NULL, verbose = NULL)
 }
 \arguments{
-\item{x}{Name of the genlight object containing SNP genotypes or
-presence/absence data [required].}
+\item{x}{Name of the genlight object [required].}
 
 \item{loc.list}{A list of loci to be deleted
 [required, if loc.range not specified].}
@@ -20,28 +19,46 @@ presence/absence data [required].}
 [if not specified, last locus in the dataset].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log; 3, progress and results summary; 5, full report
-[default 2 or as specified using gl.set.verbosity].}
+progress but not results; 3, progress and results summary; 5, full report
+ [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A genlight object with the reduced data.
+A reduced dartR genlight object
 }
 \description{
-The script returns a genlight object with specified loci deleted.
+This function deletes individuals and their associated metadata. 
 
-#' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
+The script returns a dartR genlight object with the retained loci. 
+The script works with both genlight objects
+containing SNP genotypes and Tag P/A data (SilicoDArT).
 }
 \examples{
 # SNP data
   gl2 <- gl.drop.loc(testset.gl, loc.list=c('100051468|42-A/T', '100049816-51-A/G'),verbose=3)
 # Tag P/A data
   gs2 <- gl.drop.loc(testset.gs, loc.list=c('20134188','19249144'),verbose=3)
-
 }
 \seealso{
 \code{\link{gl.keep.loc}} to keep rather than drop specified loci
+
+Other dartR-base: 
+\code{\link{gl.drop.ind}()},
+\code{\link{gl.drop.pop}()},
+\code{\link{gl.edit.recode.ind}()},
+\code{\link{gl.edit.recode.pop}()},
+\code{\link{gl.keep.loc}()},
+\code{\link{gl.make.recode.ind}()},
+\code{\link{gl.read.dart}()},
+\code{\link{gl.recode.ind}()},
+\code{\link{gl.recode.pop}()},
+\code{\link{gl.set.verbosity}()},
+\code{\link{utils.dart2genlight
+Converts DarT to genlight.
+Internal function called by gl.read.dart()}},
+\code{\link{utils.read.dart}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{dartR-base}

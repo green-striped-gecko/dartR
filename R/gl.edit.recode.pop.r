@@ -51,7 +51,7 @@
 #'  [default 2 or as specified using gl.set.verbosity].
 #'  
 #' @import utils
-#' @export#'  
+#' @export
 #' @return A genlight object with the revised population assignments
 #' 
 #' @family dartR-base
