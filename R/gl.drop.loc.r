@@ -11,10 +11,10 @@
 #' @param x Name of the genlight object [required].
 #' @param loc.list A list of loci to be deleted
 #' [required, if loc.range not specified].
-#' @param first First of a range of loci to be deleted
+#' @param first_tmp First of a range of loci to be deleted
 #' [required, if loc.list not specified].
-#' @param last Last of a range of loci to be deleted
-#' [if not specified, last locus in the dataset].
+#' @param last_tmp Last of a range of loci to be deleted
+#' [if not specified, last_tmp locus in the dataset].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress but not results; 3, progress and results summary; 5, full report
 #'  [default 2 or as specified using gl.set.verbosity].
@@ -38,8 +38,8 @@
 # Function 
 gl.drop.loc <- function(x,
                         loc.list = NULL,
-                        first = NULL,
-                        last = NULL,
+                        first_tmp = NULL,
+                        last_tmp = NULL,
                         verbose = NULL) {
   # Preliminaries -------------
     # SET VERBOSITY
@@ -55,7 +55,7 @@ gl.drop.loc <- function(x,
     datatype <- utils.check.datatype(x, verbose = verbose)
     
    # Function-specific error checking -----------      
-    if (!is.null(loc.list) && !is.null(first)) {
+    if (!is.null(loc.list) && !is.null(first_tmp)) {
         flag <- "both"
         if (verbose >= 2) {
             cat(report(
@@ -67,7 +67,7 @@ gl.drop.loc <- function(x,
         if (verbose >= 2) {
             cat(report("  List of loci to drop has been specified\n"))
         }
-    } else if (!is.null(first)) {
+    } else if (!is.null(first_tmp)) {
         flag <- "range"
         if (verbose >= 2) {
             cat(report("  Range of loci to drop has been specified\n"))
@@ -101,13 +101,13 @@ gl.drop.loc <- function(x,
     }
     
     if (flag == "range") {
-        if (first <= 0) {
+        if (first_tmp <= 0) {
             cat(warn(
                 "  Warning: Lower limit to range of loci cannot be less than 1, set to 1\n)"
             ))
-            first <- 1
+            first_tmp <- 1
         }
-        if (first > nLoc(x)) {
+        if (first_tmp > nLoc(x)) {
             cat(
                 warn(
                     "  Warning: Upper limit to range of loci cannot be greater than the number of loci, set to",
@@ -115,15 +115,15 @@ gl.drop.loc <- function(x,
                     "\n)"
                 )
             )
-            last <- nLoc(x)
+            last_tmp <- nLoc(x)
         }
-        if (first > last) {
+        if (first_tmp > last_tmp) {
             cat(warn(
                 "  Warning: Upper limit is smaller than lower limit, reversed\n"
             ))
-            tmp <- first
-            first <- last
-            last <- tmp
+            tmp <- first_tmp
+            first_tmp <- last_tmp
+            last_tmp <- tmp
         }
     }
     
@@ -136,11 +136,11 @@ gl.drop.loc <- function(x,
         cat(report("  Deleting the specified loci\n"))
     }
     
-    if (!is.null(first) && !is.null(loc.list)) {
-        list.from.range <- locNames(x)[first:last]
+    if (!is.null(first_tmp) && !is.null(loc.list)) {
+        list.from.range <- locNames(x)[first_tmp:last_tmp]
         loc.list <- unique(c(loc.list, list.from.range))
-    } else if (!is.null(first)) {
-        loc.list <- locNames(x)[first:last]
+    } else if (!is.null(first_tmp)) {
+        loc.list <- locNames(x)[first_tmp:last_tmp]
     }
     if (length(loc.list) == 0) {
         cat(warn(
@@ -150,7 +150,7 @@ gl.drop.loc <- function(x,
     } else {
         # Remove loci flagged for deletion
       
-        x2 <- x[,!x$loc.names %in% loc.list]
+        x2 <- x[,which(!x$loc.names %in% loc.list)]
         x2@other$loc.metrics <- x@other$loc.metrics[!x$loc.names %in% loc.list,]
     }
     # End block -----------

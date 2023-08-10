@@ -1,22 +1,24 @@
 #' @name gl.plot.heatmap
 #' @title Represents a distance matrix as a heatmap
+#' @family graphics
+
 #' @description
 #' The script plots a heat map to represent the distances in the distance or
 #' dissimilarity matrix. This function is a wrapper for
 #' \link[gplots]{heatmap.2} (package gplots).
-#'
+
 #' @param D Name of the distance matrix or class fd object [required].
-#' @param color_palette A color palette for the distance values [NULL].
-#' @param n_colors Number of colors for the color palette [default 10].
+#' @param palette.divergent A divergent palette for the distance values
+#'  [default gl.colors("div")].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2 or as specified using gl.set.verbosity]
 #' @param ... Parameters passed to function
 #' \link[gplots]{heatmap.2} (package gplots)
-#' @return returns no value (i.e. NULL)
-#' @export
+#' 
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr})
+#' 
 #' @examples
 #' \dontrun{
 #'    gl <- testset.gl[1:10,]
@@ -31,69 +33,59 @@
 #'    D2 <- gl.dist.pop(possums.gl)
 #'    gl.plot.heatmap(D2)
 #'    }
+#'    
+#' @export
+#' @return returns no value (i.e. NULL)
 
 gl.plot.heatmap <- function(D,
-                            color_palette = NULL,
-                            n_colors = 10,
+                            palette.divergent = gl.colors("div"),
                             verbose = NULL,
                             ...) {
-    # SET VERBOSITY
-    verbose <- gl.check.verbosity(verbose)
-    
-    # FLAG SCRIPT START
-    funname <- match.call()[[1]]
-    utils.flag.start(func = funname,
-                     build = "Jody",
-                     verbosity = verbose)
-    
-    # CHECK DATATYPE
-    datatype <-
-        utils.check.datatype(D,
-                             accept = c("dist", "fd", "matrix"),
-                             verbose = verbose)
-    
-    # DO THE JOB
-    
-    if(is.null(color_palette)){
-      
-      col_palette <- diverging_palette(n_colors)
-      
-    } else {
-      
-      col_palette <- color_palette(n_colors)
-      
-    }
-    
-    if (datatype == "dist" | datatype == "matrix") {
-        p3 <-
-            gplots::heatmap.2(
-                as.matrix(D),
-                col = col_palette,
-                dendrogram = "column",
-                trace = "none",
-                na.color = "gray",
-                ...
-            )
-    }
-    
-    if (datatype == "fd") {
-        p3 <-
-            gplots::heatmap.2(
-                as.matrix(D$fd),
-                col = col_palette,
-                dendrogram = "column",
-                trace = "none",
-                ...
-            )
-    }
-    
-    # FLAG SCRIPT END
-    
-    if (verbose > 0) {
-        cat(report("Completed:", funname, "\n"))
-    }
-    
-    invisible(p3)
-    
+  # SET VERBOSITY
+  verbose <- gl.check.verbosity(verbose)
+  
+  # FLAG SCRIPT START
+  funname <- match.call()[[1]]
+  utils.flag.start(func = funname,
+                   build = "v.2023.2",
+                   verbose = verbose)
+  
+  # CHECK DATATYPE
+  datatype <-
+    utils.check.datatype(D,
+                         accept = c("dist", "fd", "matrix"),
+                         verbose = verbose)
+  
+  # DO THE JOB
+  
+  if (datatype == "dist" | datatype == "matrix") {
+    p3 <-
+      gplots::heatmap.2(
+        as.matrix(D),
+        col = palette.divergent(255),
+        dendrogram = "column",
+        trace = "none",
+        ...
+      )
+  }
+  if (datatype == "fd") {
+    p3 <-
+      gplots::heatmap.2(
+        as.matrix(D$fd),
+        col = palette.divergent(255),
+        dendrogram = "column",
+        trace = "none",
+        ...
+      )
+  }
+  
+  # FLAG SCRIPT END
+  
+  if (verbose > 0) {
+    cat(report("Completed:", funname, "\n"))
+  }
+  
+  invisible(p3)
+  
 }
 

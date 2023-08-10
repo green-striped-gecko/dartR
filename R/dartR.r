@@ -415,18 +415,18 @@ rbind.dartR <- function(...) {
   
   if (!all(sapply(myList, function(x)
     inherits(x, "genlight")))) {
-    stop("some objects are not genlight objects")
+    stop(error("Some objects are not genlight objects"))
   }
   
   ## remove empty objects
   myList <- myList[sapply(myList, nLoc) > 0 & sapply(myList, nInd) > 0]
   if (length(myList) == 0) {
-    warning("All objects are empty")
+    warning("All objects are empty\n")
     return(NULL)
   }
   
   if (length(unique(sapply(myList, nLoc))) != 1) {
-    stop("objects have different numbers of SNPs")
+    stop(error("Objects have different numbers of SNPs"))
   }
   
   ## build output
@@ -439,7 +439,7 @@ rbind.dartR <- function(...) {
   indNames(res) <- unlist(lapply(myList, indNames))
   pop(res)      <- factor(unlist(lapply(myList, pop)))
   
-  #hierachies are ignored in dart objects here
+  # hierarchies are ignored in dartR objects here
   # Hierarchies are tricky. Using dplyr's bind_rows.
   #res <- .rbind_strata(myList, res)
   
