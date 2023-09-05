@@ -4,7 +4,13 @@
 \alias{gl.drop.loc}
 \title{Removes specified loci from a dartR genlight object}
 \usage{
-gl.drop.loc(x, loc.list = NULL, first = NULL, last = NULL, verbose = NULL)
+gl.drop.loc(
+  x,
+  loc.list = NULL,
+  first_tmp = NULL,
+  last_tmp = NULL,
+  verbose = NULL
+)
 }
 \arguments{
 \item{x}{Name of the genlight object [required].}
@@ -12,11 +18,11 @@ gl.drop.loc(x, loc.list = NULL, first = NULL, last = NULL, verbose = NULL)
 \item{loc.list}{A list of loci to be deleted
 [required, if loc.range not specified].}
 
-\item{first}{First of a range of loci to be deleted
+\item{first_tmp}{First of a range of loci to be deleted
 [required, if loc.list not specified].}
 
-\item{last}{Last of a range of loci to be deleted
-[if not specified, last locus in the dataset].}
+\item{last_tmp}{Last of a range of loci to be deleted
+[if not specified, last_tmp locus in the dataset].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress but not results; 3, progress and results summary; 5, full report

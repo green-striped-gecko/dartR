@@ -2,20 +2,20 @@
 % Please edit documentation in R/gl.report.fstat.r
 \name{gl.report.fstat}
 \alias{gl.report.fstat}
-\title{Reports various statistics of genetic differentiation between populations}
+\title{Reports various statistics of genetic differentiation between
+populations}
 \usage{
 gl.report.fstat(
   x,
   nboots = 0,
   conf = 0.95,
+  boot.type = "norm",
   parallel = "no",
   ncpus = 1,
   digits = 4,
   plot.stat = "Fst",
   plot.display = TRUE,
-  plot.theme = theme_dartR(),
-  plot.colors = gl.select.colors(library = "brewer", palette = "Blues", select = c(7, 5),
-    verbose = 0),
+  palette.divergent = gl.colors("div"),
   plot.file = NULL,
   plot.dir = NULL,
   verbose = NULL,
@@ -30,7 +30,11 @@ gl.report.fstat(
 
 \item{conf}{Confident intervals [default 0.95].}
 
-\item{parallel}{The type of parallel operation to be used (if any). If 
+\item{boot.type}{A vector of character strings representing the type of
+intervals required. The value should be any subset of the values
+c("norm","basic", "stud", "perc") [default "norm"].}
+
+\item{parallel}{The type of parallel operation to be used (if any). If
 missing, the default is taken from the option "boot.parallel" (and if that is
  not set, "no").}
 
@@ -42,17 +46,15 @@ one would chose this to the number of available CPUs [default 1].}
 \item{plot.stat}{Statistic to plot. One of "Ho","Hs","Ht","Dst","Htp","Dstp",
 "Fst","Fstp","Fis","Dest","Gst_max","Gst_H" [default "Fst"].}
 
-\item{plot.display}{If TRUE, histograms of base composition are displayed in 
+\item{plot.display}{If TRUE, histograms of base composition are displayed in
 the plot window
 [default TRUE].}
 
-\item{plot.theme}{Theme for the plot. See Details for options
-[default theme_dartR()].}
+\item{palette.divergent}{A divergent palette for the distance values
+[default gl.colors("div")].}
 
-\item{plot.colors}{List of two color names for the borders and fill of the
-plots [default gl.select.colors(library="brewer",palette="Blues",select=c(7,5))].}
-
-\item{plot.file}{Name for the RDS binary file to save (base name only, exclude extension) [default NULL]}
+\item{plot.file}{Name for the RDS binary file to save (base name only,
+exclude extension) [default NULL]}
 
 \item{plot.dir}{Directory in which to save files [default = working directory]}
 
@@ -63,76 +65,168 @@ progress log; 3, progress and results summary; 5, full report
 \item{...}{Parameters passed to function \link[gplots]{heatmap.2},
 such as width and height, when the ggplot is to be saved.}
 }
+\value{
+A list containing matrices with genetic statistics taken pairwise by
+population
+}
 \description{
-Reports various statistics of genetic differentiation between populations
+Reports various statistics of genetic differentiation between
+populations
 }
 \details{
-Even though FST and its relatives can predict evolutionary processes 
+Even though Fst and its relatives can predict evolutionary processes
  (Holsinger & Weir, 2009), they are not true measures of genetic
   differentiation in the sense that they are dependent on the diversity
-   within populations (Meirmans & Hedrick, 2011), the number of populations 
-   analysed (Alcala & Rosenberg, 2017) and are not monotonic 
-   (Sherwin et al., 2017). Recent approaches have been developed to 
-   accommodate these mathematical restrictions (G'ST and Jost's D; Hedrick, 
-   2005; Jost, 2008). More recently, novel approaches based on information 
-   theory (Mutual Information; Sherwin et al., 2017) and allele frequencies 
+   within populations (Meirmans & Hedrick, 2011), the number of populations
+   analysed (Alcala & Rosenberg, 2017) and are not monotonic
+   (Sherwin et al., 2017). Recent approaches have been developed to
+   accommodate these mathematical restrictions (G'ST and Jost's D; Hedrick,
+   2005; Jost, 2008). More recently, novel approaches based on information
+   theory (Mutual Information; Sherwin et al., 2017) and allele frequencies
    (Allele Frequency Difference; Berner, 2019) have distinct properties that
-    make them valuable resources to interpret genetic differentiation. 
-    
-    Note that each measure of genetic differentiation has advantages and 
-    drawbacks, and the decision of using a particular measure is usually 
+    make them valuable resources to interpret genetic differentiation.
+
+    Note that each measure of genetic differentiation has advantages and
+    drawbacks, and the decision of using a particular measure is usually
     based on the research question.
-    "Ho" - Observed heterozygosity (Nei, 1987, pp. 164–165)
-    \figure{Ho_equation.jpg}   
-    "Hs" - Expected heterozygosity corrected for sample size (Nei, 1987, pp. 164–165)
-    \figure{He_equation.jpg}   
-    \figure{He_equation_2.jpg}   
-    "Ht"
-    \figure{Ho_equation.jpg}   
-    "Dst"
-    \figure{Ho_equation.jpg}   
-    "Htp"
-    \figure{Ho_equation.jpg}   
-    "Dstp"
-    \figure{Ho_equation.jpg}   
-    "Fst"
-    \figure{Ho_equation.jpg}   
-    "Fstp"
-    \figure{Ho_equation.jpg}   
-    "Fis"
-    \figure{Ho_equation.jpg}   
-    "Dest"
-    \figure{Ho_equation.jpg}   
-    "Gst_max"
-    \figure{Ho_equation.jpg}   
-    "Gst_H"
-    \figure{Ho_equation.jpg}   
+     \itemize{
+     \item
+    "Ho" - Observed heterozygosity corrected for sample size
+    (Nei, 1987, pp. 164–165) is calculated as:
+
+    \figure{Ho_equation.jpg}
+
+    where Pkii represents the proportion of homozygote i in sample k and np
+    the number of samples.
+
+    \item
+    "Hs" - Expected heterozygosity corrected for sample size
+    (Nei, 1987, pp. 164–165) is calculated as:
+
+    \figure{He_equation.jpg}
+
+    \figure{He_equation_2.jpg}
+
+    \item
+    "Ht" - Overall heterozygosity corrected for sample size
+    (Nei, 1987, pp. 164–165) is calculated as:
+
+    \figure{Ht_equation.jpg}
+
+    \figure{Ht_equation_2.jpg}
+
+    \item
+    "Dst" - Amount of heterozygosity among samples (Nei, 1987, pp. 164–165)
+    is calculated as:
+
+    \figure{Dst_equation.jpg}
+
+    \item
+    "Htp" - Overall heterozygosity corrected for sample size
+    (Nei, 1987, pp. 164–165) is calculated as:
+
+    \figure{Htp_equation.jpg}
+
+    \item
+    "Dstp" - Amount of heterozygosity among samples corrected for sample size
+     (Nei, 1987, pp. 164–165) is calculated as:
+
+    \figure{Dstp_equation.jpg}
+
+    \item
+    "Fst" - Nei's Gst (Nei, 1987, pp. 164–165) is calculated as:
+
+    \figure{Fst_equation.jpg}
+
+    \item
+    "Fstp" - Fst corrected for sample size (Nei, 1987, pp. 164–165) is
+    calculated as:
+
+    \figure{Fstp_equation.jpg}
+
+    \item
+    "Fis" - Inbreeding coefficient is calculated as:
+
+    \figure{Fis_equation.jpg}
+
+    \item
+    "Dest" - Jost’s D (Jost, 2008) is calculated as:
+
+    \figure{Dest_equation.jpg}
+
+    \item
+    "Gst_max" - The maximum level that Gst can obtain for the observed amount
+     of genetic variation (Hedrick 2005) is calculated as:
+
+    \figure{GstMax_equation.jpg}
+
+    where k is the number of subpopulations.
+
+    \item
+    "Gst_H" - Gst standardized by the maximum level that it can obtain for the
+    observed amount of genetic variation (Hedrick 2005) is calculated as:
+
+    \figure{Gst_H.jpg}
+
+    }
 
  \strong{Bootstrapping}
- 
+
+ Nonparametric Bootstrap Confidence Intervals (CI) are calculated using the
+ function \link[boot]{boot.ci} (package rrBLUP). The type of intervals is
+ controlled by the parameter "boot.type".
+
 Efron (1979) suggested that Bootstraps should be at least 200.
 
- A color vector can be obtained with gl.select.colors() and then passed to the function
- with the plot.colors parameter.
-Themes can be obtained from in \itemize{
- \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
- \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
- }
-If a plot.file is given, the ggplot arising from this function is saved as an "RDS"
-binary file using saveRDS(); can be reloaded with readRDS(). A file name must be
-specified for the plot to be saved.
+ \strong{Plotting}
+
+ The plot can be customised by including any parameter from the function
+ \link[gplots]{heatmap.2}
+
+ A color vector can be obtained with  \code{\link{gl.select.colors}} and then
+  passed to the function with the plot.colors parameter.
+
+If a plot.file is given, the plot arising from this function is saved as an
+ "RDS" binary file using saveRDS(); can be reloaded with readRDS(). A file
+  name must be specified for the plot to be saved.
+
  If a plot directory (plot.dir) is specified, the ggplot binary is saved to that
  directory; otherwise to the tempdir().
+}
+\examples{
+res <- gl.report.fstat(platypus.gl)
+
 }
 \references{
 \itemize{
 \item
+Alcala, N., & Rosenberg, N. A. (2017). Mathematical constraints on FST:
+Biallelic markers in arbitrarily many populations. Genetics (206), 1581-1600.
+\item
+Berner, D. (2019). Allele frequency difference AFD–an intuitive alternative
+to FST for quantifying genetic population differentiation. Genes, 10(4), 308.
+\item
+Efron, B. (1979). Bootstrap methods: Another look at the jackknife. Annals of
+Statistics 7, 1–26.
+\item
+Hedrick, P. W. (2005). A standardized genetic differentiation measure.
+Evolution, 59(8), 1633-1638.
+\item
 Holsinger, K. E., & Weir, B. S. (2009). Genetics in geographically structured
- populations: defining, estimating and interpreting F ST. Nature Reviews 
+ populations: defining, estimating and interpreting FST. Nature Reviews
  Genetics, 10(9), 639- 650.
- 
-Efron, B. (1979). Bootstrap methods: Another look at the jackknife.
-Annals of Statistics 7, 1–26.
+ \item
+ Jost, L. (2008). GST and its relatives do not measure differentiation.
+ Molecular Ecology, 17(18), 4015-4026.
+ \item
+ Meirmans, P. G., & Hedrick, P. W. (2011). Assessing population structure:
+ FST and related measures. Molecular Ecology Resources, 11(1), 5-18.
+ \item
+ Nei, M. (1987). Molecular evolutionary genetics: Columbia University Press.
+ \item
+ Sherwin, W. B., Chao, A., Jost, L., & Smouse, P. E. (2017). Information
+ theory broadens the spectrum of molecular ecology and evolution. Trends in
+  Ecology & Evolution, 32(12), 948-963.
 }
 }
 \author{

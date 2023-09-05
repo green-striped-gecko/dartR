@@ -82,10 +82,15 @@ Basic Local Alignment Search Tool (BLAST; Altschul et al., 1990 &
 
  \strong{Running BLAST}
 
- Four different tasks are supported: \itemize{ \item “megablast”, for very
- similar sequences (e.g, sequencing errors) \item “dc-megablast”, typically
- used for inter-species comparisons \item “blastn”, the traditional program
- used for inter-species comparisons \item “blastn-short”, optimized for
+ Four different tasks are supported: 
+ \itemize{ 
+ \item “megablast”, for very
+ similar sequences (e.g, sequencing errors) 
+ \item “dc-megablast”, typically
+ used for inter-species comparisons 
+ \item “blastn”, the traditional program
+ used for inter-species comparisons
+ \item “blastn-short”, optimized for
  sequences less than 30 nucleotides }
 
  If  you  are  running  a  BLAST alignment of  similar  sequences,  for
