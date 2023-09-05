@@ -91,8 +91,7 @@ Suggests:
     tibble,
     vcfR,
     zoo,
-    viridis,
-    testthat (>= 3.0.0)
+    viridis
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.2.3
