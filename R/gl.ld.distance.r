@@ -64,7 +64,7 @@ gl.ld.distance <- function(ld_report,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jody",
-                   verbosity = verbose)
+                   verbose = verbose)
 
   # DO THE JOB
   

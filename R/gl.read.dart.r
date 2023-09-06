@@ -95,7 +95,7 @@ gl.read.dart <- function(filename,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "v.2023.2",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     if (verbose == 0) {
         probar <-FALSE

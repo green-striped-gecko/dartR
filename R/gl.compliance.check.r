@@ -42,7 +42,7 @@ gl.compliance.check <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # DO THE JOB
     

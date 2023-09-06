@@ -35,7 +35,7 @@ utils.dart2genlight <- function(dart,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # DO THE JOB
     
@@ -332,3 +332,4 @@ utils.dart2genlight <- function(dart,
     return(gout)
     
 }
+

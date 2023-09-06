@@ -3,75 +3,87 @@
 \name{gl.report.fstat}
 \alias{gl.report.fstat}
 \title{Reports various statistics of genetic differentiation between
-populations}
+populations with confident intervals}
 \usage{
 gl.report.fstat(
   x,
   nboots = 0,
   conf = 0.95,
-  boot.type = "norm",
-  parallel = "no",
+  CI.type = "bca",
   ncpus = 1,
-  digits = 4,
-  plot.stat = "Fst",
+  plot.stat = "Fstp",
   plot.display = TRUE,
   palette.divergent = gl.colors("div"),
-  plot.file = NULL,
+  font.size = 0.5,
   plot.dir = NULL,
+  plot.file = NULL,
   verbose = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP or presence/absence
-(SilicoDArT) data [required].}
+\item{x}{Name of the genlight object containing the SNP data [required].}
 
-\item{nboots}{Number of bootstraps [default 0].}
+\item{nboots}{Number of bootstrap replicates to obtain confident intervals
+[default 0].}
 
-\item{conf}{Confident intervals [default 0.95].}
+\item{conf}{The confidence level of the required interval  [default 0.95].}
 
-\item{boot.type}{A vector of character strings representing the type of
-intervals required. The value should be any subset of the values
-c("norm","basic", "stud", "perc") [default "norm"].}
+\item{CI.type}{Method to estimate confident intervals. One of
+"norm", "basic", "perc" or "bca" [default "bca"].}
 
-\item{parallel}{The type of parallel operation to be used (if any). If
-missing, the default is taken from the option "boot.parallel" (and if that is
- not set, "no").}
+\item{ncpus}{Number of processes to be used in parallel operation. If ncpus
+> 1 parallel operation is activated,see "Details" section [default 1].}
 
-\item{ncpus}{Number of processes to be used in parallel operation: typically
-one would chose this to the number of available CPUs [default 1].}
+\item{plot.stat}{Statistic to plot. One of "Fst","Fstp","Dest" or "Gst_H"
+[default "Fstp"].}
 
-\item{digits}{Number of Digits to use [default 4].}
+\item{plot.display}{If TRUE, a heatmap of the pairwise static chosen is
+displayed in the plot window [default TRUE].}
 
-\item{plot.stat}{Statistic to plot. One of "Ho","Hs","Ht","Dst","Htp","Dstp",
-"Fst","Fstp","Fis","Dest","Gst_max","Gst_H" [default "Fst"].}
-
-\item{plot.display}{If TRUE, histograms of base composition are displayed in
-the plot window
-[default TRUE].}
-
-\item{palette.divergent}{A divergent palette for the distance values
+\item{palette.divergent}{A color palette function for the heatmap plot
 [default gl.colors("div")].}
 
-\item{plot.file}{Name for the RDS binary file to save (base name only,
-exclude extension) [default NULL]}
+\item{font.size}{Size of font for the labels of horizontal and vertical axes
+of the heatmap [default 0.5].}
 
-\item{plot.dir}{Directory in which to save files [default = working directory]}
+\item{plot.dir}{Directory in which to save files [default working directory].}
+
+\item{plot.file}{Name for the RDS binary file to save (base name only,
+exclude extension) [default NULL].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
  [default NULL, unless specified using gl.set.verbosity]}
 
-\item{...}{Parameters passed to function \link[gplots]{heatmap.2},
-such as width and height, when the ggplot is to be saved.}
+\item{...}{Parameters passed to function \link[gplots]{heatmap.2} (package
+gplots).}
 }
 \value{
-A list containing matrices with genetic statistics taken pairwise by
-population
+Two lists, the first list contains matrices with genetic statistics
+taken pairwise by population, the second list contains tables with the
+genetic statistics for each pair of populations. If nboots > 0, tables with
+the four statistics calculated with Low Confidence Intervals (LCI) and High
+Confidence Intervals (HCI).
 }
 \description{
-Reports various statistics of genetic differentiation between
-populations
+This function calculates four genetic differentiation between populations
+statistics (see the "Details" section for further information).
+
+\itemize{
+\item \strong{Fst} - Measure of the degree of genetic differentiation of 
+subpopulations (Nei, 1987).
+\item \strong{Fstp} - Unbiased (i.e. corrected for sampling error, see 
+explanation below) Fst (Nei, 1987).
+\item \strong{Dest} - Jost’s D (Jost, 2008).
+\item \strong{Gst_H} - Gst standardized by the maximum level that it can obtain for
+the observed amount of genetic variation (Hedrick 2005).
+}
+
+Sampling errors arise because allele frequencies in our samples differ from 
+those in the subpopulations from which they were taken (Holsinger, 2012).
+
+Confident Intervals are obtained using bootstrapping.
 }
 \details{
 Even though Fst and its relatives can predict evolutionary processes
@@ -80,118 +92,207 @@ Even though Fst and its relatives can predict evolutionary processes
    within populations (Meirmans & Hedrick, 2011), the number of populations
    analysed (Alcala & Rosenberg, 2017) and are not monotonic
    (Sherwin et al., 2017). Recent approaches have been developed to
-   accommodate these mathematical restrictions (G'ST and Jost's D; Hedrick,
-   2005; Jost, 2008). More recently, novel approaches based on information
-   theory (Mutual Information; Sherwin et al., 2017) and allele frequencies
-   (Allele Frequency Difference; Berner, 2019) have distinct properties that
-    make them valuable resources to interpret genetic differentiation.
+   accommodate these mathematical restrictions (G'ST; "Gst_H"; Hedrick, 2005,
+and Jost's D; "Dest"; Jost, 2008). More recently, novel approaches based on
+information theory (Mutual Information; Sherwin et al., 2017) and allele
+frequencies (Allele Frequency Difference; Berner, 2019) have distinct
+properties that make them valuable resources to interpret genetic
+ differentiation between populations.
 
     Note that each measure of genetic differentiation has advantages and
     drawbacks, and the decision of using a particular measure is usually
     based on the research question.
+
+    \strong{Statistics calculated}
+
+    The equations used to calculate the statistics are shown below.
+
      \itemize{
      \item
-    "Ho" - Observed heterozygosity corrected for sample size
-    (Nei, 1987, pp. 164–165) is calculated as:
+    \emph{Ho} - Unbiased estimate of observed heterozygosity across 
+    subpopulations (Nei, 1987, pp. 164, eq. 7.38) is calculated as:
 
     \figure{Ho_equation.jpg}
 
-    where Pkii represents the proportion of homozygote i in sample k and np
-    the number of samples.
+    where \emph{Pkii} represents the proportion of homozygote \emph{ii} for 
+    allele \emph{i} in individual \emph{k} and \emph{s} represents the number
+     of subpopulations.
 
     \item
-    "Hs" - Expected heterozygosity corrected for sample size
-    (Nei, 1987, pp. 164–165) is calculated as:
+    \emph{Hs} - Unbiased estimate of the expected heterozygosity under 
+    Hardy-Weinberg equilibrium across subpopulations (Nei, 1987, pp. 164,
+     eq. 7.39) is calculated as:
 
-    \figure{He_equation.jpg}
-
-    \figure{He_equation_2.jpg}
+    \figure{Hs_equation.jpg}
+    
+    where \emph{ñ} is the harmonic mean of \emph{nk} (the number of 
+    individuals in each subpopulation), \emph{pki} is the proportion 
+    (sometimes misleadingly called frequency) of allele \emph{i} in 
+    subpopulation \emph{k}. 
 
     \item
-    "Ht" - Overall heterozygosity corrected for sample size
-    (Nei, 1987, pp. 164–165) is calculated as:
+    \emph{Ht} - Heterozygosity for the total population (Nei, 1987, pp. 164,
+     eq. 7.40) is calculated as:
 
     \figure{Ht_equation.jpg}
 
-    \figure{Ht_equation_2.jpg}
-
     \item
-    "Dst" - Amount of heterozygosity among samples (Nei, 1987, pp. 164–165)
-    is calculated as:
+    \emph{Dst} - The average allele frequency differentiation between 
+    populations (Nei, 1987, pp. 163) is calculated as:
 
     \figure{Dst_equation.jpg}
 
     \item
-    "Htp" - Overall heterozygosity corrected for sample size
-    (Nei, 1987, pp. 164–165) is calculated as:
+    \emph{Htp} - Unbiased estimate of Heterozygosity for the total population
+    (Nei, 1987, pp. 165) is calculated as:
 
     \figure{Htp_equation.jpg}
 
     \item
-    "Dstp" - Amount of heterozygosity among samples corrected for sample size
-     (Nei, 1987, pp. 164–165) is calculated as:
+    \emph{Dstp} - Unbiased estimate of the average allele frequency 
+    differentiation between populations (Nei, 1987, pp. 165) is calculated
+     as:
 
     \figure{Dstp_equation.jpg}
 
     \item
-    "Fst" - Nei's Gst (Nei, 1987, pp. 164–165) is calculated as:
+    \emph{Fst} - Measure of the extent of genetic differentiation 
+    of subpopulations (Nei, 1987, pp. 162, eq. 7.34) is calculated as:
 
     \figure{Fst_equation.jpg}
 
     \item
-    "Fstp" - Fst corrected for sample size (Nei, 1987, pp. 164–165) is
-    calculated as:
+    \emph{Fstp} - Unbiased measure of the extent of genetic differentiation 
+    of subpopulations (Nei, 1987, pp. 163, eq. 7.36) is calculated as:
 
     \figure{Fstp_equation.jpg}
 
     \item
-    "Fis" - Inbreeding coefficient is calculated as:
-
-    \figure{Fis_equation.jpg}
-
-    \item
-    "Dest" - Jost’s D (Jost, 2008) is calculated as:
+    \emph{Dest} - Jost’s D (Jost, 2008, eq. 12) is calculated as:
 
     \figure{Dest_equation.jpg}
 
     \item
-    "Gst_max" - The maximum level that Gst can obtain for the observed amount
-     of genetic variation (Hedrick 2005) is calculated as:
+    \emph{Gst_max} - The maximum level that Gst can obtain for the observed 
+    amount of genetic variation (Hedrick 2005, eq. 4a) is calculated as:
 
     \figure{GstMax_equation.jpg}
 
-    where k is the number of subpopulations.
-
     \item
-    "Gst_H" - Gst standardized by the maximum level that it can obtain for the
-    observed amount of genetic variation (Hedrick 2005) is calculated as:
+    \emph{Gst_H} - Gst standardized by the maximum level that it can obtain 
+    for the observed amount of genetic variation (Hedrick 2005, eq. 4b) is 
+    calculated as:
 
     \figure{Gst_H.jpg}
 
     }
 
- \strong{Bootstrapping}
+ \strong{Confident Intervals}
 
- Nonparametric Bootstrap Confidence Intervals (CI) are calculated using the
- function \link[boot]{boot.ci} (package rrBLUP). The type of intervals is
- controlled by the parameter "boot.type".
+The uncertainty of a parameter, in this case the mean of the statistic, can
+be summarised by a confidence interval (CI) which includes the true parameter
+value with a specified probability (i.e. confidence level; the parameter
+"conf" in this function).
 
-Efron (1979) suggested that Bootstraps should be at least 200.
+In this function, CI are obtained using Bootstrap which is an inference
+method that samples with replacement the data (i.e. loci) and calculates the
+ statistics every time.
+
+ This function uses the function \link[boot]{boot} (package boot) to perform
+ the bootstrap replicates and the function \link[boot]{boot.ci}
+ (package boot) to perform the calculations for the CI.
+
+ Four different types of nonparametric CI can be calculated
+  (parameter "CI.type" in this function):
+  \itemize{
+   \item First order normal approximation interval ("norm").
+   \item Basic bootstrap interval ("basic").
+   \item Bootstrap percentile interval ("perc").
+   \item Adjusted bootstrap percentile interval ("bca").
+   }
+
+The studentized bootstrap interval ("stud") was not included in the CI types
+ because it is computationally intensive, it may produce estimates outside
+ the range of plausible values and it has been found to be erratic in
+ practice, see for example the "Studentized (t) Intervals" section in:
+
+   \url{https://www.r-bloggers.com/2019/09/understanding-bootstrap-confidence-interval-output-from-the-r-boot-package}
+
+    Nice tutorials about the different types of CI can be found in:
+
+    \url{https://www.datacamp.com/tutorial/bootstrap-r}
+
+    and
+
+   \url{https://www.r-bloggers.com/2019/09/understanding-bootstrap-confidence-interval-output-from-the-r-boot-package}
+
+     Efron and Tibshirani (1993, p. 162) and Davison and Hinkley
+     (1997, p. 194) suggest that the number of bootstrap replicates should
+     be between 1000 and 2000.
+
+ \strong{It is important} to note that unreliable confident intervals will be
+  obtained if too few number of bootstrap replicates are used.
+  Therefore, the function \link[boot]{boot.ci} will throw warnings and errors
+   if bootstrap replicates are too few. Consider increasing then number of
+   bootstrap replicates to at least 200.
+
+   The "bca" interval is often cited as the best for theoretical reasons,
+   however it may produce unstable results if the bootstrap distribution
+    is skewed or has extreme values. For example, you might get the warning
+    "extreme order statistics used as endpoints" or the error "estimated
+    adjustment 'a' is NA". In this case, you may want to use more bootstrap
+    replicates or a different method or check your data for outliers.
+
+   The error "estimated adjustment 'w' is infinite" means that the estimated
+   adjustment ‘w’ for the "bca" interval is infinite, which can happen when
+   the empirical influence values are zero or very close to zero. This can
+   be caused by various reasons, such as:
+
+   The number of bootstrap replicates is too small, the statistic of interest
+    is constant or nearly constant across the bootstrap samples, the data
+    contains outliers or extreme values.
+
+    You can try some possible solutions, such as:
+
+Increasing the number of bootstrap replicates, using a different type of
+bootstrap confidence interval or removing or transforming the outliers or
+ extreme values.
 
  \strong{Plotting}
 
- The plot can be customised by including any parameter from the function
- \link[gplots]{heatmap.2}
+ The plot can be customised by including any parameter(s) from the function
+ \link[gplots]{heatmap.2} (package gplots).
 
- A color vector can be obtained with  \code{\link{gl.select.colors}} and then
-  passed to the function with the plot.colors parameter.
+ For the color palette you could try for example:
+
+ > \code{library(viridis)}
+
+ > \code{res <- gl.report.fstat(platypus.gl, palette.divergent = viridis)}
 
 If a plot.file is given, the plot arising from this function is saved as an
- "RDS" binary file using saveRDS(); can be reloaded with readRDS(). A file
+ "RDS" binary file using the function \link[base]{saveRDS} (package base);
+  can be reloaded with function \link[base]{readRDS} (package base). A file
   name must be specified for the plot to be saved.
 
- If a plot directory (plot.dir) is specified, the ggplot binary is saved to that
- directory; otherwise to the tempdir().
+ If a plot directory (plot.dir) is specified, the gplot binary is saved to
+ that directory; otherwise to the tempdir().
+
+ Your plot might not shown in full because your 'Plots' pane is too small
+ (in RStudio).
+ Increase the size of the 'Plots' pane before running the function.
+ Alternatively, use the parameter 'plot.file' to save the plot to a file.
+
+ \strong{Parallelisation}
+
+ If the parameter ncpus > 1, parallelisation is enabled. In Windows, parallel
+  computing employs a "socket" approach that starts new copies of R on each
+   core. POSIX systems, on the other hand (Mac, Linux, Unix, and BSD),
+   utilise a "forking" approach that replicates the whole current version of
+    R and transfers it to a new core.
+
+    Opening and terminating R sessions in each core involves a significant
+    amount of processing time, therefore parallelisation in Windows machines
+   is only quicker than not usung parallelisation when nboots > 1000-2000.
 }
 \examples{
 res <- gl.report.fstat(platypus.gl)
@@ -206,11 +307,19 @@ Biallelic markers in arbitrarily many populations. Genetics (206), 1581-1600.
 Berner, D. (2019). Allele frequency difference AFD–an intuitive alternative
 to FST for quantifying genetic population differentiation. Genes, 10(4), 308.
 \item
+Davison AC, Hinkley DV (1997). Bootstrap Methods and their Application.
+ Cambridge University Press: Cambridge.
+\item
 Efron, B. (1979). Bootstrap methods: Another look at the jackknife. Annals of
 Statistics 7, 1–26.
 \item
+Efron B, Tibshirani RJ (1993). An Introduction to the Bootstrap. Chapman and
+ Hall: London.
+\item
 Hedrick, P. W. (2005). A standardized genetic differentiation measure.
 Evolution, 59(8), 1633-1638.
+\item 
+Holsinger, K. E. (2012). Lecture notes in population genetics.
 \item
 Holsinger, K. E., & Weir, B. S. (2009). Genetics in geographically structured
  populations: defining, estimating and interpreting FST. Nature Reviews

@@ -11,9 +11,9 @@
 
 utils.flag.start <- function(func = NULL,
                              build = NULL,
-                             verbosity = NULL) {
+                             verbose = NULL) {
     # SET VERBOSITY
-    verbose <- gl.check.verbosity(verbosity)
+    verbose <- gl.check.verbosity(verbose)
     
     if (is.null(func)) {
         stop(error("Fatal Error: The calling function must be specified.\n"))

@@ -4,7 +4,7 @@
 \alias{utils.flag.start}
 \title{A utility script to flag the start of a script}
 \usage{
-utils.flag.start(func = NULL, build = NULL, verbosity = NULL)
+utils.flag.start(func = NULL, build = NULL, verbose = NULL)
 }
 \arguments{
 \item{func}{Name of the function that is starting [required].}

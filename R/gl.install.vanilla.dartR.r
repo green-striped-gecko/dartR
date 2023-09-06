@@ -33,7 +33,7 @@ gl.install.vanilla.dartR <- function(flavour = NULL,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Josh",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # ERROR CHECKING
     

@@ -64,7 +64,7 @@ gl.smearplot <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # SCRIPT SPECIFIC CHECKS
     if (length(plot_colors)==1) {
@@ -94,6 +94,7 @@ gl.smearplot <- function(x,
     
     # DO THE JOB
     # pull the data from the genlight object, and place in a dataframe
+    
     df.matrix <- as.data.frame(as.matrix(x))
     colnames(df.matrix) <- 1:nLoc(x)
     df.matrix$id <- individuals
@@ -101,7 +102,7 @@ gl.smearplot <- function(x,
     df.matrix$id <- factor(df.matrix$id, levels = df.matrix$id)
     df.matrix$pop <- pop(x)
     
-    X <- reshape2::melt(X_temp, id.vars = c("pop", "id"))
+    X <- reshape2::melt(df.matrix, id.vars = c("pop", "id"))
     X$value <- as.character(X$value)
     X$value <- ifelse(X$value=="NA", NA, X$value)
     colnames(X) <- c("pop", "id", "locus", "genotype")
