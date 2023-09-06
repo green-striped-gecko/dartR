@@ -71,7 +71,7 @@ gl.read.silicodart <- function(filename,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jackson",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # DO THE JOB
     

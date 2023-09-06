@@ -23,7 +23,6 @@
 #' #snps, #non genetic metrics, #genetic data (still two line format, rows=snps,
 #'  columns=individuals)
 #'  
-#'@family dartR-base
 #'@author Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 utils.read.dart <- function(filename,
@@ -41,7 +40,7 @@ utils.read.dart <- function(filename,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "v.2023.2",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # DO THE JOB
     
@@ -150,7 +149,7 @@ utils.read.dart <- function(filename,
     # check that there are two lines per locus... covmetrics = separate(covmetrics, AlleleID, into = c('allid','alrest'),sep = '\\|',
     # extra='merge')
     covmetrics$clone <-
-      (sub("\\|.*", "", covmetrics$AlleleID, perl = T))
+      (sub("\\|.*", "", covmetrics$AlleleID, perl = TRUE))
     spp <-
       (sub(".+-+(\\d{1,3}):.+", "\\1", covmetrics$AlleleID))
     

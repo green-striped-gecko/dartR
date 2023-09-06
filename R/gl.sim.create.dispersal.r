@@ -51,7 +51,7 @@ gl.sim.create_dispersal <- function(number_pops,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jody",
-                   verbosity = verbose)
+                   verbose = verbose)
   
   # DO THE JOB
   pops_vector <- 1:number_pops

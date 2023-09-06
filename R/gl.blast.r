@@ -161,7 +161,7 @@ gl.blast <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # Check if the x@other$loc.metrics$TrimmedSequence slot exists
     if (class(x)[1] == "genlight") {
@@ -433,7 +433,7 @@ gl.blast <- function(x,
         cat(report("Completed:", funname, "\n\n"))
     }
     
-    if (class(x)[1] == "genlight") {
+    if (class(x)[1] == "genlight" | class(x)[1] == "dartR") {
         return(x)
     } else {
         return(one_hit)

@@ -65,11 +65,7 @@ Other dartR-base:
 \code{\link{gl.read.dart}()},
 \code{\link{gl.recode.ind}()},
 \code{\link{gl.recode.pop}()},
-\code{\link{gl.set.verbosity}()},
-\code{\link{utils.dart2genlight
-Converts DarT to genlight.
-Internal function called by gl.read.dart()}},
-\code{\link{utils.read.dart}()}
+\code{\link{gl.set.verbosity}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to

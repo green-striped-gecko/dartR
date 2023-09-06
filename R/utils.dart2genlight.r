@@ -20,7 +20,6 @@
 #' specify spatial coordinates (in decimal degrees WGS1984 format). Additional
 #' columns with individual metadata can be imported (e.g. age, gender).
 #' 
-#'@family dartR-base
 #'@author Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 utils.dart2genlight <- function(dart,
@@ -35,7 +34,7 @@ utils.dart2genlight <- function(dart,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # DO THE JOB
     
@@ -332,3 +331,4 @@ utils.dart2genlight <- function(dart,
     return(gout)
     
 }
+

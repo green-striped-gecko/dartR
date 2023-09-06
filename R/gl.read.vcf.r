@@ -24,7 +24,7 @@ gl.read.vcf <- function(vcffile,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jackson",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     x <- NULL
     
@@ -65,7 +65,9 @@ gl.read.vcf <- function(vcffile,
         }else{
         ALT <- vcfR::getALT(vcf)
         more_alleles <- which(stringr::str_length(ALT) >1)
-        info <- info[-more_alleles,]
+        if(length(more_alleles)>0){
+          info <- info[-more_alleles,]
+        }
         }
         
         ploidy(x) <- 2
