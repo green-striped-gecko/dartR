@@ -83,10 +83,9 @@ dartfile <- system.file('extdata','testset_SNPs_2Row.csv', package='dartR')
 metadata <- system.file('extdata','testset_metadata.csv', package='dartR')
 gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=TRUE)
 
+
 }
 \seealso{
-\code{\link{utils.read.dart}}
-
 Other dartR-base: 
 \code{\link{gl.drop.ind}()},
 \code{\link{gl.drop.loc}()},
@@ -97,11 +96,7 @@ Other dartR-base:
 \code{\link{gl.make.recode.ind}()},
 \code{\link{gl.recode.ind}()},
 \code{\link{gl.recode.pop}()},
-\code{\link{gl.set.verbosity}()},
-\code{\link{utils.dart2genlight
-Converts DarT to genlight.
-Internal function called by gl.read.dart()}},
-\code{\link{utils.read.dart}()}
+\code{\link{gl.set.verbosity}()}
 }
 \author{
 Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})

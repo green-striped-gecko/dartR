@@ -56,7 +56,6 @@
 #' metadata <- system.file('extdata','testset_metadata.csv', package='dartR')
 #' gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=TRUE)
 #'
-#'@seealso \code{\link{utils.read.dart}}
 #'
 # ------------------------
 # Function

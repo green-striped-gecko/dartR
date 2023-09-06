@@ -11,7 +11,7 @@ utils.flag.start(func = NULL, build = NULL, verbose = NULL)
 
 \item{build}{Name of the build [default NULL].}
 
-\item{verbosity}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report [default 2].}
 }
 \value{

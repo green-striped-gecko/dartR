@@ -23,7 +23,6 @@
 #' #snps, #non genetic metrics, #genetic data (still two line format, rows=snps,
 #'  columns=individuals)
 #'  
-#'@family dartR-base
 #'@author Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 utils.read.dart <- function(filename,
