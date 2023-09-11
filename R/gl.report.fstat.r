@@ -74,7 +74,7 @@
 #'     \emph{Ho} - Unbiased estimate of observed heterozygosity across 
 #'     subpopulations (Nei, 1987, pp. 164, eq. 7.38) is calculated as:
 #'
-#'     \figure{Ho_equation.jpg}
+#'     \figure{Ho-equation.jpg}
 #'
 #'     where \emph{Pkii} represents the proportion of homozygote \emph{ii} for 
 #'     allele \emph{i} in individual \emph{k} and \emph{s} represents the number
@@ -85,7 +85,7 @@
 #'     Hardy-Weinberg equilibrium across subpopulations (Nei, 1987, pp. 164,
 #'      eq. 7.39) is calculated as:
 #'
-#'     \figure{Hs_equation.jpg}
+#'     \figure{Hs-equation.jpg}
 #'     
 #'     where \emph{ñ} is the harmonic mean of \emph{nk} (the number of 
 #'     individuals in each subpopulation), \emph{pki} is the proportion 
@@ -96,56 +96,56 @@
 #'     \emph{Ht} - Heterozygosity for the total population (Nei, 1987, pp. 164,
 #'      eq. 7.40) is calculated as:
 #'
-#'     \figure{Ht_equation.jpg}
+#'     \figure{Ht-equation.jpg}
 #'
 #'     \item
 #'     \emph{Dst} - The average allele frequency differentiation between 
 #'     populations (Nei, 1987, pp. 163) is calculated as:
 #'
-#'     \figure{Dst_equation.jpg}
+#'     \figure{Dst-equation.jpg}
 #'
 #'     \item
 #'     \emph{Htp} - Unbiased estimate of Heterozygosity for the total population
 #'     (Nei, 1987, pp. 165) is calculated as:
 #'
-#'     \figure{Htp_equation.jpg}
+#'     \figure{Htp-equation.jpg}
 #'
 #'     \item
 #'     \emph{Dstp} - Unbiased estimate of the average allele frequency 
 #'     differentiation between populations (Nei, 1987, pp. 165) is calculated
 #'      as:
 #'
-#'     \figure{Dstp_equation.jpg}
+#'     \figure{Dstp-equation.jpg}
 #'
 #'     \item
 #'     \emph{Fst} - Measure of the extent of genetic differentiation 
 #'     of subpopulations (Nei, 1987, pp. 162, eq. 7.34) is calculated as:
 #'
-#'     \figure{Fst_equation.jpg}
+#'     \figure{Fst-equation.jpg}
 #'
 #'     \item
 #'     \emph{Fstp} - Unbiased measure of the extent of genetic differentiation 
 #'     of subpopulations (Nei, 1987, pp. 163, eq. 7.36) is calculated as:
 #'
-#'     \figure{Fstp_equation.jpg}
+#'     \figure{Fstp-equation.jpg}
 #'
 #'     \item
 #'     \emph{Dest} - Jost’s D (Jost, 2008, eq. 12) is calculated as:
 #'
-#'     \figure{Dest_equation.jpg}
+#'     \figure{Dest-equation.jpg}
 #'
 #'     \item
-#'     \emph{Gst_max} - The maximum level that Gst can obtain for the observed 
+#'     \emph{Gst-max} - The maximum level that Gst can obtain for the observed 
 #'     amount of genetic variation (Hedrick 2005, eq. 4a) is calculated as:
 #'
-#'     \figure{GstMax_equation.jpg}
+#'     \figure{GstMax-equation.jpg}
 #'
 #'     \item
-#'     \emph{Gst_H} - Gst standardized by the maximum level that it can obtain 
+#'     \emph{Gst-H} - Gst standardized by the maximum level that it can obtain 
 #'     for the observed amount of genetic variation (Hedrick 2005, eq. 4b) is 
 #'     calculated as:
 #'
-#'     \figure{Gst_H.jpg}
+#'     \figure{Gst-H.jpg}
 #'
 #'     }
 #'
@@ -302,7 +302,6 @@
 #'   Ecology & Evolution, 32(12), 948-963.
 #' }
 #' @export
-#'@importFrom boot boot boot.ci
 #' @return Two lists, the first list contains matrices with genetic statistics
 #' taken pairwise by population, the second list contains tables with the
 #' genetic statistics for each pair of populations. If nboots > 0, tables with
