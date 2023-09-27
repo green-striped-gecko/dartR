@@ -864,7 +864,7 @@ gl.report.heterozygosity <- function(x,
           geom_bar(stat = "identity", 
                    color = "black", 
                    position = position_dodge())+ 
-          facet_wrap(~variable, nrow=1) +
+          facet_wrap(~variable, nrow=1,scales = "free") +
           scale_fill_manual(values = pop_list_plot_stat$color) +
           scale_x_discrete(labels = paste(pop_list_plot_stat$pop,
                                           round(pop_list_plot_stat$n.Ind,

@@ -48,8 +48,7 @@ utils.dart2genlight <- function(dart,
     sraw <- dart[["covmetrics"]]
     nrows <- dart[["nrows"]]  #check if nrows are provided...
     service <- as.character(unlist(unname(dart[["service"]])))
-    plate_location <-
-        as.character(unlist(unname(dart[["plate_location"]])))
+    plate_location <- as.character(unlist(unname(dart[["plate_location"]])))
     
     if (is.null(nrows)) {
         cat(report(
@@ -76,9 +75,12 @@ utils.dart2genlight <- function(dart,
     }
     
     if (sum(c("SNP", "SnpPosition") %in% names(sraw)) != 2) {
-        stop(error(
-            "Could not find SNP or SnpPosition in Dart file. Check you headers!!!"
-        ))
+      cat(warn(
+        "   Could not find SNP or SnpPosition in Dart file. Check you headers!!!\n"
+      ))
+        # stop(error(
+        #     "Could not find SNP or SnpPosition in Dart file. Check you headers!!!"
+        # ))
     }
     
     if (verbose >= 2) {
@@ -105,13 +107,19 @@ utils.dart2genlight <- function(dart,
     
     sdata <- dart[["gendata"]]
     # every second line only....
-    esl <-seq(nrows, nrow(sdata), nrows)
-    
+    esl <- seq(nrows, nrow(sdata), nrows)
     pos <- sraw$SnpPosition[esl]
-    alleles <- as.character(sraw$SNP)[esl]
-    a1 <- substr(alleles, nchar(alleles) - 2, nchar(alleles))
-    a2 <- sub(">", "/", a1)
-    locname <- paste(sraw$uid[esl], a2, sep = "-")
+    
+    if(!is.null(sraw$SNP)){
+      alleles <- as.character(sraw$SNP)[esl]
+      a1 <- substr(alleles, nchar(alleles) - 2, nchar(alleles))
+      a2 <- sub(">", "/", a1)
+      locname <- paste(sraw$uid[esl], a2, sep = "-")
+    }else{
+      a2 <- rep("c/g",nrow(sraw))
+      locname <- sraw[,1][esl]
+    }
+
     geninddata <- matrix(NA, nrow = nsnp, ncol = nind)
     
     if (nrows == 2) {
@@ -177,11 +185,10 @@ utils.dart2genlight <- function(dart,
                 paste("Adding individual metrics:", ind.metafile, ".\n")
             ))
         }
-        ###### population and individual file to link AAnumbers to populations...
-        ind.cov <-
-            read.csv(ind.metafile,
-                     header = T,
-                     stringsAsFactors = T)
+        ###### population and individual file to link numbers to populations...
+        ind.cov <- read.csv(ind.metafile,  
+                            header = TRUE, 
+                            stringsAsFactors = TRUE)
         # is there an entry for every individual
         
         id.col <-match("id", names(ind.cov))

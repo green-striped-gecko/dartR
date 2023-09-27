@@ -30,16 +30,16 @@ clumpp <- function(Q_list,
     all(dim(
       x
     ) == dim_Q))) == TRUE)) {
-    stop("size of all matrices in Q_list must be equal")
+    stop(error("  Size of all matrices in Q_list must be equal"))
   }
   
   K <- dim_Q[2]
   
   # gracefully return Q_list if K=1
   if (K == 1) {
-    message(
-      "Number of assumed populations = 1 for all Q matrices, clummping is unecessary, returning Q_list"
-    )
+    message(warn(
+      "  Number of assumed populations = 1 for all Q matrices, clummping is unecessary, returning Q_list"
+    ))
     return(Q_list)
   }
   
@@ -75,8 +75,9 @@ clumpp <- function(Q_list,
         size = length(Q_list),
         replace = FALSE
       ))
-    permQs <- apply(perms, 2, function(p)
-      largeKGreedy(Q_list[p]))
+    permQs <- apply(perms, 2, function(p){
+      largeKGreedy(Q_list[p])
+    })
     Hs <-
       lapply(permQs, function(x)
         averagePairWiseSimilarityH(x$Q_list))
