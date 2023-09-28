@@ -18,6 +18,7 @@
 #' [default 14].
 #' @param map.interactive Specify whether an interactive map showing private
 #' alleles between populations is to be produced [default FALSE].
+#' @param provider Passed to leaflet [default "Esri.NatGeoWorldMap"].
 #' @param palette_discrete A discrete palette for the color of populations or a
 #' list with as many colors as there are populations in the dataset
 #'  [default discrete_palette].
@@ -115,6 +116,7 @@ gl.report.pa <- function(x,
                          plot.out = TRUE,
                          font_plot = 14,
                          map.interactive = FALSE,
+                         provider = "Esri.NatGeoWorldMap",
                          palette_discrete = discrete_palette,
                          save2tmp = FALSE,
                          verbose = NULL) {
@@ -536,7 +538,10 @@ gl.report.pa <- function(x,
   if (plot.out) {
     if (map.interactive & method == "pairwise") {
       labs <- popNames(x)
-      print(gl.map.interactive(x, matrix = mm, symmetric = FALSE))
+      print(gl.map.interactive(x, 
+                               matrix = mm, 
+                               symmetric = FALSE,
+                               provider=provider))
     }
     # using package patchwork
     print(p3)
