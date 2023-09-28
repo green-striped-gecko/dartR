@@ -18,6 +18,7 @@
 #' @param plot.out Specify if plot is to be produced [default TRUE].
 #' @param save2tmp If TRUE, saves any ggplots and listings to the session
 #' temporary directory (tempdir) [default FALSE].
+#' @param plot_title Title of tyh plot [default " "].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log; 3, progress and results summary; 5, full report
 #' [default 2, unless specified using gl.set.verbosity].
@@ -55,6 +56,7 @@ gl.ld.distance <- function(ld_report,
                            plot_theme = NULL,
                            plot.out = TRUE,
                            save2tmp = FALSE,
+                           plot_title = " ",
                            verbose = NULL){
   
   # SET VERBOSITY
@@ -126,7 +128,8 @@ gl.ld.distance <- function(ld_report,
     labs(color = "") +
     scale_color_manual(values = pop_colors) +
     plot_theme +
-    theme(legend.position = "bottom")
+    theme(legend.position = "bottom") +
+    ggtitle(plot_title)
   
   
   # PRINTING OUTPUTS
