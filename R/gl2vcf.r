@@ -178,7 +178,7 @@ gl2vcf <- function(x,
                  prefix.out = prefix.out_temp,
                  autosome.only = FALSE,
                  extra.options = "") {
-            bedfile.out <- paste0(prefix.out, ".bed")
+            # bedfile.out <- paste0(prefix.out, ".bed")
             system_verbose(
                 paste(
                     plink.path,

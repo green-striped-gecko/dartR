@@ -265,6 +265,8 @@ gl.read.dart <- function(filename,
         glout@other$history <- list(match.call())
     }
     
+    glout <- gl.compliance.check(glout)
+    
     # FLAG SCRIPT END ---------------------
     if (verbose > 0) {
         cat(report(paste("Completed:", funname, "\n")))

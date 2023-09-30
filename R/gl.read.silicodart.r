@@ -342,6 +342,8 @@ gl.read.silicodart <- function(filename,
     names(glout@other$loc.metrics.flags) <- recalc.flags
     glout@other$verbose <- 2
     
+    glout <- gl.compliance.check(glout)
+    
     # FLAG SCRIPT END
     
     if (verbose >= 1) {
