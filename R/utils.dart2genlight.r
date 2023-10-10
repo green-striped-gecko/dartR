@@ -260,7 +260,7 @@ utils.dart2genlight <- function(dart,
             }
         }
         
-        pop.col <-match("pop", names(ind.cov))
+        pop.col <- match("pop", names(ind.cov))
         
         if (is.na(pop.col)) {
             if (verbose >= 1) {
