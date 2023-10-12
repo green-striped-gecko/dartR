@@ -145,7 +145,7 @@ gl.pcoa.plot <- function(glPca,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Josh",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype1 <-
@@ -760,7 +760,7 @@ gl.pcoa.plot <- function(glPca,
                     )
                 )
             )
-        show(plott)
+        print(plott)
         if (verbose >= 2) {
             cat(warn("  May need to zoom out to place 3D plot within bounds\n"))
         }
@@ -795,5 +795,5 @@ gl.pcoa.plot <- function(glPca,
         cat(report("Completed:", funname, "\n"))
     }
     
-    invisible(NULL)
+    return(plott)
 }

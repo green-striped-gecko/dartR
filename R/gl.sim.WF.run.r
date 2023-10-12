@@ -125,7 +125,7 @@ gl.sim.WF.run <-
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "stringi"
@@ -990,7 +990,7 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
         #tic("mutation_2")
         # making available to mutation those loci in which deleterious alleles 
         # have been eliminated from all populations
-        if(mutation==T){
+        if(mutation==TRUE){
           
           pops_merge <- rbindlist(pop_list)
           pops_seqs <- c(pops_merge$V3,pops_merge$V4)

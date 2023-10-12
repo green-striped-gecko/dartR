@@ -37,9 +37,8 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2, dplyr, dartR.data
 biocViews:
-Imports: ape,crayon,data.table,fields,foreach,gridExtra,MASS,methods,patchwork,plyr,PopGenReport,raster,reshape2,shiny,SNPRelate,sp (>= 1.6.1),StAMPP,stats,stringr,tidyr,utils,vegan
+Imports: ape,boot,crayon,data.table,fields,foreach,gridExtra,MASS,methods,patchwork,plyr,PopGenReport,raster,reshape2,shiny,SNPRelate,sp (>= 1.6.1),StAMPP,stats,stringr,tidyr,utils,vegan
 Suggests: 
-    boot,
     devtools,
     directlabels,
     dismo,
@@ -91,8 +90,7 @@ Suggests:
     tibble,
     vcfR,
     zoo,
-    viridis,
-    testthat (>= 3.0.0)
+    viridis
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.2.3
@@ -107,6 +105,5 @@ Author: Bernd Gruber [aut, cre],
   Lindsay V. Clark [ctb],
   Floriaan Devloo-Delva [ctb],
   Eric Archer [ctb]
-Config/testthat/edition: 3
 URL: https://green-striped-gecko.github.io/dartR/
 BugReports: https://groups.google.com/g/dartr?pli=1

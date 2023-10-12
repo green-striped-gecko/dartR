@@ -99,7 +99,7 @@ gl2plink <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -110,7 +110,14 @@ gl2plink <- function(x,
     
     if(is.null(x$chromosome)){
       x$chromosome <- as.factor(rep("1",nLoc(x)))
-      cat(warn("   Chromosome slot is empty. Using 1 as dummy name.\n"))
+      cat(warn("   chromosome slot is empty. Using 1 as dummy name.\n"))
+    }
+    
+    if(is.null(x$position)){
+      x$position <- 1:nLoc(x)
+      cat(warn(
+"   position slot is empty. Using sequence from one to number of loci in the 
+dataset as dummy position.\n"))
     }
     
     snp_temp <- as.data.frame(cbind(as.character(x$chromosome),x$position))

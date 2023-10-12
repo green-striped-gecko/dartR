@@ -102,7 +102,7 @@ gl.sim.WF.table <- function(file_var,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # DO THE JOB
     ##### LOADING VARIABLES ######

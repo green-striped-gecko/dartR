@@ -12,6 +12,7 @@ gl.report.pa(
   plot.out = TRUE,
   font_plot = 14,
   map.interactive = FALSE,
+  provider = "Esri.NatGeoWorldMap",
   palette_discrete = discrete_palette,
   save2tmp = FALSE,
   verbose = NULL
@@ -37,6 +38,8 @@ differences should reported. If TRUE, loci names are reported using a list
 
 \item{map.interactive}{Specify whether an interactive map showing private
 alleles between populations is to be produced [default FALSE].}
+
+\item{provider}{Passed to leaflet [default "Esri.NatGeoWorldMap"].}
 
 \item{palette_discrete}{A discrete palette for the color of populations or a
 list with as many colors as there are populations in the dataset
@@ -143,7 +146,6 @@ Other report functions:
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.hamming}()},
-\code{\link{gl.report.heterozygosity}()},
 \code{\link{gl.report.hwe}()},
 \code{\link{gl.report.ld.map}()},
 \code{\link{gl.report.locmetric}()},

@@ -101,7 +101,6 @@ Other report functions:
 \code{\link{gl.report.bases}()},
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.diversity}()},
-\code{\link{gl.report.heterozygosity}()},
 \code{\link{gl.report.hwe}()},
 \code{\link{gl.report.ld.map}()},
 \code{\link{gl.report.locmetric}()},

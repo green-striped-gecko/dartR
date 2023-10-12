@@ -224,7 +224,7 @@ gl.spatial.autoCorr <- function(x = NULL,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jackson",
-                   verbosity = verbose)
+                   verbose = verbose)
   
   # CHECK DATATYPE
   if (!is.null(x)) {

@@ -15,13 +15,13 @@ utils.het.pop <- function(x) {
     for (i in 1:length(sgl)) {
         gl <- sgl[[i]]
         t <- as.matrix(gl)
-        p <- colMeans(t == 0, na.rm = T)
-        q <- colMeans(t == 2, na.rm = T)
-        hets <- colMeans(t == 1, na.rm = T)
+        p <- colMeans(t == 0, na.rm = TRUE)
+        q <- colMeans(t == 2, na.rm = TRUE)
+        hets <- colMeans(t == 1, na.rm = TRUE)
         p <- (2 * p + hets) / 2
         q <- (2 * q + hets) / 2
         H <- 1 - (p * p + q * q)
-        Hexp[i] <- round(mean(H, na.rm = T), 6)
+         Hexp[i] <- round(mean(H, na.rm = TRUE), 6)
     }
     invisible(Hexp)
 }

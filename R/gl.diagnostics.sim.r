@@ -58,7 +58,7 @@
 
 gl.diagnostics.sim <- function(x,
                                Ne,
-                               iteration =1,
+                               iteration = 1,
                                pop_he = 1 ,
                                pops_fst = c(1,2),
                                plot_theme = theme_dartR(),
@@ -73,7 +73,7 @@ gl.diagnostics.sim <- function(x,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jody",
-                   verbosity = verbose)
+                   verbose = verbose)
 
   # DO THE JOB
   

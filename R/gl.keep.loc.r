@@ -1,13 +1,14 @@
 #' @name gl.keep.loc
+# Preliminaries -- Parameter specifications -------------- 
 #' @title Removes all but the specified loci from a genlight object
 #' @description
-#' The script returns a genlight object with the all but the specified loci
-#' deleted.
-#' 
-#' #' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
+#' This function deletes loci that are not specified to keep, and their associated metadata. 
 #'
-#' @param x Name of the genlight object containing SNP genotypes or
-#' presence/absence data [required].
+#' The script returns a dartR genlight object with the retained loci. 
+#' The script works with both genlight objects
+#' containing SNP genotypes and Tag P/A data (SilicoDArT).
+
+#' @param x Name of the genlight object [required].
 #' @param loc.list A list of loci to be kept
 #' [required, if loc.range not specified].
 #' @param first First of a range of loci to be kept
@@ -15,41 +16,45 @@
 #' @param last Last of a range of loci to be kept
 #' [if not specified, last locus in the dataset].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-#' progress log; 3, progress and results summary; 5, full report
-#' [default 2 or as specified using gl.set.verbosity]
+#' progress but not results; 3, progress and results summary; 5, full report
+#'  [default 2 or as specified using gl.set.verbosity].
+#'
+#' @export
 #' @return A genlight object with the reduced data
 #'
+#' @family dartR-base
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-#'
+# Examples -------------
 #' @examples
 #' # SNP data
 #'   gl2 <- gl.keep.loc(testset.gl, loc.list=c('100051468|42-A/T', '100049816-51-A/G'))
 #' # Tag P/A data
 #'   gs2 <- gl.keep.loc(testset.gs, loc.list=c('20134188','19249144'))
-#'
+# See also ------------
 #' @seealso \code{\link{gl.drop.loc}} to drop rather than keep specified loci
-#' @export
-
+#'
+# End Block --------------
+# Function 
 gl.keep.loc <- function(x,
                         loc.list = NULL,
                         first = NULL,
                         last = NULL,
                         verbose = NULL) {
-    # SET VERBOSITY
+  # Preliminaries -------------
+  # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "v.2023.1",
-                     verbosity = verbose)
+                     build = "v.2023.2",
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
     
-    # FUNCTION SPECIFIC ERROR CHECKING
-    
+   # Function-specific error checking -----------        
     if (!is.null(loc.list) && !is.null(first)) {
         flag <- "both"
         if (verbose >= 2) {
@@ -117,14 +122,15 @@ gl.keep.loc <- function(x,
         }
     }
     
-    # DO THE JOB
+	# DO THE JOB --------------
+    # Remove loci ------
     hold <- x
     
     if (verbose >= 2) {
         cat(report("  Deleting all but the specified loci\n"))
     }
     
-    # Remove duplicated loci if specified
+    # Remove loci if specified
     
     if (!is.null(first) && !is.null(loc.list)) {
         list.from.range <- locNames(x)[first:last]
@@ -145,8 +151,8 @@ gl.keep.loc <- function(x,
 
     }
     
-    # REPORT A SUMMARY
-    
+# REPORT A SUMMARY -------------
+    # Summary of outcomes --------------       
     if (verbose >= 3) {
         cat("  Summary of recoded dataset\n")
         cat(paste("    Original No. of loci:", nLoc(hold), "\n"))
@@ -155,15 +161,15 @@ gl.keep.loc <- function(x,
         # cat(paste(' No. of individuals:', nInd(x2),'\n')) cat(paste(' No. of populations: ', nPop(x2),'\n'))
     }
     
-    # ADD TO HISTORY
+    # ADD TO HISTORY ---------------
     nh <- length(x2@other$history)
     x2@other$history[[nh + 1]] <- match.call()
     
-    # FLAG SCRIPT END
+    # FLAG SCRIPT END ----------------
     
     if (verbose >= 1) {
         cat(report("Completed:", funname, "\n"))
     }
-    
+    # End block --------------
     return(x2)
 }
