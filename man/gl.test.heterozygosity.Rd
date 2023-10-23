@@ -10,6 +10,7 @@ gl.test.heterozygosity(
   nreps = 100,
   alpha1 = 0.05,
   alpha2 = 0.01,
+  test_het = "He",
   plot.out = TRUE,
   max_plots = 6,
   plot_theme = theme_dartR(),
@@ -28,6 +29,9 @@ gl.test.heterozygosity(
 
 \item{alpha2}{Second significance level for comparison with diff=0 on plot
 [default 0.01].}
+
+\item{test_het}{Wheteher to test difference using observed heterozygosity
+("Ho") or expected heterozygosity ("He") [default "He"].}
 
 \item{plot.out}{If TRUE, plots a sampling distribution of the differences for
 each comparison [default TRUE].}
