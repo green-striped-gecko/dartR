@@ -2,16 +2,17 @@
 #' @title Tests the difference in heterozygosity between populations taken
 #'  pairwise
 #' @description
-#' Calculates the expected heterozygosities for each population in a genlight
-#' object, and uses re-randomization to test the statistical significance of
-#' differences in heterozygosity between populations taken pairwise.
+#' Calculates heterozygosities (expected or observed) for each population in a 
+#' genlight object, and uses re-randomization to test the statistical 
+#' significance of differences in heterozygosity between populations taken
+#'  pairwise.
 #' @param x A genlight object containing the SNP genotypes [required].
 #' @param nreps Number of replications of the re-randomization [default 1,000].
 #' @param alpha1 First significance level for comparison with diff=0 on plot
 #' [default 0.05].
 #' @param alpha2 Second significance level for comparison with diff=0 on plot
 #' [default 0.01].
-#' @param test_het Wheteher to test difference using observed heterozygosity
+#' @param test_het Whether to test difference using observed heterozygosity
 #'  ("Ho") or expected heterozygosity ("He") [default "He"].
 #' @param plot.out If TRUE, plots a sampling distribution of the differences for
 #' each comparison [default TRUE].

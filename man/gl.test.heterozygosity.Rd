@@ -30,7 +30,7 @@ gl.test.heterozygosity(
 \item{alpha2}{Second significance level for comparison with diff=0 on plot
 [default 0.01].}
 
-\item{test_het}{Wheteher to test difference using observed heterozygosity
+\item{test_het}{Whether to test difference using observed heterozygosity
 ("Ho") or expected heterozygosity ("He") [default "He"].}
 
 \item{plot.out}{If TRUE, plots a sampling distribution of the differences for
@@ -56,9 +56,10 @@ A dataframe containing population labels, heterozygosities and sample
  sizes
 }
 \description{
-Calculates the expected heterozygosities for each population in a genlight
-object, and uses re-randomization to test the statistical significance of
-differences in heterozygosity between populations taken pairwise.
+Calculates heterozygosities (expected or observed) for each population in a 
+genlight object, and uses re-randomization to test the statistical 
+significance of differences in heterozygosity between populations taken
+ pairwise.
 }
 \details{
 \strong{ Function's output }
