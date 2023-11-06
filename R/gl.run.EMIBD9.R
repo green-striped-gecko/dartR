@@ -1,4 +1,4 @@
-
+#'@export
 # Inbreed: A Boolean, taking values 0 or 1 to indicate inbreeding is not and is 
 # allowed in estimating IBD coefficients.
 # GtypeFile: A string, giving the path and name of the genotype file. 

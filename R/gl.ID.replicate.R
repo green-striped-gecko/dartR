@@ -1,4 +1,4 @@
-
+#'@export
 gl.ID.replicate <- function(x,
                             loc_threshold = 100,
                             perc_geno = 0.99
