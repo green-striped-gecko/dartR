@@ -103,7 +103,7 @@ gl.run.EMIBD9 <- function(x,
   }
   ## if windows
   if (!grepl("unix", .Platform$OS.type, ignore.case = TRUE)) {
-    system("CEM_IBD_P.exe")
+    system("EM_IBD_P.exe INP:MyData.par")
   }
   
   
