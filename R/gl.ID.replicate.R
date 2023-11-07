@@ -1,4 +1,24 @@
-#'@export
+#' @name gl.ID.replicate
+#' @title Identify replicate individuals 
+#' @description
+#' Identify replicate individuals 
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param loc_threshold Minimum number of loci required to asses that two 
+#' individuals are replicates [default 100].
+#' @param perc_geno Mimimum percentage of genotypes in which two individuals 
+#' should be the same [default 0.99]. 
+#' @details
+#' This function uses an C++ implementation, so package Rcpp needs to be 
+#' installed and it is therefore fast (once it has compiled the function after 
+#' the first run).
+#' @return Dataframe with pairwise results of percentage of same genotypes 
+#' between two individuals and the number of loci used in the comparison. 
+#' @author Custodian: Luis Mijangos -- Post to
+#' \url{https://groups.google.com/d/forum/dartr}
+#' @examples
+#' res_rep <- gl.ID.replicate(platypus.gl, loc_threshold = 500, perc_geno = 0.85)
+#' @export
+
 gl.ID.replicate <- function(x,
                             loc_threshold = 100,
                             perc_geno = 0.99

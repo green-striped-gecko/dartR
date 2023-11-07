@@ -1,11 +1,38 @@
-#'@export
-# Inbreed: A Boolean, taking values 0 or 1 to indicate inbreeding is not and is 
-# allowed in estimating IBD coefficients.
-# GtypeFile: A string, giving the path and name of the genotype file. 
-# OutFileName: A string, giving the path and name of the output file.
-# ISeed: An integer used to seed the random number generator.
-# for windows move the following files to working directory: EM_IBD_P.exe, 
-#  impi.dll and libiomp5md.dll
+#' @name gl.run.EMIBD9
+#' @title run program EMIBD9
+#' @description
+#' run program EMIBD9
+#' @param x Name of the genlight object containing the SNP data [required].
+#' @param Inbreed A Boolean, taking values 0 or 1 to indicate inbreeding is not
+#'  and is allowed in estimating IBD coefficients [default 1].
+#' @param GtypeFile: A string, giving the path and name of the genotype file 
+#' [default "EMIBD9_Gen.dat"]. 
+#' @param OutFileName_par A string, giving the path and name of the parameter
+#'  file [default "MyData.par"].
+#' @param OutFileName A string, giving the path and name of the output file 
+#' [default "EMIBD9_Res.ibd9"].
+#' @param ISeed: An integer used to seed the random number generator [default 52].
+#' @details
+#' Download the program from here:
+#' 
+#' https://www.zsl.org/about-zsl/resources/software/emibd9
+#' 
+#' For Windows, install the program and then move the following files to your
+#'  working directory: "EM_IBD_P.exe", "impi.dll" and "libiomp5md.dll".
+#' 
+#' For Mac move the file "EM_IBD_P" to the working directory.
+#' 
+#' @return Dataframe with pairwise results of percentage of same genotypes 
+#' between two individuals and the number of loci used in the comparison. 
+#' @author Custodian: Luis Mijangos -- Post to
+#' \url{https://groups.google.com/d/forum/dartr}
+#' @examples
+#' \dontrun{
+#' t1 <- gl.filter.allna(platypus.gl)
+#' res_rel <- gl.run.EMIBD9(t1)
+#' }
+#' @export
+
 gl.run.EMIBD9 <- function(x,
                           Inbreed = 1,
                           GtypeFile = "EMIBD9_Gen.dat",
