@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.run.EMIBD9.R
 \name{gl.run.EMIBD9}
 \alias{gl.run.EMIBD9}
-\title{run program EMIBD9}
+\title{Run program EMIBD9}
 \usage{
 gl.run.EMIBD9(
   x,
@@ -31,11 +31,10 @@ file [default "MyData.par"].}
 \item{ISeed:}{An integer used to seed the random number generator [default 52].}
 }
 \value{
-Dataframe with pairwise results of percentage of same genotypes 
-between two individuals and the number of loci used in the comparison.
+A matrix with pairwise relatedness
 }
 \description{
-run program EMIBD9
+Run program EMIBD9
 }
 \details{
 Download the program from here:
@@ -51,6 +50,14 @@ For Mac move the file "EM_IBD_P" to the working directory.
 \dontrun{
 t1 <- gl.filter.allna(platypus.gl)
 res_rel <- gl.run.EMIBD9(t1)
+}
+
+}
+\references{
+\itemize{
+\item Wang, J. (2022). A joint likelihood estimator of relatedness and allele
+ frequencies from a small sample of individuals. Methods in Ecology and 
+ Evolution, 13(11), 2443-2462.
 }
 }
 \author{

@@ -50,23 +50,25 @@ dataset, the name of the replicates and the percentage of the same genotype.
  }
 }
 \description{
-Identify replicate individuals
+Identify replicated individuals
 }
 \details{
 This function uses an C++ implementation, so package Rcpp needs to be 
 installed and it is therefore fast (once it has compiled the function after 
 the first run).
+
 Ideally, in a large dataset with related and unrelated individuals and 
 several replicated individuals, such as in a capture/mark/recapture study, 
 the first histogram should have four "peaks". The first peak should represent
  unrelated individuals, the second peak should correspond to second-degree 
  relationships (such as cousins), the third peak should represent 
  first-degree relationships (like parent/offspring and full siblings), and
-  the fourth peak should represent replicated individuals. In order to 
-  ensure that replicated individuals are properly identified, it's important 
-  to have a clear separation between the third and fourth peaks in the second
-   histogram. This means that there should be bins with zero counts between 
-   these two peaks.
+  the fourth peak should represent replicated individuals. 
+  
+In order to ensure that replicated individuals are properly identified, it's
+ important to have a clear separation between the third and fourth peaks in 
+ the second histogram. This means that there should be bins with zero counts 
+ between these two peaks.
 }
 \examples{
 res_rep <- gl.report.replicates(platypus.gl, loc_threshold = 500, 

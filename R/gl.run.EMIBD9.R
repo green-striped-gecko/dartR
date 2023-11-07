@@ -1,7 +1,7 @@
 #' @name gl.run.EMIBD9
-#' @title run program EMIBD9
+#' @title Run program EMIBD9
 #' @description
-#' run program EMIBD9
+#' Run program EMIBD9
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param Inbreed A Boolean, taking values 0 or 1 to indicate inbreeding is not
 #'  and is allowed in estimating IBD coefficients [default 1].
@@ -22,14 +22,20 @@
 #' 
 #' For Mac move the file "EM_IBD_P" to the working directory.
 #' 
-#' @return Dataframe with pairwise results of percentage of same genotypes 
-#' between two individuals and the number of loci used in the comparison. 
+#' @return A matrix with pairwise relatedness
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
 #' \dontrun{
 #' t1 <- gl.filter.allna(platypus.gl)
 #' res_rel <- gl.run.EMIBD9(t1)
+#' }
+#' 
+#' @references
+#' \itemize{
+#' \item Wang, J. (2022). A joint likelihood estimator of relatedness and allele
+#'  frequencies from a small sample of individuals. Methods in Ecology and 
+#'  Evolution, 13(11), 2443-2462.
 #' }
 #' @export
 
