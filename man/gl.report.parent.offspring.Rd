@@ -125,6 +125,7 @@ Other report functions:
 \code{\link{gl.report.overshoot}()},
 \code{\link{gl.report.pa}()},
 \code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.replicates}()},
 \code{\link{gl.report.reproducibility}()},
 \code{\link{gl.report.secondaries}()},
 \code{\link{gl.report.sexlinked}()},
