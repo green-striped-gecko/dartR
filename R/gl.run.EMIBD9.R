@@ -124,6 +124,8 @@ gl.run.EMIBD9 <- function(x,
   
   restore_names_2 <- merge(data.frame(id2= rownames(res)), restore_names, by ="id2")
   
+  res <- apply(res, 2, as.numeric)
+  
   colnames(res) <- restore_names_2$id
   rownames(res) <- restore_names_2$id
   
