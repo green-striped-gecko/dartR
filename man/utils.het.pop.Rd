@@ -4,7 +4,7 @@
 \alias{utils.het.pop}
 \title{Calculates expected mean expected heterozygosity per population}
 \usage{
-utils.het.pop(x)
+utils.het.pop(x, t_het)
 }
 \arguments{
 \item{x}{A genlight object containing the SNP genotypes [required].}

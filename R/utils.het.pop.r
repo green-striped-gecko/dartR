@@ -7,10 +7,10 @@
 #' @examples
 #' out <- utils.het.pop(testset.gl)
 
-utils.het.pop <- function(x) {
+utils.het.pop <- function(x,t_het) {
     # Split the genlight object into a list of populations
     sgl <- seppop(x)
-    Hexp <- array(NA, length(sgl))
+    res_het <- array(NA, length(sgl))
     # For each population
     for (i in 1:length(sgl)) {
         gl <- sgl[[i]]
@@ -18,12 +18,18 @@ utils.het.pop <- function(x) {
         p <- colMeans(t == 0, na.rm = TRUE)
         q <- colMeans(t == 2, na.rm = TRUE)
         hets <- colMeans(t == 1, na.rm = TRUE)
-        p <- (2 * p + hets) / 2
-        q <- (2 * q + hets) / 2
-        H <- 1 - (p * p + q * q)
-         Hexp[i] <- round(mean(H, na.rm = TRUE), 6)
+        if(t_het=="He"){
+          p <- (2 * p + hets) / 2
+          q <- (2 * q + hets) / 2
+          H <- 1 - (p * p + q * q)
+          res_het[i] <- round(mean(H, na.rm = TRUE), 6)
+        }
+        if(t_het=="Ho"){
+          res_het[i] <- round(mean(hets, na.rm = TRUE), 6)
+        }
+
     }
-    invisible(Hexp)
+    invisible(res_het)
 }
 
 ind.count <- function(x) {

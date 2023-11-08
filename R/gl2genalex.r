@@ -60,6 +60,8 @@ gl2genalex <- function(x,
     
     # DO THE JOB
     
+    x <- x[order(pop(x)),]
+    
     gind <- gl2gi(x, verbose = 0)
     poppr::genind2genalex(
         gind,
