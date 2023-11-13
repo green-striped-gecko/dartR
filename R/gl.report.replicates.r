@@ -151,7 +151,7 @@ gl.report.replicates <- function(x,
   ind_list <- NULL
   
     for (y in 1:nrow(unique_ind_tmp)) {
-      if (unique_ind_tmp[y, "test_stat"] == TRUE) {
+      if (unique_ind_tmp[y, "test_stat"] == FALSE) {
         ind_tmp <- unique_ind_tmp[y, "ind1"]
       } else{
         ind_tmp <- unique_ind_tmp[y, "ind2"]
