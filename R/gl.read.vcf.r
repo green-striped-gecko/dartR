@@ -73,6 +73,13 @@ gl.read.vcf <- function(vcffile,
           if(length(more_alleles)!=0){
             info <- info[-more_alleles,]
             info[] <- lapply(info, as.numeric)
+            x@loc.all <- loc.all[-more_alleles]
+            x@chromosome <- as.factor(chrom[-more_alleles])
+            x@position <- pos[-more_alleles]
+          }else{
+            x@loc.all <- loc.all
+            x@chromosome <- as.factor(chrom)
+            x@position <- pos
           }
         }else{
         ALT <- vcfR::getALT(vcf)
@@ -82,6 +89,10 @@ gl.read.vcf <- function(vcffile,
           x@loc.all <- loc.all[-more_alleles]
           x@chromosome <- as.factor(chrom[-more_alleles])
           x@position <- pos[-more_alleles]
+        }else{
+          x@loc.all <- loc.all
+          x@chromosome <- as.factor(chrom)
+          x@position <- pos
         }
         }
         
