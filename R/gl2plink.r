@@ -220,16 +220,16 @@ dataset as dummy position.\n"))
         prefix.in_temp <- outfilespec
         prefix.out_temp <- outfilespec
         
-        allele_tmp <- gsub("/"," ", x$loc.all)
-        allele_tmp <- strsplit(allele_tmp,split = " ")
-        allele_tmp <- Reduce(rbind,allele_tmp)[,1]
-        allele_tmp <- cbind(locNames(x), allele_tmp)
-        write.table(allele_tmp,
-                    file = file.path(outpath,"mylist.txt"),
-                    row.names = FALSE,
-                    col.names = FALSE,
-                    quote = FALSE
-                    )
+        # allele_tmp <- gsub("/"," ", x$loc.all)
+        # allele_tmp <- strsplit(allele_tmp,split = " ")
+        # allele_tmp <- Reduce(rbind,allele_tmp)[,1]
+        # allele_tmp <- cbind(locNames(x), allele_tmp)
+        # write.table(allele_tmp,
+        #             file = file.path(outpath,"mylist.txt"),
+        #             row.names = FALSE,
+        #             col.names = FALSE,
+        #             quote = FALSE
+        #             )
         
         make_plink <-
             function(plink.path,
@@ -253,7 +253,7 @@ dataset as dummy position.\n"))
             }
         
         system_verbose <-function(...) {
-            report <-system(..., intern = T)
+            report <- system(..., intern = TRUE)
             message(
                 paste0(
                     "\n\n----------Output of function start:\n\n",

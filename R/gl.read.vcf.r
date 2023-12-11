@@ -40,9 +40,11 @@ gl.read.vcf <- function(vcffile,
         vcf <- vcfR::read.vcfR(file = vcffile, verbose = verbose)
         myRef <- vcfR::getREF(vcf)
         myAlt <- vcfR::getALT(vcf)
+        chrom <- vcfR::getCHROM(vcf)
+        pos <- vcfR::getPOS(vcf) 
         loc.all <- paste0(myRef,"/",myAlt)
         x <- vcfR::vcfR2genlight(vcf)
-        x@loc.all <- loc.all
+
         
         # adding SNP information from VCF
         info_tmp_1 <- vcf@fix[,6:7]
@@ -54,7 +56,15 @@ gl.read.vcf <- function(vcffile,
           info_tmp_2 <- as.data.frame(do.call(rbind,stringr::str_split(info_tmp_2,pattern = "=|;")))
           info <- info_tmp_2[,seq(2,ncol(info_tmp_2),2)]
           info <- cbind(info_tmp_1,info)
-          colnames(info) <- c("QUAL","FILTER",unname(unlist(info_tmp_2[1,seq(1,ncol(info_tmp_2),2)])))
+          col.names.info <- c("QUAL","FILTER",unname(unlist(info_tmp_2[1,seq(1,ncol(info_tmp_2),2)])))
+          if(length(col.names.info)!=  length(colnames(info))){
+            message(warn(
+              "  Locus information is not formatted correctly. One reason could be that a field could have missing values."))
+            info <- info_tmp_1
+            colnames(info) <- c("QUAL","FILTER")
+          }else{
+          colnames(info) <- col.names.info
+          }
         }
       
         # identify which SNPs have more than 2 alleles
@@ -66,9 +76,12 @@ gl.read.vcf <- function(vcffile,
           }
         }else{
         ALT <- vcfR::getALT(vcf)
-        more_alleles <- which(stringr::str_length(ALT) >1)
+        more_alleles <- grep(pattern = ",",ALT)
         if(length(more_alleles)>0){
           info <- info[-more_alleles,]
+          x@loc.all <- loc.all[-more_alleles]
+          x@chromosome <- as.factor(chrom[-more_alleles])
+          x@position <- pos[-more_alleles]
         }
         }
         
@@ -76,6 +89,7 @@ gl.read.vcf <- function(vcffile,
         x <- gl.compliance.check(x)
         
         x$other$loc.metrics <- cbind(x$other$loc.metrics,info)
+        x$other$loc.metrics$QUAL <- as.numeric(x$other$loc.metrics$QUAL)
         
         # add history
         x@other$history <- list(match.call())
