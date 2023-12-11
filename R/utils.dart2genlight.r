@@ -14,8 +14,8 @@
 #' loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
 #' @details
 #' The ind.metadata file needs to have very specific headings. First a heading
-#' called id. Here the ids have to match the ids in the dart object
-#' \code{colnames(dart[[4]])}. The following column headings are optional.
+#' called id. Here the ids have to match the ids in the dartR object. 
+#' The following column headings are optional.
 #' pop: specifies the population membership of each individual. lat and lon
 #' specify spatial coordinates (in decimal degrees WGS1984 format). Additional
 #' columns with individual metadata can be imported (e.g. age, gender).
