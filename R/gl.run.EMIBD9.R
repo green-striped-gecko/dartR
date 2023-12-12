@@ -112,7 +112,6 @@ gl.run.EMIBD9 <- function(x,
     system("EM_IBD_P.exe INP:MyData.par")
   }
   
-  
   x_lines <- readLines("EMIBD9_Res.ibd9")
   strt <- which(grepl( "^IBD",x_lines)) + 2
   stp <- which(grepl("Indiv genotypes",x_lines)) - 4
@@ -134,6 +133,9 @@ gl.run.EMIBD9 <- function(x,
   
   colnames(res) <- restore_names_2$id
   rownames(res) <- restore_names_2$id
+  
+  order_mat <- colnames(res)[order(colnames(res))]
+  res <- res[order_mat, order_mat]
   
   return(res)
   

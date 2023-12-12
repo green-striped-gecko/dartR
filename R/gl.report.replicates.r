@@ -151,7 +151,7 @@ gl.report.replicates <- function(x,
   ind_list <- NULL
   
     for (y in 1:nrow(unique_ind_tmp)) {
-      if (unique_ind_tmp[y, "test_stat"] == TRUE) {
+      if (unique_ind_tmp[y, "test_stat"] == FALSE) {
         ind_tmp <- unique_ind_tmp[y, "ind1"]
       } else{
         ind_tmp <- unique_ind_tmp[y, "ind2"]
@@ -168,9 +168,10 @@ gl.report.replicates <- function(x,
   # getting list of replicated individuals
   
   ind_mat <- as.matrix(reshape2::acast(unique_ind, ind1~ind2, value.var="perc"))
+  # ind_mat[lower.tri(ind_mat,diag = TRUE)] <- NA
   
   ind_list_rep <- apply(ind_mat,2,function(x){
-    x[which(!is.na(x))]
+    names(x[which(!is.na(x))])
   })
   
   # Histograms

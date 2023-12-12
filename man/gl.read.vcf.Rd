@@ -4,10 +4,13 @@
 \alias{gl.read.vcf}
 \title{Converts a vcf file into a genlight object}
 \usage{
-gl.read.vcf(vcffile, verbose = NULL)
+gl.read.vcf(vcffile, ind.metafile = NULL, verbose = NULL)
 }
 \arguments{
 \item{vcffile}{A vcf file (works only for diploid data) [required].}
+
+\item{ind.metafile}{Optional file in csv format with metadata for each
+individual (see details for explanation) [default NULL].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report
@@ -17,9 +20,15 @@ progress log; 3, progress and results summary; 5, full report
 A genlight object.
 }
 \description{
-This function needs package vcfR, please install it. The converted genlight
-object does not have individual metrics. You need to add them 'manually' to
-the other$ind.metrics slot.
+This function needs package vcfR, please install it.
+}
+\details{
+The ind.metadata file needs to have very specific headings. First a heading
+called id. Here the ids have to match the ids in the dartR object. 
+The following column headings are optional.
+pop: specifies the population membership of each individual. lat and lon
+specify spatial coordinates (in decimal degrees WGS1984 format). Additional
+columns with individual metadata can be imported (e.g. age, gender).
 }
 \examples{
 \dontrun{
