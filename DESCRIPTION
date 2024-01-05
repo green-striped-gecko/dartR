@@ -108,5 +108,5 @@ Author: Bernd Gruber [aut, cre],
   Floriaan Devloo-Delva [ctb],
   Eric Archer [ctb]
 Config/testthat/edition: 3
-URL: https://green-striped-gecko.github.io/dartR/
+URL: https://green-striped-gecko.github.io/dartR/, https://github.com/green-striped-gecko/dartR
 BugReports: https://groups.google.com/g/dartr?pli=1
