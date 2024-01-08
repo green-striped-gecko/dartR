@@ -1,11 +1,12 @@
 #' Calculates allele frequency of the first and second allele for each loci
 #' A very simple function to report allele frequencies
-#' @param x Name of the genlight object containing the SNP data [required].
+#' @param x:object  Name of the genlight object containing the SNP data [required].
 #' @return A simple data.frame with alf1, alf2.
 #' @export
 #' @rawNamespace import(adegenet, except = plot)
 #' @author Bernd Gruber (bugs? Post to
 #'  \url{https://groups.google.com/d/forum/dartr})
+#' @return data.frame
 #' @examples
 #' #for the first 10 loci only
 #' gl.alf(possums.gl[,1:10])
