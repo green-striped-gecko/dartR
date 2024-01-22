@@ -207,32 +207,68 @@ gl.dist.pop <- function(x,
             stop(error("Fatal Error: Nei Standard Distance is not available
                        for presence-absence data\n"))
         }
-        for (i in (1:(nP - 1))) {
-            for (j in ((i + 1):nP)) {
-                # Pull the loci for individuals i and j
-                prow1 <- p[i,]
-                prow2 <- p[j,]
-                # Delete the pairwise missing
-                tmp <- prow1+prow2
-                prow1 <- prow1[!is.na(tmp)]
-                prow2 <- prow2[!is.na(tmp)]
-                # Squares
-                p1sq <- prow1*prow1
-                p2sq <- prow2*prow2
-                # Repeat for q=1-p
-                qrow1 <- 1-prow1
-                qrow2 <- 1-prow2
-                q1sq <- qrow1*qrow1
-                q2sq <- qrow2*qrow2
-                # Cross products
-                p12 <- prow1*prow2
-                q12 <- qrow1*qrow2
-                # Number of non-missing loci
-                L <- length(p12)
-
-                dd[j,i] <- -log(sum(p12+q12)/(sqrt(sum(p1sq+q1sq))*sqrt(sum(p2sq+q2sq))))
-            }
-        }
+        # for (i in (1:(nP - 1))) {
+        #     for (j in ((i + 1):nP)) {
+        #         # Pull the loci for individuals i and j
+        #         prow1 <- p[i,]
+        #         prow2 <- p[j,]
+        #         # Delete the pairwise missing
+        #         tmp <- prow1+prow2
+        #         prow1 <- prow1[!is.na(tmp)]
+        #         prow2 <- prow2[!is.na(tmp)]
+        #         # Squares
+        #         p1sq <- prow1*prow1
+        #         p2sq <- prow2*prow2
+        #         # Repeat for q=1-p
+        #         qrow1 <- 1-prow1
+        #         qrow2 <- 1-prow2
+        #         q1sq <- qrow1*qrow1
+        #         q2sq <- qrow2*qrow2
+        #         # Cross products
+        #         p12 <- prow1*prow2
+        #         q12 <- qrow1*qrow2
+        #         # Number of non-missing loci
+        #         L <- length(p12)
+        # 
+        #         dd[j,i] <- -log(sum(p12+q12)/(sqrt(sum(p1sq+q1sq))*sqrt(sum(p2sq+q2sq))))
+        #     }
+        # }
+      #to hack package checking...
+      NeiDis <- function() {}  
+      
+      Rcpp::cppFunction(
+        "NumericMatrix NeiDis(NumericMatrix p, int nP) {
+  NumericMatrix out(nP,nP);
+  for (int i=0; i<(nP-1); i++) {
+     for (int j=(i+1); j<nP; j++) {
+  // Pull the loci for individuals i and j\
+    NumericVector prow1 = p(i,_);
+    NumericVector prow2 = p(j,_);
+  // Delete the pairwise missing
+    NumericVector tmp = prow1+prow2;
+    LogicalVector tmp2 = !is_na(tmp);
+    prow1 = prow1[tmp2];
+    prow2 = prow2[tmp2];
+  // Squares
+    NumericVector p1sq = prow1*prow1;
+    NumericVector p2sq = prow2*prow2;
+  // Repeat for q=1-p
+    NumericVector qrow1 = 1-prow1;
+    NumericVector qrow2 = 1-prow2;
+  // Cross products
+    NumericVector q1sq = qrow1*qrow1;
+    NumericVector q2sq = qrow2*qrow2;
+    NumericVector p12 = prow1*prow2;
+    NumericVector q12 = qrow1*qrow2;
+    out(j,i) = -log(sum(p12+q12)/(sqrt(sum(p1sq+q1sq))*sqrt(sum(p2sq+q2sq))));
+     }
+  }
+  return out;
+}"
+      )
+      p2 <- as.matrix(p)
+      dd <- NeiDis(p = p2,nP = nP)
+      dd[dd==0] <- NA
     }
     # # Test code
     # x <- dartR::gl2gi(testset.gl)
