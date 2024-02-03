@@ -795,5 +795,5 @@ gl.pcoa.plot <- function(glPca,
         cat(report("Completed:", funname, "\n"))
     }
     
-    return(plott)
+    return(invisible(plott))
 }
