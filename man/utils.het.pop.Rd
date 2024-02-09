@@ -16,7 +16,7 @@ A vector with the mean expected heterozygosity for each population
 Calculates expected mean expected heterozygosity per population
 }
 \examples{
-out <- utils.het.pop(testset.gl)
+out <- utils.het.pop(testset.gl,t_het="He")
 }
 \author{
 Bernd Gruber & Luis Mijangos (bugs? Post to
