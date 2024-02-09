@@ -419,6 +419,7 @@ locNames(pop_list_freq_temp[[1]])[which(pop_list_freq_temp[[1]]$chromosome ==
         if(store_phase1==TRUE){
         # counter to store values every generation
         gen <- 0
+        count_store <- 0
         }
         
         # pick which sex is going to be transferred first
@@ -576,6 +577,7 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
           variance_offspring <- variance_offspring_phase2
           number_offspring <- number_offspring_phase2
           dispersal <- dispersal_phase2
+          population_size <- population_size_phase2
           
           store_values <- TRUE
           
@@ -589,7 +591,10 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
           }
           
           # counter to store genlight objects
-          count_store <- 0
+          if(!exists("count_store")){
+            count_store <- 0
+          }
+          
           # counter to store values every generation
           gen <- 0
           

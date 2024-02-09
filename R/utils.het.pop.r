@@ -5,7 +5,7 @@
 #' @author Bernd Gruber & Luis Mijangos (bugs? Post to
 #' \url{https://groups.google.com/d/forum/dartr})
 #' @examples
-#' out <- utils.het.pop(testset.gl)
+#' out <- utils.het.pop(testset.gl,t_het="He")
 
 utils.het.pop <- function(x,t_het) {
     # Split the genlight object into a list of populations

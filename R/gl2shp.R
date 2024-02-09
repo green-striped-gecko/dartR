@@ -102,14 +102,14 @@ gl2shp <- function(x,
                 "Removed: ", indNames(x)[toremove], "\n"
             )))
         }
-        glpoints <- glpoints[complete.cases(glpoints),]
+        # glpoints <- glpoints[complete.cases(glpoints),]
         
         glpoints$id <- 1:nrow(glpoints)
         
         sp::coordinates(glpoints) <- c("lon", "lat")
         
         # create all sites point shp files
-        spdf <-SpatialPointsDataFrame(glpoints, data.frame(glpoints))
+        spdf <- SpatialPointsDataFrame(glpoints, data.frame(glpoints))
         proj4string(spdf) <- CRS(proj4)
         # if (!is.null(reproj4)) spdf <- project(spdf, proj = reproj4, inv = TRUE)
         #now use terra
