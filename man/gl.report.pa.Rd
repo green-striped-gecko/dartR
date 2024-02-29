@@ -19,7 +19,8 @@ gl.report.pa(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required].}
+\item{x}{Name of the genlight object containing the SNP or SilicoDArT data 
+[required].}
 
 \item{x2}{If two separate genlight objects are to be compared this can be
 provided here, but they must have the same number of SNPs [default NULL].}
