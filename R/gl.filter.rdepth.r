@@ -100,8 +100,8 @@ gl.filter.rdepth <-  function(x,
         ))
     }
     
-    index <- (rdepth >= lower & rdepth <= upper)
-    
+    index <- (rdepth >= lower & rdepth <= upper & !is.na(rdepth))
+
       x2 <- x[, index]
       # Remove the corresponding records from the loci metadata
       x2@other$loc.metrics <- x@other$loc.metrics[index,]
