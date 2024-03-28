@@ -292,7 +292,7 @@ gl.report.heterozygosity <- function(x,
     pop.het_fun <- function(df,
                             n.invariant) {
       Ho.loc <- colMeans(df == 1, na.rm = TRUE)
-      n_loc <- apply(df, 2, function(y) {
+      n_loc <- apply(df, 1, function(y) {
         sum(!is.na(y))
       })
       Ho.adj.loc <- Ho.loc * n_loc / (n_loc + n.invariant)
