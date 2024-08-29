@@ -178,4 +178,4 @@ Have fun working with `dartR`!
 
 Cheers,
 
-Bernd, Arthur, Luis, Carlo & Olly
+Bernd, Arthur, Luis, Carlo, Olly & Diana
