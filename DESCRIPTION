@@ -9,6 +9,7 @@ Authors@R: c(
             person("Arthur", "Georges", email="georges@aerg.edu.au", role="aut"),
             person("Jose L.", "Mijangos", email="Luis.MijangosAraujo@canberra.edu.au", role="aut"), 
             person("Carlo", "Pacioni",email="carlo.pacioni@delwp.vic.gov.au",role="aut"),
+            person("Diana", "Robledo-Ruiz",email="diana.robledoruiz1@monash.edu",role ="aut"),
             person("Peter J.", "Unmack", email="peter.mail2@unmack.net", role="ctb"),
             person("Oliver", "Berry", email="oliver.berry@csiro.au", role="ctb" ),
             person("Lindsay V.", "Clark", email="lvclark@illinois.edu", role="ctb"),
@@ -95,7 +96,7 @@ Suggests:
     testthat (>= 3.0.0)
 License: GPL (>= 3)
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 NeedsCompilation: no
 Packaged: 2023-06-02 23:28:46 UTC; Bernd Gruber
 Author: Bernd Gruber [aut, cre],
