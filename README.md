@@ -2,8 +2,9 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/dartRlogo.png' align="right" height="140" /></a>
-
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
+
+## This is the legacy version and no longer actively developed. Please upgrade to the [dartRverse](https://github.com/green-striped-gecko/dartRverse) suit of packages
 
 <!-- badges: start -->
 
