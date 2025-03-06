@@ -9,6 +9,7 @@ Authors@R: c(
             person("Arthur", "Georges", email="georges@aerg.edu.au", role="aut"),
             person("Jose L.", "Mijangos", email="Luis.MijangosAraujo@canberra.edu.au", role="aut"), 
             person("Carlo", "Pacioni",email="carlo.pacioni@delwp.vic.gov.au",role="aut"),
+            person("Diana", "Robledo-Ruiz",email="diana.robledoruiz1@monash.edu",role ="aut"),
             person("Peter J.", "Unmack", email="peter.mail2@unmack.net", role="ctb"),
             person("Oliver", "Berry", email="oliver.berry@csiro.au", role="ctb" ),
             person("Lindsay V.", "Clark", email="lvclark@illinois.edu", role="ctb"),
@@ -37,8 +38,9 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2, dplyr, dartR.data
 biocViews:
-Imports: ape,boot,crayon,data.table,fields,foreach,gridExtra,MASS,methods,patchwork,plyr,PopGenReport,raster,reshape2,shiny,SNPRelate,sp (>= 1.6.1),StAMPP,stats,stringr,tidyr,utils,vegan
+Imports: ape,crayon,data.table,fields,foreach,gridExtra,MASS,methods,patchwork,plyr,PopGenReport,raster,reshape2,shiny,SNPRelate,sp (>= 1.6.1),StAMPP,stats,stringr,tidyr,utils,vegan
 Suggests: 
+    boot,
     devtools,
     directlabels,
     dismo,
@@ -93,17 +95,18 @@ Suggests:
     viridis
 License: GPL (>= 3)
 LazyData: true
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 NeedsCompilation: no
 Packaged: 2023-06-02 23:28:46 UTC; Bernd Gruber
 Author: Bernd Gruber [aut, cre],
   Arthur Georges [aut],
   Jose L. Mijangos [aut],
   Carlo Pacioni [aut],
+  Diana Robledo [aut],
   Peter J. Unmack [ctb],
   Oliver Berry [ctb],
   Lindsay V. Clark [ctb],
   Floriaan Devloo-Delva [ctb],
   Eric Archer [ctb]
-URL: https://green-striped-gecko.github.io/dartR/
+URL: https://green-striped-gecko.github.io/dartR/, https://github.com/green-striped-gecko/dartR
 BugReports: https://groups.google.com/g/dartr?pli=1
