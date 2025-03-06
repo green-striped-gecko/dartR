@@ -4,14 +4,14 @@
 \alias{utils.flag.start}
 \title{A utility script to flag the start of a script}
 \usage{
-utils.flag.start(func = NULL, build = NULL, verbosity = NULL)
+utils.flag.start(func = NULL, build = NULL, verbose = NULL)
 }
 \arguments{
 \item{func}{Name of the function that is starting [required].}
 
 \item{build}{Name of the build [default NULL].}
 
-\item{verbosity}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+\item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report [default 2].}
 }
 \value{

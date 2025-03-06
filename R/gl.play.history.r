@@ -68,7 +68,7 @@ gl.play.history <- function(x,
         # run history one by one
         if (verbose > 0) {
             cat(report("\n################################\n"))
-            cat(report("###########Running #############\n"))
+            cat(report("########### Running #############\n"))
             print(glhist)
             cat(report("--------------------------------\n"))
         }

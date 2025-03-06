@@ -75,7 +75,7 @@ gl.report.callrate <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -259,7 +259,7 @@ cat("   Mean Call Rate",mean(pop_tmp$other$loc.metrics$CallRate,na.rm = TRUE) ,
         
   # Determine the loss of individuals for a given threshold using quantiles
         quantile_res <-
-            quantile(ind.call.rate, probs = seq(0, 1, 1 / 20))
+            quantile(ind.call.rate, probs = seq(0, 1, 1 / 20),na.rm = TRUE)
         retained <- unlist(lapply(quantile_res, function(y) {
             res <- length(ind.call.rate[ind.call.rate >= y])
         }))

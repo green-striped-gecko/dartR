@@ -88,7 +88,7 @@ gl.filter.maf <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Josh",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -180,7 +180,7 @@ gl.filter.maf <- function(x,
         x <- utils.recalc.maf(x, verbose = 0)
         
         # Remove loci with NA count <= 1-threshold
-        index <- x@other$loc.metrics$maf >= threshold
+        index <- which(x@other$loc.metrics$maf >= threshold)
         
           x2 <- x[, index]
           x2@other$loc.metrics <- x@other$loc.metrics[index,]

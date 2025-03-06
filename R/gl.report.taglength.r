@@ -65,7 +65,7 @@ gl.report.taglength <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -125,7 +125,7 @@ gl.report.taglength <- function(x,
     
     # Determine the loss of loci for a given threshold using quantiles
     quantile_res <-
-        quantile(nchar.tags, probs = seq(0, 1, 1 / 20),type=1)
+        quantile(nchar.tags, probs = seq(0, 1, 1 / 20),type=1,na.rm = TRUE)
     retained <- unlist(lapply(quantile_res, function(y) {
         res <- length(nchar.tags[nchar.tags >= y])
     }))

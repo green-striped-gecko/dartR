@@ -12,6 +12,7 @@ gl.ld.distance(
   plot_theme = NULL,
   plot.out = TRUE,
   save2tmp = FALSE,
+  plot_title = " ",
   verbose = NULL
 )
 }
@@ -32,6 +33,8 @@ base pairs [default NULL].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
+
+\item{plot_title}{Title of tyh plot [default " "].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 progress log; 3, progress and results summary; 5, full report

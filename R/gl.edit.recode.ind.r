@@ -1,79 +1,91 @@
 #' @name gl.edit.recode.ind
+# Preliminaries -- parameters -----------
 #' @title Creates or edits individual (=specimen) names, creates a recode_ind
 #'  file and applies the changes to a genlight object
 #' @description
-#' A script to edit individual names in a genlight object, or to create a
+#' A function to edit names of individual in a dartR genlight object, or to create a
 #' reassignment table taking the individual labels from a genlight object, or to
-#' edit existing individual labels in an existing recode_ind file.
+#' edit existing individual labels in an existing recode_ind file. The amended 
+#' recode table is then applied to the genlight object.
 #' @details
-#' Renaming individuals may be required when there have been errors in labelling
-#'  arising in the process from sample to DArT files. There may be occasions
-#'  where renaming individuals is required for preparation of figures. Caution
-#'  needs to be exercised because of the potential for breaking the 'chain of
-#'  evidence' between the samples themselves and the analyses. Recoding
-#'  individuals can also be done with a recode table (csv).
+#' Renaming individuals may be required when there have been errors in labeling
+#'  arising in the passage of samples to sequencing. There may be occasions
+#'  where renaming individuals is required for preparation of figures. 
 #'
-#' This script will input an existing recode table for editing and optionally
+#' This function will input an existing recode table for editing and optionally
 #' save it as a new table, or if the name of an input table is not supplied,
 #' will generate a table using the individual labels in the parent genlight
 #' object.
+#' 
+#' When caution needs to be exercised because of the potential for breaking the
+#' 'chain of evidence' associated with the samples, recoding individuals using
+#' a recode table (csv) can provide a durable record of the changes.
 #'
-#' The script, having deleted individuals, optionally identifies resultant
-#' monomorphic loci or loci with all values missing and deletes them (using
-#' gl.filter.monomorphs.r). The script also optionally recalculates statistics
-#' made redundant by the deletion of individuals from the dataset.
+#' For SNP genotype data, the function, having deleted individuals, optionally 
+#' identifies resultant monomorphic loci or loci with all values missing 
+#' and deletes them. The script also optionally recalculates the
+#' locus metadata as appropriate. The optional deletion of monomorphic loci
+#' and the optional recalculation of locus statistics is not available for
+#' Tag P/A data (SilicoDArT).
 #'
-#' Use outpath=getwd() or outpath='.' when calling this function to direct
+#' Use outpath=getwd() when calling this function to direct
 #' output files to your working directory.
 #'
-#' The script returns a genlight object with the new individual labels and the
-#' recalculated locus metadata.
+#' The function returns a dartR genlight object with the new population assignments  
+#' and the recalculated locus metadata. 
 #'
-#' @param x Name of the genlight object for which individuals are to be
-#'  relabelled [required].
+#' @param x Name of the genlight object [required].
 #' @param out.recode.file Name of the file to output the new individual labels
 #'  [optional].
-#' @param outpath Path where to save the output file
+#' @param outpath Path specifying where to save the output file
 #' [default tempdir(), mandated by CRAN].
-#' @param recalc Recalculate the locus metadata statistics [default TRUE].
-#' @param mono.rm Remove monomorphic loci [default TRUE].
+#' @param recalc If TRUE, recalculate the locus metadata statistics [default TRUE].
+#' @param mono.rm If TRUE, remove monomorphic loci [default TRUE].
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-#' progress log; 3, progress and results summary; 5, full report
-#' [default 2 or as specified using gl.set.verbosity].
+#' progress but not results; 3, progress and results summary; 5, full report
+#'  [default 2 or as specified using gl.set.verbosity].
+#'
 #' @return An object of class ('genlight') with the revised individual labels.
+#' @export 
 #' @import utils
-#' @export
+#' 
+#' @family dartR-base
 #' @author Custodian: Arthur Georges -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
-#' @seealso \code{\link{gl.recode.ind}}, \code{\link{gl.drop.ind}},
-#' \code{\link{gl.keep.ind}}
+#' 
+# Examples --------------
 #' @examples
 #' \dontrun{
 #' gl <- gl.edit.recode.ind(testset.gl)
 #' gl <- gl.edit.recode.ind(testset.gl, out.recode.file='ind.recode.table.csv')
 #' }
+# See also --------------
+#' @seealso \code{\link{gl.recode.ind}}, \code{\link{gl.drop.ind}},
+#' \code{\link{gl.keep.ind}}
 
+# Function ----------
 gl.edit.recode.ind <- function(x,
                                out.recode.file = NULL,
                                outpath = tempdir(),
                                recalc = FALSE,
                                mono.rm = FALSE,
                                verbose = NULL) {
-    # SET VERBOSITY
+  # Preliminaries -------------
+  # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
-                     verbosity = verbose)
+                     build = "v.2023.2",
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
     
     outfilespec <- file.path(outpath, out.recode.file)
     
-    # DO THE JOB
+    # DO THE JOB ---------------
     
     # Store variables
     hold <- x
@@ -153,7 +165,7 @@ gl.edit.recode.ind <- function(x,
                         verbose = 0)
     }
     
-    # Remove monomorphic loci
+    # Remove monomorphic loci -----------
     if (mono.rm) {
         if (verbose >= 2) {
             cat(report("  Deleting monomorphic loc\n"))
@@ -169,7 +181,7 @@ gl.edit.recode.ind <- function(x,
         }
     }
     
-    # Recalculate statistics
+    # Recalculate statistics ----------------
     if (recalc) {
         x <- gl.recalc.metrics(x, verbose = 0)
         if (verbose >= 2) {
@@ -182,7 +194,7 @@ gl.edit.recode.ind <- function(x,
         }
     }
     
-    # REPORT A SUMMARY
+    # REPORT A SUMMARY ----------------
     
     if (verbose >= 2) {
         cat("  Summary of recoded dataset\n")
@@ -198,15 +210,16 @@ gl.edit.recode.ind <- function(x,
         }
     }
     
-    # ADD TO HISTORY
+    # ADD TO HISTORY ---------------
     nh <- length(x@other$history)
     x@other$history[[nh + 1]] <- match.call()
     
-    # FLAG SCRIPT END
+    # FLAG SCRIPT END -------------------
     
     if (verbose > 0) {
         cat(report("Completed:", funname, "\n"))
     }
+    # End block ------------------
     
     return(x)
 }

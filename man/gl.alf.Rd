@@ -8,7 +8,7 @@ A very simple function to report allele frequencies}
 gl.alf(x)
 }
 \arguments{
-\item{x}{Name of the genlight object containing the SNP data [required].}
+\item{x:object}{Name of the genlight object containing the SNP data [required].}
 }
 \value{
 A simple data.frame with alf1, alf2.

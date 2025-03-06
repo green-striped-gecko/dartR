@@ -1,6 +1,6 @@
 #' Calculates allele frequency of the first and second allele for each loci
 #' A very simple function to report allele frequencies
-#' @param x Name of the genlight object containing the SNP data [required].
+#' @param x:object  Name of the genlight object containing the SNP data [required].
 #' @return A simple data.frame with alf1, alf2.
 #' @export
 #' @rawNamespace import(adegenet, except = plot)
@@ -12,7 +12,7 @@
 #' barplot(t(as.matrix(gl.alf(possums.gl[,1:10]))))
 
 gl.alf <- function(x) {
-  alf <- colMeans(as.matrix(x), na.rm = T) / 2
+  alf <- colMeans(as.matrix(x), na.rm = TRUE) / 2
   out <- data.frame(alf1 = 1 - alf, alf2 = alf)
   return(out)
 }

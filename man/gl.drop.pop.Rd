@@ -2,7 +2,7 @@
 % Please edit documentation in R/gl.drop.pop.r
 \name{gl.drop.pop}
 \alias{gl.drop.pop}
-\title{Removes specified populations from a genlight object}
+\title{Removes specified populations from a dartR genlight object}
 \usage{
 gl.drop.pop(
   x,
@@ -14,38 +14,35 @@ gl.drop.pop(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing SNP genotypes or Tag P/A data
-(SilicoDArT) [required].}
+\item{x}{Name of the genlight object [required].}
 
-\item{pop.list}{A list of populations to be removed [required].}
+\item{pop.list}{List of populations to be removed [required].}
 
-\item{as.pop}{Temporarily assign another metric to represent population for
+\item{as.pop}{Temporarily assign another locus metric as the population for
 the purposes of deletions [default NULL].}
 
-\item{recalc}{Recalculate the locus metadata statistics [default FALSE].}
+\item{recalc}{If TRUE, recalculate the locus metadata statistics [default FALSE].}
 
-\item{mono.rm}{Remove monomorphic loci [default FALSE].}
+\item{mono.rm}{If TRUE, remove monomorphic and all NA loci [default FALSE].}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log; 3, progress and results summary; 5, full report
+progress but not results; 3, progress and results summary; 5, full report
  [default 2 or as specified using gl.set.verbosity].}
 }
 \value{
-A genlight object with the reduced data
+A reduced dartR genlight object
 }
 \description{
-Individuals are assigned to populations based on the specimen metadata
-file (csv) used with \code{\link{gl.read.dart}}.
-The script, having deleted populations, optionally identifies resultant
-monomorphic loci or loci with all values missing and deletes them
-(using gl.filter.monomorphs.r). The script also optionally
-recalculates statistics made redundant by the deletion of individuals from
-the dataset.
+Individuals are assigned to populations based on associated specimen metadata
+stored in the dartR genlight object. 
+This function deletes all individuals in the nominated populations (pop.list).
+Monomorphic loci and loci that are scored all NA are optionally deleted (mono.rm=TRUE). 
+The script also optionally recalculates locus metatdata statistics to accommodate
+the deletion of individuals from the dataset (recalc=TRUE).
 
-The script returns a genlight object with the new population assignments and
-the recalculated locus metadata.
-
-#' See more about data manipulation in the [tutorial](http://georges.biomatix.org/storage/app/media/uploaded-files/tutorial4dartrdatamanipulation22-dec-21-3.pdf).
+The script returns a dartR genlight object with the retained populations 
+and the recalculated locus metadata. The script works with both genlight objects
+containing SNP genotypes and Tag P/A data (SilicoDArT).
 }
 \examples{
  # SNP data
@@ -53,16 +50,27 @@ the recalculated locus metadata.
    pop.list=c('EmsubRopeMata','EmvicVictJasp'),verbose=3)
    gl2 <- gl.drop.pop(testset.gl, pop.list=c('EmsubRopeMata','EmvicVictJasp'),
    mono.rm=TRUE,recalc=TRUE)
-   gl2 <- gl.drop.pop(testset.gl, pop.list=c('Male','Unknown'),as.pop='sex',verbose=3)
+   gl2 <- gl.drop.pop(testset.gl,as.pop='sex',pop.list=c('Male','Unknown'),verbose=3)
  # Tag P/A data
    gs2 <- gl.drop.pop(testset.gs, pop.list=c('EmsubRopeMata','EmvicVictJasp'))
-
 }
 \seealso{
-\code{\link{gl.keep.pop}} to keep rather than drop specified
- populations
+\code{\link{gl.keep.pop}} to keep rather than drop specified populations
+
+Other dartR-base: 
+\code{\link{gl.drop.ind}()},
+\code{\link{gl.drop.loc}()},
+\code{\link{gl.edit.recode.ind}()},
+\code{\link{gl.edit.recode.pop}()},
+\code{\link{gl.keep.loc}()},
+\code{\link{gl.make.recode.ind}()},
+\code{\link{gl.read.dart}()},
+\code{\link{gl.recode.ind}()},
+\code{\link{gl.recode.pop}()},
+\code{\link{gl.set.verbosity}()}
 }
 \author{
 Custodian: Arthur Georges -- Post to
 \url{https://groups.google.com/d/forum/dartr}
 }
+\concept{dartR-base}

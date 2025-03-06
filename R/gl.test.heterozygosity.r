@@ -2,15 +2,18 @@
 #' @title Tests the difference in heterozygosity between populations taken
 #'  pairwise
 #' @description
-#' Calculates the expected heterozygosities for each population in a genlight
-#' object, and uses re-randomization to test the statistical significance of
-#' differences in heterozygosity between populations taken pairwise.
+#' Calculates heterozygosities (expected or observed) for each population in a 
+#' genlight object, and uses re-randomization to test the statistical 
+#' significance of differences in heterozygosity between populations taken
+#'  pairwise.
 #' @param x A genlight object containing the SNP genotypes [required].
 #' @param nreps Number of replications of the re-randomization [default 1,000].
 #' @param alpha1 First significance level for comparison with diff=0 on plot
 #' [default 0.05].
 #' @param alpha2 Second significance level for comparison with diff=0 on plot
 #' [default 0.01].
+#' @param test_het Whether to test difference using observed heterozygosity
+#'  ("Ho") or expected heterozygosity ("He") [default "He"].
 #' @param plot.out If TRUE, plots a sampling distribution of the differences for
 #' each comparison [default TRUE].
 #' @param max_plots Maximum number of plots to print per page [default 6].
@@ -55,6 +58,7 @@ gl.test.heterozygosity <- function(x,
                                    nreps = 100,
                                    alpha1 = 0.05,
                                    alpha2 = 0.01,
+                                   test_het = "He",
                                    plot.out = TRUE,
                                    max_plots = 6,
                                    plot_theme = theme_dartR(),
@@ -141,7 +145,7 @@ gl.test.heterozygosity <- function(x,
     # DO THE JOB
     
     # Calculate a matrix of heterozygosities (He)
-    out <- utils.het.pop(x)
+    out <- utils.het.pop(x,t_het = test_het)
     D <- outer(out, out, "-")
     
     # Simulate the distribution of differences in He by population, pairwise Initialize the data matrix to hold simulation results
@@ -157,9 +161,9 @@ gl.test.heterozygosity <- function(x,
     n <- nLoc(x)
     for (i in 1:nreps) {
         # Sample the dataset
-        x2 <- x[, sample(1:n, n, replace = T)]
+        x2 <- x[, sample(1:n, n, replace = TRUE)]
         # Calculate Heterozygosity
-        out <- utils.het.pop(x2)
+        out <- utils.het.pop(x2,t_het = test_het)
         # Save difference values away
         mat[, , i] <- outer(out, out, "-")
     }

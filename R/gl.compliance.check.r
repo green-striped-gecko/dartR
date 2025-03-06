@@ -42,7 +42,7 @@ gl.compliance.check <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # DO THE JOB
     
@@ -269,6 +269,16 @@ Creating a dummy variable (A/C) to insert in this slot. \n"))
             "  Spelling of coordinates checked and changed if necessary to 
             lat/lon\n"
         ))
+    }
+    
+    # Check SNP position
+    if(is.null(x$position) & "SnpPosition" %in% names(x$other$loc.metrics)){
+      x$position <- x$other$loc.metrics$SnpPosition
+      if (verbose >= 2) {
+        cat(report(
+          "  Assigning SNP position using slot gl$other$loc.metrics$SnpPosition \n"
+        ))
+      }
     }
     
     # ADD TO HISTORY

@@ -2,7 +2,7 @@
 #'
 #' @param func Name of the function that is starting [required].
 #' @param build Name of the build [default NULL].
-#' @param verbosity Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
+#' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #'  progress log; 3, progress and results summary; 5, full report [default 2].
 #' @return calling function name
 #' @author Custodian: Arthur Georges -- Post to
@@ -11,9 +11,9 @@
 
 utils.flag.start <- function(func = NULL,
                              build = NULL,
-                             verbosity = NULL) {
+                             verbose = NULL) {
     # SET VERBOSITY
-    verbose <- gl.check.verbosity(verbosity)
+    verbose <- gl.check.verbosity(verbose)
     
     if (is.null(func)) {
         stop(error("Fatal Error: The calling function must be specified.\n"))

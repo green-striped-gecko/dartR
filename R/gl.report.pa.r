@@ -5,7 +5,8 @@
 #' second population, for all populations taken pairwise. It also reports a
 #' count of fixed allelic differences and the mean absolute allele frequency
 #' differences (AFD) between pairs of populations.
-#' @param x Name of the genlight object containing the SNP data [required].
+#' @param x Name of the genlight object containing the SNP or SilicoDArT data 
+#' [required].
 #' @param x2 If two separate genlight objects are to be compared this can be
 #' provided here, but they must have the same number of SNPs [default NULL].
 #' @param method Method to calculate private alleles: 'pairwise' comparison or
@@ -18,6 +19,7 @@
 #' [default 14].
 #' @param map.interactive Specify whether an interactive map showing private
 #' alleles between populations is to be produced [default FALSE].
+#' @param provider Passed to leaflet [default "Esri.NatGeoWorldMap"].
 #' @param palette_discrete A discrete palette for the color of populations or a
 #' list with as many colors as there are populations in the dataset
 #'  [default discrete_palette].
@@ -115,6 +117,7 @@ gl.report.pa <- function(x,
                          plot.out = TRUE,
                          font_plot = 14,
                          map.interactive = FALSE,
+                         provider = "Esri.NatGeoWorldMap",
                          palette_discrete = discrete_palette,
                          save2tmp = FALSE,
                          verbose = NULL) {
@@ -125,7 +128,7 @@ gl.report.pa <- function(x,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jackson",
-                   verbosity = verbose)
+                   verbose = verbose)
   
   # CHECK DATATYPE
   datatype1 <- utils.check.datatype(x, verbose = verbose)
@@ -186,23 +189,24 @@ gl.report.pa <- function(x,
   # DO THE JOB For method 'pairwise'
   if (method == "pairwise") {
     pc <- t(combn(length(pops), 2))
-    pall <-
-      data.frame(
-        p1 = pc[, 1],
-        p2 = pc[, 2],
-        pop1 = names(pops)[pc[, 1]],
-        pop2 = names(pops)[pc[, 2]],
-        N1 = NA,
-        N2 = NA,
-        fixed = NA,
-        priv1 = NA,
-        priv2 = NA,
-        Chao1 = NA,
-        Chao2= NA,
-        totalpriv = NA,
-        AFD = NA
-      )
-    
+
+      pall <-
+        data.frame(
+          p1 = pc[, 1],
+          p2 = pc[, 2],
+          pop1 = names(pops)[pc[, 1]],
+          pop2 = names(pops)[pc[, 2]],
+          N1 = NA,
+          N2 = NA,
+          fixed = NA,
+          priv1 = NA,
+          priv2 = NA,
+          Chao1 = NA,
+          Chao2= NA,
+          totalpriv = NA,
+          AFD = NA
+        )
+
     pall_loc_names <- rep(list(as.list(rep(NA, 3))), nrow(pc))
     
     names(pall_loc_names) <- paste0(names(pops)[pc[, 1]],
@@ -213,54 +217,56 @@ gl.report.pa <- function(x,
       names(x) <- c("pop1_pop2_pa","pop2_pop1_pa","fd")
       return(x)
     })
-    
+      
+      for (i in 1:nrow(pc)) {
+        i1 <- pall[i, 1]
+        i2 <- pall[i, 2]
+        
+        p1 <- as.matrix(pops[[i1]])
+        p2 <- as.matrix(pops[[i2]])
+        if(datatype1 == "SilicoDArT"){
+          p1alf <- colMeans(p1, na.rm = TRUE) 
+          p2alf <- colMeans(p2, na.rm = TRUE) 
+          
+        }else{
+          p1alf <- colMeans(p1, na.rm = TRUE) / 2
+          p2alf <- colMeans(p2, na.rm = TRUE) / 2
+        }
+        
+        pall[i, c("N1","N2")] <- c(nrow(p1), nrow(p2))
 
-    for (i in 1:nrow(pc)) {
-      i1 <- pall[i, 1]
-      i2 <- pall[i, 2]
-      
-      p1 <- as.matrix(pops[[i1]])
-      p2 <- as.matrix(pops[[i2]])
-      p1alf <- colMeans(p1, na.rm = TRUE) / 2
-      p2alf <- colMeans(p2, na.rm = TRUE) / 2
-      
-      pall[i, c("N1","N2")] <- c(nrow(p1), nrow(p2))
-      # pall[i, "fixed"] <- sum(abs(p1alf - p2alf) == 1, na.rm = T)
-      
-      # pall[i, "priv1"] <- sum(p2alf == 0 &
-      #                     p1alf != 0, na.rm = T) + sum(p2alf == 1 &
-      #                                                 p1alf != 1, na.rm = T)
-      # pall[i, "priv2"] <- sum(p1alf == 0 &
-      #                     p2alf != 0, na.rm = T) + sum(p1alf == 1 &
-      #                                                  p2alf != 1, na.rm = T)
-      
-      # Changing code to get the names of the SNP with fixed differences and 
-      # private alleles
-      pop1_pop2_pa <- unique(unname(unlist(c(which(p2alf == 0 & p1alf != 0),
-                                             which(p2alf == 1 & p1alf != 1)))))
-      pop1_pop2_pa_loc_names <- locNames(x)[pop1_pop2_pa]
-      pop2_pop1_pa <- unique(unname(unlist(c(which(p1alf == 0 & p2alf != 0),
-                                             which(p1alf == 1 & p2alf != 1)))))
-      pop2_pop1_pa_loc_names <- locNames(x)[pop2_pop1_pa]
-      pop1_pop2_fd <- unique(unname(unlist(which(abs(p1alf - p2alf) == 1))))
-      pop1_pop2_fd_loc_names <- locNames(x)[pop1_pop2_fd]
-      
-      pall[i, "fixed"] <- length(pop1_pop2_fd)
-      pall[i, "priv1"] <- length(pop1_pop2_pa)
-      pall[i, "priv2"] <- length(pop2_pop1_pa)
-      
-      pall_loc_names[[i]][["pop1_pop2_pa"]] <- pop1_pop2_pa_loc_names
-      pall_loc_names[[i]][["pop2_pop1_pa"]] <- pop2_pop1_pa_loc_names
-      pall_loc_names[[i]][["fd"]] <- pop1_pop2_fd_loc_names
-      
-      pall[i, "totalpriv"] <- pall[i, 8] + pall[i, 9]
-      pall[i, "AFD"] <- round(mean(abs(p1alf - p2alf), na.rm = TRUE), 3)
-      
-      pa_Chao <- utils.pa.Chao(x=x,pop1_m=pops[[i1]],pop2_m=pops[[i2]])
-      pall[i,"Chao1"] <- round(pa_Chao[[1]],0)
-      pall[i,"Chao2"] <- round(pa_Chao[[2]],0)
-      
-    }
+        pop1_pop2_pa <- unique(unname(unlist(c(which(p2alf == 0 & p1alf != 0),
+                                               which(p2alf == 1 & p1alf != 1)))))
+        pop1_pop2_pa_loc_names <- locNames(x)[pop1_pop2_pa]
+        pop2_pop1_pa <- unique(unname(unlist(c(which(p1alf == 0 & p2alf != 0),
+                                               which(p1alf == 1 & p2alf != 1)))))
+        pop2_pop1_pa_loc_names <- locNames(x)[pop2_pop1_pa]
+        pop1_pop2_fd <- unique(unname(unlist(which(abs(p1alf - p2alf) == 1))))
+        pop1_pop2_fd_loc_names <- locNames(x)[pop1_pop2_fd]
+        
+        pall[i, "fixed"] <- length(pop1_pop2_fd)
+        pall[i, "priv1"] <- length(pop1_pop2_pa)
+        pall[i, "priv2"] <- length(pop2_pop1_pa)
+        
+        pall_loc_names[[i]][["pop1_pop2_pa"]] <- pop1_pop2_pa_loc_names
+        pall_loc_names[[i]][["pop2_pop1_pa"]] <- pop2_pop1_pa_loc_names
+        pall_loc_names[[i]][["fd"]] <- pop1_pop2_fd_loc_names
+        
+        pall[i, "totalpriv"] <- pall[i, 8] + pall[i, 9]
+        pall[i, "AFD"] <- round(mean(abs(p1alf - p2alf), na.rm = TRUE), 3)
+        
+        if(datatype1 == "SilicoDArT"){
+          
+          pall[i,"Chao1"] <- NA
+          pall[i,"Chao2"] <- NA
+        }else{
+          pa_Chao <- utils.pa.Chao(x=x,pop1_m=pops[[i1]],pop2_m=pops[[i2]])
+          pall[i,"Chao1"] <- round(pa_Chao[[1]],0)
+          pall[i,"Chao2"] <- round(pa_Chao[[2]],0)
+          
+        }
+          
+      }
     
     if (plot.out) {
       mm <- matrix(0, nPop(x), nPop(x))
@@ -405,9 +411,16 @@ gl.report.pa <- function(x,
         
         p1 <- as.matrix(pops[[i1]])
         p2 <- as.matrix(pops[[i2]])
-        p1alf <- colMeans(p1, na.rm = T) / 2
-        p2alf <- colMeans(p2, na.rm = T) / 2
         
+        if(datatype1 == "SilicoDArT"){
+          p1alf <- colMeans(p1, na.rm = TRUE) 
+          p2alf <- colMeans(p2, na.rm = TRUE) 
+          
+        }else{
+          p1alf <- colMeans(p1, na.rm = TRUE) / 2
+          p2alf <- colMeans(p2, na.rm = TRUE) / 2
+        }
+
         pop1_pop2_pa <- unique(unname(unlist(c(which(p2alf == 0 & p1alf != 0),
                                                which(p2alf == 1 & p1alf != 1)))))
         pop1_pop2_pa_loc_names <- locNames(x)[pop1_pop2_pa]
@@ -426,15 +439,6 @@ gl.report.pa <- function(x,
         pall_loc_names[[y]][["fd"]] <- pop1_pop2_fd_loc_names
         
         pall[i, 5:6] <- c(nrow(p1), nrow(p2))
-        # pall[i, 7] <- sum(abs(p1alf - p2alf) == 1, na.rm = T)
-        # 
-        # pall[i, 8] <- sum(p2alf == 0 &
-        #                     p1alf != 0, na.rm = T) + 
-        #   sum(p2alf == 1 & p1alf != 1, na.rm = T)
-        # 
-        # pall[i, 9] <- sum(p1alf == 0 &
-        #                     p2alf != 0, na.rm = T) + 
-        #   sum(p1alf == 1 & p2alf != 1, na.rm = T)
         
         pall[i, 10] <- pall[i, 8] + pall[i, 9]
         pall[i, 11] <-
@@ -534,9 +538,12 @@ gl.report.pa <- function(x,
   
   # PRINTING OUTPUTS
   if (plot.out) {
-    if (map.interactive & (method == "pairwise")) {
+    if (map.interactive & method == "pairwise") {
       labs <- popNames(x)
-      gl.map.interactive(x, matrix = mm, symmetric = FALSE)
+      print(gl.map.interactive(x, 
+                               matrix = mm, 
+                               symmetric = FALSE,
+                               provider=provider))
     }
     # using package patchwork
     print(p3)
@@ -592,7 +599,7 @@ gl.report.pa <- function(x,
     
   }else{
     
-   return(invisible(df))
+   return(df)
     
   }
   

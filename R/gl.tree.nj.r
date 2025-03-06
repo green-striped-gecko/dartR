@@ -50,7 +50,7 @@ gl.tree.nj <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jackson",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)

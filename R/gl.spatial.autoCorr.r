@@ -224,7 +224,7 @@ gl.spatial.autoCorr <- function(x = NULL,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jackson",
-                   verbosity = verbose)
+                   verbose = verbose)
   
   # CHECK DATATYPE
   if (!is.null(x)) {
@@ -501,6 +501,9 @@ gl.spatial.autoCorr <- function(x = NULL,
             ncol = nbins,
             byrow = TRUE
           )
+          temp_perm <- tempfile(pattern = paste0("Perm_Pop", z))
+          saveRDS(bs, file = temp_perm)
+          
           bs.l <- apply(bs, 2, quantile, probs = 0.025, na.rm = TRUE)
           bs.u <- apply(bs, 2, quantile, probs = 0.975, na.rm = TRUE)
           
@@ -534,6 +537,9 @@ gl.spatial.autoCorr <- function(x = NULL,
                    nrow = reps,
                    ncol = nbins,
                    byrow = TRUE)
+          temp_boots <- tempfile(pattern = paste0("Boots_Pop", z))
+          saveRDS(errors, file = temp_boots)
+          
           err.l <- apply(errors, 2, quantile, probs = 0.025, na.rm = TRUE)
           err.u <- apply(errors, 2, quantile, probs = 0.975, na.rm = TRUE)
         }

@@ -60,7 +60,7 @@ gl.report.rdepth <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -137,7 +137,7 @@ gl.report.rdepth <- function(x,
     ))) / (nLoc(x) * nInd(x)), 2), "\n\n")
     
     # Determine the loss of loci for a given threshold using quantiles
-    quantile_res <- quantile(rdepth, probs = seq(0, 1, 1 / 20),type=1)
+    quantile_res <- quantile(rdepth, probs = seq(0, 1, 1 / 20),type=1,na.rm = TRUE)
     retained <- unlist(lapply(quantile_res, function(y) {
         res <- length(rdepth[rdepth >= y])
     }))

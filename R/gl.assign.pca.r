@@ -86,7 +86,7 @@ gl.assign.pca <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Josh",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     
     

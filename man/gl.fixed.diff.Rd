@@ -60,7 +60,7 @@ as follows:
        for each comparison [by simulation];
        \item $sdfpos -- if test=TRUE, the standard deviation of the count of
        false positives for each comparison [by simulation];
-       \item $prob -- if test=TRUE, the significance of the count of fixed
+       \item $pval -- if test=TRUE, the significance of the count of fixed
        differences [by simulation])
         }
 }

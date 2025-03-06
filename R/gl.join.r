@@ -39,7 +39,7 @@ gl.join <- function(x1,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # STANDARD ERROR CHECKING
     

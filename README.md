@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+
 # `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/dartRlogo.png' align="right" height="140" /></a>
+
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
 
 ## This is the legacy version and no longer actively developed. Please upgrade to the [dartRverse](https://github.com/green-striped-gecko/dartRverse) suit of packages
@@ -41,6 +43,7 @@ and pipelines on the same platform, as well as excellent user support
 via high-quality tutorials and documentation.
 
 `dartR` is a collaboration between the University of Canberra, CSIRO,
+
 Diversity Arrays Technology and Monash University , and is supported
 with funding from the ACT Priority Investment Program, CSIRO and the
 University of Canberra.
@@ -51,6 +54,7 @@ University of Canberra.
 <img src='man/figures/DArT_logo.png' height="100"/>    
 <img src='man/figures/Monash.png' height="100"/>    
 <img src='man/figures/ACT.png' height="100"/>
+
 </p>
 
 ## Installation
