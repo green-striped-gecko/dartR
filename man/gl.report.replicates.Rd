@@ -71,8 +71,10 @@ In order to ensure that replicated individuals are properly identified, it's
  between these two peaks.
 }
 \examples{
-res_rep <- gl.report.replicates(platypus.gl[,], loc_threshold = 500, 
+\donttest{
+res_rep <- gl.report.replicates(platypus.gl, loc_threshold = 500, 
 perc_geno = 0.85)
+}
 }
 \seealso{
 Other report functions: 

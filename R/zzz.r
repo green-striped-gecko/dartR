@@ -319,7 +319,7 @@ theme_dartR <- function(base_size = 11,
         )
     ))
   packageStartupMessage(important(
-    "##############################\n Be aware this the legacy version of dartR, which is no longer developed. Please consider using the new version of dartR called 'dartRverse'. As before you can find the latest version on CRAN. dartRverse has the same functionality as dartR but is more up-to-date and maintained. To reduce dependencies and improve the overall performance, dartRverse consists of several packacages that are maintained seperately to reduce dependencies . To install dartRverse please download the package dartRverse and follow the instructions there. For more information please visit: https://github.com/green-striped-gecko/dartRverse.\n#############\n"))
+    "##############################\n Be aware this the legacy version of dartR, which is no longer developed. Please consider using the new version of dartR, called 'dartRverse'. As before you can find the latest version on CRAN. dartRverse has the same functionality as dartR, but is more up-to-date and maintained. To reduce dependencies, and improve the overall performance, dartRverse consists of several packacages, that are maintained seperately to reduce dependencies . To install dartRverse please download the package dartRverse and follow the instructions therein. For more information please visit: https://github.com/green-striped-gecko/dartRverse.\n#############\n"))
     packageStartupMessage(
         report(
             "Be aware that owing to CRAN requirements and compatibility reasons not all functions of the package may run after the basic installation, as some packages could still be missing. Hence for a most enjoyable experience we recommend to run the function "

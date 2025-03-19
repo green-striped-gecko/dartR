@@ -231,7 +231,7 @@ gl.plot.faststructure <- function(sr,
   })
   
   if (is.null(plot_theme)) {
-    plot_theme <- dartR::theme_dartR()
+    plot_theme <- theme_dartR()
   }
   
   if (is.null(colors_clusters)) {

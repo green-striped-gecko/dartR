@@ -45,8 +45,10 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' res_rep <- gl.report.replicates(platypus.gl[,], loc_threshold = 500, 
+#' \donttest{
+#' res_rep <- gl.report.replicates(platypus.gl, loc_threshold = 500, 
 #' perc_geno = 0.85)
+#' }
 #' @family report functions
 #' @export
 
