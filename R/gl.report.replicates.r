@@ -45,7 +45,7 @@
 #' @author Custodian: Luis Mijangos -- Post to
 #' \url{https://groups.google.com/d/forum/dartr}
 #' @examples
-#' res_rep <- gl.report.replicates(platypus.gl, loc_threshold = 500, 
+#' res_rep <- gl.report.replicates(platypus.gl[,], loc_threshold = 500, 
 #' perc_geno = 0.85)
 #' @family report functions
 #' @export
@@ -118,6 +118,7 @@ gl.report.replicates <- function(x,
   
   col_same <- as.data.frame(as.table(mat_same))
   colnames(col_same) <- c("ind1","ind2","perc")
+  perc <- NULL
   col_noNas <- as.data.frame(as.table(SameGenoNA_tmp))
   
   col_same$nloc <- col_noNas$Freq

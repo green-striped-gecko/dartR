@@ -1,4 +1,5 @@
 #' @name utils.read.dart
+#' @title utility function to read in DArT data
 # Preliminaries -- parameter definitions ----------------
 #' @description
 #' Utility to import DarT data to R

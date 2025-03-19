@@ -46,9 +46,9 @@ of the values obtained can be used to evaluate the variability around the point
 estimate. This function can take the loci, the individuals or the populations 
 as units over which to conduct resampling.
 
-bold{Note} that when n is very small, jackknife resampling is not recommended.
+\bold{Note} that when n is very small, jackknife resampling is not recommended.
 
-Parallel computation is implemented. The argument code{n.cores} indicates the 
+Parallel computation is implemented. The argument \code{n.cores} indicates the 
 number of core to use. If "auto" [default], it will use all but one available 
 cores. If the number of units is small (e.g. a few populations), there is not 
 real advantage in using parallel computation. On the other hand, if the number 

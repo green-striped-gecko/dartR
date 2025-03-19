@@ -64,6 +64,7 @@
 #' gl.map.structure(qmat, K=2, t1, scalex=1, scaley=0.5)
 #' }
 #' @export
+#' @importFrom gsubfn read.pattern
 #' @references
 #' \itemize{
 #' \item Raj, A., Stephens, M., & Pritchard, J. K. (2014). fastSTRUCTURE:

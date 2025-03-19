@@ -1,6 +1,5 @@
 #' @name utils.dart2genlight
-#' Converts DarT to genlight.
-#' Internal function called by gl.read.dart()
+#' @title Converts DarT to genlight.
 #' @description Converts a DArT file (read via \code{read.dart}) into an
 #' genlight object \code{\link{adegenet}}. 
 #' @param dart A dart object created via read.dart [required].

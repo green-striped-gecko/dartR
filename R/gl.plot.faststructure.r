@@ -110,7 +110,7 @@ gl.plot.faststructure <- function(sr,
         res_tmp <- Q_list_tmp[[1]]
         # if more than 1 replicate
       }else{
-        res_tmp <- dartR:::clumpp(Q_list_tmp, 
+        res_tmp <- dartR::utils.clumpp(Q_list_tmp, 
                                   method = met_clumpp, 
                                   iter = iter_clumpp)$Q_list
       }
@@ -231,7 +231,7 @@ gl.plot.faststructure <- function(sr,
   })
   
   if (is.null(plot_theme)) {
-    plot_theme <- dartR:::theme_dartR()
+    plot_theme <- dartR::theme_dartR()
   }
   
   if (is.null(colors_clusters)) {

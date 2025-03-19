@@ -1,5 +1,7 @@
 #' Calculates expected mean expected heterozygosity per population
 #' @param x A genlight object containing the SNP genotypes [required].
+#' @param t_het A string specifying the type of expected heterozygosity to be
+#' calculated. Options are "He" for expected heterozygosity and "Ho" for observed
 #' @return A vector with the mean expected heterozygosity for each population
 #' @export
 #' @author Bernd Gruber & Luis Mijangos (bugs? Post to

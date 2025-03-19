@@ -8,6 +8,9 @@ utils.het.pop(x, t_het)
 }
 \arguments{
 \item{x}{A genlight object containing the SNP genotypes [required].}
+
+\item{t_het}{A string specifying the type of expected heterozygosity to be
+calculated. Options are "He" for expected heterozygosity and "Ho" for observed}
 }
 \value{
 A vector with the mean expected heterozygosity for each population

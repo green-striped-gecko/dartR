@@ -1,6 +1,6 @@
 #' Calculates allele frequency of the first and second allele for each loci
 #' A very simple function to report allele frequencies
-#' @param x:object  Name of the genlight object containing the SNP data [required].
+#' @param x Name of the genlight object containing the SNP data [required].
 #' @return A simple data.frame with alf1, alf2.
 #' @export
 #' @rawNamespace import(adegenet, except = plot)

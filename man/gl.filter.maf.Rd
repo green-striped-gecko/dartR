@@ -3,8 +3,7 @@
 \name{gl.filter.maf}
 \alias{gl.filter.maf}
 \title{Filters loci on the basis of minor allele frequency (MAF) in a 
-genlight
- {adegenet} object}
+genlight \code{adegenet} object}
 \usage{
 gl.filter.maf(
   x,

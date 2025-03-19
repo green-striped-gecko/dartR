@@ -6,8 +6,9 @@
 # @param iter The number of iterations to use if running either 'greedy' or
 #  'greedyLargeK'
 # @importFrom purrr map_dbl
+#' @export
 
-clumpp <- function(Q_list,
+utils.clumpp <- function(Q_list,
                    method,
                    iter) {
   # i/o checks
