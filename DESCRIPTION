@@ -38,7 +38,7 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: R (>= 3.5), adegenet (>= 2.0.0), ggplot2, dplyr, dartR.data
 biocViews:
-Imports: ape,crayon,data.table,fields,foreach,gridExtra,MASS,methods,patchwork,plyr,PopGenReport,raster,reshape2,shiny,SNPRelate,sp (>= 1.6.1),StAMPP,stats,stringr,tidyr,utils,vegan, gsubfn, purrr
+Imports: ape,crayon,data.table,fields,foreach,gridExtra,MASS,methods,patchwork,plyr,PopGenReport,raster,reshape2,shiny,SNPRelate,sp (>= 1.6.1),StAMPP,stats,stringr,tidyr,utils, gsubfn, purrr
 Suggests: 
     boot,
     devtools,
@@ -72,7 +72,6 @@ Suggests:
     plotly,
     poppr,
     proxy,
-    purrr,
     qvalue,
     RColorBrewer,
     Rcpp,
@@ -92,7 +91,8 @@ Suggests:
     tibble,
     vcfR,
     zoo,
-    viridis
+    viridis,
+    vegan
 License: GPL (>= 3)
 LazyData: true
 RoxygenNote: 7.3.2
