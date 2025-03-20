@@ -112,10 +112,7 @@
 #'
 #'     \item
 #'     \emph{Dstp} - Unbiased estimate of the average allele frequency 
-#'     differentiation between populations (Nei, 1987, pp. 165) is calculated
-#'      as:
-#'
-#'     \figure{Dstp-equation.jpg}
+#'     differentiation between populations (Nei, 1987, pp. 165) 
 #'
 #'     \item
 #'     \emph{Fst} - Measure of the extent of genetic differentiation 
@@ -130,9 +127,9 @@
 #'     \figure{Fstp-equation.jpg}
 #'
 #'     \item
-#'     \emph{Dest} - Jost’s D (Jost, 2008, eq. 12) is calculated as:
+#'     \emph{Dest} - Jost’s D (Jost, 2008, eq. 12) 
 #'
-#'     \figure{Dest-equation.jpg}
+#'     
 #'
 #'     \item
 #'     \emph{Gst-max} - The maximum level that Gst can obtain for the observed 

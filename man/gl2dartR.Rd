@@ -4,12 +4,15 @@
 \alias{gl2dartR}
 \title{Convert a genlight object to a dartR object}
 \usage{
-gl2dartR(x, filename = NULL, file.path = getwd())
+gl2dartR(x, filename = NULL, file.path = tempdir())
 }
 \arguments{
 \item{x}{An object of class `genlight` to be converted.}
 
-\item{save}{Logical. If `TRUE`, the converted object is saved as an file.}
+\item{filename}{A character string specifying the name of the file to save 
+the converted object. [default is gl.rds]}
+
+\item{file.path}{A character string specifying the path to save the file.}
 }
 \value{
 The input object with class changed to `"dartR"` and its package attribute set to `"dartR.base"`.
@@ -20,7 +23,9 @@ changing its class attribute.
 It is used to convert legacy data sets to the new dartR format.
 }
 \examples{
-gl <- glSim(10, 100, ploidy = 2, ind.names=1:10, loc.names=1:100)  # Simulating a genlight object
-gl <- gl2dartR(gl)
-pop(gl)<- rep("A",10)
+simgl <- glSim(10, 100, ploidy = 2, indnames=1:10, locnames=1:100)  # Simulating a genlight object
+simgl <- gl2dartR(simgl)
+pop(simgl)<- rep("A",10)
+indNames(simgl) <- paste0("ind",1:10)
+gl.smearplot(simgl, verbose=0)
 }
