@@ -221,7 +221,7 @@ The studentized bootstrap interval ("stud") was not included in the CI types
  the range of plausible values and it has been found to be erratic in
  practice, see for example the "Studentized (t) Intervals" section in:
 
-   \url{https://www.r-bloggers.com/2019/09/understanding-bootstrap-confidence-interval-output-from-the-r-boot-package}
+   www.r-bloggers.com/2019/09/understanding-bootstrap-confidence-interval-output-from-the-r-boot-package
      Efron and Tibshirani (1993, p. 162) and Davison and Hinkley
      (1997, p. 194) suggest that the number of bootstrap replicates should
      be between 1000 and 2000.
