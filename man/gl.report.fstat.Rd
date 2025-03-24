@@ -215,13 +215,10 @@ The studentized bootstrap interval ("stud") was not included in the CI types
 
    \url{https://www.r-bloggers.com/2019/09/understanding-bootstrap-confidence-interval-output-from-the-r-boot-package}
 
-    Nice tutorials about the different types of CI can be found in:
+    Nice tutorials about the different types of CI can be found at:
 
-    \url{https://www.datacamp.com/tutorial/bootstrap-r}
+    https://www.datacamp.com/tutorial/bootstrap-r
 
-    and
-
-   \url{https://www.r-bloggers.com/2019/09/understanding-bootstrap-confidence-interval-output-from-the-r-boot-package}
 
      Efron and Tibshirani (1993, p. 162) and Davison and Hinkley
      (1997, p. 194) suggest that the number of bootstrap replicates should
