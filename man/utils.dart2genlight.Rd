@@ -31,7 +31,7 @@ loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
 }
 \description{
 Converts a DArT file (read via \code{read.dart}) into an
-genlight object \code{\link{adegenet}}.
+genlight object \code{adegenet}.
 }
 \details{
 The ind.metadata file needs to have very specific headings. First a heading

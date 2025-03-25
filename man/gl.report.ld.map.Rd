@@ -89,7 +89,7 @@ If SNPs are mapped to a reference genome, the parameter
 }
 \details{
 This function reports LD between SNP pairs by population. 
-The function \code{\link{gl.filter.ld}} filters out the SNPs in LD using as
+The function \code{gl.filter.ld} filters out the SNPs in LD using as
 input the results of \code{\link{gl.report.ld.map}}. The actual number of 
 SNPs to be filtered out depends on the parameters set in the function 
 \code{\link{gl.filter.ld}}.
