@@ -69,7 +69,7 @@ gl.grm <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -153,7 +153,11 @@ gl.grm <- function(x,
             trace = "none",
             density.info = "none",
             scale = "none",
-            main = "Probability of identity by descent"
+            main = "Probability of identity by descent",
+            srtRow = 45,
+            srtCol = 45,
+            offsetRow = 0,
+            offsetCol = 0
         )
         legend(
             legendx,

@@ -51,7 +51,7 @@
 #'  [default 2 or as specified using gl.set.verbosity].
 #'  
 #' @import utils
-#' @export#'  
+#' @export
 #' @return A genlight object with the revised population assignments
 #' 
 #' @family dartR-base
@@ -85,7 +85,7 @@ gl.edit.recode.pop <-  function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "v.2023.2",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)

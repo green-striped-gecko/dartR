@@ -4,10 +4,13 @@
 \alias{utils.het.pop}
 \title{Calculates expected mean expected heterozygosity per population}
 \usage{
-utils.het.pop(x)
+utils.het.pop(x, t_het)
 }
 \arguments{
 \item{x}{A genlight object containing the SNP genotypes [required].}
+
+\item{t_het}{A string specifying the type of expected heterozygosity to be
+calculated. Options are "He" for expected heterozygosity and "Ho" for observed}
 }
 \value{
 A vector with the mean expected heterozygosity for each population
@@ -16,7 +19,7 @@ A vector with the mean expected heterozygosity for each population
 Calculates expected mean expected heterozygosity per population
 }
 \examples{
-out <- utils.het.pop(testset.gl)
+out <- utils.het.pop(testset.gl,t_het="He")
 }
 \author{
 Bernd Gruber & Luis Mijangos (bugs? Post to

@@ -9,10 +9,6 @@
 #'The function will determine automatically if the data are in Diversity Arrays
 #'one-row csv format or two-row csv format. 
 #'
-#'The number of locus metadata columns 
-#'in the input data is determined by a signature last column, by default 'RepAvg'.
-#'This can be alternatively specified using parameter 'lastmetric'. 
-#'
 #'The first 
 #'row of data is determined from the number of rows with an * in the first 
 #'column. This can be alternatively specified with the topskip parameter.
@@ -32,12 +28,11 @@
 #'@param filename File containing the SNP data (csv file) [required].
 #'@param ind.metafile File that contains additional information on individuals
 #' [required].
-#'@param covfilename Depricated, sse ind.metafile parameter [NULL].
+#'@param covfilename Deprecated, sse ind.metafile parameter [NULL].
 #'@param nas A character specifying NAs [default '-'].
 #'@param topskip A number specifying the number of initial rows to be skipped. [default NULL].
-#'@param lastmetric Specifies the last column of locus metadata. Can be specified 
-#'as a column number.
-#'  [default 'RepAvg'].
+#'@param lastmetric Deprecated, specifies the last column of locus metadata. Can be 
+#'specified as a column number [default NULL].
 #'@param service.row The row number for the DArT service
 #'is contained [default 1].
 #'@param plate.row The row number the plate well [default 3].
@@ -61,7 +56,6 @@
 #' metadata <- system.file('extdata','testset_metadata.csv', package='dartR')
 #' gl <- gl.read.dart(dartfile, ind.metafile = metadata, probar=TRUE)
 #'
-#'@seealso \code{\link{utils.read.dart}}
 #'
 # ------------------------
 # Function
@@ -71,7 +65,7 @@ gl.read.dart <- function(filename,
                          mono.rm = FALSE,
                          nas = "-",
                          topskip = NULL,
-                         # lastmetric = "RepAvg",
+                         lastmetric = NULL,
                          covfilename = NULL,
                          service.row = 1,
                          plate.row = 3,
@@ -100,7 +94,7 @@ gl.read.dart <- function(filename,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "v.2023.2",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     if (verbose == 0) {
         probar <-FALSE
@@ -270,6 +264,8 @@ gl.read.dart <- function(filename,
     if (is.null(glout@other$history)) {
         glout@other$history <- list(match.call())
     }
+    
+    glout <- gl.compliance.check(glout)
     
     # FLAG SCRIPT END ---------------------
     if (verbose > 0) {

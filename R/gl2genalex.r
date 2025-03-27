@@ -42,7 +42,7 @@ gl2genalex <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -59,6 +59,8 @@ gl2genalex <- function(x,
     }
     
     # DO THE JOB
+    
+    x <- x[order(pop(x)),]
     
     gind <- gl2gi(x, verbose = 0)
     poppr::genind2genalex(

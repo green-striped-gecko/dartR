@@ -51,10 +51,10 @@
 #'
 #' @details
 #' This function reports LD between SNP pairs by population. 
-#' The function \code{\link{gl.filter.ld}} filters out the SNPs in LD using as
+#' The function \code{gl.filter.ld} filters out the SNPs in LD using as
 #' input the results of \code{\link{gl.report.ld.map}}. The actual number of 
 #' SNPs to be filtered out depends on the parameters set in the function 
-#' \code{\link{gl.filter.ld}}.
+#' \code{gl.filter.ld}.
 #' 
 #' Boxplots of LD by population and
 #' a histogram showing LD frequency are presented.
@@ -70,7 +70,7 @@
 #' x$position <- x$other$loc.metrics$ChromPos_Platypus_Chrom_NCBIv1
 #' x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 #' ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
-#' @seealso \code{\link{gl.filter.ld}}
+#' @seealso \code{gl.filter.ld}
 #' @family report functions
 #' @export
 
@@ -95,7 +95,7 @@ gl.report.ld.map <- function(x,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jody",
-                   verbosity = verbose)
+                   verbose = verbose)
   
   # CHECK DATATYPE
   datatype <- utils.check.datatype(x, verbose = verbose)

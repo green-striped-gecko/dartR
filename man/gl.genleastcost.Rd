@@ -95,8 +95,8 @@ barriers in landscape genetics. Molecular ecology, 4179-4191.
  }
 }
 \seealso{
-\code{\link{landgenreport}}, \code{\link{popgenreport}},
- \code{\link{wassermann}}, \code{\link{lgrMMRR}}
+\code{\link[PopGenReport]{landgenreport}}, \code{\link[PopGenReport]{popgenreport}},
+ \code{\link[PopGenReport]{wassermann}}, \code{\link[PopGenReport]{lgrMMRR}}
 }
 \author{
 Bernd Gruber (bugs? Post to

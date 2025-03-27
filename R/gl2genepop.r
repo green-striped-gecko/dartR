@@ -2,8 +2,7 @@
 #' @title Converts a genlight object into genepop format (and file)
 #' @description
 #' The genepop format is used by several external applications (for example
-#' Neestimator2
-#' (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/}).
+#' Neestimator2.
 #' So the main idea is to create the genepop file and then run the other
 #' software externally. As a feature, the genepop file is also returned as an
 #' invisible data.frame by the function.
@@ -49,7 +48,7 @@ gl2genepop <- function (x,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jody",
-                   verbosity = verbose)
+                   verbose = verbose)
   
   # CHECK DATATYPE
   datatype <- utils.check.datatype(x, verbose = verbose)

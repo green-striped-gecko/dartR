@@ -145,7 +145,7 @@ gl.pcoa.plot <- function(glPca,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Josh",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype1 <-
@@ -795,5 +795,5 @@ gl.pcoa.plot <- function(glPca,
         cat(report("Completed:", funname, "\n"))
     }
     
-    return(plott)
+    return(invisible(plott))
 }

@@ -44,8 +44,8 @@
 #'  line objects.
 #' @author Bernd Gruber (bugs? Post to
 #' \url{https://groups.google.com/d/forum/dartr})
-#' @seealso \code{\link{landgenreport}}, \code{\link{popgenreport}},
-#'  \code{\link{wassermann}}, \code{\link{lgrMMRR}}
+#' @seealso \code{\link[PopGenReport]{landgenreport}}, \code{\link[PopGenReport]{popgenreport}},
+#'  \code{\link[PopGenReport]{wassermann}}, \code{\link[PopGenReport]{lgrMMRR}}
 #' @references
 #' \itemize{
 #' \item Cushman, S., Wasserman, T., Landguth, E. and Shirk, A. (2013).
@@ -90,7 +90,7 @@ gl.genleastcost <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # FUNCTION SPECIFIC ERROR CHECKING
     # CHECK IF PACKAGES ARE INSTALLED

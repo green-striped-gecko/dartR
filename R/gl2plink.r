@@ -99,7 +99,7 @@ gl2plink <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -110,7 +110,14 @@ gl2plink <- function(x,
     
     if(is.null(x$chromosome)){
       x$chromosome <- as.factor(rep("1",nLoc(x)))
-      cat(warn("   Chromosome slot is empty. Using 1 as dummy name.\n"))
+      cat(warn("   chromosome slot is empty. Using 1 as dummy name.\n"))
+    }
+    
+    if(is.null(x$position)){
+      x$position <- 1:nLoc(x)
+      cat(warn(
+"   position slot is empty. Using sequence from one to number of loci in the 
+dataset as dummy position.\n"))
     }
     
     snp_temp <- as.data.frame(cbind(as.character(x$chromosome),x$position))
@@ -213,16 +220,16 @@ gl2plink <- function(x,
         prefix.in_temp <- outfilespec
         prefix.out_temp <- outfilespec
         
-        allele_tmp <- gsub("/"," ", x$loc.all)
-        allele_tmp <- strsplit(allele_tmp,split = " ")
-        allele_tmp <- Reduce(rbind,allele_tmp)[,1]
-        allele_tmp <- cbind(locNames(x), allele_tmp)
-        write.table(allele_tmp,
-                    file = file.path(outpath,"mylist.txt"),
-                    row.names = FALSE,
-                    col.names = FALSE,
-                    quote = FALSE
-                    )
+        # allele_tmp <- gsub("/"," ", x$loc.all)
+        # allele_tmp <- strsplit(allele_tmp,split = " ")
+        # allele_tmp <- Reduce(rbind,allele_tmp)[,1]
+        # allele_tmp <- cbind(locNames(x), allele_tmp)
+        # write.table(allele_tmp,
+        #             file = file.path(outpath,"mylist.txt"),
+        #             row.names = FALSE,
+        #             col.names = FALSE,
+        #             quote = FALSE
+        #             )
         
         make_plink <-
             function(plink.path,
@@ -246,7 +253,7 @@ gl2plink <- function(x,
             }
         
         system_verbose <-function(...) {
-            report <-system(..., intern = T)
+            report <- system(..., intern = TRUE)
             message(
                 paste0(
                     "\n\n----------Output of function start:\n\n",

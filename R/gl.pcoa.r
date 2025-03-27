@@ -33,7 +33,7 @@
 #' [default 2 or as specified using gl.set.verbosity].
 #'
 #' @details
-#'The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\}
+#'The function is essentially a wrapper for glPca \code{adegenet} or pcoa \{ape\}
 #'with default settings apart from those specified as parameters in this
 #'function.
 #'\strong{ Sources of stress in the visual representation }
@@ -198,7 +198,7 @@ gl.pcoa <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Josh",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <-

@@ -1,9 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/dartR_logo.png' align="right" height="300" /></a>
+
+# `dartR` <a href="https://green-striped-gecko.github.io/dartR/"><img src='man/figures/dartRlogo.png' align="right" height="140" /></a>
 
 ## An accessible genetic analysis platform for conservation, ecology and agriculture
+
+## This is the legacy version and no longer actively developed. Please upgrade to the [dartRverse](https://github.com/green-striped-gecko/dartRverse) suit of packages
 
 <!-- badges: start -->
 
@@ -12,10 +15,9 @@ Main repository:
 [![CRAN
 checks](https://cranchecks.info/badges/summary/dartR)](https://cran.r-project.org/web/checks/check_results_dartR.html)
 [![R-CMD-check](https://github.com/green-striped-gecko/dartR/workflows/R-CMD-check/badge.svg)](https://github.com/green-striped-gecko/dartR/actions)
-
-Beta:
-[![check-new](https://github.com/green-striped-gecko/dartR/actions/workflows/check-standard.yml/badge.svg)](https://github.com/green-striped-gecko/dartR/actions/workflows/check-standard.yml)
+[![R-CMD-check-beta](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-beta.yaml/badge.svg?branch=beta)](https://github.com/green-striped-gecko/dartR/actions/workflows/R-CMD-check-beta.yaml)
 [![](http://cranlogs.r-pkg.org/badges/last-week/dartR?color=orange)](https://cran.r-project.org/package=dartR)
+[![Downloads from Rstudio mirror](https://cranlogs.r-pkg.org/badges/grand-total/dartR)](https://cran.r-project.org/package=dartR)
 <!-- badges: end -->
 
 Publication:
@@ -41,13 +43,18 @@ and pipelines on the same platform, as well as excellent user support
 via high-quality tutorials and documentation.
 
 `dartR` is a collaboration between the University of Canberra, CSIRO,
-Diversity Arrays Technology, Arthur Rylah Institute for Environmental
-Research and Monash University. `dartR` is supported with funding from
-the ACT Priority Investment Program, CSIRO and the University of
-Canberra.
+
+Diversity Arrays Technology and Monash University , and is supported
+with funding from the ACT Priority Investment Program, CSIRO and the
+University of Canberra.
 
 <p align="center">
-<img src='man/figures/institutions.png' width="800"/>
+<img src='man/figures/UC.png' height="100"/>    
+<img src='man/figures/csiro_logo.png' height="100"/>    
+<img src='man/figures/DArT_logo.png' height="100"/>    
+<img src='man/figures/Monash.png' height="100"/>    
+<img src='man/figures/ACT.png' height="100"/>
+
 </p>
 
 ## Installation
@@ -178,4 +185,4 @@ Have fun working with `dartR`!
 
 Cheers,
 
-Bernd, Arthur, Luis, Carlo & Olly
+Bernd, Arthur, Luis, Carlo, Olly & Diana

@@ -3,8 +3,7 @@
 \name{gl.filter.maf}
 \alias{gl.filter.maf}
 \title{Filters loci on the basis of minor allele frequency (MAF) in a 
-genlight
- {adegenet} object}
+genlight \code{adegenet} object}
 \usage{
 gl.filter.maf(
   x,
@@ -100,12 +99,11 @@ Other filter functions:
 \code{\link{gl.filter.callrate}()},
 \code{\link{gl.filter.heterozygosity}()},
 \code{\link{gl.filter.hwe}()},
-\code{\link{gl.filter.ld}()},
 \code{\link{gl.filter.locmetric}()},
 \code{\link{gl.filter.monomorphs}()},
 \code{\link{gl.filter.overshoot}()},
-\code{\link{gl.filter.parent.offspring}()},
 \code{\link{gl.filter.pa}()},
+\code{\link{gl.filter.parent.offspring}()},
 \code{\link{gl.filter.rdepth}()},
 \code{\link{gl.filter.reproducibility}()},
 \code{\link{gl.filter.secondaries}()},

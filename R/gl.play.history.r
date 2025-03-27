@@ -6,7 +6,7 @@
 #' indicates which which part of the history of x is used [\code{c(1,3,4)} uses
 #' the first, third and forth entry from \code{x@other$history}]. Or a simple
 #' link to a history slot of another genlight object (e.g.
-#' code{x2@other$history[c(1,4,5)]}). [optional].
+#' \code{x2@other$history[c(1,4,5)]}). [optional].
 #' @param verbose If set to one then history commands are printed,
 #'  which may facilitate reading the output [default 0].
 #' @return Returns a genlight object that was created by replaying the provided
@@ -68,7 +68,7 @@ gl.play.history <- function(x,
         # run history one by one
         if (verbose > 0) {
             cat(report("\n################################\n"))
-            cat(report("###########Running #############\n"))
+            cat(report("########### Running #############\n"))
             print(glhist)
             cat(report("--------------------------------\n"))
         }

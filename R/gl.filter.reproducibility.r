@@ -61,7 +61,7 @@ gl.filter.reproducibility <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -106,21 +106,26 @@ gl.filter.reproducibility <- function(x,
     # Tag presence/absence data
     if (datatype == "SilicoDArT") {
         repeatability <- x@other$loc.metrics$Reproducibility
-        for (i in 1:nLoc(x)) {
-            if (repeatability[i] < threshold) {
-                loc.list[i] <- locNames(x)[i]
-            }
-        }
+        # for (i in 1:nLoc(x)) {
+        #     if (repeatability[i] < threshold) {
+        #         loc.list[i] <- locNames(x)[i]
+        #     }
+        # }
+        
+        loc.list <- locNames(x)[which(repeatability < threshold)]
+        
     }
     
     # SNP data
     if (datatype == "SNP") {
         repeatability <- x@other$loc.metrics$RepAvg
-        for (i in 1:nLoc(x)) {
-            if (repeatability[i] < threshold) {
-                loc.list[i] <- locNames(x)[i]
-            }
-        }
+        # for (i in 1:nLoc(x)) {
+        #     if (repeatability[i] < threshold) {
+        #         loc.list[i] <- locNames(x)[i]
+        #     }
+        # }
+        loc.list <- locNames(x)[which(repeatability < threshold)]
+        
     }
     
     # Remove NAs from list of loci to be discarded
