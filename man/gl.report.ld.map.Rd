@@ -92,7 +92,7 @@ This function reports LD between SNP pairs by population.
 The function \code{gl.filter.ld} filters out the SNPs in LD using as
 input the results of \code{\link{gl.report.ld.map}}. The actual number of 
 SNPs to be filtered out depends on the parameters set in the function 
-\code{\link{gl.filter.ld}}.
+\code{gl.filter.ld}.
 
 Boxplots of LD by population and
 a histogram showing LD frequency are presented.
@@ -107,7 +107,7 @@ x$chromosome <- as.factor(x$other$loc.metrics$Chrom_Platypus_Chrom_NCBIv1)
 ld_res <- gl.report.ld.map(x,ld_max_pairwise = 10000000)
 }
 \seealso{
-\code{\link{gl.filter.ld}}
+\code{gl.filter.ld}
 
 Other report functions: 
 \code{\link{gl.report.bases}()},
