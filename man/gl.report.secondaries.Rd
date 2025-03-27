@@ -133,7 +133,6 @@ Other report functions:
 \code{\link{gl.report.callrate}()},
 \code{\link{gl.report.diversity}()},
 \code{\link{gl.report.hamming}()},
-\code{\link{gl.report.heterozygosity}()},
 \code{\link{gl.report.hwe}()},
 \code{\link{gl.report.ld.map}()},
 \code{\link{gl.report.locmetric}()},
@@ -143,6 +142,7 @@ Other report functions:
 \code{\link{gl.report.pa}()},
 \code{\link{gl.report.parent.offspring}()},
 \code{\link{gl.report.rdepth}()},
+\code{\link{gl.report.replicates}()},
 \code{\link{gl.report.reproducibility}()},
 \code{\link{gl.report.sexlinked}()},
 \code{\link{gl.report.taglength}()}

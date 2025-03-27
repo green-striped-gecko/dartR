@@ -65,7 +65,7 @@ distance matrix. Technically, any distance matrix can be represented in an
 ordinated space using PCoA.
 }
 \details{
-The function is essentially a wrapper for glPca {adegenet} or pcoa \{ape\}
+The function is essentially a wrapper for glPca \code{adegenet} or pcoa \{ape\}
 with default settings apart from those specified as parameters in this
 function.
 \strong{ Sources of stress in the visual representation }

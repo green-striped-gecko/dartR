@@ -9,10 +9,15 @@ gl.report.heterozygosity(
   x,
   method = "pop",
   n.invariant = 0,
-  plot.out = TRUE,
-  plot_theme = theme_dartR(),
-  plot_colors_pop = discrete_palette,
-  plot_colors_ind = two_colors,
+  nboots = 0,
+  conf = 0.95,
+  CI.type = "bca",
+  ncpus = 1,
+  plot.display = TRUE,
+  plot.theme = theme_dartR(),
+  plot.colors.pop = gl.colors("dis"),
+  plot.colors.ind = gl.colors(2),
+  error.bar = "SD",
   save2tmp = FALSE,
   verbose = NULL
 )
@@ -26,17 +31,32 @@ individual (method='ind') [default 'pop'].}
 \item{n.invariant}{An estimate of the number of invariant sequence tags used
 to adjust the heterozygosity rate [default 0].}
 
-\item{plot.out}{Specify if plot is to be produced [default TRUE].}
+\item{nboots}{Number of bootstrap replicates to obtain confident intervals
+[default 0].}
 
-\item{plot_theme}{Theme for the plot. See Details for options
+\item{conf}{The confidence level of the required interval  [default 0.95].}
+
+\item{CI.type}{Method to estimate confident intervals. One of
+"norm", "basic", "perc" or "bca" [default "bca"].}
+
+\item{ncpus}{Number of processes to be used in parallel operation. If ncpus
+> 1 parallel operation is activated,see "Details" section [default 1].}
+
+\item{plot.display}{Specify if plot is to be produced [default TRUE].}
+
+\item{plot.theme}{Theme for the plot. See Details for options
 [default theme_dartR()].}
 
-\item{plot_colors_pop}{A color palette for population plots or a list with
+\item{plot.colors.pop}{A color palette for population plots or a list with
 as many colors as there are populations in the dataset
-[default discrete_palette].}
+[default gl.colors("dis")].}
 
-\item{plot_colors_ind}{List of two color names for the borders and fill of
-the plot by individual [default two_colors].}
+\item{plot.colors.ind}{List of two color names for the borders and fill of
+the plot by individual [default gl.colors(2)].}
+
+\item{error.bar}{statistic to be plotted as error bar either "SD" (standard 
+deviation) or "SE" (standard error) or "CI" (confident intervals)
+ [default "SD"].}
 
 \item{save2tmp}{If TRUE, saves any ggplots and listings to the session
 temporary directory (tempdir) [default FALSE].}
@@ -59,11 +79,13 @@ genlight object.
 Observed heterozygosity for a population takes the proportion of
 heterozygous loci for each individual then averages over the individuals in
 that population. The calculations take into account missing values.
-
 Expected heterozygosity for a population takes the expected proportion of
 heterozygotes, that is, expected under Hardy-Weinberg equilibrium, for each
 locus, then averages this across the loci for an average estimate for the
 population.
+
+Expected heterozygosity is calculated using the correction for sample size
+following equation 2 from Nei 1978.
 
 Observed heterozygosity for individuals is calculated as the proportion of
 loci that are heterozygous for that individual.
@@ -99,28 +121,150 @@ the alternative allele.
 (2 * n_Ind - 1))
 \item Inbreeding coefficient (FIS) = 1 - (mean(Ho) / mean(uHe))
 }
-
 \strong{ Function's output }
-
 Output for method='pop' is an ordered barchart of observed heterozygosity,
 unbiased expected heterozygosity and FIS (Inbreeding coefficient) across populations
 together with a table of mean observed and expected heterozygosities and FIS
 by population and their respective standard deviations (SD).
-
 In the output, it is also reported by population: the number of loci used to
- estimate heterozygosity(nLoc), the number of polymorphic loci (polyLoc), 
+ estimate heterozygosity(n.Loc), the number of polymorphic loci (polyLoc),
  the number of monomorphic loci (monoLoc) and loci with all missing data
   (all_NALoc).
-
 Output for method='ind' is a histogram and a boxplot of heterozygosity across
 individuals.
-
  Plots and table are saved to the session temporary directory (tempdir)
-
  Examples of other themes that can be used can be consulted in \itemize{
  \item \url{https://ggplot2.tidyverse.org/reference/ggtheme.html} and \item
  \url{https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/}
  }
+ 
+  \strong{Error bars}
+ 
+ The best method for presenting or assessing genetic statistics depends on 
+ the type of data you have and the specific questions you're trying to 
+ answer. Here's a brief overview of when you might use each method:
+ 
+  \strong{1. Confidence Intervals ("CI"):}
+  
+ - Usage: Often used to convey the precision of an estimate.
+ 
+ - Advantage: Confidence intervals give a range in which the true parameter 
+ (like a population mean) is likely to fall, given the data and a specified 
+ probability (like 95%).
+ 
+ - In Context: For genetic statistics, if you're estimating a parameter,
+  a 95% CI gives you a range in which you're 95% confident the true parameter
+   lies.
+ 
+  \strong{2. Standard Deviation ("SD"):}
+  
+ - Usage: Describes the amount of variation from the average in a set of data.
+ 
+ - Advantage: Allows for an understanding of the spread of individual data
+  points around the mean.
+  
+ - In Context: If you're looking at the distribution of a quantitative trait 
+ (like height) in a population with a particular genotype, the SD can 
+ describe how much individual heights vary around the average height.
+ 
+  \strong{3. Standard Error ("SE"):}
+  
+ - Usage: Describes the precision of the sample mean as an estimate of the 
+ population mean.
+ 
+ - Advantage: Smaller than the SD in large samples; it takes into account 
+ both the SD and the sample size. 
+ 
+ - In Context: If you want to know how accurately your sample mean represents
+  the population mean, you'd look at the SE.
+  
+   \strong{Recommendation:}
+   
+  - If you're trying to convey the precision of an estimate, confidence 
+  intervals are very useful.
+  
+  - For understanding variability within a sample, standard deviation is key.
+  
+  - To see how well a sample mean might estimate a population mean, consider 
+  the standard error.
+  
+  In practice, geneticists often use a combination of these methods to 
+  analyze and present their data, depending on their research questions and 
+  the nature of the data.
+  
+ \strong{Confident Intervals}
+
+The uncertainty of a parameter, in this case the mean of the statistic, can
+be summarised by a confidence interval (CI) which includes the true parameter
+value with a specified probability (i.e. confidence level; the parameter
+"conf" in this function).
+
+In this function, CI are obtained using Bootstrap which is an inference
+method that samples with replacement the data (i.e. loci) and calculates the
+ statistics every time.
+
+ This function uses the function \link[boot]{boot} (package boot) to perform
+ the bootstrap replicates and the function \link[boot]{boot.ci}
+ (package boot) to perform the calculations for the CI.
+
+ Four different types of nonparametric CI can be calculated
+  (parameter "CI.type" in this function):
+  \itemize{
+   \item First order normal approximation interval ("norm").
+   \item Basic bootstrap interval ("basic").
+   \item Bootstrap percentile interval ("perc").
+   \item Adjusted bootstrap percentile interval ("bca").
+   }
+
+The studentized bootstrap interval ("stud") was not included in the CI types
+ because it is computationally intensive, it may produce estimates outside
+ the range of plausible values and it has been found to be erratic in
+ practice, see for example the "Studentized (t) Intervals" section in:
+
+   www.r-bloggers.com/2019/09/understanding-bootstrap-confidence-interval-output-from-the-r-boot-package
+     Efron and Tibshirani (1993, p. 162) and Davison and Hinkley
+     (1997, p. 194) suggest that the number of bootstrap replicates should
+     be between 1000 and 2000.
+
+ \strong{It is important} to note that unreliable confident intervals will be
+  obtained if too few number of bootstrap replicates are used.
+  Therefore, the function \link[boot]{boot.ci} will throw warnings and errors
+   if bootstrap replicates are too few. Consider increasing then number of
+   bootstrap replicates to at least 200.
+
+   The "bca" interval is often cited as the best for theoretical reasons,
+   however it may produce unstable results if the bootstrap distribution
+    is skewed or has extreme values. For example, you might get the warning
+    "extreme order statistics used as endpoints" or the error "estimated
+    adjustment 'a' is NA". In this case, you may want to use more bootstrap
+    replicates or a different method or check your data for outliers.
+
+   The error "estimated adjustment 'w' is infinite" means that the estimated
+   adjustment ‘w’ for the "bca" interval is infinite, which can happen when
+   the empirical influence values are zero or very close to zero. This can
+   be caused by various reasons, such as:
+
+   The number of bootstrap replicates is too small, the statistic of interest
+    is constant or nearly constant across the bootstrap samples, the data
+    contains outliers or extreme values.
+
+    You can try some possible solutions, such as:
+
+Increasing the number of bootstrap replicates, using a different type of
+bootstrap confidence interval or removing or transforming the outliers or
+ extreme values.
+ 
+ \strong{Parallelisation}
+
+ If the parameter ncpus > 1, parallelisation is enabled. In Windows, parallel
+  computing employs a "socket" approach that starts new copies of R on each
+   core. POSIX systems, on the other hand (Mac, Linux, Unix, and BSD),
+   utilise a "forking" approach that replicates the whole current version of
+    R and transfers it to a new core.
+
+    Opening and terminating R sessions in each core involves a significant
+    amount of processing time, therefore parallelisation in Windows machines
+   is only quicker than not usung parallelisation when nboots > 1000-2000.
 }
 \examples{
  \donttest{
@@ -131,32 +275,19 @@ n.inv <- gl.report.secondaries(platypus.gl)
 gl.report.heterozygosity(platypus.gl, n.invariant = n.inv[7, 2])
 }
 df <- gl.report.heterozygosity(platypus.gl)
-
+}
+\references{
+Nei, M. (1978). Estimation of average heterozygosity and genetic distance
+from a small number of individuals. Genetics, 89(3), 583-590.
 }
 \seealso{
 \code{\link{gl.filter.heterozygosity}}
 
-Other report functions: 
-\code{\link{gl.report.bases}()},
-\code{\link{gl.report.callrate}()},
-\code{\link{gl.report.diversity}()},
-\code{\link{gl.report.hamming}()},
-\code{\link{gl.report.hwe}()},
-\code{\link{gl.report.ld.map}()},
-\code{\link{gl.report.locmetric}()},
-\code{\link{gl.report.maf}()},
-\code{\link{gl.report.monomorphs}()},
-\code{\link{gl.report.overshoot}()},
-\code{\link{gl.report.pa}()},
-\code{\link{gl.report.parent.offspring}()},
-\code{\link{gl.report.rdepth}()},
-\code{\link{gl.report.reproducibility}()},
-\code{\link{gl.report.secondaries}()},
-\code{\link{gl.report.sexlinked}()},
-\code{\link{gl.report.taglength}()}
+Other unmatched report: 
+\code{\link{gl.allele.freq}()}
 }
 \author{
 Custodian: Luis Mijangos (Post to
 \url{https://groups.google.com/d/forum/dartr})
 }
-\concept{report functions}
+\concept{unmatched report}

@@ -54,10 +54,15 @@
 #'
 #'  \strong{Running BLAST}
 #'
-#'  Four different tasks are supported: \itemize{ \item “megablast”, for very
-#'  similar sequences (e.g, sequencing errors) \item “dc-megablast”, typically
-#'  used for inter-species comparisons \item “blastn”, the traditional program
-#'  used for inter-species comparisons \item “blastn-short”, optimized for
+#'  Four different tasks are supported: 
+#'  \itemize{ 
+#'  \item “megablast”, for very
+#'  similar sequences (e.g, sequencing errors) 
+#'  \item “dc-megablast”, typically
+#'  used for inter-species comparisons 
+#'  \item “blastn”, the traditional program
+#'  used for inter-species comparisons
+#'  \item “blastn-short”, optimized for
 #'  sequences less than 30 nucleotides }
 #'
 #'  If  you  are  running  a  BLAST alignment of  similar  sequences,  for
@@ -156,10 +161,10 @@ gl.blast <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # Check if the x@other$loc.metrics$TrimmedSequence slot exists
-    if (class(x)[1] == "genlight") {
+    if (class(x)[1] == "genlight"| class(x)[1] == "dartR" ) {
         if (is.null(x$other$loc.metrics$TrimmedSequence)) {
             stop(error(
                 "\n\nFatal Error: TrimmedSequence column is required!.\n\n"
@@ -373,7 +378,7 @@ gl.blast <- function(x,
     
     one_hit <- plyr::rbind.fill(one_hit_temp)
     # merging one hit per sequence with genlight object
-    if (class(x)[1] == "genlight") {
+    if (class(x)[1] == "genlight"| class(x)[1] == "dartR"  ) {
         one_hit_temp <- x$other$loc.metrics
         one_hit_temp$qseqid <- 1:nLoc(x)
         if (!is.null(one_hit)) {
@@ -418,7 +423,7 @@ gl.blast <- function(x,
     }
     
     # ADD TO HISTORY
-    if (class(x)[1] == "genlight") {
+    if (class(x)[1] == "genlight" | class(x)[1] == "dartR" ) {
         nh <- length(x@other$history)
         x@other$history[[nh + 1]] <- match.call()
     }
@@ -428,7 +433,7 @@ gl.blast <- function(x,
         cat(report("Completed:", funname, "\n\n"))
     }
     
-    if (class(x)[1] == "genlight") {
+    if (class(x)[1] == "genlight" | class(x)[1] == "dartR") {
         return(x)
     } else {
         return(one_hit)

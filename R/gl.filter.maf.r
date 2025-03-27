@@ -1,7 +1,6 @@
 #' @name gl.filter.maf
 #' @title Filters loci on the basis of minor allele frequency (MAF) in a 
-#' genlight
-#'  {adegenet} object
+#' genlight \code{adegenet} object
 #' @description
 #' This script calculates the minor allele frequency for each locus and updates
 #' the locus metadata for FreqHomRef, FreqHomSnp, FreqHets and MAF (if it
@@ -88,7 +87,7 @@ gl.filter.maf <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Josh",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -180,7 +179,7 @@ gl.filter.maf <- function(x,
         x <- utils.recalc.maf(x, verbose = 0)
         
         # Remove loci with NA count <= 1-threshold
-        index <- x@other$loc.metrics$maf >= threshold
+        index <- which(x@other$loc.metrics$maf >= threshold)
         
           x2 <- x[, index]
           x2@other$loc.metrics <- x@other$loc.metrics[index,]

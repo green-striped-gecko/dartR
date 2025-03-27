@@ -64,7 +64,7 @@ gl.smearplot <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # SCRIPT SPECIFIC CHECKS
     if (length(plot_colors)==1) {
@@ -93,16 +93,16 @@ gl.smearplot <- function(x,
     # }
     
     # DO THE JOB
+    # pull the data from the genlight object, and place in a dataframe
     
-    X_temp <- as.data.frame(as.matrix(x))
-    colnames(X_temp) <- 1:nLoc(x)
-    X_temp$id <- individuals
+    df.matrix <- as.data.frame(as.matrix(x))
+    colnames(df.matrix) <- 1:nLoc(x)
+    df.matrix$id <- individuals
     # converting id to factor using levels parameters
-    X_temp$id <- factor(X_temp$id, levels = X_temp$id)
+    df.matrix$id <- factor(df.matrix$id, levels = df.matrix$id)
+    df.matrix$pop <- pop(x)
     
-    X_temp$pop <- pop(x)
-    
-    X <- reshape2::melt(X_temp, id.vars = c("pop", "id"))
+    X <- reshape2::melt(df.matrix, id.vars = c("pop", "id"))
     X$value <- as.character(X$value)
     X$value <- ifelse(X$value=="NA", NA, X$value)
     colnames(X) <- c("pop", "id", "locus", "genotype")
@@ -124,7 +124,8 @@ gl.smearplot <- function(x,
                 x = locus,
                 y = id,
                 fill = genotype
-            )) + geom_raster() + scale_fill_discrete(
+            )) + geom_raster() + 
+          scale_fill_discrete(
                 type = plot_colors[c(1, 3)],
                  na.value = plot_colors[4],
                 name = "Genotype",

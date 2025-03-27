@@ -7,6 +7,7 @@
 gl2fasta(
   x,
   method = 1,
+  trimmed.sequence = TRUE,
   outfile = "output.fasta",
   outpath = tempdir(),
   probar = FALSE,
@@ -18,6 +19,9 @@ gl2fasta(
 
 \item{method}{One of 1 | 2 | 3 | 4. Type method=0 for a list of options 
 [method=1].}
+
+\item{trimmed.sequence}{Include Trimmedsequence. If FALSE, only method 3 and 
+4 are available [default = TRUE].}
 
 \item{outfile}{Name of the output file (fasta format) ["output.fasta"].}
 
@@ -71,6 +75,8 @@ fastA file. Requires 'TrimmedSequence' to be among the locus metrics
 loc.all e.g. 'G/A') and the position of the SNP in slot position of the
  ```genlight``` object (see testset.gl@position and testset.gl@loc.all for
  how to format these slots.)
+ 
+ When trimmed.sequence = FALSE, loci that are not SNPs are removed.
 }
 \examples{
  \donttest{

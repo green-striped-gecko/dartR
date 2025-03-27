@@ -35,7 +35,6 @@ Other filter functions:
 \code{\link{gl.filter.allna}()},
 \code{\link{gl.filter.callrate}()},
 \code{\link{gl.filter.hwe}()},
-\code{\link{gl.filter.ld}()},
 \code{\link{gl.filter.locmetric}()},
 \code{\link{gl.filter.maf}()},
 \code{\link{gl.filter.monomorphs}()},

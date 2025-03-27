@@ -118,7 +118,7 @@ gl.report.locmetric <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)
@@ -171,7 +171,7 @@ gl.report.locmetric <- function(x,
     
     # Determine the loss of loci for a given threshold using quantiles
     quantile_res <-
-        quantile(metric_df$field, probs = seq(0, 1, 1 / 20),type=1)
+        quantile(metric_df$field, probs = seq(0, 1, 1 / 20),type=1,na.rm = TRUE)
     retained <- unlist(lapply(quantile_res, function(y) {
         res <- length(metric_df$field[metric_df$field >= y])
     }))

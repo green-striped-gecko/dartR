@@ -125,7 +125,7 @@ gl.sim.WF.run <-
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # CHECK IF PACKAGES ARE INSTALLED
     pkg <- "stringi"
@@ -419,6 +419,7 @@ locNames(pop_list_freq_temp[[1]])[which(pop_list_freq_temp[[1]]$chromosome ==
         if(store_phase1==TRUE){
         # counter to store values every generation
         gen <- 0
+        count_store <- 0
         }
         
         # pick which sex is going to be transferred first
@@ -576,6 +577,7 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
           variance_offspring <- variance_offspring_phase2
           number_offspring <- number_offspring_phase2
           dispersal <- dispersal_phase2
+          population_size <- population_size_phase2
           
           store_values <- TRUE
           
@@ -589,7 +591,10 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
           }
           
           # counter to store genlight objects
-          count_store <- 0
+          if(!exists("count_store")){
+            count_store <- 0
+          }
+          
           # counter to store values every generation
           gen <- 0
           
@@ -990,7 +995,7 @@ stringi::stri_sub_all(pop[individual_pop, 4], from=real,length = 1) <-
         #tic("mutation_2")
         # making available to mutation those loci in which deleterious alleles 
         # have been eliminated from all populations
-        if(mutation==T){
+        if(mutation==TRUE){
           
           pops_merge <- rbindlist(pop_list)
           pops_seqs <- c(pops_merge$V3,pops_merge$V4)

@@ -96,7 +96,7 @@ gl.ld.haplotype <- function(x,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jody",
-                   verbosity = verbose)
+                   verbose = verbose)
   
   # CHECK DATATYPE
   datatype <- utils.check.datatype(x, verbose = verbose)
@@ -159,6 +159,7 @@ gl.ld.haplotype <- function(x,
     cat(report("  Restricting the analysis from",coordinates[1],"to",
                coordinates[2],"base pairs\n"))
     x_list <- lapply(x_list,function(y){
+      y$position <- as.integer(y$position)
       loc_names <- which(y$position >= coordinates[1] & 
                            y$position <= coordinates[2])
       y <- gl.keep.loc(y,loc.list = locNames(y)[loc_names],verbose = 0)
@@ -337,13 +338,11 @@ p <- NULL
         as.data.frame(matrix(ncol = 2 , nrow = length(means_col)))
       df_col[, 1] <- 1:nrow(df_col)
       df_col[, 2] <- means_col
-      df_col[, 2] <-
-        scales::rescale(df_col[, 2], to = c(0, height_poly))
+      df_col[, 2] <- scales::rescale(df_col[, 2], to = c(0, height_poly))
       means_col_2 <- means_col
       
       mean_column <- as.numeric(summary(means_col_2, na.rm = TRUE)[1:6])
-      mean_column <-
-        scales::rescale(mean_column, to = c(0, height_poly))
+      mean_column <- scales::rescale(mean_column, to = c(0, height_poly))
       
 # as the matrix was rotated the position of the snps is not correct anymore.
 # the following code reassigns the snp position based on the second row from
@@ -616,12 +615,12 @@ p <- NULL
         theme(
           legend.position = "top",
           legend.text = element_text(size = 10),
-          axis.ticks.y = element_blank(),
-          axis.title.y = element_blank(),
-          axis.text.y = element_blank(),
-          axis.title.x = element_text(hjust = 0.5),
-          axis.ticks.x = element_blank(),
-          axis.text.x = element_blank()
+          # axis.ticks.y = element_blank(),
+          # axis.title.y = element_blank(),
+          # axis.text.y = element_blank(),
+          # axis.title.x = element_text(hjust = 0.5),
+          # axis.ticks.x = element_blank(),
+          # axis.text.x = element_blank()
         ) +
         coord_fixed(ratio = 1 / 1)
       

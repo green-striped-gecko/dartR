@@ -71,7 +71,7 @@ gl.read.silicodart <- function(filename,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jackson",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # DO THE JOB
     
@@ -341,6 +341,8 @@ gl.read.silicodart <- function(filename,
         data.frame(matrix(TRUE, nrow = 1, ncol = length(recalc.flags)))
     names(glout@other$loc.metrics.flags) <- recalc.flags
     glout@other$verbose <- 2
+    
+    glout <- gl.compliance.check(glout)
     
     # FLAG SCRIPT END
     

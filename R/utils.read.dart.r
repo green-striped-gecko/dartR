@@ -1,39 +1,47 @@
-#' Imports DarT data to R
-#'
-#' Internal function called by gl.read.dart
+#' @name utils.read.dart
+#' @title utility function to read in DArT data
+# Preliminaries -- parameter definitions ----------------
+#' @description
+#' Utility to import DarT data to R
+#' Internal function called by gl.read.dart()
+#' 
 #' @param filename Path to file (csv file only currently) [required].
 #' @param nas A character specifying NAs [default '-'].
 #' @param topskip A number specifying the number of rows to be skipped. If not
 #' provided the number of rows to be skipped are 'guessed' by the number of rows
 #' with '*' at the beginning [default NULL].
-#' @param service_row The row number in which the information of the DArT
+#' @param service.row The row number in which the information of the DArT
 #' service is contained [default 1].
-#' @param plate_row The row number in which the information of the plate
+#' @param plate.row The row number in which the information of the plate
 #' location is contained [default 3].
 #' @param lastmetric Specifies the last non genetic column [default 'RepAvg'].
 #' Be sure to check if that is true, otherwise the number of individuals will
 #' not match. You can also specify the last column by a number.
 #' @param verbose Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
 #' progress log ; 3, progress and results summary; 5, full report [default NULL].
+#' 
 #' @return A list of length 5. #dart format (one or two rows) #individuals,
 #' #snps, #non genetic metrics, #genetic data (still two line format, rows=snps,
 #'  columns=individuals)
+#'  
+#'@author Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 utils.read.dart <- function(filename,
                             nas = "-",
                             topskip = NULL,
                             lastmetric = "RepAvg",
-                            service_row = 1,
-                            plate_row = 3,
+                            service.row = 1,
+                            plate.row = 3,
                             verbose = NULL) {
+  
     # SET VERBOSITY
     verbose <- gl.check.verbosity(verbose)
     
     # FLAG SCRIPT START
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
-                     build = "Jody",
-                     verbosity = verbose)
+                     build = "v.2023.2",
+                     verbose = verbose)
     
     # DO THE JOB
     
@@ -99,21 +107,21 @@ utils.read.dart <- function(filename,
     plate_location <- NA 
     if(exists("tdummy")){
     # extracting service information
-    service <- tdummy[service_row, (lmet + 1):ncol(tdummy)]
+    service <- tdummy[service.row, (lmet + 1):ncol(tdummy)]
     # extracting plate information
     plate <-
-        unlist(unname(tdummy[plate_row, (lmet + 1):ncol(tdummy)]))
-    plate_row_res <-
-        unlist(unname(tdummy[(plate_row + 1), (lmet + 1):ncol(tdummy)]))
+        unlist(unname(tdummy[plate.row, (lmet + 1):ncol(tdummy)]))
+    plate.row_res <-
+        unlist(unname(tdummy[(plate.row + 1), (lmet + 1):ncol(tdummy)]))
     plate_col_res <-
-        unlist(unname(tdummy[(plate_row + 2), (lmet + 1):ncol(tdummy)]))
+        unlist(unname(tdummy[(plate.row + 2), (lmet + 1):ncol(tdummy)]))
     plate_location <-
-        paste0(plate, "-", plate_row_res, plate_col_res)
+        paste0(plate, "-", plate.row_res, plate_col_res)
     }
     
     ind.names <- colnames(snpraw)[(lmet + 1):ncol(snpraw)]
-    ind.names <-
-        trimws(ind.names, which = "both")  #trim for spaces
+    ind.names <- trimws(ind.names, which = "both")  #trim for spaces
+    
     if (length(ind.names) != length(unique(ind.names))) {
         cat(
             warn(
@@ -141,13 +149,12 @@ utils.read.dart <- function(filename,
     
     # check that there are two lines per locus... covmetrics = separate(covmetrics, AlleleID, into = c('allid','alrest'),sep = '\\|',
     # extra='merge')
-    
-    if("MarkerName" %in% colnames(covmetrics)){
-      covmetrics$clone <- sub("\\|.*", "", covmetrics$MarkerName, perl = TRUE)
-      spp <- sub(".+-+(\\d{1,3}):.+", "\\1", covmetrics$MarkerName)
-    }else{
+    if(!is.null(covmetrics$AlleleID)){
       covmetrics$clone <- sub("\\|.*", "", covmetrics$AlleleID, perl = TRUE)
       spp <- sub(".+-+(\\d{1,3}):.+", "\\1", covmetrics$AlleleID)
+    }else{
+      covmetrics$clone <- NA
+      spp <- NA
     }
 
     #### find uid within allelid

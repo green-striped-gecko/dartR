@@ -43,7 +43,7 @@ utils.n.var.invariant <- function(x,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)  # I'm not quite sure what the build here should be
+                     verbose = verbose)  # I'm not quite sure what the build here should be
     
     # CHECK DATATYPE
     datatype <- utils.check.datatype(x, verbose = verbose)

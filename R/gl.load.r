@@ -28,7 +28,7 @@ gl.load <- function(file,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     x <- readRDS(file)
     
@@ -36,10 +36,13 @@ gl.load <- function(file,
     datatype <- utils.check.datatype(x, verbose = verbose)
     cat(report("  Loaded object of type", datatype, "from", file, "\n"))
     
+    x <- gl.compliance.check(x)
+    
     # FLAG SCRIPT END
     
     if (verbose > 0) {
         cat(report("Completed:", funname, "\n"))
+      
     }
     
     invisible(x)

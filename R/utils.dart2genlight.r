@@ -1,8 +1,7 @@
-#' Converts DarT to genlight
-#'
+#' @name utils.dart2genlight
+#' @title Converts DarT to genlight.
 #' @description Converts a DArT file (read via \code{read.dart}) into an
-#' genlight object \code{\link{adegenet}}. Internal function called by
-#' gl.read.dart
+#' genlight object \code{adegenet}. 
 #' @param dart A dart object created via read.dart [required].
 #' @param ind.metafile Optional file in csv format with metadata for each
 #' individual (see details for explanation) [default NULL].
@@ -14,11 +13,13 @@
 #' loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
 #' @details
 #' The ind.metadata file needs to have very specific headings. First a heading
-#' called id. Here the ids have to match the ids in the dart object
-#' \code{colnames(dart[[4]])}. The following column headings are optional.
+#' called id. Here the ids have to match the ids in the dartR object. 
+#' The following column headings are optional.
 #' pop: specifies the population membership of each individual. lat and lon
 #' specify spatial coordinates (in decimal degrees WGS1984 format). Additional
 #' columns with individual metadata can be imported (e.g. age, gender).
+#' 
+#'@author Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 
 utils.dart2genlight <- function(dart,
                                 ind.metafile = NULL,
@@ -32,7 +33,7 @@ utils.dart2genlight <- function(dart,
     funname <- match.call()[[1]]
     utils.flag.start(func = funname,
                      build = "Jody",
-                     verbosity = verbose)
+                     verbose = verbose)
     
     # DO THE JOB
     
@@ -46,8 +47,7 @@ utils.dart2genlight <- function(dart,
     sraw <- dart[["covmetrics"]]
     nrows <- dart[["nrows"]]  #check if nrows are provided...
     service <- as.character(unlist(unname(dart[["service"]])))
-    plate_location <-
-        as.character(unlist(unname(dart[["plate_location"]])))
+    plate_location <- as.character(unlist(unname(dart[["plate_location"]])))
     
     if (is.null(nrows)) {
         cat(report(
@@ -74,12 +74,12 @@ utils.dart2genlight <- function(dart,
     }
     
     if (sum(c("SNP", "SnpPosition") %in% names(sraw)) != 2) {
+      cat(warn(
+        "   Could not find SNP or SnpPosition in Dart file. Check you headers!!!\n"
+      ))
         # stop(error(
         #     "Could not find SNP or SnpPosition in Dart file. Check you headers!!!"
         # ))
-      warn(
-        "Could not find SNP or SnpPosition in Dart file. Check you headers!!!"
-      )
     }
     
     if (verbose >= 2) {
@@ -106,17 +106,19 @@ utils.dart2genlight <- function(dart,
     
     sdata <- dart[["gendata"]]
     # every second line only....
-    esl <-seq(nrows, nrow(sdata), nrows)
+    esl <- seq(nrows, nrow(sdata), nrows)
+    pos <- sraw$SnpPosition[esl]
     
-    if("SnpPosition" %in% colnames(sraw)){
-      pos <- sraw$SnpPosition[esl]
+    if(!is.null(sraw$SNP)){
+      alleles <- as.character(sraw$SNP)[esl]
+      a1 <- substr(alleles, nchar(alleles) - 2, nchar(alleles))
+      a2 <- sub(">", "/", a1)
+      locname <- paste(sraw$uid[esl], a2, sep = "-")
     }else{
-      pos <- NULL
+      a2 <- rep("c/g",nrow(sraw))
+      locname <- sraw[,1][esl]
     }
-    alleles <- as.character(sraw$SNP)[esl]
-    a1 <- substr(alleles, nchar(alleles) - 2, nchar(alleles))
-    a2 <- sub(">", "/", a1)
-    locname <- paste(sraw$uid[esl], a2, sep = "-")
+
     geninddata <- matrix(NA, nrow = nsnp, ncol = nind)
     
     if (nrows == 2) {
@@ -182,11 +184,10 @@ utils.dart2genlight <- function(dart,
                 paste("Adding individual metrics:", ind.metafile, ".\n")
             ))
         }
-        ###### population and individual file to link AAnumbers to populations...
-        ind.cov <-
-            read.csv(ind.metafile,
-                     header = TRUE,
-                     stringsAsFactors = TRUE)
+        ###### population and individual file to link numbers to populations...
+        ind.cov <- read.csv(ind.metafile,  
+                            header = TRUE, 
+                            stringsAsFactors = TRUE)
         # is there an entry for every individual
         
         id.col <-match("id", names(ind.cov))
@@ -258,7 +259,7 @@ utils.dart2genlight <- function(dart,
             }
         }
         
-        pop.col <-match("pop", names(ind.cov))
+        pop.col <- match("pop", names(ind.cov))
         
         if (is.na(pop.col)) {
             if (verbose >= 1) {
@@ -336,3 +337,4 @@ utils.dart2genlight <- function(dart,
     return(gout)
     
 }
+

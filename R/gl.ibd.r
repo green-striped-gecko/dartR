@@ -4,7 +4,6 @@
 #' test and also produces an isolation by distance plot. If a genlight object
 #' with coordinates is provided, then an Euclidean and genetic distance matrices
 #' are calculated.'
-#' @importFrom vegan mantel
 #' @importFrom MASS kde2d
 #' @importFrom grDevices colorRampPalette
 #' @importFrom graphics abline title points
@@ -111,6 +110,16 @@ gl.ibd <- function(x = NULL,
                    verbose = NULL) {
   
     # CHECK IF PACKAGES ARE INSTALLED
+ pkg <- "vegan"
+  if (!(requireNamespace(pkg, quietly = TRUE))) {
+    cat(error(
+      "Package",
+      pkg,
+      " needed for this function to work. Please install it.\n"
+    ))
+    return(-1)
+  }
+
   pkg <- "dismo"
   if (!(requireNamespace(pkg, quietly = TRUE))) {
     cat(error(

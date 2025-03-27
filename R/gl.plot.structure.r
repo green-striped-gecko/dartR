@@ -108,7 +108,7 @@ gl.plot.structure <- function(sr,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jody",
-                   verbosity = verbose)
+                   verbose = verbose)
   
   # DO THE JOB
   
@@ -156,7 +156,7 @@ gl.plot.structure <- function(sr,
         res_tmp <- Q_list_tmp[[1]]
       # if more than 1 replicate
       }else{
-        res_tmp <- clumpp(Q_list_tmp, method = met_clumpp, iter = iter_clumpp)$Q_list
+        res_tmp <- utils.clumpp(Q_list_tmp, method = met_clumpp, iter = iter_clumpp)$Q_list
       }
       
       # clumpak method for inferring modes within multiple structure runs as

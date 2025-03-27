@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.dart2genlight.r
 \name{utils.dart2genlight}
 \alias{utils.dart2genlight}
-\title{Converts DarT to genlight}
+\title{Converts DarT to genlight.}
 \usage{
 utils.dart2genlight(
   dart,
@@ -31,14 +31,16 @@ loc.names, ind.names, pop, lat, lon (if provided via the ind.metadata file)
 }
 \description{
 Converts a DArT file (read via \code{read.dart}) into an
-genlight object \code{\link{adegenet}}. Internal function called by
-gl.read.dart
+genlight object \code{adegenet}.
 }
 \details{
 The ind.metadata file needs to have very specific headings. First a heading
-called id. Here the ids have to match the ids in the dart object
-\code{colnames(dart[[4]])}. The following column headings are optional.
+called id. Here the ids have to match the ids in the dartR object. 
+The following column headings are optional.
 pop: specifies the population membership of each individual. lat and lon
 specify spatial coordinates (in decimal degrees WGS1984 format). Additional
 columns with individual metadata can be imported (e.g. age, gender).
+}
+\author{
+Custodian: Bernd Gruber (Post to \url{https://groups.google.com/d/forum/dartr})
 }

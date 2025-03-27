@@ -3,12 +3,8 @@
 #' method based on NeEstimator (V2)
 #' @description
 #' This function is basically a convenience function that runs the LD Ne
-#'  estimator using Neestimator2
-#'  (\url{http://www.molecularfisherieslaboratory.com.au/neestimator-software/})
-#'  within R using the provided genlight object. To be able to do so, the
-#'  software has to be downloaded from their website and the appropriate
-#'  executable Ne2-1 has to be copied into the path as specified in the function
-#'  (see example below).
+#'  estimator using Neestimator2within R using the provided genlight object.
+#'  To be able to do so, the software has to be downloaded from their website and the appropriate executable Ne2-1 has to be copied into the path as specified in the function. (see example below).
 #' @param x Name of the genlight object containing the SNP data [required].
 #' @param outfile File name of the output file  with
 #' all results from Neestimator 2 [default 'genepopLD.txt'].
@@ -71,7 +67,7 @@ gl.LDNe <- function(x,
   funname <- match.call()[[1]]
   utils.flag.start(func = funname,
                    build = "Jody",
-                   verbosity = verbose)
+                   verbose = verbose)
   
   # CHECK DATATYPE
   datatype <- utils.check.datatype(x, verbose = verbose)

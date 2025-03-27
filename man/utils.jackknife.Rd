@@ -16,23 +16,23 @@ utils.jackknife(
 )
 }
 \arguments{
-\item{x}{Name of the genlight object containing SNP genotypes [required].}
+\item{x}{Name of the genlight object [required].}
 
 \item{FUN}{the name of the function to be used to calculate the statistic}
 
 \item{unit}{The unit to use for resampling. One of c("loc", "ind", "pop"): 
 loci, individuals or populations}
 
-\item{recalc}{Recalculate the locus metadata statistics [default FALSE].}
+\item{recalc}{If TRUE, recalculate the locus metadata statistics [default FALSE].}
 
-\item{mono.rm}{Remove monomorphic loci [default FALSE].}
+\item{mono.rm}{If TRUE, remove monomorphic and all NA loci [default FALSE].}
 
 \item{n.cores}{The number of cores to use. If "auto" [default], it will 
 use all but one available cores.}
 
 \item{verbose}{Verbosity: 0, silent or fatal errors; 1, begin and end; 2,
-progress log; 3, progress and results summary; 5, full report
-[default 2 or as specified using gl.set.verbosity].}
+progress but not results; 3, progress and results summary; 5, full report
+ [default 2 or as specified using gl.set.verbosity].}
 
 \item{...}{any additional arguments to be passed to FUN}
 }
@@ -46,9 +46,9 @@ of the values obtained can be used to evaluate the variability around the point
 estimate. This function can take the loci, the individuals or the populations 
 as units over which to conduct resampling.
 
-bold{Note} that when n is very small, jackknife resampling is not recommended.
+\bold{Note} that when n is very small, jackknife resampling is not recommended.
 
-Parallel computation is implemented. The argument code{n.cores} indicates the 
+Parallel computation is implemented. The argument \code{n.cores} indicates the 
 number of core to use. If "auto" [default], it will use all but one available 
 cores. If the number of units is small (e.g. a few populations), there is not 
 real advantage in using parallel computation. On the other hand, if the number 

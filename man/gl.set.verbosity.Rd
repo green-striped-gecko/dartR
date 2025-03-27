@@ -18,14 +18,30 @@ verbosity value [set for all functions]
 dartR functions have a verbosity parameter that sets the level of reporting
  during the execution of the function. The verbosity level, set by parameter
  'verbose' can be one of verbose 0, silent or fatal errors; 1, begin and end;
- 2, progress log; 3, progress and results summary; 5, full report. The
+ 2, progress ; 3, progress and results summary; 5, full report. The
  default value for verbosity is stored in the r environment. This script sets
  the default value.
 }
 \examples{
 gl <- gl.set.verbosity(value=2)
+
+}
+\seealso{
+Other dartR-base: 
+\code{\link{gl.drop.ind}()},
+\code{\link{gl.drop.loc}()},
+\code{\link{gl.drop.pop}()},
+\code{\link{gl.edit.recode.ind}()},
+\code{\link{gl.edit.recode.pop}()},
+\code{\link{gl.keep.loc}()},
+\code{\link{gl.make.recode.ind}()},
+\code{\link{gl.read.dart}()},
+\code{\link{gl.recode.ind}()},
+\code{\link{gl.recode.pop}()}
 }
 \author{
 Custodian: Arthur Georges (Post to
 \url{https://groups.google.com/d/forum/dartr})
+# Examples -------------
 }
+\concept{dartR-base}
